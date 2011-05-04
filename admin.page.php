@@ -1,6 +1,6 @@
 <div class="wrap<?php if ( hmbkp_is_in_progress() ) { ?> hmbkp_running<?php } ?>">
 
-	<?php screen_icon( 'tools' ); ?>
+	<?php screen_icon( 'backupwordpress' ); ?>
 
 	<h2>
 
