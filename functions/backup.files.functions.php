@@ -37,10 +37,14 @@ function hmbkp_backup_files( $backup_tmp_dir ) {
 
         	// Copy the file
         	copy( $f, $wordpress_files . hmbkp_conform_dir( $f, true ) );
+        	
+        	// Chown the file so we can delete it
+        	chmod( $f, 0644 );
 
         endif;
 
         $i++;
+    
     endforeach;
 
 }
