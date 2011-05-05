@@ -38,8 +38,8 @@ function hmbkp_backup_files( $backup_tmp_dir ) {
         	// Copy the file
         	copy( $f, $wordpress_files . hmbkp_conform_dir( $f, true ) );
         	
-        	// Chown the file so we can delete it
-        	chmod( $f, 0644 );
+        	// Attempt to chown the file so we can delete it
+        	@chmod( $f, 0644 );
 
         endif;
 
@@ -64,7 +64,8 @@ function hmbkp_archive_files( $backup_tmp_dir, $backup_filepath ) {
 	// Do we have the path to the zip command
 	if ( hmbkp_zip_path() )
 		shell_exec( 'cd ' . escapeshellarg( $backup_tmp_dir ) . ' && zip -r ' . escapeshellarg( $backup_filepath ) . ' ./' );
-
+	
+	// If not use the fallback
 	else
 		hmbkp_archive_files_fallback( $backup_tmp_dir, $backup_filepath );
 

@@ -130,14 +130,14 @@ function hmbkp_timestamp() {
  * @return string $dir
  */
 function hmbkp_conform_dir( $dir, $rel = false ) {
-	
+
 	// Normalise slashes
 	$dir = str_replace( '\\', '/', $dir );
 	$dir = str_replace( '//', '/', $dir );
-	
+
 	// Remove the trailingslash
 	$dir = untrailingslashit( $dir );
-	
+
 	// If we're on Windows
 	if ( strpos( ABSPATH, '\\' ) !== false )
 		$dir = str_replace( '/', '\\', $dir );
@@ -263,19 +263,21 @@ function hmbkp_ls( $dir, $files = array() ) {
 
 	$d = opendir( $dir );
 
-	if ( strpos( $dir, hmbkp_path() ) !== false )
-		return $files;
-
 	while ( $file = readdir( $d ) ) :
 
-		// Ignore current dir and containing dir as well as files in the backups dir
-		if ( $file == '.' || $file == '..' || strpos( hmbkp_conform_dir( trailingslashit( $dir ) ) . $file, hmbkp_path() ) !== false || strpos( hmbkp_conform_dir( trailingslashit( $dir ) ) . $file, hmbkp_conform_dir( trailingslashit( WP_CONTENT_DIR ) . 'backups' ) ) !== false )
+		// Ignore current dir and containing dir as well the backups dir
+		if ( $file == '.' || $file == '..' )
 			continue;
 
-		$files[] = trailingslashit( $dir ) . $file;
+		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
 
-		if ( is_dir( trailingslashit( $dir ) . $file ) )
-			$files = hmbkp_ls( trailingslashit( $dir ) . $file, $files );
+		if ( $file == hmbkp_path() )
+			continue;
+
+		$files[] = $file;
+
+		if ( is_dir( $file ) )
+			$files = hmbkp_ls( $file, $files );
 
 	endwhile;
 
@@ -356,7 +358,7 @@ function hmbkp_calculate() {
     	$res = $wpdb->get_results( 'SHOW TABLE STATUS FROM ' . DB_NAME, ARRAY_A );
 
     	foreach ( $res as $r )
-    		$filesize += $r['Data_free'] += $r['Data_length'];
+    		$filesize += (float) $r['Data_length'];
 
     endif;
 
@@ -365,12 +367,16 @@ function hmbkp_calculate() {
     	// Get rid of any cached filesizes
     	clearstatcache();
 
-    	$filesize += hmbkp_dirsize( ABSPATH );
+    	foreach ( hmbkp_ls( ABSPATH ) as $f )
+			$filesize += (float) @filesize( $f );
 
 	endif;
 
-    // Cache in a transient for a day
-    set_transient( 'hmbkp_estimated_filesize', $filesize,  86400 );
+	// Account for compression
+	$filesize /= 1.9;
+
+    // Cache in a transient for a week
+    set_transient( 'hmbkp_estimated_filesize', $filesize,  604800 );
 
     return hmbkp_size_readable( $filesize, null, '%01u %s' );
 
@@ -417,33 +423,74 @@ function hmbkp_total_filesize() {
 }
 
 /**
- * Efficiant way to calculate the size of a directory
- * or file
- *
- * @param string $dir
- * @return float space
+ * Setup the daily backup schedule
  */
-function hmbkp_dirsize( $pointer )  {
+function hmbkp_setup_daily_schedule() {
 
-   $stat = @stat( $pointer );
-   $space = $stat['blocks'] * 512;
+	// Clear any old schedules
+	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 
-   if ( is_dir( $pointer ) ) :
+	// Default to 11 in the evening
+	$time = '23:00';
 
-		// Skip the backups dir
-		if ( strpos( hmbkp_conform_dir( $pointer ), hmbkp_path() ) !== false )
-			return 0;
+	// Allow it to be overridden
+	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME )
+		$time = HMBKP_DAILY_SCHEDULE_TIME;
 
-		$handle = opendir( $pointer );
+	if ( time() > strtotime( $time ) )
+		$time = 'tomorrow ' . $time;
 
-		while ( ( $file = readdir( $handle ) ) !== false )
-			if ( !in_array( $file, array( '..', '.' ) ) )
-				$space += hmbkp_dirsize( trailingslashit( $pointer ) . $file );
+	wp_schedule_event( strtotime( $time ), 'hmbkp_daily', 'hmbkp_schedule_backup_hook' );
+}
 
-		closedir( $handle );
 
-   endif;
+/**
+ * Get the path to the backups directory
+ *
+ * Will try to create it if it doesn't exist
+ * and will fallback to default if a custom dir
+ * isn't writable.
+ */
+function hmbkp_path() {
 
-   return $space;
+	$path = get_option( 'hmbkp_path' );
+
+	// Allow the backups path to be defined
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+		$path = HMBKP_PATH;
+
+	// If the dir doesn't exist or isn't writable then use wp-content/backups instead
+	if ( ( !$path || !is_writable( $path ) ) && $path != WP_CONTENT_DIR . '/backups' ) :
+    	$path = WP_CONTENT_DIR . '/backups';
+		update_option( 'hmbkp_path', $path );
+	endif;
+
+	// Create the backups directory if it doesn't exist
+	if ( is_writable( WP_CONTENT_DIR ) && !is_dir( $path ) )
+		mkdir( $path, 0755 );
+
+	// Secure the directory with a .htaccess file
+	$htaccess = $path . '/.htaccess';
+
+	if ( !file_exists( $htaccess ) && is_writable( $path ) ) :
+		require_once( ABSPATH . '/wp-admin/includes/misc.php' );
+		insert_with_markers( $htaccess, 'BackUpWordPress', array( 'deny from all' ) );
+	endif;
+
+    return hmbkp_conform_dir( $path );
+}
+
+/**
+ * The maximum number of backups to keep
+ * defaults to 10
+ *
+ * @return int
+ */
+function hmbkp_max_backups() {
+
+	if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
+		return (int) HMBKP_MAX_BACKUPS;
+
+	return 10;
 
 }
