@@ -25,7 +25,7 @@ function hmbkp_deactivate() {
 		'_transient_timeout_hmbkp_estimated_filesize',
 		'hmbkp_status',
 		'hmbkp_complete',
-		'hmbkp_email_errors'
+		'hmbkp_email_error'
 	);
 
 	foreach ( $options as $option )
