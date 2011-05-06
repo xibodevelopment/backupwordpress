@@ -52,14 +52,14 @@ function hmbkp_mysqldump_path() {
 		'/opt/local/lib/mysql6/bin/mysqldump',
 		'/opt/local/lib/mysql5/bin/mysqldump',
 		'/opt/local/lib/mysql4/bin/mysqldump',
-		'C:\xampp\mysql\bin\mysqldump',
-		'C:\Program Files\xampp\mysql\bin\mysqldump',
-		'C:\Program Files\MySQL\MySQL Server 6.0\bin\mysqldump',
-		'C:\Program Files\MySQL\MySQL Server 5.5\bin\mysqldump',
-		'C:\Program Files\MySQL\MySQL Server 5.4\bin\mysqldump',
-		'C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqldump',
-		'C:\Program Files\MySQL\MySQL Server 5.0\bin\mysqldump',
-		'C:\Program Files\MySQL\MySQL Server 4.1\bin\mysqldump'
+		'\xampp\mysql\bin\mysqldump',
+		'\Program Files\xampp\mysql\bin\mysqldump',
+		'\Program Files\MySQL\MySQL Server 6.0\bin\mysqldump',
+		'\Program Files\MySQL\MySQL Server 5.5\bin\mysqldump',
+		'\Program Files\MySQL\MySQL Server 5.4\bin\mysqldump',
+		'\Program Files\MySQL\MySQL Server 5.1\bin\mysqldump',
+		'\Program Files\MySQL\MySQL Server 5.0\bin\mysqldump',
+		'\Program Files\MySQL\MySQL Server 4.1\bin\mysqldump'
 	);
 	
 	// Allow the path to be overridden

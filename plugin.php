@@ -90,7 +90,6 @@ require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
 // Load the core functions
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/interface.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/settings.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.mysql.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.files.functions.php' );
