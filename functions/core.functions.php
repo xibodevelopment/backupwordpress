@@ -21,8 +21,6 @@ function hmbkp_deactivate() {
 		'hmbkp_path',
 		'hmbkp_max_backups',
 		'hmbkp_running',
-		'_transient_hmbkp_estimated_filesize',
-		'_transient_timeout_hmbkp_estimated_filesize',
 		'hmbkp_status',
 		'hmbkp_complete',
 		'hmbkp_email_error'
@@ -32,6 +30,7 @@ function hmbkp_deactivate() {
 		delete_option( $option );
 
 	delete_transient( 'hmbkp_running' );
+	delete_transient( 'hmbkp_estimated_filesize' );
 
 	// Clear cron
 	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
@@ -47,6 +46,7 @@ function hmbkp_update() {
 
 	// Every update
 	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) :
+		
 		delete_transient( 'hmbkp_estimated_filesize' );
 		delete_option( 'hmbkp_running' );
 		delete_option( 'hmbkp_complete' );
@@ -59,14 +59,11 @@ function hmbkp_update() {
 
 	endif;
 
-	// 1.0.x to 1.1
+	// Pre 1.1
 	if ( !get_option( 'hmbkp_plugin_version' ) ) :
-		delete_transient( 'hmbkp_estimated_filesize' );
+		
+		// Delete the obsolete max backups option
 		delete_option( 'hmbkp_max_backups' );
-		delete_option( 'hmbkp_running' );
-
-		// Delete the logs directory
-		hmbkp_rmdirtree( hmbkp_path() . '/logs' );
 
 	endif;
 

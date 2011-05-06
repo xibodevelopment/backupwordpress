@@ -84,7 +84,7 @@
 	<table class="widefat" id="hmbkp_manage_backups_table">
 		<thead>
 			<tr>
-				<th scope="col"><?php _e( 'Completed Backups', 'hmbkp' ); ?></th>
+				<th scope="col"><?php printf( __( '%d Completed backups', 'hmbkp' ), count( $backup_archives ) ); ?></th>
 				<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
 				<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
 			</tr>
@@ -92,7 +92,7 @@
 
 		<tfoot>
 			<tr>
-				<th><?php printf( _n( 'Only the most recent backup will be saved.', 'The %d most recent backups will be saved.', hmbkp_max_backups(), 'hmbkp' ), hmbkp_max_backups() ); ?></th>
+				<th><?php printf( _n( 'Only the most recent backup will be saved', 'The %d most recent backups will be saved', hmbkp_max_backups(), 'hmbkp' ), hmbkp_max_backups() ); ?></th>
 				<th><?php printf( __( 'Total %s, %s available', 'hmbkp' ), hmbkp_total_filesize(), hmbkp_size_readable( disk_free_space( ABSPATH ), null, '%01u %s' ) ); ?></th>
 				<th></th>
 			</tr>

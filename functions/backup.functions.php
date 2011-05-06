@@ -28,29 +28,29 @@ function hmbkp_do_backup() {
 	ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	set_time_limit( 0 );
 
-    update_option( 'hmbkp_status', __( 'Creating tmp directory.', 'hmbkp' ) );
+    update_option( 'hmbkp_status', __( 'Creating tmp directory', 'hmbkp' ) );
 
 	// Create a temporary directory for this backup
     $backup_tmp_dir = hmbkp_create_tmp_dir( $time_start );
 
-    update_option( 'hmbkp_status', __( 'Dumping database to tmp folder.', 'hmbkp' ) );
+    update_option( 'hmbkp_status', __( 'Dumping database to tmp directory', 'hmbkp' ) );
 
 	// Backup database
 	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
 	    hmbkp_backup_mysql( $backup_tmp_dir );
 
-	update_option( 'hmbkp_status', __( 'Copying files to tmp folder.', 'hmbkp' ) );
+	update_option( 'hmbkp_status', __( 'Copying files to tmp directory', 'hmbkp' ) );
 
 	// Backup files
 	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
 		hmbkp_backup_files( $backup_tmp_dir );
 
-    update_option( 'hmbkp_status', __( 'Zipping up tmp directory.', 'hmbkp' ) );
+    update_option( 'hmbkp_status', __( 'Zipping up tmp directory', 'hmbkp' ) );
 
 	// Zip up the files
 	hmbkp_archive_files( $backup_tmp_dir, $filepath );
 
-    update_option( 'hmbkp_status', __( 'Removing tmp directory.', 'hmbkp' ) );
+    update_option( 'hmbkp_status', __( 'Removing tmp directory', 'hmbkp' ) );
 
 	// Remove the temporary directory
 	hmbkp_rmdirtree( $backup_tmp_dir );
@@ -58,7 +58,7 @@ function hmbkp_do_backup() {
 	// Email Backup
 	hmbkp_email_backup( $filepath );
 
-    update_option( 'hmbkp_status', __( 'Removing old backups.', 'hmbkp' ) );
+    update_option( 'hmbkp_status', __( 'Removing old backups', 'hmbkp' ) );
 
 	// Delete any old backup files
     hmbkp_delete_old_backups();

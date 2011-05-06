@@ -1,9 +1,9 @@
 === BackUpWordPress ===
-Contributors: willmot, humanmade
-Tags: back up, backup, backups
+Contributors: willmot, matheu, joehoyle, humanmade
+Tags: back up, back up, backup, backups, database, zip, db, files, archive
 Requires at least: 3.0
 Tested up to: 3.1.2
-Stable tag: 1.1.4
+Stable tag: 1.2
 
 Simple automated backups of your WordPress powered website.
 
@@ -11,13 +11,23 @@ Simple automated backups of your WordPress powered website.
 
 BackUpWordPress will back up your entire site including your database and all your files once every day. It has several advanced options for power users.
 
+Features include:
+
+* Super simple to use, no setup required.
+* Uses `zip` and `mysqldump` for faster backups if they are available.
+* Option to have each backup file emailed to you.
+* Works on Linux & Windows Server.
+* Control advanced options by defining any of the optional `Constants`.
+* Good support should you need help.
+
+
 == Installation ==
 
-1. Install BackUpWordPress either via the WordPress.org plugin directory, or by uploading the files to your server
-2. Activate the plugin
-3. Sit back and relax safe in the knowledge that your complete site will be backed up every day at 11:00
+1. Install BackUpWordPress either via the WordPress.org plugin directory, or by uploading the files to your server.
+2. Activate the plugin.
+3. Sit back and relax safe in the knowledge that your whole site will be backed up every day.
 
-The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site. You can point the plugin in the right direction by defining `HMBKP_ZIP_PATH` and `HMBKP_MYSQLDUMP_PATH` in your `wp-config.php`.
+The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site. If you know about such things then you can point the plugin in the right direction by defining `HMBKP_ZIP_PATH` and `HMBKP_MYSQLDUMP_PATH` in your `wp-config.php`.
 
 == Frequently Asked Questions ==
 
@@ -29,11 +39,11 @@ Contact support@humanmade.co.uk for help/support.
 
 == Changelog ==
 
-#### 1.2 Beta
+#### 1.2
 
 * Show live backup status in the back up now button when a back up is running.
 * Show free disk space after total used by backups.
-* Some langauge changes.
+* Several langauge changes.
 * Work around the 1 cron every 60 seconds limit.
 * Store backup status in a 2 hour transient as a last ditch attempt to work around the "stuck on backup running" issue.
 * Show a warning and disable backups when PHP is in Safe Mode, may try to work round issues and re-enable in the future.
@@ -41,8 +51,9 @@ Contact support@humanmade.co.uk for help/support.
 * Show defaults for all `Constants`.
 * Show a warning if both `HMBKP_FILES_ONLY` and `HMBKP_DATABASE_ONLY` are defined at the same time.
 * Make sure options added in 1.1.4 are cleared on de-activate.
-* Normalize slashes on Windows, stops backup directory from being included in backup on Windows.
 * Support `mysqldump on` Windows if it's available.
+* New option to have each backup emailed to you on completion. Props @matheu for the contribution.
+* Improved windows server support.
 
 #### 1.1.4
 
