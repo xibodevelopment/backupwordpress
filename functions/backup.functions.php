@@ -183,7 +183,7 @@ function hmbkp_email_backup( $file ) {
 		
 	// Try to send the email
 	$sent = wp_mail( HMBKP_EMAIL, $subject, $message, $headers, $file );
-	$sent = false;
+
 	// If it failed- Try to send a download link - The file was probably too large. 
 	if( !$sent ) :
 		
@@ -192,7 +192,7 @@ function hmbkp_email_backup( $file ) {
 		$message = 'Looks like the Backup is too large to email ('  . round(filesize($file) / 1048576, 2) . 'MB) - Download backup: ' . $url;
 		
 		$sent = wp_mail( $email_address, $subject, $message, $headers );
-		$sent = false;		
+
 	endif;
 	
 	//Set option for email not sent error
