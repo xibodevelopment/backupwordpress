@@ -170,6 +170,9 @@ function hmbkp_email_backup( $file ) {
 
 	if( !defined('HMBKP_EMAIL' ) || !HMBKP_EMAIL )
 		return;
+	
+	if( !is_email( HMBKP_EMAIL ) ) 
+		return;
 
 	// Raise the memory limit
 	ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
@@ -180,7 +183,7 @@ function hmbkp_email_backup( $file ) {
 		
 	// Try to send the email
 	$sent = wp_mail( HMBKP_EMAIL, $subject, $message, $headers, $file );
-	
+	$sent = false;
 	// If it failed- Try to send a download link - The file was probably too large. 
 	if( !$sent ) :
 		
@@ -189,14 +192,17 @@ function hmbkp_email_backup( $file ) {
 		$message = 'Looks like the Backup is too large to email ('  . round(filesize($file) / 1048576, 2) . 'MB) - Download backup: ' . $url;
 		
 		$sent = wp_mail( $email_address, $subject, $message, $headers );
-		
+		$sent = false;		
 	endif;
 	
-	//What to  if it still isn't sent.
+	//Set option for email not sent error
 	if( !$sent ) :
-		error_log( 'Email Not Working. Attepted both with and without attachment.' );
+		update_option('hmbkp_email_errors', 'hmbkp_email_failed' );
 		return false;
 	else :
-		return true;
+		delete_option('hmbkp_email_errors' );
 	endif;
+	
+	return true;
+	
 } 
