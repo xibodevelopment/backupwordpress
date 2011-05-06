@@ -74,8 +74,8 @@
 	<?php endif; ?>
 <?php endif ; ?>
 
-<?php if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL  ) : ?>
-	<p>&#10003; <?php printf( __( 'A copy of your backups will be sent to %s.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ); ?></p>
+<?php if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL && is_email( HMBKP_EMAIL ) ) : ?>
+	<p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ); ?></p>
 <?php endif; ?>
 
 	<?php $backup_archives = hmbkp_get_backups();
