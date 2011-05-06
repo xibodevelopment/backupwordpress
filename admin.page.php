@@ -74,6 +74,10 @@
 	<?php endif; ?>
 <?php endif ; ?>
 
+<?php if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL  ) : ?>
+	<p>&#10003; <?php printf( __( 'A copy of your backups will be sent to %s.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ); ?></p>
+<?php endif; ?>
+
 	<?php $backup_archives = hmbkp_get_backups();
 	if ( count( $backup_archives ) ) : ?>
 
@@ -146,6 +150,9 @@
 
 		    <dt<?php if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DAILY_SCHEDULE_TIME</code></dt>
 		    <dd><?php printf( __( 'The time that the daily back up should run. Defaults to %s.', 'hmbkp' ), '<code>23:00</code>' ); ?></dd>
+
+			<dt<?php if ( defined( 'HMBKP_EMAIL' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EMAIL</code></dt>
+		    <dd><?php printf( __( 'Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s.', 'hmbkp' ), '<code>(bool) false</code>' ); ?></dd>
 
 		</dl>
 

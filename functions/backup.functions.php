@@ -55,6 +55,9 @@ function hmbkp_do_backup() {
 	// Remove the temporary directory
 	hmbkp_rmdirtree( $backup_tmp_dir );
 
+	//Email Backup
+	hmbkp_email_backup( $filepath );
+
     update_option( 'hmbkp_status', __( 'Removing old backups.', 'hmbkp' ) );
 
 	// Delete any old backup files
@@ -156,3 +159,44 @@ function hmbkp_create_tmp_dir( $date ) {
 function hmbkp_is_in_progress() {
 	return (bool) get_transient( 'hmbkp_running' );
 }
+
+/**
+  * Email backup.
+  *
+  *	@param $file
+  * @return bool
+  */
+function hmbkp_email_backup( $file ) {
+
+	if( !defined('HMBKP_EMAIL' ) || !HMBKP_EMAIL )
+		return;
+
+	// Raise the memory limit
+	ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
+	set_time_limit( 0 );
+			$subject = sprintf( __('Backup from %s', 'hmbkp' ), get_bloginfo('url') );
+	$message = __( 'Backup Complete. The zip file of your backup is attached to this email.', 'hmbkp' );
+	$headers = 'From: BackUpWordPress <' . get_bloginfo('admin_email') . '>' . "\r\n";
+		
+	// Try to send the email
+	$sent = wp_mail( HMBKP_EMAIL, $subject, $message, $headers, $file );
+	
+	// If it failed- Try to send a download link - The file was probably too large. 
+	if( !$sent ) :
+		
+		$subject = sprintf( __( 'BACKUP FAILED. %s not backed up', 'hmbkp' ), get_bloginfo( 'url' ) );
+		$url = get_bloginfo('wpurl') . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
+		$message = 'Looks like the Backup is too large to email ('  . round(filesize($file) / 1048576, 2) . 'MB) - Download backup: ' . $url;
+		
+		$sent = wp_mail( $email_address, $subject, $message, $headers );
+		
+	endif;
+	
+	//What to  if it still isn't sent.
+	if( !$sent ) :
+		error_log( 'Email Not Working. Attepted both with and without attachment.' );
+		return false;
+	else :
+		return true;
+	endif;
+} 
