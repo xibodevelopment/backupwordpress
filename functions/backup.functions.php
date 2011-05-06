@@ -20,7 +20,7 @@ function hmbkp_do_backup() {
 
 	$filename = $time_start . '.zip';
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
-	
+
 	// Set as running for a max of 2 hours
 	set_transient( 'hmbkp_running', $time_start, 7200 );
 
@@ -55,7 +55,7 @@ function hmbkp_do_backup() {
 	// Remove the temporary directory
 	hmbkp_rmdirtree( $backup_tmp_dir );
 
-	//Email Backup
+	// Email Backup
 	hmbkp_email_backup( $filepath );
 
     update_option( 'hmbkp_status', __( 'Removing old backups.', 'hmbkp' ) );
@@ -168,41 +168,39 @@ function hmbkp_is_in_progress() {
   */
 function hmbkp_email_backup( $file ) {
 
-	if( !defined('HMBKP_EMAIL' ) || !HMBKP_EMAIL )
-		return;
-	
-	if( !is_email( HMBKP_EMAIL ) ) 
+	if ( !defined('HMBKP_EMAIL' ) || !HMBKP_EMAIL || !is_email( HMBKP_EMAIL ) )
 		return;
 
-	// Raise the memory limit
+	// Raise the memory and time limit
 	ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	set_time_limit( 0 );
-			$subject = sprintf( __('Backup from %s', 'hmbkp' ), get_bloginfo('url') );
-	$message = __( 'Backup Complete. The zip file of your backup is attached to this email.', 'hmbkp' );
-	$headers = 'From: BackUpWordPress <' . get_bloginfo('admin_email') . '>' . "\r\n";
-		
+	
+	$download = get_bloginfo( 'wpurl' ) . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
+	$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST ) . parse_url( get_bloginfo( 'url' ), PHP_URL_PATH );
+
+	$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
+	$message = sprintf( __( "BackUpWordPress has completed a backup of your site %s.\n\nThe backup file should be attached to this email.\n\nYou can also download the backup file by clicking the link below:\n\n%s\n\nKind Regards\n\n The Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), get_bloginfo( 'url' ), $download );
+	$headers = 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+
 	// Try to send the email
 	$sent = wp_mail( HMBKP_EMAIL, $subject, $message, $headers, $file );
 
-	// If it failed- Try to send a download link - The file was probably too large. 
-	if( !$sent ) :
-		
-		$subject = sprintf( __( 'BACKUP FAILED. %s not backed up', 'hmbkp' ), get_bloginfo( 'url' ) );
-		$url = get_bloginfo('wpurl') . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
-		$message = 'Looks like the Backup is too large to email ('  . round(filesize($file) / 1048576, 2) . 'MB) - Download backup: ' . $url;
-		
-		$sent = wp_mail( $email_address, $subject, $message, $headers );
+	// If it failed- Try to send a download link - The file was probably too large.
+	if ( !$sent ) :
+
+		$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
+		$message = sprintf( __( "BackUpWordPress has completed a backup of your site %s.\n\nUnfortunately the backup file was too large to attach to this email.\n\nYou can download the backup file by clicking the link below:\n\n%s\n\nKind Regards\n\n The Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), get_bloginfo( 'url' ), $download );
+
+		$sent = wp_mail( HMBKP_EMAIL, $subject, $message, $headers );
 
 	endif;
-	
-	//Set option for email not sent error
-	if( !$sent ) :
-		update_option('hmbkp_email_errors', 'hmbkp_email_failed' );
-		return false;
-	else :
-		delete_option('hmbkp_email_errors' );
-	endif;
-	
+
+	// Set option for email not sent error
+	if ( !$sent )
+		update_option( 'hmbkp_email_error', 'hmbkp_email_failed' );
+	else
+		delete_option( 'hmbkp_email_error' );
+
 	return true;
-	
-} 
+
+}
