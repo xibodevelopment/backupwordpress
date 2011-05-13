@@ -12,13 +12,16 @@
  */
 function hmbkp_do_backup() {
 
-	// Make sure it's safe to do a backup
-	if ( !is_writable( hmbkp_path() ) || !is_dir( hmbkp_path() ) || ini_get( 'safe_mode' ) )
+	// Make sure it's possible to do a backup
+	if ( !hmbkp_possible() )
 		return false;
-
+	
+	// Clean up any mess left by the last backup
+	hmbkp_cleanup();
+	
     $time_start = date( 'Y-m-d-H-i-s' );
 
-	$filename = $time_start . '.zip';
+	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
 
 	// Set as running for a max of 1 hour
@@ -63,14 +66,13 @@ function hmbkp_do_backup() {
  */
 function hmbkp_delete_old_backups() {
 
-    $files = hmbkp_get_backups();
+    $files = hmbkp_get_backups();    
 
     if ( count( $files ) <= hmbkp_max_backups() )
     	return;
-
-    foreach ( $files as $key => $f )
-        if ( ( $key + 1 ) > hmbkp_max_backups() )
-        	hmbkp_delete_backup( base64_encode( $f['file'] ) );
+    	
+    foreach( array_slice( $files, hmbkp_max_backups() ) as $file )
+       	hmbkp_delete_backup( base64_encode( $file ) );
 
 }
 
@@ -83,26 +85,17 @@ function hmbkp_get_backups() {
 
     $hmbkp_path = hmbkp_path();
 
-    if ( !is_writable( $hmbkp_path ) )
-    	return;
-
     if ( $handle = opendir( $hmbkp_path ) ) :
-
+	
     	while ( false !== ( $file = readdir( $handle ) ) )
-    		if ( ( substr( $file, 0, 1 ) != '.' ) && !is_dir( trailingslashit( $hmbkp_path ) . $file ) && strpos( $file, '.zip' ) !== false )
-    			$files[] = array( 'file' => trailingslashit( $hmbkp_path ) . $file, 'filename' => $file );
+    		if ( strpos( $file, '.zip' ) !== false )
+	   			$files[filemtime( trailingslashit( $hmbkp_path ) . $file )] = trailingslashit( $hmbkp_path ) . $file;
 
     	closedir( $handle );
 
     endif;
 
-    if ( count( $files ) < 1 )
-    	return;
-
-    foreach ( $files as $key => $row )
-    	$filename[$key] = $row['filename'];
-
-    array_multisort( $filename, SORT_DESC, $files );
+    krsort( $files );
 
     return $files;
 }

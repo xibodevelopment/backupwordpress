@@ -1,5 +1,6 @@
 <?php $backup_archives = hmbkp_get_backups();
-if ( count( $backup_archives ) ) : ?>
+if ( count( $backup_archives ) ) :
+	hmbkp_delete_old_backups(); ?>
 
 <table class="widefat" id="hmbkp_manage_backups_table">
     <thead>
@@ -22,7 +23,7 @@ if ( count( $backup_archives ) ) : ?>
 
     <?php foreach ( (array) $backup_archives as $file ) :
 
-        if ( !file_exists( $file['file'] ) )
+        if ( !file_exists( $file ) )
         	continue;
 
         hmbkp_get_backup_row( $file );

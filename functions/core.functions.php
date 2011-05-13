@@ -35,6 +35,8 @@ function hmbkp_deactivate() {
 	// Clear cron
 	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 	wp_clear_scheduled_hook( 'hmbkp_schedule_single_backup_hook' );
+	
+	hmbkp_cleanup();
 
 }
 
@@ -46,7 +48,9 @@ function hmbkp_update() {
 
 	// Every update
 	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) :
-		
+	
+		hmbkp_cleanup();
+
 		delete_transient( 'hmbkp_estimated_filesize' );
 		delete_option( 'hmbkp_running' );
 		delete_option( 'hmbkp_complete' );
@@ -61,7 +65,7 @@ function hmbkp_update() {
 
 	// Pre 1.1
 	if ( !get_option( 'hmbkp_plugin_version' ) ) :
-		
+
 		// Delete the obsolete max backups option
 		delete_option( 'hmbkp_max_backups' );
 
@@ -107,7 +111,8 @@ function hmbkp_update() {
 	endif;
 
 	// Update the stored version
-	update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
+	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION )
+		update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
 
 }
 
@@ -286,25 +291,28 @@ function hmbkp_ls( $dir, $files = array() ) {
  * Recursively delete a directory including
  * all the files and sub-directories.
  *
- * @param string $dirname
+ * @param string $dir
  */
-function hmbkp_rmdirtree( $dirname ) {
+function hmbkp_rmdirtree( $dir ) {
 
-    if ( !is_dir( $dirname ) )
+	if ( is_file( $dir ) )
+		unlink( $dir );
+
+    if ( !is_dir( $dir ) )
     	return false;
 
     $result = array();
 
-    $dirname = trailingslashit( $dirname );
+    $dir = trailingslashit( $dir );
 
-    $handle = opendir( $dirname );
+    $handle = opendir( $dir );
 
     while ( false !== ( $file = readdir( $handle ) ) ) :
 
         // Ignore . and ..
         if ( $file != '.' && $file != '..' ) :
 
-        	$path = $dirname . $file;
+        	$path = $dir . $file;
 
         	// Recurse if subdir, Delete if file
         	if ( is_dir( $path ) ) :
@@ -322,9 +330,9 @@ function hmbkp_rmdirtree( $dirname ) {
 
     closedir( $handle );
 
-    rmdir( $dirname );
+    rmdir( $dir );
 
-    $result[] .= $dirname;
+    $result[] .= $dir;
 
     return $result;
 
@@ -414,7 +422,7 @@ function hmbkp_total_filesize() {
 	clearstatcache();
 
    	foreach ( $files as $f )
-		$filesize += @filesize( $f['file'] );
+		$filesize += @filesize( $f );
 
 	return hmbkp_size_readable( $filesize );
 
@@ -494,9 +502,25 @@ function hmbkp_max_backups() {
 }
 
 function hmbkp_possible() {
-	
+
 	if ( is_writable( hmbkp_path() ) || is_dir( hmbkp_path() ) || !ini_get( 'safe_mode' ) )
 		return true;
-		
+
 	return false;
+}
+
+function hmbkp_cleanup() {
+
+	$hmbkp_path = hmbkp_path();
+		
+	if ( $handle = opendir( $hmbkp_path ) ) :
+	
+    	while ( false !== ( $file = readdir( $handle ) ) )
+    		if ( $file != '.' && $file != '..' && $file != '.htaccess' && strpos( $file, '.zip' ) === false )
+				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
+
+    	closedir( $handle );
+
+    endif;
+
 }
