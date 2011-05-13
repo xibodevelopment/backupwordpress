@@ -41,11 +41,10 @@ function hmbkp_backquote( $a_name ) {
  * Website: http://restkultur.ch/personal/wolf/scripts/db_backup/
  *
  * @access public
- * @param string $path
  * @param mixed $sql_file
  * @param mixed $table
  */
-function hmbkp_make_sql( $path, $sql_file, $table ) {
+function hmbkp_make_sql( $sql_file, $table ) {
 
 	global $hmbkp_db_connect;
 
@@ -150,7 +149,7 @@ function hmbkp_make_sql( $path, $sql_file, $table ) {
     	// write the rows in batches of 100
     	if ( $batch_write == 100 ) :
     		$batch_write = 0;
-    		hmbkp_write_sql( $path, $sql_file );
+    		hmbkp_write_sql( $sql_file );
     		$sql_file = '';
     	endif;
 
@@ -169,7 +168,7 @@ function hmbkp_make_sql( $path, $sql_file, $table ) {
     $sql_file .= "# --------------------------------------------------------\n";
     $sql_file .= "\n";
     
-	hmbkp_write_sql( $path, $sql_file );
+	hmbkp_write_sql( $sql_file );
 
 }
 
@@ -200,9 +199,8 @@ function hmbkp_sql_addslashes( $a_string = '', $is_like = false ) {
  * hmbkp_mysql function.
  *
  * @access public
- * @param mixed $path
  */
-function hmbkp_backup_mysql_fallback( $path ) {
+function hmbkp_backup_mysql_fallback() {
 
 	global $hmbkp_db_connect;
 
@@ -224,14 +222,13 @@ function hmbkp_backup_mysql_fallback( $path ) {
 
     	$curr_table = mysql_tablename( $tables, $i );
 
-    	// Increase script execution time-limit to 15 min for every table.
-		set_time_limit( 0 );
+		@set_time_limit( 0 );
 
     	// Create the SQL statements
     	$sql_file .= "# --------------------------------------------------------\n";
     	$sql_file .= "# Table: " . hmbkp_backquote( $curr_table ) . "\n";
     	$sql_file .= "# --------------------------------------------------------\n";
-    	hmbkp_make_sql( $path, $sql_file, $curr_table );
+    	hmbkp_make_sql( $sql_file, $curr_table );
 
     endfor;
 
@@ -240,12 +237,11 @@ function hmbkp_backup_mysql_fallback( $path ) {
 /**
  * hmbkp_write_sql function.
  *
- * @param mixed $sqldir
  * @param mixed $sql
  */
-function hmbkp_write_sql( $sqldir, $sql ) {
+function hmbkp_write_sql( $sql ) {
 
-    $sqlname = $sqldir . '/wordpress.sql';
+    $sqlname = hmbkp_path() . '/database_' . DB_NAME . '.sql';
 
     // Actually write the sql file
     if ( is_writable( $sqlname ) || !file_exists( $sqlname ) ) :

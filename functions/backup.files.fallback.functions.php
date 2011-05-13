@@ -7,15 +7,38 @@
  * Uses the PCLZIP library that ships with WordPress
  *
  * @todo support zipArchive
- * @param string $backup_tmp_dir
  * @param string $backup_filepath
  */
-function hmbkp_archive_files_fallback( $backup_tmp_dir, $backup_filepath ) {
+function hmbkp_archive_files_fallback( $backup_filepath ) {
 
 	// Try PCLZIP
 	require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
 
 	$archive = new PclZip( $backup_filepath );
-	$archive->create( $backup_tmp_dir, PCLZIP_OPT_REMOVE_PATH, $backup_tmp_dir );
+	
+	// Zip up everything
+	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
+		$archive->create( ABSPATH, PCLZIP_OPT_REMOVE_PATH, ABSPATH, PCLZIP_CB_PRE_ADD, 'hmbkp_pclzip_exclude' );
+	
+	// Only zip up the database
+	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
+		$archive->create( hmbkp_path() . '/database_' . DB_NAME . '.sql', PCLZIP_OPT_REMOVE_PATH, hmbkp_path() );
+
+}
+
+function hmbkp_pclzip_exclude( $event, $file ) {
+
+	$excludes = file_get_contents( HMBKP_PLUGIN_PATH . '/exclude.php' );
+
+	$excludes = str_replace( array( '*', "\n" ), array( '([.]*?)', '|' ), $excludes );
+	
+	// Include the database file
+	if ( strpos( $file['filename'], 'database_' . DB_NAME . '.sql' ) !== false )
+		return true;
+
+	if ( preg_match( '(' . $excludes . ')', $file['filename'] ) )
+		return false;
+
+	return true;
 
 }

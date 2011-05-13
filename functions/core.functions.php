@@ -217,7 +217,7 @@ function hmbkp_send_file( $path ) {
 		return false;
 
 	// Overide max_execution_time
-	set_time_limit( 0 );
+	@set_time_limit( 0 );
 
 	$name = basename( $path );
 
@@ -340,7 +340,7 @@ function hmbkp_rmdirtree( $dirname ) {
  */
 function hmbkp_calculate() {
 
-    ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
+    @ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 
     // Check cache
 	if ( $filesize = get_transient( 'hmbkp_estimated_filesize' ) )
@@ -491,4 +491,12 @@ function hmbkp_max_backups() {
 
 	return 10;
 
+}
+
+function hmbkp_possible() {
+	
+	if ( is_writable( hmbkp_path() ) || is_dir( hmbkp_path() ) || !ini_get( 'safe_mode' ) )
+		return true;
+		
+	return false;
 }

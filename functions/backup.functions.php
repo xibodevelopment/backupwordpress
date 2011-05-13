@@ -21,39 +21,27 @@ function hmbkp_do_backup() {
 	$filename = $time_start . '.zip';
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
 
-	// Set as running for a max of 2 hours
-	set_transient( 'hmbkp_running', $time_start, 7200 );
+	// Set as running for a max of 1 hour
+	set_transient( 'hmbkp_running', $time_start, 3600 );
 
 	// Raise the memory limit
-	ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
-	set_time_limit( 0 );
+	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
+	@set_time_limit( 0 );
 
-    update_option( 'hmbkp_status', __( 'Creating tmp directory', 'hmbkp' ) );
-
-	// Create a temporary directory for this backup
-    $backup_tmp_dir = hmbkp_create_tmp_dir( $time_start );
-
-    update_option( 'hmbkp_status', __( 'Dumping database to tmp directory', 'hmbkp' ) );
+    update_option( 'hmbkp_status', __( 'Dumping database', 'hmbkp' ) );
 
 	// Backup database
 	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
-	    hmbkp_backup_mysql( $backup_tmp_dir );
+	    hmbkp_backup_mysql();
 
-	update_option( 'hmbkp_status', __( 'Copying files to tmp directory', 'hmbkp' ) );
+    update_option( 'hmbkp_status', __( 'Creating zip archive', 'hmbkp' ) );
 
-	// Backup files
+	// Zip everything up
+	hmbkp_archive_files( $filepath );
+	
+	// Delete the database dump file
 	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
-		hmbkp_backup_files( $backup_tmp_dir );
-
-    update_option( 'hmbkp_status', __( 'Zipping up tmp directory', 'hmbkp' ) );
-
-	// Zip up the files
-	hmbkp_archive_files( $backup_tmp_dir, $filepath );
-
-    update_option( 'hmbkp_status', __( 'Removing tmp directory', 'hmbkp' ) );
-
-	// Remove the temporary directory
-	hmbkp_rmdirtree( $backup_tmp_dir );
+		unlink( hmbkp_path() . '/database_' . DB_NAME . '.sql' );
 
 	// Email Backup
 	hmbkp_email_backup( $filepath );
@@ -135,23 +123,6 @@ function hmbkp_delete_backup( $file ) {
 }
 
 /**
- * Create and return the path to the tmp directory
- *
- * @param string $date
- * @return string
- */
-function hmbkp_create_tmp_dir( $date ) {
-
-    $backup_tmp_dir = trailingslashit( hmbkp_path() ) . $date;
-
-    if ( !is_dir( $backup_tmp_dir ) )
-		mkdir( $backup_tmp_dir );
-
-    return $backup_tmp_dir;
-
-}
-
-/**
  * Check if a backup is running
  *
  * @return bool
@@ -172,8 +143,8 @@ function hmbkp_email_backup( $file ) {
 		return;
 
 	// Raise the memory and time limit
-	ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
-	set_time_limit( 0 );
+	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
+	@set_time_limit( 0 );
 	
 	$download = get_bloginfo( 'wpurl' ) . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
 	$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST ) . parse_url( get_bloginfo( 'url' ), PHP_URL_PATH );
