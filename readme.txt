@@ -31,6 +31,28 @@ The plugin will try to use the `mysqldump` and `zip` commands via shell if they 
 
 == Frequently Asked Questions ==
 
+**Where does BackUpWordPress store the backups?**
+
+Currently, backups are stored on your server at <code>wp-content/backups</code>
+
+**Important:** By default BackUpWordPress backs up everything on your site. Your database, themes, uploads and any other folders in your root directory. This means that your backup directory can get quite large. Up to 10 times the size of your site, so make sure your host will not charge you extra for this. 
+
+**How do I restore my site from a backup?**
+
+You need to download the latest backup using ftp. Unzip the files, and re-upload. Overwriting everything on your site. You can then import the database using your hosts database management tool (e.g. phpMyAdmin)
+
+**How do I change BackUpWordPress options?**
+
+A list of available options can be found on the Backups page in the admin. Click the Advanced Options button.
+
+You need to edit the <code>wp-config.php</code> file, and define the Constants. Do it somewhere just before the line <code>/* That's all, stop editing! Happy blogging. */</code>
+
+Here is an example of what it might look like - <code>define('HMBKP_DATABASE_ONLY', true);</code> - this will set BackUpWordPress to backup *only* the database.
+
+**Does BackUpWordPress backup the backups directory?**
+
+No.
+
 Contact support@humanmade.co.uk for help/support.
 
 == Screenshots ==
