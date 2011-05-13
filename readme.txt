@@ -1,6 +1,6 @@
 === BackUpWordPress ===
-Contributors: willmot, matheu, joehoyle, humanmade
-Tags: back up, back up, backup, backups, database, zip, db, files, archive
+Contributors: willmot, mattheu, joehoyle, humanmade
+Tags: back up, back up, backup, backups, database, zip, db, files, archive, humanmade
 Requires at least: 3.0
 Tested up to: 3.1.2
 Stable tag: 1.2
