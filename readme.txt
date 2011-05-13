@@ -31,29 +31,36 @@ The plugin will try to use the `mysqldump` and `zip` commands via shell if they 
 
 == Frequently Asked Questions ==
 
-**Where does BackUpWordPress store the backups?**
+**Where does BackUpWordPress store the backup files?**
 
-Currently, backups are stored on your server at <code>wp-content/backups</code>
+Backups are stored on your server in `wp-content/backups`, you can change the directory.
 
-**Important:** By default BackUpWordPress backs up everything on your site. Your database, themes, uploads and any other folders in your root directory. This means that your backup directory can get quite large. Up to 10 times the size of your site, so make sure your host will not charge you extra for this. 
+**Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This means that your backup directory can get quite large.
 
 **How do I restore my site from a backup?**
 
-You need to download the latest backup using ftp. Unzip the files, and re-upload. Overwriting everything on your site. You can then import the database using your hosts database management tool (e.g. phpMyAdmin)
+You need to download the latest backup file either by clicking download on the backups page or via `FTP`. `Unzip` the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely `phpMyAdmin`).
 
 **How do I change BackUpWordPress options?**
 
-A list of available options can be found on the Backups page in the admin. Click the Advanced Options button.
+A list of available options can be found on the Backups page in the admin. Click the Advanced Options button to see all the options.
 
-You need to edit the <code>wp-config.php</code> file, and define the Constants. Do it somewhere just before the line <code>/* That's all, stop editing! Happy blogging. */</code>
+To set an option you define a `Constant` in your `wp-config.php` file see the following links for help defining `Constants` and editing your `wp-config.php` file:
 
-Here is an example of what it might look like - <code>define('HMBKP_DATABASE_ONLY', true);</code> - this will set BackUpWordPress to backup *only* the database.
+* http://php.net/manual/en/language.constants.php
+* http://codex.wordpress.org/Editing_wp-config.php
+
+For example: to set the number of backups stored to 3 add `define( 'HMBKP_MAX_BACKUPS', 3 );` to your `wp-config.php` file.
 
 **Does BackUpWordPress backup the backups directory?**
 
 No.
 
-Contact support@humanmade.co.uk for help/support.
+**How many backups are stored by default**
+
+BackUpWordPress stores the last 10 backups by default.
+
+Contact support@humanmade.co.uk for further help/support.
 
 == Screenshots ==
 
