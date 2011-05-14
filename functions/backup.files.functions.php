@@ -13,17 +13,21 @@ function hmbkp_archive_files( $backup_filepath ) {
 
 	// Do we have the path to the zip command
 	if ( hmbkp_zip_path() ) :
-		
+
 		// Zip up ABSPATH
 		if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) ) :
-			shell_exec( 'cd ' . escapeshellarg( ABSPATH ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -rq ' . escapeshellarg( $backup_filepath ) . ' ./ -x@' . escapeshellarg( HMBKP_PLUGIN_PATH . '/exclude.php' ) );
+
+			$exclude = ' -x ' . hmbkp_exclude_string( 'zip' );
+
+			shell_exec( 'cd ' . escapeshellarg( ABSPATH ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -rq ' . escapeshellarg( $backup_filepath ) . ' ./' . $exclude );
+
 		endif;
-		
+
 		// Add the database dump to the archive
 		if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) ) :
 			shell_exec( 'cd ' . escapeshellarg( hmbkp_path() ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -uq ' . escapeshellarg( $backup_filepath ) . ' ' . escapeshellarg( 'database_' . DB_NAME . '.sql' ) );
 		endif;
-	
+
 	// If not use the fallback
 	else :
 		hmbkp_archive_files_fallback( $backup_filepath );
@@ -79,5 +83,54 @@ function hmbkp_zip_path() {
 	endif;
 
 	return $path;
+
+}
+
+function hmbkp_excludes() {
+
+	// Exclude the back up path
+	$excludes[] = hmbkp_path();
+
+	// Exclude the default back up path
+	$excludes[] = hmbkp_path_default();
+
+	// Exclude the custom path if one is defined
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+		$excludes[] = hmbkp_conform_dir( HMBKP_PATH );
+
+	return array_unique( $excludes );
+
+}
+
+function hmbkp_exclude_string( $context = 'zip' ) {
+
+	// Return a comma separated list by default
+	$wildcard = ', ';
+
+	// The zip command
+	if ( $context == 'zip' ) :
+		$wildcard = '*';
+		$separator = ' -x ';
+
+	// The PCLZIP fallback library
+	elseif ( $context == 'pclzip' ) :
+		$wildcard = '([.]*?)';
+		$separator = '|';
+
+	endif;
+
+	// Get the excludes
+	$excludes = hmbkp_excludes();
+
+	// Add wildcards to the directories
+	foreach( $excludes as $key => &$exclude )
+		if ( is_dir( $exclude ) )
+			$exclude = str_replace( ABSPATH, '', hmbkp_conform_dir( $exclude ) . $wildcard );
+
+	// Escape shell args to zip command
+	if ( $context == 'zip' )
+		$excludes = array_map( 'escapeshellarg', $excludes );
+
+	return implode( $separator, $excludes );
 
 }

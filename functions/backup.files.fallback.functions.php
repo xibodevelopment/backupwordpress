@@ -21,16 +21,14 @@ function hmbkp_archive_files_fallback( $backup_filepath ) {
 		$archive->create( ABSPATH, PCLZIP_OPT_REMOVE_PATH, ABSPATH, PCLZIP_CB_PRE_ADD, 'hmbkp_pclzip_exclude' );
 	
 	// Only zip up the database
-	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
+	if ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
 		$archive->create( hmbkp_path() . '/database_' . DB_NAME . '.sql', PCLZIP_OPT_REMOVE_PATH, hmbkp_path() );
 
 }
 
 function hmbkp_pclzip_exclude( $event, $file ) {
 
-	$excludes = file_get_contents( HMBKP_PLUGIN_PATH . '/exclude.php' );
-
-	$excludes = str_replace( array( '*', "\n" ), array( '([.]*?)', '|' ), $excludes );
+	$excludes = hmbkp_exclude_string( 'pclzip' );
 	
 	// Include the database file
 	if ( strpos( $file['filename'], 'database_' . DB_NAME . '.sql' ) !== false )
