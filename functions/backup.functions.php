@@ -15,10 +15,10 @@ function hmbkp_do_backup() {
 	// Make sure it's possible to do a backup
 	if ( !hmbkp_possible() )
 		return false;
-	
+
 	// Clean up any mess left by the last backup
 	hmbkp_cleanup();
-	
+
     $time_start = date( 'Y-m-d-H-i-s' );
 
 	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
@@ -41,7 +41,7 @@ function hmbkp_do_backup() {
 
 	// Zip everything up
 	hmbkp_archive_files( $filepath );
-	
+
 	// Delete the database dump file
 	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
 		unlink( hmbkp_path() . '/database_' . DB_NAME . '.sql' );
@@ -66,11 +66,11 @@ function hmbkp_do_backup() {
  */
 function hmbkp_delete_old_backups() {
 
-    $files = hmbkp_get_backups();    
+    $files = hmbkp_get_backups();
 
     if ( count( $files ) <= hmbkp_max_backups() )
     	return;
-    	
+
     foreach( array_slice( $files, hmbkp_max_backups() ) as $file )
        	hmbkp_delete_backup( base64_encode( $file ) );
 
@@ -86,7 +86,7 @@ function hmbkp_get_backups() {
     $hmbkp_path = hmbkp_path();
 
     if ( $handle = opendir( $hmbkp_path ) ) :
-	
+
     	while ( false !== ( $file = readdir( $handle ) ) )
     		if ( strpos( $file, '.zip' ) !== false )
 	   			$files[filemtime( trailingslashit( $hmbkp_path ) . $file )] = trailingslashit( $hmbkp_path ) . $file;
@@ -94,6 +94,21 @@ function hmbkp_get_backups() {
     	closedir( $handle );
 
     endif;
+
+    // If there is a custom backups directory and it's not writable then include those backups as well
+    if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && !is_writable( HMBKP_PATH ) ) :
+
+    	if ( $handle = opendir( HMBKP_PATH ) ) :
+
+    		while ( false !== ( $file = readdir( $handle ) ) )
+    			if ( strpos( $file, '.zip' ) !== false )
+		   			$files[filemtime( trailingslashit( HMBKP_PATH ) . $file )] = trailingslashit( HMBKP_PATH ) . $file;
+
+    		closedir( $handle );
+
+    	endif;
+
+	endif;
 
     krsort( $files );
 
@@ -138,7 +153,7 @@ function hmbkp_email_backup( $file ) {
 	// Raise the memory and time limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	@set_time_limit( 0 );
-	
+
 	$download = get_bloginfo( 'wpurl' ) . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
 	$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST ) . parse_url( get_bloginfo( 'url' ), PHP_URL_PATH );
 

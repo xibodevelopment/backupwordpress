@@ -37,18 +37,6 @@
 
 <?php endif; ?>
 
-<?php if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) :
-    if ( !is_dir( HMBKP_PATH ) || !is_writable( HMBKP_PATH ) ) : ?>
-
-    <p>&#10007; <code><?php echo HMBKP_PATH; ?></code><?php printf( __( 'doesn\'t exist or isn\'t writable. your backups will be saved to %s.', 'hmbkp' ), '<code>' . hmbkp_path() . '</code>' ); ?>.</p>
-
-    <?php else : ?>
-
-    <p>&#10003; <?php printf( __( 'Your backups will be saved to %s.', 'hmbkp' ), '<code>' . hmbkp_path() . '</code>' ); ?></p>
-
-    <?php endif; ?>
-<?php endif ; ?>
-
 <?php if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL && is_email( HMBKP_EMAIL ) ) : ?>
 <p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ); ?></p>
 <?php endif; ?>

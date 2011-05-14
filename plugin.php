@@ -49,40 +49,11 @@ function hmbkp_actions() {
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css' );
 	endif;
 
-	// Check whether we need to disable the cron
-	if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-
-	// Or whether we need to re-enable it
-	elseif( ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && !HMBKP_DISABLE_AUTOMATIC_BACKUP || !defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ) && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_daily_schedule();
-
-	// Allow the time of the daily backup to be changed
-	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) != strtotime( HMBKP_DAILY_SCHEDULE_TIME ) && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_daily_schedule();
-
-	// Reset if custom time is removed
-	elseif( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && !HMBKP_DISABLE_AUTOMATIC_BACKUP || !defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ) )
-		hmbkp_setup_daily_schedule();
+	// Handle any advanced option changes
+	hmbkp_constant_changes();
 
 }
 add_action( 'admin_init', 'hmbkp_actions' );
-
-/**
- * Hook in an change the plugin description when BackUpWordPress is activated
- *
- * @param array $plugins
- * @return $plugins
- */
-function hmbkp_plugin_row( $plugins ) {
-
-	if ( isset( $plugins[HMBKP_PLUGIN_SLUG . '/plugin.php'] ) )
-		$plugins[HMBKP_PLUGIN_SLUG . '/plugin.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>Tools &rarr; Backups</strong>', 'Find me under <strong><a href="' . admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG ) . '">Tools &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/plugin.php']['Description'] );
-
-	return $plugins;
-
-}
-add_filter( 'all_plugins', 'hmbkp_plugin_row', 10 );
 
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );

@@ -105,5 +105,41 @@ function hmbkp_admin_notices() {
 
 	endif;
 
+	// If a custom backups directory is defined and it doesn't exist and can't be created
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && !is_dir( HMBKP_PATH ) ) :
+
+		function hmbkp_path_error(){
+			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s doesn\'t exist and can\'t be created, your backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
+		}
+		add_action( 'admin_notices', 'hmbkp_path_error' );
+
+	endif;
+
+	// If a custom backups directory is defined and exists but isn't writable
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && !is_writable( HMBKP_PATH ) ) :
+
+		function hmbkp_path_error(){
+			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s isn\'t writable, new backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
+		}
+		add_action( 'admin_notices', 'hmbkp_path_error' );
+
+	endif;
+
 }
 add_action( 'admin_head', 'hmbkp_admin_notices' );
+
+/**
+ * Hook in an change the plugin description when BackUpWordPress is activated
+ *
+ * @param array $plugins
+ * @return $plugins
+ */
+function hmbkp_plugin_row( $plugins ) {
+
+	if ( isset( $plugins[HMBKP_PLUGIN_SLUG . '/plugin.php'] ) )
+		$plugins[HMBKP_PLUGIN_SLUG . '/plugin.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>Tools &rarr; Backups</strong>', 'Find me under <strong><a href="' . admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG ) . '">Tools &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/plugin.php']['Description'] );
+
+	return $plugins;
+
+}
+add_filter( 'all_plugins', 'hmbkp_plugin_row', 10 );
