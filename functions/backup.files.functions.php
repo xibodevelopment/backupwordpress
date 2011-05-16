@@ -121,21 +121,23 @@ function hmbkp_exclude_string( $context = 'zip' ) {
 
 	// Get the excludes
 	$excludes = hmbkp_excludes();
-	
+
 	// Add any defined excludes
 	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
 		$excludes = array_merge( explode( ',', HMBKP_EXCLUDES ), $excludes );
 
+	$excludes = array_map( 'trim', $excludes );
+
 	// Add wildcards to the directories
-	foreach( $excludes as $key => &$exclude )
-		if ( is_dir( $exclude ) )
+	foreach( $excludes as $key => &$exclude ) :
+		if ( is_dir( $exclude ) || is_dir( ABSPATH . $exclude ) || is_dir( trailingslashit( ABSPATH ) . $exclude ) )
 			$exclude = str_replace( ABSPATH, '', hmbkp_conform_dir( $exclude ) . $wildcard );
+
+	endforeach;
 
 	// Escape shell args to zip command
 	if ( $context == 'zip' )
 		$excludes = array_map( 'escapeshellarg', $excludes );
-		
-	$excludes = array_map( 'trim', $excludes );
 
 	return implode( $separator, $excludes );
 

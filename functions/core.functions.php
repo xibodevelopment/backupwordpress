@@ -609,7 +609,7 @@ function hmbkp_invalid_custom_excludes() {
 
 	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
 		foreach ( explode( ',', HMBKP_EXCLUDES ) as $exclude )
-			if ( ( $exclude = trim( $exclude ) ) && !file_exists( $exclude ) && !file_exists( ABSPATH . $exclude ) && !file_exists( trailingslashit( ABSPATH ) . $exclude ) )
+			if ( ( $exclude = trim( $exclude ) ) && strpos( $exclude, '*' ) === false && !file_exists( $exclude ) && !file_exists( ABSPATH . $exclude ) && !file_exists( trailingslashit( ABSPATH ) . $exclude ) )
 				$invalid_rules[] = $exclude;
 
 	return $invalid_rules;
@@ -622,7 +622,7 @@ function hmbkp_valid_custom_excludes() {
 
 	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
 		foreach ( explode( ',', HMBKP_EXCLUDES ) as $exclude )
-			if ( ( $exclude = trim( $exclude ) ) && ( file_exists( $exclude ) || file_exists( ABSPATH . $exclude ) || file_exists( trailingslashit( ABSPATH ) . $exclude ) ) )
+			if ( ( $exclude = trim( $exclude ) ) && ( strpos( $exclude, '*' ) !== false || file_exists( $exclude ) || file_exists( ABSPATH . $exclude ) || file_exists( trailingslashit( ABSPATH ) . $exclude ) ) )
 				$valid_rules[] = $exclude;
 
 	return $valid_rules;

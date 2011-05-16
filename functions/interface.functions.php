@@ -129,7 +129,7 @@ function hmbkp_admin_notices() {
 	if ( hmbkp_invalid_custom_excludes() ) :
 
 		function hmbkp_invalid_exclude_notice() {
-			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have defined a custom exclude list but the following paths don\'t exist %s, are you sure you entered them correctly?', 'hmbkp' ), '<code>' . implode( ', ', (array) hmbkp_invalid_custom_excludes() ) . '</code>' ) . '</p></div>';
+			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have defined a custom exclude list but the following paths don\'t exist %s, are you sure you entered them correctly?', 'hmbkp' ), '<code>' . implode( '</code>, <code>', (array) hmbkp_invalid_custom_excludes() ) . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_invalid_exclude_notice' );
 

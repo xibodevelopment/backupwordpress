@@ -42,5 +42,5 @@
 <?php endif; ?>
 
 <?php if ( $valid_excludes = hmbkp_valid_custom_excludes() ) : ?>
-<p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( ', ', $valid_excludes ) . '</code>' ); ?></p>
+<p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $valid_excludes ) . '</code>' ); ?></p>
 <?php endif; ?>
