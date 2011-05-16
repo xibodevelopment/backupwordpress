@@ -88,7 +88,7 @@ function hmbkp_admin_notices() {
 	// If the email address is invalid
 	if ( defined( 'HMBKP_EMAIL' ) && !is_email( HMBKP_EMAIL ) ) :
 
-		function hmbkp_email_invalid_warning(){
+		function hmbkp_email_invalid_warning() {
 			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is not a valid email address.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_email_invalid_warning' );
@@ -98,7 +98,7 @@ function hmbkp_admin_notices() {
 	// If the email failed to send
 	if ( defined( 'HMBKP_EMAIL' ) && get_option( 'hmbkp_email_error' ) ) :
 
-		function hmbkp_email_failed_warning(){
+		function hmbkp_email_failed_warning() {
 			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . __( 'The last backup email failed to send.', 'hmbkp' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_email_failed_warning' );
@@ -108,7 +108,7 @@ function hmbkp_admin_notices() {
 	// If a custom backups directory is defined and it doesn't exist and can't be created
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && !is_dir( HMBKP_PATH ) ) :
 
-		function hmbkp_custom_path_exists_warning(){
+		function hmbkp_custom_path_exists_warning() {
 			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s doesn\'t exist and can\'t be created, your backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_custom_path_exists_warning' );
@@ -118,10 +118,20 @@ function hmbkp_admin_notices() {
 	// If a custom backups directory is defined and exists but isn't writable
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && !is_writable( HMBKP_PATH ) ) :
 
-		function hmbkp_custom_path_writable_notice(){
+		function hmbkp_custom_path_writable_notice() {
 			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s isn\'t writable, new backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_custom_path_writable_notice' );
+
+	endif;
+
+	// If there are custom excludes defined and any of the files or directories don't exist
+	if ( hmbkp_invalid_custom_excludes() ) :
+
+		function hmbkp_invalid_exclude_notice() {
+			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have defined a custom exclude list but the following paths don\'t exist %s, are you sure you entered them correctly?', 'hmbkp' ), '<code>' . implode( ', ', (array) hmbkp_invalid_custom_excludes() ) . '</code>' ) . '</p></div>';
+		}
+		add_action( 'admin_notices', 'hmbkp_invalid_exclude_notice' );
 
 	endif;
 

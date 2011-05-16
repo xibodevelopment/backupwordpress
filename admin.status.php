@@ -15,7 +15,7 @@
     else
     	$what_to_backup = '<code>' . __( 'files', 'hmbkp' ) . '</code>'; ?>
 
-    <?php printf( __( 'Your %s will be automatically backed up every day at %s into %s.', 'hmbkp' ), $what_to_backup , '<code title="' . sprintf( __( 'It\'s currently %s on the server.', 'hmbkp' ), date( 'H:i' ) ) . '">' . date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
+    <?php printf( __( 'Your %s will be automatically backed up every day at %s to %s.', 'hmbkp' ), $what_to_backup , '<code title="' . sprintf( __( 'It\'s currently %s on the server.', 'hmbkp' ), date( 'H:i' ) ) . '">' . date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
 
 <?php endif; ?>
 
@@ -39,4 +39,8 @@
 
 <?php if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL && is_email( HMBKP_EMAIL ) ) : ?>
 <p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ); ?></p>
+<?php endif; ?>
+
+<?php if ( $valid_excludes = hmbkp_valid_custom_excludes() ) : ?>
+<p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( ', ', $valid_excludes ) . '</code>' ); ?></p>
 <?php endif; ?>
