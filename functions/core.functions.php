@@ -143,7 +143,7 @@ function hmbkp_conform_dir( $dir, $rel = false ) {
 
 	// If we're on Windows
 	if ( strpos( ABSPATH, '\\' ) !== false )
-		$dir = str_replace( '/', '\\', $dir );
+		$dir = str_replace( '\\', '/', $dir );
 
 	if ( $rel == true )
 		$dir = str_replace( hmbkp_conform_dir( ABSPATH ), '', $dir );
@@ -486,7 +486,7 @@ function hmbkp_path() {
 }
 
 function hmbkp_path_default() {
-	return WP_CONTENT_DIR . '/backups';
+	return hmbkp_conform_dir( WP_CONTENT_DIR . '/backups' );
 }
 
 function hmbkp_path_move( $from, $to ) {
