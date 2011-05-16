@@ -130,8 +130,12 @@ function hmbkp_exclude_string( $context = 'zip' ) {
 
 	// Add wildcards to the directories
 	foreach( $excludes as $key => &$exclude ) :
+
 		if ( is_dir( $exclude ) || is_dir( ABSPATH . $exclude ) || is_dir( trailingslashit( ABSPATH ) . $exclude ) )
 			$exclude = str_replace( ABSPATH, '', hmbkp_conform_dir( $exclude ) . $wildcard );
+
+		elseif ( !is_file( $exclude ) && strpos( $exclude, '*' ) === false )
+			unset( $excludes[$key] );
 
 	endforeach;
 
