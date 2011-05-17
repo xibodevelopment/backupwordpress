@@ -45,7 +45,7 @@
 				</tr>
 				<tr align="top">
 					<th scope="row"><label for="hmbkp_backup_number">Number of backups</label></th>
-					<td><label for="hmbkp_backup_number">The last <input type="text" class="small-text <?php if( defined('HMBKP_MAX_BACKUPS') ) echo 'disabled'; ?>" value="<?php hmbkp_option_value( 'hmbkp_max_backups', 10 ) ?>" id="hmbkp_backup_number" name="hmbkp_backup_number" <?php if( defined('HMBKP_MAX_BACKUPS') ) echo 'disabled="disabled"'; ?>> backups will be stored on the server.</label></td>
+					<td><label for="hmbkp_backup_number">The last <input type="text" class="small-text <?php if( defined('HMBKP_MAX_BACKUPS') ) echo 'disabled'; ?>" value="<?php echo hmbkp_max_backups() ?>" id="hmbkp_backup_number" name="hmbkp_backup_number" <?php if( defined('HMBKP_MAX_BACKUPS') ) echo 'disabled="disabled"'; ?>> backups will be stored on the server.</label></td>
 				</tr>
 				<tr valign="top">
 					<th scope="row"><label for="hmbkp_email_address">Email Backups</label></th>
@@ -133,7 +133,7 @@ function hmbkp_option_save() {
 function hmbkp_option_value( $option, $default = false, $echo = true ) {
 	
 	switch( $option ) {
-		
+			
 		case 'hmbkp_max_backups' :
 			if( defined( 'HMBKP_MAX_BACKUPS' ) )
 				$r = HMBKP_MAX_BACKUPS;

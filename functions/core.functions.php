@@ -524,6 +524,9 @@ function hmbkp_max_backups() {
 
 	if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
 		return (int) HMBKP_MAX_BACKUPS;
+	
+	if( get_option( 'hmbkp_max_backups' ) )
+		return (int) get_option( 'hmbkp_max_backups', 10 ); 
 
 	return 10;
 
