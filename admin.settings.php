@@ -104,8 +104,7 @@ function hmbkp_option_save() {
 		$errors[] = 'Invalid number of backups entered. Reset to default (10 backups)';
 	}
 	
-	if( !is_email( $_POST['hmbkp_email_address'] ) ) {
-		delete_option( 'hmbkp_email_address' );
+	if( !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
 		$errors[] = 'Email address was invalid.';
 	} elseif( !empty( $_POST['hmbkp_email_address'] ) ) {
 		update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
@@ -135,7 +134,7 @@ function hmbkp_option_value( $option, $default = false, $echo = true ) {
 	
 	switch( $option ) {
 		
-		case 'hmbkp_max_backups'
+		case 'hmbkp_max_backups' :
 			if( defined( 'HMBKP_MAX_BACKUPS' ) )
 				$r = HMBKP_MAX_BACKUPS;
 			else
