@@ -123,8 +123,8 @@ function hmbkp_exclude_string( $context = 'zip' ) {
 	$excludes = hmbkp_excludes();
 
 	// Add any defined excludes
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		$excludes = array_merge( explode( ',', HMBKP_EXCLUDES ), $excludes );
+	if ( hmbkp_get_excludes() )
+		$excludes = array_merge( explode( ',', hmbkp_get_excludes() ), $excludes );
 
 	$excludes = array_map( 'trim', $excludes );
 

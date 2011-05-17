@@ -42,7 +42,7 @@
 				<tr align="top">
 					<th scope="row"><label for="hmbkp_excludes">Excludes</th>
 					<td>
-						<textarea class="large-text<?php if ( defined( 'HMBKP_EXCLUDES' ) ) echo ' disabled' ?>" name="hmbkp_excludes" id="hmbkp_excludes" <?php if( defined( 'HMBKP_EXCLUDES' ) ) echo 'disabled="disabled"'; ?>><?php hmbkp_option_value('hmbkp_excludes'); ?></textarea> 
+						<textarea class="large-text<?php if ( defined( 'HMBKP_EXCLUDES' ) ) echo ' disabled' ?>" name="hmbkp_excludes" id="hmbkp_excludes" <?php if( defined( 'HMBKP_EXCLUDES' ) ) echo 'disabled="disabled"'; ?>><?php echo hmbkp_get_excludes(); ?></textarea> 
 						<span class="description">A comma separated list of file and directory paths that you do <strong>not</strong> want to backup.</span><br/>
 						e.g. <code>file.php, directory/, directory/file.jpg</code>
 					</td>

@@ -587,6 +587,15 @@ function hmbkp_get_disable_automatic_backup() {
 		return false;
 }
 
+function hmbkp_get_excludes() {
+	if( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
+		return HMBKP_EXCLUDES;
+	elseif( get_option('hmbkp_excludes') )
+		return get_option('hmbkp_excludes');
+	else
+		return false;
+}
+
 /**
  * Check if a backup is possible with regards to file
  * permissions etc.
@@ -665,8 +674,8 @@ function hmbkp_invalid_custom_excludes() {
 
 	$invalid_rules = array();
 
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		foreach ( explode( ',', HMBKP_EXCLUDES ) as $exclude )
+	if ( hmbkp_get_excludes() )
+		foreach ( explode( ',', hmbkp_get_excludes() ) as $exclude )
 			if ( ( $exclude = trim( $exclude ) ) && strpos( $exclude, '*' ) === false && !file_exists( $exclude ) && !file_exists( ABSPATH . $exclude ) && !file_exists( trailingslashit( ABSPATH ) . $exclude ) )
 				$invalid_rules[] = $exclude;
 
@@ -678,8 +687,8 @@ function hmbkp_valid_custom_excludes() {
 
 	$valid_rules = array();
 
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		foreach ( explode( ',', HMBKP_EXCLUDES ) as $exclude )
+	if ( hmbkp_get_excludes() )
+		foreach ( explode( ',', hmbkp_get_excludes() ) as $exclude )
 			if ( ( $exclude = trim( $exclude ) ) && ( strpos( $exclude, '*' ) !== false || file_exists( $exclude ) || file_exists( ABSPATH . $exclude ) || file_exists( trailingslashit( ABSPATH ) . $exclude ) ) )
 				$valid_rules[] = $exclude;
 
