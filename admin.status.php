@@ -1,7 +1,5 @@
 <p>&#10003;
 
-<?php var_dump( hmbkp_get_disable_automatic_backup() ); ?>
-
 <?php if ( hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) : ?>
 
     <?php printf( __( 'Automatic backups are %s.', 'hmbkp' ), '<strong>' . __( 'disabled', 'hmbkp' ) . '</strong>' ); ?>

@@ -641,8 +641,9 @@ function hmbkp_cleanup() {
 function hmbkp_constant_changes() {
 
 	// Check whether we need to disable the cron
-	if ( hmbkp_get_disable_automatic_backup() && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
+	if ( hmbkp_get_disable_automatic_backup() && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) {
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
+	}
 
 	// Or whether we need to re-enable it
 	if ( !hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
@@ -653,7 +654,7 @@ function hmbkp_constant_changes() {
 		hmbkp_setup_daily_schedule();
 
 	// Reset if custom time is removed
-	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && !HMBKP_DISABLE_AUTOMATIC_BACKUP || !defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ) )
+	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
 		hmbkp_setup_daily_schedule();
 
 	// If a custom backup path has been set or changed
