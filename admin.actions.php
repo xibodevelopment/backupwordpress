@@ -1,6 +1,63 @@
 <?php
 
 /**
+ *	hmbkp_option_save function 
+ *
+ *	Verify & save all the options set on 
+ *	the backupwordpress advanced options page.
+ * 	
+ *	Returns array of errors encountered when updating options.
+ * 	If no errors - returns false. 
+ *
+ *	Uses $_POST data
+ */
+function hmbkp_option_save() {
+	
+	if( empty( $_POST['hmbkp_options_submit'] ) ) {
+		return; 
+	}
+	
+	check_admin_referer( 'hmbkp_options', 'hmbkp_options_nonce' );
+	
+	if( ! (bool) $_POST['hmbkp_automatic'] )
+		update_option('hmbkp_disable_automatic_backup', 'true' );
+	else 
+		delete_option('hmbkp_disable_automatic_backup');
+	
+	if( $_POST['hmbkp_what_to_backup'] == 'files only' ) {
+		update_option('hmbkp_files_only', 'true' );
+		delete_option('hmbkp_database_only');
+	} elseif( $_POST['hmbkp_what_to_backup'] == 'database only' ) {
+		update_option('hmbkp_database_only', 'true' );
+		delete_option('hmbkp_files_only');
+	} else {
+		delete_option('hmbkp_database_only');
+		delete_option('hmbkp_files_only');
+	}
+	
+	if( $max_backups = intval( $_POST['hmbkp_backup_number'] ) ) {
+		update_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
+	} else {
+		delete_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
+		$errors[] = 'Invalid number of backups entered. Reset to default (10 backups)';
+	}
+	
+	if( !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
+		$errors[] = 'Email address was invalid.';
+	} elseif( !empty( $_POST['hmbkp_email_address'] ) ) {
+		update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
+	} else {
+		delete_option( 'hmbkp_email_address' );
+	}
+	
+	if( !empty( $_POST['hmbkp_excludes'] ) )
+		update_option('hmbkp_excludes', $_POST['hmbkp_excludes'] );
+	else 
+		delete_option('hmbkp_excludes');			
+}
+add_action('admin_init', 'hmbkp_option_save', 11 );
+
+/**
  * Delete the backup and then redirect
  * back to the backups page
  */

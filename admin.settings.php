@@ -1,21 +1,9 @@
 <div id="hmbkp_advanced-options">
 
-	<?php 
-		
-		if( isset( $_POST['submit'] ) ) {
-			$errors = hmbkp_option_save();
-		}
-		
-		if( $errors ) {
-			foreach( $errors as $error ) {
-				echo '<div class="error fade">' . $error . '</div>';
-			}
-		}
-	?>
-
     <h4><?php _e( 'Advanced Options', 'hmbkp' ); ?></h4>
 
 	<form action="" method="post">
+		<?php wp_nonce_field( 'hmbkp_options', 'hmbkp_options_nonce' ); ?>
 		<table class="form-table">
 			<tbody>
 				<tr align="top">
@@ -27,7 +15,7 @@
 								Backup my site automatically.
 							</label><br/>
 							<label for="hmbkp_automatic_off">
-								<input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_off" value="0" <?php if( !hmbkp_get_disable_automatic_backup() ) echo 'checked="checked"'; ?> <?php if( defined('HMBKP_DISABLE_AUTOMATIC_BACKUP') ) echo 'disabled="disabled"'; ?>>
+								<input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_off" value="0" <?php if( hmbkp_get_disable_automatic_backup() ) echo 'checked="checked"'; ?> <?php if( defined('HMBKP_DISABLE_AUTOMATIC_BACKUP') ) echo 'disabled="disabled"'; ?>>
 								No automatic backups.
 							</label><br/>
 						</fieldset>
@@ -61,68 +49,13 @@
 				</tr>
 			</tbody>
 		</table>
-	<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Save Changes"></p>
+	<p class="submit"><input type="submit" name="hmbkp_options_submit" id="submit" class="button-primary" value="Save Changes"></p>
 	</form>
 	<p><?php printf( __( 'You can still %s settings in your %s to control advanced options. A full list of %s can be found in the readme. Defined settings will not be editable via the WordPress admin.', 'hmbkp' ), '<code>define</code>', '<code>wp-config.php</code>', '<code>Constants</code>', '<a href="http://codex.wordpress.org/Editing_wp-config.php">' . __( 'The Codex can help', 'hmbkp' ) . '</a>', '<code>Constants</code>' ); ?></p>
 	    
 </div>
 
 <?php
-/**
- *	hmbkp_option_save function 
- *
- *	Verify & save all the options set on 
- *	the backupwordpress advanced options page.
- * 	
- *	Returns array of errors encountered when updating options.
- * 	If no errors - returns false. 
- *
- *	Uses $_POST data
- */
-function hmbkp_option_save() {
-	
-	if( ! (bool) $_POST['hmbkp_automatic'] )
-		update_option('hmbkp_disable_automatic_backup', 'true' );
-	else 
-		delete_option('hmbkp_disable_automatic_backup');
-	
-	if( $_POST['hmbkp_what_to_backup'] == 'files only' ) {
-		update_option('hmbkp_files_only', 'true' );
-		delete_option('hmbkp_database_only');
-	} elseif( $_POST['hmbkp_what_to_backup'] == 'database only' ) {
-		update_option('hmbkp_database_only', 'true' );
-		delete_option('hmbkp_files_only');
-	} else {
-		delete_option('hmbkp_database_only');
-		delete_option('hmbkp_files_only');
-	}
-	
-	if( $max_backups = intval( $_POST['hmbkp_backup_number'] ) ) {
-		update_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
-	} else {
-		delete_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
-		$errors[] = 'Invalid number of backups entered. Reset to default (10 backups)';
-	}
-	
-	if( !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
-		$errors[] = 'Email address was invalid.';
-	} elseif( !empty( $_POST['hmbkp_email_address'] ) ) {
-		update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
-	} else {
-		delete_option( 'hmbkp_email_address' );
-	}
-	
-	if( !empty( $_POST['hmbkp_excludes'] ) )
-		update_option('hmbkp_excludes', $_POST['hmbkp_excludes'] );
-	else 
-		delete_option('hmbkp_excludes');
-	
-	if( $errors ) {
-		return $errors; 
-	}
-				
-}
-
 /**
  *	hmbkp_option_value function
  *
