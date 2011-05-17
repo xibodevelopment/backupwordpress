@@ -533,6 +533,61 @@ function hmbkp_max_backups() {
 }
 
 /**
+ *	Returns true or false
+ */
+function hmbkp_get_files_only() {
+	if( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) 
+		return true;
+	elseif( get_option( 'hmbkp_files_only' ) )
+		return true;
+	else
+		return false;
+}
+
+/**
+ *	Returns true or false
+ */
+function hmbkp_get_database_only() {
+	if( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) 
+		return true;
+	elseif( get_option( 'hmbkp_database_only' ) )
+		return true;
+	else
+		return false;
+}
+
+/**
+ *	Returns defined email address or email address saved in options.
+ *	If none set, return false.
+ */
+
+function hmbkp_get_email_address() {
+	if( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL )
+		$r = HMBKP_EMAIL;
+	elseif( get_option( 'hmbkp_email_address' ) )
+		$r = get_option( 'hmbkp_email_address' );
+	else
+		return false;
+		
+	if( is_email( $r ) )
+		return $r;
+	else
+		return false;
+}
+
+/**
+ *	Returns true or false
+ */
+function hmbkp_get_disable_automatic_backup() {
+	if( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP )
+		return true;
+	elseif( get_option('hmbkp_disable_automatic_backup') )
+		return true;
+	else
+		return false;
+}
+
+/**
  * Check if a backup is possible with regards to file
  * permissions etc.
  *

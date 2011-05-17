@@ -23,11 +23,11 @@
 					<td>
 						<fieldset>
 							<label for="hmbkp_automatic_on"> 
-								<input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_on" value="1" <?php if( ! (bool) get_option('hmbkp_disable_automatic_backup' ) ) echo 'checked="checked"'; ?> <?php if( defined('HMBKP_DISABLE_AUTOMATIC_BACKUP') ) echo 'disabled="disabled"'; ?>>
+								<input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_on" value="1" <?php if( !hmbkp_get_disable_automatic_backup() ) echo 'checked="checked"'; ?> <?php if( defined('HMBKP_DISABLE_AUTOMATIC_BACKUP') ) echo 'disabled="disabled"'; ?>>
 								Backup my site automatically.
 							</label><br/>
 							<label for="hmbkp_automatic_off">
-								<input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_off" value="0" <?php if( (bool) get_option('hmbkp_disable_automatic_backup' ) ) echo 'checked="checked"'; ?> <?php if( defined('HMBKP_DISABLE_AUTOMATIC_BACKUP') ) echo 'disabled="disabled"'; ?>>
+								<input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_off" value="0" <?php if( !hmbkp_get_disable_automatic_backup() ) echo 'checked="checked"'; ?> <?php if( defined('HMBKP_DISABLE_AUTOMATIC_BACKUP') ) echo 'disabled="disabled"'; ?>>
 								No automatic backups.
 							</label><br/>
 						</fieldset>
@@ -38,8 +38,8 @@
 					<td>Backup my 
 						<select name="hmbkp_what_to_backup" id="hmbkp_what_to_backup" <?php if( defined('HMBKP_FILES_ONLY') || defined('HMBKP_DATABASE_ONLY')  ) echo 'disabled="disabled"'; ?>>
 							<option value="default" <?php if( !get_option( 'hmbkp_files_only' ) && !get_option( 'hmbkp_database_only' ) ) echo 'selected="selected"'; ?>>database &amp; files</option>
-							<option <?php if( get_option( 'hmbkp_database_only' ) || defined( 'HMBKP_DATABASE_ONLY' ) ) echo 'selected="selected"'; ?>>database only</option>
-							<option <?php if( get_option( 'hmbkp_files_only' ) || defined( 'HMBKP_FILES_ONLY' ) ) echo 'selected="selected"'; ?>>files only</option>
+							<option <?php if( hmbkp_get_database_only() ) echo 'selected="selected"'; ?>>database only</option>
+							<option <?php if( hmbkp_get_files_only() ) echo 'selected="selected"'; ?>>files only</option>
 						</select>
 					</td>
 				</tr>
@@ -49,7 +49,7 @@
 				</tr>
 				<tr valign="top">
 					<th scope="row"><label for="hmbkp_email_address">Email Backups</label></th>
-					<td><input name="hmbkp_email_address" type="text" id="hmbkp_email_address" value="<?php hmbkp_option_value( 'hmbkp_email_address', false) ?>" class="regular-text <?php if( defined('HMBKP_EMAIL') ) echo 'disabled'; ?>" <?php if( defined('HMBKP_EMAIL') ) echo 'disabled="disabled"'; ?>> <span class="description">A copy of the backup file will be emailed to this address. Disabled if left blank.</span></td>
+					<td><input name="hmbkp_email_address" type="text" id="hmbkp_email_address" value="<?php echo hmbkp_get_email_address(); ?>" class="regular-text <?php if( defined('HMBKP_EMAIL') ) echo 'disabled'; ?>" <?php if( defined('HMBKP_EMAIL') ) echo 'disabled="disabled"'; ?>> <span class="description">A copy of the backup file will be emailed to this address. Disabled if left blank.</span></td>
 				</tr>
 				<tr align="top">
 					<th scope="row"><label for="hmbkp_excludes">Excludes</th>
@@ -133,21 +133,7 @@ function hmbkp_option_save() {
 function hmbkp_option_value( $option, $default = false, $echo = true ) {
 	
 	switch( $option ) {
-			
-		case 'hmbkp_max_backups' :
-			if( defined( 'HMBKP_MAX_BACKUPS' ) )
-				$r = HMBKP_MAX_BACKUPS;
-			else
-				$r = get_option( $option, $default );
-			break;		
-			
-		case 'hmbkp_email_address' :
-			if( defined( 'HMBKP_EMAIL' ) )
-				$r = HMBKP_EMAIL;
-			else
-				$r = get_option( $option, $default );
-			break;
-			
+						
 		case 'hmbkp_excludes' :
 			if( defined( 'HMBKP_EXCLUDES' ) )
 				$r = HMBKP_EXCLUDES;

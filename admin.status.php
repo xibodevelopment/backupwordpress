@@ -1,15 +1,17 @@
 <p>&#10003;
 
-<?php if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) : ?>
+<?php var_dump( hmbkp_get_disable_automatic_backup() ); ?>
+
+<?php if ( hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) : ?>
 
     <?php printf( __( 'Automatic backups are %s.', 'hmbkp' ), '<strong>' . __( 'disabled', 'hmbkp' ) . '</strong>' ); ?>
 
 <?php else :
 
-    if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY || !defined( 'HMBKP_FILES_ONLY' ) ) && ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY || !defined( 'HMBKP_DATABASE_ONLY' ) ) )
+    if ( !hmbkp_get_database_only() && !hmbkp_get_files_only()  )
     	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code> ' . __( '&amp;', 'hmbkp' ) . ' <code>' . __( 'files', 'hmbkp' ) . '</code>';
 
-    elseif( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
+    elseif( hmbkp_get_database_only() )
     	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code>';
 
     else
@@ -27,18 +29,18 @@
 
 <?php if ( hmbkp_shell_exec_available() ) : ?>
 
-    <?php if ( hmbkp_zip_path() && ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY || !defined( 'HMBKP_DATABASE_ONLY' ) ) ) : ?>
+    <?php if ( hmbkp_zip_path() && !hmbkp_get_database_only() ) : ?>
 <p>&#10003; <?php printf( __( 'Your %s will be backed up using %s.', 'hmbkp' ), '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>' . hmbkp_zip_path() . '</code>' ); ?></p>
     <?php endif; ?>
 
-    <?php if ( hmbkp_mysqldump_path() && ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY || !defined( 'HMBKP_FILES_ONLY' ) ) ) : ?>
+    <?php if ( hmbkp_mysqldump_path() && !hmbkp_get_files_only() ) : ?>
 <p>&#10003; <?php printf( __( 'Your %s will be backed up using %s.', 'hmbkp' ), '<code>' . __( 'database', 'hmbkp' ) . '</code>', '<code>' . hmbkp_mysqldump_path() . '</code>' ); ?></p>
     <?php endif; ?>
 
 <?php endif; ?>
 
-<?php if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL && is_email( HMBKP_EMAIL ) ) : ?>
-<p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ); ?></p>
+<?php if ( hmbkp_get_email_address() ) : ?>
+<p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . hmbkp_get_email_address() . '</code>' ); ?></p>
 <?php endif; ?>
 
 <?php if ( $valid_excludes = hmbkp_valid_custom_excludes() ) : ?>
