@@ -15,7 +15,7 @@ function hmbkp_archive_files( $backup_filepath ) {
 	if ( hmbkp_zip_path() ) :
 
 		// Zip up ABSPATH
-		if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) ) :
+		if ( !hmbkp_get_database_only() ) :
 
 			$exclude = ' -x ' . hmbkp_exclude_string( 'zip' );
 
@@ -24,7 +24,7 @@ function hmbkp_archive_files( $backup_filepath ) {
 		endif;
 
 		// Add the database dump to the archive
-		if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) ) :
+		if ( !hmbkp_get_files_only() ) :
 			shell_exec( 'cd ' . escapeshellarg( hmbkp_path() ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -uq ' . escapeshellarg( $backup_filepath ) . ' ' . escapeshellarg( 'database_' . DB_NAME . '.sql' ) );
 		endif;
 

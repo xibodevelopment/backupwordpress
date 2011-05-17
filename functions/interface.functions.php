@@ -66,7 +66,7 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If both HMBKP_FILES_ONLY & HMBKP_DATABASE_ONLY are defined at the same time
-	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) :
+	if ( hmbkp_get_files_only() && hmbkp_get_database_only() ) :
 
 	    function hmbkp_nothing_to_backup_warning() {
 	    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have both %s and %s defined so there isn\'t anything to back up.', 'hmbkp' ), '<code>HMBKP_DATABASE_ONLY</code>', '<code>HMBKP_FILES_ONLY</code>' ) . '</p></div>';

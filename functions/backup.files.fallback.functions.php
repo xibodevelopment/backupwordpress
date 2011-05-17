@@ -17,11 +17,11 @@ function hmbkp_archive_files_fallback( $backup_filepath ) {
 	$archive = new PclZip( $backup_filepath );
 
 	// Zip up everything
-	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
+	if ( !hmbkp_get_database_only() )
 		$archive->create( ABSPATH, PCLZIP_OPT_REMOVE_PATH, ABSPATH, PCLZIP_CB_PRE_ADD, 'hmbkp_pclzip_exclude' );
 
 	// Only zip up the database
-	if ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
+	if ( hmbkp_get_database_only() )
 		$archive->create( hmbkp_path() . '/database_' . DB_NAME . '.sql', PCLZIP_OPT_REMOVE_PATH, hmbkp_path() );
 
 }

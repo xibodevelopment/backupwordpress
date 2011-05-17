@@ -357,7 +357,7 @@ function hmbkp_calculate() {
 	$filesize = 0;
 
     // Don't include database if files only
-	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) ) :
+	if ( !hmbkp_get_files_only() ) :
 
     	global $wpdb;
 
@@ -368,7 +368,7 @@ function hmbkp_calculate() {
 
     endif;
 
-   	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) ) :
+   	if ( !hmbkp_get_database_only() ) :
 
     	// Get rid of any cached filesizes
     	clearstatcache();
@@ -632,11 +632,11 @@ function hmbkp_cleanup() {
 function hmbkp_constant_changes() {
 
 	// Check whether we need to disable the cron
-	if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
+	if ( hmbkp_get_disable_automatic_backup() && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 
 	// Or whether we need to re-enable it
-	if ( ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && !HMBKP_DISABLE_AUTOMATIC_BACKUP || !defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ) && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
+	if ( !hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
 		hmbkp_setup_daily_schedule();
 
 	// Allow the time of the daily backup to be changed
