@@ -5,12 +5,13 @@
 tfoot p { margin: 0; font-weight: normal; }
 #hmbkp_advanced-options { display: none; }
 #hmbkp_advanced-options dl { overflow: hidden; margin: 20px 0; }
-#hmbkp_advanced-options dt { float: left; min-width: 250px; clear: both; padding: 6px 0; margin: 1px 0; }
-#hmbkp_advanced-options dd { color: #666; padding: 7px 0 7px 250px; border-top: 1px solid #DFDFDF; margin: 0; cursor: pointer; }
+#hmbkp_advanced-options dt { float: left; min-width: 250px; clear: both; padding: 6px; margin: 1px 0; cursor: pointer; }
+#hmbkp_advanced-options dd { color: #666; padding: 7px 0 7px 250px; border-top: 1px solid #DFDFDF; margin: 0; cursor: pointer; min-height: 34px; }
 #hmbkp_advanced-options dd:last-child { border-bottom: 1px solid #DFDFDF; }
 #hmbkp_advanced-options dt:not(.hmbkp_active) + dd { background: #F9F9F9; }
 #hmbkp_advanced-options dd .example { white-space: nowrap; display: none; }
 #hmbkp_advanced-options dd p { margin: 0; }
+#hmbkp_advanced-options dt:not(.hmbkp_active):hover + dd, #hmbkp_advanced-options dt:not(.hmbkp_active) + dd:hover { background-color: #FFF; }
 #hmbkp_advanced-options dd:hover p, #hmbkp_advanced-options dt:hover + dd p { display: none; }
 #hmbkp_advanced-options dd:hover .example, #hmbkp_advanced-options dt:hover + dd .example { display: inline; }
 .hmbkp_manage_backups_row .delete { color: #BC0B0B; }
