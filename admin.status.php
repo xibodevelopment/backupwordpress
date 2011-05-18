@@ -1,5 +1,10 @@
+<?php 
+	// If the form has been submitted, things may have changed.
+	if ( ( !empty( $_POST['hmbkp_options_submit'] ) ) && ( !wp_next_scheduled('hmbkp_schedule_backup_hook') || hmbkp_get_disable_automatic_backup() ) )	{
+		hmbkp_constant_changes();
+	}	
+?>
 <p>&#10003;
-
 <?php if ( hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) : ?>
 
     <?php printf( __( 'Automatic backups are %s.', 'hmbkp' ), '<strong>' . __( 'disabled', 'hmbkp' ) . '</strong>' ); ?>
