@@ -5,7 +5,8 @@
  * to the tools menu
  */
 function hmbkp_admin_menu() {
-	add_management_page( __( 'Manage Backups','hmbkp' ), __( 'Backups','hmbkp' ), 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
+	global $hmbkp_plugin_hook;
+	$hmbkp_plugin_hook = add_management_page( __( 'Manage Backups','hmbkp' ), __( 'Backups','hmbkp' ), 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
 }
 add_action( 'admin_menu', 'hmbkp_admin_menu' );
 
@@ -33,3 +34,20 @@ function hmbkp_plugin_action_link( $links, $file ) {
 
 }
 add_filter('plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
+
+/**
+ *	Add Contextual Help to Backups tools page.
+ *
+ */
+ function hmbkp_contextual_help($contextual_help, $screen_id, $screen) {
+	global $hmbkp_plugin_hook;
+	if ($screen_id == $hmbkp_plugin_hook) {
+		
+		require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+		$plugin = plugins_api( 'plugin_information', array( 'slug' => 'backupwordpress' ) );
+		$hmbkp_contextual_help = $plugin->sections['faq'];
+	}
+	return $hmbkp_contextual_help . '<p><strong>For more information:</strong><p/>' . $contextual_help;
+}
+add_filter('contextual_help', 'hmbkp_contextual_help', 10, 3);
+ 
