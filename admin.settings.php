@@ -1,4 +1,4 @@
-<div id="hmbkp_advanced-options">
+<div id="hmbkp_advanced-options" <?php if( !empty( $_POST['hmbkp_options_submit'] ) ) echo ' class="submitted"' ?>>
 
     <h4><?php _e( 'Advanced Options', 'hmbkp' ); ?></h4>
 
