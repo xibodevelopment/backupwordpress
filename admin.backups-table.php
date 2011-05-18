@@ -1,11 +1,11 @@
-<?php $backup_archives = hmbkp_get_backups();
-if ( count( $backup_archives ) ) :
-	hmbkp_delete_old_backups(); ?>
+<?php hmbkp_delete_old_backups();
+$backup_archives = hmbkp_get_backups();
+if ( count( $backup_archives ) ) : ?>
 
 <table class="widefat" id="hmbkp_manage_backups_table">
     <thead>
     	<tr>
-    		<th scope="col"><?php printf( __( '%d Completed backups', 'hmbkp' ), count( $backup_archives ) ); ?></th>
+    		<th scope="col"><?php printf( _n( '1 backup completed', '%d backups completed', count( $backup_archives ),  'hmbkp' ), count( $backup_archives ) ); ?></th>
     		<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
     		<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
     	</tr>

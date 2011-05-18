@@ -30,9 +30,9 @@ function hmbkp_pclzip_exclude( $event, &$file ) {
 
 	$excludes = hmbkp_exclude_string( 'pclzip' );
 
-	// Include the database file
+	// Include the database file TODO NOT WORKING IN WINDOWS
 	if ( strpos( $file['filename'], 'database_' . DB_NAME . '.sql' ) !== false )
-		$file['stored_filename'] = str_replace( str_replace( ABSPATH, '', hmbkp_path() ), '', $file['stored_filename'] );
+		$file['stored_filename'] = 'database_' . DB_NAME . '.sql';
 
 	// Match everything else past the exclude list
 	elseif ( preg_match( '(' . $excludes . ')', $file['filename'] ) )
