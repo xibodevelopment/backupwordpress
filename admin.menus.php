@@ -38,16 +38,25 @@ add_filter('plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
 /**
  *	Add Contextual Help to Backups tools page.
  *
+ *	Help is pulled from the readme FAQ.
+ *	NOTE: FAQ used is from the wordpress repo, and might not be up to date for development versions.
+ *
  */
- function hmbkp_contextual_help($contextual_help, $screen_id, $screen) {
+ function hmbkp_contextual_help( $contextual_help, $screen_id, $screen ) {
 	global $hmbkp_plugin_hook;
-	if ($screen_id == $hmbkp_plugin_hook) {
-		
+	if ( $screen_id == $hmbkp_plugin_hook ) {
 		require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
 		$plugin = plugins_api( 'plugin_information', array( 'slug' => 'backupwordpress' ) );
-		$hmbkp_contextual_help = $plugin->sections['faq'];
+		$hmbkp_contextual_help = '';
+		
+		//Check if help is for the right version.
+		if( HMBKP_VERSION > $plugin->version )
+			$hmbkp_contextual_help .= sprintf( __('<p><strong>Help for version <em>%s</em>.</strong> Looks like you are using version <em>%s</em> - this information may not be up to date. Please check the readme.txt file.</p>', 'hmbkp'), $plugin->version, HMBKP_VERSION );
+		
+		$hmbkp_contextual_help .= $plugin->sections['faq'];
+		
 	}
-	return $hmbkp_contextual_help . '<p><strong>For more information:</strong><p/>' . $contextual_help;
+	return $hmbkp_contextual_help . __( '<p><strong>For more information:</strong><p/>', 'hmbkp' ) . $contextual_help;
 }
-add_filter('contextual_help', 'hmbkp_contextual_help', 10, 3);
+add_filter( 'contextual_help', 'hmbkp_contextual_help', 10, 3 );
  
