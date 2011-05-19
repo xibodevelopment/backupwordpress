@@ -277,6 +277,20 @@ function hmbkp_ls( $dir, $files = array() ) {
 		if ( $file == hmbkp_path() )
 			continue;
 
+		//Get excluded files & directories.
+		$excludes = hmbkp_valid_custom_excludes();
+		foreach( $excludes as &$exclude ) {
+			$exclude = ABSPATH . $exclude;
+		}
+	
+		//Skip over excluded files
+		if ( is_array( $excludes ) && in_array( $file, $excludes ) )
+			continue;
+		
+		//Skip over excluded directories
+		if ( is_array( $excludes ) && is_dir( $file ) && in_array( trailingslashit( $file ), $excludes ) )
+			continue;
+
 		$files[] = $file;
 
 		if ( is_dir( $file ) )
