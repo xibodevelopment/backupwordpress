@@ -31,6 +31,24 @@ function hmbkp_get_backup_row( $file ) {
 
 function hmbkp_admin_notices() {
 
+	// If the form has been submitted, display un updated notification
+	// Display  notifications for any errors in the advanced options form. 
+	if( !empty( $_POST['hmbkp_options_submit'] ) ) :
+
+		function hmbkp_advanced_options_saved() {
+			echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
+
+			global $hmbkp_errors;
+			if ( !empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() ) {
+				foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error ) {
+					echo '<div class="error"><p>' . $hmbkp_error . '</p></div>';
+				}
+			}
+		}
+		add_action( 'admin_notices', 'hmbkp_advanced_options_saved' );
+		
+	endif; 
+	
 	// If the backups directory doesn't exist and can't be automatically created
 	if ( !is_dir( hmbkp_path() ) ) :
 

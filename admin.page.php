@@ -21,20 +21,6 @@
 
 	</h2>
 
-<?php
-	// If the form has been submitted, display un updated notification
-	if( !empty( $_POST['hmbkp_options_submit'] ) )
-		echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
-	
-	// Display  notifications for any errors in the advanced options form. 
-	global $hmbkp_errors;
-	if ( !empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() ) {
-		foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error ) {
-			echo '<div class="error"><p>' . $hmbkp_error . '</p></div>';
-		}
-	}	
-?>
-
 <?php if ( hmbkp_possible() ) : ?>
 
 	<?php include_once( HMBKP_PLUGIN_PATH . '/admin.status.php' ); ?>
