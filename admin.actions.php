@@ -38,7 +38,7 @@ function hmbkp_option_save() {
 		delete_option('hmbkp_files_only');
 	}
 	
-	if( isset( $_POST['hmbkp_max_backups'] ) && $max_backups = intval( $_POST['hmbkp_backup_number'] ) ) {
+	if( isset( $_POST['hmbkp_backup_number'] ) && $max_backups = intval( $_POST['hmbkp_backup_number'] ) ) {
 		update_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
 	} else {
 		delete_option( 'hmbkp_max_backups' );
