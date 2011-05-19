@@ -19,6 +19,9 @@ function hmbkp_option_save() {
 	
 	check_admin_referer( 'hmbkp_options', 'hmbkp_options_nonce' );
 	
+	global $hmbkp_errors;
+	$hmbkp_errors = new WP_Error;
+	
 	if( ! (bool) $_POST['hmbkp_automatic'] )
 		update_option('hmbkp_disable_automatic_backup', 'true' );
 	else 
@@ -39,11 +42,11 @@ function hmbkp_option_save() {
 		update_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
 	} else {
 		delete_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
-		$errors[] = 'Invalid number of backups entered. Reset to default (10 backups)';
+		$hmbkp_errors->add( 'invalid_no_backups', __("You have entered an invalid number of backups.") );
 	}
 	
 	if( !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
-		$errors[] = 'Email address was invalid.';
+			$hmbkp_errors->add( 'invalid_email', __("You have entered an invalid email address.") );
 	} elseif( !empty( $_POST['hmbkp_email_address'] ) ) {
 		update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
 	} else {
@@ -54,6 +57,12 @@ function hmbkp_option_save() {
 		update_option('hmbkp_excludes', $_POST['hmbkp_excludes'] );
 	else 
 		delete_option('hmbkp_excludes');			
+		
+	if( $hmbkp_errors->get_error_code() )
+		return $hmbkp_errors;
+	
+	return true;
+	
 }
 add_action('admin_init', 'hmbkp_option_save', 11 );
 

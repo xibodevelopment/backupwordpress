@@ -6,11 +6,6 @@
 
 		<?php _e( 'Manage Backups', 'hmbkp' ); ?>
 
-<?php
-	if( !empty( $_POST['hmbkp_options_submit'] ) )
-		echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
-?>
-
 <?php if ( hmbkp_is_in_progress() ) : ?>
 		<a class="button add-new-h2" <?php disabled( true ); ?>><img src="<?php echo site_url( 'wp-admin/images/wpspin_light.gif' ); ?>" width="16" height="16" /><?php echo get_option( 'hmbkp_status' ); ?></a>
 
@@ -25,6 +20,20 @@
 		<a href="#hmbkp_advanced-options" class="button add-new-h2 hmbkp_advanced-options-toggle"><?php _e( 'Advanced Options' ); ?></a>
 
 	</h2>
+
+<?php
+	// If the form has been submitted, display un updated notification
+	if( !empty( $_POST['hmbkp_options_submit'] ) )
+		echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
+	
+	// Display  notifications for any errors in the advanced options form. 
+	global $hmbkp_errors;
+	if ( !empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() ) {
+		foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error ) {
+			echo '<div class="error"><p>' . $hmbkp_error . '</p></div>';
+		}
+	}	
+?>
 
 <?php if ( hmbkp_possible() ) : ?>
 
