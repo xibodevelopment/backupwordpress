@@ -6,6 +6,11 @@
 
 		<?php _e( 'Manage Backups', 'hmbkp' ); ?>
 
+<?php
+	if( !empty( $_POST['hmbkp_options_submit'] ) )
+		echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
+?>
+
 <?php if ( hmbkp_is_in_progress() ) : ?>
 		<a class="button add-new-h2" <?php disabled( true ); ?>><img src="<?php echo site_url( 'wp-admin/images/wpspin_light.gif' ); ?>" width="16" height="16" /><?php echo get_option( 'hmbkp_status' ); ?></a>
 
