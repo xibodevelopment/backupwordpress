@@ -2,7 +2,7 @@
 
     <h4><?php _e( 'Advanced Options', 'hmbkp' ); ?></h4>
 
-	<form action="" method="post">
+	<form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 		<?php wp_nonce_field( 'hmbkp_options', 'hmbkp_options_nonce' ); ?>
 		<table class="form-table">
 			<tbody>
