@@ -19,10 +19,11 @@ function hmbkp_do_backup() {
 	// Clean up any mess left by the last backup
 	hmbkp_cleanup();
 
-    $time_start = date( 'Y-m-d-H-i-s' );
-
+	$offset = current_time( 'timestamp' ) - time();
+    $time_start = date( 'Y-m-d-H-i-s', time() + $offset );
 	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
+
 
 	// Set as running for a max of 1 hour
 	set_transient( 'hmbkp_running', $time_start, 3600 );

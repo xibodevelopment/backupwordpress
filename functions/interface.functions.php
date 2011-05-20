@@ -6,12 +6,15 @@
  */
 function hmbkp_get_backup_row( $file ) {
 
-	$encode = base64_encode( $file ); ?>
+	$encode = base64_encode( $file ); 
+	$offset = current_time( 'timestamp' ) - time();
+	
+	?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( get_option( 'hmbkp_complete' ) ) : ?> completed<?php delete_option( 'hmbkp_complete' ); endif; ?>">
 
 		<th scope="row">
-			<?php echo date( get_option('date_format'), filemtime( $file ) ) . ' ' . date( 'H:i', filemtime($file ) ); ?>
+			<?php echo date( get_option('date_format'), filemtime( $file ) + $offset ) . ' ' . date( 'H:i', filemtime($file ) + $offset ); ?>
 		</th>
 
 		<td>
