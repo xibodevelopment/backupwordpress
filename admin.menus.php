@@ -50,9 +50,9 @@ add_filter('plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
 		$hmbkp_contextual_help = '';
 		
 		//Check if help is for the right version.	
-		if( HMBKP_VERSION > $plugin->version )
+		if( version_compare( HMBKP_VERSION, $plugin->version, '>' ) > 0 )
 			$hmbkp_contextual_help .= sprintf( __('<p><strong>Help for version <em>%s</em>.</strong> Looks like you are using a development version <em>(%s)</em> &mdash; this information may not be up to date. Please check the readme.txt file.</p>', 'hmbkp'), $plugin->version, HMBKP_VERSION );
-		elseif( HMBKP_VERSION < $plugin->version )
+		if( version_compare( HMBKP_VERSION, $plugin->version, '>' ) < 0 )
 			$hmbkp_contextual_help .= sprintf( __('<p><strong>Help for version <em>%s</em>.</strong> Looks like you are using an older version <em>(%s)</em> &ndash; this information may not be up to date. Please check the readme.txt file.</p>', 'hmbkp'), $plugin->version, HMBKP_VERSION );
 		
 		$hmbkp_contextual_help .= $plugin->sections['faq'];
