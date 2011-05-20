@@ -19,7 +19,7 @@
 
 <?php endif; ?>
 
-<p>&#10003; <span class="hmbkp_estimated-size"><?php printf( __( 'Each backup will be roughly %s.', 'hmbkp' ), get_transient( 'hmbkp_estimated_filesize' ) ? '<code>' . hmbkp_calculate() . '</code>' : '<code class="calculate">' . __( 'Calculating Size...', 'hmbkp' ) . '</code>' ); ?></span></p>
+<p>&#10003; <span class="hmbkp_estimated-size"><?php printf( __( 'Your site is %s. Your final backup will be compressed and should be smaller than this.', 'hmbkp' ), get_transient( 'hmbkp_estimated_filesize' ) ? '<code>' . hmbkp_calculate() . '</code>' : '<code class="calculate">' . __( 'Calculating Size...', 'hmbkp' ) . '</code>' ); ?></span></p>
 
 <?php if ( !hmbkp_shell_exec_available() ) : ?>
 <p>&#10007; <?php printf( __( '%s is disabled which means we have to use the slower PHP fallbacks, you could try contacting your host and asking them to enable it.', 'hmbkp' ), '<code>shell_exec</code>' ); ?>

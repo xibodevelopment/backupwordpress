@@ -381,9 +381,6 @@ function hmbkp_calculate() {
 
 	endif;
 
-	// Account for compression
-	$filesize /= 1.9;
-
     // Cache in a transient for a week
     set_transient( 'hmbkp_estimated_filesize', $filesize,  604800 );
 
