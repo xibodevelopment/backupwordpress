@@ -457,7 +457,10 @@ function hmbkp_setup_daily_schedule() {
 	if ( time() > strtotime( $time ) )
 		$time = 'tomorrow ' . $time;
 
-	wp_schedule_event( strtotime( $time ), 'hmbkp_daily', 'hmbkp_schedule_backup_hook' );
+	//GMT offset
+	$offset = current_time( 'timestamp' ) - time();
+	
+	wp_schedule_event( ( strtotime( $time ) - $offset ), 'hmbkp_daily', 'hmbkp_schedule_backup_hook' );
 }
 
 
