@@ -264,6 +264,9 @@ function hmbkp_send_file( $path ) {
  */
 function hmbkp_ls( $dir, $files = array() ) {
 
+	if ( !is_readable( $dir ) )
+		return $files;
+
 	$d = opendir( $dir );
 
 	while ( $file = readdir( $d ) ) :
@@ -402,11 +405,22 @@ function hmbkp_shell_exec_available() {
 		return false;
 
 	// Are we in Safe Mode
-	if ( ini_get( 'safe_mode' ) )
+	if ( hmbkp_is_safe_mode_active() )
 		return false;
 
 	return true;
 
+}
+
+function hmbkp_is_safe_mode_active() {
+	
+	$safe_mode = ini_get( 'safe_mode' );
+	
+	if ( $safe_mode && $safe_mode != 'off' )
+		return true;
+		
+	return false;
+	
 }
 
 /**
@@ -537,7 +551,7 @@ function hmbkp_max_backups() {
  */
 function hmbkp_possible() {
 
-	if ( is_writable( hmbkp_path() ) || is_dir( hmbkp_path() ) || !ini_get( 'safe_mode' ) )
+	if ( is_writable( hmbkp_path() ) && is_dir( hmbkp_path() ) && !hmbkp_is_safe_mode_active() )
 		return true;
 
 	return false;

@@ -65,11 +65,11 @@ Class wpdb2 Extends wpdb {
 }
 
 /**
- * If mysql.max_links is 2 or less and we're using the mysqldump fallback
+ * If mysql.max_links is 2 or less
  * then we need the second link for the backup so we can't include
  * mysql_ping.
  */
-if ( ini_get( 'mysql.max_links' > 2 ) && !hmbkp_mysqldump_path() ) :
+if ( ini_get( 'mysql.max_links' ) > 2 || ini_get( 'mysql.max_links' ) == -1 ) :
 
 	// Setup the wpdb2 class
 	$wpdb2 = new wpdb2( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST );
