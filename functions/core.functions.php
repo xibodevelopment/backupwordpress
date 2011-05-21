@@ -201,7 +201,10 @@ function hmbkp_size_readable( $size, $unit = null, $retstring = '%01.2f %s', $si
 function hmbkp_more_reccurences( $recc ) {
 
 	$hmbkp_reccurrences = array(
-	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'every day' )
+	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'every day' ),
+	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' )
+	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' )
+	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'once a month' )
 	);
 
 	return array_merge( $recc, $hmbkp_reccurrences );
@@ -454,11 +457,10 @@ function hmbkp_setup_daily_schedule() {
 	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME )
 		$time = HMBKP_DAILY_SCHEDULE_TIME;
 
-	//How far off UTC are we? 
 	$offset = current_time( 'timestamp' ) - time();
-
 	$scheduletime_UTC = strtotime( $time ) - $offset;
 		
+	// If scheduled backup is in the past - fast forward 1 day.
 	if( $scheduletime_UTC < time( ) )
 		$scheduletime_UTC = $scheduletime_UTC + 86400;
 	
