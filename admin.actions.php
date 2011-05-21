@@ -27,6 +27,9 @@ function hmbkp_option_save() {
 	else 
 		delete_option('hmbkp_disable_automatic_backup');
 	
+	if( isset( $_POST['hmbkp_frequency'] ) )
+		update_option('hmbkp_frequency', $_POST['hmbkp_frequency'] );
+	
 	if( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'files only' ) {
 		update_option('hmbkp_files_only', 'true' );
 		delete_option('hmbkp_database_only');

@@ -22,6 +22,18 @@
 					</td>
 				</tr>
 				<tr align="top">
+					<th scope="row">Frequency of backups</th>
+					<td>
+						Automatic backups will occur 
+							<select name="hmbkp_frequency" id="hmbkp_frequency">
+								<option value="hmbkp_daily" <?php if( get_option( 'hmbkp_frequency' ) == 'hmpkp_daily' ) echo 'selected="selected"'; ?>>Daily</option>
+								<option value="hmbkp_weekly" <?php if( get_option( 'hmbkp_frequency' ) == 'hmbkp_weekly' ) echo 'selected="selected"'; ?>>Weekly</option>
+								<option value="hmbkp_fortnightly" <?php if( get_option( 'hmbkp_frequency' ) == 'hmbkp_fortnightly' ) echo 'selected="selected"'; ?>>Fortnightly</option>
+								<option value="hmbkp_monthly" <?php if( get_option( 'hmbkp_frequency' ) == 'hmbkp_monthly' ) echo 'selected="selected"'; ?>>Monthly</option>
+							</select>
+					</td>
+				</tr>
+				<tr align="top">
 					<th scope="row"><label for="hmbkp_what_to_backup">What to Backup</label></th>
 					<td>Backup my 
 						<select name="hmbkp_what_to_backup" id="hmbkp_what_to_backup" <?php if( defined('HMBKP_FILES_ONLY') || defined('HMBKP_DATABASE_ONLY')  ) echo 'disabled="disabled"'; ?>>
