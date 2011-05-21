@@ -454,13 +454,15 @@ function hmbkp_setup_daily_schedule() {
 	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME )
 		$time = HMBKP_DAILY_SCHEDULE_TIME;
 
-	if ( time() > strtotime( $time ) )
-		$time = 'tomorrow ' . $time;
-
-	//GMT offset
+	//How far off UTC are we? 
 	$offset = current_time( 'timestamp' ) - time();
+
+	$scheduletime_UTC = strtotime( $time ) - $offset;
+		
+	if( $scheduletime_UTC < time( ) )
+		$scheduletime_UTC = $scheduletime_UTC + 86400;
 	
-	wp_schedule_event( ( strtotime( $time ) - $offset ), 'hmbkp_daily', 'hmbkp_schedule_backup_hook' );
+	wp_schedule_event( $scheduletime_UTC, 'hmbkp_daily', 'hmbkp_schedule_backup_hook' );
 }
 
 
