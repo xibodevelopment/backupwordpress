@@ -202,8 +202,8 @@ function hmbkp_more_reccurences( $recc ) {
 
 	$hmbkp_reccurrences = array(
 	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'every day' ),
-	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' )
-	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' )
+	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' ),
+	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' ),
 	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'once a month' )
 	);
 
