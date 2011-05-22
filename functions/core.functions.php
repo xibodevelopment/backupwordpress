@@ -204,10 +204,10 @@ function hmbkp_size_readable( $size, $unit = null, $retstring = '%01.2f %s', $si
 function hmbkp_more_reccurences( $recc ) {
 
 	$hmbkp_reccurrences = array(
-	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'every day' ),
-	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' ),
-	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' ),
-	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'once a month' )
+	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'Every Day' ),
+	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'Every Week' ),
+	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'Once a Fortnight' ),
+	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'Once a Month' )
 	);
 
 	return array_merge( $recc, $hmbkp_reccurrences );
@@ -467,7 +467,16 @@ function hmbkp_setup_daily_schedule() {
 	if( $scheduletime_UTC < time( ) )
 		$scheduletime_UTC = $scheduletime_UTC + 86400;
 	
-	wp_schedule_event( $scheduletime_UTC, 'hmbkp_daily', 'hmbkp_schedule_backup_hook' );
+	if( defined( 'HMBKP_SCHEDULE_FREQUENCY' ) && HMBKP_SCHEDULE_FREQUENCY )
+		$schedule_frequency = HMBKP_SCHEDULE_FREQUENCY;
+	elseif( get_option('hmbkp_schedule_frequency') )
+		$schedule_frequency = get_option('hmbkp_schedule_frequency');
+	else
+		$schedule_frequency = 'hmbkp_daily';
+	
+	error_log( $schedule_frequency );
+	
+	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
 
 
@@ -671,8 +680,9 @@ function hmbkp_constant_changes() {
 		hmbkp_setup_daily_schedule();
 
 	// Allow the time of the daily backup to be changed
-	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) != strtotime( HMBKP_DAILY_SCHEDULE_TIME ) && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_daily_schedule();
+	// This is wrong.
+	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) != strtotime( HMBKP_DAILY_SCHEDULE_TIME ) && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )	
+		//hmbkp_setup_daily_schedule();
 
 	// Reset if custom time is removed
 	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
