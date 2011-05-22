@@ -204,10 +204,10 @@ function hmbkp_size_readable( $size, $unit = null, $retstring = '%01.2f %s', $si
 function hmbkp_more_reccurences( $recc ) {
 
 	$hmbkp_reccurrences = array(
-	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'Every Day' ),
-	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'Every Week' ),
-	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'Once a Fortnight' ),
-	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'Once a Month' )
+	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'every day' ),
+	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' ),
+	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' ),
+	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'once a month' )
 	);
 
 	return array_merge( $recc, $hmbkp_reccurrences );
@@ -473,8 +473,6 @@ function hmbkp_setup_daily_schedule() {
 		$schedule_frequency = get_option('hmbkp_schedule_frequency');
 	else
 		$schedule_frequency = 'hmbkp_daily';
-	
-	error_log( $schedule_frequency );
 	
 	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
