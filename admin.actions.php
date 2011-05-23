@@ -33,6 +33,7 @@ function hmbkp_option_save() {
 	else
 		delete_option( 'hmbkp_schedule_frequency' );
 	
+	//Clear schedule if settings have changed.
 	if ( wp_get_schedule('hmbkp_schedule_backup_hook') != get_option('hmbkp_schedule_frequency') )
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 	

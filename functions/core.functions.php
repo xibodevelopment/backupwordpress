@@ -476,10 +476,6 @@ function hmbkp_setup_daily_schedule() {
 
 	$offset = current_time( 'timestamp' ) - time();
 	$scheduletime_UTC = strtotime( $time ) - $offset;
-		
-	// If scheduled backup is in the past - fast forward 1 day.
-	if( $scheduletime_UTC < time( ) )
-		$scheduletime_UTC = $scheduletime_UTC + 86400;
 	
 	if( defined( 'HMBKP_SCHEDULE_FREQUENCY' ) && HMBKP_SCHEDULE_FREQUENCY )
 		$schedule_frequency = HMBKP_SCHEDULE_FREQUENCY;
@@ -488,15 +484,18 @@ function hmbkp_setup_daily_schedule() {
 	else
 		$schedule_frequency = 'hmbkp_daily';
 	
-	if( $schedule_frequency != 'hmbkp_daily' ) {
+	// Advance by the interval. (except daily, when it will only happen if shcheduled time is in the past. )
+	if( $schedule_frequency == 'hmbkp_daily' && $scheduletime_UTC < time() ) {
+		$scheduletime_UTC = $scheduletime_UTC + 86400;
+	} else {
 		$interval =  wp_get_schedules('hmbkp_schedule_backup_hook');
 		$interval = $interval[ $schedule_frequency ]['interval'];
 		$scheduletime_UTC = $scheduletime_UTC + $interval;
 	}
 		
+		 
 	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
-
 
 /**
  * Get the path to the backups directory
@@ -701,7 +700,7 @@ function hmbkp_constant_changes() {
 		hmbkp_setup_daily_schedule();
 
 	// Reset if custom time is removed
-	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
+	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option('hmbkp_schedule_frequency') == 'hmbkp_daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
 		hmbkp_setup_daily_schedule();
 
 	// If a custom backup path has been set or changed
