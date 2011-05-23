@@ -33,8 +33,7 @@ function hmbkp_option_save() {
 	else
 		delete_option( 'hmbkp_schedule_frequency' );
 	
-	//If a new schedule frequency is set - clear old schedule.
-	if( isset( $_POST['hmbkp_frequency'] ) && $_POST['hmbkp_frequency'] != get_option('hmbkp_schedule_frequency') )
+	if ( wp_get_schedule('hmbkp_schedule_backup_hook') != get_option('hmbkp_schedule_frequency') )
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 	
 	if( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'files only' ) {
