@@ -64,6 +64,9 @@ function hmbkp_actions() {
 }
 add_action( 'admin_init', 'hmbkp_actions' );
 
+// Work around low mysql wait_timeout var
+require_once( HMBKP_PLUGIN_PATH . '/functions/mysql-ping.php' );
+
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
 
@@ -75,7 +78,6 @@ require_once( HMBKP_PLUGIN_PATH . '/functions/backup.mysql.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.files.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.mysql.fallback.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.files.fallback.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/mysql-ping.php' );
 
 // Plugin activation and deactivation
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
