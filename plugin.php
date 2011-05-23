@@ -32,10 +32,8 @@ define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
 
 if( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
-	$plugins = get_option('active_plugins' );
-	$plugin_deactivate = array_keys( $plugins, 'backupwordpress/plugin.php' );
-	unset( $plugins[$plugin_deactivate[0]]);
-	update_option( 'active_plugins', $plugins );
+	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	deactivate_plugins( ABSPATH . 'wp-content/plugins/backupwordpress/plugin.php' );
 	die(sprintf( __( 'BackUpWordPress requires at least WordPress version %s' ), HMBKP_REQUIRED_WP_VERSION ) );
 }
 
