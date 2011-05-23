@@ -488,6 +488,12 @@ function hmbkp_setup_daily_schedule() {
 	else
 		$schedule_frequency = 'hmbkp_daily';
 	
+	if( $schedule_frequency != 'hmbkp_daily' ) {
+		$interval =  wp_get_schedules('hmbkp_schedule_backup_hook');
+		$interval = $interval[ $schedule_frequency ]['interval'];
+		$scheduletime_UTC = $scheduletime_UTC + $interval;
+	}
+		
 	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
 
