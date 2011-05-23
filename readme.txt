@@ -11,7 +11,7 @@ Simple automated backups of your WordPress powered website.
 
 BackUpWordPress will back up your entire site including your database and all your files once every day. It has several advanced options for power users.
 
-Features include:
+= Features =
 
 * Super simple to use, no setup required.
 * Uses `zip` and `mysqldump` for faster backups if they are available.
@@ -60,7 +60,13 @@ No.
 
 BackUpWordPress stores the last 10 backups by default.
 
-Contact support@humanmade.co.uk for further help/support.
+**Further Support & Feedbask**
+
+General support questions should be made using the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
+
+<a href="https://github.com/humanmade/HM-Portfolio">Report any development issues/feature requests should be made on GitHub.</a>
+
+You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
 
 == Screenshots ==
 
