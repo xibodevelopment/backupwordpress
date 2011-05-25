@@ -29,7 +29,7 @@ Author URI: http://humanmade.co.uk/
 define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
 define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
-define( 'HMBKP_REQUIRED_WP_VERSION', '3.2' );
+define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
 
 // Don't activate on old versions of WordPress
 if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
