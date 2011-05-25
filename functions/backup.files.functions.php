@@ -139,8 +139,8 @@ function hmbkp_exclude_string( $context = 'zip' ) {
 	$excludes = hmbkp_excludes();
 
 	// Add any defined excludes
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		$excludes = array_merge( explode( ',', HMBKP_EXCLUDES ), $excludes );
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		$excludes = array_merge( explode( ',', HMBKP_EXCLUDE ), $excludes );
 
 	$excludes = array_map( 'trim', $excludes );
 
@@ -212,8 +212,8 @@ function hmbkp_invalid_custom_excludes() {
 	$invalid_rules = array();
 
 	// Check if any absolute path excludes actually exist
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		foreach ( explode( ',', HMBKP_EXCLUDES ) as $rule )
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		foreach ( explode( ',', HMBKP_EXCLUDE ) as $rule )
 			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && !file_exists( $rule ) && !file_exists( ABSPATH . $rule ) && !file_exists( trailingslashit( ABSPATH ) . $rule ) )
 				$invalid_rules[] = $rule;
 
@@ -230,8 +230,8 @@ function hmbkp_valid_custom_excludes() {
 
 	$valid_rules = array();
 
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		$valid_rules = array_diff( explode( ',', HMBKP_EXCLUDES ), hmbkp_invalid_custom_excludes() );
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		$valid_rules = array_diff( explode( ',', HMBKP_EXCLUDE ), hmbkp_invalid_custom_excludes() );
 
 	return array_map( 'trim', $valid_rules );
 

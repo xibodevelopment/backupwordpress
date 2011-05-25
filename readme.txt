@@ -1,25 +1,26 @@
 === BackUpWordPress ===
 Contributors: willmot, mattheu, joehoyle, humanmade
 Tags: back up, back up, backup, backups, database, zip, db, files, archive, humanmade
-Requires at least: 3.0
+Requires at least: 3.1
 Tested up to: 3.1.2
-Stable tag: 1.2
+Stable tag: 1.3
 
-Simple automated backups of your WordPress powered website.
+Simple automated back ups of your WordPress powered website.
 
 == Description ==
 
 BackUpWordPress will back up your entire site including your database and all your files once every day. It has several advanced options for power users.
 
-Features include:
+= Features =
 
 * Super simple to use, no setup required.
-* Uses `zip` and `mysqldump` for faster backups if they are available.
+* Uses `zip` and `mysqldump` for faster back ups if they are available.
+* Works in low memory, "shared host" environments.
 * Option to have each backup file emailed to you.
 * Works on Linux & Windows Server.
 * Control advanced options by defining any of the optional `Constants`.
+* Exclude files and folders from your back ups.
 * Good support should you need help.
-
 
 == Installation ==
 
@@ -35,7 +36,7 @@ The plugin will try to use the `mysqldump` and `zip` commands via shell if they 
 
 Backups are stored on your server in `wp-content/backups`, you can change the directory.
 
-**Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This means that your backup directory can get quite large.
+**Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does means that your backup directory can get quite large.
 
 **How do I restore my site from a backup?**
 
@@ -52,7 +53,7 @@ To set an option you define a `Constant` in your `wp-config.php` file see the fo
 
 For example: to set the number of backups stored to 3 add `define( 'HMBKP_MAX_BACKUPS', 3 );` to your `wp-config.php` file.
 
-**Does BackUpWordPress backup the backups directory?**
+**Does BackUpWordPress back up the backups directory?**
 
 No.
 
@@ -60,13 +61,37 @@ No.
 
 BackUpWordPress stores the last 10 backups by default.
 
-Contact support@humanmade.co.uk for further help/support.
+**Further Support & Feedbask**
+
+General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
+
+For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/HM-Portfolio">BackUpWordPress on GitHub.</a>
+
+You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
 
 == Screenshots ==
 
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.3
+
+* Re-written back up engine, no longer copies everything to a tmp folder before zipping which should improve speed and reliability.
+* Support for excluding files and folders, define `HMBKP_EXCLUDE` with a comma separated list of files and folders to exclude, supports wildcards `*`, path fragments and absolute paths.
+* Full support for moving the backups directory, if you define a new backups directory then your existing backups will be moved to it.
+* Work around issues caused by low MySQL `wait_timeout` setting.
+* Add FAQ to readme.txt.
+* Pull FAQ into the contextual help tab on the backups page.
+* Block activation on old versions of WordPress.
+* Stop guessing compressed backup file size, instead just show size of site uncompressed.
+* Fix bug in `safe_mode` detection which could cause `Off` to act like `On`.
+* Better name for the database dump file.
+* Better name for the backup files.
+* Improve styling for advanced options.
+* Show examples for all advanced options.
+* Language improvements.
+* Layout tweaks.
 
 #### 1.2
 
