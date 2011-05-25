@@ -4,15 +4,16 @@ jQuery( document ).ready( function( $ ) {
 		hmbkpRedirectOnBackupComplete();
 	}
 
-	$.get( ajaxurl, { 'action' : 'hmbkp_calculate' },
-	    function( data ) {
-	    	$( '.hmbkp_estimated-size .calculate' ).removeClass( 'calculating' );
-	    	$( '.hmbkp_estimated-size .calculate' ).fadeOut( function() {
-	    		$( this ).empty().append( data );
-	    	} ).fadeIn();
-	    }
-	);
-
+	if ( $( '.hmbkp_estimated-size .calculate' ).size() ) {
+		$.get( ajaxurl, { 'action' : 'hmbkp_calculate' },
+		    function( data ) {
+		    	$( '.hmbkp_estimated-size .calculate' ).fadeOut( function() {
+		    		$( this ).empty().append( data );
+		    	} ).fadeIn();
+		    }
+		);
+	}
+		
 	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
 	    function( data ) {
 	    	if ( data != 1 ) {

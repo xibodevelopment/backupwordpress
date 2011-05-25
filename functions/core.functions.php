@@ -269,15 +269,19 @@ function hmbkp_ls( $dir, $files = array() ) {
 
 	$d = opendir( $dir );
 
+	// Get excluded files & directories.
+	$excludes = hmbkp_exclude_string( 'pclzip' );
+
 	while ( $file = readdir( $d ) ) :
 
-		// Ignore current dir and containing dir as well the backups dir
+		// Ignore current dir and containing dir and any unreadable files or directories
 		if ( $file == '.' || $file == '..' )
 			continue;
 
 		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
 
-		if ( $file == hmbkp_path() )
+		// Skip the backups dir and any excluded paths
+		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || !is_readable( $file ) ) )
 			continue;
 
 		$files[] = $file;
@@ -410,14 +414,14 @@ function hmbkp_shell_exec_available() {
 }
 
 function hmbkp_is_safe_mode_active() {
-	
+
 	$safe_mode = ini_get( 'safe_mode' );
-	
+
 	if ( $safe_mode && $safe_mode != 'off' )
 		return true;
-		
+
 	return false;
-	
+
 }
 
 /**
@@ -548,10 +552,13 @@ function hmbkp_max_backups() {
  */
 function hmbkp_possible() {
 
-	if ( is_writable( hmbkp_path() ) && is_dir( hmbkp_path() ) && !hmbkp_is_safe_mode_active() )
-		return true;
-
-	return false;
+	if ( !is_writable( hmbkp_path() ) || !is_dir( hmbkp_path() ) || hmbkp_is_safe_mode_active() )
+		return false;
+	
+	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
+		return false;
+	
+	return true;
 }
 
 /**
@@ -572,70 +579,5 @@ function hmbkp_cleanup() {
     	closedir( $handle );
 
     endif;
-
-}
-
-/**
- * Handles changes in the defined Constants
- * that users can define to control advanced
- * settings
- *
- * @return void
- */
-function hmbkp_constant_changes() {
-
-	// Check whether we need to disable the cron
-	if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-
-	// Or whether we need to re-enable it
-	if ( ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && !HMBKP_DISABLE_AUTOMATIC_BACKUP || !defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ) && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_daily_schedule();
-
-	// Allow the time of the daily backup to be changed
-	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) != strtotime( HMBKP_DAILY_SCHEDULE_TIME ) && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_daily_schedule();
-
-	// Reset if custom time is removed
-	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && !HMBKP_DISABLE_AUTOMATIC_BACKUP || !defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ) )
-		hmbkp_setup_daily_schedule();
-
-	// If a custom backup path has been set or changed
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) )
-		hmbkp_path_move( $from, HMBKP_PATH );
-
-	// If a custom backup path has been removed
-	if ( ( ( defined( 'HMBKP_PATH' ) && !HMBKP_PATH ) || !defined( 'HMBKP_PATH' ) && hmbkp_conform_dir( hmbkp_path_default() ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
-		hmbkp_path_move( $from, hmbkp_path_default() );
-
-	// If the custom path has changed and the new directory isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) && $from != hmbkp_path_default() && !is_writable( HMBKP_PATH ) && is_dir( $from ) )
-		hmbkp_path_move( $from, hmbkp_path_default() );
-
-}
-
-function hmbkp_invalid_custom_excludes() {
-
-	$invalid_rules = array();
-
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		foreach ( explode( ',', HMBKP_EXCLUDES ) as $exclude )
-			if ( ( $exclude = trim( $exclude ) ) && strpos( $exclude, '*' ) === false && !file_exists( $exclude ) && !file_exists( ABSPATH . $exclude ) && !file_exists( trailingslashit( ABSPATH ) . $exclude ) )
-				$invalid_rules[] = $exclude;
-
-	return $invalid_rules;
-
-}
-
-function hmbkp_valid_custom_excludes() {
-
-	$valid_rules = array();
-
-	if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		foreach ( explode( ',', HMBKP_EXCLUDES ) as $exclude )
-			if ( ( $exclude = trim( $exclude ) ) && ( strpos( $exclude, '*' ) !== false || file_exists( $exclude ) || file_exists( ABSPATH . $exclude ) || file_exists( trailingslashit( ABSPATH ) . $exclude ) ) )
-				$valid_rules[] = $exclude;
-
-	return $valid_rules;
 
 }

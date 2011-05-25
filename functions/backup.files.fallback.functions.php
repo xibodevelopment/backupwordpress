@@ -7,14 +7,14 @@
  * Uses the PCLZIP library that ships with WordPress
  *
  * @todo support zipArchive
- * @param string $backup_filepath
+ * @param string $path
  */
-function hmbkp_archive_files_fallback( $backup_filepath ) {
+function hmbkp_archive_files_fallback( $path ) {
 
 	// Try PCLZIP
 	require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
 
-	$archive = new PclZip( $backup_filepath );
+	$archive = new PclZip( $path );
 
 	// Zip up everything
 	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
@@ -30,12 +30,12 @@ function hmbkp_pclzip_exclude( $event, &$file ) {
 
 	$excludes = hmbkp_exclude_string( 'pclzip' );
 
-	// Include the database file TODO NOT WORKING IN WINDOWS
+	// Include the database file
 	if ( strpos( $file['filename'], 'database_' . DB_NAME . '.sql' ) !== false )
 		$file['stored_filename'] = 'database_' . DB_NAME . '.sql';
 
 	// Match everything else past the exclude list
-	elseif ( preg_match( '(' . $excludes . ')', $file['filename'] ) )
+	elseif ( preg_match( '(' . $excludes . ')', $file['stored_filename'] ) )
 		return false;
 
 	return true;

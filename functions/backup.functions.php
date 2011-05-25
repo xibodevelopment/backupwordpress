@@ -43,7 +43,7 @@ function hmbkp_do_backup() {
 	hmbkp_archive_files( $filepath );
 
 	// Delete the database dump file
-	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
+	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
 		unlink( hmbkp_path() . '/database_' . DB_NAME . '.sql' );
 
 	// Email Backup
