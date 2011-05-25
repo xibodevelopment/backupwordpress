@@ -29,6 +29,19 @@ Author URI: http://humanmade.co.uk/
 define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
 define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
+define( 'HMBKP_REQUIRED_WP_VERSION', '3.2' );
+
+// Don't activate on old versions of WordPress
+if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+
+	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+	deactivate_plugins( ABSPATH . 'wp-content/plugins/' . HMBKP_PLUGIN_SLUG . '/plugin.php' );
+
+	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+		die( sprintf( __( 'BackUpWordPress requires WordPress version %s.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
+
+}
 
 // Load the admin actions file
 function hmbkp_actions() {
