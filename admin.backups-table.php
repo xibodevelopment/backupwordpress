@@ -19,7 +19,7 @@ if ( count( $backup_archives ) ) : ?>
     <tfoot>
     	<tr>
     		<th><?php printf( _n( 'Only the most recent backup will be saved', 'The %d most recent backups will be saved', hmbkp_max_backups(), 'hmbkp' ), hmbkp_max_backups() ); ?></th>
-    		<th><?php printf( __( 'Total %s', 'hmbkp' ), hmbkp_total_filesize() ); ?><?php if ( disk_free_space( ABSPATH ) ) : printf( __( ', %s available' ), hmbkp_size_readable( disk_free_space( ABSPATH ), null, '%01u %s' ) ); endif; ?></th>
+    		<th><?php printf( __( 'Total %s', 'hmbkp' ), hmbkp_total_filesize() ); ?></th>
     		<th></th>
     	</tr>
     </tfoot>

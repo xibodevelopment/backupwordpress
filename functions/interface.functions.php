@@ -75,16 +75,6 @@ function hmbkp_admin_notices() {
 
 	endif;
 
-	// If the server is low on space
-	if ( get_transient( 'hmbkp_estimated_filesize' ) && disk_free_space( ABSPATH ) && disk_free_space( ABSPATH ) <= ( 2 * get_transient( 'hmbkp_estimated_filesize' ) ) ) :
-
-	    function hmbkp_low_space_warning() {
-	    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You only have %s of free space left on your server.', 'hmbkp' ), '<code>' . hmbkp_size_readable( disk_free_space( ABSPATH ), null, '%01u %s' ) . '</code>' ) . '</p></div>';
-	    }
-	    add_action( 'admin_notices', 'hmbkp_low_space_warning' );
-
-	endif;
-
 	// If the email address is invalid
 	if ( defined( 'HMBKP_EMAIL' ) && !is_email( HMBKP_EMAIL ) ) :
 
