@@ -54,7 +54,7 @@ For example: to set the number of backups stored to 3 add `define( 'HMBKP_MAX_BA
 
 **Does BackUpWordPress backup the backups directory?**
 
-No.
+No. But it might backup directories created by other backup plugins.
 
 **How many backups are stored by default**
 
@@ -67,6 +67,8 @@ General support questions should be made using the <a href="http://wordpress.org
 <a href="https://github.com/humanmade/HM-Portfolio">Report any development issues/feature requests should be made on GitHub.</a>
 
 You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
+
+<a href="http://humanmade.co.uk/plugins/backupwordpress">Visit the BackUpWordPress page at humanmade.co.uk</a>
 
 == Screenshots ==
 
