@@ -66,32 +66,3 @@
 	<p><?php printf( __( 'You can still %s settings in your %s to control advanced options. A full list of %s can be found in the readme. Defined settings will not be editable via the WordPress admin.', 'hmbkp' ), '<code>define</code>', '<code>wp-config.php</code>', '<code>Constants</code>', '<a href="http://codex.wordpress.org/Editing_wp-config.php">' . __( 'The Codex can help', 'hmbkp' ) . '</a>', '<code>Constants</code>' ); ?></p>
 	    
 </div>
-
-<?php
-/**
- *	hmbkp_option_value function
- *
- *	Echoes the value of the given option.
- *	If the values have been defined using constants, return that value instead. 
- *
- */
-function hmbkp_option_value( $option, $default = false, $echo = true ) {
-	
-	switch( $option ) {
-						
-		case 'hmbkp_excludes' :
-			if( defined( 'HMBKP_EXCLUDES' ) )
-				$r = HMBKP_EXCLUDES;
-			else
-				$r = get_option( 'hmbkp_excludes', false );
-			break;
-		
-		default:
-			$r = get_option( $option, $default );
-	}
-		
-	if( $echo )
-		echo $r;
-	else
-		return $r;
-}
