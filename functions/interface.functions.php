@@ -8,7 +8,7 @@ function hmbkp_get_backup_row( $file ) {
 
 	$encode = base64_encode( $file ); ?>
 
-	<tr class="hmbkp_manage_backups_row<?php if ( get_option( 'hmbkp_complete' ) ) : ?> completed<?php delete_option( 'hmbkp_complete' ); endif; ?>">
+	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 
 		<th scope="row">
 			<?php echo date( get_option('date_format'), filemtime( $file ) ) . ' ' . date( 'H:i', filemtime($file ) ); ?>

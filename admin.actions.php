@@ -62,8 +62,8 @@ function hmbkp_ajax_is_backup_in_progress() {
 	if ( !hmbkp_is_in_progress() )
 		echo 0;
 
-	elseif ( get_option( 'hmbkp_status' ) )
-		echo get_option( 'hmbkp_status' );
+	elseif ( $status = hmbkp_get_status() )
+		echo $status;
 
 	else
 		echo 1;

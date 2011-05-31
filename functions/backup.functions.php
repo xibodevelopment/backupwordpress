@@ -25,19 +25,19 @@ function hmbkp_do_backup() {
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
 
 	// Set as running for a max of 1 hour
-	set_transient( 'hmbkp_running', $time_start, 3600 );
+	hmbkp_set_status();
 
 	// Raise the memory limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	@set_time_limit( 0 );
 
-    update_option( 'hmbkp_status', __( 'Dumping database', 'hmbkp' ) );
+    hmbkp_set_status( __( 'Dumping database', 'hmbkp' ) );
 
 	// Backup database
 	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
 	    hmbkp_backup_mysql();
 
-    update_option( 'hmbkp_status', __( 'Creating zip archive', 'hmbkp' ) );
+	hmbkp_set_status( __( 'Creating zip archive', 'hmbkp' ) );
 
 	// Zip everything up
 	hmbkp_archive_files( $filepath );
@@ -49,15 +49,22 @@ function hmbkp_do_backup() {
 	// Email Backup
 	hmbkp_email_backup( $filepath );
 
-    update_option( 'hmbkp_status', __( 'Removing old backups', 'hmbkp' ) );
+    hmbkp_set_status( __( 'Removing old backups', 'hmbkp' ) );
 
 	// Delete any old backup files
     hmbkp_delete_old_backups();
+    
+    unlink( hmbkp_path() . '/.backup_running' );
+    
+	$file = hmbkp_path() . '/.backup_complete';
+	
+	if ( !$handle = @fopen( $file, 'w' ) )
+		return false;
+	
+	fwrite( $handle );
+	
+	fclose( $handle );
 
-    delete_transient( 'hmbkp_running' );
-    delete_option( 'hmbkp_status' );
-
-    update_option( 'hmbkp_complete', true );
 
 }
 
@@ -136,7 +143,7 @@ function hmbkp_delete_backup( $file ) {
  * @return bool
  */
 function hmbkp_is_in_progress() {
-	return (bool) get_transient( 'hmbkp_running' );
+	return file_exists( hmbkp_path() . '/.backup_running' );
 }
 
 /**
@@ -182,4 +189,26 @@ function hmbkp_email_backup( $file ) {
 
 	return true;
 
+}
+
+function hmbkp_set_status( $message = '' ) {
+	
+	$file = hmbkp_path() . '/.backup_running';
+	
+	if ( !$handle = @fopen( $file, 'w' ) )
+		return false;
+	
+	fwrite( $handle, $message );
+	
+	fclose( $handle );
+	
+}
+
+function hmbkp_get_status() {
+	
+	if ( !file_exists( hmbkp_path() . '/.backup_running' ) )
+		return false;
+		
+	return file_get_contents( hmbkp_path() .'/.backup_running' );
+	
 }
