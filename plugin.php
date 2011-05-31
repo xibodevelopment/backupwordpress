@@ -68,9 +68,6 @@ function hmbkp_actions() {
 }
 add_action( 'admin_init', 'hmbkp_actions' );
 
-// Work around low mysql wait_timeout var
-require_once( HMBKP_PLUGIN_PATH . '/functions/mysql-ping.php' );
-
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
 
