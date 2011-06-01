@@ -191,6 +191,12 @@ function hmbkp_email_backup( $file ) {
 
 }
 
+/**
+ * Set the status of the running backup
+ * 
+ * @param string $message. (default: '')
+ * @return void
+ */
 function hmbkp_set_status( $message = '' ) {
 	
 	$file = hmbkp_path() . '/.backup_running';
@@ -204,6 +210,11 @@ function hmbkp_set_status( $message = '' ) {
 	
 }
 
+/**
+ * Get the status of the running backup
+ * 
+ * @return string
+ */
 function hmbkp_get_status() {
 	
 	if ( !file_exists( hmbkp_path() . '/.backup_running' ) )

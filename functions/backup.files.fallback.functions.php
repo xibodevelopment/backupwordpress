@@ -11,7 +11,6 @@
  */
 function hmbkp_archive_files_fallback( $path ) {
 
-	// Try PCLZIP
 	require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
 
 	$archive = new PclZip( $path );
@@ -26,6 +25,15 @@ function hmbkp_archive_files_fallback( $path ) {
 
 }
 
+/**
+ * Add file callback, excludes files in the backups directory
+ * and sets the database dump to be stored in the root
+ * of the zip
+ * 
+ * @param string $event
+ * @param array &$file
+ * @return bool
+ */
 function hmbkp_pclzip_exclude( $event, &$file ) {
 
 	$excludes = hmbkp_exclude_string( 'pclzip' );

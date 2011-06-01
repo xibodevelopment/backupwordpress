@@ -57,6 +57,11 @@ function hmbkp_request_download_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
 
+/**
+ * Display the running status via ajax
+ *
+ * @return void
+ */
 function hmbkp_ajax_is_backup_in_progress() {
 
 	if ( !hmbkp_is_in_progress() )
@@ -72,12 +77,22 @@ function hmbkp_ajax_is_backup_in_progress() {
 }
 add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' );
 
+/**
+ * Display the calculated size via ajax
+ *
+ * @return void
+ */
 function hmbkp_ajax_calculate_backup_size() {
 	echo hmbkp_calculate();
 	exit;
 }
 add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
 
+/**
+ * Test the cron response and if it's not 200 show a warning message
+ *
+ * @return void
+ */
 function hmbkp_ajax_cron_test() {
 
 	$response = wp_remote_get( site_url( 'wp-cron.php' ) );

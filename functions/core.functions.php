@@ -413,11 +413,16 @@ function hmbkp_shell_exec_available() {
 
 }
 
+/**
+ * Check whether safe mode if active or not
+ * 
+ * @return bool
+ */
 function hmbkp_is_safe_mode_active() {
 
 	$safe_mode = ini_get( 'safe_mode' );
 
-	if ( $safe_mode && $safe_mode != 'off' )
+	if ( $safe_mode && $safe_mode != 'off' && $safe_mode != 'Off' )
 		return true;
 
 	return false;
@@ -464,7 +469,6 @@ function hmbkp_setup_daily_schedule() {
 	wp_schedule_event( strtotime( $time ), 'hmbkp_daily', 'hmbkp_schedule_backup_hook' );
 }
 
-
 /**
  * Get the path to the backups directory
  *
@@ -500,10 +504,23 @@ function hmbkp_path() {
     return hmbkp_conform_dir( $path );
 }
 
+/**
+ * Return the default backup path
+ * 
+ * @return string path
+ */
 function hmbkp_path_default() {
 	return hmbkp_conform_dir( WP_CONTENT_DIR . '/backups' );
 }
 
+/**
+ * Move the backup directory and all existing backup files to a new
+ * location
+ * 
+ * @param string $from path to move the backups dir from
+ * @param string $to path to move the backups dir to
+ * @return void
+ */
 function hmbkp_path_move( $from, $to ) {
 
 	// Create the custom backups directory if it doesn't exist
@@ -569,6 +586,9 @@ function hmbkp_possible() {
 function hmbkp_cleanup() {
 
 	$hmbkp_path = hmbkp_path();
+	
+	if ( !is_dir( $hmbkp_path ) )
+		return;
 
 	if ( $handle = opendir( $hmbkp_path ) ) :
 

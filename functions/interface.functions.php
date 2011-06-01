@@ -29,6 +29,12 @@ function hmbkp_get_backup_row( $file ) {
 
 <?php }
 
+/**
+ * Displays admin notices for various error / warning 
+ * conditions
+ * 
+ * @return void
+ */
 function hmbkp_admin_notices() {
 
 	// If the backups directory doesn't exist and can't be automatically created
