@@ -5,6 +5,7 @@
 	}	
 ?>
 <p>&#10003;
+
 <?php if ( hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) : ?>
 
     <?php printf( __( 'Automatic backups are %s.', 'hmbkp' ), '<strong>' . __( 'disabled', 'hmbkp' ) . '</strong>' ); ?>
@@ -50,6 +51,6 @@
 <p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . hmbkp_get_email_address() . '</code>' ); ?></p>
 <?php endif; ?>
 
-<?php if ( ( $valid_excludes = hmbkp_valid_custom_excludes() ) && ( !hmbkp_get_database_only() ) : ?>
+<?php if ( ( $valid_excludes = hmbkp_valid_custom_excludes() ) && ( !hmbkp_get_database_only() ) ) : ?>
 <p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $valid_excludes ) . '</code>' ); ?></p>
 <?php endif; ?>

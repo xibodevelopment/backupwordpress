@@ -692,45 +692,6 @@ function hmbkp_cleanup() {
 
 }
 
-/**
- * Handles changes in the defined Constants
- * that users can define to control advanced
- * settings
- *
- * @return void
- */
-function hmbkp_constant_changes() {
-
-	// Check whether we need to disable the cron
-	if ( hmbkp_get_disable_automatic_backup() && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) {
-		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-	}
-
-	// Or whether we need to re-enable it
-	if ( !hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_daily_schedule();
-
-	if ( wp_get_schedule('hmbkp_schedule_backup_hook') != get_option('hmbkp_schedule_frequency') )
-		hmbkp_setup_daily_schedule();
-
-	// Reset if custom time is removed
-	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option('hmbkp_schedule_frequency') == 'hmbkp_daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
-		hmbkp_setup_daily_schedule();
-
-	// If a custom backup path has been set or changed
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) )
-		hmbkp_path_move( $from, HMBKP_PATH );
-
-	// If a custom backup path has been removed
-	if ( ( ( defined( 'HMBKP_PATH' ) && !HMBKP_PATH ) || !defined( 'HMBKP_PATH' ) && hmbkp_conform_dir( hmbkp_path_default() ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
-		hmbkp_path_move( $from, hmbkp_path_default() );
-
-	// If the custom path has changed and the new directory isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) && $from != hmbkp_path_default() && !is_writable( HMBKP_PATH ) && is_dir( $from ) )
-		hmbkp_path_move( $from, hmbkp_path_default() );
-
-}
-
 function hmbkp_invalid_custom_excludes() {
 
 	$invalid_rules = array();
