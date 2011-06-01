@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://humanmade.co.uk/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 1.3 bleeding
+Version: 1.3
 Author URI: http://humanmade.co.uk/
 */
 
@@ -31,10 +31,16 @@ define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
 
-if( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+// Don't activate on old versions of WordPress
+if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( ABSPATH . 'wp-content/plugins/backupwordpress/plugin.php' );
-	die(sprintf( __( 'BackUpWordPress requires at least WordPress version %s' ), HMBKP_REQUIRED_WP_VERSION ) );
+
+	deactivate_plugins( ABSPATH . 'wp-content/plugins/' . HMBKP_PLUGIN_SLUG . '/plugin.php' );
+
+	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+		die( sprintf( __( 'BackUpWordPress requires WordPress version %s.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
+
 }
 
 // Load the admin actions file
@@ -61,9 +67,6 @@ function hmbkp_actions() {
 
 }
 add_action( 'admin_init', 'hmbkp_actions' );
-
-// Work around low mysql wait_timeout var
-require_once( HMBKP_PLUGIN_PATH . '/functions/mysql-ping.php' );
 
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );

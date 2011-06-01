@@ -28,7 +28,7 @@
 
 <?php endif; ?>
 
-<p>&#10003; <span class="hmbkp_estimated-size"><?php printf( __( 'The size of the files you want to backup are roughly %s uncrompressed. Your final backup is zipped and should be smaller than this.', 'hmbkp' ), get_transient( 'hmbkp_estimated_filesize' ) ? '<code>' . hmbkp_calculate() . '</code>' : '<code class="calculate">' . __( 'Calculating Size...', 'hmbkp' ) . '</code>' ); ?></span></p>
+<p>&#10003; <span class="hmbkp_estimated-size"><?php printf( __( 'Your site is %s. Backups will be compressed and should be smaller than this.', 'hmbkp' ), get_transient( 'hmbkp_estimated_filesize' ) ? '<code>' . hmbkp_calculate() . '</code>' : '<code class="calculate">' . __( 'Calculating Size...', 'hmbkp' ) . '</code>' ); ?></span></p>
 
 <?php if ( !hmbkp_shell_exec_available() ) : ?>
 <p>&#10007; <?php printf( __( '%s is disabled which means we have to use the slower PHP fallbacks, you could try contacting your host and asking them to enable it.', 'hmbkp' ), '<code>shell_exec</code>' ); ?>
@@ -50,6 +50,6 @@
 <p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . hmbkp_get_email_address() . '</code>' ); ?></p>
 <?php endif; ?>
 
-<?php if ( $valid_excludes = hmbkp_valid_custom_excludes() ) : ?>
+<?php if ( ( $valid_excludes = hmbkp_valid_custom_excludes() ) && ( !hmbkp_get_database_only() ) : ?>
 <p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $valid_excludes ) . '</code>' ); ?></p>
 <?php endif; ?>

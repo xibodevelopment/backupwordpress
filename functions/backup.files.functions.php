@@ -7,9 +7,9 @@
  * thats not available then it fallsback on
  * PHP zip classes.
  *
- * @param string $backup_filepath
+ * @param string $path
  */
-function hmbkp_archive_files( $backup_filepath ) {
+function hmbkp_archive_files( $path ) {
 
 	// Do we have the path to the zip command
 	if ( hmbkp_zip_path() ) :
@@ -17,20 +17,20 @@ function hmbkp_archive_files( $backup_filepath ) {
 		// Zip up ABSPATH
 		if ( !hmbkp_get_database_only() ) :
 
-			$exclude = ' -x ' . hmbkp_exclude_string( 'zip' );
+			$excludes = ' -x ' . hmbkp_exclude_string( 'zip' );
 
-			shell_exec( 'cd ' . escapeshellarg( ABSPATH ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -rq ' . escapeshellarg( $backup_filepath ) . ' ./' . $exclude );
+			shell_exec( 'cd ' . escapeshellarg( ABSPATH ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -rq ' . escapeshellarg( $path ) . ' ./' . $excludes );
 
 		endif;
 
 		// Add the database dump to the archive
 		if ( !hmbkp_get_files_only() ) :
-			shell_exec( 'cd ' . escapeshellarg( hmbkp_path() ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -uq ' . escapeshellarg( $backup_filepath ) . ' ' . escapeshellarg( 'database_' . DB_NAME . '.sql' ) );
+			shell_exec( 'cd ' . escapeshellarg( hmbkp_path() ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -uq ' . escapeshellarg( $path ) . ' ' . escapeshellarg( 'database_' . DB_NAME . '.sql' ) );
 		endif;
 
 	// If not use the fallback
 	else :
-		hmbkp_archive_files_fallback( $backup_filepath );
+		hmbkp_archive_files_fallback( $path );
 
 	endif;
 
@@ -86,6 +86,12 @@ function hmbkp_zip_path() {
 
 }
 
+/**
+ * Returns an array of default exclude paths
+ *
+ * @access public
+ * @return array
+ */
 function hmbkp_excludes() {
 
 	// Exclude the back up path
@@ -98,14 +104,24 @@ function hmbkp_excludes() {
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
 		$excludes[] = hmbkp_conform_dir( HMBKP_PATH );
 
-	return array_unique( $excludes );
+	return array_map( 'trailingslashit', array_unique( $excludes ) );
 
 }
 
+/**
+ * Generate the exclude param string for the zip backup
+ *
+ * Takes the exclude rules and formats them for use with either
+ * the shell zip command or pclzip
+ *
+ * @param string $context. (default: 'zip')
+ * @return string
+ */
 function hmbkp_exclude_string( $context = 'zip' ) {
 
 	// Return a comma separated list by default
-	$wildcard = ', ';
+	$separator = ', ';
+	$wildcard = '';
 
 	// The zip command
 	if ( $context == 'zip' ) :
@@ -129,20 +145,56 @@ function hmbkp_exclude_string( $context = 'zip' ) {
 	$excludes = array_map( 'trim', $excludes );
 
 	// Add wildcards to the directories
-	foreach( $excludes as $key => &$exclude ) :
+	foreach( $excludes as $key => &$rule ) :
 
-		if ( $context == 'pclzip' && strpos( $exclude, '*' ) !== false )
-			$exclude = str_replace( '*', $wildcard, $exclude );
+		$file = $absolute = $fragment = false;
 
-		if ( is_dir( $exclude ) || is_dir( ABSPATH . $exclude ) || is_dir( trailingslashit( ABSPATH ) . $exclude ) )
-			$exclude = str_replace( ABSPATH, '', hmbkp_conform_dir( $exclude ) . $wildcard );
+		// Files don't end with /
+		if ( !in_array( substr( $rule, -1 ), array( '\\', '/' ) ) )
+			$file = true;
 
-		elseif ( !is_file( $exclude ) && strpos( $exclude, '*' ) === false )
-			unset( $excludes[$key] );
+		// If rule starts with a / then treat as absolute path
+		elseif ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) )
+			$absolute = true;
+
+		// Otherwise treat as dir fragment
+		else
+			$fragment = true;
+
+		// Strip ABSPATH and conform
+		$rule = str_replace( hmbkp_conform_dir( ABSPATH ), '', untrailingslashit( hmbkp_conform_dir( $rule ) ) );
+
+		if ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) )
+			$rule = substr( $rule, 1 );
+
+		// Escape string for regex
+		if ( $context == 'pclzip' )
+			//$rule = preg_quote( $rule );
+			$rule = str_replace( '.', '\.', $rule );
+
+		// Convert any existing wildcards
+		if ( $wildcard != '*' && strpos( $rule, '*' ) !== false )
+			$rule = str_replace( '*', $wildcard, $rule );
+
+		// Wrap directory fragments in wildcards for zip
+		if ( $context == 'zip' && $fragment )
+			$rule = $wildcard . $rule . $wildcard;
+
+		// Add a wildcard to the end of absolute url for zips
+		if ( $context == 'zip' && $absolute )
+			$rule .= $wildcard;
+
+		// Add and end carrot to files for pclzip
+		if ( $file && $context == 'pclzip' )
+			$rule .= '$';
+
+		// Add a start carrot to absolute urls for pclzip
+		if ( $absolute && $context == 'pclzip' )
+			$rule = '^' . $rule;
 
 	endforeach;
 
-	// Escape shell args to zip command
+	// Escape shell args for zip command
 	if ( $context == 'zip' )
 		$excludes = array_map( 'escapeshellarg', $excludes );
 

@@ -275,29 +275,19 @@ function hmbkp_ls( $dir, $files = array() ) {
 
 	$d = opendir( $dir );
 
+	// Get excluded files & directories.
+	$excludes = hmbkp_exclude_string( 'pclzip' );
+
 	while ( $file = readdir( $d ) ) :
 
-		// Ignore current dir and containing dir as well the backups dir
+		// Ignore current dir and containing dir and any unreadable files or directories
 		if ( $file == '.' || $file == '..' )
 			continue;
 
 		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
 
-		if ( $file == hmbkp_path() )
-			continue;
-
-		//Get excluded files & directories.
-		$excludes = hmbkp_valid_custom_excludes();
-		foreach( $excludes as &$exclude ) {
-			$exclude = ABSPATH . $exclude;
-		}
-	
-		//Skip over excluded files
-		if ( is_array( $excludes ) && in_array( $file, $excludes ) )
-			continue;
-		
-		//Skip over excluded directories
-		if ( is_array( $excludes ) && is_dir( $file ) && in_array( trailingslashit( $file ), $excludes ) )
+		// Skip the backups dir and any excluded paths
+		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || !is_readable( $file ) ) )
 			continue;
 
 		$files[] = $file;
@@ -429,11 +419,16 @@ function hmbkp_shell_exec_available() {
 
 }
 
+/**
+ * Check whether safe mode if active or not
+ * 
+ * @return bool
+ */
 function hmbkp_is_safe_mode_active() {
 	
 	$safe_mode = ini_get( 'safe_mode' );
 	
-	if ( $safe_mode && $safe_mode != 'off' )
+	if ( $safe_mode && $safe_mode != 'off' && $safe_mode != 'Off' )
 		return true;
 		
 	return false;
@@ -483,7 +478,7 @@ function hmbkp_setup_daily_schedule() {
 		$schedule_frequency = get_option('hmbkp_schedule_frequency');
 	else
 		$schedule_frequency = 'hmbkp_daily';
-	
+
 	// Advance by the interval. (except daily, when it will only happen if shcheduled time is in the past. )
 	if( $schedule_frequency == 'hmbkp_daily' && $scheduletime_UTC < time() ) {
 		$scheduletime_UTC = $scheduletime_UTC + 86400;
@@ -532,10 +527,23 @@ function hmbkp_path() {
     return hmbkp_conform_dir( $path );
 }
 
+/**
+ * Return the default backup path
+ * 
+ * @return string path
+ */
 function hmbkp_path_default() {
 	return hmbkp_conform_dir( WP_CONTENT_DIR . '/backups' );
 }
 
+/**
+ * Move the backup directory and all existing backup files to a new
+ * location
+ * 
+ * @param string $from path to move the backups dir from
+ * @param string $to path to move the backups dir to
+ * @return void
+ */
 function hmbkp_path_move( $from, $to ) {
 
 	// Create the custom backups directory if it doesn't exist
@@ -571,7 +579,7 @@ function hmbkp_max_backups() {
 
 	if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
 		return (int) HMBKP_MAX_BACKUPS;
-	
+
 	if( get_option( 'hmbkp_max_backups' ) )
 		return (int) get_option( 'hmbkp_max_backups', 10 ); 
 
@@ -651,10 +659,13 @@ function hmbkp_get_excludes() {
  */
 function hmbkp_possible() {
 
-	if ( is_writable( hmbkp_path() ) && is_dir( hmbkp_path() ) && !hmbkp_is_safe_mode_active() )
-		return true;
+	if ( !is_writable( hmbkp_path() ) || !is_dir( hmbkp_path() ) || hmbkp_is_safe_mode_active() )
+		return false;
 
+	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
 	return false;
+	
+	return true;
 }
 
 /**
@@ -665,6 +676,9 @@ function hmbkp_possible() {
 function hmbkp_cleanup() {
 
 	$hmbkp_path = hmbkp_path();
+
+	if ( !is_dir( $hmbkp_path ) )
+		return;
 
 	if ( $handle = opendir( $hmbkp_path ) ) :
 

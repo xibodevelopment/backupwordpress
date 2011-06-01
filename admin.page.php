@@ -7,7 +7,7 @@
 		<?php _e( 'Manage Backups', 'hmbkp' ); ?>
 
 <?php if ( hmbkp_is_in_progress() ) : ?>
-		<a class="button add-new-h2" <?php disabled( true ); ?>><img src="<?php echo site_url( 'wp-admin/images/wpspin_light.gif' ); ?>" width="16" height="16" /><?php echo get_option( 'hmbkp_status' ); ?></a>
+		<a class="button add-new-h2" <?php disabled( true ); ?>><img src="<?php echo site_url( 'wp-admin/images/wpspin_light.gif' ); ?>" width="16" height="16" /><?php echo hmbkp_get_status(); ?></a>
 
 <?php elseif ( !hmbkp_possible() ) : ?>
 		<a class="button add-new-h2" <?php disabled( true ); ?>><?php _e( 'Back Up Now', 'hmbkp' ); ?></a>

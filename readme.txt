@@ -15,11 +15,12 @@ BackUpWordPress will back up your entire site including your database and all yo
 
 * Super simple to use, no setup required.
 * Uses `zip` and `mysqldump` for faster backups if they are available.
+* Works in low memory, "shared host" environments.
 * Option to have each backup file emailed to you.
 * Works on Linux & Windows Server.
 * Control advanced options by defining any of the optional `Constants`.
+* Exclude files and folders from your back ups.
 * Good support should you need help.
-
 
 == Installation ==
 
@@ -62,9 +63,9 @@ BackUpWordPress stores the last 10 backups by default.
 
 **Further Support & Feedbask**
 
-General support questions should be made using the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
+General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
 
-<a href="https://github.com/humanmade/HM-Portfolio">Report any development issues/feature requests should be made on GitHub.</a>
+For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/HM-Portfolio">BackUpWordPress on GitHub.</a>
 
 You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
 
@@ -75,6 +76,24 @@ You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a>
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.3
+
+* Re-written back up engine, no longer copies everything to a tmp folder before zipping which should improve speed and reliability.
+* Support for excluding files and folders, define `HMBKP_EXCLUDE` with a comma separated list of files and folders to exclude, supports wildcards `*`, path fragments and absolute paths.
+* Full support for moving the backups directory, if you define a new backups directory then your existing backups will be moved to it.
+* Work around issues caused by low MySQL `wait_timeout` setting.
+* Add FAQ to readme.txt.
+* Pull FAQ into the contextual help tab on the backups page.
+* Block activation on old versions of WordPress.
+* Stop guessing compressed backup file size, instead just show size of site uncompressed.
+* Fix bug in `safe_mode` detection which could cause `Off` to act like `On`.
+* Better name for the database dump file.
+* Better name for the backup files.
+* Improve styling for advanced options.
+* Show examples for all advanced options.
+* Language improvements.
+* Layout tweaks.
 
 #### 1.2
 

@@ -21,20 +21,20 @@
         <dt<?php if ( defined( 'HMBKP_MAX_BACKUPS' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_MAX_BACKUPS</code></dt>
         <dd><p><?php printf( __( 'Number of backups to keep, older backups will be deleted automatically when a new backup is completed. Detaults to %s.', 'hmbkp' ), '<code>(int) 10</code>' ); ?><p class="example">e.g. <code>define( 'HMBKP_MAX_BACKUPS', 5 );</code></p></dd>
 
-        <dt<?php if ( hmbkp_get_files_only() ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_FILES_ONLY</code></dt>
+        <dt<?php if ( defined( 'HMBKP_FILES_ONLY' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_FILES_ONLY</code></dt>
         <dd><p><?php printf( __( 'Backup %s only, your %s will %s be backed up. Defaults to %s.', 'hmbkp' ), '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>', '<strong>' . __( 'not', 'hmbkp' ) . '</strong>', '<code>(bool) false</code>' ); ?><p class="example">e.g. <code>define( 'HMBKP_FILES_ONLY', true );</code></p></dd>
 
-        <dt<?php if ( hmbkp_get_database_only() ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DATABASE_ONLY</code></dt>
+        <dt<?php if ( defined( 'HMBKP_DATABASE_ONLY' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DATABASE_ONLY</code></dt>
         <dd><p><?php printf( __( 'Backup %s only, your %s will %s be backed up. Defaults to %s.', 'hmbkp' ), '<code>' . __( 'database', 'hmbkp' ) . '</code>', '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<strong>' . __( 'not', 'hmbkp' ) . '</strong>', '<code>(bool) false</code>' ); ?><p class="example">e.g. <code>define( 'HMBKP_DATABASE_ONLY', true );</code></p></dd>
 
         <dt<?php if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DAILY_SCHEDULE_TIME</code></dt>
         <dd><p><?php printf( __( 'The time that the daily back up should run. Defaults to %s.', 'hmbkp' ), '<code>23:00</code>' ); ?><p class="example">e.g. <code>define( 'HMBKP_DAILY_SCHEDULE_TIME', '07:30' );</code></p></dd>
 
-    	<dt<?php if ( hmbkp_email_address() ) { ?> class="hmbkp_active"<?php } ?>><code>hmbkp_email_address()</code></dt>
+    	<dt<?php if ( defined( 'HMBKP_EMAIL' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EMAIL</code></dt>
         <dd><p><?php printf( __( 'Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s.', 'hmbkp' ), '<code>(bool) false</code>' ); ?><p class="example">e.g. <code>define( 'HMBKP_EMAIL', 'email@example.com' );</code></p></dd>
 
-        <dt<?php if (hmbkp_get_excludes() ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EXCLUDES</code></dt>
-        <dd><p><?php _e( 'Comma separated list of files or directories to exclude, the backups directory is automatically excluded.', 'hmbkp' ); ?><p class="example">e.g. <code>define( 'HMBKP_EXCLUDES', 'wp-content/uploads, stats, webalizer' );</code></p></dd>
+        <dt<?php if ( hmbkp_get_excludes() ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EXCLUDE</code></dt>
+        <dd><p><?php _e( 'Comma separated list of files or directories to exclude, the backups directory is automatically excluded.', 'hmbkp' ); ?><p class="example">e.g. <code>define( 'HMBKP_EXCLUDE', '/wp-content/uploads/, /stats/, .svn/, *.txt' );</code></p></dd>
 
     </dl>
 

@@ -1,4 +1,9 @@
-<?php hmbkp_delete_old_backups();
+<?php
+
+// If max backups has changed
+if ( !hmbkp_is_in_progress() )
+	hmbkp_delete_old_backups();
+
 $backup_archives = hmbkp_get_backups();
 if ( count( $backup_archives ) ) : ?>
 
@@ -14,7 +19,7 @@ if ( count( $backup_archives ) ) : ?>
     <tfoot>
     	<tr>
     		<th><?php printf( _n( 'Only the most recent backup will be saved', 'The %d most recent backups will be saved', hmbkp_max_backups(), 'hmbkp' ), hmbkp_max_backups() ); ?></th>
-    		<th><?php printf( __( 'Total %s', 'hmbkp' ), hmbkp_total_filesize() ); ?><?php if ( disk_free_space( ABSPATH ) ) : printf( __( ', %s available' ), hmbkp_size_readable( disk_free_space( ABSPATH ), null, '%01u %s' ) ); endif; ?></th>
+    		<th><?php printf( __( 'Total %s', 'hmbkp' ), hmbkp_total_filesize() ); ?></th>
     		<th></th>
     	</tr>
     </tfoot>
