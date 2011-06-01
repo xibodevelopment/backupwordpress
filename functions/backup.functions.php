@@ -61,7 +61,7 @@ function hmbkp_do_backup() {
 	if ( !$handle = @fopen( $file, 'w' ) )
 		return false;
 	
-	fwrite( $handle );
+	fwrite( $handle, '' );
 	
 	fclose( $handle );
 
@@ -189,4 +189,37 @@ function hmbkp_email_backup( $file ) {
 
 	return true;
 
+}
+
+/**
+ * Set the status of the running backup
+ * 
+ * @param string $message. (default: '')
+ * @return void
+ */
+function hmbkp_set_status( $message = '' ) {
+	
+	$file = hmbkp_path() . '/.backup_running';
+	
+	if ( !$handle = @fopen( $file, 'w' ) )
+		return false;
+	
+	fwrite( $handle, $message );
+	
+	fclose( $handle );
+	
+}
+
+/**
+ * Get the status of the running backup
+ * 
+ * @return string
+ */
+function hmbkp_get_status() {
+	
+	if ( !file_exists( hmbkp_path() . '/.backup_running' ) )
+		return false;
+		
+	return file_get_contents( hmbkp_path() .'/.backup_running' );
+	
 }
