@@ -53,4 +53,6 @@
 
 <?php if ( ( $valid_excludes = hmbkp_valid_custom_excludes() ) && ( !hmbkp_get_database_only() ) ) : ?>
 <p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $valid_excludes ) . '</code>' ); ?></p>
+<?php else : ?>
+<p>&#10003; <?php _e( 'All files in the root directory of your site will be backed up.', 'hmbkp' ); ?></p>
 <?php endif; ?>
