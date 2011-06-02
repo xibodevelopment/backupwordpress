@@ -5,7 +5,7 @@ if ( !hmbkp_is_in_progress() )
 	hmbkp_delete_old_backups();
 
 $backup_archives = hmbkp_get_backups();
-if ( count( $backup_archives ) ) : ?>
+if ( $backup_archives && count( $backup_archives ) ) : ?>
 
 <table class="widefat" id="hmbkp_manage_backups_table">
     <thead>

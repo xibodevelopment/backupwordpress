@@ -119,6 +119,9 @@ function hmbkp_get_backups() {
 
     krsort( $files );
 
+	if( empty($files) )
+		return false;
+
     return $files;
 }
 
