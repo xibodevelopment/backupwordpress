@@ -1,4 +1,4 @@
-<div id="hmbkp_advanced-options" <?php if( !empty( $_POST['hmbkp_options_submit'] ) ) echo ' class="submitted"' ?>>
+<div id="hmbkp_advanced-options" <?php if( !hmbkp_get_backups() || !empty( $_POST['hmbkp_options_submit'] ) ) echo ' class="show_form"' ?>>
 
     <h4><?php _e( 'Advanced Options', 'hmbkp' ); ?></h4>
 
