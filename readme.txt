@@ -3,7 +3,7 @@ Contributors: willmot, mattheu, joehoyle, humanmade
 Tags: back up, back up, backup, backups, database, zip, db, files, archive, humanmade
 Requires at least: 3.1
 Tested up to: 3.1.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 
 Simple automated back ups of your WordPress powered website.
 
@@ -74,6 +74,10 @@ You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a>
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.3.1
+
+* Check for PHP version. Deactivate plugin if running on PHP version 4. 
 
 #### 1.3
 
