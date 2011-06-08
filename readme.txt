@@ -1,11 +1,11 @@
 === BackUpWordPress ===
 Contributors: willmot, mattheu, joehoyle, humanmade
 Tags: back up, back up, backup, backups, database, zip, db, files, archive, humanmade
-Requires at least: 3.0
+Requires at least: 3.1
 Tested up to: 3.1.2
-Stable tag: 1.2
+Stable tag: 1.3.1
 
-Simple automated backups of your WordPress powered website.
+Simple automated back ups of your WordPress powered website.
 
 == Description ==
 
@@ -14,7 +14,7 @@ BackUpWordPress will back up your entire site including your database and all yo
 = Features =
 
 * Super simple to use, no setup required.
-* Uses `zip` and `mysqldump` for faster backups if they are available.
+* Uses `zip` and `mysqldump` for faster back ups if they are available.
 * Works in low memory, "shared host" environments.
 * Option to have each backup file emailed to you.
 * Works on Linux & Windows Server.
@@ -53,9 +53,9 @@ To set an option you define a `Constant` in your `wp-config.php` file see the fo
 
 For example: to set the number of backups stored to 3 add `define( 'HMBKP_MAX_BACKUPS', 3 );` to your `wp-config.php` file.
 
-**Does BackUpWordPress backup the backups directory?**
+**Does BackUpWordPress back up the backups directory?**
 
-No. But it might backup directories created by other backup plugins.
+No.
 
 **How many backups are stored by default**
 
@@ -68,8 +68,6 @@ General support questions should be posted in the <a href="http://wordpress.org/
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/HM-Portfolio">BackUpWordPress on GitHub.</a>
 
 You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
-
-<a href="http://humanmade.co.uk/plugins/backupwordpress">Visit the BackUpWordPress page at humanmade.co.uk</a>
 
 == Screenshots ==
 
