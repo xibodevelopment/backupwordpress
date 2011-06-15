@@ -52,7 +52,9 @@ function hmbkp_option_save() {
 		update_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
 	} else {
 		delete_option( 'hmbkp_max_backups' );
-		$hmbkp_errors->add( 'invalid_no_backups', __("You have entered an invalid number of backups.") );
+		//Only error if it is actually empty.
+		if( isset( $_POST['hmbkp_backup_number'] ) )
+			$hmbkp_errors->add( 'invalid_no_backups', __("You have entered an invalid number of backups.") );
 	}
 	
 	if( isset( $_POST['hmbkp_email_address'] ) && !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
