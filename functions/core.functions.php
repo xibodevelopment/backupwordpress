@@ -8,7 +8,7 @@ function hmbkp_activate() {
 	hmbkp_setup_daily_schedule();
 	
 	//If there is a backup running file we should delete it on activate.
-    $file = hmbkp_path() . '/.backup_running'
+    $file = hmbkp_path() . '/.backup_running';
     if( file_exists( $file ) )
     	unlink(  );
     	    
@@ -37,7 +37,7 @@ function hmbkp_deactivate() {
 		delete_option( $option );
 
 	//If there is a backup running file we should delete it on activate.
-    $file = hmbkp_path() . '/.backup_running'
+    $file = hmbkp_path() . '/.backup_running';
     if( file_exists( $file ) )
     	unlink(  );
 
