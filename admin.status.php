@@ -5,7 +5,6 @@
 	}	
 ?>
 <p>&#10003;
-
 <?php if ( hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) : ?>
 
     <?php printf( __( 'Automatic backups are %s.', 'hmbkp' ), '<strong>' . __( 'disabled', 'hmbkp' ) . '</strong>' ); ?>
@@ -28,11 +27,12 @@
     	printf( __( 'Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s and be saved to %s.', 'hmbkp' ), $what_to_backup , $schedule, '<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( 'H:i' ) ) . '">' . date( 'd/m/y H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
 
 <?php endif; ?>
+</p>
 
 <p>&#10003; <span class="hmbkp_estimated-size"><?php printf( __( 'Your site is %s. Backups will be compressed and should be smaller than this.', 'hmbkp' ), get_transient( 'hmbkp_estimated_filesize' ) ? '<code>' . hmbkp_calculate() . '</code>' : '<code class="calculate">' . __( 'Calculating Size...', 'hmbkp' ) . '</code>' ); ?></span></p>
 
 <?php if ( !hmbkp_shell_exec_available() ) : ?>
-<p>&#10007; <?php printf( __( '%s is disabled which means we have to use the slower PHP fallbacks, you could try contacting your host and asking them to enable it.', 'hmbkp' ), '<code>shell_exec</code>' ); ?>
+<p>&#10007; <?php printf( __( '%s is disabled which means we have to use the slower PHP fallbacks, you could try contacting your host and asking them to enable it.', 'hmbkp' ), '<code>shell_exec</code>' ); ?></p>
 <?php endif; ?>
 
 <?php if ( hmbkp_shell_exec_available() ) : ?>
