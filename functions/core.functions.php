@@ -4,7 +4,14 @@
  * Setup the default options on plugin activation
  */
 function hmbkp_activate() {
+
 	hmbkp_setup_daily_schedule();
+	
+	//If there is a backup running file we should delete it on activate.
+    $file = hmbkp_path() . '/.backup_running';
+    if( file_exists( $file ) )
+    	unlink(  );
+    	    
 }
 
 /**
@@ -32,8 +39,10 @@ function hmbkp_deactivate() {
 	foreach ( $options as $option )
 		delete_option( $option );
 
-	delete_transient( 'hmbkp_running' );
-	delete_transient( 'hmbkp_estimated_filesize' );
+	//If there is a backup running file we should delete it on activate.
+    $file = hmbkp_path() . '/.backup_running';
+    if( file_exists( $file ) )
+    	unlink(  );
 
 	// Clear cron
 	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
