@@ -28,7 +28,7 @@ function hmbkp_request_do_backup() {
 		return false;
 
 	// Schedule a single backup
-	wp_schedule_single_event( time(), 'hmbkp_schedule_single_backup_hook' );
+	wp_schedule_single_event( time(), 'hmbkp_schedule_single_backup_hook', array('is_manual' => true) );
 
 	// Remove the once every 60 seconds limitation
 	delete_transient( 'doing_cron' );
