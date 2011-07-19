@@ -10,7 +10,10 @@
  * @uses hmbkp_backup_files
  * @uses hmbkp_delete_old_backups
  */
-function hmbkp_do_backup() {
+
+function hmbkp_do_backup( $args ) {
+	
+	global $hmbk_backup_timestamp;
 
 	// Make sure it's possible to do a backup
 	if ( !hmbkp_possible() )
@@ -20,25 +23,38 @@ function hmbkp_do_backup() {
 	hmbkp_cleanup();
 
     $time_start = date( 'Y-m-d-H-i-s' );
+    
+    $hmbk_backup_timestamp = $time_start;
 
 	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
 
 	// Set as running for a max of 1 hour
 	hmbkp_set_status();
+	
+	// create new skeleton backup information entry in the database
+	hmbkp_add_db_entry($args);
+	hmbkp_db_update_entry('file_name',$filename);
 
 	// Raise the memory limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	@set_time_limit( 0 );
-
+    
+    // Set running status
     hmbkp_set_status( __( 'Dumping database', 'hmbkp' ) );
+    hmbkp_db_update_entry('current_status', 'Dumping database');
 
+	
 	// Backup database
-	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
+	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) ){
+	    hmbkp_db_update_entry('database_included', true);
 	    hmbkp_backup_mysql();
+	    }
 
 	hmbkp_set_status( __( 'Creating zip archive', 'hmbkp' ) );
-
+	hmbkp_db_update_entry('current_status', 'Creating zip archive');
+	hmbkp_db_update_entry('file_path', hmbkp_path() ); //possible bug
+	
 	// Zip everything up
 	hmbkp_archive_files( $filepath );
 
@@ -57,11 +73,13 @@ function hmbkp_do_backup() {
     unlink( hmbkp_path() . '/.backup_running' );
     
 	$file = hmbkp_path() . '/.backup_complete';
+	hmbkp_db_update_entry('current_status', 'completed');
+	
 	
 	if ( !$handle = @fopen( $file, 'w' ) )
 		return false;
 	
-	fwrite( $handle );
+	fwrite( $handle, '' );
 	
 	fclose( $handle );
 
@@ -226,3 +244,37 @@ function hmbkp_get_status() {
 	return file_get_contents( hmbkp_path() .'/.backup_running' );
 	
 }
+
+
+function hmbkp_add_db_entry($args){
+	global $hmbk_backup_timestamp;
+	
+	$addentry = array(
+		'file_name' =>'',
+	    'file_path' =>'', // not working yet
+		'database_included' =>false,
+		'files_included' =>false,
+		'current_status' =>'started',
+		'exclude_list' =>hmbkp_excludes(),
+		'is_manual' => $args['is_manual'],  
+	);
+
+	$dbentry = get_option('Backup_wordpress_backups_info', array());
+
+		
+	$dbentry[$hmbk_backup_timestamp] = $addentry;
+	
+	update_option('Backup_wordpress_backups_info', $dbentry );	
+
+
+}
+function hmbkp_db_update_entry($key, $value){
+
+	global $hmbk_backup_timestamp;
+	
+	$dbentry = get_option('Backup_wordpress_backups_info', array());
+	$dbentry[$hmbk_backup_timestamp][$key] = $value;
+	update_option('Backup_wordpress_backups_info', $dbentry );
+
+}
+
