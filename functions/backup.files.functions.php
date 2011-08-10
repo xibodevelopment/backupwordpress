@@ -13,11 +13,10 @@ function hmbkp_archive_files( $path ) {
 
 	// Do we have the path to the zip command
 	if ( hmbkp_zip_path() ) :
-		
+
 		// Zip up ABSPATH
 		if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) ) :
-			hmbkp_db_update_entry('files_included', true);
-				
+
 			$excludes = ' -x ' . hmbkp_exclude_string( 'zip' );
 
 			shell_exec( 'cd ' . escapeshellarg( ABSPATH ) . ' && ' . escapeshellarg( hmbkp_zip_path() ) . ' -rq ' . escapeshellarg( $path ) . ' ./' . $excludes );
