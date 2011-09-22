@@ -243,3 +243,35 @@ function hmbkp_get_status() {
 	return file_get_contents( hmbkp_path() .'/.backup_running' );
 	
 }
+function hmbkp_add_db_entry($args){
+	global $hmbk_backup_timestamp;
+	
+	$addentry = array(
+		'file_name' =>'',
+	    'file_path' =>'', // not working yet
+		'database_included' =>false,
+		'files_included' =>false,
+		'current_status' =>'started',
+		'exclude_list' =>hmbkp_excludes(),
+		'is_manual' => $args['is_manual'],  
+	);
+
+	$dbentry = get_option('Backup_wordpress_backups_info', array());
+
+		
+	$dbentry[$hmbk_backup_timestamp] = $addentry;
+	
+	update_option('Backup_wordpress_backups_info', $dbentry );	
+
+
+}
+function hmbkp_db_update_entry($key, $value){
+
+	global $hmbk_backup_timestamp;
+	
+	$dbentry = get_option('Backup_wordpress_backups_info', array());
+	$dbentry[$hmbk_backup_timestamp][$key] = $value;
+	update_option('Backup_wordpress_backups_info', $dbentry );
+
+}
+
