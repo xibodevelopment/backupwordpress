@@ -16,6 +16,8 @@ function hmbkp_archive_files( $path ) {
 
 		// Zip up ABSPATH
 		if ( !hmbkp_get_database_only() ) :
+		
+			hmbkp_db_update_entry('files_included', true);
 
 			$excludes = ' -x ' . hmbkp_exclude_string( 'zip' );
 
@@ -139,8 +141,8 @@ function hmbkp_exclude_string( $context = 'zip' ) {
 	$excludes = hmbkp_excludes();
 
 	// Add any defined excludes
-	if ( hmbkp_get_excludes() )
-		$excludes = array_merge( explode( ',', hmbkp_get_excludes() ), $excludes );
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		$excludes = array_merge( explode( ',', HMBKP_EXCLUDE ), $excludes );
 
 	$excludes = array_map( 'trim', $excludes );
 
@@ -199,5 +201,40 @@ function hmbkp_exclude_string( $context = 'zip' ) {
 		$excludes = array_map( 'escapeshellarg', $excludes );
 
 	return implode( $separator, $excludes );
+
+}
+
+/**
+ * Return an array of invalid custom exclude rules
+ *
+ * @return array
+ */
+function hmbkp_invalid_custom_excludes() {
+
+	$invalid_rules = array();
+
+	// Check if any absolute path excludes actually exist
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		foreach ( explode( ',', HMBKP_EXCLUDE ) as $rule )
+			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && !file_exists( $rule ) && !file_exists( ABSPATH . $rule ) && !file_exists( trailingslashit( ABSPATH ) . $rule ) )
+				$invalid_rules[] = $rule;
+
+	return $invalid_rules;
+
+}
+
+/**
+ * Return an array of valid custom exclude rules
+ *
+ * @return array
+ */
+function hmbkp_valid_custom_excludes() {
+
+	$valid_rules = array();
+
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		$valid_rules = array_diff( explode( ',', HMBKP_EXCLUDE ), hmbkp_invalid_custom_excludes() );
+
+	return array_map( 'trim', $valid_rules );
 
 }

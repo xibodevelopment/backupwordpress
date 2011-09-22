@@ -10,7 +10,10 @@
  * @uses hmbkp_backup_files
  * @uses hmbkp_delete_old_backups
  */
-function hmbkp_do_backup() {
+
+function hmbkp_do_backup( $args ) {
+	
+	global $hmbk_backup_timestamp;
 
 	// Make sure it's possible to do a backup
 	if ( !hmbkp_possible() )
@@ -21,23 +24,35 @@ function hmbkp_do_backup() {
 
 	$offset = current_time( 'timestamp' ) - time();
     $time_start = date( 'Y-m-d-H-i-s', time() + $offset );
+    
 	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
 
 	// Set as running for a max of 1 hour
 	hmbkp_set_status();
 
+	// create new skeleton backup information entry in the database
+	hmbkp_add_db_entry($args);
+	hmbkp_db_update_entry('file_name',$filename);
+
 	// Raise the memory limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	@set_time_limit( 0 );
 
+    // Set running status
     hmbkp_set_status( __( 'Dumping database', 'hmbkp' ) );
+    hmbkp_db_update_entry('current_status', 'Dumping database');
+
 
 	// Backup database
-	if ( !hmbkp_get_files_only() )
+	if ( !hmbkp_get_files_only() ){
+	    hmbkp_db_update_entry('database_included', true);
 	    hmbkp_backup_mysql();
+	}
 
 	hmbkp_set_status( __( 'Creating zip archive', 'hmbkp' ) );
+	hmbkp_db_update_entry('current_status', 'Creating zip archive');
+	hmbkp_db_update_entry('file_path', hmbkp_path() ); //possible bug
 
 	// Zip everything up
 	hmbkp_archive_files( $filepath );
@@ -53,10 +68,12 @@ function hmbkp_do_backup() {
 
 	// Delete any old backup files
     hmbkp_delete_old_backups();
-
+    
     unlink( hmbkp_path() . '/.backup_running' );
     
 	$file = hmbkp_path() . '/.backup_complete';
+	hmbkp_db_update_entry('current_status', 'completed');
+	
 	
 	if ( !$handle = @fopen( $file, 'w' ) )
 		return false;

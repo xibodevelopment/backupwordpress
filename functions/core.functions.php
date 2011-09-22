@@ -5,13 +5,10 @@
  */
 function hmbkp_activate() {
 
+	hmbkp_deactivate();
+
 	hmbkp_setup_daily_schedule();
-	
-	//If there is a backup running file we should delete it on activate.
-    $file = hmbkp_path() . '/.backup_running';
-    if( file_exists( $file ) )
-    	unlink(  );
-    	    
+
 }
 
 /**
@@ -41,8 +38,12 @@ function hmbkp_deactivate() {
 
 	//If there is a backup running file we should delete it on activate.
     $file = hmbkp_path() . '/.backup_running';
+
     if( file_exists( $file ) )
-    	unlink(  );
+    	unlink( $file );
+
+	delete_transient( 'hmbkp_running' );
+	delete_transient( 'hmbkp_estimated_filesize' );
 
 	// Clear cron
 	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
@@ -61,13 +62,7 @@ function hmbkp_update() {
 	// Every update
 	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) :
 
-		hmbkp_cleanup();
-
-		delete_transient( 'hmbkp_estimated_filesize' );
-		delete_option( 'hmbkp_running' );
-		delete_option( 'hmbkp_complete' );
-		delete_option( 'hmbkp_status' );
-		delete_transient( 'hmbkp_running' );
+		hmbkp_deactivate();
 
 		// Check whether we have a logs directory to delete
 		if ( is_dir( hmbkp_path() . '/logs' ) )
@@ -296,7 +291,7 @@ function hmbkp_ls( $dir, $files = array() ) {
 		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
 
 		// Skip the backups dir and any excluded paths
-		if ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || !is_readable( $file ) )
+		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || !is_readable( $file ) ) )
 			continue;
 
 		$files[] = $file;
@@ -379,7 +374,7 @@ function hmbkp_calculate() {
 	$filesize = 0;
 
     // Don't include database if files only
-	if ( !hmbkp_get_files_only() ) :
+	if ( ! hmbkp_get_files_only() ) :
 
     	global $wpdb;
 
@@ -390,7 +385,7 @@ function hmbkp_calculate() {
 
     endif;
 
-   	if ( !hmbkp_get_database_only() ) :
+   	if ( ! hmbkp_get_database_only() ) :
 
     	// Get rid of any cached filesizes
     	clearstatcache();
@@ -434,14 +429,14 @@ function hmbkp_shell_exec_available() {
  * @return bool
  */
 function hmbkp_is_safe_mode_active() {
-	
+
 	$safe_mode = ini_get( 'safe_mode' );
-	
+
 	if ( $safe_mode && $safe_mode != 'off' && $safe_mode != 'Off' )
 		return true;
-		
+
 	return false;
-	
+
 }
 
 /**
@@ -494,7 +489,7 @@ function hmbkp_setup_daily_schedule() {
 		$interval = $interval[ $schedule_frequency ]['interval'];
 		$scheduletime_UTC = $scheduletime_UTC + $interval;
 	}
-		 
+
 	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
 
@@ -667,9 +662,9 @@ function hmbkp_possible() {
 
 	if ( !is_writable( hmbkp_path() ) || !is_dir( hmbkp_path() ) || hmbkp_is_safe_mode_active() )
 		return false;
-
+	
 	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
-	return false;
+		return false;
 	
 	return true;
 }
@@ -682,7 +677,7 @@ function hmbkp_possible() {
 function hmbkp_cleanup() {
 
 	$hmbkp_path = hmbkp_path();
-
+	
 	if ( !is_dir( $hmbkp_path ) )
 		return;
 
@@ -695,31 +690,5 @@ function hmbkp_cleanup() {
     	closedir( $handle );
 
     endif;
-
-}
-
-function hmbkp_invalid_custom_excludes() {
-
-	$invalid_rules = array();
-
-	if ( hmbkp_get_excludes() )
-		foreach ( explode( ',', hmbkp_get_excludes() ) as $exclude )
-			if ( ( $exclude = trim( $exclude ) ) && strpos( $exclude, '*' ) === false && !file_exists( $exclude ) && !file_exists( ABSPATH . $exclude ) && !file_exists( trailingslashit( ABSPATH ) . $exclude ) )
-				$invalid_rules[] = $exclude;
-
-	return $invalid_rules;
-
-}
-
-function hmbkp_valid_custom_excludes() {
-
-	$valid_rules = array();
-
-	if ( hmbkp_get_excludes() )
-		foreach ( explode( ',', hmbkp_get_excludes() ) as $exclude )
-			if ( ( $exclude = trim( $exclude ) ) && ( strpos( $exclude, '*' ) !== false || file_exists( $exclude ) || file_exists( ABSPATH . $exclude ) || file_exists( trailingslashit( ABSPATH ) . $exclude ) ) )
-				$valid_rules[] = $exclude;
-
-	return $valid_rules;
 
 }

@@ -2,7 +2,7 @@
 Contributors: willmot, mattheu, joehoyle, humanmade
 Tags: back up, back up, backup, backups, database, zip, db, files, archive, humanmade
 Requires at least: 3.1
-Tested up to: 3.1.2
+Tested up to: 3.2.1
 Stable tag: 1.3.1
 
 Simple automated back ups of your WordPress powered website.
@@ -36,7 +36,7 @@ The plugin will try to use the `mysqldump` and `zip` commands via shell if they 
 
 Backups are stored on your server in `wp-content/backups`, you can change the directory.
 
-**Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This means that your backup directory can get quite large.
+**Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does means that your backup directory can get quite large.
 
 **How do I restore my site from a backup?**
 
@@ -74,6 +74,10 @@ You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a>
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.3.1
+
+* Check for PHP version. Deactivate plugin if running on PHP version 4. 
 
 #### 1.3
 
