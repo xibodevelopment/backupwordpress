@@ -18,7 +18,6 @@ function hmbkp_archive_files_fallback( $path ) {
 	// Zip up everything
 	if ( ! hmbkp_get_database_only() ) {
 		$archive->create( ABSPATH, PCLZIP_OPT_REMOVE_PATH, ABSPATH, PCLZIP_CB_PRE_ADD, 'hmbkp_pclzip_exclude' );
-		hmbkp_db_update_entry('files_included', true);
 	}
 	// Only zip up the database
 	if ( hmbkp_get_database_only() )
