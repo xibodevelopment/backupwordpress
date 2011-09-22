@@ -11,7 +11,7 @@
  * @uses hmbkp_delete_old_backups
  */
 
-function hmbkp_do_backup( $args ) {
+function hmbkp_do_backup() {
 	
 	global $hmbk_backup_timestamp;
 
@@ -30,9 +30,6 @@ function hmbkp_do_backup( $args ) {
 
 	// Set as running for a max of 1 hour
 	hmbkp_set_status();
-	
-	// create new skeleton backup information entry in the database
-	hmbkp_add_db_entry($args);
 
 	// Raise the memory limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
