@@ -458,8 +458,13 @@ function hmbkp_total_filesize() {
 
 }
 
+
 /**
- * Setup the daily backup schedule
+ * Set Up the shedule.
+ * This should runn according to the Frequency defined, or set in the option. 
+ * 
+ * @access public
+ * @return void
  */
 function hmbkp_setup_daily_schedule() {
 
