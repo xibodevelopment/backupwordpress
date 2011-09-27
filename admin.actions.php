@@ -92,7 +92,7 @@ function hmbkp_request_delete_backup() {
 
 	hmbkp_delete_backup( $_GET['hmbkp_delete'] );
 
-	wp_redirect( remove_query_arg( 'hmbkp_delete' ) );
+	wp_redirect( remove_query_arg( 'hmbkp_delete' ), 303 );
 	exit;
 
 }
@@ -108,8 +108,16 @@ function hmbkp_request_do_backup() {
 	if ( !isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_backup_now' || hmbkp_is_in_progress() || !hmbkp_possible() )
 		return false;
 
+	// If cron is disabled for manual backups
+	if ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) && HMBKP_DISABLE_MANUAL_BACKUP_CRON ) {
+		
+		hmbkp_do_backup();
+	
+	// If not fire the cron
+	} else {
+
 	// Schedule a single backup
-	wp_schedule_single_event( time(), 'hmbkp_schedule_single_backup_hook' );
+		wp_schedule_single_event( time(), 'hmbkp_schedule_single_backup_hook' );
 
 	// Remove the once every 60 seconds limitation
 	delete_transient( 'doing_cron' );
@@ -117,8 +125,10 @@ function hmbkp_request_do_backup() {
 	// Fire the cron now
 	spawn_cron();
 
+	}
+
 	// Redirect back
-	wp_redirect( remove_query_arg( 'action' ) );
+	wp_redirect( remove_query_arg( 'action' ), 303 );
 	exit;
 
 }
@@ -199,12 +209,13 @@ function hmbkp_constant_changes() {
 	// Check whether we need to disable the cron
 	if ( hmbkp_get_disable_automatic_backup() && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-	
+
 
 	// Or whether we need to re-enable it
 	if ( !hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
 		hmbkp_setup_daily_schedule();
 
+// Allow the time of the daily backup to be changed
 	if ( wp_get_schedule('hmbkp_schedule_backup_hook') != get_option('hmbkp_schedule_frequency') )
 		hmbkp_setup_daily_schedule();
 

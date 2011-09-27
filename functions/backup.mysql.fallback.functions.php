@@ -203,6 +203,8 @@ function hmbkp_sql_addslashes( $a_string = '', $is_like = false ) {
 function hmbkp_backup_mysql_fallback() {
 
 	global $hmbkp_db_connect;
+	
+	@set_time_limit( 0 );
 
     $hmbkp_db_connect = mysql_pconnect( DB_HOST, DB_USER, DB_PASSWORD );
 
@@ -221,8 +223,6 @@ function hmbkp_backup_mysql_fallback() {
     for ( $i = 0; $i < mysql_num_rows( $tables ); $i++ ) :
 
     	$curr_table = mysql_tablename( $tables, $i );
-
-		@set_time_limit( 0 );
 
     	// Create the SQL statements
     	$sql_file .= "# --------------------------------------------------------\n";

@@ -10,10 +10,7 @@
  * @uses hmbkp_backup_files
  * @uses hmbkp_delete_old_backups
  */
-
 function hmbkp_do_backup() {
-	
-	global $hmbk_backup_timestamp;
 
 	// Make sure it's possible to do a backup
 	if ( !hmbkp_possible() )
@@ -30,7 +27,7 @@ function hmbkp_do_backup() {
 
 	// Set as running for a max of 1 hour
 	hmbkp_set_status();
-
+	
 	// Raise the memory limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	@set_time_limit( 0 );
@@ -38,7 +35,6 @@ function hmbkp_do_backup() {
     // Set running status
     hmbkp_set_status( __( 'Dumping database', 'hmbkp' ) );
 
-	
 	// Backup database
 	if ( !hmbkp_get_files_only() ){
 	    hmbkp_backup_mysql();

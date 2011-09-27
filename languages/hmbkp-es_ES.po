@@ -1,0 +1,327 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: BackUpWordPress\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/backupwordpress\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"POT-Creation-Date: 2011-07-11 15:40:57+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2011-07-12 12:08-0000\n"
+"Last-Translator: Francesca Bartrum <frankiie@humanmade.co.uk>\n"
+"Language-Team: HumanMade <support@humanmade.co.uk>\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: England\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: admin.actions.php:101
+#: functions/interface.functions.php:68
+#: functions/interface.functions.php:78
+#: functions/interface.functions.php:88
+#: functions/interface.functions.php:98
+#: functions/interface.functions.php:108
+#: functions/interface.functions.php:118
+#: functions/interface.functions.php:128
+msgid "BackUpWordPress has detected a problem."
+msgstr "BackUpWordPress ha detectado un problema."
+
+#: admin.actions.php:101
+msgid "%s is returning a %s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run back ups in a separate process."
+msgstr "&s esta devolviendo una respuesta &s que podria hacer que un trabajo no sea ejecutado apropiadamente. BackUpWordPress no funciona sin que wp-cron haga copias de seguridad  en un processo aparte."
+
+#: admin.backups-table.php:13
+msgid "1 backup completed"
+msgid_plural "%d backups completed"
+msgstr[0] "una copia completada"
+msgstr[1] "%s copias completadas"
+
+#: admin.backups-table.php:14
+msgid "Size"
+msgstr "tamano"
+
+#: admin.backups-table.php:15
+msgid "Actions"
+msgstr "Acción"
+
+#: admin.backups-table.php:21
+msgid "Only the most recent backup will be saved"
+msgid_plural "The %d most recent backups will be saved"
+msgstr[0] "Solamente la copia más nueva será guardada"
+msgstr[1] "Solamente las %s copias más nuevas serán guardadas"
+
+#: admin.backups-table.php:22
+msgid "Total %s"
+msgstr "%s total"
+
+#: functions/backup.functions.php:34
+msgid "Dumping database"
+msgstr "Base de datos ejecutado"
+
+#: functions/backup.functions.php:40
+msgid "Creating zip archive"
+msgstr "Creando archivo de zip"
+
+#: functions/backup.functions.php:52
+msgid "Removing old backups"
+msgstr "Borrando copias viejas"
+
+#: functions/backup.functions.php:167
+#: functions/backup.functions.php:177
+msgid "Backup of %s"
+msgstr "Copias de %s"
+
+#: functions/backup.functions.php:168
+msgid ""
+"BackUpWordPress has completed a backup of your site %s.\n"
+"\n"
+"The backup file should be attached to this email.\n"
+"\n"
+"You can also download the backup file by clicking the link below:\n"
+"\n"
+"%s\n"
+"\n"
+"Kind Regards\n"
+"\n"
+" The Happy BackUpWordPress Backup Emailing Robot"
+msgstr ""
+"BackUpWordpress ha completado una copia de tu web %s.\n"
+"\n"
+"La copia del archivo debería estar adjunto a este email.\n"
+"\n"
+"%s\n"
+"\n"
+"Un saludo\n"
+"\n"
+"El feliz robot de BackUpWordPress Email"
+
+#: functions/backup.functions.php:178
+msgid ""
+"BackUpWordPress has completed a backup of your site %s.\n"
+"\n"
+"Unfortunately the backup file was too large to attach to this email.\n"
+"\n"
+"You can download the backup file by clicking the link below:\n"
+"\n"
+"%s\n"
+"\n"
+"Kind Regards\n"
+"\n"
+" The Happy BackUpWordPress Backup Emailing Robot"
+msgstr ""
+"BackUpWordpress ha completado una copia de tu web %s.\n"
+"\n"
+"Desafortunadamente la copia del archivo no pudo ser añadido a este email.\n"
+"\n"
+"Puedes descargar la copia del archivo a través de lasiguiente dirección:\n"
+"\n"
+"%s\n"
+"\n"
+"Un saludo\n"
+"\n"
+"El feliz robot de BackUpWordPress Email"
+
+#: functions/interface.functions.php:23
+msgid "Download"
+msgstr "Descarga"
+
+#: functions/interface.functions.php:24
+msgid "Delete"
+msgstr "Borra"
+
+#: functions/interface.functions.php:46
+#: functions/interface.functions.php:58
+msgid "BackUpWordPress is almost ready."
+msgstr "BackUpWordPress esta casi preparado."
+
+#: functions/interface.functions.php:46
+msgid "The backups directory can't be created because your %s directory isn't writable, run %s or %s or create the folder yourself."
+msgstr "El directorio de copias de seguridad no pudo ser creado porque tu directorio de %s no pudo ser escrito, ejecuta %s o %s o crea el archivo tu mismo."
+
+#: functions/interface.functions.php:58
+msgid "Your backups directory isn't writable. run %s or %s or set the permissions yourself."
+msgstr "El directorio de tus copias no se puede escribir, ejecuta %s o %s o configura los permisos tu mismo."
+
+#: functions/interface.functions.php:68
+msgid " %s is running in %s. Please contact your host and ask them to disable %s."
+msgstr "%s está ejecutando en %s. Por favor contacte su administrador para que incapacite. %s"
+
+#: functions/interface.functions.php:78
+msgid "You have both %s and %s defined so there isn't anything to back up."
+msgstr "Tienes %s y %s definidos asi que no hay nada de lo que hacer copias."
+
+#: functions/interface.functions.php:88
+msgid "%s is not a valid email address."
+msgstr "%s no es una dirección de email valida."
+
+#: functions/interface.functions.php:98
+msgid "The last backup email failed to send."
+msgstr "El último email con las copias no se pudo enviar."
+
+#: functions/interface.functions.php:108
+msgid "Your custom backups directory %s doesn't exist and can't be created, your backups will be saved to %s instead."
+msgstr "Tus copias en tu directorio %s no existen y no pueden ser creados, tus copias serán entonces guardadas en %s."
+
+#: functions/interface.functions.php:118
+msgid "Your custom backups directory %s isn't writable, new backups will be saved to %s instead."
+msgstr "Tus copias en tu directorio %s no se pudieron crear, las nuevas copis serán guardadas en %s."
+
+#: functions/interface.functions.php:128
+msgid "You have defined a custom exclude list but the following paths don't exist %s, are you sure you entered them correctly?"
+msgstr "Has definido tu propoa lista pero las trajectorias %s no existen, ¿estás seguro de que los has llenado correctamente?"
+
+#: admin.status.php:5
+msgid "Automatic backups are %s."
+msgstr "Las copias automaticas son %s."
+
+#: admin.status.php:5
+msgid "disabled"
+msgstr "impedido"
+
+#: admin.status.php:10
+#: admin.status.php:13
+#: admin.status.php:35
+#: admin.advanced-options.php:13
+#: admin.advanced-options.php:16
+#: admin.advanced-options.php:25
+#: admin.advanced-options.php:28
+msgid "database"
+msgstr "base de datos"
+
+#: admin.status.php:10
+msgid "&amp;"
+msgstr "&amp;"
+
+#: admin.status.php:10
+#: admin.status.php:16
+#: admin.status.php:31
+#: admin.advanced-options.php:16
+#: admin.advanced-options.php:25
+#: admin.advanced-options.php:28
+msgid "files"
+msgstr "archivos"
+
+#: admin.status.php:18
+msgid "Your %s will be automatically backed up every day at %s to %s."
+msgstr "Tus %s serán automaticamente copiados cada día de %s a %s."
+
+#: admin.status.php:18
+msgid "It's currently %s on the server."
+msgstr "Corrientemente es %s en el servidor."
+
+#: admin.status.php:22
+msgid "Your site is %s. Backups will be compressed and should be smaller than this."
+msgstr "Tu web es %s. Las copias serán compresadas Y deberían ser menos grandes que el original."
+
+#: admin.status.php:22
+msgid "Calculating Size..."
+msgstr "Calculando el tamaño..."
+
+#: admin.status.php:25
+msgid "%s is disabled which means we have to use the slower PHP fallbacks, you could try contacting your host and asking them to enable it."
+msgstr "%s ha diso incapacitado que quiere decir que tenemos que utlizar PHP fallbacks más pequeños, podrías intentar contactando con tu host y pedirles que lo incampaciten."
+
+#: admin.status.php:31
+#: admin.status.php:35
+msgid "Your %s will be backed up using %s."
+msgstr "Su %s tendrá una copia utilizando %s."
+
+#: admin.status.php:41
+msgid "A copy of each backup will be emailed to %s."
+msgstr "Una copia de cada copia de seguridad será mandada por email a %s."
+
+#: admin.status.php:45
+msgid "The following paths will be excluded from your backups %s."
+msgstr "Las siguientes trajectorias serán ejecutadas de tu copias %s"
+
+#: admin.page.php:7
+#: admin.menus.php:8
+msgid "Manage Backups"
+msgstr "Manejar copias"
+
+#: admin.page.php:13
+#: admin.page.php:16
+msgid "Back Up Now"
+msgstr "Hacer copias ahora"
+
+#: admin.page.php:20
+#: admin.advanced-options.php:3
+msgid "Advanced Options"
+msgstr "Opciones avanzadas"
+
+#: admin.page.php:32
+msgid "You need to fix the issues detailed above before BackUpWordPress can start."
+msgstr "Debes arreglar los problemas relacionados arriba antes que BackUpWordPress comience."
+
+#: admin.page.php:38
+msgid "If you need help getting things working you are more than welcome to email us at %s and we'll do what we can to help."
+msgstr "Si necesitas ayuda porfavor contactenos a través de nuestro email %s y haremos lo que podemos para ayudarle."
+
+#: admin.menus.php:8
+#: admin.menus.php:30
+msgid "Backups"
+msgstr "Copias de seguridad"
+
+#: admin.menus.php:53
+msgid "You are not using the latest stable version of BackUpWordPress"
+msgstr "No estás utlizando la versión más estable de BackUpWordPress"
+
+#: admin.menus.php:53
+msgid " &mdash; The information below is for version %s. View the readme.txt file for help specific to version %s."
+msgstr "&mdash; La información abajo es para la versión %s. Lea el archivo readme.txt para ayuda especifica para la versión %s."
+
+#: plugin.php:42
+msgid "BackUpWordPress requires WordPress version %s."
+msgstr "BackUpWordPress requiere la versión %s de Wordpress."
+
+#: admin.advanced-options.php:5
+msgid "You can %s any of the following %s in your %s to control advanced options. %s. Defined %s will be highlighted."
+msgstr "Puedes %s cualquiera de los %s en tu %s para controlar opciones avanzadas. %s. %s definidos serán subrayados."
+
+#: admin.advanced-options.php:5
+msgid "The Codex can help"
+msgstr "El Codex puede ayudar"
+
+#: admin.advanced-options.php:10
+msgid "The path to folder you would like to store your backup files in, defaults to %s."
+msgstr "La trajectoria al archivo en la que deseas guardar tus copias será por defecto &s."
+
+#: admin.advanced-options.php:13
+msgid "The path to your %s executable. Will be used for the %s part of the back up if available."
+msgstr "La trajectoria a tu %s executable. será utilizado para la parte %s de la copia que es disponible."
+
+#: admin.advanced-options.php:16
+msgid "The path to your %s executable. Will be used to zip up your %s and %s if available."
+msgstr "La trajectoria a tu %s ejecutable. será utilizado para hacer zip to %s y %s si son disponibles."
+
+#: admin.advanced-options.php:19
+msgid "Completely disables the automatic back up. You can still back up using the \"Back Up Now\" button. Defaults to %s."
+msgstr "Completamente desactiva las copias automaticas, todavía podrás copiar utilizando el botón \"Back Up Now\". Por defecto a %s."
+
+#: admin.advanced-options.php:22
+msgid "Number of backups to keep, older backups will be deleted automatically when a new backup is completed. Detaults to %s."
+msgstr "El numero de copias la cual guardar, las copias viejas serán borradas automaticamente cuando una nueva copia ha sido completada. Por defecto a %s."
+
+#: admin.advanced-options.php:25
+#: admin.advanced-options.php:28
+msgid "Backup %s only, your %s will %s be backed up. Defaults to %s."
+msgstr "Solamente %s, su %s será %s copiado. por defecto a %s."
+
+#: admin.advanced-options.php:25
+#: admin.advanced-options.php:28
+msgid "not"
+msgstr "no"
+
+#: admin.advanced-options.php:31
+msgid "The time that the daily back up should run. Defaults to %s."
+msgstr "La hora a la que la copia diaria será ejecutado. Por defecto a %s."
+
+#: admin.advanced-options.php:34
+msgid "Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s."
+msgstr "Intento a mandar un email con la copia de sus copias de seguridad. Por defecto al email que sido elegido por usted en la configuración."
+
+#: admin.advanced-options.php:37
+msgid "Comma separated list of files or directories to exclude, the backups directory is automatically excluded."
+msgstr "listas de archivos o directorios separadas por una coma para excluir, las copias en el directorio serán automaticamente excluidas."
+

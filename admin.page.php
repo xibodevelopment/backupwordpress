@@ -7,17 +7,14 @@
 		<?php _e( 'Manage Backups', 'hmbkp' ); ?>
 
 <?php if ( hmbkp_is_in_progress() ) : ?>
-		<a class="button add-new-h2" <?php disabled( true ); ?>><img src="<?php echo site_url( 'wp-admin/images/wpspin_light.gif' ); ?>" width="16" height="16" /><?php echo hmbkp_get_status(); ?></a>
+		<a class="add-new-h2" <?php disabled( true ); ?>><img src="<?php echo site_url( 'wp-admin/images/wpspin_light.gif' ); ?>" width="16" height="16" /><?php echo hmbkp_get_status(); ?></a>
 
-<?php elseif ( !hmbkp_possible() ) : ?>
-		<a class="button add-new-h2" <?php disabled( true ); ?>><?php _e( 'Back Up Now', 'hmbkp' ); ?></a>
-
-<?php else : ?>
-		<a class="button add-new-h2" href="tools.php?page=<?php echo $_GET['page']; ?>&amp;action=hmbkp_backup_now"><?php _e( 'Back Up Now', 'hmbkp' ); ?></a>
+<?php elseif ( hmbkp_possible() ) : ?>
+		<a class="add-new-h2" href="tools.php?page=<?php echo $_GET['page']; ?>&amp;action=hmbkp_backup_now"><?php _e( 'Back Up Now', 'hmbkp' ); ?></a>
 
 <?php endif; ?>
 
-		<a href="#hmbkp_advanced-options" class="button add-new-h2 hmbkp_advanced-options-toggle"><?php _e( 'Advanced Options' ); ?></a>
+		<a href="#hmbkp_advanced-options" class="add-new-h2 hmbkp_advanced-options-toggle"><?php _e( 'Advanced Options' ); ?></a>
 
 	</h2>
 
