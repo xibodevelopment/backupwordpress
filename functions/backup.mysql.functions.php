@@ -15,7 +15,10 @@ function hmbkp_backup_mysql() {
 		$cmd = escapeshellarg( hmbkp_mysqldump_path() );
 
 		// No Create DB command
-		$cmd .= ' --no-create-db ';
+		$cmd .= ' --no-create-db';
+		
+		// Make sure binary data is exported properly
+		$cmd .= ' --hex-blob';
 
 		// Username
 		$cmd .= ' -u ' . escapeshellarg( DB_USER );
