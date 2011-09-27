@@ -36,6 +36,9 @@
         <dt<?php if ( defined( 'HMBKP_EXCLUDE' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EXCLUDE</code></dt>
         <dd><p><?php _e( 'Comma separated list of files or directories to exclude, the backups directory is automatically excluded.', 'hmbkp' ); ?><p class="example">e.g. <code>define( 'HMBKP_EXCLUDE', '/wp-content/uploads/, /stats/, .svn/, *.txt' );</code></p></dd>
 
+        <dt<?php if ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DISABLE_MANUAL_BACKUP_CRON</code></dt>
+        <dd><p><?php _e( 'Disable the use of wp-cron for manual backups.', 'hmbkp' ); ?><p class="example">e.g. <code>define( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON', true );</code></p></dd>
+
     </dl>
 
 </div>
