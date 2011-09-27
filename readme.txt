@@ -1,9 +1,9 @@
 === BackUpWordPress ===
 Contributors: willmot, mattheu, joehoyle, humanmade
-Tags: back up, back up, backup, backups, database, zip, db, files, archive, humanmade
+Tags: back up, backup, backups, database, zip, db, files, archive, humanmade
 Requires at least: 3.1
 Tested up to: 3.2.1
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 Simple automated back ups of your WordPress powered website.
 
@@ -77,7 +77,16 @@ You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a>
 
 #### 1.3.2
 
-* Bug fix release
+* Spanish translation
+* Bump PHP version check to 5.2.4
+* Fallback to PHP mysqldump if shell_exec fails for any reason.
+* Silently ignore unreadable files / folders
+* Make sure binary data is properly exported when doing a mysqldump
+* Use 303 instead of 302 when redirecting in the admin.
+* Don't set_time_limit inside a loop
+* Use WordPress 3.2 style buttons
+* Don't pass an empty password to mysqldump
+
 
 #### 1.3.1
 
