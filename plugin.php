@@ -31,15 +31,14 @@ define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
 
-
 // Don't activate on anything less than PHP5
-if ( version_compare( phpversion(), '5.0', '<' ) ) {
+if ( version_compare( phpversion(), '5.2.4', '<' ) ) {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( ABSPATH . 'wp-content/plugins/' . HMBKP_PLUGIN_SLUG . '/plugin.php' );
+	deactivate_plugins( HMBKP_PLUGIN_PATH . '/plugin.php' );
 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( __( 'BackUpWordPress requires PHP version 5.0.', 'hmbkp' ) );
+		die( __( 'BackUpWordPress requires PHP version 5.2.4 or greater.', 'hmbkp' ) );
 
 }
 
@@ -47,7 +46,7 @@ if ( version_compare( phpversion(), '5.0', '<' ) ) {
 if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( ABSPATH . 'wp-content/plugins/' . HMBKP_PLUGIN_SLUG . '/plugin.php' );
+	deactivate_plugins( HMBKP_PLUGIN_PATH . '/plugin.php' );
 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
 		die( sprintf( __( 'BackUpWordPress requires WordPress version %s.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
