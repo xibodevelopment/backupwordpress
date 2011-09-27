@@ -96,9 +96,6 @@ require_once( HMBKP_PLUGIN_PATH . '/functions/backup.files.fallback.functions.ph
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
 
-// Add more cron schedules
-add_filter( 'cron_schedules', 'hmbkp_more_reccurences' );
-
 // Cron hook for backups
 add_action( 'hmbkp_schedule_backup_hook', 'hmbkp_do_backup' );
 add_action( 'hmbkp_schedule_single_backup_hook', 'hmbkp_do_backup' );
