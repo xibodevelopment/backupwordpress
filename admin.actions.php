@@ -28,7 +28,7 @@ function hmbkp_option_save() {
 		delete_option('hmbkp_disable_automatic_backup');
 	
 	//Update schedule frequency settings. Or reset to default of daily. 
-	if( isset( $_POST['hmbkp_frequency'] ) && $_POST['hmbkp_frequency'] != 'hmbkp_daily' )
+	if( isset( $_POST['hmbkp_frequency'] ) && $_POST['hmbkp_frequency'] != 'daily' )
 		update_option( 'hmbkp_schedule_frequency', $_POST['hmbkp_frequency'] );
 	else
 		delete_option( 'hmbkp_schedule_frequency' );

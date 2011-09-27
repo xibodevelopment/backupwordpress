@@ -208,7 +208,6 @@ function hmbkp_size_readable( $size, $unit = null, $retstring = '%01.2f %s', $si
 function hmbkp_more_reccurences( $recc ) {
 
 	$hmbkp_reccurrences = array(
-	    'hmbkp_daily' => array( 'interval' => 86400, 'display' => 'every day' ),
 	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' ),
 	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' ),
 	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'once a month' )
@@ -486,10 +485,10 @@ function hmbkp_setup_daily_schedule() {
 	elseif( get_option('hmbkp_schedule_frequency') )
 		$schedule_frequency = get_option('hmbkp_schedule_frequency');
 	else
-		$schedule_frequency = 'hmbkp_daily';
+		$schedule_frequency = 'daily';
 
 	// Advance by the interval. (except daily, when it will only happen if shcheduled time is in the past. )
-	if( $schedule_frequency != 'hmbkp_daily' || $schedule_frequency == 'hmbkp_daily' && $scheduletime_UTC < time() ) {
+	if( $schedule_frequency != 'daily' || $schedule_frequency == 'daily' && $scheduletime_UTC < time() ) {
 		$interval =  wp_get_schedules('hmbkp_schedule_backup_hook');
 		$interval = $interval[ $schedule_frequency ]['interval'];
 		$scheduletime_UTC = $scheduletime_UTC + $interval;

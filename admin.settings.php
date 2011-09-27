@@ -26,7 +26,7 @@
 					<td>
 						Automatic backups will occur  
 							<select name="hmbkp_frequency" id="hmbkp_frequency">
-								<option value="hmbkp_daily" <?php if( !get_option( 'hmbkp_schedule_frequency' ) ) echo 'selected="selected"'; ?>>Daily</option>
+								<option value="daily" <?php if( ! get_option( 'hmbkp_schedule_frequency' ) ) echo 'selected="selected"'; ?>>Daily</option>
 								<option value="hmbkp_weekly" <?php if( get_option( 'hmbkp_schedule_frequency' ) == 'hmbkp_weekly' ) echo 'selected="selected"'; ?>>Weekly</option>
 								<option value="hmbkp_fortnightly" <?php if( get_option( 'hmbkp_schedule_frequency' ) == 'hmbkp_fortnightly' ) echo 'selected="selected"'; ?>>Fortnightly</option>
 								<option value="hmbkp_monthly" <?php if( get_option( 'hmbkp_schedule_frequency' ) == 'hmbkp_monthly' ) echo 'selected="selected"'; ?>>Monthly</option>
