@@ -59,6 +59,8 @@ function hmbkp_actions() {
 	$plugin_data = get_plugin_data( __FILE__ );
 
 	define( 'HMBKP_VERSION', $plugin_data['Version'] );
+	
+	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 	// Fire the update action
 	if ( HMBKP_VERSION > get_option( 'hmbkp_plugin_version' ) )
