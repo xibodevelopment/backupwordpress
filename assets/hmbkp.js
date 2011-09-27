@@ -30,7 +30,7 @@ jQuery( document ).ready( function( $ ) {
 
 function hmbkpRedirectOnBackupComplete() {
 
-	img = jQuery( '<div>' ).append( jQuery( '.hmbkp_running a.button[disabled]:first img' ).clone() ).remove().html();
+	img = jQuery( '<div>' ).append( jQuery( '.hmbkp_running a.add-new-h2[disabled]:first img' ).clone() ).remove().html();
 
 	jQuery.get( ajaxurl, { 'action' : 'hmbkp_is_in_progress' },
 
@@ -44,7 +44,7 @@ function hmbkpRedirectOnBackupComplete() {
 
 				setTimeout( 'hmbkpRedirectOnBackupComplete();', 5000 );
 
-				jQuery( '.hmbkp_running a.button[disabled]:first' ).html( img + data );
+				jQuery( '.hmbkp_running a.add-new-h2[disabled]:first' ).html( img + data );
 
 			}
 		}

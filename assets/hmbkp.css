@@ -1,7 +1,6 @@
 #icon-backupwordpress.icon32	{ background: url(icon_backupwordpress_32x32.png); }
-.hmbkp_running .add-new-h2 img { margin: 0 3px -4px -9px; opacity: 0.3; }
-.button.disabled, .button[disabled], .button[disabled="disabled"] { cursor: default; }
-.button.disabled:active, .button[disabled]:active, .button[disabled="disabled"]:active { background: #F2F2F2 url(../../../../wp-admin/images/white-grad.png) repeat-x; }
+.hmbkp_running .add-new-h2 img { margin: 0 3px -4px -6px; opacity: 0.3; }
+.add-new-h2[disabled="disabled"], add-new-h2[disabled="disabled"]:hover, .add-new-h2[disabled="disabled"]:active, .add-new-h2[disabled="disabled"]:focus { cursor: default; color: #666; }
 tfoot p { margin: 0; font-weight: normal; }
 #hmbkp_advanced-options { display: none; }
 #hmbkp_advanced-options dl { overflow: hidden; margin: 20px 0; }
