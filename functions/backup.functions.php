@@ -79,7 +79,6 @@ function hmbkp_delete_old_backups() {
     	return;
 
     foreach( array_slice( $files, hmbkp_max_backups() ) as $file )
-	fwrite( $handle, '' );
        	hmbkp_delete_backup( base64_encode( $file ) );
 
 }
