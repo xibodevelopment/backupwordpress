@@ -45,6 +45,10 @@ function hmbkp_pclzip_exclude( $event, &$file ) {
 	// Match everything else past the exclude list
 	elseif ( preg_match( '(' . $excludes . ')', $file['stored_filename'] ) )
 		return false;
+	
+	// Don't try to add unreadable files.
+	if ( !is_readable( $file['filename'] ) )
+		return false;
 
 	return true;
 
