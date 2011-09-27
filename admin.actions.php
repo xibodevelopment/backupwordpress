@@ -11,7 +11,7 @@ function hmbkp_request_delete_backup() {
 
 	hmbkp_delete_backup( $_GET['hmbkp_delete'] );
 
-	wp_redirect( remove_query_arg( 'hmbkp_delete' ) );
+	wp_redirect( remove_query_arg( 'hmbkp_delete' ), 303 );
 	exit;
 
 }
@@ -37,7 +37,7 @@ function hmbkp_request_do_backup() {
 	spawn_cron();
 
 	// Redirect back
-	wp_redirect( remove_query_arg( 'action' ) );
+	wp_redirect( remove_query_arg( 'action' ), 303 );
 	exit;
 
 }
