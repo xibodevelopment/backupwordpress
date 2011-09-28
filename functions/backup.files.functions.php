@@ -230,8 +230,14 @@ function hmbkp_valid_custom_excludes() {
 
 	$valid_rules = array();
 
-	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
-		$valid_rules = array_diff( explode( ',', HMBKP_EXCLUDE ), hmbkp_invalid_custom_excludes() );
+	$exclude = hmbkp_get_exclude();
+	
+	if( ! $exclude )
+		return;
+
+	$valid_rules = array_diff( explode( ',', $exclude ), hmbkp_invalid_custom_exclude() );
+	
+
 
 	return array_map( 'trim', $valid_rules );
 
