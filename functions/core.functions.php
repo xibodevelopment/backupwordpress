@@ -652,8 +652,8 @@ function hmbkp_get_disable_automatic_backup() {
 }
 
 function hmbkp_get_excludes() {
-	if( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-		return HMBKP_EXCLUDES;
+	if( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		return HMBKP_EXCLUDE;
 	elseif( get_option('hmbkp_excludes') )
 		return get_option('hmbkp_excludes');
 	else
