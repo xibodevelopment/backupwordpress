@@ -36,10 +36,10 @@ function hmbkp_deactivate() {
 	foreach ( $options as $option )
 		delete_option( $option );
 
-	//If there is a backup running file we should delete it on activate.
+	// If there is a backup running file we should delete it on activate.
     $file = hmbkp_path() . '/.backup_running';
 
-    if( file_exists( $file ) )
+    if ( file_exists( $file ) )
     	unlink( $file );
 
 	delete_transient( 'hmbkp_running' );
@@ -424,7 +424,7 @@ function hmbkp_shell_exec_available() {
 
 /**
  * Check whether safe mode if active or not
- * 
+ *
  * @return bool
  */
 function hmbkp_is_safe_mode_active() {
@@ -479,7 +479,7 @@ function hmbkp_setup_daily_schedule() {
 
 	$offset = current_time( 'timestamp' ) - time();
 	$scheduletime_UTC = strtotime( $time ) - $offset;
-	
+
 	if( defined( 'HMBKP_SCHEDULE_FREQUENCY' ) && HMBKP_SCHEDULE_FREQUENCY )
 		$schedule_frequency = HMBKP_SCHEDULE_FREQUENCY;
 	elseif( get_option('hmbkp_schedule_frequency') )
@@ -538,7 +538,7 @@ function hmbkp_path() {
 
 /**
  * Return the default backup path
- * 
+ *
  * @return string path
  */
 function hmbkp_path_default() {
@@ -548,7 +548,7 @@ function hmbkp_path_default() {
 /**
  * Move the backup directory and all existing backup files to a new
  * location
- * 
+ *
  * @param string $from path to move the backups dir from
  * @param string $to path to move the backups dir to
  * @return void
@@ -670,10 +670,10 @@ function hmbkp_possible() {
 
 	if ( !is_writable( hmbkp_path() ) || !is_dir( hmbkp_path() ) || hmbkp_is_safe_mode_active() )
 		return false;
-	
+
 	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
 		return false;
-	
+
 	return true;
 }
 
@@ -685,7 +685,7 @@ function hmbkp_possible() {
 function hmbkp_cleanup() {
 
 	$hmbkp_path = hmbkp_path();
-	
+
 	if ( !is_dir( $hmbkp_path ) )
 		return;
 
