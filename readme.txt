@@ -1,5 +1,5 @@
 === BackUpWordPress ===
-Contributors: willmot, mattheu, joehoyle, humanmade
+Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, humanmade
 Requires at least: 3.1
 Tested up to: 3.2.1
