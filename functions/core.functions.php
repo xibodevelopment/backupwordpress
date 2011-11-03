@@ -411,7 +411,7 @@ function hmbkp_is_safe_mode_active() {
 
 	$safe_mode = ini_get( 'safe_mode' );
 
-	if ( $safe_mode && $safe_mode != 'off' && $safe_mode != 'Off' )
+	if ( $safe_mode && strtolower( $safe_mode ) != 'off' )
 		return true;
 
 	return false;
