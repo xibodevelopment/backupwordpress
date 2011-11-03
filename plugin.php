@@ -2,11 +2,11 @@
 
 /*
 Plugin Name: BackUpWordPress
-Plugin URI: http://humanmade.co.uk/
+Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
 Version: 1.4 beta
-Author URI: http://humanmade.co.uk/
+Author URI: http://hmn.md/
 */
 
 /*  Copyright 2011 Human Made Limited  (email : hello@humanmade.co.uk)
