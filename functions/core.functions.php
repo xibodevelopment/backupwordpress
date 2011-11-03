@@ -121,15 +121,6 @@ function hmbkp_update() {
 }
 
 /**
- * Simply wrapper function for creating timestamps
- *
- * @return timestamp
- */
-function hmbkp_timestamp() {
-	return date( get_option( 'date_format' ) ) . ' ' . date( 'H:i:s' );
-}
-
-/**
  * Sanitize a directory path
  *
  * @param string $dir
