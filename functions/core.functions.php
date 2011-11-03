@@ -124,15 +124,6 @@ function hmbkp_update() {
 }
 
 /**
- * Simply wrapper function for creating timestamps
- *
- * @return timestamp
- */
-function hmbkp_timestamp() {
-	return date( get_option( 'date_format' ) ) . ' ' . date( 'H:i:s' );
-}
-
-/**
  * Sanitize a directory path
  *
  * @param string $dir
@@ -432,7 +423,7 @@ function hmbkp_is_safe_mode_active() {
 
 	$safe_mode = ini_get( 'safe_mode' );
 
-	if ( $safe_mode && $safe_mode != 'off' && $safe_mode != 'Off' )
+	if ( $safe_mode && strtolower( $safe_mode ) != 'off' )
 		return true;
 
 	return false;

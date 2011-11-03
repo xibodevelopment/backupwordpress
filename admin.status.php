@@ -24,7 +24,7 @@
     	$offset = current_time( 'timestamp' ) - time();
     	$schedule = wp_get_schedules();
     	$schedule = $schedule[ wp_get_schedule('hmbkp_schedule_backup_hook') ]['display'];
-    	printf( __( 'Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s and be saved to %s.', 'hmbkp' ), $what_to_backup , $schedule, '<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( 'H:i' ) ) . '">' . date( 'd/m/y H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
+    	printf( __( 'Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s and be saved to %s.', 'hmbkp' ), $what_to_backup , $schedule, '<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( 'H:i' ) ) . '">' . date_i18n( 'd/m/y H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
 
 <?php endif; ?>
 </p>
