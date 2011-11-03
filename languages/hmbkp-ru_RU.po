@@ -1,0 +1,384 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+# Valera Ryaboshapko <valera@creator.su>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: BackUpWordPress\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/backupwordpress\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"POT-Creation-Date: 2011-07-11 15:40:57+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: UTF-8\n"
+"PO-Revision-Date: 2011-10-06 10:26+0400\n"
+"Last-Translator: Valera Ryaboshapko <valera@creator.su>\n"
+"Language-Team: ru_RU < >\n"
+
+#: admin.actions.php:101 functions/interface.functions.php:68
+#: functions/interface.functions.php:78 functions/interface.functions.php:88
+#: functions/interface.functions.php:98 functions/interface.functions.php:108
+#: functions/interface.functions.php:118 functions/interface.functions.php:128
+msgid "BackUpWordPress has detected a problem."
+msgstr "BackUpWordPress обнаружил проблему."
+
+#: admin.actions.php:101
+msgid ""
+"%s is returning a %s response which could mean cron jobs aren't getting "
+"fired properly. BackUpWordPress relies on wp-cron to run back ups in a "
+"separate process."
+msgstr ""
+"&s вернул &s, что может означать неправильное удаление задания cron. "
+"BackUpWordPress использует wp-cron для запуска резервного копирования "
+"отдельным процессом."
+
+#: admin.backups-table.php:13
+msgid "1 backup completed"
+msgid_plural "%d backups completed"
+msgstr[0] "%s резервная копия готова"
+msgstr[1] "%s резервные копии готовы"
+msgstr[2] "%s резервных копий готово"
+
+#: admin.backups-table.php:14
+msgid "Size"
+msgstr "Размер"
+
+#: admin.backups-table.php:15
+msgid "Actions"
+msgstr "Действия"
+
+#: admin.backups-table.php:21
+msgid "Only the most recent backup will be saved"
+msgid_plural "The %d most recent backups will be saved"
+msgstr[0] "%d последняя копия будет сохранена"
+msgstr[1] "%d последние копии будут сохранены"
+msgstr[2] "%d последних копий будут сохранены"
+
+#: admin.backups-table.php:22
+msgid "Total %s"
+msgstr "Всего %s"
+
+#: functions/backup.functions.php:34
+msgid "Dumping database"
+msgstr "Копирование базы данных"
+
+#: functions/backup.functions.php:40
+msgid "Creating zip archive"
+msgstr "Создание zip-архива"
+
+#: functions/backup.functions.php:52
+msgid "Removing old backups"
+msgstr "Удаление старых копий"
+
+#: functions/backup.functions.php:167 functions/backup.functions.php:177
+msgid "Backup of %s"
+msgstr "Копирование %s"
+
+#: functions/backup.functions.php:168
+msgid ""
+"BackUpWordPress has completed a backup of your site %s.\n"
+"\n"
+"The backup file should be attached to this email.\n"
+"\n"
+"You can also download the backup file by clicking the link below:\n"
+"\n"
+"%s\n"
+"\n"
+"Kind Regards\n"
+"\n"
+" The Happy BackUpWordPress Backup Emailing Robot"
+msgstr ""
+"BackUpWordpress закончил резервировать ваш сайт %s.\n"
+"\n"
+"Файл с резервной копией должен быть прикреплён к этому письму.\n"
+"\n"
+"Так же вы можете скачать его по данной ссылке:"
+"\n"
+"%s\n"
+"\n"
+"С наилучшими пожеланиями,\n"
+"\n"
+"Почовый робот BackUpWordPress."
+
+#: functions/backup.functions.php:178
+msgid ""
+"BackUpWordPress has completed a backup of your site %s.\n"
+"\n"
+"Unfortunately the backup file was too large to attach to this email.\n"
+"\n"
+"You can download the backup file by clicking the link below:\n"
+"\n"
+"%s\n"
+"\n"
+"Kind Regards\n"
+"\n"
+" The Happy BackUpWordPress Backup Emailing Robot"
+msgstr ""
+"BackUpWordpress закончил резервировать ваш сайт %s.\n"
+"\n"
+"К сожалению, файл резервной копии оказался слишком велик для прикрепления его к этому письму..\n"
+"\n"
+" Скачать его можно по данной ссылке:\n"
+"\n"
+"%s\n"
+"\n"
+"С наилучшими пожеланиями,\n"
+"\n"
+"Почовый робот BackUpWordPress."
+
+#: functions/interface.functions.php:23
+msgid "Download"
+msgstr "Скачать"
+
+#: functions/interface.functions.php:24
+msgid "Delete"
+msgstr "Удалить"
+
+#: functions/interface.functions.php:46 functions/interface.functions.php:58
+msgid "BackUpWordPress is almost ready."
+msgstr "BackUpWordPress почти готов."
+
+#: functions/interface.functions.php:46
+msgid ""
+"The backups directory can't be created because your %s directory isn't "
+"writable, run %s or %s or create the folder yourself."
+msgstr ""
+"Папка резервных копий не может быть создана, т.&nbsp;к. папка %s"
+"не доступна для записи. Выполните %s или %s, или создайте папку вручную."
+
+#: functions/interface.functions.php:58
+msgid ""
+"Your backups directory isn't writable. run %s or %s or set the permissions "
+"yourself."
+msgstr ""
+"Папка для резервных копий недоступна для записи. Выполните %s или %s, или "
+"установите права вручную."
+
+#: functions/interface.functions.php:68
+msgid ""
+" %s is running in %s. Please contact your host and ask them to disable %s."
+msgstr ""
+"%s выполняется в %s. Пожалуйста, свяжитесь с администрацией своего хостинга и попросите отключить %s."
+
+#: functions/interface.functions.php:78
+msgid "You have both %s and %s defined so there isn't anything to back up."
+msgstr "Вы запретили резервные копии и %s, и %s, так что делать нечего."
+
+#: functions/interface.functions.php:88
+msgid "%s is not a valid email address."
+msgstr "E-mail адрес %s не действителен."
+
+#: functions/interface.functions.php:98
+msgid "The last backup email failed to send."
+msgstr "Предыдущий e-mail с резервной копией не был отправлен."
+
+#: functions/interface.functions.php:108
+msgid ""
+"Your custom backups directory %s doesn't exist and can't be created, your "
+"backups will be saved to %s instead."
+msgstr ""
+"Заданная вами папка для резервных копий %s не существует и не может быть создана, поэтому "
+"они будут сохранены в %s."
+
+#: functions/interface.functions.php:118
+msgid ""
+"Your custom backups directory %s isn't writable, new backups will be saved "
+"to %s instead."
+msgstr ""
+"Заданная вами папка для резервных копий  %s недоступна для записи, "
+"поэтому они будут сохранены в %s."
+
+#: functions/interface.functions.php:128
+msgid ""
+"You have defined a custom exclude list but the following paths don't exist "
+"%s, are you sure you entered them correctly?"
+msgstr ""
+"Вы задали список папок и файлов для исключения из резервной копии, но путь %s не существует. "
+"Вы уверены, что задали его правильно?"
+
+#: admin.status.php:5
+msgid "Automatic backups are %s."
+msgstr "Автоматическое резервное копирование %s."
+
+#: admin.status.php:5
+msgid "disabled"
+msgstr "отключено"
+
+#: admin.status.php:10 admin.status.php:13 admin.status.php:35
+#: admin.advanced-options.php:13 admin.advanced-options.php:16
+#: admin.advanced-options.php:25 admin.advanced-options.php:28
+msgid "database"
+msgstr "баз данных"
+
+#: admin.status.php:10
+msgid "&amp;"
+msgstr "и"
+
+#: admin.status.php:10 admin.status.php:16 admin.status.php:31
+#: admin.advanced-options.php:16 admin.advanced-options.php:25
+#: admin.advanced-options.php:28
+msgid "files"
+msgstr "файлов"
+
+#: admin.status.php:18
+msgid "Your %s will be automatically backed up every day at %s to %s."
+msgstr "Резервное копирование ваших %s будет проходить ежедневно в %s в папку %s."
+
+#: admin.status.php:18
+msgid "It's currently %s on the server."
+msgstr "На сервере сейчас %s."
+
+#: admin.status.php:22
+msgid ""
+"Your site is %s. Backups will be compressed and should be smaller than this."
+msgstr ""
+"Ваш сайт занимает  %s. Резервные копии будут сжаты и займут меньше места. "
+
+#: admin.status.php:22
+msgid "Calculating Size..."
+msgstr "Вычисление размера…"
+
+#: admin.status.php:25
+msgid ""
+"%s is disabled which means we have to use the slower PHP fallbacks, you "
+"could try contacting your host and asking them to enable it."
+msgstr ""
+"%s отключен. Это значит, что будут использованы более медленные команды PHP. "
+"Вы можете обратиться к администрации своего хостинга с просьбой включить эту функцию. "
+
+#: admin.status.php:31 admin.status.php:35
+msgid "Your %s will be backed up using %s."
+msgstr "Ваши %s будут зарезервированы с помощью %s."
+
+#: admin.status.php:41
+msgid "A copy of each backup will be emailed to %s."
+msgstr "Каждая резервная копия будет отправляться на адрес %s."
+
+#: admin.status.php:45
+msgid "The following paths will be excluded from your backups %s."
+msgstr "Эти файлы и папки будут исключены из резервных копий: %s"
+
+#: admin.page.php:7 admin.menus.php:8
+msgid "Manage Backups"
+msgstr "Управление резервным копированием"
+
+#: admin.page.php:13 admin.page.php:16
+msgid "Back Up Now"
+msgstr "Сделать копию"
+
+#: admin.page.php:20 admin.advanced-options.php:3
+msgid "Advanced Options"
+msgstr "Дополнительные опции"
+
+#: admin.page.php:32
+msgid ""
+"You need to fix the issues detailed above before BackUpWordPress can start."
+msgstr ""
+"Исправьте ошибки, приведённые выше, прежде чем BackUpWordPress сможет начать работу."
+
+#: admin.page.php:38
+msgid ""
+"If you need help getting things working you are more than welcome to email "
+"us at %s and we'll do what we can to help."
+msgstr ""
+"Если вам требуется помощь в том, чтобы заставить всё это работать, непременно пишите нам на %s, "
+"и мы сделаем всё, что в наших силах."
+
+#: admin.menus.php:8 admin.menus.php:30
+msgid "Backups"
+msgstr "Резервные копии"
+
+#: admin.menus.php:53
+msgid "You are not using the latest stable version of BackUpWordPress"
+msgstr "Ваша версия BackUpWordPress устарела."
+
+#: admin.menus.php:53
+msgid ""
+" &mdash; The information below is for version %s. View the readme.txt file "
+"for help specific to version %s."
+msgstr ""
+"&mdash; Информация ниже актуальна для версии %s. Особенности версии %s смотрите в файле readme.txt"
+
+#: plugin.php:42
+msgid "BackUpWordPress requires WordPress version %s."
+msgstr "Для работы BackUpWordPress требуется Wordpress версии %s."
+
+#: admin.advanced-options.php:5
+msgid ""
+"You can %s any of the following %s in your %s to control advanced options. "
+"%s. Defined %s will be highlighted."
+msgstr ""
+"Вы можете %s любую из приведённых %s в вашем %s, чтобы включить дополнительный опции. "
+"%s. Заданные %s будут подсвечены."
+
+#: admin.advanced-options.php:5
+msgid "The Codex can help"
+msgstr "Подробности смотрите в Кодексе"
+
+#: admin.advanced-options.php:10
+msgid ""
+"The path to folder you would like to store your backup files in, defaults to "
+"%s."
+msgstr ""
+"Путь к папке, где вы хотите хранить ваши резервные копии. "
+"По умолчанию это %s."
+
+#: admin.advanced-options.php:13
+msgid ""
+"The path to your %s executable. Will be used for the %s part of the back up "
+"if available."
+msgstr ""
+"Путь к исполняемому файлу %s. Он будет использован для копирования %s, "
+"если доступен."
+
+#: admin.advanced-options.php:16
+msgid ""
+"The path to your %s executable. Will be used to zip up your %s and %s if "
+"available."
+msgstr ""
+"Путь к исполняемому файлу %s. Он будет использован для сжатия %s и %s, "
+"если доступен."
+
+#: admin.advanced-options.php:19
+msgid ""
+"Completely disables the automatic back up. You can still back up using the "
+"\"Back Up Now\" button. Defaults to %s."
+msgstr ""
+"Полный запрет на автоматическое резервное копирование. Однако, ручное копирование "
+"кнопкой \"Сделать копию\" будет доступно. Значение по умолчанию %s."
+
+#: admin.advanced-options.php:22
+msgid ""
+"Number of backups to keep, older backups will be deleted automatically when "
+"a new backup is completed. Detaults to %s."
+msgstr ""
+"Количество хранимых резервных копий. Более старые копии будут удалены автоматически "
+"после создания новой. Значение по умолчанию %s."
+
+#: admin.advanced-options.php:25 admin.advanced-options.php:28
+msgid "Backup %s only, your %s will %s be backed up. Defaults to %s."
+msgstr "Делать копии только %s, но не %s, которые %s будут включены в резервную копию. Значение по умолчанию %s."
+
+#: admin.advanced-options.php:25 admin.advanced-options.php:28
+msgid "not"
+msgstr "не"
+
+#: admin.advanced-options.php:31
+msgid "The time that the daily back up should run. Defaults to %s."
+msgstr "Время запуска ежедневного резервного копирования. Значение по умолчанию %s."
+
+#: admin.advanced-options.php:34
+msgid ""
+"Attempt to email a copy of your backups. Value should be email address to "
+"send backups to. Defaults to %s."
+msgstr ""
+"Попытаться отправить резервную копию на e-mail. Значением должен быть e-mail адрес. "
+"Значение по умолчанию %s."
+
+#: admin.advanced-options.php:37
+msgid ""
+"Comma separated list of files or directories to exclude, the backups "
+"directory is automatically excluded."
+msgstr ""
+"Список файлов и папок, которые нужно исключить из резервной копии, разделённый запятыми. "
+"Папка с предыдущими резервными копиями исключается автоматически.  "
