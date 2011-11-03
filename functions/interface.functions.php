@@ -6,12 +6,15 @@
  */
 function hmbkp_get_backup_row( $file ) {
 
-	$encode = base64_encode( $file ); ?>
+	$encode = base64_encode( $file ); 
+	$offset = current_time( 'timestamp' ) - time();
+	
+	?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 
 		<th scope="row">
-			<?php echo date_i18n( get_option('date_format'), filemtime( $file ) ) . ' ' . date( 'H:i', filemtime($file ) ); ?>
+			<?php echo date_i18n( get_option( 'date_format' ) . ' - ' . get_option( 'time_format' ), filemtime( $file ) + $offset ); ?>
 		</th>
 
 		<td>
@@ -37,6 +40,24 @@ function hmbkp_get_backup_row( $file ) {
  */
 function hmbkp_admin_notices() {
 
+	// If the form has been submitted, display un updated notification
+	// Display  notifications for any errors in the advanced options form. 
+	if( !empty( $_POST['hmbkp_options_submit'] ) ) :
+
+		function hmbkp_advanced_options_saved() {
+			echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
+
+			global $hmbkp_errors;
+			if ( !empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() ) {
+				foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error ) {
+					echo '<div class="error"><p>' . $hmbkp_error . '</p></div>';
+				}
+			}
+		}
+		add_action( 'admin_notices', 'hmbkp_advanced_options_saved' );
+		
+	endif; 
+	
 	// If the backups directory doesn't exist and can't be automatically created
 	if ( !is_dir( hmbkp_path() ) ) :
 
@@ -72,7 +93,7 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If both HMBKP_FILES_ONLY & HMBKP_DATABASE_ONLY are defined at the same time
-	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) :
+	if ( hmbkp_get_files_only() && hmbkp_get_database_only() ) :
 
 	    function hmbkp_nothing_to_backup_warning() {
 	    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have both %s and %s defined so there isn\'t anything to back up.', 'hmbkp' ), '<code>HMBKP_DATABASE_ONLY</code>', '<code>HMBKP_FILES_ONLY</code>' ) . '</p></div>';

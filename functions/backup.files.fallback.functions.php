@@ -16,11 +16,11 @@ function hmbkp_archive_files_fallback( $path ) {
 	$archive = new PclZip( $path );
 
 	// Zip up everything
-	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) )
+	if ( ! hmbkp_get_database_only() )
 		$archive->create( ABSPATH, PCLZIP_OPT_REMOVE_PATH, ABSPATH, PCLZIP_CB_PRE_ADD, 'hmbkp_pclzip_exclude' );
 
 	// Only zip up the database
-	if ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
+	if ( hmbkp_get_database_only() )
 		$archive->create( hmbkp_path() . '/database_' . DB_NAME . '.sql', PCLZIP_OPT_REMOVE_PATH, hmbkp_path() );
 
 }
@@ -45,7 +45,7 @@ function hmbkp_pclzip_exclude( $event, &$file ) {
 	// Match everything else past the exclude list
 	elseif ( preg_match( '(' . $excludes . ')', $file['stored_filename'] ) )
 		return false;
-	
+
 	// Don't try to add unreadable files.
 	if ( !is_readable( $file['filename'] ) )
 		return false;

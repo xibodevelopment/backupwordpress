@@ -3,6 +3,7 @@
 .add-new-h2[disabled="disabled"], add-new-h2[disabled="disabled"]:hover, .add-new-h2[disabled="disabled"]:active, .add-new-h2[disabled="disabled"]:focus { cursor: default; color: #666; }
 tfoot p { margin: 0; font-weight: normal; }
 #hmbkp_advanced-options { display: none; }
+#hmbkp_advanced-options.show_form { display: block; }
 #hmbkp_advanced-options dl { overflow: hidden; margin: 20px 0; }
 #hmbkp_advanced-options dt { float: left; min-width: 250px; clear: both; padding: 6px; margin: 1px 0; cursor: pointer; }
 #hmbkp_advanced-options dd { color: #666; padding: 7px 0 7px 250px; border-top: 1px solid #DFDFDF; margin: 0; cursor: pointer; min-height: 34px; }

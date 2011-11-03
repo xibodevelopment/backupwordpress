@@ -25,6 +25,11 @@ jQuery( document ).ready( function( $ ) {
 	$( '.hmbkp_advanced-options-toggle' ).click( function() {
 		$( '#hmbkp_advanced-options' ).toggle();
 	} );
+	
+	if( window.location.hash == '#hmbkp_advanced-options' ){
+		$( '#hmbkp_advanced-options' ).css( 'display', 'block' );		
+	}
+	
 
 } );
 

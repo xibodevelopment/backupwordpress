@@ -27,7 +27,10 @@ function hmbkp_deactivate() {
 		'hmbkp_running',
 		'hmbkp_status',
 		'hmbkp_complete',
-		'hmbkp_email_error'
+		'hmbkp_email_error',
+		'hmbkp_email_address',
+		'hmbkp_schedule_frequency',
+		'hmbkp_excludes'
 	);
 
 	foreach ( $options as $option )
@@ -188,6 +191,24 @@ function hmbkp_size_readable( $size, $unit = null, $retstring = '%01.2f %s', $si
 }
 
 /**
+ * Add daily as a cron schedule choice
+ *
+ * @param array $recc
+ * @return array $recc
+ */
+function hmbkp_more_reccurences( $recc ) {
+
+	$hmbkp_reccurrences = array(
+	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' ),
+	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' ),
+	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'once a month' )
+	);
+
+	return array_merge( $recc, $hmbkp_reccurrences );
+}
+add_filter('cron_schedules', 'hmbkp_more_reccurences');
+
+/**
  * Send a flie to the browser for download
  *
  * @param string $path
@@ -344,7 +365,7 @@ function hmbkp_calculate() {
 	$filesize = 0;
 
     // Don't include database if files only
-	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) ) :
+	if ( ! hmbkp_get_files_only() ) :
 
     	global $wpdb;
 
@@ -355,7 +376,7 @@ function hmbkp_calculate() {
 
     endif;
 
-   	if ( ( defined( 'HMBKP_DATABASE_ONLY' ) && !HMBKP_DATABASE_ONLY ) || !defined( 'HMBKP_DATABASE_ONLY' ) ) :
+   	if ( ! hmbkp_get_database_only() ) :
 
     	// Get rid of any cached filesizes
     	clearstatcache();
@@ -428,8 +449,13 @@ function hmbkp_total_filesize() {
 
 }
 
+
 /**
- * Setup the daily backup schedule
+ * Set Up the shedule.
+ * This should runn according to the Frequency defined, or set in the option.
+ *
+ * @access public
+ * @return void
  */
 function hmbkp_setup_daily_schedule() {
 
@@ -443,10 +469,24 @@ function hmbkp_setup_daily_schedule() {
 	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME )
 		$time = HMBKP_DAILY_SCHEDULE_TIME;
 
-	if ( time() > strtotime( $time ) )
-		$time = 'tomorrow ' . $time;
+	$offset = current_time( 'timestamp' ) - time();
+	$scheduletime_UTC = strtotime( $time ) - $offset;
 
-	wp_schedule_event( strtotime( $time ), 'daily', 'hmbkp_schedule_backup_hook' );
+	if( defined( 'HMBKP_SCHEDULE_FREQUENCY' ) && HMBKP_SCHEDULE_FREQUENCY )
+		$schedule_frequency = HMBKP_SCHEDULE_FREQUENCY;
+	elseif( get_option('hmbkp_schedule_frequency') )
+		$schedule_frequency = get_option('hmbkp_schedule_frequency');
+	else
+		$schedule_frequency = 'daily';
+
+	// Advance by the interval. (except daily, when it will only happen if shcheduled time is in the past. )
+	if( $schedule_frequency != 'daily' || $schedule_frequency == 'daily' && $scheduletime_UTC < time() ) {
+		$interval =  wp_get_schedules('hmbkp_schedule_backup_hook');
+		$interval = $interval[ $schedule_frequency ]['interval'];
+		$scheduletime_UTC = $scheduletime_UTC + $interval;
+	}
+
+	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
 
 /**
@@ -481,7 +521,7 @@ function hmbkp_path() {
 	$contents[]	= '# ' . __( 'This .htaccess file ensures that people cannot download your backup files.', 'hmbkp' );
 	$contents[] = '';
 	$contents[] = 'deny from all';
-	
+
 	if ( !file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
 		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
@@ -541,7 +581,100 @@ function hmbkp_max_backups() {
 	if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
 		return (int) HMBKP_MAX_BACKUPS;
 
+	if ( get_option( 'hmbkp_max_backups' ) )
+		return (int) get_option( 'hmbkp_max_backups', 10 );
+
 	return 10;
+
+}
+
+/**
+ * Whether to only backup files
+ *
+ * @return bool
+ */
+function hmbkp_get_files_only() {
+
+	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY )
+		return true;
+
+	if ( get_option( 'hmbkp_files_only' ) )
+		return true;
+
+	return false;
+}
+
+/**
+ * Whether to only backup the database
+ *
+ * @return bool
+ */
+function hmbkp_get_database_only() {
+
+	if ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
+		return true;
+
+	if ( get_option( 'hmbkp_database_only' ) )
+		return true;
+
+	return false;
+
+}
+
+/**
+ *	Returns defined email address or email address saved in options.
+ *	If none set, return false.
+ */
+
+function hmbkp_get_email_address() {
+
+	if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL )
+		$email = HMBKP_EMAIL;
+
+	elseif ( get_option( 'hmbkp_email_address' ) )
+		$email = get_option( 'hmbkp_email_address' );
+
+	else
+		return false;
+
+	if ( is_email( $email ) )
+		return $email;
+
+	return false;
+
+}
+
+/**
+ * Are automatic backups disabled
+ *
+ * @return bool
+ */
+function hmbkp_get_disable_automatic_backup() {
+
+	if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP )
+		return true;
+
+	if ( get_option( 'hmbkp_disable_automatic_backup' ) )
+		return true;
+
+	return false;
+
+}
+
+/**
+ * Get the list of excludes
+ *
+ * @return bool
+ */
+function hmbkp_get_excludes() {
+
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		return HMBKP_EXCLUDE;
+
+	if ( get_option( 'hmbkp_excludes' ) )
+		return get_option( 'hmbkp_excludes' );
+
+	return false;
 
 }
 

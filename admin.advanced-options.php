@@ -33,7 +33,7 @@
     	<dt<?php if ( defined( 'HMBKP_EMAIL' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EMAIL</code></dt>
         <dd><p><?php printf( __( 'Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s.', 'hmbkp' ), '<code>(bool) false</code>' ); ?><p class="example">e.g. <code>define( 'HMBKP_EMAIL', 'email@example.com' );</code></p></dd>
 
-        <dt<?php if ( defined( 'HMBKP_EXCLUDE' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EXCLUDE</code></dt>
+        <dt<?php if ( hmbkp_get_excludes() ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EXCLUDE</code></dt>
         <dd><p><?php _e( 'Comma separated list of files or directories to exclude, the backups directory is automatically excluded.', 'hmbkp' ); ?><p class="example">e.g. <code>define( 'HMBKP_EXCLUDE', '/wp-content/uploads/, /stats/, .svn/, *.txt' );</code></p></dd>
 
         <dt<?php if ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DISABLE_MANUAL_BACKUP_CRON</code></dt>

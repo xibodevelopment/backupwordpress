@@ -19,31 +19,34 @@ function hmbkp_do_backup() {
 	// Clean up any mess left by the last backup
 	hmbkp_cleanup();
 
-    $time_start = date( 'Y-m-d-H-i-s' );
+	$offset = current_time( 'timestamp' ) - time();
+    $time_start = date( 'Y-m-d-H-i-s', time() + $offset );
 
 	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
 
 	// Set as running for a max of 1 hour
 	hmbkp_set_status();
-
+	
 	// Raise the memory limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
 	@set_time_limit( 0 );
-
+    
+    // Set running status
     hmbkp_set_status( __( 'Dumping database', 'hmbkp' ) );
 
 	// Backup database
-	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
+	if ( !hmbkp_get_files_only() ){
 	    hmbkp_backup_mysql();
+	    }
 
 	hmbkp_set_status( __( 'Creating zip archive', 'hmbkp' ) );
-
+	
 	// Zip everything up
 	hmbkp_archive_files( $filepath );
 
 	// Delete the database dump file
-	if ( ( defined( 'HMBKP_FILES_ONLY' ) && !HMBKP_FILES_ONLY ) || !defined( 'HMBKP_FILES_ONLY' ) )
+	if ( hmbkp_get_database_only() )
 		unlink( hmbkp_path() . '/database_' . DB_NAME . '.sql' );
 
 	// Email Backup
@@ -157,7 +160,7 @@ function hmbkp_is_in_progress() {
   */
 function hmbkp_email_backup( $file ) {
 
-	if ( !defined('HMBKP_EMAIL' ) || !HMBKP_EMAIL || !is_email( HMBKP_EMAIL ) )
+	if ( !hmbkp_get_email_address() )
 		return;
 
 	// Raise the memory and time limit
@@ -172,7 +175,7 @@ function hmbkp_email_backup( $file ) {
 	$headers = 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
 
 	// Try to send the email
-	$sent = wp_mail( HMBKP_EMAIL, $subject, $message, $headers, $file );
+	$sent = wp_mail( hmbkp_get_email_address(), $subject, $message, $headers, $file );
 
 	// If it failed- Try to send a download link - The file was probably too large.
 	if ( !$sent ) :
@@ -180,7 +183,7 @@ function hmbkp_email_backup( $file ) {
 		$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
 		$message = sprintf( __( "BackUpWordPress has completed a backup of your site %s.\n\nUnfortunately the backup file was too large to attach to this email.\n\nYou can download the backup file by clicking the link below:\n\n%s\n\nKind Regards\n\n The Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), get_bloginfo( 'url' ), $download );
 
-		$sent = wp_mail( HMBKP_EMAIL, $subject, $message, $headers );
+		$sent = wp_mail( hmbkp_get_email_address(), $subject, $message, $headers );
 
 	endif;
 
