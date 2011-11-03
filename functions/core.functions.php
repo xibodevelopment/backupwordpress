@@ -452,8 +452,8 @@ function hmbkp_total_filesize() {
 
 /**
  * Set Up the shedule.
- * This should runn according to the Frequency defined, or set in the option. 
- * 
+ * This should runn according to the Frequency defined, or set in the option.
+ *
  * @access public
  * @return void
  */
@@ -521,7 +521,7 @@ function hmbkp_path() {
 	$contents[]	= '# ' . __( 'This .htaccess file ensures that people cannot download your backup files.', 'hmbkp' );
 	$contents[] = '';
 	$contents[] = 'deny from all';
-	
+
 	if ( !file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
 		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
@@ -581,35 +581,44 @@ function hmbkp_max_backups() {
 	if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
 		return (int) HMBKP_MAX_BACKUPS;
 
-	if( get_option( 'hmbkp_max_backups' ) )
-		return (int) get_option( 'hmbkp_max_backups', 10 ); 
+	if ( get_option( 'hmbkp_max_backups' ) )
+		return (int) get_option( 'hmbkp_max_backups', 10 );
 
 	return 10;
 
 }
 
 /**
- *	Returns true or false
+ * Whether to only backup files
+ *
+ * @return bool
  */
 function hmbkp_get_files_only() {
-	if( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) 
+
+	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY )
 		return true;
-	elseif( get_option( 'hmbkp_files_only' ) )
+
+	if ( get_option( 'hmbkp_files_only' ) )
 		return true;
-	else
-		return false;
+
+	return false;
 }
 
 /**
- *	Returns true or false
+ * Whether to only backup the database
+ *
+ * @return bool
  */
 function hmbkp_get_database_only() {
-	if( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) 
+
+	if ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
 		return true;
-	elseif( get_option( 'hmbkp_database_only' ) )
+
+	if ( get_option( 'hmbkp_database_only' ) )
 		return true;
-	else
-		return false;
+
+	return false;
+
 }
 
 /**
@@ -618,38 +627,55 @@ function hmbkp_get_database_only() {
  */
 
 function hmbkp_get_email_address() {
-	if( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL )
-		$r = HMBKP_EMAIL;
-	elseif( get_option( 'hmbkp_email_address' ) )
-		$r = get_option( 'hmbkp_email_address' );
+
+	if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL )
+		$email = HMBKP_EMAIL;
+
+	elseif ( get_option( 'hmbkp_email_address' ) )
+		$email = get_option( 'hmbkp_email_address' );
+
 	else
 		return false;
-		
-	if( is_email( $r ) )
-		return $r;
-	else
-		return false;
+
+	if ( is_email( $email ) )
+		return $email;
+
+	return false;
+
 }
 
 /**
- *	Returns true or false
+ * Are automatic backups disabled
+ *
+ * @return bool
  */
 function hmbkp_get_disable_automatic_backup() {
-	if( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP )
+
+	if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP )
 		return true;
-	elseif( get_option('hmbkp_disable_automatic_backup') )
+
+	if ( get_option( 'hmbkp_disable_automatic_backup' ) )
 		return true;
-	else
-		return false;
+
+	return false;
+
 }
 
+/**
+ * Get the list of excludes
+ *
+ * @return bool
+ */
 function hmbkp_get_excludes() {
-	if( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
 		return HMBKP_EXCLUDE;
-	elseif( get_option('hmbkp_excludes') )
-		return get_option('hmbkp_excludes');
-	else
-		return false;
+
+	if ( get_option( 'hmbkp_excludes' ) )
+		return get_option( 'hmbkp_excludes' );
+
+	return false;
+
 }
 
 /**

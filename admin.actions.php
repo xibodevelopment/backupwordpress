@@ -1,85 +1,104 @@
 <?php
 
 /**
- *	hmbkp_option_save function 
+ *	hmbkp_option_save function
  *
- *	Verify & save all the options set on 
+ *	Verify & save all the options set on
  *	the backupwordpress advanced options page.
- * 	
+ *
  *	Returns array of errors encountered when updating options.
- * 	If no errors - returns false. 
+ * 	If no errors - returns false.
  *
  *	Uses $_POST data
  */
 function hmbkp_option_save() {
-	
-	if( empty( $_POST['hmbkp_options_submit'] ) ) {
-		return; 
-	}
-	
+
+	if ( empty( $_POST['hmbkp_options_submit'] ) )
+		return;
+
 	check_admin_referer( 'hmbkp_options', 'hmbkp_options_nonce' );
-	
+
 	global $hmbkp_errors;
 	$hmbkp_errors = new WP_Error;
+
+	// Disable Automatic backups
+	if ( isset( $_POST['hmbkp_automatic'] ) && ! (bool) $_POST['hmbkp_automatic'] ) {
+		update_option( 'hmbkp_disable_automatic_backup', 'true' );
+		// TODO We need to clear the next scheduled event here	
+	} else {
+		delete_option( 'hmbkp_disable_automatic_backup');
 	
-	if( isset( $_POST['hmbkp_automatic'] ) && ! (bool) $_POST['hmbkp_automatic'] )
-		update_option('hmbkp_disable_automatic_backup', 'true' );
-	else 
-		delete_option('hmbkp_disable_automatic_backup');
+	}
+
+	// Update schedule frequency settings. Or reset to default of daily.
+	if ( isset( $_POST['hmbkp_frequency'] ) && $_POST['hmbkp_frequency'] != 'daily' )
+		update_option( 'hmbkp_schedule_frequency', esc_attr( $_POST['hmbkp_frequency'] ) );
 	
-	//Update schedule frequency settings. Or reset to default of daily. 
-	if( isset( $_POST['hmbkp_frequency'] ) && $_POST['hmbkp_frequency'] != 'daily' )
-		update_option( 'hmbkp_schedule_frequency', $_POST['hmbkp_frequency'] );
 	else
 		delete_option( 'hmbkp_schedule_frequency' );
-	
-	//Clear schedule if settings have changed.
-	if ( wp_get_schedule('hmbkp_schedule_backup_hook') != get_option('hmbkp_schedule_frequency') )
+
+	// Clear schedule if settings have changed.
+	if ( wp_get_schedule( 'hmbkp_schedule_backup_hook' ) != get_option( 'hmbkp_schedule_frequency' ) )
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-	
-	if( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'files only' ) {
-		update_option('hmbkp_files_only', 'true' );
-		delete_option('hmbkp_database_only');
-	} elseif( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'database only' ) {
-		update_option('hmbkp_database_only', 'true' );
-		delete_option('hmbkp_files_only');
+
+	if ( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'files only' ) {
+
+		update_option( 'hmbkp_files_only', 'true' );
+		delete_option( 'hmbkp_database_only' );
+
+	} elseif ( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'database only' ) {
+
+		update_option( 'hmbkp_database_only', 'true' );
+		delete_option( 'hmbkp_files_only' );
+
 	} else {
-		delete_option('hmbkp_database_only');
-		delete_option('hmbkp_files_only');
+
+		delete_option( 'hmbkp_database_only' );
+		delete_option( 'hmbkp_files_only' );
+
 	}
-	
-	if( isset( $_POST['hmbkp_backup_number'] ) && $max_backups = intval( $_POST['hmbkp_backup_number'] ) ) {
-		update_option('hmbkp_max_backups', intval( $_POST['hmbkp_backup_number'] ) );
+
+	if ( isset( $_POST['hmbkp_backup_number'] ) && $max_backups = intval( $_POST['hmbkp_backup_number'] ) ) {
+		update_option( 'hmbkp_max_backups', intval( esc_attr( $_POST['hmbkp_backup_number'] ) ) );
+
 	} else {
 		delete_option( 'hmbkp_max_backups' );
-		//Only error if it is actually empty.
-		if( isset( $_POST['hmbkp_backup_number'] ) )
-			$hmbkp_errors->add( 'invalid_no_backups', __("You have entered an invalid number of backups.") );
+
+		// Only error if it is actually empty.
+		if ( isset( $_POST['hmbkp_backup_number'] ) )
+			$hmbkp_errors->add( 'invalid_no_backups', __( 'You have entered an invalid number of backups.', 'hmbkp' ) );
+
 	}
-	
-	if( isset( $_POST['hmbkp_email_address'] ) && !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
-			$hmbkp_errors->add( 'invalid_email', __("You have entered an invalid email address.") );
+
+	if ( isset( $_POST['hmbkp_email_address'] ) && !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
+		$hmbkp_errors->add( 'invalid_email', __( 'You have entered an invalid email address.', 'hmbkp' ) );
+
 	} elseif( isset( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
 		update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
+
 	} else {
 		delete_option( 'hmbkp_email_address' );
 	}
-	
-	if( isset( $_POST['hmbkp_excludes'] ) && !empty( $_POST['hmbkp_excludes'] ) ) {
-		update_option('hmbkp_excludes', $_POST['hmbkp_excludes'] );
-		delete_transient('hmbkp_estimated_filesize');
+
+	if ( isset( $_POST['hmbkp_excludes'] ) && !empty( $_POST['hmbkp_excludes'] ) ) {
+
+		update_option( 'hmbkp_excludes', $_POST['hmbkp_excludes'] );
+		delete_transient( 'hmbkp_estimated_filesize');
+
 	} else {
-		delete_option('hmbkp_excludes');			
-		delete_transient('hmbkp_estimated_filesize');
+
+		delete_option( 'hmbkp_excludes' );
+		delete_transient( 'hmbkp_estimated_filesize' );
+
 	}
-		
-	if( $hmbkp_errors->get_error_code() )
+
+	if ( $hmbkp_errors->get_error_code() )
 		return $hmbkp_errors;
-	
+
 	return true;
-	
+
 }
-add_action('admin_init', 'hmbkp_option_save', 11 );
+add_action( 'admin_init', 'hmbkp_option_save', 11 );
 
 /**
  * Delete the backup and then redirect
@@ -110,9 +129,9 @@ function hmbkp_request_do_backup() {
 
 	// If cron is disabled for manual backups
 	if ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) && HMBKP_DISABLE_MANUAL_BACKUP_CRON ) {
-		
+
 		hmbkp_do_backup();
-	
+
 	// If not fire the cron
 	} else {
 
