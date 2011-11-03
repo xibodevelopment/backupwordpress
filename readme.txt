@@ -65,7 +65,7 @@ BackUpWordPress stores the last 10 backups by default.
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
 
-For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/HM-Portfolio">BackUpWordPress on GitHub.</a>
+For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
 You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
 
