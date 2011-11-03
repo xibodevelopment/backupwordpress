@@ -229,13 +229,12 @@ function hmbkp_constant_changes() {
 	if ( hmbkp_get_disable_automatic_backup() && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 
-
 	// Or whether we need to re-enable it
 	if ( !hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
 		hmbkp_setup_daily_schedule();
 
-// Allow the time of the daily backup to be changed
-	if ( wp_get_schedule('hmbkp_schedule_backup_hook') != get_option('hmbkp_schedule_frequency') )
+	// Allow the time of the daily backup to be changed
+	if ( wp_get_schedule( 'hmbkp_schedule_backup_hook' ) != get_option( 'hmbkp_schedule_frequency' ) )
 		hmbkp_setup_daily_schedule();
 
 	// Reset if custom time is removed
