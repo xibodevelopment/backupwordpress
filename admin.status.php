@@ -4,7 +4,9 @@
 		hmbkp_constant_changes();
 	}	
 ?>
+
 <p>&#10003;
+
 <?php if ( hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) : ?>
 
     <?php printf( __( 'Automatic backups are %s.', 'hmbkp' ), '<strong>' . __( 'disabled', 'hmbkp' ) . '</strong>' ); ?>
@@ -20,11 +22,10 @@
     else
     	$what_to_backup = '<code>' . __( 'files', 'hmbkp' ) . '</code>'; ?>
 
-    <?php 
-    	$offset = current_time( 'timestamp' ) - time();
-    	$schedule = wp_get_schedules();
-    	$schedule = $schedule[ wp_get_schedule('hmbkp_schedule_backup_hook') ]['display'];
-    	printf( __( 'Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s and be saved to %s.', 'hmbkp' ), $what_to_backup , $schedule, '<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( 'H:i' ) ) . '">' . date_i18n( 'd/m/y H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
+    	<?php $offset = current_time( 'timestamp' ) - time();
+		$schedules = wp_get_schedules();
+    	$schedule = $schedules[ wp_get_schedule('hmbkp_schedule_backup_hook') ]['display'];
+    	printf( __( 'Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s on %s and be saved to %s.', 'hmbkp' ), $what_to_backup , $schedule, '<code>' . date_i18n( get_option( 'time_format' ), wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( get_option( 'time_format' ) ) ) . '">' . date_i18n( get_option( 'date_format' ), wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
 
 <?php endif; ?>
 </p>
