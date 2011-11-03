@@ -31,7 +31,7 @@ define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
 
-// Don't activate on anything less than PHP5
+// Don't activate on anything less than PHP 5.2.4
 if ( version_compare( phpversion(), '5.2.4', '<' ) ) {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
