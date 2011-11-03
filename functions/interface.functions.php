@@ -11,7 +11,7 @@ function hmbkp_get_backup_row( $file ) {
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 
 		<th scope="row">
-			<?php echo date( get_option('date_format'), filemtime( $file ) ) . ' ' . date( 'H:i', filemtime($file ) ); ?>
+			<?php echo date_i18n( get_option('date_format'), filemtime( $file ) ) . ' ' . date( 'H:i', filemtime($file ) ); ?>
 		</th>
 
 		<td>

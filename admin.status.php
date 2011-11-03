@@ -15,7 +15,7 @@
     else
     	$what_to_backup = '<code>' . __( 'files', 'hmbkp' ) . '</code>'; ?>
 
-    <?php printf( __( 'Your %s will be automatically backed up every day at %s to %s.', 'hmbkp' ), $what_to_backup , '<code title="' . sprintf( __( 'It\'s currently %s on the server.', 'hmbkp' ), date( 'H:i' ) ) . '">' . date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
+    <?php printf( __( 'Your %s will be automatically backed up every day at %s to %s.', 'hmbkp' ), $what_to_backup , '<code title="' . sprintf( __( 'It\'s currently %s on the server.', 'hmbkp' ), date_i18n( 'H:i' ) ) . '">' . date_i18n( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
 
 <?php endif; ?>
 
