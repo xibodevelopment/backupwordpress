@@ -519,9 +519,10 @@ function hmbkp_path() {
 	// Secure the directory with a .htaccess file
 	$htaccess = $path . '/.htaccess';
 
-	$contents[]	= '# ' . __( 'This .htaccess file ensures that people cannot download your backup files.', 'hmbkp' );
+	$contents[]	= '# ' . __( 'This .htaccess file ensures that other people cannot download your backup files.', 'hmbkp' );
 	$contents[] = '';
 	$contents[] = 'deny from all';
+	$contents[] = '';
 
 	if ( !file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
 		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
