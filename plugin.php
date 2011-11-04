@@ -83,14 +83,13 @@ add_action( 'admin_init', 'hmbkp_actions' );
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
 
+// Load HM Backup
+require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
+
 // Load the core functions
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/interface.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/backup.mysql.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/backup.files.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/backup.mysql.fallback.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/backup.files.fallback.functions.php' );
 
 // Plugin activation and deactivation
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );

@@ -124,31 +124,6 @@ function hmbkp_update() {
 }
 
 /**
- * Sanitize a directory path
- *
- * @param string $dir
- * @param bool $rel. (default: false)
- * @return string $dir
- */
-function hmbkp_conform_dir( $dir, $rel = false ) {
-
-	// Normalise slashes
-	$dir = str_replace( '\\', '/', $dir );
-	$dir = str_replace( '//', '/', $dir );
-
-	// Remove the trailingslash
-	$dir = untrailingslashit( $dir );
-
-	// If we're on Windows
-	if ( strpos( ABSPATH, '\\' ) !== false )
-		$dir = str_replace( '\\', '/', $dir );
-
-	if ( $rel == true )
-		$dir = str_replace( hmbkp_conform_dir( ABSPATH ), '', $dir );
-
-	return $dir;
-}
-/**
  * Take a file size and return a human readable
  * version
  *
@@ -280,7 +255,7 @@ function hmbkp_ls( $dir, $files = array() ) {
 		if ( $file == '.' || $file == '..' )
 			continue;
 
-		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
+		$file = HMBackup::conform_dir( trailingslashit( $dir ) . $file );
 
 		// Skip the backups dir and any excluded paths
 		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || !is_readable( $file ) ) )
@@ -509,7 +484,7 @@ function hmbkp_path() {
 		$path = HMBKP_PATH;
 
 	// If the dir doesn't exist or isn't writable then use wp-content/backups instead
-	if ( ( !$path || !is_writable( $path ) ) && hmbkp_conform_dir( $path ) != hmbkp_path_default() )
+	if ( ( !$path || !is_writable( $path ) ) && HMBackup::conform_dir( $path ) != hmbkp_path_default() )
     	$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
@@ -530,7 +505,7 @@ function hmbkp_path() {
 	if ( !file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
 		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
-    return hmbkp_conform_dir( $path );
+    return HMBackup::conform_dir( $path );
 }
 
 /**
@@ -539,7 +514,7 @@ function hmbkp_path() {
  * @return string path
  */
 function hmbkp_path_default() {
-	return hmbkp_conform_dir( WP_CONTENT_DIR . '/backups' );
+	return HMBackup::conform_dir( WP_CONTENT_DIR . '/backups' );
 }
 
 /**

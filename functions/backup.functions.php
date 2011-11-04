@@ -2,51 +2,27 @@
 
 /**
  * Backup database and files
- *
- * Creates a temporary directory containing a copy of all files
- * and a dump of the database. Then zip that up and delete the temporary files
- *
- * @uses hmbkp_backup_mysql
- * @uses hmbkp_backup_files
- * @uses hmbkp_delete_old_backups
  */
 function hmbkp_do_backup() {
-
-	// Make sure it's possible to do a backup
-	if ( !hmbkp_possible() )
-		return false;
 
 	// Clean up any mess left by the last backup
 	hmbkp_cleanup();
 
-	$offset = current_time( 'timestamp' ) - time();
-    $time_start = date( 'Y-m-d-H-i-s', time() + $offset );
-
-	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
-	$filepath = trailingslashit( hmbkp_path() ) . $filename;
-
-	// Set as running
-	hmbkp_set_status();
+	$backup = new HMBackup();
 	
-	// Raise the memory limit
-	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
-	@set_time_limit( 0 );
-    
-    // Set running status
-    hmbkp_set_status( __( 'Dumping database', 'hmbkp' ) );
-
-	// Backup database
-	if ( !hmbkp_get_files_only() )
-	    hmbkp_backup_mysql();
-
-	hmbkp_set_status( __( 'Creating zip archive', 'hmbkp' ) );
+	$backup->path = hmbkp_path();
+	$backup->files_only = hmbkp_get_files_only();
+	$backup->database_only = hmbkp_get_database_only();
 	
-	// Zip everything up
-	hmbkp_archive_files( $filepath );
+	if ( defined( 'MYSQLDUMP_PATH' ) && MYSQLDUMP_PATH )
+		$backup->mysqldump_path = MYSQLDUMP_PATH;
 
-	// Delete the database dump file
-	if ( file_exists( hmbkp_path() . '/database_' . DB_NAME . '.sql' ) )
-		unlink( hmbkp_path() . '/database_' . DB_NAME . '.sql' );
+	if ( defined( 'ZIP_PATH' ) && ZIP_PATH )
+		$backup->mysqldump_path = ZIP_PATH;
+		
+	$backup->excludes = hmbkp_get_excludes();
+	
+	$backup->backup();
 
 	// Email Backup
 	hmbkp_email_backup( $filepath );
@@ -56,8 +32,7 @@ function hmbkp_do_backup() {
 	// Delete any old backup files
     hmbkp_delete_old_backups();
     
-    if ( file_exists( hmbkp_path() . '/.backup_running' ) )
-	    unlink( hmbkp_path() . '/.backup_running' );
+    unlink( hmbkp_path() . '/.backup_running' );
     
 	$file = hmbkp_path() . '/.backup_complete';
 	
@@ -198,34 +173,43 @@ function hmbkp_email_backup( $file ) {
 }
 
 /**
- * Set the status of the running backup
- * 
- * @param string $message. (default: '')
- * @return void
+ * Return an array of invalid custom exclude rules
+ *
+ * @return array
  */
-function hmbkp_set_status( $message = '' ) {
-	
-	$file = hmbkp_path() . '/.backup_running';
-	
-	if ( !$handle = @fopen( $file, 'w' ) )
-		return false;
-	
-	fwrite( $handle, $message );
-	
-	fclose( $handle );
-	
+function hmbkp_invalid_custom_excludes() {
+ 
+    $invalid_rules = array();
+ 
+    // Check if any absolute path excludes actually exist
+    if ( $excludes = hmbkp_get_excludes() )
+     
+        foreach ( explode( ',', $excludes ) as $rule )
+            if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && !file_exists( $rule ) && ! file_exists( ABSPATH . $rule ) && ! file_exists( trailingslashit( ABSPATH ) . $rule ) )
+                $invalid_rules[] = $rule;
+ 
+    return $invalid_rules;
+ 
 }
-
+ 
 /**
- * Get the status of the running backup
- * 
- * @return string
+ * Return an array of valid custom exclude rules
+ *
+ * @return array
  */
-function hmbkp_get_status() {
-	
-	if ( !file_exists( hmbkp_path() . '/.backup_running' ) )
-		return false;
-		
-	return file_get_contents( hmbkp_path() .'/.backup_running' );
-	
+function hmbkp_valid_custom_excludes() {
+ 
+    $valid_rules = array();
+ 
+    $excludes = hmbkp_get_excludes();
+     
+    if( ! $excludes )
+        return;
+ 
+    $valid_rules = array_diff( explode( ',', $excludes ), hmbkp_invalid_custom_excludes() );
+     
+ 
+ 
+    return array_map( 'trim', $valid_rules );
+ 
 }

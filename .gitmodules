@@ -1,0 +1,3 @@
+[submodule "classes"]
+	path = classes
+	url = git@github.com:humanmade/hm-backups.git
