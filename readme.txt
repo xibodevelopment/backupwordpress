@@ -18,9 +18,15 @@ BackUpWordPress will back up your entire site including your database and all yo
 * Works in low memory, "shared host" environments.
 * Option to have each backup file emailed to you.
 * Works on Linux & Windows Server.
-* Control advanced options by defining any of the optional `Constants`.
 * Exclude files and folders from your back ups.
+* Control advanced options by defining any of the optional `Constants`.
 * Good support should you need help.
+
+= Help develop this plugin =
+
+The BackUpWordPress plugin is hosted github, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
+
+We'd also love help translating the plugin into more languages, if you can help then please contact support@humanmade.co.uk or send us a pull request.
 
 == Installation ==
 
@@ -41,17 +47,6 @@ Backups are stored on your server in `wp-content/backups`, you can change the di
 **How do I restore my site from a backup?**
 
 You need to download the latest backup file either by clicking download on the backups page or via `FTP`. `Unzip` the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely `phpMyAdmin`).
-
-**How do I change BackUpWordPress options?**
-
-A list of available options can be found on the Backups page in the admin. Click the Advanced Options button to see all the options.
-
-To set an option you define a `Constant` in your `wp-config.php` file see the following links for help defining `Constants` and editing your `wp-config.php` file:
-
-* http://php.net/manual/en/language.constants.php
-* http://codex.wordpress.org/Editing_wp-config.php
-
-For example: to set the number of backups stored to 3 add `define( 'HMBKP_MAX_BACKUPS', 3 );` to your `wp-config.php` file.
 
 **Does BackUpWordPress back up the backups directory?**
 
@@ -75,6 +70,15 @@ You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a>
 
 == Changelog ==
 
+#### 1.4
+
+* Most options can now be set on the backups page, all options can still be set by defining `Constants`
+* Russian translation props Valera
+* All dates are now translatable.
+* Fixed some strings which weren't translatable.
+* New Constant `HMBKP_DISABLE_MANUAL_BACKUP_CRON` which enable you to disable the use of `wp_cron` for manual backups.
+* Manual backups now work if `DISABLE_WP_CRON` is defined as `true`.
+
 #### 1.3.2
 
 * Spanish translation
@@ -83,10 +87,9 @@ You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a>
 * Silently ignore unreadable files / folders
 * Make sure binary data is properly exported when doing a mysqldump
 * Use 303 instead of 302 when redirecting in the admin.
-* Don't set_time_limit inside a loop
+* Don't `set_time_limit` inside a loop
 * Use WordPress 3.2 style buttons
 * Don't pass an empty password to mysqldump
-
 
 #### 1.3.1
 
