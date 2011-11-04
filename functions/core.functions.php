@@ -462,6 +462,9 @@ function hmbkp_setup_schedule() {
 	// Clear any old schedules
 	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 
+	if( get_option( 'hmbkp_disable_automatic_backup' ) ) 
+		return; 
+
 	// Default to 11 in the evening
 	$time = '23:00';
 
