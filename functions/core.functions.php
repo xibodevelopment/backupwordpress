@@ -193,6 +193,7 @@ function hmbkp_size_readable( $size, $unit = null, $retstring = '%01.2f %s', $si
 /**
  * Add daily as a cron schedule choice
  *
+ * @todo can we not use the built in schedules
  * @param array $recc
  * @return array $recc
  */
