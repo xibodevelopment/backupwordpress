@@ -81,7 +81,7 @@
 				<tr align="top">
 					<th scope="row"><label for="hmbkp_excludes"><?php _e( 'Excludes', 'hmbkp' ); ?></th>
 					<td>
-						<textarea class="large-text<?php if ( defined( 'HMBKP_EXCLUDE' ) || hmbkp_get_database_only() ) echo ' disabled' ?>" name="hmbkp_excludes" id="hmbkp_excludes" <?php disabled( defined( 'HMBKP_EXCLUDE' ) || hmbkp_get_database_only() ); ?>><?php echo hmbkp_get_excludes(); ?></textarea> 
+						<textarea class="code large-text<?php if ( defined( 'HMBKP_EXCLUDE' ) || hmbkp_get_database_only() ) echo ' disabled' ?>" name="hmbkp_excludes" id="hmbkp_excludes" <?php disabled( defined( 'HMBKP_EXCLUDE' ) || hmbkp_get_database_only() ); ?>><?php echo hmbkp_get_excludes(); ?></textarea> 
 						<span class="description"><?php _e( 'A comma separated list of file and directory paths that you do <strong>not</strong> want to backup.', 'hmbkp' ); ?></span><br/>
 						<?php _e( 'e.g.', 'hmbkp' ); ?> <code>file.php, /directory/, /directory/file.jpg</code>
 					</td>
