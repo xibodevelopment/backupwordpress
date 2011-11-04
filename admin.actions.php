@@ -128,7 +128,7 @@ function hmbkp_request_do_backup() {
 		return false;
 
 	// If cron is disabled for manual backups
-	if ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) && HMBKP_DISABLE_MANUAL_BACKUP_CRON ) {
+	if ( ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) && HMBKP_DISABLE_MANUAL_BACKUP_CRON ) || ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) ) {
 
 		hmbkp_do_backup();
 
@@ -238,7 +238,7 @@ function hmbkp_constant_changes() {
 		hmbkp_setup_daily_schedule();
 
 	// Reset if custom time is removed
-	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option('hmbkp_schedule_frequency') == 'hmbkp_daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
+	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option( 'hmbkp_schedule_frequency' ) == 'daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
 		hmbkp_setup_daily_schedule();
 
 	// If a custom backup path has been set or changed
