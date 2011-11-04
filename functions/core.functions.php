@@ -207,7 +207,7 @@ function hmbkp_more_reccurences( $recc ) {
 
 	return array_merge( $recc, $hmbkp_reccurrences );
 }
-add_filter('cron_schedules', 'hmbkp_more_reccurences');
+add_filter( 'cron_schedules', 'hmbkp_more_reccurences' );
 
 /**
  * Send a flie to the browser for download
