@@ -24,10 +24,9 @@ function hmbkp_option_save() {
 	// Disable Automatic backups
 	if ( isset( $_POST['hmbkp_automatic'] ) && ! (bool) $_POST['hmbkp_automatic'] ) {
 		update_option( 'hmbkp_disable_automatic_backup', 'true' );
-		// TODO We need to clear the next scheduled event here	
+		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 	} else {
 		delete_option( 'hmbkp_disable_automatic_backup');
-	
 	}
 
 	// Update schedule frequency settings. Or reset to default of daily.
