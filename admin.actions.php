@@ -229,16 +229,16 @@ function hmbkp_constant_changes() {
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 
 	// Or whether we need to re-enable it
-	if ( !hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_daily_schedule();
+	if ( ! hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
+		hmbkp_setup_schedule();
 
 	// Allow the time of the daily backup to be changed
 	if ( wp_get_schedule( 'hmbkp_schedule_backup_hook' ) != get_option( 'hmbkp_schedule_frequency' ) )
-		hmbkp_setup_daily_schedule();
+		hmbkp_setup_schedule();
 
 	// Reset if custom time is removed
 	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option('hmbkp_schedule_frequency') == 'hmbkp_daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
-		hmbkp_setup_daily_schedule();
+		hmbkp_setup_schedule();
 
 	// If a custom backup path has been set or changed
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) )

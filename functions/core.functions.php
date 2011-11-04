@@ -7,7 +7,7 @@ function hmbkp_activate() {
 
 	hmbkp_deactivate();
 
-	hmbkp_setup_daily_schedule();
+	hmbkp_setup_schedule();
 
 }
 
@@ -457,7 +457,7 @@ function hmbkp_total_filesize() {
  * @access public
  * @return void
  */
-function hmbkp_setup_daily_schedule() {
+function hmbkp_setup_schedule() {
 
 	// Clear any old schedules
 	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
