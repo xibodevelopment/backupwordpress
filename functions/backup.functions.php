@@ -25,7 +25,7 @@ function hmbkp_do_backup() {
 	$filename = sanitize_file_name( get_bloginfo( 'name' ) . '.backup.' . $time_start . '.zip' );
 	$filepath = trailingslashit( hmbkp_path() ) . $filename;
 
-	// Set as running for a max of 1 hour
+	// Set as running
 	hmbkp_set_status();
 	
 	// Raise the memory limit
