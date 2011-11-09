@@ -233,12 +233,10 @@ function hmbkp_valid_custom_excludes() {
 
 	$excludes = hmbkp_get_excludes();
 	
-	if( ! $excludes )
-		return;
+	if ( ! $excludes )
+		array();
 
 	$valid_rules = array_diff( explode( ',', $excludes ), hmbkp_invalid_custom_excludes() );
-	
-
 
 	return array_map( 'trim', $valid_rules );
 

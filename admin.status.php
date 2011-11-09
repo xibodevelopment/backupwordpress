@@ -51,6 +51,8 @@ if ( ( !empty( $_POST['hmbkp_options_submit'] ) ) && ( !wp_next_scheduled('hmbkp
 <p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . hmbkp_get_email_address() . '</code>' ); ?></p>
 <?php endif; ?>
 
-<?php if ( $valid_excludes = hmbkp_valid_custom_excludes() && !hmbkp_get_database_only() ) : ?>
+<?php hmbkp_valid_custom_excludes(); ?>
+
+<?php if ( ( $valid_excludes = hmbkp_valid_custom_excludes() ) && !hmbkp_get_database_only() ) : ?>
 <p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $valid_excludes ) . '</code>' ); ?></p>
 <?php endif; ?>

@@ -36,9 +36,8 @@ function hmbkp_do_backup() {
     hmbkp_set_status( __( 'Dumping database', 'hmbkp' ) );
 
 	// Backup database
-	if ( !hmbkp_get_files_only() ){
+	if ( !hmbkp_get_files_only() )
 	    hmbkp_backup_mysql();
-	    }
 
 	hmbkp_set_status( __( 'Creating zip archive', 'hmbkp' ) );
 	
@@ -46,7 +45,7 @@ function hmbkp_do_backup() {
 	hmbkp_archive_files( $filepath );
 
 	// Delete the database dump file
-	if ( hmbkp_get_database_only() )
+	if ( file_exists( hmbkp_path() . '/database_' . DB_NAME . '.sql' ) )
 		unlink( hmbkp_path() . '/database_' . DB_NAME . '.sql' );
 
 	// Email Backup
@@ -57,7 +56,8 @@ function hmbkp_do_backup() {
 	// Delete any old backup files
     hmbkp_delete_old_backups();
     
-    unlink( hmbkp_path() . '/.backup_running' );
+    if ( file_exists( hmbkp_path() . '/.backup_running' ) )
+	    unlink( hmbkp_path() . '/.backup_running' );
     
 	$file = hmbkp_path() . '/.backup_complete';
 	
