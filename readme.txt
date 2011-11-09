@@ -21,6 +21,7 @@ BackUpWordPress will back up your entire site including your database and all yo
 * Exclude files and folders from your back ups.
 * Control advanced options by defining any of the optional `Constants`.
 * Good support should you need help.
+* Spanish & Russian translations.
 
 = Help develop this plugin =
 
@@ -62,7 +63,7 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
+You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
 
 == Screenshots ==
 
@@ -72,8 +73,8 @@ You can also twitter <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a>
 
 #### 1.4
 
-* Most options can now be set on the backups page, all options can still be set by defining `Constants`
-* Russian translation props Valera
+* Most options can now be set on the backups page, all options can still be set by defining them as `Constants`.
+* Russian translation, props valericus.
 * All dates are now translatable.
 * Fixed some strings which weren't translatable.
 * New Constant `HMBKP_DISABLE_MANUAL_BACKUP_CRON` which enable you to disable the use of `wp_cron` for manual backups.
