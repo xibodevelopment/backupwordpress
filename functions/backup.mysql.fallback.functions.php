@@ -209,6 +209,7 @@ function hmbkp_backup_mysql_fallback() {
     $hmbkp_db_connect = mysql_pconnect( DB_HOST, DB_USER, DB_PASSWORD );
 
     mysql_select_db( DB_NAME, $hmbkp_db_connect );
+    mysql_set_charset( DB_CHARSET, $hmbkp_db_connect );
 
     // Begin new backup of MySql
     $tables = mysql_list_tables( DB_NAME );
