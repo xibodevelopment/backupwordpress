@@ -5,6 +5,8 @@
  */
 function hmbkp_activate() {
 
+	hmbkp_setup_hm_backup();
+
 	hmbkp_deactivate();
 
 	hmbkp_setup_schedule();
@@ -17,6 +19,8 @@ function hmbkp_activate() {
  * Removes options and clears all cron schedules
  */
 function hmbkp_deactivate() {
+
+	hmbkp_setup_hm_backup();
 
 	// Options to delete
 	$options = array(
@@ -255,7 +259,7 @@ function hmbkp_ls( $dir, $files = array() ) {
 		if ( $file == '.' || $file == '..' )
 			continue;
 
-		$file = HMBackup::conform_dir( trailingslashit( $dir ) . $file );
+		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
 
 		// Skip the backups dir and any excluded paths
 		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || !is_readable( $file ) ) )
@@ -370,43 +374,6 @@ function hmbkp_calculate() {
 }
 
 /**
- * Check whether shell_exec has been disabled.
- *
- * @return bool
- */
-function hmbkp_shell_exec_available() {
-
-	$disable_functions = ini_get( 'disable_functions' );
-
-	// Is shell_exec disabled?
-	if ( strpos( $disable_functions, 'shell_exec' ) !== false )
-		return false;
-
-	// Are we in Safe Mode
-	if ( hmbkp_is_safe_mode_active() )
-		return false;
-
-	return true;
-
-}
-
-/**
- * Check whether safe mode if active or not
- *
- * @return bool
- */
-function hmbkp_is_safe_mode_active() {
-
-	$safe_mode = ini_get( 'safe_mode' );
-
-	if ( $safe_mode && strtolower( $safe_mode ) != 'off' )
-		return true;
-
-	return false;
-
-}
-
-/**
  * Calculate the total filesize of all backups
  *
  * @return string
@@ -484,7 +451,7 @@ function hmbkp_path() {
 		$path = HMBKP_PATH;
 
 	// If the dir doesn't exist or isn't writable then use wp-content/backups instead
-	if ( ( !$path || !is_writable( $path ) ) && HMBackup::conform_dir( $path ) != hmbkp_path_default() )
+	if ( ( !$path || !is_writable( $path ) ) && hmbkp_conform_dir( $path ) != hmbkp_path_default() )
     	$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
@@ -505,7 +472,7 @@ function hmbkp_path() {
 	if ( !file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
 		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
-    return HMBackup::conform_dir( $path );
+    return hmbkp_conform_dir( $path );
 }
 
 /**
@@ -514,7 +481,7 @@ function hmbkp_path() {
  * @return string path
  */
 function hmbkp_path_default() {
-	return HMBackup::conform_dir( WP_CONTENT_DIR . '/backups' );
+	return hmbkp_conform_dir( WP_CONTENT_DIR . '/backups' );
 }
 
 /**
@@ -605,7 +572,6 @@ function hmbkp_get_database_only() {
  *	Returns defined email address or email address saved in options.
  *	If none set, return false.
  */
-
 function hmbkp_get_email_address() {
 
 	if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL )
@@ -615,12 +581,12 @@ function hmbkp_get_email_address() {
 		$email = get_option( 'hmbkp_email_address' );
 
 	else
-		return false;
+		return '';
 
 	if ( is_email( $email ) )
 		return $email;
 
-	return false;
+	return '';
 
 }
 
@@ -697,4 +663,45 @@ function hmbkp_cleanup() {
 
     endif;
 
+}
+
+function hmbkp_conform_dir( $dir ) {
+	
+	global $hm_backup;
+	
+	return $hm_backup->conform_dir( $dir );
+	
+}
+
+function hmbkp_get_mysqldump_path() {	
+	return defined( 'HMBKP_MYSQLDUMP_PATH' ) ? HMBKP_ZIP_PATH : '';
+}
+
+function hmbkp_get_zip_path() {
+	return defined( 'HMBKP_ZIP_PATH' ) ? HMBKP_ZIP_PATH : '';
+}
+
+function hmbkp_is_safe_mode_active() {
+	
+	global $hm_backup;
+	
+	return $hm_backup->is_safe_mode_active();
+	
+}
+
+/**
+ * Check if a backup is running
+ *
+ * @return bool
+ */
+function hmbkp_is_in_progress() {
+	return file_exists( hmbkp_path() . '/.backup_running' );
+}
+
+function hmbkp_exclude_string( $context ) {
+	
+	global $hm_backup;
+	
+	return $hm_backup->exclude_string( $context );
+		
 }

@@ -53,13 +53,12 @@ if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) 
 
 }
 
-// Load the admin actions file
 function hmbkp_actions() {
 
 	$plugin_data = get_plugin_data( __FILE__ );
 
 	define( 'HMBKP_VERSION', $plugin_data['Version'] );
-	
+
 	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 	// Fire the update action
@@ -69,10 +68,10 @@ function hmbkp_actions() {
 	require_once( HMBKP_PLUGIN_PATH . '/admin.actions.php' );
 
 	// Load admin css and js
-	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) :
+	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js' );
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css' );
-	endif;
+	}
 
 	// Handle any advanced option changes
 	hmbkp_constant_changes();
@@ -80,13 +79,41 @@ function hmbkp_actions() {
 }
 add_action( 'admin_init', 'hmbkp_actions' );
 
+/**
+ * Setup the HMBackup class
+ * 
+ * @return null
+ */
+function hmbkp_setup_hm_backup() {
+
+	global $hm_backup;
+
+	new HMBackup();
+	
+	$hm_backup->path = hmbkp_path();
+	$hm_backup->root = ABSPATH;
+	$hm_backup->files_only = hmbkp_get_files_only();
+	$hm_backup->database_only = hmbkp_get_database_only();
+	
+	if ( hmbkp_get_mysqldump_path() )
+		$hm_backup->mysqldump_path = hmbkp_get_mysqldump_path();
+	
+	if ( hmbkp_get_zip_path() )
+		$hm_backup->zip_path = hmbkp_get_zip_path();
+	
+	$hm_backup->excludes = hmbkp_get_excludes();
+
+}
+add_action( 'init', 'hmbkp_setup_hm_backup' );
+
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
 
-// Load HM Backup
+// Load hm-backup
 require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
 
 // Load the core functions
+require_once( HMBKP_PLUGIN_PATH . '/functions/backup.actions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/interface.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );

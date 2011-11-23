@@ -243,15 +243,15 @@ function hmbkp_constant_changes() {
 		hmbkp_setup_schedule();
 
 	// If a custom backup path has been set or changed
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HMBackup::conform_dir( HMBKP_PATH ) != ( $from = HMBackup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) )
 		hmbkp_path_move( $from, HMBKP_PATH );
 
 	// If a custom backup path has been removed
-	if ( ( ( defined( 'HMBKP_PATH' ) && !HMBKP_PATH ) || !defined( 'HMBKP_PATH' ) && HMBackup::conform_dir( hmbkp_path_default() ) != ( $from = HMBackup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
+	if ( ( ( defined( 'HMBKP_PATH' ) && !HMBKP_PATH ) || !defined( 'HMBKP_PATH' ) && hmbkp_conform_dir( hmbkp_path_default() ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
 		hmbkp_path_move( $from, hmbkp_path_default() );
 
 	// If the custom path has changed and the new directory isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HMBackup::conform_dir( HMBKP_PATH ) != ( $from = HMBackup::conform_dir( get_option( 'hmbkp_path' ) ) ) && $from != hmbkp_path_default() && !is_writable( HMBKP_PATH ) && is_dir( $from ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) && $from != hmbkp_path_default() && !is_writable( HMBKP_PATH ) && is_dir( $from ) )
 		hmbkp_path_move( $from, hmbkp_path_default() );
 
 }
