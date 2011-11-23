@@ -1,7 +1,7 @@
 <?php // If the form has been submitted, things may have changed.
-if ( ( !empty( $_POST['hmbkp_options_submit'] ) ) && ( !wp_next_scheduled('hmbkp_schedule_backup_hook') || hmbkp_get_disable_automatic_backup() ) )	{
-	hmbkp_constant_changes();
-} ?>
+// @todo hook this in with an action
+if ( ( !empty( $_POST['hmbkp_settings_submit'] ) ) && ( ! wp_next_scheduled( 'hmbkp_schedule_backup_hook') || hmbkp_get_disable_automatic_backup() ) )
+	hmbkp_constant_changes(); ?>
 
 <p>&#10003;
 

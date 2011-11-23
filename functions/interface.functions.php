@@ -40,11 +40,11 @@ function hmbkp_get_backup_row( $file ) {
  */
 function hmbkp_admin_notices() {
 
-	// If the form has been submitted, display un updated notification
-	// Display  notifications for any errors in the advanced options form. 
-	if( !empty( $_POST['hmbkp_options_submit'] ) ) :
+	// If the form has been submitted, display updated notification
+	// Display  notifications for any errors in the settings form. 
+	if( !empty( $_POST['hmbkp_settings_submit'] ) ) :
 
-		function hmbkp_advanced_options_saved() {
+		function hmbkp_advanced_settings_saved() {
 			echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
 
 			global $hmbkp_errors;
@@ -54,7 +54,7 @@ function hmbkp_admin_notices() {
 				}
 			}
 		}
-		add_action( 'admin_notices', 'hmbkp_advanced_options_saved' );
+		add_action( 'admin_notices', 'hmbkp_advanced_settings_saved' );
 		
 	endif; 
 	

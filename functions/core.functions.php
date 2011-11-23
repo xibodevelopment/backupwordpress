@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Setup the default options on plugin activation
+ * Setup the plugin defaults on activation
  */
 function hmbkp_activate() {
 
@@ -570,7 +570,7 @@ function hmbkp_get_database_only() {
 
 /**
  *	Returns defined email address or email address saved in options.
- *	If none set, return false.
+ *	If none set, return empty string.
  */
 function hmbkp_get_email_address() {
 

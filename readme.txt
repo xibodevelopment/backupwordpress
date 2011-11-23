@@ -9,7 +9,7 @@ Simple automated back ups of your WordPress powered website.
 
 == Description ==
 
-BackUpWordPress will back up your entire site including your database and all your files once every day. It has several advanced options for power users.
+BackUpWordPress will back up your entire site including your database and all your files once every day.
 
 = Features =
 
@@ -19,7 +19,7 @@ BackUpWordPress will back up your entire site including your database and all yo
 * Option to have each backup file emailed to you.
 * Works on Linux & Windows Server.
 * Exclude files and folders from your back ups.
-* Control advanced options by defining any of the optional `Constants`.
+* Control advanced settings by defining any of the optional `Constants`.
 * Good support should you need help.
 * Spanish & Russian translations.
 

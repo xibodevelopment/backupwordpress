@@ -14,7 +14,7 @@
 
 <?php endif; ?>
 
-		<a href="#hmbkp_advanced-options" class="add-new-h2 hmbkp_advanced-options-toggle"><?php _e( 'Advanced Options', 'hmbkp' ); ?></a>
+		<a href="#hmbkp-settings" class="add-new-h2 hmbkp-settings-toggle"><?php _e( 'Settings', 'hmbkp' ); ?></a>
 
 	</h2>
 

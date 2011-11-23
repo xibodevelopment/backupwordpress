@@ -1,12 +1,12 @@
-<div id="hmbkp_advanced-options" <?php if ( !hmbkp_get_backups() || !empty( $_POST['hmbkp_options_submit'] ) ) echo ' class="show_form"' ?>>
+<div id="hmbkp-settings" <?php if ( !hmbkp_get_backups() || !empty( $_POST['hmbkp_settings_submit'] ) ) echo ' class="show_form"' ?>>
 
-    <h4><?php _e( 'Advanced Options', 'hmbkp' ); ?></h4>
+    <h4><?php _e( 'Settings', 'hmbkp' ); ?></h4>
 
 	<p><?php printf( __( 'You can still define %s in your %s to control some settings. A full list of %s can be found in the readme. Defined settings will not be editable below.', 'hmbkp' ), '<code>Constants</code>', '<code>wp-config.php</code>', '<code>Constants</code>' ); ?></p>
 
 	<form method="post">
 		
-		<?php wp_nonce_field( 'hmbkp_options', 'hmbkp_options_nonce' ); ?>
+		<?php wp_nonce_field( 'hmbkp_settings', 'hmbkp_settings_nonce' ); ?>
 		
 		<table class="form-table">
 			<tbody>
@@ -91,7 +91,7 @@
 	
 		</table>
 
-		<p class="submit"><input type="submit" name="hmbkp_options_submit" id="submit" class="button-primary" value="Save Changes"></p>
+		<p class="submit"><input type="submit" name="hmbkp_settings_submit" id="submit" class="button-primary" value="Save Changes"></p>
 
 	</form>
 	    

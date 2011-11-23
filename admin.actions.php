@@ -1,22 +1,21 @@
 <?php
 
 /**
- *	hmbkp_option_save function
+ *	Verify & save all the user settings
  *
- *	Verify & save all the options set on
- *	the backupwordpress advanced options page.
- *
- *	Returns array of errors encountered when updating options.
- * 	If no errors - returns false.
+ *	Returns WP_Error object if there are errors when updating settings.
+ * 	Return  (bool) true if no errors.
  *
  *	Uses $_POST data
+ *
+ * @return mixed
  */
 function hmbkp_option_save() {
 
-	if ( empty( $_POST['hmbkp_options_submit'] ) )
+	if ( empty( $_POST['hmbkp_settings_submit'] ) )
 		return;
 
-	check_admin_referer( 'hmbkp_options', 'hmbkp_options_nonce' );
+	check_admin_referer( 'hmbkp_settings', 'hmbkp_settings_nonce' );
 
 	global $hmbkp_errors;
 	$hmbkp_errors = new WP_Error;
@@ -107,7 +106,7 @@ add_action( 'admin_init', 'hmbkp_option_save', 11 );
  */
 function hmbkp_request_delete_backup() {
 
-	if ( !isset( $_GET['hmbkp_delete'] ) || empty( $_GET['hmbkp_delete'] ) )
+	if ( ! isset( $_GET['hmbkp_delete'] ) || empty( $_GET['hmbkp_delete'] ) )
 		return false;
 
 	hmbkp_delete_backup( $_GET['hmbkp_delete'] );
@@ -125,7 +124,7 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup
 function hmbkp_request_do_backup() {
 
 	// Are we sure
-	if ( !isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_backup_now' || hmbkp_is_in_progress() || !hmbkp_possible() )
+	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_backup_now' || hmbkp_is_in_progress() || ! hmbkp_possible() )
 		return false;
 
 	// If cron is disabled for manual backups
@@ -136,14 +135,14 @@ function hmbkp_request_do_backup() {
 	// If not fire the cron
 	} else {
 
-	// Schedule a single backup
+		// Schedule a single backup
 		wp_schedule_single_event( time(), 'hmbkp_schedule_single_backup_hook' );
 
-	// Remove the once every 60 seconds limitation
-	delete_transient( 'doing_cron' );
-
-	// Fire the cron now
-	spawn_cron();
+		// Remove the once every 60 seconds limitation
+		delete_transient( 'doing_cron' );
+		
+		// Fire the cron now
+		spawn_cron();
 
 	}
 
@@ -160,7 +159,7 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_do_backup' );
  */
 function hmbkp_request_download_backup() {
 
-	if ( !isset( $_GET['hmbkp_download'] ) || empty( $_GET['hmbkp_download'] ) )
+	if ( ! isset( $_GET['hmbkp_download'] ) || empty( $_GET['hmbkp_download'] ) )
 		return false;
 
 	hmbkp_send_file( base64_decode( $_GET['hmbkp_download'] ) );
@@ -175,7 +174,7 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_back
  */
 function hmbkp_ajax_is_backup_in_progress() {
 
-	if ( !hmbkp_is_in_progress() )
+	if ( ! hmbkp_is_in_progress() )
 		echo 0;
 
 	elseif ( $status = hmbkp_get_status() )
@@ -208,7 +207,7 @@ function hmbkp_ajax_cron_test() {
 
 	$response = wp_remote_get( site_url( 'wp-cron.php' ) );
 
-	if ( !is_wp_error( $response ) && $response['response']['code'] != '200' )
+	if ( ! is_wp_error( $response ) && $response['response']['code'] != '200' )
     	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is returning a %s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run back ups in a separate process.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response['response']['code'] . '</code>' ) . '</p></div>';
 	else
 		echo 1;
@@ -222,7 +221,7 @@ add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
  * that users can define to control advanced
  * settings
  *
- * @return void
+ * @return null
  */
 function hmbkp_constant_changes() {
 
@@ -231,7 +230,7 @@ function hmbkp_constant_changes() {
 		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 
 	// Or whether we need to re-enable it
-	if ( !hmbkp_get_disable_automatic_backup() && !wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
+	if ( ! hmbkp_get_disable_automatic_backup() && ! wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
 		hmbkp_setup_schedule();
 
 	// Allow the time of the daily backup to be changed
@@ -239,7 +238,7 @@ function hmbkp_constant_changes() {
 		hmbkp_setup_schedule();
 
 	// Reset if custom time is removed
-	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && !HMBKP_DAILY_SCHEDULE_TIME ) || !defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option( 'hmbkp_schedule_frequency' ) == 'daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && !hmbkp_get_disable_automatic_backup() )
+	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && ! HMBKP_DAILY_SCHEDULE_TIME ) || ! defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option( 'hmbkp_schedule_frequency' ) == 'daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && ! hmbkp_get_disable_automatic_backup() )
 		hmbkp_setup_schedule();
 
 	// If a custom backup path has been set or changed
@@ -247,7 +246,7 @@ function hmbkp_constant_changes() {
 		hmbkp_path_move( $from, HMBKP_PATH );
 
 	// If a custom backup path has been removed
-	if ( ( ( defined( 'HMBKP_PATH' ) && !HMBKP_PATH ) || !defined( 'HMBKP_PATH' ) && hmbkp_conform_dir( hmbkp_path_default() ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
+	if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || !defined( 'HMBKP_PATH' ) && hmbkp_conform_dir( hmbkp_path_default() ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
 		hmbkp_path_move( $from, hmbkp_path_default() );
 
 	// If the custom path has changed and the new directory isn't writable

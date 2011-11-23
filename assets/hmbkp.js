@@ -22,12 +22,12 @@ jQuery( document ).ready( function( $ ) {
 	    }
 	);
 
-	$( '.hmbkp_advanced-options-toggle' ).click( function() {
-		$( '#hmbkp_advanced-options' ).toggle();
+	$( '.hmbkp-settings-toggle' ).click( function() {
+		$( '#hmbkp-settings' ).toggle();
 	} );
 	
-	if( window.location.hash == '#hmbkp_advanced-options' ){
-		$( '#hmbkp_advanced-options' ).css( 'display', 'block' );		
+	if ( window.location.hash == '#hmbkp-settings' ){
+		$( '#hmbkp-settings' ).show();		
 	}
 	
 
