@@ -5,8 +5,6 @@
  */
 function hmbkp_activate() {
 
-	hmbkp_setup_hm_backup();
-
 	hmbkp_deactivate();
 
 	hmbkp_setup_schedule();
@@ -667,9 +665,7 @@ function hmbkp_cleanup() {
 
 function hmbkp_conform_dir( $dir ) {
 	
-	global $hm_backup;
-	
-	return $hm_backup->conform_dir( $dir );
+	return HMBackup::conform_dir( $dir );
 	
 }
 

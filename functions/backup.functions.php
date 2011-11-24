@@ -173,11 +173,6 @@ function hmbkp_set_status( $message = '' ) {
 	
 	if ( !$handle = @fopen( $file, 'w' ) )
 		return false;
-		
-	if ( is_object( $message ) ) {
-		hm( debug_backtrace() );
-		exit;
-	}
 	
 	fwrite( $handle, $message );
 	
