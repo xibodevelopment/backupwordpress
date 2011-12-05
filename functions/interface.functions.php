@@ -7,9 +7,7 @@
 function hmbkp_get_backup_row( $file ) {
 
 	$encode = base64_encode( $file ); 
-	$offset = current_time( 'timestamp' ) - time();
-	
-	?>
+	$offset = current_time( 'timestamp' ) - time(); ?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 
