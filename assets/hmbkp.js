@@ -25,6 +25,8 @@ jQuery( document ).ready( function( $ ) {
 	$( '.hmbkp-settings-toggle' ).click( function() {
 		$( '#hmbkp-settings' ).toggle();
 	} );
+
+	$( '.hmbkp-show-help-tab' ).click( screenMeta.toggleEvent );
 	
 	if ( window.location.hash == '#hmbkp-settings' ){
 		$( '#hmbkp-settings' ).show();		

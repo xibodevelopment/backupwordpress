@@ -2,7 +2,7 @@
 
     <h4><?php _e( 'Settings', 'hmbkp' ); ?></h4>
 
-	<p><?php printf( __( 'You can still define %s in your %s to control some settings. A full list of %s can be found in the readme. Defined settings will not be editable below.', 'hmbkp' ), '<code>Constants</code>', '<code>wp-config.php</code>', '<code>Constants</code>' ); ?></p>
+	<p><?php printf( __( 'You can define %s in your %s to control some settings. A full list of %s can be found in the <a href="#contextual-help-wrap" class="hmbkp-show-help-tab">help</a> panel. Defined settings will not be editable below.', 'hmbkp' ), '<code>Constants</code>', '<code>wp-config.php</code>', '<code>Constants</code>' ); ?></p>
 
 	<form method="post">
 		
@@ -18,7 +18,7 @@
 					<td>
 						
 						<label for="hmbkp_automatic_on"> 
-						    <input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_on" value="1" <?php checked( !hmbkp_get_disable_automatic_backup() ); ?> <?php disabled( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ); ?>>
+						    <input name="hmbkp_automatic" type="radio" id="hmbkp_automatic_on" value="1" <?php checked( ! hmbkp_get_disable_automatic_backup() ); ?> <?php disabled( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ); ?>>
 						    <?php _e( 'Backup my site automatically.', 'hmbkp' ); ?>
 						</label><br/>
 						
