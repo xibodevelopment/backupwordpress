@@ -14,10 +14,10 @@ function hmbkp_do_backup() {
 	// Clean up any mess left by the last backup
 	hmbkp_cleanup();
 	
-	HMBackup::get_instance()->backup();
+	HM_Backup::get_instance()->backup();
  
 	// Email Backup
-	hmbkp_email_backup( HMBackup::get_instance()->archive_filepath() );
+	hmbkp_email_backup( HM_Backup::get_instance()->archive_filepath() );
  
     hmbkp_set_status( __( 'Removing old backups', 'hmbkp' ) );
  
@@ -27,7 +27,7 @@ function hmbkp_do_backup() {
     if ( file_exists( hmbkp_path() . '/.backup_running' ) )
 	    unlink( hmbkp_path() . '/.backup_running' );
     
-    if ( file_exists( HMBackup::get_instance()->archive_filepath() ) ) {
+    if ( file_exists( HM_Backup::get_instance()->archive_filepath() ) ) {
 
 		$file = hmbkp_path() . '/.backup_complete';
 	
@@ -265,5 +265,5 @@ function hmbkp_is_in_progress() {
  * @return string
  */
 function hmbkp_exclude_string( $context ) {
-	return HMBackup::get_instance()->exclude_string( $context );
+	return HM_Backup::get_instance()->exclude_string( $context );
 }
