@@ -85,15 +85,13 @@ function hmbkp_actions() {
 add_action( 'admin_init', 'hmbkp_actions' );
 
 /**
- * Setup the HMBackup class
+ * Setup the HM_Backup class
  * 
  * @return null
  */
 function hmbkp_setup_hm_backup() {
 
-	global $hm_backup;
-
-	new HMBackup();
+	$hm_backup = HM_Backup::get_instance();
 	
 	$hm_backup->path = hmbkp_path();
 	$hm_backup->root = ABSPATH;
@@ -106,7 +104,7 @@ function hmbkp_setup_hm_backup() {
 	if ( hmbkp_get_zip_path() )
 		$hm_backup->zip_path = hmbkp_get_zip_path();
 	
-	$hm_backup->excludes = hmbkp_get_excludes();
+	$hm_backup->excludes = hmbkp_valid_custom_excludes();
 
 }
 add_action( 'init', 'hmbkp_setup_hm_backup' );

@@ -1,11 +1,10 @@
 <?php
 
 // If max backups has changed
-if ( !hmbkp_is_in_progress() )
+if ( ! hmbkp_is_in_progress() )
 	hmbkp_delete_old_backups();
 
-$backup_archives = hmbkp_get_backups();
-if ( $backup_archives && count( $backup_archives ) ) : ?>
+if ( ( $backup_archives = hmbkp_get_backups() ) && count( $backup_archives ) ) : ?>
 
 <table class="widefat" id="hmbkp_manage_backups_table">
     <thead>
@@ -28,7 +27,7 @@ if ( $backup_archives && count( $backup_archives ) ) : ?>
 
     <?php foreach ( (array) $backup_archives as $file ) :
 
-        if ( !file_exists( $file ) )
+        if ( ! file_exists( $file ) )
         	continue;
 
         hmbkp_get_backup_row( $file );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Displays a row in the manage backups table
  *
@@ -6,7 +7,7 @@
  */
 function hmbkp_get_backup_row( $file ) {
 
-	$encode = base64_encode( $file ); 
+	$encode = base64_encode( $file );
 	$offset = current_time( 'timestamp' ) - time(); ?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
@@ -31,31 +32,32 @@ function hmbkp_get_backup_row( $file ) {
 <?php }
 
 /**
- * Displays admin notices for various error / warning 
+ * Displays admin notices for various error / warning
  * conditions
- * 
+ *
  * @return void
  */
 function hmbkp_admin_notices() {
 
 	// If the form has been submitted, display updated notification
-	// Display  notifications for any errors in the settings form. 
-	if( !empty( $_POST['hmbkp_settings_submit'] ) ) :
+	// Display  notifications for any errors in the settings form.
+	if ( ! empty( $_POST['hmbkp_settings_submit'] ) ) :
 
 		function hmbkp_advanced_settings_saved() {
+
 			echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
 
 			global $hmbkp_errors;
-			if ( !empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() ) {
-				foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error ) {
+
+			if ( !empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() )
+				foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error )
 					echo '<div class="error"><p>' . $hmbkp_error . '</p></div>';
-				}
-			}
+
 		}
 		add_action( 'admin_notices', 'hmbkp_advanced_settings_saved' );
-		
-	endif; 
-	
+
+	endif;
+
 	// If the backups directory doesn't exist and can't be automatically created
 	if ( !is_dir( hmbkp_path() ) ) :
 

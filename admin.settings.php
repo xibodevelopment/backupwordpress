@@ -1,6 +1,6 @@
-<div id="hmbkp-settings" <?php if ( !hmbkp_get_backups() || !empty( $_POST['hmbkp_settings_submit'] ) ) echo ' class="show_form"' ?>>
+<div id="hmbkp-settings" <?php if ( ! hmbkp_get_backups() || ! empty( $_POST['hmbkp_settings_submit'] ) ) echo ' class="show_form"' ?>>
 
-    <h4><?php _e( 'Settings', 'hmbkp' ); ?></h4>
+    <h3><?php _e( 'Settings', 'hmbkp' ); ?></h3>
 
 	<p><?php printf( __( 'You can define %s in your %s to control some settings. A full list of %s can be found in the <a href="#contextual-help-wrap" class="hmbkp-show-help-tab">help</a> panel. Defined settings will not be editable below.', 'hmbkp' ), '<code>Constants</code>', '<code>wp-config.php</code>', '<code>Constants</code>' ); ?></p>
 

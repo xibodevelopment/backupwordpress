@@ -6,7 +6,7 @@ tfoot p { margin: 0; font-weight: normal; }
 #hmbkp-settings.show_form { display: block; }
 #hmbkp-constants dl { overflow: hidden; margin: 20px 0; }
 #hmbkp-constants dt { float: left; min-width: 250px; clear: both; padding: 6px; margin: 1px 0; cursor: pointer; }
-#hmbkp-constants dd { color: #666; padding: 7px 0 7px 250px; border-top: 1px solid #DFDFDF; margin: 0; cursor: pointer; min-height: 34px; }
+#hmbkp-constants dd { color: #666; padding: 7px 0 7px 250px; border-top: 1px solid #DFDFDF; margin: 0; cursor: pointer; min-height: 40px; }
 #hmbkp-constants dd:last-child { border-bottom: 1px solid #DFDFDF; }
 #hmbkp-constants dt:not(.hmbkp_active) + dd { background: #F9F9F9; }
 #hmbkp-constants dd .example { white-space: nowrap; display: none; }

@@ -8,6 +8,7 @@
  *
  *	Uses $_POST data
  *
+ * @todo Should redirect on success
  * @return mixed
  */
 function hmbkp_option_save() {
@@ -98,7 +99,7 @@ function hmbkp_option_save() {
 	return true;
 
 }
-add_action( 'admin_init', 'hmbkp_option_save', 11 );
+add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_option_save' );
 
 /**
  * Delete the backup and then redirect
@@ -156,6 +157,8 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_do_backup' );
 /**
  * Send the download file to the browser and
  * then redirect back to the backups page
+ *
+ * @todo We need to find a way to do this without streaming the file through PHP
  */
 function hmbkp_request_download_backup() {
 

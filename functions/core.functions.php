@@ -73,7 +73,7 @@ function hmbkp_update() {
 	endif;
 
 	// Pre 1.1
-	if ( !get_option( 'hmbkp_plugin_version' ) ) :
+	if ( ! get_option( 'hmbkp_plugin_version' ) ) :
 
 		// Delete the obsolete max backups option
 		delete_option( 'hmbkp_max_backups' );
@@ -243,7 +243,7 @@ function hmbkp_send_file( $path ) {
  */
 function hmbkp_ls( $dir, $files = array() ) {
 
-	if ( !is_readable( $dir ) )
+	if ( ! is_readable( $dir ) )
 		return $files;
 
 	$d = opendir( $dir );
@@ -252,7 +252,7 @@ function hmbkp_ls( $dir, $files = array() ) {
 	$excludes = hmbkp_exclude_string( 'pclzip' );
 
 	while ( $file = readdir( $d ) ) :
-
+	
 		// Ignore current dir and containing dir and any unreadable files or directories
 		if ( $file == '.' || $file == '..' )
 			continue;
@@ -334,7 +334,7 @@ function hmbkp_rmdirtree( $dir ) {
  */
 function hmbkp_calculate() {
 
-    @ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
+    @ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
 
     // Check cache
 	if ( $filesize = get_transient( 'hmbkp_estimated_filesize' ) )
@@ -403,8 +403,8 @@ function hmbkp_setup_schedule() {
 	// Clear any old schedules
 	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
 
-	if( hmbkp_get_disable_automatic_backup() ) 
-		return; 
+	if( hmbkp_get_disable_automatic_backup() )
+		return;
 
 	// Default to 11 in the evening
 	$time = '23:00';
@@ -606,23 +606,6 @@ function hmbkp_get_disable_automatic_backup() {
 }
 
 /**
- * Get the list of excludes
- *
- * @return bool
- */
-function hmbkp_get_excludes() {
-
-	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
-		return HMBKP_EXCLUDE;
-
-	if ( get_option( 'hmbkp_excludes' ) )
-		return get_option( 'hmbkp_excludes' );
-
-	return false;
-
-}
-
-/**
  * Check if a backup is possible with regards to file
  * permissions etc.
  *
@@ -664,12 +647,10 @@ function hmbkp_cleanup() {
 }
 
 function hmbkp_conform_dir( $dir ) {
-	
-	return HMBackup::conform_dir( $dir );
-	
+	return HM_Backup::get_instance()->conform_dir( $dir );
 }
 
-function hmbkp_get_mysqldump_path() {	
+function hmbkp_get_mysqldump_path() {
 	return defined( 'HMBKP_MYSQLDUMP_PATH' ) ? HMBKP_ZIP_PATH : '';
 }
 
@@ -678,26 +659,5 @@ function hmbkp_get_zip_path() {
 }
 
 function hmbkp_is_safe_mode_active() {
-	
-	global $hm_backup;
-	
-	return $hm_backup->is_safe_mode_active();
-	
-}
-
-/**
- * Check if a backup is running
- *
- * @return bool
- */
-function hmbkp_is_in_progress() {
-	return file_exists( hmbkp_path() . '/.backup_running' );
-}
-
-function hmbkp_exclude_string( $context ) {
-	
-	global $hm_backup;
-	
-	return $hm_backup->exclude_string( $context );
-		
+	return HM_Backup::get_instance()->is_safe_mode_active();
 }

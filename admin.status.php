@@ -1,5 +1,4 @@
 <?php // If the form has been submitted, things may have changed.
-// @todo hook this in with an action
 if ( ( !empty( $_POST['hmbkp_settings_submit'] ) ) && ( ! wp_next_scheduled( 'hmbkp_schedule_backup_hook') || hmbkp_get_disable_automatic_backup() ) )
 	hmbkp_constant_changes(); ?>
 
@@ -11,7 +10,7 @@ if ( ( !empty( $_POST['hmbkp_settings_submit'] ) ) && ( ! wp_next_scheduled( 'hm
 
 <?php else :
 
-    if ( !hmbkp_get_database_only() && !hmbkp_get_files_only()  )
+    if ( ! hmbkp_get_database_only() && ! hmbkp_get_files_only()  )
     	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code> ' . __( '&amp;', 'hmbkp' ) . ' <code>' . __( 'files', 'hmbkp' ) . '</code>';
 
     elseif( hmbkp_get_database_only() )
@@ -22,7 +21,7 @@ if ( ( !empty( $_POST['hmbkp_settings_submit'] ) ) && ( ! wp_next_scheduled( 'hm
 
     	<?php $offset = current_time( 'timestamp' ) - time();
 		$schedules = wp_get_schedules();
-    	$schedule = $schedules[ wp_get_schedule('hmbkp_schedule_backup_hook') ]['display'];
+    	$schedule = $schedules[wp_get_schedule( 'hmbkp_schedule_backup_hook' )]['display'];
     	printf( __( 'Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s on %s and be saved to %s.', 'hmbkp' ), $what_to_backup , $schedule, '<code>' . date_i18n( get_option( 'time_format' ), wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( get_option( 'time_format' ) ) ) . '">' . date_i18n( get_option( 'date_format' ), wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
 
 <?php endif; ?>

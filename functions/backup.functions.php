@@ -1,29 +1,23 @@
 <?php
 
-/* Backup database and files
+/** 
+ * Run HM Backup
  *
- * Creates a temporary directory containing a copy of all files
- * and a dump of the database. Then zip that up and delete the temporary files
- *
- * @uses hmbkp_backup_mysql
- * @uses hmbkp_backup_files
- * @uses hmbkp_delete_old_backups
+ * @return null
  */
 function hmbkp_do_backup() {
-
-	global $hm_backup;
  
 	// Make sure it's possible to do a backup
-	if ( !hmbkp_possible() )
-		return false;
+	if ( ! hmbkp_possible() )
+		return;
  
 	// Clean up any mess left by the last backup
 	hmbkp_cleanup();
 	
-	$hm_backup->backup();
+	HMBackup::get_instance()->backup();
  
 	// Email Backup
-	hmbkp_email_backup( $hm_backup->archive_filepath() );
+	hmbkp_email_backup( HMBackup::get_instance()->archive_filepath() );
  
     hmbkp_set_status( __( 'Removing old backups', 'hmbkp' ) );
  
@@ -33,19 +27,25 @@ function hmbkp_do_backup() {
     if ( file_exists( hmbkp_path() . '/.backup_running' ) )
 	    unlink( hmbkp_path() . '/.backup_running' );
     
-	$file = hmbkp_path() . '/.backup_complete';
+    if ( file_exists( HMBackup::get_instance()->archive_filepath() ) ) {
+
+		$file = hmbkp_path() . '/.backup_complete';
 	
-	if ( !$handle = @fopen( $file, 'w' ) )
-		return false;
+		if ( !$handle = @fopen( $file, 'w' ) )
+			return false;
 	
-	fwrite( $handle, '' );
+		fwrite( $handle, '' );
 	
-	fclose( $handle );
+		fclose( $handle );
+		
+	}
  
 }
 
 /**
  * Deletes old backup files
+ * 
+ * @return null
  */
 function hmbkp_delete_old_backups() {
 
@@ -61,6 +61,8 @@ function hmbkp_delete_old_backups() {
 
 /**
  * Returns an array of backup files
+ * 
+ * @return array $files
  */
 function hmbkp_get_backups() {
 
@@ -95,9 +97,6 @@ function hmbkp_get_backups() {
 
     krsort( $files );
 
-	if( empty($files) )
-		return false;
-
     return $files;
 }
 
@@ -128,9 +127,10 @@ function hmbkp_email_backup( $file ) {
 		return;
 
 	// Raise the memory and time limit
-	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', '256M' ) );
+	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
 	@set_time_limit( 0 );
-
+	
+	// @todo admin_url?
 	$download = get_bloginfo( 'wpurl' ) . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
 	$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST ) . parse_url( get_bloginfo( 'url' ), PHP_URL_PATH );
 
@@ -142,7 +142,7 @@ function hmbkp_email_backup( $file ) {
 	$sent = wp_mail( hmbkp_get_email_address(), $subject, $message, $headers, $file );
 
 	// If it failed- Try to send a download link - The file was probably too large.
-	if ( !$sent ) :
+	if ( ! $sent ) :
 
 		$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
 		$message = sprintf( __( "BackUpWordPress has completed a backup of your site %s.\n\nUnfortunately the backup file was too large to attach to this email.\n\nYou can download the backup file by clicking the link below:\n\n%s\n\nKind Regards\n\n The Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), get_bloginfo( 'url' ), $download );
@@ -152,8 +152,9 @@ function hmbkp_email_backup( $file ) {
 	endif;
 
 	// Set option for email not sent error
-	if ( !$sent )
+	if ( ! $sent )
 		update_option( 'hmbkp_email_error', 'hmbkp_email_failed' );
+
 	else
 		delete_option( 'hmbkp_email_error' );
 
@@ -171,8 +172,8 @@ function hmbkp_set_status( $message = '' ) {
 	
 	$file = hmbkp_path() . '/.backup_running';
 	
-	if ( !$handle = @fopen( $file, 'w' ) )
-		return false;
+	if ( ! $handle = @fopen( $file, 'w' ) )
+		return;
 	
 	fwrite( $handle, $message );
 	
@@ -187,11 +188,28 @@ function hmbkp_set_status( $message = '' ) {
  */
 function hmbkp_get_status() {
 	
-	if ( !file_exists( hmbkp_path() . '/.backup_running' ) )
-		return false;
+	if ( ! file_exists( hmbkp_path() . '/.backup_running' ) )
+		return '';
 		
 	return file_get_contents( hmbkp_path() .'/.backup_running' );
 	
+}
+
+/**
+ * Get the list of excludes
+ *
+ * @return bool
+ */
+function hmbkp_get_excludes() {
+
+	if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		return HMBKP_EXCLUDE;
+
+	if ( get_option( 'hmbkp_excludes' ) )
+		return get_option( 'hmbkp_excludes' );
+
+	return false;
+
 }
 
 /**
@@ -224,12 +242,28 @@ function hmbkp_valid_custom_excludes() {
 	$valid_rules = array();
 
 	$excludes = hmbkp_get_excludes();
-	
-	if ( ! $excludes )
-		array();
 
 	$valid_rules = array_diff( explode( ',', $excludes ), hmbkp_invalid_custom_excludes() );
 
 	return array_filter( array_map( 'trim', $valid_rules ) );
 
+}
+
+/**
+ * Check if a backup is running
+ *
+ * @return bool
+ */
+function hmbkp_is_in_progress() {
+	return file_exists( hmbkp_path() . '/.backup_running' );
+}
+
+/**
+ * Get the exclude string from HM Backup
+ * 
+ * @param string $context
+ * @return string
+ */
+function hmbkp_exclude_string( $context ) {
+	return HMBackup::get_instance()->exclude_string( $context );
 }
