@@ -260,7 +260,7 @@ function hmbkp_ls( $dir, $files = array() ) {
 		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
 
 		// Skip the backups dir and any excluded paths
-		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || ! is_readable( $file ) ) )
+		if ( ! is_readable( $file ) || $file == hmbkp_path() || preg_match( '(' . $excludes . ')', str_replace( ABSPATH, '', $file ) ) )
 			continue;
 
 		$files[] = $file;
