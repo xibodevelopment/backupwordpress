@@ -81,17 +81,15 @@ function hmbkp_option_save() {
 		delete_option( 'hmbkp_email_address' );
 	}
 
-	if ( isset( $_POST['hmbkp_excludes'] ) && !empty( $_POST['hmbkp_excludes'] ) ) {
-
+	if ( isset( $_POST['hmbkp_excludes'] ) && ! empty( $_POST['hmbkp_excludes'] ) ) {
 		update_option( 'hmbkp_excludes', $_POST['hmbkp_excludes'] );
-		delete_transient( 'hmbkp_estimated_filesize');
 
 	} else {
-
 		delete_option( 'hmbkp_excludes' );
-		delete_transient( 'hmbkp_estimated_filesize' );
 
 	}
+	
+	delete_transient( 'hmbkp_estimated_filesize' );
 
 	if ( $hmbkp_errors->get_error_code() )
 		return $hmbkp_errors;
