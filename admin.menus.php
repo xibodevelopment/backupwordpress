@@ -60,6 +60,10 @@ function hmbkp_contextual_help() {
 	ob_start();
 	require_once( HMBKP_PLUGIN_PATH . '/admin.constants.php' );
 	$constants = ob_get_clean();
+	
+	// Pre WordPress 3.3 compat
+	if ( ! method_exists( get_current_screen(), 'add_help_tab' ) )
+		return;
 
 	get_current_screen()->add_help_tab( array( 'title' => 'FAQ', 'id' => 'hmbkp_faq', 'content' => $contextual_help ) );
 	get_current_screen()->add_help_tab( array( 'title' => 'Constants', 'id' => 'hmbkp_constants', 'content' => $constants ) );
