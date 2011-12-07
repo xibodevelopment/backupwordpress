@@ -36,6 +36,9 @@
 
         <dt<?php if ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DISABLE_MANUAL_BACKUP_CRON</code></dt>
         <dd><p><?php _e( 'Disable the use of wp-cron for manual backups.', 'hmbkp' ); ?><p class="example">e.g. <code>define( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON', true );</code></p></dd>
+        
+        <dt<?php if ( defined( 'HMBKP_CAPABILITY' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_CAPABILITY</code></dt>
+        <dd><p><?php printf( __( 'The capability to use when calling %s. Defaults to %s.', 'hmbkp' ), '<code>add_menu_page</code>', '<code>manage_options</code>' ); ?><p class="example">e.g. <code>define( 'HMBKP_CAPABILITY', 'edit_posts' );</code></p></dd>
 
     </dl>
 
