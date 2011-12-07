@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, humanmade
 Requires at least: 3.1
 Tested up to: 3.2.1
-Stable tag: 1.4.1
+Stable tag: 1.5
 
 Simple automated back ups of your WordPress powered website.
 
@@ -21,7 +21,7 @@ BackUpWordPress will back up your entire site including your database and all yo
 * Exclude files and folders from your back ups.
 * Control advanced settings by defining any of the optional `Constants`.
 * Good support should you need help.
-* Spanish & Russian translations.
+* (Partial) Spanish & Russian translations.
 
 = Help develop this plugin =
 
@@ -35,7 +35,7 @@ We'd also love help translating the plugin into more languages, if you can help 
 2. Activate the plugin.
 3. Sit back and relax safe in the knowledge that your whole site will be backed up every day.
 
-The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site. If you know about such things then you can point the plugin in the right direction by defining `HMBKP_ZIP_PATH` and `HMBKP_MYSQLDUMP_PATH` in your `wp-config.php`.
+The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site.
 
 == Frequently Asked Questions ==
 
@@ -53,9 +53,28 @@ You need to download the latest backup file either by clicking download on the b
 
 No.
 
-**How many backups are stored by default**
+**How many backups are stored by default?**
 
 BackUpWordPress stores the last 10 backups by default.
+
+**How long should a backup take?**
+
+Unless your site is very large (many gigabytes) it should only take a few minutes to perform a back up, if your back up has been running for longer than an hour it's safe to assume that something has gone wrong, try de-activating and re-activating the plugin, if it keeps happening, contact support.
+
+**What do I do if I get the wp-cron error message**
+
+The issue is that your `wp-cron.php` is not returning a `200` response when hit with a http request originating from your own server, it could be several things, most of the time it's an issue with the server / site and not with BackUpWordPress.
+
+Some things you can test are.
+
+* Are scheduled posts working? (They use wp-cron too).
+* Are you hosted on Heart Internet? (wp-cron is known not to work with them).
+* If you click manual backup does it work?
+* Try adding `define( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON', true );` to your `wp-config.php`, does your manual backup work then?
+* Try adding `define( 'ALTERNATE_WP_CRON', true ); to your `wp-config.php`, do backups (manual and automatic) work?
+* Is your site private (I.E. is it behind some kind of authentication, maintenance plugin, .htaccess) if so wp-cron won't work until you remove it, if you are and you temporarily remove the authentication, do backups start working?
+
+If you have tried all these then feel free to contact support.
 
 **Further Support & Feedbask**
 
@@ -70,6 +89,19 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.5
+
+* Re-written core backup engine should be more robust especially in edge case scenarios.
+* 48 unit tests for the core backup engine, yay for unit tests.
+* Remove some extraneous status information from the admin interface.
+* Rename Advanced Options to Settings
+* New `Constant` `HMBKP_CAPABILITY` to allow the default `add_menu_page` capability to be changed.
+* Suppress possible filemtime warnings in some edge cases.
+* 3.3 compatability.
+* Set proper charset of MySQL backup, props valericus.
+* Fix some inconsistencies between the estimated backup size and actual backup size when excluding files.
+*
 
 #### 1.4.1
 
