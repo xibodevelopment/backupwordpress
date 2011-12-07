@@ -74,7 +74,7 @@ function hmbkp_get_backups() {
 
     	while ( false !== ( $file = readdir( $handle ) ) )
     		if ( strpos( $file, '.zip' ) !== false )
-	   			$files[filemtime( trailingslashit( $hmbkp_path ) . $file )] = trailingslashit( $hmbkp_path ) . $file;
+	   			$files[@filemtime( trailingslashit( $hmbkp_path ) . $file )] = trailingslashit( $hmbkp_path ) . $file;
 
     	closedir( $handle );
 
@@ -87,7 +87,7 @@ function hmbkp_get_backups() {
 
     		while ( false !== ( $file = readdir( $handle ) ) )
     			if ( strpos( $file, '.zip' ) !== false )
-		   			$files[filemtime( trailingslashit( HMBKP_PATH ) . $file )] = trailingslashit( HMBKP_PATH ) . $file;
+		   			$files[@filemtime( trailingslashit( HMBKP_PATH ) . $file )] = trailingslashit( HMBKP_PATH ) . $file;
 
     		closedir( $handle );
 
