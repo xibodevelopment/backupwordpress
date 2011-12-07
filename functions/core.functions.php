@@ -260,7 +260,7 @@ function hmbkp_ls( $dir, $files = array() ) {
 		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
 
 		// Skip the backups dir and any excluded paths
-		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || !is_readable( $file ) ) )
+		if ( ( $file == hmbkp_path() || preg_match( '(' . $excludes . ')', $file ) || ! is_readable( $file ) ) )
 			continue;
 
 		$files[] = $file;
@@ -648,14 +648,6 @@ function hmbkp_cleanup() {
 
 function hmbkp_conform_dir( $dir ) {
 	return HM_Backup::get_instance()->conform_dir( $dir );
-}
-
-function hmbkp_get_mysqldump_path() {
-	return defined( 'HMBKP_MYSQLDUMP_PATH' ) ? HMBKP_ZIP_PATH : '';
-}
-
-function hmbkp_get_zip_path() {
-	return defined( 'HMBKP_ZIP_PATH' ) ? HMBKP_ZIP_PATH : '';
 }
 
 function hmbkp_is_safe_mode_active() {

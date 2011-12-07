@@ -101,11 +101,11 @@ function hmbkp_setup_hm_backup() {
 	$hm_backup->files_only = hmbkp_get_files_only();
 	$hm_backup->database_only = hmbkp_get_database_only();
 	
-	if ( hmbkp_get_mysqldump_path() )
-		$hm_backup->mysqldump_path = hmbkp_get_mysqldump_path();
+	if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
+		$hm_backup->mysql_command_path = HMBKP_MYSQLDUMP_PATH;
 	
-	if ( hmbkp_get_zip_path() )
-		$hm_backup->zip_path = hmbkp_get_zip_path();
+	if ( defined( 'HMBKP_ZIP_PATH' ) )
+		$hm_backup->zip_command_path = HMBKP_ZIP_PATH;
 	
 	$hm_backup->excludes = hmbkp_valid_custom_excludes();
 
