@@ -19,4 +19,4 @@ tfoot p { margin: 0; font-weight: normal; }
 .completed th, .completed td { background-color: #FFFFE0; }
 .hmbkp_active:before { content: "\00a0 \2713 "; font-size: 11px; }
 .hmbkp_active, .hmbkp_active code, #hmbkp-constants .hmbkp_active + dd { background: #E5F7E8; }
-#tab-panel-hmbkp_faq .updated { margin: 15px 0 0; }
+.contextual-help-tabs-wrap .updated { margin: 15px 0 0; }
