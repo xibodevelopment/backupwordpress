@@ -22,8 +22,12 @@ jQuery( document ).ready( function( $ ) {
 	    }
 	);
 
-	$( '.hmbkp-settings-toggle' ).click( function() {
+	$( '.hmbkp-settings-toggle' ).click( function( e ) {
+
 		$( '#hmbkp-settings' ).toggle();
+		
+		e.preventDefault();
+
 	} );
 	
 	if ( typeof( screenMeta ) != 'undefined' ) {
