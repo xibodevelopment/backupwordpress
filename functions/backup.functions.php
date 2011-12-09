@@ -62,6 +62,7 @@ function hmbkp_delete_old_backups() {
 /**
  * Returns an array of backup files
  * 
+ * @todo exclude the currently running backup
  * @return array $files
  */
 function hmbkp_get_backups() {
@@ -73,7 +74,7 @@ function hmbkp_get_backups() {
     if ( $handle = opendir( $hmbkp_path ) ) :
 
     	while ( false !== ( $file = readdir( $handle ) ) )
-    		if ( strpos( $file, '.zip' ) !== false )
+    		if ( end( explode( '.', $file ) ) == 'zip' )
 	   			$files[@filemtime( trailingslashit( $hmbkp_path ) . $file )] = trailingslashit( $hmbkp_path ) . $file;
 
     	closedir( $handle );
