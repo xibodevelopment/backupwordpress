@@ -234,46 +234,6 @@ function hmbkp_send_file( $path ) {
 }
 
 /**
- * Takes a directory and returns an array of files.
- * Does traverse sub-directories
- *
- * @param string $dir
- * @param array $files. (default: array())
- * @return arrat $files
- */
-function hmbkp_ls( $dir, $files = array() ) {
-
-	if ( ! is_readable( $dir ) )
-		return $files;
-
-	$d = opendir( $dir );
-
-	// Get excluded files & directories.
-	$excludes = hmbkp_exclude_string( 'pclzip' );
-
-	while ( $file = readdir( $d ) ) :
-	
-		// Ignore current dir and containing dir and any unreadable files or directories
-		if ( $file == '.' || $file == '..' )
-			continue;
-
-		$file = hmbkp_conform_dir( trailingslashit( $dir ) . $file );
-
-		// Skip the backups dir and any excluded paths
-		if ( ! is_readable( $file ) || $file == hmbkp_path() || preg_match( '(' . $excludes . ')', str_replace( ABSPATH, '', $file ) ) )
-			continue;
-
-		$files[] = $file;
-
-		if ( is_dir( $file ) )
-			$files = hmbkp_ls( $file, $files );
-
-	endwhile;
-
-	return $files;
-}
-
-/**
  * Recursively delete a directory including
  * all the files and sub-directories.
  *
@@ -343,7 +303,7 @@ function hmbkp_calculate() {
 	$filesize = 0;
 
     // Don't include database if files only
-	if ( ! hmbkp_get_files_only() ) :
+	if ( ! hmbkp_get_files_only() ) {
 
     	global $wpdb;
 
@@ -352,17 +312,32 @@ function hmbkp_calculate() {
     	foreach ( $res as $r )
     		$filesize += (float) $r['Data_length'];
 
-    endif;
+    }
 
-   	if ( ! hmbkp_get_database_only() ) :
+   	if ( ! hmbkp_get_database_only() ) {
 
     	// Get rid of any cached filesizes
     	clearstatcache();
 
-    	foreach ( hmbkp_ls( ABSPATH ) as $f )
-			$filesize += (float) @filesize( $f );
+    	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( ABSPATH ), RecursiveIteratorIterator::SELF_FIRST );
 
-	endif;
+		$excludes = hmbkp_exclude_string( 'regex' );
+
+		foreach ( $files as $file ) {
+
+		    // Skip bad files
+		    if ( ! is_readable( $file ) || ! file_exists( $file ) || is_link( $file ) )
+		    	continue;
+
+		    // Excludes
+		    if ( $excludes && preg_match( '(' . $excludes . ')', str_replace( ABSPATH, '', $file ) ) )
+		    	continue;
+
+			$filesize += (float) @filesize( $file );
+
+		}
+
+	}
 
     // Cache in a transient for a week
     set_transient( 'hmbkp_estimated_filesize', $filesize,  604800 );
