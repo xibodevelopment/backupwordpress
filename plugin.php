@@ -58,7 +58,7 @@ if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) 
 
 /**
  * Plugin setup
- * 
+ *
  * @return null
  */
 function hmbkp_actions() {
@@ -89,26 +89,26 @@ add_action( 'admin_init', 'hmbkp_actions' );
 
 /**
  * Setup the HM_Backup class
- * 
+ *
  * @return null
  */
 function hmbkp_setup_hm_backup() {
 
 	$hm_backup = HM_Backup::get_instance();
-	
+
 	$hm_backup->path = hmbkp_path();
 	$hm_backup->root = ABSPATH;
 	$hm_backup->files_only = hmbkp_get_files_only();
 	$hm_backup->database_only = hmbkp_get_database_only();
-	
+
 	if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
 		$hm_backup->mysql_command_path = HMBKP_MYSQLDUMP_PATH;
-	
+
 	if ( defined( 'HMBKP_ZIP_PATH' ) )
 		$hm_backup->zip_command_path = HMBKP_ZIP_PATH;
-	
+
 	$hm_backup->excludes = hmbkp_valid_custom_excludes();
-	
+
 	// If the backup path is inside ABSPATH then exclude it by default
 	if ( strpos( hmbkp_path(), ABSPATH ) === 0 )
 		$hm_backup->excludes[] = trailingslashit( str_replace( untrailingslashit( ABSPATH ), '', hmbkp_path() ) );
@@ -127,6 +127,10 @@ require_once( HMBKP_PLUGIN_PATH . '/functions/backup.actions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/interface.functions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );
+
+// Load the wp cli command
+if ( defined( 'WP_CLI' ) && WP_CLI )
+	include( HMBKP_PLUGIN_PATH . '/functions/wp-cli.php' );
 
 // Plugin activation and deactivation
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
