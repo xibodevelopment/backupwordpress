@@ -39,7 +39,7 @@ class BackUpCommand extends WP_CLI_Command {
 		if ( ! empty( $assoc_args['root'] ) )
 			$hm_backup->root = $assoc_args['root'];
 
-		if ( ! is_dir( $hm_backup->path ) || ! is_writable( $hm_backup->path ) ) {
+		if ( ( ! is_dir( $hm_backup->path ) && ! mkdir( $hm_backup->path ) ) || ! is_writable( $hm_backup->path ) ) {
 			WP_CLI::error( 'Invalid backup path' );
 			return false;
 		}
@@ -63,7 +63,7 @@ class BackUpCommand extends WP_CLI_Command {
 			$hm_backup->zip_command_path = empty( $assoc_args['zip_command_path'] ) || $assoc_args['zip_command_path'] === 'false' ? false : true;
 
 		if ( ! empty( $assoc_args['excludes'] ) )
-			$hm_backup->excludes = $assoc_args['excludes'];
+			$hm_backup->excludes = 	$valid_rules = array_filter( array_map( 'trim', explode( ',', $assoc_args['excludes'] ) ) );
 
 		$hm_backup->backup();
 
@@ -85,5 +85,6 @@ class BackUpCommand extends WP_CLI_Command {
 		WP_CLI::line( 'usage: wp backup --files_only --database_only --path=/path/to/save/backup/' );
 
 	}
+
 }
 WP_CLI::addCommand( 'backup', 'BackUpCommand' );
