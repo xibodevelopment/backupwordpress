@@ -29,10 +29,7 @@ function hmbkp_deactivate() {
 		'hmbkp_running',
 		'hmbkp_status',
 		'hmbkp_complete',
-		'hmbkp_email_error',
-		'hmbkp_email_address',
-		'hmbkp_schedule_frequency',
-		'hmbkp_excludes'
+		'hmbkp_email_error'
 	);
 
 	foreach ( $options as $option )
