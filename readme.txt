@@ -90,6 +90,14 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 1.5.1
+
+* Better detection of `zip` command.
+* Don't delete user settings on update / deactivate.
+* Use `ZipArchive` if `zip` is not available, still falls back to `PclZip` if neither `zip` nor `ZipArchive` are installed.
+* Better exclude rule parsing, fixes lots of edge cases, excludes now pass all 52 unit tests.
+* Improved the speed of the backup size calculation.
+
 #### 1.5
 
 * Re-written core backup engine should be more robust especially in edge case scenarios.
@@ -101,7 +109,6 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * 3.3 compatability.
 * Set proper charset of MySQL backup, props valericus.
 * Fix some inconsistencies between the estimated backup size and actual backup size when excluding files.
-*
 
 #### 1.4.1
 
