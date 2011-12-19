@@ -11,7 +11,7 @@ function hmbkp_do_backup() {
 	if ( ! hmbkp_possible() )
 		return;
  
-	// Clean up any mess left by the last backup
+	// Clean up any mess left by a previous backup
 	hmbkp_cleanup();
 	
 	HM_Backup::get_instance()->backup();
@@ -124,7 +124,7 @@ function hmbkp_delete_backup( $file ) {
   */
 function hmbkp_email_backup( $file ) {
 
-	if ( !hmbkp_get_email_address() )
+	if ( ! hmbkp_get_email_address() )
 		return;
 
 	// Raise the memory and time limit

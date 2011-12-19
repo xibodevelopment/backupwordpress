@@ -585,7 +585,7 @@ function hmbkp_get_disable_automatic_backup() {
  */
 function hmbkp_possible() {
 
-	if ( !is_writable( hmbkp_path() ) || !is_dir( hmbkp_path() ) || hmbkp_is_safe_mode_active() )
+	if ( ! is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) || hmbkp_is_safe_mode_active() )
 		return false;
 
 	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
