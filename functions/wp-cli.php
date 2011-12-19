@@ -39,7 +39,7 @@ class BackUpCommand extends WP_CLI_Command {
 		if ( ! empty( $assoc_args['root'] ) )
 			$hm_backup->root = $assoc_args['root'];
 
-		if ( ( ! is_dir( $hm_backup->path ) && ! mkdir( $hm_backup->path ) ) || ! is_writable( $hm_backup->path ) ) {
+		if ( ( ! is_dir( $hm_backup->path ) && ( ! is_writable( dirname( $hm_backup->path ) ) || ! mkdir( $hm_backup->path ) ) ) || ! is_writable( $hm_backup->path ) ) {
 			WP_CLI::error( 'Invalid backup path' );
 			return false;
 		}
@@ -50,11 +50,15 @@ class BackUpCommand extends WP_CLI_Command {
 			return false;
 		}
 
+		// Default to both
+		$hm_backup->files_only = false;
+		$hm_backup->database_only = false;
+
 		if ( ! empty( $assoc_args['files_only'] ) )
-			$hm_backup->files_only = empty( $assoc_args['files_only'] ) || $assoc_args['files_only'] === 'false' ? false : true;
+			$hm_backup->files_only = true;
 
 		if ( ! empty( $assoc_args['database_only'] ) )
-			$hm_backup->database_only = empty( $assoc_args['database_only'] ) || $assoc_args['database_only'] === 'false' ? false : true;
+			$hm_backup->database_only = true;
 
 		if ( ! empty( $assoc_args['mysqldump_command_path'] ) )
 			$hm_backup->mysqldump_command_path = empty( $assoc_args['mysqldump_command_path'] ) || $assoc_args['mysqldump_command_path'] === 'false' ? false : true;
@@ -82,7 +86,18 @@ class BackUpCommand extends WP_CLI_Command {
 
 	static function help() {
 
-		WP_CLI::line( 'usage: wp backup --files_only --database_only --path=/path/to/save/backup/' );
+		WP_CLI::line( <<<EOB
+usage: wp backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [--zip_command_path=<path>] [--mysqldump_command_path=<path>]
+
+	 --files_only                   Backup files only, default to off
+	 --database_only                Backup database only, defaults to off
+	 --path                         dir that the backup should be save in, defaults to wp-content/backups/
+	 --root                         dir that should be backed up, defaults to ABSPATH
+	 --zip_command_path             path to your zip binary, standard locations are automatically used
+	 --mysqldump_command_path       path to your mysqldump binary, standard locations are automatically used
+
+EOB
+		);
 
 	}
 
