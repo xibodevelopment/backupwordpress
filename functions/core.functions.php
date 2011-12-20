@@ -241,43 +241,23 @@ function hmbkp_rmdirtree( $dir ) {
 	if ( is_file( $dir ) )
 		unlink( $dir );
 
-    if ( !is_dir( $dir ) )
+    if ( ! is_dir( $dir ) )
     	return false;
 
-    $result = array();
+    $files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
-    $dir = trailingslashit( $dir );
+	foreach ( $files as $file ) {
 
-    $handle = opendir( $dir );
+      if ( $file->isDir() )
+         rmdir( $file->getPathname() );
 
-    while ( false !== ( $file = readdir( $handle ) ) ) :
+      else
+         unlink( $file->getPathname() );
 
-        // Ignore . and ..
-        if ( $file != '.' && $file != '..' ) :
 
-        	$path = $dir . $file;
+   }
 
-        	// Recurse if subdir, Delete if file
-        	if ( is_dir( $path ) ) :
-        		$result = array_merge( $result, hmbkp_rmdirtree( $path ) );
-
-        	else :
-        		unlink( $path );
-        		$result[] .= $path;
-
-        	endif;
-
-        endif;
-
-    endwhile;
-
-    closedir( $handle );
-
-    rmdir( $dir );
-
-    $result[] .= $dir;
-
-    return $result;
+   rmdir( $dir );
 
 }
 
@@ -322,15 +302,14 @@ function hmbkp_calculate() {
 
 		foreach ( $files as $file ) {
 
-		    // Skip bad files
-		    if ( ! is_readable( $file ) || ! file_exists( $file ) || is_link( $file ) )
-		    	continue;
+			if ( ! $file->isReadable() )
+				continue;
 
 		    // Excludes
-		    if ( $excludes && preg_match( '(' . $excludes . ')', str_replace( ABSPATH, '', $file ) ) )
+		    if ( $excludes && preg_match( '(' . $excludes . ')', str_replace( ABSPATH, '', $file->getPathname() ) ) )
 		    	continue;
 
-			$filesize += (float) @filesize( $file );
+			$filesize += (float) @$file->getSize();
 
 		}
 

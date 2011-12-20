@@ -156,7 +156,7 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_do_backup' );
  * Send the download file to the browser and
  * then redirect back to the backups page
  *
- * @todo We need to find a way to do this without streaming the file through PHP
+ * @todo We need to find a way to do this without streaming the file through PHP, move file to tmp location and then http download, then delete
  */
 function hmbkp_request_download_backup() {
 

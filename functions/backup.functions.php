@@ -1,50 +1,50 @@
 <?php
 
-/** 
+/**
  * Run HM Backup
  *
  * @return null
  */
 function hmbkp_do_backup() {
- 
+
 	// Make sure it's possible to do a backup
 	if ( ! hmbkp_possible() )
 		return;
- 
+
 	// Clean up any mess left by a previous backup
 	hmbkp_cleanup();
-	
+
 	HM_Backup::get_instance()->backup();
- 
+
 	// Email Backup
 	hmbkp_email_backup( HM_Backup::get_instance()->archive_filepath() );
- 
+
     hmbkp_set_status( __( 'Removing old backups', 'hmbkp' ) );
- 
+
 	// Delete any old backup files
     hmbkp_delete_old_backups();
-    
+
     if ( file_exists( hmbkp_path() . '/.backup_running' ) )
 	    unlink( hmbkp_path() . '/.backup_running' );
-    
+
     if ( file_exists( HM_Backup::get_instance()->archive_filepath() ) ) {
 
 		$file = hmbkp_path() . '/.backup_complete';
-	
+
 		if ( !$handle = @fopen( $file, 'w' ) )
 			return false;
-	
+
 		fwrite( $handle, '' );
-	
+
 		fclose( $handle );
-		
+
 	}
- 
+
 }
 
 /**
  * Deletes old backup files
- * 
+ *
  * @return null
  */
 function hmbkp_delete_old_backups() {
@@ -61,8 +61,9 @@ function hmbkp_delete_old_backups() {
 
 /**
  * Returns an array of backup files
- * 
+ *
  * @todo exclude the currently running backup
+ * @todo use RecursiveDirectoryIterator
  * @return array $files
  */
 function hmbkp_get_backups() {
@@ -130,7 +131,7 @@ function hmbkp_email_backup( $file ) {
 	// Raise the memory and time limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
 	@set_time_limit( 0 );
-	
+
 	// @todo admin_url?
 	$download = get_bloginfo( 'wpurl' ) . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
 	$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST ) . parse_url( get_bloginfo( 'url' ), PHP_URL_PATH );
@@ -165,35 +166,35 @@ function hmbkp_email_backup( $file ) {
 
 /**
  * Set the status of the running backup
- * 
+ *
  * @param string $message. (default: '')
  * @return void
  */
 function hmbkp_set_status( $message = '' ) {
-	
+
 	$file = hmbkp_path() . '/.backup_running';
-	
+
 	if ( ! $handle = @fopen( $file, 'w' ) )
 		return;
-	
+
 	fwrite( $handle, $message );
-	
+
 	fclose( $handle );
-	
+
 }
 
 /**
  * Get the status of the running backup
- * 
+ *
  * @return string
  */
 function hmbkp_get_status() {
-	
+
 	if ( ! file_exists( hmbkp_path() . '/.backup_running' ) )
 		return '';
-		
+
 	return file_get_contents( hmbkp_path() .'/.backup_running' );
-	
+
 }
 
 /**
@@ -224,7 +225,7 @@ function hmbkp_invalid_custom_excludes() {
 
 	// Check if any absolute path excludes actually exist
 	if ( $excludes = hmbkp_get_excludes() )
-	
+
 		foreach ( explode( ',', $excludes ) as $rule )
 			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && !file_exists( $rule ) && ! file_exists( ABSPATH . $rule ) && ! file_exists( trailingslashit( ABSPATH ) . $rule ) )
 				$invalid_rules[] = $rule;
@@ -261,7 +262,7 @@ function hmbkp_is_in_progress() {
 
 /**
  * Get the exclude string from HM Backup
- * 
+ *
  * @param string $context
  * @return string
  */
