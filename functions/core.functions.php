@@ -316,7 +316,7 @@ function hmbkp_calculate() {
     	// Get rid of any cached filesizes
     	clearstatcache();
 
-    	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( ABSPATH ), RecursiveIteratorIterator::SELF_FIRST );
+    	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( ABSPATH ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 		$excludes = hmbkp_exclude_string( 'regex' );
 
