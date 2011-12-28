@@ -248,16 +248,16 @@ function hmbkp_rmdirtree( $dir ) {
 
 	foreach ( $files as $file ) {
 
-      if ( $file->isDir() )
-         rmdir( $file->getPathname() );
+		if ( $file->isDir() )
+			@rmdir( $file->getPathname() );
 
-      else
-         unlink( $file->getPathname() );
+		else
+			@unlink( $file->getPathname() );
 
 
-   }
+	}
 
-   rmdir( $dir );
+	@rmdir( $dir );
 
 }
 
