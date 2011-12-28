@@ -23,8 +23,12 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * @return null
 	 */
 	function setUp() {
+
 		$this->backup = new HM_Backup();
 		$this->backup->excludes = 'wp-content/backups/';
+
+		$this->markTestSkipped();
+
 	}
 
 	/**
@@ -51,6 +55,9 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		if ( ! $this->backup->zip_command_path )
             $this->markTestSkipped( 'Empty zip command path' );
+
+		if ( ! defined( 'RecursiveDirectoryIterator::FOLLOW_SYMLINK' ) )
+			$this->markTestSkipped();
 
 		$this->backup->backup();
 
