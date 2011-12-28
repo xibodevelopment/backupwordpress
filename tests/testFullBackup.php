@@ -27,8 +27,6 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		$this->backup = new HM_Backup();
 		$this->backup->excludes = 'wp-content/backups/';
 
-		$this->markTestSkipped();
-
 	}
 
 	/**
@@ -56,14 +54,11 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		if ( ! $this->backup->zip_command_path )
             $this->markTestSkipped( 'Empty zip command path' );
 
-		if ( ! defined( 'RecursiveDirectoryIterator::FOLLOW_SYMLINK' ) )
-			$this->markTestSkipped();
-
 		$this->backup->backup();
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
-		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root() ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD, RecursiveDirectoryIterator::FOLLOW_SYMLINK );
+		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root(), RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 		$excludes = $this->backup->exclude_string( 'regex' );
 
@@ -101,7 +96,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
-		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root() ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root(), RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 		$excludes = $this->backup->exclude_string( 'regex' );
 
@@ -140,7 +135,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
-		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root() ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root(), RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 		$excludes = $this->backup->exclude_string( 'regex' );
 
