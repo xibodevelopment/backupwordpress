@@ -23,6 +23,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * @return null
 	 */
 	function setUp() {
+	
+		$this->time = time();
 
 		$this->backup = new HM_Backup();
 		$this->backup->excludes = 'wp-content/backups/';
@@ -40,6 +42,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		if ( file_exists( $this->backup->archive_filepath() ) )
 			unlink( $this->backup->archive_filepath() );
+			
+		echo ( time() - $this->time ) . ' Seconds ';
 
 	}
 
