@@ -62,27 +62,11 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
-		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root(), RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+		$files = $this->backup->files();
+		$files[] = $this->backup->database_dump_filename;
 
-		$excludes = $this->backup->exclude_string( 'regex' );
-
-		foreach ( $files as $file ) {
-
-			if ( ! $file->isReadable() )
-			    continue;
-
-			// Excludes
-			if ( $excludes && preg_match( '(' . $excludes . ')', str_replace( $this->backup->root(), '', $this->backup->conform_dir( $file->getPathname() ) ) ) )
-			    continue;
-
-			$paths[] = str_replace( trailingslashit( $this->backup->root() ), '', $file->getPathname() );
-
-		}
-
-		$paths[] = $this->backup->database_dump_filename;
-
-		$this->assertArchiveContains( $this->backup->archive_filepath(), $paths );
-		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $paths ) );
+		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
+		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
 
 	}
 
@@ -100,27 +84,11 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
-		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root(), RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+		$files = $this->backup->files();
+		$files[] = $this->backup->database_dump_filename;
 
-		$excludes = $this->backup->exclude_string( 'regex' );
-
-		foreach ( $files as $file ) {
-
-			if ( ! $file->isReadable() )
-			    continue;
-
-			// Excludes
-			if ( $excludes && preg_match( '(' . $excludes . ')', str_replace( $this->backup->root(), '', $this->backup->conform_dir( $file->getPathname() ) ) ) )
-			    continue;
-
-			$paths[] = str_replace( trailingslashit( $this->backup->root() ), '', $file->getPathname() );
-
-		}
-
-		$paths[] = $this->backup->database_dump_filename;
-
-		$this->assertArchiveContains( $this->backup->archive_filepath(), $paths );
-		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $paths ) );
+		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
+		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
 
 	}
 
@@ -139,27 +107,11 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
-		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->backup->root(), RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+		$files = $this->backup->files();
+		$files[] = $this->backup->database_dump_filename;
 
-		$excludes = $this->backup->exclude_string( 'regex' );
-
-		foreach ( $files as $file ) {
-
-			if ( ! $file->isReadable() )
-			    continue;
-
-			// Excludes
-			if ( $excludes && preg_match( '(' . $excludes . ')', str_replace( $this->backup->root(), '', $this->backup->conform_dir( $file->getPathname() ) ) ) )
-			    continue;
-
-			$paths[] = str_replace( trailingslashit( $this->backup->root() ), '', $file->getPathname() );
-
-		}
-
-		$paths[] = $this->backup->database_dump_filename;
-
-		$this->assertArchiveContains( $this->backup->archive_filepath(), $paths );
-		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $paths ) );
+		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
+		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
 
 	}
 

@@ -295,22 +295,8 @@ function hmbkp_calculate() {
     	// Get rid of any cached filesizes
     	clearstatcache();
 
-    	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( ABSPATH, RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
-
-		$excludes = hmbkp_exclude_string( 'regex' );
-
-		foreach ( $files as $file ) {
-
-			if ( ! $file->isReadable() )
-				continue;
-
-		    // Excludes
-		    if ( $excludes && preg_match( '(' . $excludes . ')', str_replace( ABSPATH, '', $file->getPathname() ) ) )
-		    	continue;
-
-			$filesize += (float) @$file->getSize();
-
-		}
+		foreach ( HM_Backup::get_instance()->files() as $file )
+			$filesize += (float) @filesize( ABSPATH . $file );
 
 	}
 
