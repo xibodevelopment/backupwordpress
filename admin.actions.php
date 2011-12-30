@@ -28,13 +28,13 @@ function hmbkp_option_save() {
 
 	} else {
 		delete_option( 'hmbkp_disable_automatic_backup');
-	
+
 	}
 
 	// Update schedule frequency settings. Or reset to default of daily.
 	if ( isset( $_POST['hmbkp_frequency'] ) && $_POST['hmbkp_frequency'] != 'daily' )
 		update_option( 'hmbkp_schedule_frequency', esc_attr( $_POST['hmbkp_frequency'] ) );
-	
+
 	else
 		delete_option( 'hmbkp_schedule_frequency' );
 
@@ -88,7 +88,7 @@ function hmbkp_option_save() {
 		delete_option( 'hmbkp_excludes' );
 
 	}
-	
+
 	delete_transient( 'hmbkp_estimated_filesize' );
 
 	if ( $hmbkp_errors->get_error_code() )
@@ -139,7 +139,7 @@ function hmbkp_request_do_backup() {
 
 		// Remove the once every 60 seconds limitation
 		delete_transient( 'doing_cron' );
-		
+
 		// Fire the cron now
 		spawn_cron();
 
@@ -155,15 +155,19 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_do_backup' );
 /**
  * Send the download file to the browser and
  * then redirect back to the backups page
- *
- * @todo We need to find a way to do this without streaming the file through PHP, move file to tmp location and then http download, then delete
  */
 function hmbkp_request_download_backup() {
 
-	if ( ! isset( $_GET['hmbkp_download'] ) || empty( $_GET['hmbkp_download'] ) )
+	if ( empty( $_GET['hmbkp_download'] ) )
 		return false;
 
-	hmbkp_send_file( base64_decode( $_GET['hmbkp_download'] ) );
+	if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+		unlink( hmbkp_path() . '/.htaccess' );
+
+	hmbkp_path();
+
+	wp_redirect( add_query_arg( 'key', md5( SECURE_AUTH_KEY ), str_replace( ABSPATH, site_url( '/' ), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+	exit;
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );

@@ -184,53 +184,6 @@ function hmbkp_more_reccurences( $recc ) {
 add_filter( 'cron_schedules', 'hmbkp_more_reccurences' );
 
 /**
- * Send a flie to the browser for download
- *
- * @param string $path
- */
-function hmbkp_send_file( $path ) {
-
-	session_write_close();
-
-	ob_end_clean();
-
-	if ( !is_file( $path ) || connection_status() != 0 )
-		return false;
-
-	// Overide max_execution_time
-	@set_time_limit( 0 );
-
-	$name = basename( $path );
-
-	// Filenames in IE containing dots will screw up the filename unless we add this
-	if ( strstr( $_SERVER['HTTP_USER_AGENT'], 'MSIE' ) )
-		$name = preg_replace( '/\./', '%2e', $name, substr_count( $name, '.' ) - 1 );
-
-	// Force
-	header( 'Cache-Control: ' );
-	header( 'Pragma: ' );
-	header( 'Content-Type: application/octet-stream' );
-	header( 'Content-Length: ' . (string) ( filesize( $path ) ) );
-	header(	'Content-Disposition: attachment; filename=" ' . $name . '"' );
-	header( 'Content-Transfer-Encoding: binary\n' );
-
-	if ( $file = fopen( $path, 'rb' ) ) :
-
-		while ( ( !feof( $file ) ) && ( connection_status() == 0) ) :
-
-			print( fread( $file, 1024 * 8 ) );
-			flush();
-
-		endwhile;
-
-		fclose( $file );
-
-	endif;
-
-	return ( connection_status() == 0 ) and !connection_aborted();
-}
-
-/**
  * Recursively delete a directory including
  * all the files and sub-directories.
  *
@@ -385,11 +338,11 @@ function hmbkp_path() {
 		$path = HMBKP_PATH;
 
 	// If the dir doesn't exist or isn't writable then use wp-content/backups instead
-	if ( ( !$path || !is_writable( $path ) ) && hmbkp_conform_dir( $path ) != hmbkp_path_default() )
+	if ( ( ! $path || ! is_writable( $path ) ) && hmbkp_conform_dir( $path ) != hmbkp_path_default() )
     	$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
-	if ( is_writable( dirname( $path ) ) && !is_dir( $path ) )
+	if ( is_writable( dirname( $path ) ) && ! is_dir( $path ) )
 		mkdir( $path, 0755 );
 
 	if ( get_option( 'hmbkp_path' ) != $path )
@@ -400,10 +353,12 @@ function hmbkp_path() {
 
 	$contents[]	= '# ' . __( 'This .htaccess file ensures that other people cannot download your backup files.', 'hmbkp' );
 	$contents[] = '';
-	$contents[] = 'deny from all';
+	$contents[] = 'RewriteEngine On';
+	$contents[] = 'RewriteCond %{QUERY_STRING} !key=' . md5( SECURE_AUTH_KEY );
+	$contents[] = 'RewriteRule (.*) - [F]';
 	$contents[] = '';
 
-	if ( !file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
+	if ( ! file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
 		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
     return hmbkp_conform_dir( $path );
