@@ -40,7 +40,7 @@
 						<?php _e( 'Automatic backups will occur', 'hmbkp' ); ?>
 						
 						<select name="hmbkp_frequency" id="hmbkp_frequency">
-						    <option value="daily" <?php selected( !get_option( 'hmbkp_schedule_frequency' ) ); ?>><?php _e( 'Daily', 'hmbkp' ); ?></option>
+						    <option value="daily" <?php selected( ! get_option( 'hmbkp_schedule_frequency' ) ); ?>><?php _e( 'Daily', 'hmbkp' ); ?></option>
 						    <option value="hmbkp_weekly" <?php selected( get_option( 'hmbkp_schedule_frequency' ), 'hmbkp_weekly' ); ?>><?php _e( 'Weekly', 'hmbkp' ); ?></option>
 						    <option value="hmbkp_fortnightly" <?php selected( get_option( 'hmbkp_schedule_frequency' ), 'hmbkp_fortnightly' ); ?>><?php _e( 'Fortnightly', 'hmbkp' ); ?></option>
 						    <option value="hmbkp_monthly" <?php selected( get_option( 'hmbkp_schedule_frequency' ), 'hmbkp_monthly' ); ?>><?php _e( 'Monthly', 'hmbkp' ); ?></option>
@@ -59,7 +59,7 @@
 						<?php _e( 'Backup my', 'hmbkp' ); ?>
 				
 						<select name="hmbkp_what_to_backup" id="hmbkp_what_to_backup" <?php disabled( defined( 'HMBKP_FILES_ONLY' ) || defined( 'HMBKP_DATABASE_ONLY' )  ); ?>>
-							<option value="default" <?php selected( !get_option( 'hmbkp_files_only' ) && !get_option( 'hmbkp_database_only' ) ); ?>><?php _e( 'database &amp; files', 'hmbkp' ); ?></option>
+							<option value="default" <?php selected( ! get_option( 'hmbkp_files_only' ) && !get_option( 'hmbkp_database_only' ) ); ?>><?php _e( 'database &amp; files', 'hmbkp' ); ?></option>
 							<option <?php selected( hmbkp_get_database_only() ); ?>><?php _e( 'database only', 'hmbkp' ); ?></option>
 							<option <?php selected( hmbkp_get_files_only() ); ?>><?php _e( 'files only', 'hmbkp' ); ?></option>
 						</select>

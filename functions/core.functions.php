@@ -384,7 +384,7 @@ function hmbkp_path_default() {
 function hmbkp_path_move( $from, $to ) {
 
 	// Create the custom backups directory if it doesn't exist
-	if ( is_writable( dirname( $to ) ) && !is_dir( $to ) )
+	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
 	    mkdir( $to, 0755 );
 
 	if ( !is_dir( $to ) || !is_writable( $to ) || !is_dir( $from ) )

@@ -71,7 +71,7 @@ function hmbkp_option_save() {
 
 	}
 
-	if ( isset( $_POST['hmbkp_email_address'] ) && !is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
+	if ( isset( $_POST['hmbkp_email_address'] ) && ! is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
 		$hmbkp_errors->add( 'invalid_email', __( 'You have entered an invalid email address.', 'hmbkp' ) );
 
 	} elseif( isset( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {

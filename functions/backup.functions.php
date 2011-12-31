@@ -31,7 +31,7 @@ function hmbkp_do_backup() {
 
 		$file = hmbkp_path() . '/.backup_complete';
 
-		if ( !$handle = @fopen( $file, 'w' ) )
+		if ( ! $handle = @fopen( $file, 'w' ) )
 			return false;
 
 		fwrite( $handle, '' );
