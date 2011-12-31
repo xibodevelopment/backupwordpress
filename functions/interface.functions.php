@@ -151,17 +151,16 @@ function hmbkp_admin_notices() {
 		add_action( 'admin_notices', 'hmbkp_invalid_exclude_notice' );
 
 	endif;
-	
+
 	// If there are custom excludes defined and any of the files or directories don't exist
 	if ( hmbkp_backup_errors() ) :
 
 		function hmbkp_backup_errors_notice() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected a problem with your last backup.', 'hmbkp' ) . '</strong> ' . print_r( json_decode( hmbkp_backup_errors() ), true ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected a problem with your last backup.', 'hmbkp' ) . '</strong></p>' . hmbkp_backup_errors_message() . '</div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_backup_errors_notice' );
 
 	endif;
-
 
 }
 add_action( 'admin_head', 'hmbkp_admin_notices' );
@@ -181,3 +180,15 @@ function hmbkp_plugin_row( $plugins ) {
 
 }
 add_filter( 'all_plugins', 'hmbkp_plugin_row', 10 );
+
+function hmbkp_backup_errors_message() {
+
+	$message = '';
+
+	foreach ( json_decode( hmbkp_backup_errors() ) as $key => $errors )
+		foreach ( $errors as $error )
+			$message .= '<p><code>' . implode( ':', (array) $error ) . '</code></p>';
+
+	return $message;
+
+}
