@@ -49,7 +49,7 @@ function hmbkp_admin_notices() {
 
 			global $hmbkp_errors;
 
-			if ( !empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() )
+			if ( ! empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() )
 				foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error )
 					echo '<div class="error"><p>' . $hmbkp_error . '</p></div>';
 
@@ -59,7 +59,7 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If the backups directory doesn't exist and can't be automatically created
-	if ( !is_dir( hmbkp_path() ) ) :
+	if ( ! is_dir( hmbkp_path() ) ) :
 
 	    function hmbkp_path_exists_warning() {
 		    $php_user = exec( 'whoami' );
@@ -71,7 +71,7 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If the backups directory exists but isn't writable
-	if ( is_dir( hmbkp_path() ) && !is_writable( hmbkp_path() ) ) :
+	if ( is_dir( hmbkp_path() ) && ! is_writable( hmbkp_path() ) ) :
 
 	    function hmbkp_writable_path_warning() {
 			$php_user = exec( 'whoami' );
@@ -103,10 +103,10 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If the email address is invalid
-	if ( defined( 'HMBKP_EMAIL' ) && !is_email( HMBKP_EMAIL ) ) :
+	if ( defined( 'HMBKP_EMAIL' ) && ! is_email( HMBKP_EMAIL ) ) :
 
 		function hmbkp_email_invalid_warning() {
-			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is not a valid email address.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is not a valid email address.', 'hmbkp' ), '<code>' . HMBKP_EMAIL . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_email_invalid_warning' );
 
@@ -116,27 +116,27 @@ function hmbkp_admin_notices() {
 	if ( defined( 'HMBKP_EMAIL' ) && get_option( 'hmbkp_email_error' ) ) :
 
 		function hmbkp_email_failed_warning() {
-			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . __( 'The last backup email failed to send.', 'hmbkp' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . __( 'The last backup email failed to send.', 'hmbkp' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_email_failed_warning' );
 
 	endif;
 
 	// If a custom backups directory is defined and it doesn't exist and can't be created
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && !is_dir( HMBKP_PATH ) ) :
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! is_dir( HMBKP_PATH ) ) :
 
 		function hmbkp_custom_path_exists_warning() {
-			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s doesn\'t exist and can\'t be created, your backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s doesn\'t exist and can\'t be created, your backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_custom_path_exists_warning' );
 
 	endif;
 
 	// If a custom backups directory is defined and exists but isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && !is_writable( HMBKP_PATH ) ) :
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && ! is_writable( HMBKP_PATH ) ) :
 
 		function hmbkp_custom_path_writable_notice() {
-			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s isn\'t writable, new backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s isn\'t writable, new backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_custom_path_writable_notice' );
 
@@ -146,11 +146,22 @@ function hmbkp_admin_notices() {
 	if ( hmbkp_invalid_custom_excludes() ) :
 
 		function hmbkp_invalid_exclude_notice() {
-			echo '<div id="hmbkp-email_invalid" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have defined a custom exclude list but the following paths don\'t exist %s, are you sure you entered them correctly?', 'hmbkp' ), '<code>' . implode( '</code>, <code>', (array) hmbkp_invalid_custom_excludes() ) . '</code>' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have defined a custom exclude list but the following paths don\'t exist %s, are you sure you entered them correctly?', 'hmbkp' ), '<code>' . implode( '</code>, <code>', (array) hmbkp_invalid_custom_excludes() ) . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_invalid_exclude_notice' );
 
 	endif;
+	
+	// If there are custom excludes defined and any of the files or directories don't exist
+	if ( hmbkp_backup_errors() ) :
+
+		function hmbkp_backup_errors_notice() {
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected a problem with your last backup.', 'hmbkp' ) . '</strong> ' . print_r( json_decode( hmbkp_backup_errors() ), true ) . '</p></div>';
+		}
+		add_action( 'admin_notices', 'hmbkp_backup_errors_notice' );
+
+	endif;
+
 
 }
 add_action( 'admin_head', 'hmbkp_admin_notices' );

@@ -17,7 +17,7 @@ function hmbkp_do_backup() {
 	HM_Backup::get_instance()->backup();
 
 	// Email Backup
-	hmbkp_email_backup( HM_Backup::get_instance()->archive_filepath() );
+	hmbkp_email_backup();
 
     hmbkp_set_status( __( 'Removing old backups', 'hmbkp' ) );
 
@@ -32,7 +32,7 @@ function hmbkp_do_backup() {
 		$file = hmbkp_path() . '/.backup_complete';
 
 		if ( ! $handle = @fopen( $file, 'w' ) )
-			return false;
+			return;
 
 		fwrite( $handle, '' );
 
@@ -113,7 +113,7 @@ function hmbkp_delete_backup( $file ) {
 
 	// Delete the file
 	if ( strpos( $file, hmbkp_path() ) !== false || strpos( $file, WP_CONTENT_DIR . '/backups' ) !== false )
-	  unlink( $file );
+		unlink( $file );
 
 }
 
@@ -123,10 +123,12 @@ function hmbkp_delete_backup( $file ) {
   *	@param $file
   * @return bool
   */
-function hmbkp_email_backup( $file ) {
+function hmbkp_email_backup() {
 
 	if ( ! hmbkp_get_email_address() )
-		return;
+		return false;
+
+	$file = HM_Backup::get_instance()->archive_filepath();
 
 	// Raise the memory and time limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
@@ -210,7 +212,7 @@ function hmbkp_get_excludes() {
 	if ( get_option( 'hmbkp_excludes' ) )
 		return get_option( 'hmbkp_excludes' );
 
-	return false;
+	return '';
 
 }
 
@@ -268,4 +270,13 @@ function hmbkp_is_in_progress() {
  */
 function hmbkp_exclude_string( $context ) {
 	return HM_Backup::get_instance()->exclude_string( $context );
+}
+
+function hmbkp_backup_errors() {
+
+	if ( ! file_exists( hmbkp_path() . '/.backup_errors' ) )
+		return '';
+
+	return file_get_contents( hmbkp_path() . '/.backup_errors' );
+
 }
