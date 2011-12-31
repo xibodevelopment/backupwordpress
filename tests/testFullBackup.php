@@ -62,6 +62,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
             $this->markTestSkipped( 'Empty zip command path' );
 
 		$this->backup->backup();
+		
+		$this->assertEquals( $this->backup->archive_method(), 'zip' );
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
@@ -70,6 +72,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
 		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
+
+		$this->assertEmpty( $this->backup->errors() );
 
 	}
 
@@ -85,6 +89,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->backup->backup();
 
+		$this->assertEquals( $this->backup->archive_method(), 'ziparchive' );
+
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
 		$files = $this->backup->files();
@@ -92,6 +98,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
 		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
+
+		$this->assertEmpty( $this->backup->errors() );
 
 	}
 
@@ -107,6 +115,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		$this->backup->skip_zip_archive = true;
 
 		$this->backup->backup();
+		
+		$this->assertEquals( $this->backup->archive_method(), 'pclzip' );
 
 		$this->assertFileExists( $this->backup->archive_filepath() );
 
@@ -115,6 +125,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
 		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
+
+		$this->assertEmpty( $this->backup->errors() );
 
 	}
 
