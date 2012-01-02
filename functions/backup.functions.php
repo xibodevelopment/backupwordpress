@@ -72,7 +72,7 @@ function hmbkp_get_backups() {
 
     $hmbkp_path = hmbkp_path();
 
-    if ( $handle = opendir( $hmbkp_path ) ) :
+    if ( $handle = @opendir( $hmbkp_path ) ) :
 
     	while ( false !== ( $file = readdir( $handle ) ) )
     		if ( end( explode( '.', $file ) ) == 'zip' )
