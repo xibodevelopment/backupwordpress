@@ -40,6 +40,7 @@ function hmbkp_backup_complete( $backup ) {
 
     fclose( $handle );
 
+    hmbkp_cleanup();
 
 }
 add_action( 'hmbkp_backup_complete', 'hmbkp_backup_complete' );
