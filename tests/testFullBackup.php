@@ -46,8 +46,6 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 
 		if ( file_exists( $this->backup->archive_filepath() ) )
 			unlink( $this->backup->archive_filepath() );
-			
-		echo ( time() - $this->time ) . ' Seconds ';
 
 	}
 
