@@ -175,9 +175,8 @@ function hmbkp_request_cancel_backup() {
 
 	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_cancel' )
 		return false;
-
-	if ( file_exists( hmbkp_path() . '/.backup_running' ) )
-		unlink( hmbkp_path() . '/.backup_running' );
+		
+	hmbkp_cleanup();
 
 	wp_redirect( remove_query_arg( 'action' ), 303 );
 
@@ -195,7 +194,7 @@ function hmbkp_ajax_is_backup_in_progress() {
 		echo 0;
 
 	elseif ( $status = hmbkp_get_status() )
-		echo $status;
+		include( HMBKP_PLUGIN_PATH . '/admin.backup-button.php' );
 
 	else
 		echo 1;

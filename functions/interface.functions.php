@@ -187,7 +187,7 @@ function hmbkp_backup_errors_message() {
 
 	foreach ( json_decode( hmbkp_backup_errors() ) as $key => $errors )
 		foreach ( $errors as $error )
-			$message .= '<p><code>' . implode( ':', (array) $error ) . '</code></p>';
+			$message .= '<p><strong>' . $key . '</strong>: <code>' . implode( ':', (array) $error ) . '</code></p>';
 
 	return $message;
 

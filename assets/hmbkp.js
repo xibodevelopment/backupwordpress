@@ -22,7 +22,7 @@ jQuery( document ).ready( function( $ ) {
 	    }
 	);
 
-	$( '#hmbkp_backup' ).click( function( e ) {
+	$( '#hmbkp_backup:not(.hmbkp_running)' ).live( 'click', function( e ) {
 
 		ajaxRequest = $.get( ajaxurl, { 'action' : 'hmbkp_backup' } );
 
@@ -71,7 +71,7 @@ function hmbkpRedirectOnBackupComplete() {
 
 				setTimeout( 'hmbkpRedirectOnBackupComplete();', 1000 );
 
-				jQuery( '#hmbkp_backup' ).addClass( 'hmbkp_running' ).text( data );
+				jQuery( '#hmbkp_backup' ).replaceWith( data );
 
 			}
 		}
