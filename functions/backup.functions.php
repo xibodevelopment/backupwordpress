@@ -229,7 +229,7 @@ function hmbkp_invalid_custom_excludes() {
 	if ( $excludes = hmbkp_get_excludes() )
 
 		foreach ( explode( ',', $excludes ) as $rule )
-			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && !file_exists( $rule ) && ! file_exists( ABSPATH . $rule ) && ! file_exists( trailingslashit( ABSPATH ) . $rule ) )
+			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && ! file_exists( $rule ) && ! file_exists( ABSPATH . $rule ) && ! file_exists( trailingslashit( ABSPATH ) . $rule ) )
 				$invalid_rules[] = $rule;
 
 	return array_filter( $invalid_rules );
@@ -278,5 +278,14 @@ function hmbkp_backup_errors() {
 		return '';
 
 	return file_get_contents( hmbkp_path() . '/.backup_errors' );
+
+}
+
+function hmbkp_backup_warnings() {
+
+	if ( ! file_exists( hmbkp_path() . '/.backup_warnings' ) )
+		return '';
+
+	return file_get_contents( hmbkp_path() . '/.backup_warnings' );
 
 }

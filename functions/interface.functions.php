@@ -152,15 +152,26 @@ function hmbkp_admin_notices() {
 
 	endif;
 
-	// If there are custom excludes defined and any of the files or directories don't exist
+	// If there are any errors reported in the backup
 	if ( hmbkp_backup_errors() ) :
 
 		function hmbkp_backup_errors_notice() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected a problem with your last backup.', 'hmbkp' ) . '</strong></p>' . hmbkp_backup_errors_message() . '</div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected that your last backup failed.', 'hmbkp' ) . '</strong></p>' . hmbkp_backup_errors_message() . '</div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_backup_errors_notice' );
 
 	endif;
+	
+	// If there are any warnings reported in the backup
+	if ( hmbkp_backup_warnings() ) :
+
+		function hmbkp_backup_warnings_notice() {
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected an issue with your last backup.', 'hmbkp' ) . '</strong></p>' . hmbkp_backup_warnings_message() . '</div>';
+		}
+		add_action( 'admin_notices', 'hmbkp_backup_warnings_notice' );
+
+	endif;
+
 
 }
 add_action( 'admin_head', 'hmbkp_admin_notices' );
@@ -186,6 +197,18 @@ function hmbkp_backup_errors_message() {
 	$message = '';
 
 	foreach ( json_decode( hmbkp_backup_errors() ) as $key => $errors )
+		foreach ( $errors as $error )
+			$message .= '<p><strong>' . $key . '</strong>: <code>' . implode( ':', (array) $error ) . '</code></p>';
+
+	return $message;
+
+}
+
+function hmbkp_backup_warnings_message() {
+
+	$message = '';
+
+	foreach ( json_decode( hmbkp_backup_warnings() ) as $key => $errors )
 		foreach ( $errors as $error )
 			$message .= '<p><strong>' . $key . '</strong>: <code>' . implode( ':', (array) $error ) . '</code></p>';
 
