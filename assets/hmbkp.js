@@ -13,7 +13,7 @@ jQuery( document ).ready( function( $ ) {
 		    }
 		);
 	}
-		
+
 	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
 	    function( data ) {
 	    	if ( data != 1 ) {
@@ -22,28 +22,42 @@ jQuery( document ).ready( function( $ ) {
 	    }
 	);
 
-	$( '.hmbkp-settings-toggle' ).click( function( e ) {
+	$( '#hmbkp_backup' ).click( function( e ) {
 
-		$( '#hmbkp-settings' ).toggle();
-		
+		ajaxRequest = $.get( ajaxurl, { 'action' : 'hmbkp_backup' } );
+
+		setTimeout( function() {
+
+			ajaxRequest.abort();
+
+			hmbkpRedirectOnBackupComplete();
+
+		}, 50 );
+
 		e.preventDefault();
 
 	} );
-	
+
+	$( '.hmbkp-settings-toggle' ).click( function( e ) {
+
+		$( '#hmbkp-settings' ).toggle();
+
+		e.preventDefault();
+
+	} );
+
 	if ( typeof( screenMeta ) != 'undefined' ) {
 		$( '.hmbkp-show-help-tab' ).click( screenMeta.toggleEvent );
 	}
-	
+
 	if ( window.location.hash == '#hmbkp-settings' ){
-		$( '#hmbkp-settings' ).show();		
+		$( '#hmbkp-settings' ).show();
 	}
-	
+
 
 } );
 
 function hmbkpRedirectOnBackupComplete() {
-
-	img = jQuery( '<div>' ).append( jQuery( '.hmbkp_running a.add-new-h2[disabled]:first img' ).clone() ).remove().html();
 
 	jQuery.get( ajaxurl, { 'action' : 'hmbkp_is_in_progress' },
 
@@ -55,9 +69,9 @@ function hmbkpRedirectOnBackupComplete() {
 
 			} else {
 
-				setTimeout( 'hmbkpRedirectOnBackupComplete();', 5000 );
+				setTimeout( 'hmbkpRedirectOnBackupComplete();', 1000 );
 
-				jQuery( '.hmbkp_running a.add-new-h2[disabled]:first' ).html( img + data );
+				jQuery( '#hmbkp_backup' ).addClass( 'hmbkp_running' ).text( data );
 
 			}
 		}

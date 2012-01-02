@@ -5,16 +5,10 @@
 	<h2>
 
 		<?php _e( 'Manage Backups', 'hmbkp' ); ?>
+		
+		<?php include_once( HMBKP_PLUGIN_PATH . '/admin.backup-button.php' ); ?>
 
-<?php if ( hmbkp_is_in_progress() ) : ?>
-		<a class="add-new-h2" <?php disabled( true ); ?>><img src="<?php echo site_url( 'wp-admin/images/wpspin_light.gif' ); ?>" width="16" height="16" /><?php echo hmbkp_get_status(); ?></a>
-
-<?php elseif ( hmbkp_possible() ) : ?>
-		<a class="add-new-h2" href="tools.php?page=<?php echo $_GET['page']; ?>&amp;action=hmbkp_backup_now"><?php _e( 'Back Up Now', 'hmbkp' ); ?></a>
-
-<?php endif; ?>
-
-		<a href="#hmbkp-settings" class="add-new-h2 hmbkp-settings-toggle"><?php _e( 'Settings', 'hmbkp' ); ?></a>
+		<a class="add-new-h2 hmbkp-settings-toggle" href="#hmbkp-settings"><?php _e( 'Settings', 'hmbkp' ); ?></a>
 
 	</h2>
 
@@ -31,7 +25,7 @@
 <?php endif; ?>
 
 	<?php include_once( HMBKP_PLUGIN_PATH . '/admin.settings.php' ); ?>
-	
+
 	<p class="howto"><?php printf( __( 'If you need help getting things working you are more than welcome to email us at %s and we\'ll do what we can to help.', 'hmbkp' ), '<a href="mailto:support@humanmade.co.uk">support@humanmade.co.uk</a>' ); ?></p>
 
 </div>

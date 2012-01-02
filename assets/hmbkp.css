@@ -20,3 +20,4 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp_active:before { content: "\00a0 \2713 "; font-size: 11px; }
 .hmbkp_active, .hmbkp_active code, #hmbkp-constants .hmbkp_active + dd { background: #E5F7E8; }
 .contextual-help-tabs-wrap .updated { margin: 15px 0 0; }
+#hmbkp_backup.hmbkp_running { background-image: url('../../../../wp-admin/images/wpspin_light.gif'); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 20px; }

@@ -117,7 +117,7 @@ function hmbkp_request_delete_backup() {
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
 
 /**
- * Schedule a one time backup and then
+ * Perform a manual backup and then
  * redirect back to the backups page
  */
 function hmbkp_request_do_backup() {
@@ -126,24 +126,7 @@ function hmbkp_request_do_backup() {
 	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_backup_now' || hmbkp_is_in_progress() || ! hmbkp_possible() )
 		return false;
 
-	// If cron is disabled for manual backups
-	if ( ( defined( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON' ) && HMBKP_DISABLE_MANUAL_BACKUP_CRON ) || ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) ) {
-
-		hmbkp_do_backup();
-
-	// If not fire the cron
-	} else {
-
-		// Schedule a single backup
-		wp_schedule_single_event( time(), 'hmbkp_schedule_single_backup_hook' );
-
-		// Remove the once every 60 seconds limitation
-		delete_transient( 'doing_cron' );
-
-		// Fire the cron now
-		spawn_cron();
-
-	}
+	hmbkp_do_backup();
 
 	// Redirect back
 	wp_redirect( remove_query_arg( 'action' ), 303 );
@@ -151,6 +134,22 @@ function hmbkp_request_do_backup() {
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_do_backup' );
+
+/**
+ * Perform a manual backup via ajax
+ */
+function hmbkp_ajax_request_do_backup() {
+
+	ignore_user_abort( true );
+
+	// Are we sure
+	if ( hmbkp_is_in_progress() || ! hmbkp_possible() )
+		return false;
+
+	hmbkp_do_backup();
+
+}
+add_action( 'wp_ajax_hmbkp_backup', 'hmbkp_ajax_request_do_backup' );
 
 /**
  * Send the download file to the browser and
@@ -171,6 +170,19 @@ function hmbkp_request_download_backup() {
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
+
+function hmbkp_request_cancel_backup() {
+
+	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_cancel' )
+		return false;
+
+	if ( file_exists( hmbkp_path() . '/.backup_running' ) )
+		unlink( hmbkp_path() . '/.backup_running' );
+
+	wp_redirect( remove_query_arg( 'action' ), 303 );
+
+}
+add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
 
 /**
  * Display the running status via ajax
@@ -213,7 +225,7 @@ function hmbkp_ajax_cron_test() {
 	$response = wp_remote_get( site_url( 'wp-cron.php' ) );
 
 	if ( ! is_wp_error( $response ) && $response['response']['code'] != '200' )
-    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is returning a %s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run back ups in a separate process.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response['response']['code'] . '</code>' ) . '</p></div>';
+    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is returning a %s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response['response']['code'] . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 	else
 		echo 1;
 
