@@ -97,7 +97,6 @@ function hmbkp_setup_hm_backup() {
 	$hm_backup = HM_Backup::get_instance();
 
 	$hm_backup->path = hmbkp_path();
-	$hm_backup->root = ABSPATH;
 	$hm_backup->files_only = hmbkp_get_files_only();
 	$hm_backup->database_only = hmbkp_get_database_only();
 
