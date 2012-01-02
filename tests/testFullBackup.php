@@ -79,7 +79,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test a full backup with the shell commands
+	 * Test a full backup with the ZipArchive
 	 *
 	 * @access public
 	 * @return null
@@ -105,7 +105,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test a full backup with the shell commands
+	 * Test a full backup with PclZip
 	 *
 	 * @access public
 	 * @return null
