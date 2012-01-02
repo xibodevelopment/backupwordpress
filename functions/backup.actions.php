@@ -28,6 +28,8 @@ function hmbkp_backup_complete( $backup ) {
 	if ( ! $backup->errors() )
 		return;
 
+    hmbkp_cleanup();
+
     $file = hmbkp_path() . '/.backup_errors';
 
 	if ( file_exists( $file ) )
@@ -39,8 +41,6 @@ function hmbkp_backup_complete( $backup ) {
 	fwrite( $handle, json_encode( $backup->errors() ) );
 
     fclose( $handle );
-
-    hmbkp_cleanup();
 
 }
 add_action( 'hmbkp_backup_complete', 'hmbkp_backup_complete' );
