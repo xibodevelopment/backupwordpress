@@ -26,13 +26,15 @@ jQuery( document ).ready( function( $ ) {
 
 		ajaxRequest = $.get( ajaxurl, { 'action' : 'hmbkp_backup' } );
 
-		setTimeout( function() {
+		$( this ).text( 'Starting Backup' ).addClass( 'hmbkp_running' );
+
+	  	setTimeout( function() {
 
 			ajaxRequest.abort();
 
-			hmbkpRedirectOnBackupComplete();
+	  		hmbkpRedirectOnBackupComplete();
 
-		}, 50 );
+	  	}, 500 );
 
 		e.preventDefault();
 
