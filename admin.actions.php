@@ -193,11 +193,8 @@ function hmbkp_ajax_is_backup_in_progress() {
 	if ( ! hmbkp_is_in_progress() )
 		echo 0;
 
-	elseif ( $status = hmbkp_get_status() )
-		include( HMBKP_PLUGIN_PATH . '/admin.backup-button.php' );
-
 	else
-		echo 1;
+		include( HMBKP_PLUGIN_PATH . '/admin.backup-button.php' );
 
 	exit;
 }
