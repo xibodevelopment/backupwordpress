@@ -1,9 +1,9 @@
 === BackUpWordPress ===
 Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
-Tags: back up, backup, backups, database, zip, db, files, archive, humanmade
+Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 1.5.1
+Stable tag: 1.6
 
 Simple automated back ups of your WordPress powered website.
 
@@ -93,6 +93,18 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6
+
+* Fixes issue with backups dir being included in backups on some Windows Servers.
+* Consistent handling of symlinks across all archive methods (they are followed).
+* Use .htaccess rewrite cond authentication to allow for secure http downloads of backup files.
+* Track errors and warnings that happen during backup and expose them through admin.
+* Fire manual backups using ajax instead of wp-cron, `HMBKP_DISABLE_MANUAL_BACKUP_CRON` is no longer needed and has been removed.
+* Ability to cancel a running backup.
+* Zip files are now integrity checked after every backup.
+* More robust handling of failed / corrupt zips, backup process now fallsback through the various zip methods until one works.
+* Use `mysql_query` instead of the depreciated `mysql_list_tables`.
 
 #### 1.5.2
 
