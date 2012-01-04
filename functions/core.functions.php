@@ -34,12 +34,6 @@ function hmbkp_deactivate() {
 	foreach ( $options as $option )
 		delete_option( $option );
 
-	// If there is a backup running file we should delete it on activate.
-    $file = hmbkp_path() . '/.backup_running';
-
-    if ( file_exists( $file ) )
-    	unlink( $file );
-
 	delete_transient( 'hmbkp_running' );
 	delete_transient( 'hmbkp_estimated_filesize' );
 
@@ -58,25 +52,10 @@ function hmbkp_deactivate() {
 function hmbkp_update() {
 
 	// Every update
-	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) :
-
+	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) )
 		hmbkp_deactivate();
 
-		// Check whether we have a logs directory to delete
-		if ( is_dir( hmbkp_path() . '/logs' ) )
-			hmbkp_rmdirtree( hmbkp_path() . '/logs' );
-
-	endif;
-
-	// Pre 1.1
-	if ( ! get_option( 'hmbkp_plugin_version' ) ) :
-
-		// Delete the obsolete max backups option
-		delete_option( 'hmbkp_max_backups' );
-
-	endif;
-
-	// Update from backUpWordPress
+	// Update from backUpWordPress 0.4.5
 	if ( get_option( 'bkpwp_max_backups' ) ) :
 
 		// Carry over the custom path
