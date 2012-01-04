@@ -196,7 +196,7 @@ function hmbkp_backup_errors_message() {
 
 	$message = '';
 
-	foreach ( json_decode( hmbkp_backup_errors() ) as $key => $errors )
+	foreach ( (array) json_decode( hmbkp_backup_errors() ) as $key => $errors )
 		foreach ( $errors as $error )
 			$message .= '<p><strong>' . $key . '</strong>: <code>' . implode( ':', (array) $error ) . '</code></p>';
 
@@ -208,7 +208,7 @@ function hmbkp_backup_warnings_message() {
 
 	$message = '';
 
-	foreach ( json_decode( hmbkp_backup_warnings() ) as $key => $errors ) {
+	foreach ( (array) json_decode( hmbkp_backup_warnings() ) as $key => $errors ) {
 	
 		foreach ( $errors as $error ) {
 			
