@@ -25,7 +25,6 @@ function hmbkp_deactivate() {
 		'hmbkp_zip_path',
 		'hmbkp_mysqldump_path',
 		'hmbkp_path',
-		'hmbkp_max_backups',
 		'hmbkp_running',
 		'hmbkp_status',
 		'hmbkp_complete',
