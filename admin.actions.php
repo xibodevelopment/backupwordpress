@@ -183,6 +183,20 @@ function hmbkp_request_cancel_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
 
+function hmbkp_dismiss_error() {
+
+	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_dismiss_error' )
+		return;
+
+	hmbkp_cleanup();
+
+	wp_redirect( remove_query_arg( 'action' ), 303 );
+
+	exit;
+
+}
+add_action( 'admin_init', 'hmbkp_dismiss_error' );
+
 /**
  * Display the running status via ajax
  *
