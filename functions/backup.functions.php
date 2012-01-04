@@ -129,6 +129,9 @@ function hmbkp_email_backup() {
 		return false;
 
 	$file = HM_Backup::get_instance()->archive_filepath();
+	
+	if ( ! file_exists( $file ) )
+		return;
 
 	// Raise the memory and time limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
