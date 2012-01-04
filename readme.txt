@@ -100,6 +100,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Ability to dismiss the error / warning messages.
 * Disable use of PclZip for full archive checking for now as it causes memory issues on some large sites.
 * Don't delete "number of backups" setting on update.
+* Better handling of multibite characters in archive and database dump filenames.
+* Mark backup as running and increase callback timeout to 500 when firing backup via ajax.
+* Don't send backup email if backup failed.
+* Filter out duplicate exclude rules.
 
 #### 1.6.1
 
