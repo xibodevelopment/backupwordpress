@@ -106,11 +106,12 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_option_save' );
 function hmbkp_request_delete_backup() {
 
 	if ( ! isset( $_GET['hmbkp_delete'] ) || empty( $_GET['hmbkp_delete'] ) )
-		return false;
+		return;
 
 	hmbkp_delete_backup( $_GET['hmbkp_delete'] );
 
 	wp_redirect( remove_query_arg( 'hmbkp_delete' ), 303 );
+
 	exit;
 
 }
@@ -122,14 +123,13 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup
  */
 function hmbkp_request_do_backup() {
 
-	// Are we sure
-	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_backup_now' || hmbkp_is_in_progress() || ! hmbkp_possible() )
-		return false;
+	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_backup_now' )
+		return;
 
 	hmbkp_do_backup();
 
-	// Redirect back
 	wp_redirect( remove_query_arg( 'action' ), 303 );
+
 	exit;
 
 }
@@ -142,11 +142,9 @@ function hmbkp_ajax_request_do_backup() {
 
 	ignore_user_abort( true );
 
-	// Are we sure
-	if ( hmbkp_is_in_progress() || ! hmbkp_possible() )
-		return false;
-
 	hmbkp_do_backup();
+
+	exit;
 
 }
 add_action( 'wp_ajax_hmbkp_backup', 'hmbkp_ajax_request_do_backup' );
@@ -158,7 +156,7 @@ add_action( 'wp_ajax_hmbkp_backup', 'hmbkp_ajax_request_do_backup' );
 function hmbkp_request_download_backup() {
 
 	if ( empty( $_GET['hmbkp_download'] ) )
-		return false;
+		return;
 
 	if ( file_exists( hmbkp_path() . '/.htaccess' ) )
 		unlink( hmbkp_path() . '/.htaccess' );
@@ -166,6 +164,7 @@ function hmbkp_request_download_backup() {
 	hmbkp_path();
 
 	wp_redirect( add_query_arg( 'key', md5( SECURE_AUTH_KEY ), str_replace( ABSPATH, site_url( '/' ), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+
 	exit;
 
 }
@@ -174,11 +173,13 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_back
 function hmbkp_request_cancel_backup() {
 
 	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_cancel' )
-		return false;
-		
+		return;
+
 	hmbkp_cleanup();
 
 	wp_redirect( remove_query_arg( 'action' ), 303 );
+
+	exit;
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
@@ -211,6 +212,7 @@ function hmbkp_ajax_is_backup_in_progress() {
 		include( HMBKP_PLUGIN_PATH . '/admin.backup-button.php' );
 
 	exit;
+
 }
 add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' );
 
@@ -220,8 +222,11 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
  * @return void
  */
 function hmbkp_ajax_calculate_backup_size() {
+
 	echo hmbkp_calculate();
+
 	exit;
+
 }
 add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
 
@@ -236,10 +241,12 @@ function hmbkp_ajax_cron_test() {
 
 	if ( ! is_wp_error( $response ) && $response['response']['code'] != '200' )
     	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is returning a %s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response['response']['code'] . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+
 	else
 		echo 1;
 
 	exit;
+
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
