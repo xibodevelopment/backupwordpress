@@ -73,8 +73,6 @@ function hmbkp_actions() {
 	if ( HMBKP_VERSION > get_option( 'hmbkp_plugin_version' ) )
 		hmbkp_update();
 
-	require_once( HMBKP_PLUGIN_PATH . '/admin.actions.php' );
-
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js' );
@@ -117,6 +115,7 @@ add_action( 'init', 'hmbkp_setup_hm_backup' );
 
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
+require_once( HMBKP_PLUGIN_PATH . '/admin.actions.php' );
 
 // Load hm-backup
 require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
