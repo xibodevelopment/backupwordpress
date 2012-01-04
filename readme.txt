@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 
 Simple automated back ups of your WordPress powered website.
 
@@ -74,8 +74,7 @@ Some things you can test are.
 * Are scheduled posts working? (They use wp-cron too).
 * Are you hosted on Heart Internet? (wp-cron is known not to work with them).
 * If you click manual backup does it work?
-* Try adding `define( 'HMBKP_DISABLE_MANUAL_BACKUP_CRON', true );` to your `wp-config.php`, does your manual backup work then?
-* Try adding `define( 'ALTERNATE_WP_CRON', true ); to your `wp-config.php`, do backups (manual and automatic) work?
+* Try adding `define( 'ALTERNATE_WP_CRON', true ); to your `wp-config.php`, do automatic backups work?
 * Is your site private (I.E. is it behind some kind of authentication, maintenance plugin, .htaccess) if so wp-cron won't work until you remove it, if you are and you temporarily remove the authentication, do backups start working?
 
 If you have tried all these then feel free to contact support.
@@ -93,6 +92,14 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6.2
+
+* Track PHP errors as backup warnings not errors.
+* Only show warning message for PHP errors in BackUpWordPress files.
+* Ability to dismiss the error / warning messages.
+* Disable use of PclZip for full archive checking for now as it causes memory issues on some large sites.
+* Don't delete "number of backups" setting on update.
 
 #### 1.6.1
 
@@ -162,7 +169,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 #### 1.3.1
 
-* Check for PHP version. Deactivate plugin if running on PHP version 4. 
+* Check for PHP version. Deactivate plugin if running on PHP version 4.
 
 #### 1.3
 
