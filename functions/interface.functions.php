@@ -156,7 +156,7 @@ function hmbkp_admin_notices() {
 	if ( hmbkp_backup_errors_message() ) :
 
 		function hmbkp_backup_errors_notice() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected that your last backup failed.', 'hmbkp' ) . '</strong><a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p>' . hmbkp_backup_errors_message() . '</div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected issues with your last backup.', 'hmbkp' ) . '</strong><a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p>' . hmbkp_backup_errors_message() . '</div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_backup_errors_notice' );
 
@@ -166,7 +166,7 @@ function hmbkp_admin_notices() {
 	if ( hmbkp_backup_warnings_message() ) :
 
 		function hmbkp_backup_warnings_notice() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected an issue with your last backup.', 'hmbkp' ) . '</strong><a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p>' . hmbkp_backup_warnings_message() . '</div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected issues with your last backup.', 'hmbkp' ) . '</strong><a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p>' . hmbkp_backup_warnings_message() . '</div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_backup_warnings_notice' );
 
