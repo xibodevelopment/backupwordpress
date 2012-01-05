@@ -163,7 +163,7 @@ function hmbkp_request_download_backup() {
 
 	hmbkp_path();
 
-	wp_redirect( add_query_arg( 'key', md5( SECURE_AUTH_KEY ), str_replace( ABSPATH, site_url( '/' ), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( hmbkp_conform_dir( ABSPATH ), site_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
 
 	exit;
 

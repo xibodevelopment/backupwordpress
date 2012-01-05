@@ -332,7 +332,7 @@ function hmbkp_path() {
 	$contents[]	= '# ' . __( 'This .htaccess file ensures that other people cannot download your backup files.', 'hmbkp' );
 	$contents[] = '';
 	$contents[] = 'RewriteEngine On';
-	$contents[] = 'RewriteCond %{QUERY_STRING} !key=' . md5( SECURE_AUTH_KEY );
+	$contents[] = 'RewriteCond %{QUERY_STRING} !key=' . md5( HMBKP_SECURE_KEY );
 	$contents[] = 'RewriteRule (.*) - [F]';
 	$contents[] = '';
 
