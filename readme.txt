@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 
 Simple automated back ups of your WordPress powered website.
 
@@ -92,6 +92,18 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6.3
+
+* Don't fail archive verification for errors in previous archive methods.
+* Improved detection of zip and mysqldump command.
+* Fix issues when `ABSPATH` is `/`.
+* Remove relience on `SECURE_AUTH_KEY` as it's often not defined.
+* Use `warning()` not `error()` for issues reported by `zip`, `ZipArchive` or PclZip`.
+* Fix download zip on Windows when `ABSPATH` contains a trailing forward slash.
+* Send backup email after backup completes so that fatal errors in email code don't stop the backup from completing.
+* Add missing / to `PCLZIP_TEMPORARY_DIR` define.
+* Catch and display errors during `mysqldump`.
 
 #### 1.6.2
 
