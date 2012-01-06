@@ -130,6 +130,9 @@ require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );
 // Load the wp cli command
 if ( defined( 'WP_CLI' ) && WP_CLI )
 	include( HMBKP_PLUGIN_PATH . '/functions/wp-cli.php' );
+	
+if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
+	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
 
 // Plugin activation and deactivation
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
