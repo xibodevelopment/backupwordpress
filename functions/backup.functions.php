@@ -16,9 +16,6 @@ function hmbkp_do_backup() {
 
 	HM_Backup::get_instance()->backup();
 
-	// Email Backup
-	hmbkp_email_backup();
-
     hmbkp_set_status( __( 'Removing old backups', 'hmbkp' ) );
 
 	// Delete any old backup files
@@ -125,12 +122,7 @@ function hmbkp_delete_backup( $file ) {
   */
 function hmbkp_email_backup() {
 
-	if ( ! hmbkp_get_email_address() )
-		return false;
-
-	$file = HM_Backup::get_instance()->archive_filepath();
-	
-	if ( ! file_exists( $file ) )
+	if ( ! hmbkp_get_email_address() || ! file_exists( HM_Backup::get_instance()->archive_filepath() ) )
 		return;
 
 	// Raise the memory and time limit
@@ -168,6 +160,7 @@ function hmbkp_email_backup() {
 	return true;
 
 }
+add_action( 'hmbkp_backup_complete', 'hmbkp_email_backup', 11 );
 
 /**
  * Set the status of the running backup
