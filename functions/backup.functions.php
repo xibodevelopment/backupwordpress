@@ -80,7 +80,7 @@ function hmbkp_get_backups() {
     endif;
 
     // If there is a custom backups directory and it's not writable then include those backups as well
-    if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && !is_writable( HMBKP_PATH ) ) :
+    if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && ! is_writable( HMBKP_PATH ) ) :
 
     	if ( $handle = opendir( HMBKP_PATH ) ) :
 
