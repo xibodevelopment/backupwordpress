@@ -107,10 +107,6 @@ function hmbkp_setup_hm_backup() {
 
 	$hm_backup->excludes = hmbkp_valid_custom_excludes();
 
-	// If the backup path is inside ABSPATH then exclude it by default
-	if ( hmbkp_conform_dir( ABSPATH ) && strpos( hmbkp_path(), hmbkp_conform_dir( ABSPATH ) ) === 0 )
-		$hm_backup->excludes[] = trailingslashit( str_replace( untrailingslashit( ABSPATH ), '', hmbkp_path() ) );
-
 }
 add_action( 'init', 'hmbkp_setup_hm_backup' );
 
