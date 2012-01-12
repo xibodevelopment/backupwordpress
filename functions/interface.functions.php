@@ -161,17 +161,6 @@ function hmbkp_admin_notices() {
 		add_action( 'admin_notices', 'hmbkp_backup_errors_notice' );
 
 	endif;
-	
-	// If there are any warnings reported in the backup
-	if ( hmbkp_backup_warnings_message() ) :
-
-		function hmbkp_backup_warnings_notice() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress detected issues with your last backup.', 'hmbkp' ) . '</strong><a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p>' . hmbkp_backup_warnings_message() . '</div>';
-		}
-		add_action( 'admin_notices', 'hmbkp_backup_warnings_notice' );
-
-	endif;
-
 
 }
 add_action( 'admin_head', 'hmbkp_admin_notices' );
@@ -199,28 +188,6 @@ function hmbkp_backup_errors_message() {
 	foreach ( (array) json_decode( hmbkp_backup_errors() ) as $key => $errors )
 		foreach ( $errors as $error )
 			$message .= '<p><strong>' . $key . '</strong>: <code>' . implode( ':', (array) $error ) . '</code></p>';
-
-	return $message;
-
-}
-
-function hmbkp_backup_warnings_message() {
-
-	$message = '';
-
-	foreach ( (array) json_decode( hmbkp_backup_warnings() ) as $key => $errors ) {
-	
-		foreach ( $errors as $error ) {
-			
-			// Don't show a warning message for php errors in files outside the backupwordpress plugin
-			if ( $key == 'php' && strpos( implode( ':', (array) $error ), HMBKP_PLUGIN_PATH ) === false )
-				continue;
-	
-			$message .= '<p><strong>' . $key . '</strong>: <code>' . implode( ':', (array) $error ) . '</code></p>';
-			
-		}
-		
-	}
 
 	return $message;
 
