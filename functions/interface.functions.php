@@ -181,6 +181,13 @@ function hmbkp_plugin_row( $plugins ) {
 }
 add_filter( 'all_plugins', 'hmbkp_plugin_row', 10 );
 
+/**
+ * Parse the json string of errors and
+ * output as a human readable message
+ *
+ * @access public
+ * @return null
+ */
 function hmbkp_backup_errors_message() {
 
 	$message = '';
