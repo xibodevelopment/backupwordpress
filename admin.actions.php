@@ -157,7 +157,8 @@ function hmbkp_request_download_backup() {
 
 	if ( empty( $_GET['hmbkp_download'] ) )
 		return;
-
+	
+	// Force the .htaccess to be rebuilt
 	if ( file_exists( hmbkp_path() . '/.htaccess' ) )
 		unlink( hmbkp_path() . '/.htaccess' );
 

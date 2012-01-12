@@ -52,8 +52,15 @@ function hmbkp_deactivate() {
 function hmbkp_update() {
 
 	// Every update
-	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) )
+	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
 		hmbkp_deactivate();
+
+		// Force .htaccess to be re-written
+		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+			unlink( hmbkp_path() . '/.htaccess' );
+
+	}
 
 	// Update from backUpWordPress 0.4.5
 	if ( get_option( 'bkpwp_max_backups' ) ) :
@@ -331,9 +338,11 @@ function hmbkp_path() {
 
 	$contents[]	= '# ' . __( 'This .htaccess file ensures that other people cannot download your backup files.', 'hmbkp' );
 	$contents[] = '';
+	$contents[] = '<IfModule mod_rewrite.c>';
 	$contents[] = 'RewriteEngine On';
 	$contents[] = 'RewriteCond %{QUERY_STRING} !key=' . md5( HMBKP_SECURE_KEY );
 	$contents[] = 'RewriteRule (.*) - [F]';
+	$contents[] = '</IfModule>';
 	$contents[] = '';
 
 	if ( ! file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
