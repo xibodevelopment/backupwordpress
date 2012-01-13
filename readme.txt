@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 1.6.3
+Stable tag: 1.6.4
 
 Simple automated back ups of your WordPress powered website.
 
@@ -49,6 +49,8 @@ Backups are stored on your server in `/wp-content/backups`, you can change the d
 
 You need to download the latest backup file either by clicking download on the backups page or via `FTP`. `Unzip` the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely `phpMyAdmin`).
 
+See this post for more details http://hmn.md/backupwordpress/
+
 **Does BackUpWordPress back up the backups directory?**
 
 No.
@@ -92,6 +94,16 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6.4
+
+* Don't show warning message as they cause to much panic.
+* Move previous methods errors to warnings in fallback methods.
+* Wrap `.htaccess` rewrite rules in if mod_rewrite check.
+* Add link to new restore help article to FAQ.
+* Fix issue that could cause "not using latest stable version" message to show when you were in-fact using the latest version.
+* Bug fix in `zip command` check that could cause an incorrect zip path to be used.
+* Detect and pass MySQL port to `mysqldump`.
 
 #### 1.6.3
 
