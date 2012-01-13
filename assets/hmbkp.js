@@ -24,6 +24,8 @@ jQuery( document ).ready( function( $ ) {
 
 	$( '#hmbkp_backup:not(.hmbkp_running)' ).live( 'click', function( e ) {
 
+		$.ajaxSetup( { 'cache' : false } );
+
 		ajaxRequest = $.get( ajaxurl, { 'action' : 'hmbkp_backup' } );
 
 		$( this ).text( 'Starting Backup' ).addClass( 'hmbkp_running' );
