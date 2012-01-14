@@ -112,7 +112,7 @@ function hmbkp_delete_backup( $file ) {
 	$file = base64_decode( $file );
 
 	// Delete the file
-	if ( strpos( $file, hmbkp_path() ) !== false || strpos( $file, WP_CONTENT_DIR . '/backups' ) !== false )
+	if ( ( strpos( $file, hmbkp_path() ) !== false || strpos( $file, WP_CONTENT_DIR . '/backups' ) !== false ) && file_exists( $file ) )
 		unlink( $file );
 
 }
