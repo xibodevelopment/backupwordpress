@@ -125,7 +125,9 @@ function hmbkp_delete_backup( $file ) {
   */
 function hmbkp_email_backup() {
 
-	if ( ! hmbkp_get_email_address() || ! file_exists( HM_Backup::get_instance()->archive_filepath() ) )
+	$file = HM_Backup::get_instance()->archive_filepath();
+
+	if ( ! hmbkp_get_email_address() || ! file_exists( $file ) )
 		return;
 
 	// Raise the memory and time limit
