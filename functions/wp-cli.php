@@ -80,7 +80,7 @@ class BackUpCommand extends WP_CLI_Command {
 			WP_CLI::success( 'Backup Complete: ' . HM_Backup::get_instance()->archive_filepath() );
 
 		else
-			WP_CLI::success( 'Backup Failed' );
+			WP_CLI::error( 'Backup Failed' );
 
 	}
 
