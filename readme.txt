@@ -111,7 +111,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Improved detection of zip and mysqldump command.
 * Fix issues when `ABSPATH` is `/`.
 * Remove relience on `SECURE_AUTH_KEY` as it's often not defined.
-* Use `warning()` not `error()` for issues reported by `zip`, `ZipArchive` or PclZip`.
+* Use `warning()` not `error()` for issues reported by `zip`, `ZipArchive` or `PclZip`.
 * Fix download zip on Windows when `ABSPATH` contains a trailing forward slash.
 * Send backup email after backup completes so that fatal errors in email code don't stop the backup from completing.
 * Add missing / to `PCLZIP_TEMPORARY_DIR` define.

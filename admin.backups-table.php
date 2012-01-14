@@ -1,7 +1,7 @@
 <?php
 
 // If max backups has changed
-if ( ! hmbkp_is_in_progress() )
+if ( ! hmbkp_in_progress() )
 	hmbkp_delete_old_backups();
 
 if ( ( $backup_archives = hmbkp_get_backups() ) && count( $backup_archives ) ) : ?>

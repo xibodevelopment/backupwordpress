@@ -31,7 +31,7 @@ function hmbkp_do_backup() {
 		if ( ! $handle = @fopen( $file, 'w' ) )
 			return;
 
-		fwrite( $handle, '' );
+		fwrite( $handle, HM_Backup::get_instance()->archive_filename() );
 
 		fclose( $handle );
 
@@ -59,7 +59,6 @@ function hmbkp_delete_old_backups() {
 /**
  * Returns an array of backup files
  *
- * @todo exclude the currently running backup
  * @todo use RecursiveDirectoryIterator
  * @return array $files
  */
@@ -94,7 +93,11 @@ function hmbkp_get_backups() {
 
 	endif;
 
-    krsort( $files );
+	ksort( $files );
+
+    // Don't include the currently running backup
+    if ( $key = array_search( trailingslashit( hmbkp_path() ) . hmbkp_in_progress(), $files ) )
+    	unset( $files[$key] );
 
     return $files;
 }
@@ -175,7 +178,7 @@ function hmbkp_set_status( $message = '' ) {
 	if ( ! $handle = @fopen( $file, 'w' ) )
 		return;
 
-	fwrite( $handle, $message );
+	fwrite( $handle, HM_Backup::get_instance()->archive_filename() . '::' . $message );
 
 	fclose( $handle );
 
@@ -191,7 +194,7 @@ function hmbkp_get_status() {
 	if ( ! file_exists( hmbkp_path() . '/.backup_running' ) )
 		return '';
 
-	return file_get_contents( hmbkp_path() .'/.backup_running' );
+	return end( explode( '::', file_get_contents( hmbkp_path() . '/.backup_running' ) ) );
 
 }
 
@@ -254,8 +257,8 @@ function hmbkp_valid_custom_excludes() {
  *
  * @return bool
  */
-function hmbkp_is_in_progress() {
-	return file_exists( hmbkp_path() . '/.backup_running' );
+function hmbkp_in_progress() {
+	return file_exists( hmbkp_path() . '/.backup_running' ) ? reset( explode( '::', file_get_contents( hmbkp_path() .'/.backup_running' ) ) ) : '';
 }
 
 /**

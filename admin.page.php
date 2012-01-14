@@ -1,4 +1,4 @@
-<div class="wrap<?php if ( hmbkp_is_in_progress() ) { ?> hmbkp_running<?php } ?>">
+<div class="wrap<?php if ( hmbkp_in_progress() ) { ?> hmbkp_running<?php } ?>">
 
 	<?php screen_icon( 'backupwordpress' ); ?>
 

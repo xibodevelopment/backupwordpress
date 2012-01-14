@@ -206,7 +206,7 @@ add_action( 'admin_init', 'hmbkp_dismiss_error' );
  */
 function hmbkp_ajax_is_backup_in_progress() {
 
-	if ( ! hmbkp_is_in_progress() )
+	if ( ! hmbkp_in_progress() )
 		echo 0;
 
 	else
