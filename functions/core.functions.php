@@ -515,7 +515,7 @@ function hmbkp_cleanup() {
 	if ( $handle = opendir( $hmbkp_path ) ) :
 
     	while ( false !== ( $file = readdir( $handle ) ) )
-    		if ( $file != '.' && $file != '..' && $file != '.htaccess' && strpos( $file, '.zip' ) === false )
+    		if ( ! in_array( $file, array( '.', '..', '.htaccess' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' )
 				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
 
     	closedir( $handle );
