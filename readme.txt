@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 
 Simple automated back ups of your WordPress powered website.
 
@@ -95,23 +95,34 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 1.6.5
+
+* Fix an issue with emailing backups that could cause the backup file to not be attached.
+* Fix an issue that could cause the backup to be marked as running for ever if emailing the backup `FATAL` error'd.
+* Never show the running backup in the list of backups.
+* Show an error backup email failed to send.
+* Fix possible notice when deleting a backup file which doesn't exist.
+* Fix possible notice on older versions of `PHP` which don't define `E_DEPRECATED`.
+* Make `HMBKP_SECURE_KEY` override-able.
+* BackUpWordPress should now work when `ABSPATH` is `/`.
+
 #### 1.6.4
 
 * Don't show warning message as they cause to much panic.
 * Move previous methods errors to warnings in fallback methods.
-* Wrap `.htaccess` rewrite rules in if mod_rewrite check.
+* Wrap `.htaccess` rewrite rules in if `mod_rewrite` check.
 * Add link to new restore help article to FAQ.
 * Fix issue that could cause "not using latest stable version" message to show when you were in-fact using the latest version.
-* Bug fix in `zip command` check that could cause an incorrect zip path to be used.
-* Detect and pass MySQL port to `mysqldump`.
+* Bug fix in `zip command` check that could cause an incorrect `zip` path to be used.
+* Detect and pass `MySQL` port to `mysqldump`.
 
 #### 1.6.3
 
 * Don't fail archive verification for errors in previous archive methods.
-* Improved detection of zip and mysqldump command.
+* Improved detection of the `zip` and `mysqldump` commands.
 * Fix issues when `ABSPATH` is `/`.
-* Remove relience on `SECURE_AUTH_KEY` as it's often not defined.
-* Use `warning()` not `error()` for issues reported by `zip`, `ZipArchive` or `PclZip`.
+* Remove reliance on `SECURE_AUTH_KEY` as it's often not defined.
+* Use `warning()` not `error()` for issues reported by `zip`, `ZipArchive` & `PclZip`.
 * Fix download zip on Windows when `ABSPATH` contains a trailing forward slash.
 * Send backup email after backup completes so that fatal errors in email code don't stop the backup from completing.
 * Add missing / to `PCLZIP_TEMPORARY_DIR` define.
@@ -119,13 +130,13 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 #### 1.6.2
 
-* Track PHP errors as backup warnings not errors.
-* Only show warning message for PHP errors in BackUpWordPress files.
+* Track `PHP` errors as backup warnings not errors.
+* Only show warning message for `PHP` errors in BackUpWordPress files.
 * Ability to dismiss the error / warning messages.
-* Disable use of PclZip for full archive checking for now as it causes memory issues on some large sites.
+* Disable use of `PclZip` for full archive checking for now as it causes memory issues on some large sites.
 * Don't delete "number of backups" setting on update.
-* Better handling of multibite characters in archive and database dump filenames.
-* Mark backup as running and increase callback timeout to 500 when firing backup via ajax.
+* Better handling of multibyte characters in archive and database dump filenames.
+* Mark backup as running and increase callback timeout to `500` when firing backup via ajax.
 * Don't send backup email if backup failed.
 * Filter out duplicate exclude rules.
 
