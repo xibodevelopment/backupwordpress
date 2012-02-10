@@ -126,7 +126,7 @@ function hmbkp_delete_backup( $file ) {
 function hmbkp_email_backup() {
 
 	$file = HM_Backup::get_instance()->archive_filepath();
-
+	
 	if ( ! hmbkp_get_email_address() || ! file_exists( $file ) )
 		return;
 
@@ -136,6 +136,7 @@ function hmbkp_email_backup() {
 
 	// @todo admin_url?
 	$download = get_bloginfo( 'wpurl' ) . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
+	
 	$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST ) . parse_url( get_bloginfo( 'url' ), PHP_URL_PATH );
 
 	$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
