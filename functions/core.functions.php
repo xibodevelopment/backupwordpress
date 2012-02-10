@@ -507,6 +507,8 @@ function hmbkp_possible() {
  */
 function hmbkp_cleanup() {
 
+	delete_option( 'hmbkp_email_error' );
+
 	$hmbkp_path = hmbkp_path();
 
 	if ( ! is_dir( $hmbkp_path ) )
