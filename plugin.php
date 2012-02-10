@@ -30,7 +30,9 @@ define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
 define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
-define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
+
+if ( ! defined( 'HMBKP_SECURE_KEY' ) )
+	define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
 
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
@@ -126,7 +128,7 @@ require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );
 // Load the wp cli command
 if ( defined( 'WP_CLI' ) && WP_CLI )
 	include( HMBKP_PLUGIN_PATH . '/functions/wp-cli.php' );
-	
+
 if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
 	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
 
