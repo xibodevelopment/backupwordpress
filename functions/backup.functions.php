@@ -37,6 +37,8 @@ function hmbkp_do_backup() {
 
 	}
 
+	hmbkp_email_backup();
+
 }
 
 /**
@@ -126,9 +128,11 @@ function hmbkp_delete_backup( $file ) {
 function hmbkp_email_backup() {
 
 	$file = HM_Backup::get_instance()->archive_filepath();
-	
+
 	if ( ! hmbkp_get_email_address() || ! file_exists( $file ) )
 		return;
+		
+	update_option( 'hmbkp_email_error', 'hmbkp_email_failed' );
 
 	// Raise the memory and time limit
 	@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
@@ -136,7 +140,7 @@ function hmbkp_email_backup() {
 
 	// @todo admin_url?
 	$download = get_bloginfo( 'wpurl' ) . '/wp-admin/tools.php?page=' . HMBKP_PLUGIN_SLUG . '&hmbkp_download=' . base64_encode( $file );
-	
+
 	$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST ) . parse_url( get_bloginfo( 'url' ), PHP_URL_PATH );
 
 	$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
@@ -157,16 +161,12 @@ function hmbkp_email_backup() {
 	endif;
 
 	// Set option for email not sent error
-	if ( ! $sent )
-		update_option( 'hmbkp_email_error', 'hmbkp_email_failed' );
-
-	else
+	if ( $sent )
 		delete_option( 'hmbkp_email_error' );
 
 	return true;
 
 }
-add_action( 'hmbkp_backup_complete', 'hmbkp_email_backup', 11 );
 
 /**
  * Set the status of the running backup
