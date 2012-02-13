@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 
 Simple automated back ups of your WordPress powered website.
 
@@ -94,6 +94,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6.6
+
+* Fix backup path issue with case sensitive filesystems.
 
 #### 1.6.5
 
