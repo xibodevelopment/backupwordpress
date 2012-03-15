@@ -43,13 +43,20 @@ add_filter('plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
  *
  * Help is pulled from the readme FAQ.
  *
- * @todo get plugin info from local readme and use plugin_updates cache to check if we are running the latest version so we don't have to do a wp_remote_get on every page load.
  * @return null
  */
 function hmbkp_contextual_help() {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
-	$plugin = plugins_api( 'plugin_information', array( 'slug' => 'backupwordpress' ) );
+	
+	if ( ! $plugin = get_transient( 'hmbkp_plugin_data' ) ) {
+
+		$plugin = plugins_api( 'plugin_information', array( 'slug' => 'backupwordpress' ) );
+		
+		// Cache for one day
+		set_transient( 'hmbkp_plugin_data', $plugin, 86400 );
+		
+	}
 	
 	$warning = '';
 
