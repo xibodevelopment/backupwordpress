@@ -117,7 +117,8 @@ require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
 require_once( HMBKP_PLUGIN_PATH . '/admin.actions.php' );
 
 // Load hm-backup
-require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
+if ( ! class_exists( 'HM_Backup' ) )
+	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
 
 // Load the core functions
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.actions.php' );
