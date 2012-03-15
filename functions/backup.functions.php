@@ -95,7 +95,7 @@ function hmbkp_get_backups() {
 
 	endif;
 
-	ksort( $files );
+	krsort( $files );
 
     // Don't include the currently running backup
     if ( $key = array_search( trailingslashit( hmbkp_path() ) . hmbkp_in_progress(), $files ) )
