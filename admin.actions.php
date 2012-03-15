@@ -71,14 +71,19 @@ function hmbkp_option_save() {
 
 	}
 
-	if ( isset( $_POST['hmbkp_email_address'] ) && ! is_email( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
-		$hmbkp_errors->add( 'invalid_email', __( 'You have entered an invalid email address.', 'hmbkp' ) );
 
-	} elseif( isset( $_POST['hmbkp_email_address'] ) && !empty( $_POST['hmbkp_email_address'] ) ) {
-		update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
+	if ( isset( $_POST['hmbkp_email_address'] ) ) {
 
-	} else {
-		delete_option( 'hmbkp_email_address' );
+		foreach( array_filter( array_map( 'trim', explode( ',', $_POST['hmbkp_email_address'] ) ) ) as $email_address )
+			if ( ! is_email( $email_address ) )
+				$email_error = $hmbkp_errors->add( 'invalid_email', sprintf( __( '%s is an invalid email address.', 'hmbkp' ), $email_address ) );
+				
+		if ( ! isset( $email_error ) && ! empty( $_POST['hmbkp_email_address'] ) )
+			update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
+		
+		if ( isset( $_POST['hmbkp_email_address'] ) && empty( $_POST['hmbkp_email_address'] ) )
+			delete_option( 'hmbkp_email_address' );
+
 	}
 
 	if ( isset( $_POST['hmbkp_excludes'] ) && ! empty( $_POST['hmbkp_excludes'] ) ) {

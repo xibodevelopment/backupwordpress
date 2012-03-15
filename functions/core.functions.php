@@ -448,21 +448,20 @@ function hmbkp_get_database_only() {
  *	Returns defined email address or email address saved in options.
  *	If none set, return empty string.
  */
-function hmbkp_get_email_address() {
+function hmbkp_get_email_address( $type = 'array' ) {
+
+	$email = '';
 
 	if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL )
 		$email = HMBKP_EMAIL;
 
 	elseif ( get_option( 'hmbkp_email_address' ) )
 		$email = get_option( 'hmbkp_email_address' );
-
-	else
-		return '';
-
-	if ( is_email( $email ) )
-		return $email;
-
-	return '';
+		
+	if ( ! empty( $email ) && $type == 'array' )
+		$email = array_filter( array_map( 'trim', explode( ',', $email ) ) );
+		
+	return $email;
 
 }
 

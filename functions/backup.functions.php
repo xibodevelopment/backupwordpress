@@ -149,7 +149,7 @@ function hmbkp_email_backup() {
 	$headers = 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
 
 	// Try to send the email
-	$sent = wp_mail( hmbkp_get_email_address(), $subject, $message, $headers, $file );
+	$sent = wp_mail( array_filter( hmbkp_get_email_address(), 'is_email' ), $subject, $message, $headers, $file );
 
 	// If it failed- Try to send a download link - The file was probably too large.
 	if ( ! $sent ) :
@@ -157,7 +157,7 @@ function hmbkp_email_backup() {
 		$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
 		$message = sprintf( __( "BackUpWordPress has completed a backup of your site %s.\n\nUnfortunately the backup file was too large to attach to this email.\n\nYou can download the backup file by clicking the link below:\n\n%s\n\nKind Regards\n\n The Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), get_bloginfo( 'url' ), $download );
 
-		$sent = wp_mail( hmbkp_get_email_address(), $subject, $message, $headers );
+		$sent = wp_mail( array_filter( hmbkp_get_email_address(), 'is_email' ), $subject, $message, $headers );
 
 	endif;
 

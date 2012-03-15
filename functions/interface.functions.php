@@ -103,10 +103,10 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If the email address is invalid
-	if ( hmbkp_get_email_address() && ! is_email( hmbkp_get_email_address() ) ) :
+	if ( hmbkp_get_email_address() && array_diff( hmbkp_get_email_address(), array_filter( hmbkp_get_email_address(), 'is_email' ) ) ) :
 
 		function hmbkp_email_invalid_warning() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%s is not a valid email address.', 'hmbkp' ), '<code>' . hmbkp_get_email_address() . '</code>' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'The following email address\'s are not valid: %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_diff( hmbkp_get_email_address(), array_filter( hmbkp_get_email_address(), 'is_email' ) ) ) . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_email_invalid_warning' );
 

@@ -75,7 +75,7 @@
 				
 				<tr valign="top">
 					<th scope="row"><label for="hmbkp_email_address"><?php _e( 'Email backups', 'hmbkp' ); ?></label></th>
-					<td><input name="hmbkp_email_address" type="text" id="hmbkp_email_address" value="<?php echo hmbkp_get_email_address(); ?>" class="regular-text <?php if ( defined( 'HMBKP_EMAIL' ) ) echo 'disabled'; ?>" <?php disabled( defined( 'HMBKP_EMAIL' ) ); ?>> <span class="description"><?php _e( 'A copy of the backup file will be emailed to this address. Disabled if left blank.', 'hmbkp' ); ?></span></td>
+					<td><input name="hmbkp_email_address" type="text" id="hmbkp_email_address" value="<?php echo ! empty( $_POST['hmbkp_email_address'] ) ? $_POST['hmbkp_email_address'] : hmbkp_get_email_address( 'list' ); ?>" class="regular-text <?php if ( defined( 'HMBKP_EMAIL' ) ) echo 'disabled'; ?>" <?php disabled( defined( 'HMBKP_EMAIL' ) ); ?>> <span class="description"><?php _e( 'A copy of the backup file will be emailed to this address. Disabled if left blank.', 'hmbkp' ); ?></span></td>
 				</tr>
 				
 				<tr align="top">

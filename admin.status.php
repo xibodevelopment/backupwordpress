@@ -10,10 +10,10 @@ if ( ( ! empty( $_POST['hmbkp_settings_submit'] ) ) && ( ! wp_next_scheduled( 'h
 
 <?php else :
 
-    if ( ! hmbkp_get_database_only() && ! hmbkp_get_files_only()  )
+    if ( ! hmbkp_get_database_only() && ! hmbkp_get_files_only() )
     	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code> ' . __( '&amp;', 'hmbkp' ) . ' <code>' . __( 'files', 'hmbkp' ) . '</code>';
 
-    elseif( hmbkp_get_database_only() )
+    elseif ( hmbkp_get_database_only() )
     	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code>';
 
     else
@@ -31,9 +31,9 @@ if ( ( ! empty( $_POST['hmbkp_settings_submit'] ) ) && ( ! wp_next_scheduled( 'h
 <p>&#10003; <span class="hmbkp_estimated-size"><?php printf( __( 'Your site is %s. Backups will be compressed and should be smaller than this.', 'hmbkp' ), get_transient( 'hmbkp_estimated_filesize' ) ? '<code>' . hmbkp_calculate() . '</code>' : '<code class="calculate">' . __( 'Calculating Size...', 'hmbkp' ) . '</code>' ); ?></span></p>
 
 <?php if ( hmbkp_get_email_address() ) : ?>
-<p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . hmbkp_get_email_address() . '</code>' ); ?></p>
+<p>&#10003; <?php printf( __( 'A copy of each backup will be emailed to %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_filter( hmbkp_get_email_address(), 'is_email' ) ) . '</code>' ); ?></p>
 <?php endif; ?>
 
-<?php if ( ( $valid_excludes = hmbkp_valid_custom_excludes() ) && !hmbkp_get_database_only() ) : ?>
+<?php if ( ( $valid_excludes = hmbkp_valid_custom_excludes() ) && ! hmbkp_get_database_only() ) : ?>
 <p>&#10003; <?php printf( __( 'The following paths will be excluded from your backups %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $valid_excludes ) . '</code>' ); ?></p>
 <?php endif; ?>
