@@ -116,7 +116,7 @@ function hmbkp_admin_notices() {
 	if ( hmbkp_get_email_address() && get_option( 'hmbkp_email_error' ) ) :
 
 		function hmbkp_email_failed_warning() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . __( 'The last backup email failed to send. It\'s likely that the file is to large.', 'hmbkp' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . __( 'The last backup email failed to send. It\'s likely that the file is too large.', 'hmbkp' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_email_failed_warning' );
 
