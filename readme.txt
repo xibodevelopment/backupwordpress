@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1
 Tested up to: 3.3
-Stable tag: 1.6.6
+Stable tag: 1.6.7
 
 Simple automated back ups of your WordPress powered website.
 
@@ -81,6 +81,10 @@ Some things you can test are.
 
 If you have tried all these then feel free to contact support.
 
+**How to get BackUpWordPress working in Heart Internet**
+
+The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php` (note the space between php5 and the location of the file). The file `wp-cron.php` `chmod` must be set to `711`.
+
 **Further Support & Feedbask**
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
@@ -94,6 +98,17 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6.7
+
+* Fix issue with backups being listed in reverse chronological order.
+* Fix issue with newest backup being deleted when you hit your max backups limit.
+* It's now possible to have backups sent to multiple email address's by entering them as a comma separated list.
+* Fix a bug which broke the ability to override the `mysqldump` path with `HMBKP_MYSQLDUMP_PATH`.
+* Use `echo` rather than `pwd` when testing `shell_exec` as it's supported cross platform.
+* Updated Spanish translation.
+* Fix a minor spelling mistake.
+* Speed up the manage backups page by caching the FAQ data for 24 hours.
 
 #### 1.6.6
 
