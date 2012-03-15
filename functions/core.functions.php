@@ -457,10 +457,10 @@ function hmbkp_get_email_address( $type = 'array' ) {
 
 	elseif ( get_option( 'hmbkp_email_address' ) )
 		$email = get_option( 'hmbkp_email_address' );
-		
+
 	if ( ! empty( $email ) && $type == 'array' )
 		$email = array_filter( array_map( 'trim', explode( ',', $email ) ) );
-		
+
 	return $email;
 
 }

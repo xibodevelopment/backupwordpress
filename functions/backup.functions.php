@@ -132,7 +132,7 @@ function hmbkp_email_backup() {
 
 	if ( ! hmbkp_get_email_address() || ! file_exists( $file ) )
 		return;
-		
+
 	update_option( 'hmbkp_email_error', 'hmbkp_email_failed' );
 
 	// Raise the memory and time limit

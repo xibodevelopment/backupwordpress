@@ -77,10 +77,10 @@ function hmbkp_option_save() {
 		foreach( array_filter( array_map( 'trim', explode( ',', $_POST['hmbkp_email_address'] ) ) ) as $email_address )
 			if ( ! is_email( $email_address ) )
 				$email_error = $hmbkp_errors->add( 'invalid_email', sprintf( __( '%s is an invalid email address.', 'hmbkp' ), $email_address ) );
-				
+
 		if ( ! isset( $email_error ) && ! empty( $_POST['hmbkp_email_address'] ) )
 			update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
-		
+
 		if ( isset( $_POST['hmbkp_email_address'] ) && empty( $_POST['hmbkp_email_address'] ) )
 			delete_option( 'hmbkp_email_address' );
 
@@ -162,7 +162,7 @@ function hmbkp_request_download_backup() {
 
 	if ( empty( $_GET['hmbkp_download'] ) )
 		return;
-	
+
 	// Force the .htaccess to be rebuilt
 	if ( file_exists( hmbkp_path() . '/.htaccess' ) )
 		unlink( hmbkp_path() . '/.htaccess' );
