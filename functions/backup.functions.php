@@ -102,6 +102,7 @@ function hmbkp_get_backups() {
     	unset( $files[$key] );
 
     return $files;
+
 }
 
 /**
