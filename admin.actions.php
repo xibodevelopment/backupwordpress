@@ -75,10 +75,10 @@ function hmbkp_option_save() {
 	if ( isset( $_POST['hmbkp_email_address'] ) ) {
 
 		foreach( array_filter( array_map( 'trim', explode( ',', $_POST['hmbkp_email_address'] ) ) ) as $email_address )
-			if ( ! is_email( $email_address ) )
-				$email_error = $hmbkp_errors->add( 'invalid_email', sprintf( __( '%s is an invalid email address.', 'hmbkp' ), $email_address ) );
+			if ( ! is_email( $email_address ) && $email_error = true )
+				$hmbkp_errors->add( 'invalid_email', sprintf( __( '%s is an invalid email address.', 'hmbkp' ), $email_address ) );
 
-		if ( ! isset( $email_error ) && ! empty( $_POST['hmbkp_email_address'] ) )
+		if ( empty( $email_error ) )
 			update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
 
 		if ( isset( $_POST['hmbkp_email_address'] ) && empty( $_POST['hmbkp_email_address'] ) )
