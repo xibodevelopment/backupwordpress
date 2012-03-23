@@ -106,6 +106,9 @@ function hmbkp_setup_hm_backup() {
 
 	if ( defined( 'HMBKP_ZIP_PATH' ) )
 		$hm_backup->zip_command_path = HMBKP_ZIP_PATH;
+		
+	if ( defined( 'HMBKP_ROOT' ) )
+		$hm_backup->root = HMBKP_ROOT;
 
 	$hm_backup->excludes = hmbkp_valid_custom_excludes();
 
