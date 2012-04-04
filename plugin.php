@@ -30,6 +30,7 @@ define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
 define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
+define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
 if ( ! defined( 'HMBKP_SECURE_KEY' ) )
 	define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
@@ -78,8 +79,16 @@ function hmbkp_init() {
 
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs' ) );
+
+
+		wp_enqueue_script( 'hmbkp_modernizr', HMBKP_PLUGIN_URL . '/assets/modernizr.js' );
+		wp_enqueue_script( 'hmbkp_webshim', HMBKP_PLUGIN_URL . '/assets/webshim/src/polyfiller.js', array( 'jquery', 'hmbkp_modernizr' ) );
+		wp_enqueue_script( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ) );
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'hmbkp_fancybox' ) );
+
+		wp_enqueue_style( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.css' );
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css' );
+
 	}
 
 	// Handle any advanced option changes

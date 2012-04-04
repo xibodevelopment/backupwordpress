@@ -1,8 +1,43 @@
+jQuery.webshims.polyfill( 'forms' );
+
 jQuery( document ).ready( function( $ ) {
 
-	jQuery( '.hmbkp_schedule_tabs' ).tabs();
+	$( '.hmbkp_schedule_tabs' ).tabs();
 
-/* 	LEGACY */
+	// Replace fancybox href with ajax url
+	$( '.fancybox' ).each( function() {
+
+		$( this ).attr( 'href', $( this ).attr( 'href' ).replace( userSettings['url'] + 'wp-admin/tools.php', ajaxurl ) );
+
+	} );
+
+	// Initialize fancybox
+	$( 'button.fancybox' ).fancybox( {
+
+		'modal'		: true,
+		'type'		: 'ajax',
+		'afterShow'	: function() {
+
+			$( '<button type="reset" class="button-secondary">Cancel</button>' ).click( function() {
+				$.fancybox.cancel();
+				$.fancybox.close();
+			} ).prependTo( '.fancybox-type-ajax p.submit' );
+
+		}
+
+	} );
+
+	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
+
+		e.preventDefault();
+		
+		$.post( ajaxurl, { 'action' : 'hmnkp_edit_schedule_submit' }, function( data ) {
+			console.log( data );
+		} );
+
+	} );
+
+	/* 	LEGACY */
 
 	if ( $( '.hmbkp_running' ).size() ) {
 		hmbkpRedirectOnBackupComplete();

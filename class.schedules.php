@@ -145,7 +145,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return null
 	 */
 	public function get_name() {
-		return empty( $this->name ) ? $this->get_slug() : $this->name;
+
+		if ( empty( $this->name ) )
+			$this->set_name( $this->slug );
+
+		return $this->name;
 	}
 
 	/**
@@ -172,7 +176,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_max_backups() {
 
-		return empty( $this->options['max_backups'] ) ? 10 : $this->options['max_backups'];
+		if ( empty( $this->options['max_backups'] ) )
+			$this->set_max_backups( 10 );
+
+		return $this->options['max_backups'];
 
 	}
 
@@ -322,7 +329,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_reoccurrence() {
 
-		return empty( $this->options['reoccurrence'] ) ? 'weekly' : $this->options['reoccurrence'];
+		if ( empty( $this->options['reoccurrence'] ) )
+			$this->set_reoccurrence( 'weekly' );
+
+		return $this->options['reoccurrence'];
 
 	}
 

@@ -4,3 +4,6 @@
 [submodule "assets/fancyBox"]
 	path = assets/fancyBox
 	url = https://github.com/fancyapps/fancyBox.git
+[submodule "assets/webshim"]
+	path = assets/webshim
+	url = https://github.com/aFarkas/webshim.git

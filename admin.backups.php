@@ -1,22 +1,8 @@
-<?php
-
-$schedule_a = new HMBKP_Scheduled_Backup( 'test' );
-$schedule_a->set_type( 'complete' );
-$schedule_a->set_excludes = array( 'wp-admin', '/wp-content/' );
-
-$schedule_b = new HMBKP_Scheduled_Backup( 'backup' );
-$schedule_b->set_type( 'file' );
-$schedule_b->set_excludes = array( 'wp-admin', '/wp-content/' );
-$schedule_b->set_reoccurrence( 'weekly' );
-$schedule_b->schedule();
-
-?>
-
 <?php $schedules = new HMBKP_Schedules; ?>
 
 <?php if ( count( $schedules->get_schedules() ) > 1 ) : ?>
 
-<h3>Backup Schedules <button class="add-new-h2 button-secondary" type="button">Add Schedule</button></h3>
+<h3>Backup Schedules <button class="button-secondary" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule' ), HMBKP_ADMIN_URL ); ?>">Add</button></h3>
 
 <div class="hmbkp_schedule_tabs">
 

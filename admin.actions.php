@@ -19,7 +19,6 @@ function hmbkp_request_delete_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
 
-
 /**
  * Perform a manual backup via ajax
  */
@@ -135,6 +134,31 @@ function hmbkp_ajax_cron_test() {
 
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
+
+function hmbkp_edit_schedule_load() {
+
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule'] ) );
+	
+	require( HMBKP_PLUGIN_PATH . '/admin.schedule-form.php' );
+	
+	exit;
+
+}
+add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
+
+
+function hmnkp_edit_schedule_submit() {
+
+//	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule'] ) );
+	
+	print_r( $_REQUEST );
+	
+	exit;
+
+}
+add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' );
+
+
 
 /**
  * Handles changes in the defined Constants

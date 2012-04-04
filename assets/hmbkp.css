@@ -30,3 +30,15 @@ tfoot p { margin: 0; font-weight: normal; }
 .subsubsub li + li::before { content: "| "; }
 
 .ui-tabs-nav .ui-tabs-selected a { font-weight: bold; color: #000; }
+
+#fancybox-overlay { 
+	background-color: rgba( 255, 255, 255, .7 ) !important;
+}
+
+.hmbkp-form label { display: block; width: 100%; line-height: 25px; padding-bottom: 10px; border-bottom: 1px dotted #CCC; margin-bottom: 10px; min-width: 320px; }
+
+.hmbkp-form label > * { float: right; }
+.hmbkp-form label > input, .hmbkp-form label > select { min-width: 200px; }
+.hmbkp-form p.submit { padding-bottom: 0; }
+.hmbkp-form .button-primary { float: right; }
+.hmbkp-form [type="number"] { min-width: 40px; width: 40px; }
