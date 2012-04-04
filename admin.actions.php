@@ -1,110 +1,6 @@
 <?php
 
 /**
- *	Verify & save all the user settings
- *
- *	Returns WP_Error object if there are errors when updating settings.
- * 	Return  (bool) true if no errors.
- *
- *	Uses $_POST data
- *
- * @todo Should redirect on success
- * @return mixed
- */
-function hmbkp_option_save() {
-
-	if ( empty( $_POST['hmbkp_settings_submit'] ) )
-		return;
-
-	check_admin_referer( 'hmbkp_settings', 'hmbkp_settings_nonce' );
-
-	global $hmbkp_errors;
-	$hmbkp_errors = new WP_Error;
-
-	// Disable Automatic backups
-	if ( isset( $_POST['hmbkp_automatic'] ) && ! (bool) $_POST['hmbkp_automatic'] ) {
-		update_option( 'hmbkp_disable_automatic_backup', 'true' );
-		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-
-	} else {
-		delete_option( 'hmbkp_disable_automatic_backup');
-
-	}
-
-	// Update schedule frequency settings. Or reset to default of daily.
-	if ( isset( $_POST['hmbkp_frequency'] ) && $_POST['hmbkp_frequency'] != 'daily' )
-		update_option( 'hmbkp_schedule_frequency', esc_attr( $_POST['hmbkp_frequency'] ) );
-
-	else
-		delete_option( 'hmbkp_schedule_frequency' );
-
-	// Clear schedule if settings have changed.
-	if ( wp_get_schedule( 'hmbkp_schedule_backup_hook' ) != get_option( 'hmbkp_schedule_frequency' ) )
-		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-
-	if ( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'files only' ) {
-
-		update_option( 'hmbkp_files_only', 'true' );
-		delete_option( 'hmbkp_database_only' );
-
-	} elseif ( isset( $_POST['hmbkp_what_to_backup'] ) && $_POST['hmbkp_what_to_backup'] == 'database only' ) {
-
-		update_option( 'hmbkp_database_only', 'true' );
-		delete_option( 'hmbkp_files_only' );
-
-	} else {
-
-		delete_option( 'hmbkp_database_only' );
-		delete_option( 'hmbkp_files_only' );
-
-	}
-
-	if ( isset( $_POST['hmbkp_backup_number'] ) && $max_backups = intval( $_POST['hmbkp_backup_number'] ) ) {
-		update_option( 'hmbkp_max_backups', intval( esc_attr( $_POST['hmbkp_backup_number'] ) ) );
-
-	} else {
-		delete_option( 'hmbkp_max_backups' );
-
-		// Only error if it is actually empty.
-		if ( isset( $_POST['hmbkp_backup_number'] ) )
-			$hmbkp_errors->add( 'invalid_no_backups', __( 'You have entered an invalid number of backups.', 'hmbkp' ) );
-
-	}
-
-
-	if ( isset( $_POST['hmbkp_email_address'] ) ) {
-
-		foreach( array_filter( array_map( 'trim', explode( ',', $_POST['hmbkp_email_address'] ) ) ) as $email_address )
-			if ( ! is_email( $email_address ) && $email_error = true )
-				$hmbkp_errors->add( 'invalid_email', sprintf( __( '%s is an invalid email address.', 'hmbkp' ), $email_address ) );
-
-		if ( empty( $email_error ) )
-			update_option( 'hmbkp_email_address', $_POST['hmbkp_email_address'] );
-
-		if ( isset( $_POST['hmbkp_email_address'] ) && empty( $_POST['hmbkp_email_address'] ) )
-			delete_option( 'hmbkp_email_address' );
-
-	}
-
-	if ( isset( $_POST['hmbkp_excludes'] ) && ! empty( $_POST['hmbkp_excludes'] ) ) {
-		update_option( 'hmbkp_excludes', $_POST['hmbkp_excludes'] );
-
-	} else {
-		delete_option( 'hmbkp_excludes' );
-
-	}
-
-	delete_transient( 'hmbkp_estimated_filesize' );
-
-	if ( $hmbkp_errors->get_error_code() )
-		return $hmbkp_errors;
-
-	return true;
-
-}
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_option_save' );
-
-/**
  * Delete the backup and then redirect
  * back to the backups page
  */
@@ -113,7 +9,8 @@ function hmbkp_request_delete_backup() {
 	if ( ! isset( $_GET['hmbkp_delete'] ) || empty( $_GET['hmbkp_delete'] ) )
 		return;
 
-	hmbkp_delete_backup( $_GET['hmbkp_delete'] );
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule'] ) );
+	$schedule->delete_backup( base64_decode( urldecode( $_GET['hmbkp_delete'] ) ) );
 
 	wp_redirect( remove_query_arg( 'hmbkp_delete' ), 303 );
 
@@ -122,23 +19,6 @@ function hmbkp_request_delete_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
 
-/**
- * Perform a manual backup and then
- * redirect back to the backups page
- */
-function hmbkp_request_do_backup() {
-
-	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_backup_now' )
-		return;
-
-	hmbkp_do_backup();
-
-	wp_redirect( remove_query_arg( 'action' ), 303 );
-
-	exit;
-
-}
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_do_backup' );
 
 /**
  * Perform a manual backup via ajax
@@ -264,22 +144,6 @@ add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
  * @return null
  */
 function hmbkp_constant_changes() {
-
-	// Check whether we need to disable the cron
-	if ( hmbkp_get_disable_automatic_backup() && wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-
-	// Or whether we need to re-enable it
-	if ( ! hmbkp_get_disable_automatic_backup() && ! wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) )
-		hmbkp_setup_schedule();
-
-	// Allow the time of the daily backup to be changed
-	if ( wp_get_schedule( 'hmbkp_schedule_backup_hook' ) != get_option( 'hmbkp_schedule_frequency' ) )
-		hmbkp_setup_schedule();
-
-	// Reset if custom time is removed
-	if ( ( ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && ! HMBKP_DAILY_SCHEDULE_TIME ) || ! defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) && get_option( 'hmbkp_schedule_frequency' ) == 'daily' && date( 'H:i', wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) ) != '23:00' && ! hmbkp_get_disable_automatic_backup() )
-		hmbkp_setup_schedule();
 
 	// If a custom backup path has been set or changed
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) )

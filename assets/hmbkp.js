@@ -1,5 +1,9 @@
 jQuery( document ).ready( function( $ ) {
 
+	jQuery( '.hmbkp_schedule_tabs' ).tabs();
+
+/* 	LEGACY */
+
 	if ( $( '.hmbkp_running' ).size() ) {
 		hmbkpRedirectOnBackupComplete();
 	}
@@ -41,23 +45,6 @@ jQuery( document ).ready( function( $ ) {
 		e.preventDefault();
 
 	} );
-
-	$( '.hmbkp-settings-toggle' ).click( function( e ) {
-
-		$( '#hmbkp-settings' ).toggle();
-
-		e.preventDefault();
-
-	} );
-
-	if ( typeof( screenMeta ) != 'undefined' ) {
-		$( '.hmbkp-show-help-tab' ).click( screenMeta.toggleEvent );
-	}
-
-	if ( window.location.hash == '#hmbkp-settings' ){
-		$( '#hmbkp-settings' ).show();
-	}
-
 
 } );
 

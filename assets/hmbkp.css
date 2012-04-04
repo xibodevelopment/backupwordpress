@@ -1,6 +1,8 @@
 #icon-backupwordpress.icon32	{ background: url(icon_backupwordpress_32x32.png); }
+
 .hmbkp_running .add-new-h2 img { margin: 0 3px -4px -6px; opacity: 0.3; }
 .add-new-h2[disabled="disabled"], add-new-h2[disabled="disabled"]:hover, .add-new-h2[disabled="disabled"]:active, .add-new-h2[disabled="disabled"]:focus { cursor: default; color: #666; }
+
 tfoot p { margin: 0; font-weight: normal; }
 #hmbkp-settings { display: none; }
 #hmbkp-settings.show_form { display: block; }
@@ -14,6 +16,7 @@ tfoot p { margin: 0; font-weight: normal; }
 #hmbkp-constants dt:not(.hmbkp_active):hover + dd, #hmbkp-constants dt:not(.hmbkp_active) + dd:hover { background-color: #FFF; }
 #hmbkp-constants dd:hover p, #hmbkp-constants dt:hover + dd p { display: none; }
 #hmbkp-constants dd:hover .example, #hmbkp-constants dt:hover + dd .example { display: inline; }
+
 .hmbkp_manage_backups_row .delete { color: #BC0B0B; }
 .hmbkp_manage_backups_row .delete:hover { color: red; }
 .completed th, .completed td { background-color: #FFFFE0; }
@@ -21,3 +24,9 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp_active, .hmbkp_active code, #hmbkp-constants .hmbkp_active + dd { background: #E5F7E8; }
 .contextual-help-tabs-wrap .updated { margin: 15px 0 0; }
 #hmbkp_backup.hmbkp_running { background-image: url('../../../../wp-admin/images/wpspin_light.gif'); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 20px; }
+
+.hmbkp-schedule { font-size: 16px; font-weight: lighter; line-height: 1.5; background-color: #FFF; box-shadow: 1px 1px 2px #CCC; border-radius: 4px; padding: 5px 10px; }
+
+.subsubsub li + li::before { content: "| "; }
+
+.ui-tabs-nav .ui-tabs-selected a { font-weight: bold; color: #000; }

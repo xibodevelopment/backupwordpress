@@ -49,7 +49,7 @@ if ( version_compare( phpversion(), '5.2.4', '<' ) ) {
 }
 
 // Don't activate on old versions of WordPress
-if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	deactivate_plugins( HMBKP_PLUGIN_PATH . '/plugin.php' );
@@ -64,7 +64,7 @@ if ( version_compare( get_bloginfo('version'), HMBKP_REQUIRED_WP_VERSION, '<' ) 
  *
  * @return null
  */
-function hmbkp_actions() {
+function hmbkp_init() {
 
 	$plugin_data = get_plugin_data( __FILE__ );
 
@@ -78,7 +78,7 @@ function hmbkp_actions() {
 
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js' );
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs' ) );
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css' );
 	}
 
@@ -86,39 +86,18 @@ function hmbkp_actions() {
 	hmbkp_constant_changes();
 
 }
-add_action( 'admin_init', 'hmbkp_actions' );
-
-/**
- * Setup the HM_Backup class
- *
- * @return null
- */
-function hmbkp_setup_hm_backup() {
-
-	$hm_backup = HM_Backup::get_instance();
-
-	$hm_backup->path = hmbkp_path();
-	$hm_backup->files_only = hmbkp_get_files_only();
-	$hm_backup->database_only = hmbkp_get_database_only();
-
-	if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
-		$hm_backup->mysqldump_command_path = HMBKP_MYSQLDUMP_PATH;
-
-	if ( defined( 'HMBKP_ZIP_PATH' ) )
-		$hm_backup->zip_command_path = HMBKP_ZIP_PATH;
-
-	$hm_backup->excludes = hmbkp_valid_custom_excludes();
-
-}
-add_action( 'init', 'hmbkp_setup_hm_backup' );
+add_action( 'admin_init', 'hmbkp_init' );
 
 // Load the admin menu
-require_once( HMBKP_PLUGIN_PATH . '/admin.menus.php' );
+require_once( HMBKP_PLUGIN_PATH . '/admin.menu.php' );
 require_once( HMBKP_PLUGIN_PATH . '/admin.actions.php' );
 
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )
 	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
+
+// Load the schedules
+require_once( HMBKP_PLUGIN_PATH . '/class.schedules.php' );
 
 // Load the core functions
 require_once( HMBKP_PLUGIN_PATH . '/functions/backup.actions.php' );
@@ -136,7 +115,3 @@ if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
 // Plugin activation and deactivation
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
-
-// Cron hook for backups
-add_action( 'hmbkp_schedule_backup_hook', 'hmbkp_do_backup' );
-add_action( 'hmbkp_schedule_single_backup_hook', 'hmbkp_do_backup' );

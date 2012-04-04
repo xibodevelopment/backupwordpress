@@ -108,63 +108,18 @@ function hmbkp_update() {
 }
 
 /**
- * Take a file size and return a human readable
- * version
+ * Add weekly, fortnightly and monthly as a cron schedule choices
  *
- * @param int $size
- * @param string $unit. (default: null)
- * @param string $retstring. (default: null)
- * @param bool $si. (default: true)
- * @return int
+ * @param array $reccurrences
+ * @return array $reccurrences
  */
-function hmbkp_size_readable( $size, $unit = null, $retstring = '%01.2f %s', $si = true ) {
+function hmbkp_more_reccurences( $reccurrences ) {
 
-	// Units
-	if ( $si === true ) :
-		$sizes = array( 'B', 'kB', 'MB', 'GB', 'TB', 'PB' );
-		$mod   = 1000;
-
-	else :
-		$sizes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
-		$mod   = 1024;
-
-	endif;
-
-	$ii = count( $sizes ) - 1;
-
-	// Max unit
-	$unit = array_search( (string) $unit, $sizes );
-
-	if ( is_null( $unit ) || $unit === false )
-		$unit = $ii;
-
-	// Loop
-	$i = 0;
-
-	while ( $unit != $i && $size >= 1024 && $i < $ii ) {
-		$size /= $mod;
-		$i++;
-	}
-
-	return sprintf( $retstring, $size, $sizes[$i] );
-}
-
-/**
- * Add daily as a cron schedule choice
- *
- * @todo can we not use the built in schedules
- * @param array $recc
- * @return array $recc
- */
-function hmbkp_more_reccurences( $recc ) {
-
-	$hmbkp_reccurrences = array(
-	    'hmbkp_weekly' => array( 'interval' => 604800, 'display' => 'every week' ),
-	    'hmbkp_fortnightly' => array( 'interval' => 1209600, 'display' => 'once a fortnight' ),
-	    'hmbkp_monthly' => array( 'interval' => 2629743.83 , 'display' => 'once a month' )
-	);
-
-	return array_merge( $recc, $hmbkp_reccurrences );
+	return array_merge( $reccurrences, array(
+	    'weekly' => array( 'interval' => 604800, 'display' => 'Once Weekly' ),
+	    'fortnightly' => array( 'interval' => 1209600, 'display' => 'Once Fortnightly' ),
+	    'monthly' => array( 'interval' => 2629743.83 , 'display' => 'Once Monthly' )
+	) );
 }
 add_filter( 'cron_schedules', 'hmbkp_more_reccurences' );
 
@@ -199,53 +154,6 @@ function hmbkp_rmdirtree( $dir ) {
 }
 
 /**
- * Calculate the size of the backup
- *
- * Doesn't currently take into account for
- * compression
- *
- * @return string
- */
-function hmbkp_calculate() {
-
-    @ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
-
-    // Check cache
-	if ( $filesize = get_transient( 'hmbkp_estimated_filesize' ) )
-		return hmbkp_size_readable( $filesize, null, '%01u %s' );
-
-	$filesize = 0;
-
-    // Don't include database if files only
-	if ( ! hmbkp_get_files_only() ) {
-
-    	global $wpdb;
-
-    	$res = $wpdb->get_results( 'SHOW TABLE STATUS FROM ' . DB_NAME, ARRAY_A );
-
-    	foreach ( $res as $r )
-    		$filesize += (float) $r['Data_length'];
-
-    }
-
-   	if ( ! hmbkp_get_database_only() ) {
-
-    	// Get rid of any cached filesizes
-    	clearstatcache();
-
-		foreach ( HM_Backup::get_instance()->files() as $file )
-			$filesize += (float) @filesize( ABSPATH . $file );
-
-	}
-
-    // Cache in a transient for a week
-    set_transient( 'hmbkp_estimated_filesize', $filesize,  604800 );
-
-    return hmbkp_size_readable( $filesize, null, '%01u %s' );
-
-}
-
-/**
  * Calculate the total filesize of all backups
  *
  * @return string
@@ -262,49 +170,6 @@ function hmbkp_total_filesize() {
 
 	return hmbkp_size_readable( $filesize );
 
-}
-
-
-/**
- * Set Up the shedule.
- * This should runn according to the Frequency defined, or set in the option.
- *
- * @access public
- * @return void
- */
-function hmbkp_setup_schedule() {
-
-	// Clear any old schedules
-	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-
-	if( hmbkp_get_disable_automatic_backup() )
-		return;
-
-	// Default to 11 in the evening
-	$time = '23:00';
-
-	// Allow it to be overridden
-	if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME )
-		$time = HMBKP_DAILY_SCHEDULE_TIME;
-
-	$offset = current_time( 'timestamp' ) - time();
-	$scheduletime_UTC = strtotime( $time ) - $offset;
-
-	if( defined( 'HMBKP_SCHEDULE_FREQUENCY' ) && HMBKP_SCHEDULE_FREQUENCY )
-		$schedule_frequency = HMBKP_SCHEDULE_FREQUENCY;
-	elseif( get_option('hmbkp_schedule_frequency') )
-		$schedule_frequency = get_option('hmbkp_schedule_frequency');
-	else
-		$schedule_frequency = 'daily';
-
-	// Advance by the interval. (except daily, when it will only happen if shcheduled time is in the past. )
-	if( $schedule_frequency != 'daily' || $schedule_frequency == 'daily' && $scheduletime_UTC < time() ) {
-		$interval =  wp_get_schedules('hmbkp_schedule_backup_hook');
-		$interval = $interval[ $schedule_frequency ]['interval'];
-		$scheduletime_UTC = $scheduletime_UTC + $interval;
-	}
-
-	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
 
 /**
@@ -394,57 +259,6 @@ function hmbkp_path_move( $from, $to ) {
 }
 
 /**
- * The maximum number of backups to keep
- * defaults to 10
- *
- * @return int
- */
-function hmbkp_max_backups() {
-
-	if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
-		return (int) HMBKP_MAX_BACKUPS;
-
-	if ( get_option( 'hmbkp_max_backups' ) )
-		return (int) get_option( 'hmbkp_max_backups', 10 );
-
-	return 10;
-
-}
-
-/**
- * Whether to only backup files
- *
- * @return bool
- */
-function hmbkp_get_files_only() {
-
-	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY )
-		return true;
-
-	if ( get_option( 'hmbkp_files_only' ) )
-		return true;
-
-	return false;
-}
-
-/**
- * Whether to only backup the database
- *
- * @return bool
- */
-function hmbkp_get_database_only() {
-
-	if ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
-		return true;
-
-	if ( get_option( 'hmbkp_database_only' ) )
-		return true;
-
-	return false;
-
-}
-
-/**
  *	Returns defined email address or email address saved in options.
  *	If none set, return empty string.
  */
@@ -462,23 +276,6 @@ function hmbkp_get_email_address( $type = 'array' ) {
 		$email = array_filter( array_map( 'trim', explode( ',', $email ) ) );
 
 	return $email;
-
-}
-
-/**
- * Are automatic backups disabled
- *
- * @return bool
- */
-function hmbkp_get_disable_automatic_backup() {
-
-	if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP )
-		return true;
-
-	if ( get_option( 'hmbkp_disable_automatic_backup' ) )
-		return true;
-
-	return false;
 
 }
 
@@ -526,9 +323,13 @@ function hmbkp_cleanup() {
 }
 
 function hmbkp_conform_dir( $dir ) {
-	return HM_Backup::get_instance()->conform_dir( $dir );
+	
+	$HM_Backup = new HM_Backup();
+	
+	return $HM_Backup->conform_dir( $dir );
+	
 }
 
 function hmbkp_is_safe_mode_active() {
-	return HM_Backup::get_instance()->is_safe_mode_active();
+	return HM_Backup::is_safe_mode_active();
 }

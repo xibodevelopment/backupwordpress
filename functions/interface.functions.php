@@ -5,9 +5,9 @@
  *
  * @param string $file
  */
-function hmbkp_get_backup_row( $file ) {
+function hmbkp_get_backup_row( $file, $schedule ) {
 
-	$encode = base64_encode( $file );
+	$encode = urlencode( base64_encode( $file ) );
 	$offset = current_time( 'timestamp' ) - time(); ?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
@@ -17,13 +17,13 @@ function hmbkp_get_backup_row( $file ) {
 		</th>
 
 		<td>
-			<?php echo hmbkp_size_readable( filesize( $file ) ); ?>
+			<?php echo $schedule->human_filesize( @filesize( $file ) ); ?>
 		</td>
 
 		<td>
 
-			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_download=<?php echo $encode; ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
-			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_delete=<?php echo $encode ?>" class="delete"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_download=<?php echo $encode; ?>&amp;hmbkp_schedule=<?php echo $schedule->get_slug(); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
+			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_delete=<?php echo $encode ?>&amp;hmbkp_schedule=<?php echo $schedule->get_slug(); ?>" class="delete"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
 		</td>
 
@@ -38,25 +38,6 @@ function hmbkp_get_backup_row( $file ) {
  * @return void
  */
 function hmbkp_admin_notices() {
-
-	// If the form has been submitted, display updated notification
-	// Display  notifications for any errors in the settings form.
-	if ( ! empty( $_POST['hmbkp_settings_submit'] ) ) :
-
-		function hmbkp_advanced_settings_saved() {
-
-			echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
-
-			global $hmbkp_errors;
-
-			if ( ! empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() )
-				foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error )
-					echo '<div class="error"><p>' . $hmbkp_error . '</p></div>';
-
-		}
-		add_action( 'admin_notices', 'hmbkp_advanced_settings_saved' );
-
-	endif;
 
 	// If the backups directory doesn't exist and can't be automatically created
 	if ( ! is_dir( hmbkp_path() ) ) :
@@ -89,16 +70,6 @@ function hmbkp_admin_notices() {
 	    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( ' %s is running in %s. Please contact your host and ask them to disable %s.', 'hmbkp' ), '<code>PHP</code>', '<a href="http://php.net/manual/en/features.safe-mode.php"><code>Safe Mode</code></a>', '<code>Safe Mode</code>' ) . '</p></div>';
 	    }
 	    add_action( 'admin_notices', 'hmbkp_safe_mode_warning' );
-
-	endif;
-
-	// If both HMBKP_FILES_ONLY & HMBKP_DATABASE_ONLY are defined at the same time
-	if ( hmbkp_get_files_only() && hmbkp_get_database_only() ) :
-
-	    function hmbkp_nothing_to_backup_warning() {
-	    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have both %s and %s defined so there isn\'t anything to back up.', 'hmbkp' ), '<code>HMBKP_DATABASE_ONLY</code>', '<code>HMBKP_FILES_ONLY</code>' ) . '</p></div>';
-	    }
-	    add_action( 'admin_notices', 'hmbkp_nothing_to_backup_warning' );
 
 	endif;
 
@@ -139,16 +110,6 @@ function hmbkp_admin_notices() {
 			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %s isn\'t writable, new backups will be saved to %s instead.', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>', '<code>' . hmbkp_path() . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_custom_path_writable_notice' );
-
-	endif;
-
-	// If there are custom excludes defined and any of the files or directories don't exist
-	if ( hmbkp_invalid_custom_excludes() ) :
-
-		function hmbkp_invalid_exclude_notice() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'You have defined a custom exclude list but the following paths don\'t exist %s, are you sure you entered them correctly?', 'hmbkp' ), '<code>' . implode( '</code>, <code>', (array) hmbkp_invalid_custom_excludes() ) . '</code>' ) . '</p></div>';
-		}
-		add_action( 'admin_notices', 'hmbkp_invalid_exclude_notice' );
 
 	endif;
 

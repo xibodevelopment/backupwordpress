@@ -23,16 +23,14 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * @return null
 	 */
 	function setUp() {
-	
-		$this->time = time();
 
 		$this->backup = new HM_Backup();
-		
+
 		remove_action( 'hmbkp_backup_started', 'hmbkp_set_status', 10, 0 );
 		remove_action( 'hmbkp_mysqldump_started', 'hmbkp_set_status_dumping_database' );
 		remove_action( 'hmbkp_archive_started', 'hmbkp_set_status_archiving' );
-		remove_action( 'hmbkp_backup_complete', 'hmbkp_backup_complete' );		
-	
+		remove_action( 'hmbkp_backup_complete', 'hmbkp_backup_complete' );
+
 	}
 
 	/**
@@ -44,8 +42,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 */
 	function tearDown() {
 
-		if ( file_exists( $this->backup->archive_filepath() ) )
-			unlink( $this->backup->archive_filepath() );
+		if ( file_exists( $this->backup->get_archive_filepath() ) )
+			unlink( $this->backup->get_archive_filepath() );
 
 	}
 
@@ -57,20 +55,20 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 */
 	function testFullBackupWithZip() {
 
-		if ( ! $this->backup->zip_command_path )
+		if ( ! $this->backup->get_zip_command_path() )
             $this->markTestSkipped( 'Empty zip command path' );
 
 		$this->backup->backup();
-		
-		$this->assertEquals( $this->backup->archive_method(), 'zip' );
 
-		$this->assertFileExists( $this->backup->archive_filepath() );
+		$this->assertEquals( $this->backup->get_archive_method(), 'zip' );
 
-		$files = $this->backup->files();
-		$files[] = $this->backup->database_dump_filename;
+		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
-		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
-		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
+		$files = $this->backup->get_files();
+		$files[] = $this->backup->get_database_dump_filename();
+
+		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
+		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
 		$this->assertEmpty( $this->backup->errors() );
 
@@ -84,21 +82,21 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 */
 	function testFullBackupWithZipArchive() {
 
-		$this->backup->zip_command_path = false;
+	  	$this->backup->set_zip_command_path( false );
 
-		$this->backup->backup();
+	  	$this->backup->backup();
 
-		$this->assertEquals( $this->backup->archive_method(), 'ziparchive' );
+	  	$this->assertEquals( $this->backup->get_archive_method(), 'ziparchive' );
 
-		$this->assertFileExists( $this->backup->archive_filepath() );
+		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
-		$files = $this->backup->files();
-		$files[] = $this->backup->database_dump_filename;
+	 	$files = $this->backup->get_files();
+	 	$files[] = $this->backup->get_database_dump_filename();
 
-		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
-		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
+	 	$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
+	 	$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
-		$this->assertEmpty( $this->backup->errors() );
+	 	$this->assertEmpty( $this->backup->errors() );
 
 	}
 
@@ -110,20 +108,20 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 */
 	function testFullBackupWithPclZip() {
 
-		$this->backup->zip_command_path = false;
+		$this->backup->set_zip_command_path( false );
 		$this->backup->skip_zip_archive = true;
 
 		$this->backup->backup();
-		
-		$this->assertEquals( $this->backup->archive_method(), 'pclzip' );
 
-		$this->assertFileExists( $this->backup->archive_filepath() );
+		$this->assertEquals( $this->backup->get_archive_method(), 'pclzip' );
 
-		$files = $this->backup->files();
-		$files[] = $this->backup->database_dump_filename;
+		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
-		$this->assertArchiveContains( $this->backup->archive_filepath(), $files );
-		$this->assertArchiveFileCount( $this->backup->archive_filepath(), count( $files ) );
+		$files = $this->backup->get_files();
+		$files[] = $this->backup->get_database_dump_filename();
+
+		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
+		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
 		$this->assertEmpty( $this->backup->errors() );
 
