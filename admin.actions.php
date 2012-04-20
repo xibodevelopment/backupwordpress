@@ -6,18 +6,34 @@
  */
 function hmbkp_request_delete_backup() {
 
-	if ( empty( $_GET['hmbkp_delete'] ) )
+	if ( empty( $_GET['hmbkp_delete_backup'] ) )
 		return;
 
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
-	$schedule->delete_backup( base64_decode( urldecode( $_GET['hmbkp_delete'] ) ) );
+	$schedule->delete_backup( base64_decode( urldecode( $_GET['hmbkp_delete_backup'] ) ) );
 
-	wp_redirect( remove_query_arg( 'hmbkp_delete' ), 303 );
+	wp_redirect( remove_query_arg( 'hmbkp_delete_backup' ), 303 );
 
 	exit;
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
+
+
+function hmbkp_request_delete_schedule() {
+
+	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' )
+		return;
+
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
+	$schedule->cancel( true );
+
+	wp_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action' ) ), 303 );
+
+	exit;
+
+}
+add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedule' );
 
 /**
  * Perform a manual backup via ajax

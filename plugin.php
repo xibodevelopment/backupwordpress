@@ -35,6 +35,7 @@ define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 
 if ( ! defined( 'HMBKP_SECURE_KEY' ) )
 	define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
 
+// max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
 
@@ -68,9 +69,11 @@ if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' 
 function hmbkp_init() {
 
 	$plugin_data = get_plugin_data( __FILE__ );
-
+	
+	// define the plugin version
 	define( 'HMBKP_VERSION', $plugin_data['Version'] );
-
+	
+	// Load the languages
 	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 	// Fire the update action
@@ -80,11 +83,15 @@ function hmbkp_init() {
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
-
-		//wp_enqueue_script( 'hmbkp_modernizr', HMBKP_PLUGIN_URL . '/assets/modernizr.js' );
-		//wp_enqueue_script( 'hmbkp_webshim', HMBKP_PLUGIN_URL . '/assets/webshim/src/polyfiller.js', array( 'jquery', 'hmbkp_modernizr' ) );
 		wp_enqueue_script( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ) );
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'hmbkp_fancybox' ) );
+		
+		wp_localize_script( 'hmbkp', 'objectL10n', array(
+			'update'				=> __( 'Update', 'hmbkp' ),
+			'delete_schedule'		=> __( "Are you sure you want to delete this schedule? All of it's backups will also be deleted.\n\n'Cancel' to go back, 'OK' to delete.\n", 'hmbkp' ),
+			'delete_backup'			=> __( "Are you sure you want to delete this backup?\n\n'Cancel' to go back, 'OK' to delete.\n", 'hmbkp' ),
+			'remove_exclude_rule'	=> __( "Are you sure you want to remove this exclude rule?\n\n'Cancel' to go back, 'OK' to delete.\n", 'hmbkp' )
+		) );
 
 		wp_enqueue_style( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.css' );
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css' );
@@ -92,6 +99,7 @@ function hmbkp_init() {
 	}
 
 	// Handle any advanced option changes
+	// TODO 
 	hmbkp_constant_changes();
 
 }
@@ -118,6 +126,7 @@ require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );
 if ( defined( 'WP_CLI' ) && WP_CLI )
 	include( HMBKP_PLUGIN_PATH . '/functions/wp-cli.php' );
 
+// Set the tmp directory to the backup path
 if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
 	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
 

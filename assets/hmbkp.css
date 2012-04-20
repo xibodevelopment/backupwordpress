@@ -58,7 +58,7 @@ div.hmbkp_add_exclude_rule { display: block; line-height: 25px; margin-bottom: 2
 div.hmbkp_add_exclude_rule input { min-width: 249px; }
 .hmbkp_save_exclude_rule, .hmbkp_cancel_save_exclude_rule { float: right; }
 
-.hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 40px 0 20px; clear: both; margin-left: 10px; }
+.hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 30px 0 10px; clear: both; margin-left: 10px; }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; }
 .hmbkp-schedule-sentence:hover .hmbkp-schedule-actions { visibility: visible; }
 .hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 28px; }

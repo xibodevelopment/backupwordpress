@@ -7,7 +7,7 @@
  */
 function hmbkp_get_backup_row( $file, $schedule ) {
 
-	$encode = urlencode( base64_encode( $file ) );
+	$encoded_file = urlencode( base64_encode( $file ) );
 	$offset = current_time( 'timestamp' ) - time(); ?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
@@ -24,8 +24,8 @@ function hmbkp_get_backup_row( $file, $schedule ) {
 
 		<td>
 
-			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_download=<?php echo $encode; ?>&amp;hmbkp_schedule_id=<?php echo $schedule->get_id(); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
-			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_delete=<?php echo $encode ?>&amp;hmbkp_schedule_id=<?php echo $schedule->get_id(); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_download_backup=<?php echo $encoded_file; ?>&amp;hmbkp_schedule_id=<?php echo $schedule->get_id(); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
+			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_delete_backup=<?php echo $encoded_file ?>&amp;hmbkp_schedule_id=<?php echo $schedule->get_id(); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
 		</td>
 

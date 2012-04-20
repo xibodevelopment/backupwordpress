@@ -80,9 +80,9 @@ endswitch; ?>
 	<?php printf( __( 'Backup my %s %s %s, %s.', 'hmbkp' ), '<span>' . $type . '</span>', '<code>' . $schedule->get_filesize() . '</code>', $reoccurrence, $backup_to_keep ); ?>
 
 	<div class="hmbkp-schedule-actions row-actions">
-		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>">Edit</a> |
-		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>">Run now</a>  |
-		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>">Pause</a> |
-		<a class="delete-action" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>">Delete</a>
+		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Edit', 'hmbkp' ); ?></a> |
+		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>  |
+		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Pause', 'hmbkp' ); ?></a> |
+		<a class="delete-action" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 	</div>
 </div>

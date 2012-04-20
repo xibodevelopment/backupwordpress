@@ -591,11 +591,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @param bool $remove_backups. (default: false)
 	 */
 	public function cancel( $remove_backups = false ) {
-
+		
+		// Delete the schedule optoins
 		delete_option( 'hmbkp_schedule_' . $this->get_id() );
-
-		wp_delete_scheduled_event();
-
+		
+		// Clear the scheduled event
+		wp_unschedule_event( $this->get_next_occurrence(), $this->schedule_hook );
+		
+		// Delete it's backups
 		if ( $remove_backups )
 			$this->delete_backups();
 

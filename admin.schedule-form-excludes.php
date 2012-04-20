@@ -31,7 +31,7 @@
 
 	<?php if ( $key ) { ?>
 
-					<a href="#" class="action-delete"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+					<a href="#" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
 	<?php } ?>
 
@@ -81,7 +81,7 @@
 
 <?php } ?>
 
-    <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . $schedule->get_filesize() . '</code>' ); ?></p>
+    <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . $schedule->get_filesize( false ) . '</code>' ); ?></p>
 
     </div>
 

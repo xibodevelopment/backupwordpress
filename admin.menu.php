@@ -51,7 +51,7 @@ function hmbkp_contextual_help() {
 
 	if ( ! $plugin = get_transient( 'hmbkp_plugin_data' ) ) {
 
-		$plugin = plugins_api( 'plugin_information', array( 'slug' => 'backupwordpress' ) );
+		$plugin = plugins_api( 'plugin_information', array( 'slug' => HMBKP_PLUGIN_SLUG ) );
 
 		// Cache for one day
 		set_transient( 'hmbkp_plugin_data', $plugin, 86400 );

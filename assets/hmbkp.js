@@ -22,16 +22,32 @@ jQuery( document ).ready( function( $ ) {
 
 			$( '.hmbkp-tabs' ).tabs();
 
-			$( '<p class="submit"><button type="button" class="button-primary">Update</button></p>' ).appendTo( '.hmbkp-form fieldset + fieldset' );
+			$( '<p class="submit"><button type="button" class="button-primary">' + objectL10n.update + '</button></p>' ).appendTo( '.hmbkp-form fieldset + fieldset' );
 
 		}
 
 	} );
 
-	// Show delete confirm message for delete links
-	$( document ).on( 'click', '.delete-action', function( e ) {
+	// Show delete confirm message for delete schedule
+	$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function( e ) {
 
-		if ( ! showNotice.warn() )
+		if ( ! confirm( objectL10n.delete_schedule ) )
+			e.preventDefault();
+
+	} );
+	
+	// Show delete confirm message for delete backup
+	$( document ).on( 'click', '.hmbkp_manage_backups_row .delete-action', function( e ) {
+
+		if ( ! confirm( objectL10n.delete_backup ) )
+			e.preventDefault();
+
+	} );
+
+	// Show delete confirm message for remove exlude rule
+	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form .delete-action', function( e ) {
+
+		if ( ! confirm( objectL10n.remove_exclude_rule ) )
 			e.preventDefault();
 
 	} );
@@ -205,8 +221,21 @@ jQuery( document ).ready( function( $ ) {
 		);
 
 	} );
+	
+	// Text the cron response using ajax
+	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
+	    function( data ) {
+	    	if ( data != 1 ) {
+		    	$( '.wrap > h2' ).after( data );
+		    }
+	    }
+	);
 
+	
+	
+	
 	/* 	LEGACY */
+	// TODO
 
 	if ( $( '.hmbkp_running' ).size() ) {
 		hmbkpRedirectOnBackupComplete();
@@ -221,14 +250,6 @@ jQuery( document ).ready( function( $ ) {
 		    }
 		);
 	}
-
-	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
-	    function( data ) {
-	    	if ( data != 1 ) {
-		    	$( '.wrap > h2' ).after( data );
-		    }
-	    }
-	);
 
 	$( '#hmbkp_backup:not(.hmbkp_running)' ).live( 'click', function( e ) {
 

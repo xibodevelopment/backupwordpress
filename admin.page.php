@@ -1,6 +1,6 @@
 <div class="wrap<?php if ( hmbkp_in_progress() ) { ?> hmbkp_running<?php } ?>">
 
-	<?php screen_icon( 'backupwordpress' ); ?>
+	<?php screen_icon( HMBKP_PLUGIN_SLUG ); ?>
 
 	<h2><?php _e( 'Manage Backups', 'hmbkp' ); ?></h2>
 
