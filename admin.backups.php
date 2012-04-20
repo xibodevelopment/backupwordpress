@@ -2,9 +2,7 @@
 
 <?php if ( count( $schedules->get_schedules() ) > 1 ) : ?>
 
-<h3>Backup Schedules <button class="button-secondary" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule' ), HMBKP_ADMIN_URL ); ?>">Add</button></h3>
-
-<div class="hmbkp_schedule_tabs">
+<div class="hmbkp-tabs">
 
 	<ul class="subsubsub">
 	
@@ -13,6 +11,8 @@
 		<li><a href="#hmbkp_schedule_<?php echo $schedule->get_slug(); ?>"><?php echo $schedule->get_name(); ?></a></li>
 	
 	<?php endforeach; ?>
+	
+		<li><button class="button-secondary" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule' ), HMBKP_ADMIN_URL ); ?>">Add</button></li>
 	
 	</ul>
 

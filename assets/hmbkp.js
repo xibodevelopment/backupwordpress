@@ -1,14 +1,12 @@
-jQuery.webshims.polyfill( 'forms' );
+//jQuery.webshims.polyfill( 'forms' );
 
 jQuery( document ).ready( function( $ ) {
 
-	$( '.hmbkp_schedule_tabs' ).tabs();
+	$( '.hmbkp-tabs' ).tabs();
 
 	// Replace fancybox href with ajax url
 	$( '.fancybox' ).each( function() {
-
 		$( this ).attr( 'href', $( this ).attr( 'href' ).replace( userSettings['url'] + 'wp-admin/tools.php', ajaxurl ) );
-
 	} );
 
 	// Initialize fancybox
@@ -16,24 +14,190 @@ jQuery( document ).ready( function( $ ) {
 
 		'modal'		: true,
 		'type'		: 'ajax',
+		'maxWidth'		: 320,
 		'afterShow'	: function() {
 
-			$( '<button type="reset" class="button-secondary">Cancel</button>' ).click( function() {
+			// $( '.hmbkp-form' ).updatePolyfill();
+
+			$( '.hmbkp-tabs' ).tabs();
+
+			$( '<button type="button" class="button-secondary">Cancel</button>' ).click( function() {
 				$.fancybox.cancel();
 				$.fancybox.close();
-			} ).prependTo( '.fancybox-type-ajax p.submit' );
+			} ).prependTo( '.hmbkp-form fieldset:first-of-type p.submit' );
+
+			$( '<p class="submit"><button type="button" class="button-primary">&larr; Done</button></p>' ).appendTo( '.hmbkp-form fieldset + fieldset' );
 
 		}
 
 	} );
 
-	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
+	// Toggle excludes visibility based on backup type
+	$( document ).on( 'change', '[name="hmbkp_schedule_type"]', function() {
+
+		if ( $( this ).val() == 'database' )
+			$( 'label.hmbkp-excludes' ).slideUp( 'fast' );
+
+		else if ( $( 'label.hmbkp-excludes' ).is( ':hidden' ) )
+			$( 'label.hmbkp-excludes' ).removeClass( 'hidden' ).hide().slideDown( 'fast' );
+
+	} );
+
+	// Preview exclude rule
+	$( document ).on( 'click', '.hmbkp_preview_exclude_rule', function() {
+
+		if ( ! $( '.hmbkp_add_exclude_rule input' ).val() ) {
+			$( '.hmbkp_add_exclude_rule ul' ).remove();
+			$( '.hmbkp_add_exclude_rule p' ).remove();
+			return;
+		}
+
+		$.post(
+			ajaxurl,
+			{ 'action'	: 'hmbkp_file_list', 'hmbkp_schedule_excludes' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_slug' : $( '[name="hmbkp_schedule_slug"]' ).val(), 'hmbkp_file_method' : 'get_excluded_files' },
+			function( data ) {
+
+				$( '.hmbkp_add_exclude_rule ul' ).remove();
+				$( '.hmbkp_add_exclude_rule p' ).remove();
+
+				$( '.hmbkp-edit-schedule-excludes-form table' ).hide();
+				$( '.hmbkp-edit-schedule-excludes-form .hmbkp-tabs' ).hide();
+
+				$( '.hmbkp_add_exclude_rule' ).append( data );
+
+			}
+		);
+
+	} );
+
+	$( document ).on( 'click', '.hmbkp_cancel_save_exclude_rule, .hmbkp-edit-schedule-excludes-form .submit button', function() {
+
+	    $( '.hmbkp_add_exclude_rule ul' ).remove();
+	    $( '.hmbkp_add_exclude_rule p' ).remove();
+
+	    $( '.hmbkp-edit-schedule-excludes-form table' ).show();
+		$( '.hmbkp-edit-schedule-excludes-form .hmbkp-tabs' ).show();
+
+	} );
+
+	// Toggle additional fieldsets on
+	$( document ).on( 'click', '.hmbkp-toggle-fieldset', function() {
+
+		// Get the current fieldset
+		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
+		var toFieldset = 'fieldset.' + $( this ).attr( 'data-hmbkp-fieldset' );
+
+		// Show the one we are moving too
+		$( toFieldset ).show().find( 'p.submit button' ).data( 'hmbkp-previous-fieldset', fromFieldset );
+
+		// Animate
+		$( fromFieldset ).animate( {
+			marginLeft : '-100%'
+		}, 'fast', function() {
+			$( this ).hide();
+		} );
+
+	} );
+
+	// Toggle additional fieldsets off
+	$( document ).on( 'click', '.hmbkp-form fieldset + fieldset p.submit button', function() {
+
+		// Get the current fieldset
+		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
+		var toFieldset = $( this ).data( 'hmbkp-previous-fieldset' );
+
+		// Show the one we are moving too
+		$( toFieldset ).show();
+
+		$( toFieldset ).animate( {
+				marginLeft : '0'
+			}, 'fast', function() {
+				$( fromFieldset ).hide();
+			}
+		);
+
+	} );
+
+	// Add exclude rule
+	$( document ).on( 'click', '.hmbkp_save_exclude_rule', function() {
+
+		$.post(
+			ajaxurl,
+			{ 'action' : 'hmbkp_add_exclude_rule', 'hmbkp_exclude_rule' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_slug' : $( '[name="hmbkp_schedule_slug"]' ).val() },
+			function( data ) {
+				var backButton = $( '.hmbkp-edit-schedule-excludes-form p.submit' ).clone( true );
+				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
+				$( '.hmbkp-edit-schedule-excludes-form' ).show().append( backButton );
+				$( '.hmbkp-tabs' ).tabs();
+			}
+		);
+
+	} );
+
+	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form td a', function( e ) {
 
 		e.preventDefault();
-		
-		$.post( ajaxurl, { 'action' : 'hmnkp_edit_schedule_submit' }, function( data ) {
-			console.log( data );
-		} );
+
+		$.post(
+			ajaxurl,
+			{ 'action' : 'hmbkp_delete_exclude_rule', 'hmbkp_exclude_rule' : $( this ).closest( 'td' ).attr( 'data-hmbkp-exclude-rule' ), 'hmbkp_schedule_slug' : $( '[name="hmbkp_schedule_slug"]' ).val() },
+			function( data ) {
+				var backButton = $( '.hmbkp-edit-schedule-excludes-form p.submit' ).clone( true );
+				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
+				$( '.hmbkp-edit-schedule-excludes-form' ).show().append( backButton );
+				$( '.hmbkp-tabs' ).tabs();
+			}
+		);
+
+	} );
+
+	// Edit schedule form submit
+	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
+
+		$( '.hmbkp_error span' ).remove();
+		$( '.hmbkp_error' ).removeClass( 'hmbkp-error' );
+
+		e.preventDefault();
+
+		$.post(
+			ajaxurl + '?' + $( this ).serialize(),
+			{ 'action'	: 'hmnkp_edit_schedule_submit' },
+			function( data ) {
+
+				// Assume success if no data passed back
+				if ( ! data ) {
+
+					$.fancybox.close();
+
+				} else {
+
+					// Get the errors json string
+					errors = JSON.parse( data );
+
+					// Loop through the errors
+					$.each( errors, function( key, value ) {
+
+						// Focus the first field that errored
+						if ( typeof( hmbkp_focused ) == 'undefined' ) {
+
+							$( '[name="' + key + '"]' ).focus();
+
+							hmbkp_focused = true;
+
+						}
+
+						// Add an error class to all fields with errors
+						$( '[name="' + key + '"]' ).closest( 'label' ).addClass( 'hmbkp-error' );
+
+						// Add the error message
+						$( '[name="' + key + '"]' ).after( '<span>' + value + '</span>' );
+
+					} );
+
+				}
+
+			}
+		);
 
 	} );
 

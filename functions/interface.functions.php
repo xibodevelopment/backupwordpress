@@ -160,3 +160,37 @@ function hmbkp_backup_errors_message() {
 	return $message;
 
 }
+
+function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $file_method = 'get_files' ) {
+
+	if ( ! is_null( $excludes ) )
+		$schedule->set_excludes( $excludes );
+
+	$files = $schedule->$file_method();
+
+	if ( $files ) : ?>
+
+	<ul class="hmbkp_file_list">
+
+		<?php foreach( $files as $file ) :
+
+			if ( ! is_null( $excludes ) && strpos( $file, str_ireplace( $schedule->get_root(), '', $schedule->get_path() ) ) !== false )
+				continue; ?>
+
+			<?php if ( $file->isDir() ) { ?>
+
+		<li title="<?php echo trailingslashit( $file->getPathName() ); ?>"><?php echo trailingslashit( str_ireplace( trailingslashit( $schedule->get_root() ), '', $file->getPathName() ) ); ?></li>
+
+			<?php } else { ?>
+
+		<li title="<?php echo $file->getPathName(); ?>"><?php echo str_ireplace( trailingslashit( $schedule->get_root() ), '', $file->getPathName() ); ?></li>
+
+			<?php }
+
+		endforeach; ?>
+
+	</ul>
+
+	<?php endif;
+
+}

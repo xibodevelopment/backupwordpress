@@ -98,7 +98,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	function __construct( $slug ) {
 
-		if ( empty( $slug ) || ! is_string( $slug ) )
+		if ( ! is_string( $slug ) || ! trim( $slug ) || ! is_string( $slug ) )
 			throw new Exception( 'Schedule slug must be a non empty (string)' );
 
 		// Setup HM Backup
@@ -122,9 +122,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH )
 			$this->set_zip_command_path( HMBKP_ZIP_PATH );
 
+		parent::set_type( $this->get_type() );
+		parent::set_excludes( $this->get_excludes() );
+
 		$this->set_path( hmbkp_path() );
 
-		$this->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), $this->get_type(), $this->get_reoccurrence(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
+		$this->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), $this->get_slug(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
 
 	}
 
@@ -135,7 +138,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return null
 	 */
 	public function get_slug() {
-		return $this->slug;
+		return esc_attr( $this->slug );
 	}
 
 	/**
@@ -146,10 +149,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_name() {
 
-		if ( empty( $this->name ) )
+		if ( empty( $this->options['name'] ) )
 			$this->set_name( $this->slug );
 
-		return $this->name;
+		return esc_attr( $this->options['name'] );
+
 	}
 
 	/**
@@ -161,10 +165,42 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_name( $name ) {
 
-		if ( empty( $name ) || ! is_string( $name ) )
+		if ( ! is_string( $name ) || ! trim( $name ) || ! is_string( $name ) )
 			throw new Exception( 'Name slug must be a non empty (string)' );
 
-		$this->name = $name;
+		$this->options['name'] = $name;
+
+	}
+
+	public function get_type() {
+
+		if ( empty( $this->options['type'] ) )
+			$this->set_type( 'complete' );
+
+		return esc_attr( $this->options['type'] );
+
+	}
+
+	public function set_type( $type ) {
+
+		if ( parent::set_type( $type ) !== false )
+			$this->options['type'] = $type;
+
+	}
+
+	public function get_excludes() {
+
+		if ( ! empty( $this->options['excludes'] ) )
+			parent::set_excludes( $this->options['excludes'] );
+
+		return parent::get_excludes();
+
+	}
+
+	public function set_excludes( $excludes, $append = false ) {
+
+		if ( parent::set_excludes( $excludes, $append ) !== false )
+			$this->options['excludes'] = parent::get_excludes();
 
 	}
 
@@ -179,7 +215,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( empty( $this->options['max_backups'] ) )
 			$this->set_max_backups( 10 );
 
-		return $this->options['max_backups'];
+		return esc_attr( $this->options['max_backups'] );
 
 	}
 
@@ -197,8 +233,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$this->options['max_backups'] = $max;
 
-		$this->save();
-
 	}
 
 	/**
@@ -208,9 +242,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return array
 	 */
 	public function get_services() {
-
 		return empty( $this->options['services'] ) ? array() : $this->options['services'];
-
 	}
 
 	/**
@@ -240,13 +272,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_filesize( $cache = true ) {
 
-	    @ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
-
 		if ( ! $cache || ! $filesize = get_transient( 'hmbkp_schedule_' . $this->get_slug() . '_filesize' ) ) {
 
 			$filesize = 0;
 
-	    	// Don't include database if files only
+	    	// Don't include database if file only
 			if ( $this->get_type() != 'file' ) {
 
 	    		global $wpdb;
@@ -258,17 +288,19 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	    	}
 
+	    	// Don't include files if database only
 	   		if ( $this->get_type() != 'database' ) {
 
 	    		// Get rid of any cached filesizes
 	    		clearstatcache();
 
 				foreach ( $this->get_files() as $file )
-					$filesize += (float) @filesize( ABSPATH . $file );
+					$filesize += (float) $file->getSize();
 
 			}
-
-			set_transient( time() + 60 * 60 *24, 'hmbkp_schedule_' . $this->get_slug() . '_filesize', $filesize );
+			
+			// Cache for a day
+			set_transient( time() + 60 * 60 * 24, 'hmbkp_schedule_' . $this->get_slug() . '_filesize', $filesize );
 
 		}
 
@@ -332,7 +364,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( empty( $this->options['reoccurrence'] ) )
 			$this->set_reoccurrence( 'weekly' );
 
-		return $this->options['reoccurrence'];
+		return esc_attr( $this->options['reoccurrence'] );
 
 	}
 
@@ -345,12 +377,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
-		if ( ! in_array( $reoccurrence, array_keys( wp_get_schedules() ) ) )
+		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ! in_array( $reoccurrence, array_keys( wp_get_schedules() ) ) )
 			throw new Exception( 'set reoccurrence must be a valid cron reoccurrence' );
 
 		$this->options['reoccurrence'] = $reoccurrence;
-
-		$this->save();
 
 	}
 
@@ -488,15 +518,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Save the schedules options.
 	 *
-	 * @access private
+	 * @access public
 	 * @return null
 	 */
-	private function save() {
+	public function save() {
 
-		update_option( 'hmbkp_schedule_' . $this->get_slug(), $this->options );
-
-		// Re-initialize
-		$this->__construct( $this->get_slug() );
+		if ( $this->options !== get_option( 'hmbkp_schedule_' . $this->get_slug() ) )
+			update_option( 'hmbkp_schedule_' . $this->get_slug(), $this->options );
 
 	}
 
