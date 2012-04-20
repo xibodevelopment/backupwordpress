@@ -1,72 +1,71 @@
 <?php $schedules = new HMBKP_Schedules; ?>
 
-<?php if ( count( $schedules->get_schedules() ) > 1 ) : ?>
-
-<div class="hmbkp-tabs">
+<div>
 
 	<ul class="subsubsub">
-	
+
 	<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
-	
-		<li><a href="#hmbkp_schedule_<?php echo $schedule->get_slug(); ?>"><?php echo $schedule->get_name(); ?></a></li>
-	
+
+		<li><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ); ?> "><?php echo $schedule->get_name(); ?></a></li>
+
 	<?php endforeach; ?>
-	
-		<li><button class="button-secondary" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule' ), HMBKP_ADMIN_URL ); ?>">Add</button></li>
-	
+
+		<li><button class="fancybox add-new-h2 button-secondary" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></button></li>
+
 	</ul>
 
-<?php endif; ?>
+<?php if ( ! empty( $_GET['hmbkp_schedule_id'] ) )
+	$schedule = new HMBKP_Scheduled_Backup( $_GET['hmbkp_schedule_id'] );
 
-<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
+else
+	$schedule = reset( $schedules->get_schedules() ); ?>
 
-	<table id="hmbkp_schedule_<?php echo $schedule->get_slug(); ?>" class="widefat">
-	
-	    <thead>
-	
-			<tr>
-	
-				<th scope="col" colspan="3"><?php require( 'admin.schedule.php' ); ?></th>
-	
-			</tr>
-	
-	    </thead>
-	    
-	    <tfoot>
-	    	<tr>
-	    		<th scope="col"><?php printf( _n( '1 backup completed', '%d backups completed', count( $schedule->get_backups() ),  'hmbkp' ), count( $schedule->get_backups() ) ); ?></th>
-	    		<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
-	    		<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
-	    	</tr>
-	    </tfoot>
-	
-	    <tbody>
-	
-    <?php if ( $schedule->get_backups() ) :
+	<div id="hmbkp_schedule_<?php echo $schedule->get_id(); ?>" class="hmbkp_schedule">
 
-        foreach ( $schedule->get_backups() as $file ) :
+		<?php require( 'admin.schedule.php' ); ?>
 
-            if ( ! file_exists( $file ) )
-        		continue;
+		<table class="widefat">
 
-            hmbkp_get_backup_row( $file, $schedule );
+		    <thead>
 
-        endforeach;
-        
-    else : ?>
-    
-    <tr>
-    	
-    	<td class="hmbkp-no-backups" colspan="3">This is where your backups will appear once you have one.</td>
-    
-    </tr>
+				<tr>
 
-    <?php endif; ?>
-	
-	    </tbody>
-	
-	</table>
+					<th scope="col"><?php printf( _n( '1 backup completed', '%d backups completed', count( $schedule->get_backups() ),  'hmbkp' ), count( $schedule->get_backups() ) ); ?></th>
+		    		<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
+		    		<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
+		    		<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
 
-<?php endforeach; ?>
+				</tr>
+
+		    </thead>
+
+		    <tbody>
+
+    	<?php if ( $schedule->get_backups() ) :
+
+    	    foreach ( $schedule->get_backups() as $file ) :
+
+    	        if ( ! file_exists( $file ) )
+    	    		continue;
+
+    	        hmbkp_get_backup_row( $file, $schedule );
+
+    	    endforeach;
+
+    	else : ?>
+
+    	<tr>
+
+    		<td class="hmbkp-no-backups" colspan="3"><?php _e( 'This is where your backups will appear once you have one.', 'hmbkp' ); ?></td>
+
+    	</tr>
+
+    	<?php endif; ?>
+
+		    </tbody>
+
+		</table>
+
+	</div>
 
 </div>

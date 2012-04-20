@@ -16,14 +16,16 @@ function hmbkp_get_backup_row( $file, $schedule ) {
 			<?php echo date_i18n( get_option( 'date_format' ) . ' - ' . get_option( 'time_format' ), @filemtime( $file ) + $offset ); ?>
 		</th>
 
-		<td>
-			<?php echo $schedule->human_filesize( @filesize( $file ) ); ?>
+		<td class="code">
+			<?php echo $schedule::human_filesize( @filesize( $file ) ); ?>
 		</td>
 
+		<td><?php echo hmbkp_human_get_type( $schedule->get_type() ); ?></td>
+
 		<td>
 
-			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_download=<?php echo $encode; ?>&amp;hmbkp_schedule=<?php echo $schedule->get_slug(); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
-			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_delete=<?php echo $encode ?>&amp;hmbkp_schedule=<?php echo $schedule->get_slug(); ?>" class="delete"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_download=<?php echo $encode; ?>&amp;hmbkp_schedule_id=<?php echo $schedule->get_id(); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
+			<a href="tools.php?page=<?php echo HMBKP_PLUGIN_SLUG; ?>&amp;hmbkp_delete=<?php echo $encode ?>&amp;hmbkp_schedule_id=<?php echo $schedule->get_id(); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
 		</td>
 
@@ -170,7 +172,7 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 
 	if ( $files ) : ?>
 
-	<ul class="hmbkp_file_list">
+	<ul class="hmbkp_file_list code">
 
 		<?php foreach( $files as $file ) :
 
@@ -192,5 +194,22 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 	</ul>
 
 	<?php endif;
+
+}
+
+function hmbkp_human_get_type( $type ) {
+
+	switch ( $type ) :
+
+		case 'complete' :
+			return __( 'Database and Files', 'hmbkp' );
+
+		case 'file' :
+			return __( 'Files', 'hmbkp' );
+
+		case 'database' :
+			return __( 'Database', 'hmbkp' );
+
+	endswitch;
 
 }

@@ -20,11 +20,11 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * Setup the backup object and create the tmp directory
 	 *
 	 * @access public
-	 * @return null
 	 */
-	function setUp() {
+	public function setUp() {
 
 		$this->backup = new HM_Backup();
+		$this->backup->set_excludes( '.git/' );
 
 		remove_action( 'hmbkp_backup_started', 'hmbkp_set_status', 10, 0 );
 		remove_action( 'hmbkp_mysqldump_started', 'hmbkp_set_status_dumping_database' );
@@ -38,9 +38,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * after every test
 	 *
 	 * @access public
-	 * @return null
 	 */
-	function tearDown() {
+	public function tearDown() {
 
 		if ( file_exists( $this->backup->get_archive_filepath() ) )
 			unlink( $this->backup->get_archive_filepath() );
@@ -51,9 +50,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * Test a full backup with the shell commands
 	 *
 	 * @access public
-	 * @return null
 	 */
-	function testFullBackupWithZip() {
+	public function testFullBackupWithZip() {
 
 		if ( ! $this->backup->get_zip_command_path() )
             $this->markTestSkipped( 'Empty zip command path' );
@@ -78,9 +76,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * Test a full backup with the ZipArchive
 	 *
 	 * @access public
-	 * @return null
 	 */
-	function testFullBackupWithZipArchive() {
+	public function testFullBackupWithZipArchive() {
 
 	  	$this->backup->set_zip_command_path( false );
 
@@ -104,9 +101,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 * Test a full backup with PclZip
 	 *
 	 * @access public
-	 * @return null
 	 */
-	function testFullBackupWithPclZip() {
+	public function testFullBackupWithPclZip() {
 
 		$this->backup->set_zip_command_path( false );
 		$this->backup->skip_zip_archive = true;

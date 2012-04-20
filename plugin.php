@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 1.6.7
+Version: 2.0 alpha
 Author URI: http://hmn.md/
 */
 
@@ -81,8 +81,8 @@ function hmbkp_init() {
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
 
-		wp_enqueue_script( 'hmbkp_modernizr', HMBKP_PLUGIN_URL . '/assets/modernizr.js' );
-		wp_enqueue_script( 'hmbkp_webshim', HMBKP_PLUGIN_URL . '/assets/webshim/src/polyfiller.js', array( 'jquery', 'hmbkp_modernizr' ) );
+		//wp_enqueue_script( 'hmbkp_modernizr', HMBKP_PLUGIN_URL . '/assets/modernizr.js' );
+		//wp_enqueue_script( 'hmbkp_webshim', HMBKP_PLUGIN_URL . '/assets/webshim/src/polyfiller.js', array( 'jquery', 'hmbkp_modernizr' ) );
 		wp_enqueue_script( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ) );
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'hmbkp_fancybox' ) );
 

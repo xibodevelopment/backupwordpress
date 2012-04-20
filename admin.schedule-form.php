@@ -1,43 +1,43 @@
 <form method="post" class="hmbkp-form">
 
-	<input type="hidden" name="hmbkp_schedule_slug" value="<?php echo $schedule->get_slug(); ?>" />
+	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo $schedule->get_id(); ?>" />
 
 	<fieldset class="hmbkp-edit-schedule-form">
 
-		<legend>Edit Backup Schedule</legend>
+		<legend><?php _e( 'Backup Schedule', 'hmbkp' ); ?></legend>
 
     	<label>
 
-    		Name
+    		<?php _e( 'Name', 'hmbkp' ); ?>
 
-    		<input type="text" name="hmbkp_schedule_name" placeholder="Complete Weekly" value="<?php echo $schedule->get_name(); ?>" />
+    		<input type="text" name="hmbkp_schedule_name" placeholder="<?php _e( 'Complete Weekly', 'hmbkp' ); ?>&hellip;" value="<?php echo $schedule->get_name(); ?>" />
 
     	</label>
 
     	<label>
 
-    		Backup
+    		<?php _e( 'Backup', 'hmbkp' ); ?>
 
     		<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
-    			<option<?php selected( $schedule->get_type(), 'complete'); ?> value="complete">Both Database &amp; files</option>
-    			<option<?php selected( $schedule->get_type(), 'file'); ?> value="file">Files only</option>
-    			<option<?php selected( $schedule->get_type(), 'database'); ?> value="database">Database only</option>
+    			<option<?php selected( $schedule->get_type(), 'complete'); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
+    			<option<?php selected( $schedule->get_type(), 'file'); ?> value="file"><?php _e( 'Files only', 'hmbkp' ); ?></option>
+    			<option<?php selected( $schedule->get_type(), 'database'); ?> value="database"><?php _e( 'Database only', 'hmbkp' ); ?></option>
     		</select>
 
     	</label>
 
     	<label class="hmbkp-excludes<?php echo $schedule->get_type() == 'database' ? ' hidden' : ''; ?>">
 
-    		Files <coda><?php echo $schedule->get_filesize(); ?></code>
+    		<?php _e( 'Files', 'hmbkp' ); ?>
 
-    		<button type="button" class="button-secondary hmbkp-toggle-fieldset" data-hmbkp-fieldset="hmbkp-edit-schedule-excludes-form">Manage Excludes &rarr;</button>
+    		<button type="button" class="button-secondary hmbkp-toggle-fieldset" data-hmbkp-fieldset="hmbkp-edit-schedule-excludes-form"><?php _e( 'Manage Excludes', 'hmbkp' ); ?> &rarr;</button>
 
     	</label>
 
 
     	<label>
 
-    		Schedule
+    		<?php _e( 'Schedule', 'hmbkp' ); ?>
 
     		<select name="hmbkp_schedule_reoccurrence" id="hmbkp_schedule_reoccurrence">
 
@@ -53,7 +53,7 @@
 
     	<label>
 
-    		From
+    		<?php _e( 'From', 'hmbkp' ); ?>
 
     		<input type="datetime-local" name="hmbkp_schedule_date" value="<?php echo $schedule->get_next_occurrence(); ?>" />
 
@@ -62,16 +62,16 @@
 <!--
     	<label>
 
-    		Services
+    		<?php _e( 'Services', 'hmbkp' ); ?>
 
-    		<button type="button" class="button-secondary hmbkp-toggle-fieldset" data-hmbkp-fieldset="hmbkp-edit-schedule-services-form">Manage Services &rarr;</button>
+    		<button type="button" class="button-secondary hmbkp-toggle-fieldset" data-hmbkp-fieldset="hmbkp-edit-schedule-services-form"><?php _e( 'Manage Services', 'hmbkp' ); ?> &rarr;</button>
 
     	</label>
 -->
 
     	<label>
 
-    		Number of backups to keep
+    		<?php _e( 'Number of backups to keep', 'hmbkp' ); ?>
 
     		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo $schedule->get_max_backups(); ?>" />
 
@@ -79,7 +79,7 @@
 
     	<p class="submit">
 
-		    <button type="submit" class="button-primary">Update</button>
+		    <button type="submit" class="button-primary"><?php _e( 'Update', 'hmbkp' ); ?></button>
 
 		</p>
 

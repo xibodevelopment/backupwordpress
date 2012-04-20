@@ -1,8 +1,11 @@
-//jQuery.webshims.polyfill( 'forms' );
-
 jQuery( document ).ready( function( $ ) {
 
+	// Setup the tabs
 	$( '.hmbkp-tabs' ).tabs();
+
+	// Set the first tab to be active
+	if ( ! $( '.subsubsub a.current' ).size() )
+		$( '.subsubsub li:first a').addClass( 'current' );
 
 	// Replace fancybox href with ajax url
 	$( '.fancybox' ).each( function() {
@@ -10,25 +13,26 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Initialize fancybox
-	$( 'button.fancybox' ).fancybox( {
+	$( '.fancybox' ).fancybox( {
 
 		'modal'		: true,
 		'type'		: 'ajax',
 		'maxWidth'		: 320,
 		'afterShow'	: function() {
 
-			// $( '.hmbkp-form' ).updatePolyfill();
-
 			$( '.hmbkp-tabs' ).tabs();
 
-			$( '<button type="button" class="button-secondary">Cancel</button>' ).click( function() {
-				$.fancybox.cancel();
-				$.fancybox.close();
-			} ).prependTo( '.hmbkp-form fieldset:first-of-type p.submit' );
-
-			$( '<p class="submit"><button type="button" class="button-primary">&larr; Done</button></p>' ).appendTo( '.hmbkp-form fieldset + fieldset' );
+			$( '<p class="submit"><button type="button" class="button-primary">Update</button></p>' ).appendTo( '.hmbkp-form fieldset + fieldset' );
 
 		}
+
+	} );
+
+	// Show delete confirm message for delete links
+	$( document ).on( 'click', '.delete-action', function( e ) {
+
+		if ( ! showNotice.warn() )
+			e.preventDefault();
 
 	} );
 
@@ -54,16 +58,15 @@ jQuery( document ).ready( function( $ ) {
 
 		$.post(
 			ajaxurl,
-			{ 'action'	: 'hmbkp_file_list', 'hmbkp_schedule_excludes' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_slug' : $( '[name="hmbkp_schedule_slug"]' ).val(), 'hmbkp_file_method' : 'get_excluded_files' },
+			{ 'action'	: 'hmbkp_file_list', 'hmbkp_schedule_excludes' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val(), 'hmbkp_file_method' : 'get_excluded_files' },
 			function( data ) {
 
 				$( '.hmbkp_add_exclude_rule ul' ).remove();
 				$( '.hmbkp_add_exclude_rule p' ).remove();
 
-				$( '.hmbkp-edit-schedule-excludes-form table' ).hide();
-				$( '.hmbkp-edit-schedule-excludes-form .hmbkp-tabs' ).hide();
-
 				$( '.hmbkp_add_exclude_rule' ).append( data );
+
+				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
 			}
 		);
@@ -75,8 +78,7 @@ jQuery( document ).ready( function( $ ) {
 	    $( '.hmbkp_add_exclude_rule ul' ).remove();
 	    $( '.hmbkp_add_exclude_rule p' ).remove();
 
-	    $( '.hmbkp-edit-schedule-excludes-form table' ).show();
-		$( '.hmbkp-edit-schedule-excludes-form .hmbkp-tabs' ).show();
+	    $( '.hmbkp-edit-schedule-excludes-form' ).removeClass( 'hmbkp-exclude-preview-open' );
 
 	} );
 
@@ -123,7 +125,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$.post(
 			ajaxurl,
-			{ 'action' : 'hmbkp_add_exclude_rule', 'hmbkp_exclude_rule' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_slug' : $( '[name="hmbkp_schedule_slug"]' ).val() },
+			{ 'action' : 'hmbkp_add_exclude_rule', 'hmbkp_exclude_rule' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
 			function( data ) {
 				var backButton = $( '.hmbkp-edit-schedule-excludes-form p.submit' ).clone( true );
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
@@ -140,7 +142,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$.post(
 			ajaxurl,
-			{ 'action' : 'hmbkp_delete_exclude_rule', 'hmbkp_exclude_rule' : $( this ).closest( 'td' ).attr( 'data-hmbkp-exclude-rule' ), 'hmbkp_schedule_slug' : $( '[name="hmbkp_schedule_slug"]' ).val() },
+			{ 'action' : 'hmbkp_delete_exclude_rule', 'hmbkp_exclude_rule' : $( this ).closest( 'td' ).attr( 'data-hmbkp-exclude-rule' ), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
 			function( data ) {
 				var backButton = $( '.hmbkp-edit-schedule-excludes-form p.submit' ).clone( true );
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
@@ -168,6 +170,9 @@ jQuery( document ).ready( function( $ ) {
 				if ( ! data ) {
 
 					$.fancybox.close();
+
+					// Reload the page so we see changes
+					location.reload();
 
 				} else {
 

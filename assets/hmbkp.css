@@ -17,21 +17,23 @@ tfoot p { margin: 0; font-weight: normal; }
 #hmbkp-constants dd:hover p, #hmbkp-constants dt:hover + dd p { display: none; }
 #hmbkp-constants dd:hover .example, #hmbkp-constants dt:hover + dd .example { display: inline; }
 
-.hmbkp_manage_backups_row .delete { color: #BC0B0B; }
-.hmbkp_manage_backups_row .delete:hover { color: red; }
 .completed th, .completed td { background-color: #FFFFE0; }
 .hmbkp_active:before { content: "\00a0 \2713 "; font-size: 11px; }
 .hmbkp_active, .hmbkp_active code, #hmbkp-constants .hmbkp_active + dd { background: #E5F7E8; }
 .contextual-help-tabs-wrap .updated { margin: 15px 0 0; }
 #hmbkp_backup.hmbkp_running { background-image: url('../../../../wp-admin/images/wpspin_light.gif'); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 20px; }
 
+.subsubsub { width: 100%; margin: 20px 0px 0px 0px; border-bottom: 1px solid #EEE; }
 .subsubsub li + li::before { content: "| "; }
+.subsubsub .add-new-h2 { top: 0; }
 
 .ui-tabs-nav .ui-tabs-selected a { font-weight: bold; color: #000; }
+.hmbkp_schedule { clear: both; overflow: hidden; }
 
 #fancybox-overlay { background-color: rgba( 255, 255, 255, .7 ) !important; }
 
 .fancybox-inner { overflow-x: hidden !important; }
+.fancybox-inner fieldset { max-width: 100%; }
 .hmbkp-form fieldset { float: left; }
 .js .hmbkp-form fieldset + fieldset { display: none; margin-right: -100%; }
 
@@ -47,7 +49,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-error span { position: absolute; top: 22px; left: 120px; color: red; }
 
 .hmbkp-form ul { width: 320px; overflow: hidden; }
-.hmbkp-form ul.hmbkp_file_list { background-color: #FFF; max-height: 200px; overflow-y: scroll; display: block; border-radius: 4px; box-sizing: border-box; clear: both; box-shadow: inset 0px 0px 10px #CCC; }
+.hmbkp-form ul.hmbkp_file_list { background-color: #FFF; max-height: 200px; overflow-y: scroll; display: block; border-radius: 4px; box-sizing: border-box; clear: both; box-shadow: inset 0px 0px 2px #CCC; font-size: 11px; }
 .hmbkp_file_list li { margin: 0; padding: 5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px; }
 .hmbkp_file_list li + li { border-top: 1px dotted #CCC; }
 
@@ -56,8 +58,17 @@ div.hmbkp_add_exclude_rule { display: block; line-height: 25px; margin-bottom: 2
 div.hmbkp_add_exclude_rule input { min-width: 249px; }
 .hmbkp_save_exclude_rule, .hmbkp_cancel_save_exclude_rule { float: right; }
 
+.hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 40px 0 20px; clear: both; margin-left: 10px; }
+.hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; }
+.hmbkp-schedule-sentence:hover .hmbkp-schedule-actions { visibility: visible; }
+.hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 28px; }
+
+.delete-action { color: #BC0B0B; }
+.delete-action:hover .delete-action:focus { color: red; }
+
+.hmbkp-exclude-preview-open table, .hmbkp-exclude-preview-open .hmbkp-tabs, .hmbkp-exclude-preview-open p.submit { display: none; }
+.hmbkp-exclude-preview-open .hmbkp_add_exclude_rule { margin: 0; }
+
 table.widefat tbody td { padding: 8px 7px; }
-table thead p { margin: 0; font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: lighter; }
-table thead span { border-bottom: 1px dotted #CCC; }
 .hmbkp-edit-schedule-excludes-form td a { float: right; }
 input[type="datetime-local"] { border-radius: 3px; border-width: 1px; border-style: solid; box-sizing: border-box; border-color: #DFDFDF; background-color: white; }

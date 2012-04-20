@@ -7,8 +7,6 @@ function hmbkp_activate() {
 
 	hmbkp_deactivate();
 
-	hmbkp_setup_schedule();
-
 }
 
 /**
@@ -17,8 +15,6 @@ function hmbkp_activate() {
  * Removes options and clears all cron schedules
  */
 function hmbkp_deactivate() {
-
-	hmbkp_setup_hm_backup();
 
 	// Options to delete
 	$options = array(
@@ -323,11 +319,11 @@ function hmbkp_cleanup() {
 }
 
 function hmbkp_conform_dir( $dir ) {
-	
+
 	$HM_Backup = new HM_Backup();
-	
+
 	return $HM_Backup->conform_dir( $dir );
-	
+
 }
 
 function hmbkp_is_safe_mode_active() {

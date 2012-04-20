@@ -6,10 +6,10 @@
  */
 function hmbkp_request_delete_backup() {
 
-	if ( ! isset( $_GET['hmbkp_delete'] ) || empty( $_GET['hmbkp_delete'] ) )
+	if ( empty( $_GET['hmbkp_delete'] ) )
 		return;
 
-	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
 	$schedule->delete_backup( base64_decode( urldecode( $_GET['hmbkp_delete'] ) ) );
 
 	wp_redirect( remove_query_arg( 'hmbkp_delete' ), 303 );
@@ -24,14 +24,19 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup
  */
 function hmbkp_ajax_request_do_backup() {
 
+	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+		return;
+
 	ignore_user_abort( true );
 
-	hmbkp_do_backup();
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
+
+	$schedule->backup();
 
 	exit;
 
 }
-add_action( 'wp_ajax_hmbkp_backup', 'hmbkp_ajax_request_do_backup' );
+add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
 
 /**
  * Send the download file to the browser and
@@ -137,7 +142,7 @@ add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
 function hmbkp_edit_schedule_load() {
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_slug'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
 
 	require( HMBKP_PLUGIN_PATH . '/admin.schedule-form.php' );
 
@@ -145,6 +150,17 @@ function hmbkp_edit_schedule_load() {
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
+
+function hmbkp_add_schedule_load() {
+
+	$schedule = new HMBKP_Scheduled_Backup( date( 'U' ) );
+
+	require( HMBKP_PLUGIN_PATH . '/admin.schedule-form.php' );
+
+	exit;
+
+}
+add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
 
 /**
  * Catch the edit schedule form
@@ -156,10 +172,10 @@ add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
  */
 function hmnkp_edit_schedule_submit() {
 
-	if ( empty( $_GET['hmbkp_schedule_slug'] ) )
+	if ( empty( $_GET['hmbkp_schedule_id'] ) )
 		return;
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_slug'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
 
 	$errors = array();
 
@@ -225,7 +241,7 @@ add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' )
 
 function hmbkp_add_exclude_rule() {
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_slug'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
 
 	$schedule->set_excludes( $_POST['hmbkp_exclude_rule'], true );
 
@@ -240,7 +256,7 @@ add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
 
 function hmbkp_delete_exclude_rule() {
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_slug'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
 
 	$excludes = $schedule->get_excludes();
 
@@ -257,8 +273,8 @@ add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
 
 function hmbkp_preview_exclude_rule() {
 
-	if ( ! empty( $_POST['hmbkp_schedule_slug'] ) )
-		$schedule = new HMBKP_Scheduled_Backup( $_POST['hmbkp_schedule_slug'] );
+	if ( ! empty( $_POST['hmbkp_schedule_id'] ) )
+		$schedule = new HMBKP_Scheduled_Backup( $_POST['hmbkp_schedule_id'] );
 
 	if ( ! empty( $_POST['hmbkp_schedule_excludes'] ) )
 		$excludes = explode( ',', $_POST['hmbkp_schedule_excludes'] );
@@ -270,9 +286,19 @@ function hmbkp_preview_exclude_rule() {
 
 	foreach( $schedule->get_excluded_files() as $key => $excluded_file )
 		if ( strpos( $excluded_file, $schedule->get_path() ) === false )
-			$excluded_files[] = $excluded_file; ?>
+			$excluded_files[] = $excluded_file;
 
-	<p><?php printf( __( '%s matches %d files.', 'hmbkp' ), '<code>' . esc_attr( implode( '</code>, <code>', $excludes ) ) . '</code>', count( $excluded_files ) ); ?> <button type="button" class="button-primary hmbkp_save_exclude_rule">Exclude</button> <button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule">Cancel</button></p>
+	if ( ! empty( $excluded_files) ) { ?>
+
+	<p><?php printf( __( '%s matches %d files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', count( $excluded_files ) ); ?></p>
+
+	<?php } else { ?>
+
+	<p><?php printf( __( '%s didn\'t match any files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>' ); ?></p>
+
+	<?php } ?>
+
+	<p><button type="button" class="button-primary hmbkp_save_exclude_rule">Exclude</button> <button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule">Cancel</button></p>
 
 	<?php exit;
 
