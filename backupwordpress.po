@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BackUpWordPress\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-01 10:44+0100\n"
-"PO-Revision-Date: 2012-05-01 10:44+0100\n"
+"POT-Creation-Date: 2012-05-01 15:16+0100\n"
+"PO-Revision-Date: 2012-05-01 15:16+0100\n"
 "Last-Translator: Tom Willmot <tom@humanmade.co.uk>\n"
 "Language-Team: Human Made Limited <support@humanmade.co.uk>\n"
 "MIME-Version: 1.0\n"
@@ -64,6 +64,12 @@ msgstr ""
 #: admin.constants.php:3
 #, php-format
 msgid "You can %s any of the following %s in your %s to control advanced settings. %s. Defined %s will be highlighted."
+msgstr ""
+
+#: admin.constants.php:3
+#: admin.menus.php:76
+#: admin.settings.php:5
+msgid "Constants"
 msgstr ""
 
 #: admin.constants.php:3
@@ -158,10 +164,6 @@ msgstr ""
 
 #: admin.menus.php:75
 msgid "FAQ"
-msgstr ""
-
-#: admin.menus.php:76
-msgid "Constants"
 msgstr ""
 
 #: admin.menus.php:79
