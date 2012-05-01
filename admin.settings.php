@@ -91,7 +91,7 @@
 
 		</table>
 
-		<p class="submit"><input type="submit" name="hmbkp_settings_submit" id="submit" class="button-primary" value="<?php echo _e( 'Save Changes' ); ?>"></p>
+		<p class="submit"><input type="submit" name="hmbkp_settings_submit" id="submit" class="button-primary" value="<?php _e( 'Save Changes', 'hmbkp' ); ?>"></p>
 
 	</form>
 

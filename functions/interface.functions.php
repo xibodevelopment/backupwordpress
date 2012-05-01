@@ -45,7 +45,7 @@ function hmbkp_admin_notices() {
 
 		function hmbkp_advanced_settings_saved() { ?>
 
-			<div id="setting-error-settings_updated" class="updated settings-error"><p><strong><?php _e( 'Settings saved.' ); ?></strong></p></div>
+			<div id="setting-error-settings_updated" class="updated settings-error"><p><strong><?php _e( 'Settings saved.', 'hmbkp' ); ?></strong></p></div>
 
 			<?php global $hmbkp_errors;
 
