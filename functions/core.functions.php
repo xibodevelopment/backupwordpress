@@ -336,7 +336,7 @@ function hmbkp_path() {
 	// Secure the directory with a .htaccess file
 	$htaccess = $path . '/.htaccess';
 
-	$contents[]	= '# ' . __( 'This .htaccess file ensures that other people cannot download your backup files.', 'hmbkp' );
+	$contents[]	= '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'hmbkp' ), '.htaccess' );
 	$contents[] = '';
 	$contents[] = '<IfModule mod_rewrite.c>';
 	$contents[] = 'RewriteEngine On';
