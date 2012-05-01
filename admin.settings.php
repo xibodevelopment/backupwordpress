@@ -2,7 +2,7 @@
 
     <h3><?php _e( 'Settings', 'hmbkp' ); ?></h3>
 
-	<p><?php printf( __( 'You can define %s in your %s to control some settings. A full list of %s can be found in the %s. Defined settings will not be editable below.', 'hmbkp' ), '<code>Constants</code>', '<code>wp-config.php</code>', '<code>Constants</code>', '<a href="#contextual-help-wrap" class="hmbkp-show-help-tab">' . __( 'help panel' ) . '</a>' ); ?></p>
+	<p><?php printf( __( 'You can define %s in your %s to control some settings. A full list of %s can be found in the %s. Defined settings will not be editable below.', 'hmbkp' ), '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<code>wp-config.php</code>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<a href="#contextual-help-wrap" class="hmbkp-show-help-tab">' . __( 'help panel' ) . '</a>' ); ?></p>
 
 	<form method="post">
 
