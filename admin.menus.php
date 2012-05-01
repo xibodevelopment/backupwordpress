@@ -48,16 +48,16 @@ add_filter('plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
 function hmbkp_contextual_help() {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
-	
+
 	if ( ! $plugin = get_transient( 'hmbkp_plugin_data' ) ) {
 
 		$plugin = plugins_api( 'plugin_information', array( 'slug' => 'backupwordpress' ) );
-		
+
 		// Cache for one day
 		set_transient( 'hmbkp_plugin_data', $plugin, 86400 );
-		
+
 	}
-	
+
 	$warning = '';
 
 	// Check if help is for the right version.
@@ -67,7 +67,7 @@ function hmbkp_contextual_help() {
 	ob_start();
 	require_once( HMBKP_PLUGIN_PATH . '/admin.constants.php' );
 	$constants = ob_get_clean();
-	
+
 	// Pre WordPress 3.3 compat
 	if ( ! method_exists( get_current_screen(), 'add_help_tab' ) )
 		return;
@@ -77,8 +77,8 @@ function hmbkp_contextual_help() {
 
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-		'<p>' . __( '<a href="http://https://github.com/humanmade/backupwordpress" target="_blank">github</a>' ) . '</p>' .
-		'<p>' . __( '<a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">Support Forums</a>' ) . '</p>'
+		'<p><a href="https://github.com/humanmade/backupwordpress" target="_blank">github</a></p>' .
+		'<p><a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">' . __( 'Support Forums', 'hmbkp' ) .'</a></p>'
 	);
 
 }
