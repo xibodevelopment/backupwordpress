@@ -62,7 +62,7 @@ function hmbkp_contextual_help() {
 
 	// Check if help is for the right version.
 	if ( ! empty( $plugin->version ) && version_compare( HMBKP_VERSION, $plugin->version, '!=' ) )
-	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong>' . __( ' &mdash; The information below is for version %s. View the readme.txt file for help specific to version %s.', 'hmbkp' ) . '</p></div>', '<code>' . $plugin->version . '</code>', '<code>' . HMBKP_VERSION . '</code>' );
+	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %s. View the readme.txt file for help specific to version %s.', 'hmbkp' ) . '</p></div>', '<code>' . $plugin->version . '</code>', '<code>' . HMBKP_VERSION . '</code>' );
 
 	ob_start();
 	require_once( HMBKP_PLUGIN_PATH . '/admin.constants.php' );
@@ -72,11 +72,11 @@ function hmbkp_contextual_help() {
 	if ( ! method_exists( get_current_screen(), 'add_help_tab' ) )
 		return;
 
-	get_current_screen()->add_help_tab( array( 'title' => 'FAQ', 'id' => 'hmbkp_faq', 'content' => $warning . $plugin->sections['faq'] ) );
-	get_current_screen()->add_help_tab( array( 'title' => 'Constants', 'id' => 'hmbkp_constants', 'content' => $warning . $constants ) );
+	get_current_screen()->add_help_tab( array( 'title' => __( 'FAQ', 'hmbkp' ), 'id' => 'hmbkp_faq', 'content' => $warning . $plugin->sections['faq'] ) );
+	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'hmbkp' ), 'id' => 'hmbkp_constants', 'content' => $warning . $constants ) );
 
 	get_current_screen()->set_help_sidebar(
-		'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
+		'<p><strong>' . __( 'For more information:', 'hmbkp' ) . '</strong></p>' .
 		'<p><a href="https://github.com/humanmade/backupwordpress" target="_blank">github</a></p>' .
 		'<p><a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">' . __( 'Support Forums', 'hmbkp' ) .'</a></p>'
 	);
