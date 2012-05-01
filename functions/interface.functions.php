@@ -43,11 +43,11 @@ function hmbkp_admin_notices() {
 	// Display  notifications for any errors in the settings form.
 	if ( ! empty( $_POST['hmbkp_settings_submit'] ) ) :
 
-		function hmbkp_advanced_settings_saved() {
+		function hmbkp_advanced_settings_saved() { ?>
 
-			echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
+			<div id="setting-error-settings_updated" class="updated settings-error"><p><strong><?php _e( 'Settings saved.' ); ?></strong></p></div>
 
-			global $hmbkp_errors;
+			<?php global $hmbkp_errors;
 
 			if ( ! empty( $hmbkp_errors ) && $hmbkp_errors->get_error_code() )
 				foreach( $hmbkp_errors->get_error_messages() as $hmbkp_error )
