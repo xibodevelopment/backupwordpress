@@ -10,7 +10,7 @@
 
 	<?php endforeach; ?>
 
-		<li><button class="fancybox add-new-h2 button-secondary" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></button></li>
+		<li><button class="fancybox add-new-h2" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></button></li>
 
 	</ul>
 
