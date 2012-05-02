@@ -69,10 +69,10 @@ if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' 
 function hmbkp_init() {
 
 	$plugin_data = get_plugin_data( __FILE__ );
-	
+
 	// define the plugin version
 	define( 'HMBKP_VERSION', $plugin_data['Version'] );
-	
+
 	// Load the languages
 	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
@@ -84,10 +84,11 @@ function hmbkp_init() {
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
 		wp_enqueue_script( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ) );
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'hmbkp_fancybox' ) );
-		
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp_fancybox' ) );
+
 		wp_localize_script( 'hmbkp', 'objectL10n', array(
 			'update'				=> __( 'Update', 'hmbkp' ),
+			'cancel'				=> __( 'Cancel', 'hmbkp' ),
 			'delete_schedule'		=> __( "Are you sure you want to delete this schedule? All of it's backups will also be deleted.\n\n'Cancel' to go back, 'OK' to delete.\n", 'hmbkp' ),
 			'delete_backup'			=> __( "Are you sure you want to delete this backup?\n\n'Cancel' to go back, 'OK' to delete.\n", 'hmbkp' ),
 			'remove_exclude_rule'	=> __( "Are you sure you want to remove this exclude rule?\n\n'Cancel' to go back, 'OK' to delete.\n", 'hmbkp' )
@@ -99,7 +100,7 @@ function hmbkp_init() {
 	}
 
 	// Handle any advanced option changes
-	// TODO 
+	// TODO
 	hmbkp_constant_changes();
 
 }

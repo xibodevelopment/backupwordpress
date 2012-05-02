@@ -167,6 +167,17 @@ function hmbkp_edit_schedule_load() {
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
 
+function hmbkp_edit_schedule_excludes_load() {
+
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
+
+	require( HMBKP_PLUGIN_PATH . '/admin.schedule-form-excludes.php' );
+
+	exit;
+
+}
+add_action( 'wp_ajax_hmbkp_edit_schedule_excludes_load', 'hmbkp_edit_schedule_excludes_load' );
+
 function hmbkp_add_schedule_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( date( 'U' ) );
@@ -194,17 +205,6 @@ function hmnkp_edit_schedule_submit() {
 	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
 
 	$errors = array();
-
-	// Schedule name
-	if ( isset( $_GET['hmbkp_schedule_name'] ) ) {
-
-		if ( ! trim( $_GET['hmbkp_schedule_name'] ) )
-			$errors['hmbkp_schedule_name'] = __( 'Schedule name cannot be empty', 'hmbkp' );
-
-		else
-			$schedule->set_name( $_GET['hmbkp_schedule_name'] );
-
-	}
 
 	if ( isset( $_GET['hmbkp_schedule_type'] ) ) {
 
@@ -306,7 +306,7 @@ function hmbkp_preview_exclude_rule() {
 
 	if ( ! empty( $excluded_files) ) { ?>
 
-	<p><?php printf( __( '%s matches %d files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', count( $excluded_files ) ); ?></p>
+	<p><?php printf( _n( '%s matches 1 file.', '%s matches %d files', count( $excluded_files ), 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', count( $excluded_files ) ); ?></p>
 
 	<?php } else { ?>
 

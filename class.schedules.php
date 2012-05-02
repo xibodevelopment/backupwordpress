@@ -222,26 +222,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_name() {
 
-		if ( empty( $this->options['name'] ) )
-			return '';
-
-		return esc_attr( $this->options['name'] );
-
-	}
-
-	/**
-	 * Set the name of this backup schedule
-	 *
-	 * @access public
-	 * @param string $name
-	 */
-	public function set_name( $name ) {
-
-		// Make sure this is a valid name
-		if ( ! is_string( $name ) || ! trim( $name ) || ! is_string( $name ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . 'must be a non empty string' );
-
-		$this->options['name'] = $name;
+		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
 
 	}
 
@@ -455,6 +436,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_next_occurrence() {
 
+		if ( ! $next = wp_next_scheduled( $this->schedule_hook ) )
+			return $this->schedule();
+
 		return wp_next_scheduled( $this->schedule_hook );
 
 	}
@@ -466,7 +450,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function schedule() {
 
-		wp_schedule_event( time() + $this->get_interval(), $this->get_reoccurrence(), $this->schedule_hook );
+		wp_schedule_event( current_time( 'timestamp' ) + $this->get_interval(), $this->get_reoccurrence(), $this->schedule_hook );
 
 		add_action( $this->schedule_hook, array( $this, 'run' ) );
 
@@ -591,13 +575,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @param bool $remove_backups. (default: false)
 	 */
 	public function cancel( $remove_backups = false ) {
-		
+
 		// Delete the schedule optoins
 		delete_option( 'hmbkp_schedule_' . $this->get_id() );
-		
+
 		// Clear the scheduled event
 		wp_unschedule_event( $this->get_next_occurrence(), $this->schedule_hook );
-		
+
 		// Delete it's backups
 		if ( $remove_backups )
 			$this->delete_backups();

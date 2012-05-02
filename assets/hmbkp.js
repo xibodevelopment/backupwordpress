@@ -17,12 +17,17 @@ jQuery( document ).ready( function( $ ) {
 
 		'modal'		: true,
 		'type'		: 'ajax',
-		'maxWidth'		: 320,
+		'maxWidth'	: 320,
 		'afterShow'	: function() {
 
 			$( '.hmbkp-tabs' ).tabs();
 
-			$( '<p class="submit"><button type="button" class="button-primary">' + objectL10n.update + '</button></p>' ).appendTo( '.hmbkp-form fieldset + fieldset' );
+			if ( $( '.hmbkp-form p.submit:contains(\'Update\')' ).size() )
+				$( '<button type="button" class="button-secondary hmbkp_cancel">' + objectL10n.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
+
+			$( '.hmbkp_cancel' ).click( function() {
+				$.fancybox.close();
+			} );
 
 		}
 
@@ -35,7 +40,7 @@ jQuery( document ).ready( function( $ ) {
 			e.preventDefault();
 
 	} );
-	
+
 	// Show delete confirm message for delete backup
 	$( document ).on( 'click', '.hmbkp_manage_backups_row .delete-action', function( e ) {
 
@@ -49,17 +54,6 @@ jQuery( document ).ready( function( $ ) {
 
 		if ( ! confirm( objectL10n.remove_exclude_rule ) )
 			e.preventDefault();
-
-	} );
-
-	// Toggle excludes visibility based on backup type
-	$( document ).on( 'change', '[name="hmbkp_schedule_type"]', function() {
-
-		if ( $( this ).val() == 'database' )
-			$( 'label.hmbkp-excludes' ).slideUp( 'fast' );
-
-		else if ( $( 'label.hmbkp-excludes' ).is( ':hidden' ) )
-			$( 'label.hmbkp-excludes' ).removeClass( 'hidden' ).hide().slideDown( 'fast' );
 
 	} );
 
@@ -86,6 +80,23 @@ jQuery( document ).ready( function( $ ) {
 
 			}
 		);
+
+	} );
+
+	// Fire the preview button when the enter key is pressed in the preview input
+	$( document ).on( 'keypress', '.hmbkp_add_exclude_rule input', function( e ) {
+
+		if ( ! $( '.hmbkp_add_exclude_rule input' ).val() )
+			return true;
+
+		var code = ( e.keyCode ? e.keyCode : e.which );
+
+		if ( code != 13 )
+			return true;
+
+		$( '.hmbkp_preview_exclude_rule' ).click();
+
+		e.preventDefault();
 
 	} );
 
@@ -143,9 +154,8 @@ jQuery( document ).ready( function( $ ) {
 			ajaxurl,
 			{ 'action' : 'hmbkp_add_exclude_rule', 'hmbkp_exclude_rule' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
 			function( data ) {
-				var backButton = $( '.hmbkp-edit-schedule-excludes-form p.submit' ).clone( true );
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
-				$( '.hmbkp-edit-schedule-excludes-form' ).show().append( backButton );
+				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
 			}
 		);
@@ -221,7 +231,7 @@ jQuery( document ).ready( function( $ ) {
 		);
 
 	} );
-	
+
 	// Text the cron response using ajax
 	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
 	    function( data ) {
@@ -231,9 +241,6 @@ jQuery( document ).ready( function( $ ) {
 	    }
 	);
 
-	
-	
-	
 	/* 	LEGACY */
 	// TODO
 

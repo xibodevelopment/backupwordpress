@@ -4,15 +4,7 @@
 
 	<fieldset class="hmbkp-edit-schedule-form">
 
-		<legend><?php _e( 'Backup Schedule', 'hmbkp' ); ?></legend>
-
-    	<label>
-
-    		<?php _e( 'Name', 'hmbkp' ); ?>
-
-    		<input type="text" name="hmbkp_schedule_name" placeholder="<?php _e( 'Complete Weekly', 'hmbkp' ); ?>&hellip;" value="<?php echo $schedule->get_name(); ?>" />
-
-    	</label>
+		<legend><?php _e( 'Schedule Settings', 'hmbkp' ); ?></legend>
 
     	<label>
 
@@ -25,15 +17,6 @@
     		</select>
 
     	</label>
-
-    	<label class="hmbkp-excludes<?php echo $schedule->get_type() == 'database' ? ' hidden' : ''; ?>">
-
-    		<?php _e( 'Files', 'hmbkp' ); ?>
-
-    		<button type="button" class="button-secondary hmbkp-toggle-fieldset" data-hmbkp-fieldset="hmbkp-edit-schedule-excludes-form"><?php _e( 'Manage Excludes', 'hmbkp' ); ?> &rarr;</button>
-
-    	</label>
-
 
     	<label>
 
@@ -53,24 +36,6 @@
 
     	<label>
 
-    		<?php _e( 'From', 'hmbkp' ); ?>
-
-    		<input type="datetime-local" name="hmbkp_schedule_date" value="<?php echo $schedule->get_next_occurrence(); ?>" />
-
-    	</label>
-
-<!--
-    	<label>
-
-    		<?php _e( 'Services', 'hmbkp' ); ?>
-
-    		<button type="button" class="button-secondary hmbkp-toggle-fieldset" data-hmbkp-fieldset="hmbkp-edit-schedule-services-form"><?php _e( 'Manage Services', 'hmbkp' ); ?> &rarr;</button>
-
-    	</label>
--->
-
-    	<label>
-
     		<?php _e( 'Number of backups to keep', 'hmbkp' ); ?>
 
     		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo $schedule->get_max_backups(); ?>" />
@@ -84,23 +49,5 @@
 		</p>
 
 	</fieldset>
-
-	<?php include( HMBKP_PLUGIN_PATH . '/admin.schedule-form-excludes.php' ); ?>
-
-<!--
-	<fieldset class="hmbkp-edit-schedule-services-form">
-
-		<legend>Manage Services</legend>
-
-		<label>
-
-			Services
-
-			<textarea></textarea>
-
-		</label>
-
-	</fieldset>
--->
 
 </form>

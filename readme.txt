@@ -27,7 +27,9 @@ BackUpWordPress will back up your entire site including your database and all yo
 
 The BackUpWordPress plugin is hosted github, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
 
-We'd also love help translating the plugin into more languages, if you can help then please contact support@humanmade.co.uk or send us a pull request.
+= Translations =
+
+We'd also love help translating the plugin into more languages, if you can help then please contact support@humanmade.co.uk or visit http://translate.hmn.md/.
 
 == Installation ==
 
