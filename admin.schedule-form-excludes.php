@@ -8,11 +8,15 @@
 
         <div class="hmbkp_add_exclude_rule">
 
-        	<span class="screen-reader-text"><?php _e( 'Add New Exclude Rule', 'hmbkp' ); ?></span>
+        	<label for="hmbkp-new-exclude-rule">
 
-        	<input type="text" class="code" placeholder=".git/, *.mp3, wp-content/uploads/" />
+                <?php _e( 'New Exclude Rule', 'hmbkp' ); ?>
 
-        	<button type="button" class="button-secondary hmbkp_preview_exclude_rule"><?php _e( 'Preview', 'hmbkp' ); ?></button>
+                <input id="hmbkp-new-exclude-rule" type="text" class="code" placeholder=".git/, *.mp3, wp-content/uploads/" />
+
+                <button type="button" class="button-secondary hmbkp_preview_exclude_rule"><?php _e( 'Preview', 'hmbkp' ); ?></button>
+
+            </label>
 
         </div>
 
