@@ -18,7 +18,10 @@
 	$schedule = new HMBKP_Scheduled_Backup( $_GET['hmbkp_schedule_id'] );
 
 else
-	$schedule = reset( $schedules->get_schedules() ); ?>
+	$schedule = reset( $schedules->get_schedules() );
+
+	if ( ! $schedule )
+		return; ?>
 
 	<div data-hmbkp-schedule-id="<?php echo $schedule->get_id(); ?>" class="hmbkp_schedule">
 
