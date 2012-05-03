@@ -9,7 +9,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Replace fancybox href with ajax url
 	$( '.fancybox' ).each( function() {
-		$( this ).attr( 'href', $( this ).attr( 'href' ).replace( userSettings['url'] + 'wp-admin/tools.php', ajaxurl ) );
+		$( this ).attr( 'href', $( this ).attr( 'href' ).replace( userSettings['url'] + 'wp-admin/tools.php', ajaxurl.replace( location.origin, '' ) ) );
 	} );
 
 	// Initialize fancybox
