@@ -19,7 +19,10 @@ function hmbkp_request_delete_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
 
-
+/**
+ * Delete a schedule and all it's backups and then redirect
+ * back to the backups page
+ */
 function hmbkp_request_delete_schedule() {
 
 	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' )
@@ -47,7 +50,9 @@ function hmbkp_ajax_request_do_backup() {
 
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
 
-	$schedule->backup();
+	$schedule->run();
+
+	hmbkp_schedule_actions( $schedule );
 
 	exit;
 
@@ -76,6 +81,10 @@ function hmbkp_request_download_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
 
+/**
+ * cancels a running backup then redirect
+ * back to the backups page
+ */
 function hmbkp_request_cancel_backup() {
 
 	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_cancel' )
@@ -90,6 +99,10 @@ function hmbkp_request_cancel_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
 
+/**
+ * Dismiss an error and then redirect
+ * back to the backups page
+ */
 function hmbkp_dismiss_error() {
 
 	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_dismiss_error' )
@@ -106,16 +119,19 @@ add_action( 'admin_init', 'hmbkp_dismiss_error' );
 
 /**
  * Display the running status via ajax
- *
- * @return void
  */
 function hmbkp_ajax_is_backup_in_progress() {
 
-	if ( ! hmbkp_in_progress() )
+	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+		return;
+
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
+
+	if ( ! $schedule->get_status() )
 		echo 0;
 
 	else
-		include( HMBKP_PLUGIN_PATH . '/admin.backup-button.php' );
+		hmbkp_schedule_actions( $schedule );
 
 	exit;
 
@@ -124,8 +140,7 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
 
 /**
  * Display the calculated size via ajax
- *
- * @return void
+ * @todo
  */
 function hmbkp_ajax_calculate_backup_size() {
 
@@ -138,8 +153,6 @@ add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
 
 /**
  * Test the cron response and if it's not 200 show a warning message
- *
- * @return void
  */
 function hmbkp_ajax_cron_test() {
 
@@ -156,33 +169,42 @@ function hmbkp_ajax_cron_test() {
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
+/**
+ * Load the edit schedule form
+ */
 function hmbkp_edit_schedule_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin.schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
 
 	exit;
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
 
+/**
+ * Load the edit schedule excludes form
+ */
 function hmbkp_edit_schedule_excludes_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin.schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
 	exit;
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_excludes_load', 'hmbkp_edit_schedule_excludes_load' );
 
+/**
+ * Load the add schedule form
+ */
 function hmbkp_add_schedule_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( date( 'U' ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin.schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
 
 	exit;
 
@@ -193,9 +215,6 @@ add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
  * Catch the edit schedule form
  *
  * Validate and either return errors or update the schedule
- *
- * @access public
- * @return null
  */
 function hmnkp_edit_schedule_submit() {
 
@@ -245,6 +264,9 @@ function hmnkp_edit_schedule_submit() {
 
 	}
 
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service )
+        $errors = $service->save();
+
 	$schedule->save();
 
 	if ( $errors )
@@ -263,7 +285,7 @@ function hmbkp_add_exclude_rule() {
 
 	$schedule->save();
 
-	include( HMBKP_PLUGIN_PATH . '/admin.schedule-form-excludes.php' );
+	include( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
 	exit;
 
@@ -280,7 +302,7 @@ function hmbkp_delete_exclude_rule() {
 
 	$schedule->save();
 
-	include( HMBKP_PLUGIN_PATH . '/admin.schedule-form-excludes.php' );
+	include( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
 	exit;
 

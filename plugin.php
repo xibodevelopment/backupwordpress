@@ -73,7 +73,7 @@ function hmbkp_init() {
 	// define the plugin version
 	define( 'HMBKP_VERSION', $plugin_data['Version'] );
 
-	// Load the languages
+	// Load translations
 	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 	// Fire the update action
@@ -107,25 +107,31 @@ function hmbkp_init() {
 add_action( 'admin_init', 'hmbkp_init' );
 
 // Load the admin menu
-require_once( HMBKP_PLUGIN_PATH . '/admin.menu.php' );
-require_once( HMBKP_PLUGIN_PATH . '/admin.actions.php' );
+require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
+require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
 
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )
 	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
 
 // Load the schedules
-require_once( HMBKP_PLUGIN_PATH . '/class.schedules.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/schedule.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
 
 // Load the core functions
-require_once( HMBKP_PLUGIN_PATH . '/functions/backup.actions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/core.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/interface.functions.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/backup.functions.php' );
+require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
+require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
+require_once( HMBKP_PLUGIN_PATH . '/functions/backup.php' );
+
+// Load Services
+require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
+
+// Load the email service
+require_once( HMBKP_PLUGIN_PATH . '/classes/email.php' );
 
 // Load the wp cli command
 if ( defined( 'WP_CLI' ) && WP_CLI )
-	include( HMBKP_PLUGIN_PATH . '/functions/wp-cli.php' );
+	include( HMBKP_PLUGIN_PATH . '/classes/wp-cli.php' );
 
 // Set the tmp directory to the backup path
 if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )

@@ -18,7 +18,7 @@ add_action( 'admin_menu', 'hmbkp_admin_menu' );
  * @return null
  */
 function hmbkp_manage_backups() {
-	require_once( HMBKP_PLUGIN_PATH . '/admin.page.php' );
+	require_once( HMBKP_PLUGIN_PATH . '/admin/page.php' );
 }
 
 /**
@@ -48,16 +48,16 @@ add_filter('plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
 function hmbkp_contextual_help() {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
-	
+
 	if ( ! $plugin = get_transient( 'hmbkp_plugin_data' ) ) {
 
 		$plugin = plugins_api( 'plugin_information', array( 'slug' => HMBKP_PLUGIN_SLUG ) );
-		
+
 		// Cache for one day
 		set_transient( 'hmbkp_plugin_data', $plugin, 86400 );
-		
+
 	}
-	
+
 	$warning = '';
 
 	// Check if help is for the right version.
@@ -65,9 +65,9 @@ function hmbkp_contextual_help() {
 	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %s. View the readme.txt file for help specific to version %s.', 'hmbkp' ) . '</p></div>', '<code>' . $plugin->version . '</code>', '<code>' . HMBKP_VERSION . '</code>' );
 
 	ob_start();
-	require_once( HMBKP_PLUGIN_PATH . '/admin.constants.php' );
+	require_once( HMBKP_PLUGIN_PATH . '/admin/constants.php' );
 	$constants = ob_get_clean();
-	
+
 	// Pre WordPress 3.3 compat
 	if ( ! method_exists( get_current_screen(), 'add_help_tab' ) )
 		return;

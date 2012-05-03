@@ -1,4 +1,4 @@
-<div class="wrap<?php if ( hmbkp_in_progress() ) { ?> hmbkp_running<?php } ?>">
+<div class="wrap">
 
 	<?php screen_icon( HMBKP_PLUGIN_SLUG ); ?>
 
@@ -6,7 +6,7 @@
 
 <?php if ( hmbkp_possible() ) : ?>
 
-	<?php include_once( HMBKP_PLUGIN_PATH . '/admin.backups.php' ); ?>
+	<?php include_once( HMBKP_PLUGIN_PATH . '/admin/backups.php' ); ?>
 
 <?php else : ?>
 

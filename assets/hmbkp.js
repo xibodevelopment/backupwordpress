@@ -100,6 +100,7 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
+	// Cancel add exclude rule
 	$( document ).on( 'click', '.hmbkp_cancel_save_exclude_rule, .hmbkp-edit-schedule-excludes-form .submit button', function() {
 
 	    $( '.hmbkp_add_exclude_rule ul' ).remove();
@@ -162,6 +163,7 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
+	// Remove exclude rule
 	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form td a', function( e ) {
 
 		e.preventDefault();
@@ -182,8 +184,8 @@ jQuery( document ).ready( function( $ ) {
 	// Edit schedule form submit
 	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
 
-		$( '.hmbkp_error span' ).remove();
-		$( '.hmbkp_error' ).removeClass( 'hmbkp-error' );
+		$( '.hmbkp-error span' ).remove();
+		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
 
 		e.preventDefault();
 
@@ -198,7 +200,7 @@ jQuery( document ).ready( function( $ ) {
 					$.fancybox.close();
 
 					// Reload the page so we see changes
-					location.reload();
+					location.reload( true );
 
 				} else {
 
@@ -241,13 +243,7 @@ jQuery( document ).ready( function( $ ) {
 	    }
 	);
 
-	/* 	LEGACY */
-	// TODO
-
-	if ( $( '.hmbkp_running' ).size() ) {
-		hmbkpRedirectOnBackupComplete();
-	}
-
+	// Calculate the estimated backup size // TODO
 	if ( $( '.hmbkp_estimated-size .calculate' ).size() ) {
 		$.get( ajaxurl, { 'action' : 'hmbkp_calculate' },
 		    function( data ) {
@@ -258,13 +254,23 @@ jQuery( document ).ready( function( $ ) {
 		);
 	}
 
-	$( '#hmbkp_backup:not(.hmbkp_running)' ).live( 'click', function( e ) {
+	if ( $( '.hmbkp-running' ).size() ) {
+		hmbkpRedirectOnBackupComplete();
+	}
+
+	$( '.hmbkp-run' ).live( 'click', function( e ) {
 
 		$.ajaxSetup( { 'cache' : false } );
 
-		ajaxRequest = $.get( ajaxurl, { 'action' : 'hmbkp_backup' } );
+		ajaxRequest = $.get(
+			ajaxurl,
+			{ 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
+			function( data ) {
+				$( '.hmbkp-schedule-actions' ).replaceWith( data );
+			}
+		);
 
-		$( this ).text( 'Starting Backup' ).addClass( 'hmbkp_running' );
+		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
 	  	setTimeout( function() {
 
@@ -280,10 +286,11 @@ jQuery( document ).ready( function( $ ) {
 
 } );
 
-function hmbkpRedirectOnBackupComplete() {
+function hmbkpRedirectOnBackupComplete( schedule_id ) {
 
-	jQuery.get( ajaxurl, { 'action' : 'hmbkp_is_in_progress' },
-
+	jQuery.get(
+		ajaxurl,
+		{ 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 		function( data ) {
 
 			if ( data == 0 ) {
@@ -294,7 +301,7 @@ function hmbkpRedirectOnBackupComplete() {
 
 				setTimeout( 'hmbkpRedirectOnBackupComplete();', 1000 );
 
-				jQuery( '#hmbkp_backup' ).replaceWith( data );
+				jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
 
 			}
 		}

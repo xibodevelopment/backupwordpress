@@ -1,4 +1,4 @@
-<form method="post" class="hmbkp-form">
+<form method="post" class="hmbkp-form" novalidate>
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo $schedule->get_id(); ?>" />
 
@@ -40,7 +40,12 @@
 
     		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo $schedule->get_max_backups(); ?>" />
 
+            <p class="description">The number of previous backups to store on the server. Backups will be deleted.</p>
+
     	</label>
+
+        <?php foreach ( HMBKP_Services::get_services( $schedule ) as $service )
+            $service->field(); ?>
 
     	<p class="submit">
 

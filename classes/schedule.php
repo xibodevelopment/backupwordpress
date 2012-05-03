@@ -1,61 +1,6 @@
 <?php
 
 /**
- * A simple class for loading schedules
- */
-class HMBKP_Schedules {
-
-	/**
-	 * An array of schedules
-	 *
-	 * @var mixed
-	 * @access private
-	 */
-	private $schedules;
-
-	/**
-	 * Load the schedules from wp_options and store in $this->schedules
-	 *
-	 * @access public
-	 */
-	public function __construct() {
-
-		global $wpdb;
-
-		// Load all schedule options from the database
-		$schedules = $wpdb->get_col( "SELECT option_name from $wpdb->options WHERE option_name LIKE 'hmbkp\_schedule\_%'" );
-
-		// Instantiate each one as a HMBKP_Scheduled_Backup
-		$this->schedules = array_map( array( $this, 'instantiate_schedules' ), array_filter( (array) $schedules ) );
-
-	}
-
-	/**
-	 * Get an array of schedules
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function get_schedules() {
-		return $this->schedules;
-	}
-
-	/**
-	 * Instantiate the individual scheduled backup objects
-	 *
-	 * @access private
-	 * @param string $id
-	 * @return array An array of HMBKP_Scheduled_Backup objects
-	 */
-	private function instantiate_schedules( $id ) {
-
-		return new HMBKP_Scheduled_Backup( str_replace( 'hmbkp_schedule_', '', $id ) );
-
-	}
-
-}
-
-/**
  * Extend HM Backup with scheduling and backup file management
  *
  * @extends HM_Backup
@@ -68,7 +13,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @var string
 	 * @access private
 	 */
-	private $id;
+	private $id = '';
 
 	/**
 	 * The slugified version of the schedule name
@@ -76,7 +21,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @var string
 	 * @access private
 	 */
-	private $slug;
+	private $slug = '';
 
 	/**
 	 * The raw schedule options from the database
@@ -84,7 +29,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @var array
 	 * @access private
 	 */
-	private $options;
+	private $options = array();
 
 	/**
 	 * The unique hook name for this schedule
@@ -92,7 +37,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @var string
 	 * @access private
 	 */
-	private $schedule_hook;
+	private $schedule_hook = '';
+
+	/**
+	 * The filepath for the .running file which
+	 * is used to track whether a backup is currently in
+	 * progress
+	 */
+	private $schedule_running_filepath = '';
 
 	/**
 	 * Take a file size and return a human readable
@@ -165,6 +117,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Setup the schedule hook
 		$this->schedule_hook = 'hmbkp_schedule_' . $this->get_id() . '_hook';
 
+		$this->schedule_running_filepath = $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
+
 		// Some properties can be overridden with a defines
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
 			$this->set_root( HMBKP_ROOT );
@@ -172,10 +126,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
 			$this->set_excludes( HMBKP_EXCLUDES );
 
-		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) && HMBKP_MYSQLDUMP_PATH )
+		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
 			$this->set_mysqldump_command_path( HMBKP_MYSQLDUMP_PATH );
 
-		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH )
+		if ( defined( 'HMBKP_ZIP_PATH' ) )
 			$this->set_zip_command_path( HMBKP_ZIP_PATH );
 
 		// Pass type and excludes up to HM Backup
@@ -186,7 +140,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->set_path( hmbkp_path() );
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), $this->get_slug(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
+		$this->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), $this->get_id(), $this->get_slug(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
 
 	}
 
@@ -314,26 +268,31 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	}
 
 	/**
-	 * Get the array of services this backup supports
+	 * Get the array of services options for this schedule
 	 *
 	 * @access public
 	 * @return array
 	 */
-	public function get_services() {
-		return empty( $this->options['services'] ) ? array() : $this->options['services'];
+	public function get_service_options( $service, $option = null ) {
+
+		if ( ! is_null( $option ) && isset( $this->options[$service][$option] ) )
+			return $this->options[$service][$option];
+
+		if ( isset( $this->options[$service] ) )
+			return $this->options[$service];
+
+		return array();
+
 	}
 
 	/**
-	 * Set the services this backup supports
-	 *
-	 * Expects and associative array of key => service_hook, value => service name.
+	 * Set the service options for this schedule
 	 *
 	 * @access public
-	 * @param mixed Array $services
 	 */
-	public function set_services( Array $services ) {
+	public function set_service_options( $service, Array $options ) {
 
-		$this->options['services'] = $services;
+		$this->options[$service] = $options;
 
 	}
 
@@ -463,12 +422,112 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function run() {
 
+		// Mark the backup as started
+		$this->set_status( __( 'Backup started', 'hmbkp' ) );
+
 		$this->backup();
+
+		// Delete the backup running file
+		if ( file_exists( $this->schedule_running_filepath ) )
+			unlink( $this->schedule_running_filepath );
 
 		$this->delete_old_backups();
 
-		foreach ( $this->get_services() as $service )
-			do_action( $service, $this->archive_filename, $this );
+	}
+
+	public function get_status() {
+
+		if ( ! file_exists( $this->schedule_running_filepath ) )
+			return '';
+
+		return end( explode( '::', file_get_contents( $this->schedule_running_filepath ) ) );
+
+	}
+
+	public function get_running_backup_filename() {
+
+		if ( ! file_exists( $this->schedule_running_filepath ) )
+			return '';
+
+		return reset( explode( '::', file_get_contents( $this->schedule_running_filepath ) ) );
+	}
+
+	public function set_status( $message ) {
+
+		if ( ! $handle = fopen( $this->schedule_running_filepath, 'w' ) )
+			return;
+
+		fwrite( $handle, $this->get_archive_filename() . '::' . $message );
+
+		fclose( $handle );
+
+	}
+
+	/**
+	 * Hook into the actions fired in HM Backup and set the status
+	 *
+	 * @return null
+	 */
+	protected function do_action( $action ) {
+
+		switch ( $action ) :
+
+			case 'hmbkp_archive_started' :
+
+	    		$this->set_status( __( 'Creating zip archive', 'hmbkp' ) );
+
+	    	break;
+
+	    	case 'hmbkp_mysqldump_started' :
+
+	    		$this->set_status( __( 'Dumping database', 'hmbkp' ) );
+
+	    	break;
+
+	    	case 'hmbkp_backup_complete' :
+
+				if ( $this->errors() ) {
+
+			    	$file = $this->get_path() . '/.backup_errors';
+
+					if ( file_exists( $file ) )
+						unlink( $file );
+
+			    	if ( ! $handle = @fopen( $file, 'w' ) )
+			    		return;
+
+					fwrite( $handle, json_encode( $this->errors() ) );
+
+			    	fclose( $handle );
+
+			    }
+
+			    if ( $this->warnings() ) {
+
+					$file = $this->get_path() . '/.backup_warnings';
+
+					if ( file_exists( $file ) )
+			  			unlink( $file );
+
+					if ( ! $handle = @fopen( $file, 'w' ) )
+			  	  		return;
+
+			  		fwrite( $handle, json_encode( $this->warnings() ) );
+
+					fclose( $handle );
+
+				}
+
+	    	break;
+
+	    endswitch;
+
+	    // Pass the actions to all the services
+	    foreach ( HMBKP_Services::get_services( $this ) as $service )
+	    	$service->action( $action );
+
+	    // Fire the parent function as well
+	    parent::do_action( $action );
 
 	}
 
@@ -485,19 +544,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $handle = @opendir( $this->get_path() ) ) {
 
 			while ( false !== ( $file = readdir( $handle ) ) )
-				if ( pathinfo( $file, PATHINFO_EXTENSION ) == 'zip' && strpos( $file, $this->get_slug() ) !== false )
-		     		$files[] = trailingslashit( $this->get_path() ) . $file;
+				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() != $file )
+		     		$files[@filemtime( trailingslashit( $this->get_path() ) . $file )] = trailingslashit( $this->get_path() ) . $file;
 
 			closedir( $handle );
 
 		}
 
 		krsort( $files );
-
-		// Don't include the currently running backup
-		// TODO
-		if ( $key = array_search( trailingslashit( $this->get_path() ) . hmbkp_in_progress(), $files ) )
-			unset( $files[$key] );
 
 		return $files;
 
@@ -533,7 +587,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			throw new Exception( $filepath . ' doesn\'t exist' );
 
 		// TODO what about if slug changes
-		if ( strpos( $filepath, $this->get_slug() ) === false )
+		if ( strpos( $filepath, $this->get_id() ) === false )
 			throw new Exception( 'That backup wasn\'t created by this schedule' );
 
 		unlink( $filepath );
@@ -574,7 +628,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @access public
 	 * @param bool $remove_backups. (default: false)
 	 */
-	public function cancel( $remove_backups = false ) {
+	public function cancel( $remove_backups = true ) {
 
 		// Delete the schedule optoins
 		delete_option( 'hmbkp_schedule_' . $this->get_id() );

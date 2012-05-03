@@ -6,7 +6,7 @@ $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
 // Backup Time
 $day = date_i18n( 'l', $schedule->get_next_occurrence() );
 
-// Backup Reoccurrence
+// Backup Re-occurrence
 switch ( $schedule->get_reoccurrence() ) :
 
 	case 'hourly' :
@@ -55,7 +55,7 @@ switch ( $schedule->get_reoccurrence() ) :
 endswitch;
 
 // Backup to keep
-switch( $schedule->get_max_backups() ) :
+switch ( $schedule->get_max_backups() ) :
 
 	case 1 :
 
@@ -73,23 +73,15 @@ switch( $schedule->get_max_backups() ) :
 
 		$backup_to_keep = sprintf( __( 'store the last %s backups on this server', 'hmbkp' ), $schedule->get_max_backups() );
 
-endswitch; ?>
+endswitch;
 
-<div class="hmbkp-schedule-sentence">
+foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service )
+	$services[] = $service->display(); ?>
 
-	<?php printf( __( 'Backup my %s %s %s, %s.', 'hmbkp' ), '<code>' . $schedule->get_filesize() . '</code>', '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep ); ?>
+<div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
-	<div class="hmbkp-schedule-actions row-actions">
+	<?php printf( __( 'Backup my %s %s %s, %s. %s', 'hmbkp' ), '<code>' . $schedule->get_filesize() . '</code>', '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, implode( '. ', $services ) ); ?>
 
-		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
+	<?php hmbkp_schedule_actions( $schedule ); ?>
 
-<?php if ( $schedule->get_type() != 'database' ) { ?>
-		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_excludes_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a>  |
-<?php } ?>
-
-		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>  |
-
-		<a class="delete-action" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
-
-	</div>
 </div>

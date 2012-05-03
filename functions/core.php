@@ -319,11 +319,7 @@ function hmbkp_cleanup() {
 }
 
 function hmbkp_conform_dir( $dir ) {
-
-	$HM_Backup = new HM_Backup();
-
-	return $HM_Backup->conform_dir( $dir );
-
+	return HM_Backup::conform_dir( $dir );
 }
 
 function hmbkp_is_safe_mode_active() {

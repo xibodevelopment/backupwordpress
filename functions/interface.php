@@ -5,7 +5,7 @@
  *
  * @param string $file
  */
-function hmbkp_get_backup_row( $file, $schedule ) {
+function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 
 	$encoded_file = urlencode( base64_encode( $file ) );
 	$offset = current_time( 'timestamp' ) - time(); ?>
@@ -211,5 +211,31 @@ function hmbkp_human_get_type( $type ) {
 			return __( 'Database', 'hmbkp' );
 
 	endswitch;
+
+}
+
+function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
+
+	if ( $status = $schedule->get_status() ) { ?>
+
+		<span class="hmbkp-status"><?php echo $status; ?>[<a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel' ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>]</span>
+
+	<?php } else { ?>
+
+	<div class="hmbkp-schedule-actions row-actions">
+
+		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
+
+	<?php if ( $schedule->get_type() != 'database' ) { ?>
+		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_excludes_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a>  |
+	<?php } ?>
+
+		<a class="hmbkp-run" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>  |
+
+		<a class="delete-action" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+
+	</div>
+
+	<?php }
 
 }

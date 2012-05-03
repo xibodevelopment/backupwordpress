@@ -10,7 +10,7 @@
 
 	<?php endforeach; ?>
 
-		<li><button class="fancybox add-new-h2" type="button" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></button></li>
+		<li><a class="fancybox add-new-h2" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
 
 	</ul>
 
@@ -20,9 +20,9 @@
 else
 	$schedule = reset( $schedules->get_schedules() ); ?>
 
-	<div id="hmbkp_schedule_<?php echo $schedule->get_id(); ?>" class="hmbkp_schedule">
+	<div data-hmbkp-schedule-id="<?php echo $schedule->get_id(); ?>" class="hmbkp_schedule">
 
-		<?php require( 'admin.schedule.php' ); ?>
+		<?php require( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 
 		<table class="widefat">
 
