@@ -486,7 +486,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	    	case 'hmbkp_backup_complete' :
 
-				if ( $this->errors() ) {
+				if ( $this->get_errors() ) {
 
 			    	$file = $this->get_path() . '/.backup_errors';
 
@@ -496,13 +496,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			    	if ( ! $handle = @fopen( $file, 'w' ) )
 			    		return;
 
-					fwrite( $handle, json_encode( $this->errors() ) );
+					fwrite( $handle, json_encode( $this->get_errors() ) );
 
 			    	fclose( $handle );
 
 			    }
 
-			    if ( $this->warnings() ) {
+			    if ( $this->get_warnings() ) {
 
 					$file = $this->get_path() . '/.backup_warnings';
 
@@ -512,7 +512,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 					if ( ! $handle = @fopen( $file, 'w' ) )
 			  	  		return;
 
-			  		fwrite( $handle, json_encode( $this->warnings() ) );
+			  		fwrite( $handle, json_encode( $this->get_warnings() ) );
 
 					fclose( $handle );
 
