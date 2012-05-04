@@ -48,12 +48,6 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp_file_list li { margin: 0; padding: 5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px; }
 .hmbkp_file_list li + li { border-top: 1px dotted #CCC; }
 
-#hmbkp_add_exclude_rule { float: none; }
-div.hmbkp_add_exclude_rule { display: block; line-height: 25px; width: 320px; overflow: hidden; }
-div.hmbkp_add_exclude_rule input { min-width: 249px; float: none; }
-div.hmbkp_add_exclude_rule button { float: none; }
-.hmbkp_save_exclude_rule, .hmbkp_cancel_save_exclude_rule { float: right; }
-
 .hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 30px 0 10px; clear: both; margin-left: 10px; }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 47px; display: block; float: left; }
 .hmbkp-schedule-sentence.hmbkp-running::before { background-image: url('../../../../wp-admin/images/wpspin_light.gif'); background-repeat: no-repeat; margin-right: 10px; content: " "; }
@@ -62,8 +56,21 @@ div.hmbkp_add_exclude_rule button { float: none; }
 .hmbkp-schedule-sentence:hover .hmbkp-schedule-actions { visibility: visible; }
 .hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 
+button.hmbkp-ajax-loading { padding-left: 20px; }
+button.hmbkp-ajax-loading::before { background-image: url('../../../../wp-admin/images/wpspin_light.gif'); background-repeat: no-repeat; background-position: 1px -1px; margin-left: -20px; display: inline-block; width: 16px; height: 16px; content: " "; vertical-align: middle; padding-right: 3px; }
+
+button { height: 14px; }
+
 .delete-action { color: #BC0B0B; }
 .delete-action:hover .delete-action:focus { color: red; }
+
+label[for="hmbkp-new-exclude-rule"] { overflow: hidden; }
+.hmbkp_preview_exclude_rule { float: right; margin-top: 1px; }
+.hmbkp_preview_exclude_rule.hmbkp-ajax-loading { width: 44px; }
+div.hmbkp_add_exclude_rule { display: block; line-height: 25px; width: 320px; overflow: hidden; }
+div.hmbkp_add_exclude_rule input { min-width: 240px; float: left; }
+.hmbkp_preview_exclude_rule  { float: right; width: 56px; }
+.hmbkp_save_exclude_rule, .hmbkp_cancel_save_exclude_rule { float: right; }
 
 .hmbkp-exclude-preview-open table, .hmbkp-exclude-preview-open .hmbkp-tabs, .hmbkp-exclude-preview-open p.submit { display: none; }
 .hmbkp-exclude-preview-open .hmbkp_add_exclude_rule { margin: 0; }

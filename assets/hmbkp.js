@@ -1,5 +1,11 @@
 jQuery( document ).ready( function( $ ) {
 
+	$.ajaxSetup( { 'cache' : false } );
+
+	$( document ).ajaxComplete( function() {
+		$( '.hmbkp-ajax-loading' ).removeClass( 'hmbkp-ajax-loading' );
+	} );
+
 	// Setup the tabs
 	$( '.hmbkp-tabs' ).tabs();
 
@@ -49,7 +55,7 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
-	// Show delete confirm message for remove exlude rule
+	// Show delete confirm message for remove exclude rule
 	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form .delete-action', function( e ) {
 
 		if ( ! confirm( objectL10n.remove_exclude_rule ) )
@@ -65,6 +71,8 @@ jQuery( document ).ready( function( $ ) {
 			$( '.hmbkp_add_exclude_rule p' ).remove();
 			return;
 		}
+
+		$( this ).addClass( 'hmbkp-ajax-loading' );
 
 		$.post(
 			ajaxurl,
@@ -151,6 +159,8 @@ jQuery( document ).ready( function( $ ) {
 	// Add exclude rule
 	$( document ).on( 'click', '.hmbkp_save_exclude_rule', function() {
 
+		$( this ).addClass( 'hmbkp-ajax-loading' );
+
 		$.post(
 			ajaxurl,
 			{ 'action' : 'hmbkp_add_exclude_rule', 'hmbkp_exclude_rule' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
@@ -166,15 +176,16 @@ jQuery( document ).ready( function( $ ) {
 	// Remove exclude rule
 	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form td a', function( e ) {
 
+		$( this ).addClass( 'hmbkp-ajax-loading' );
+
 		e.preventDefault();
 
 		$.post(
 			ajaxurl,
 			{ 'action' : 'hmbkp_delete_exclude_rule', 'hmbkp_exclude_rule' : $( this ).closest( 'td' ).attr( 'data-hmbkp-exclude-rule' ), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
 			function( data ) {
-				var backButton = $( '.hmbkp-edit-schedule-excludes-form p.submit' ).clone( true );
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
-				$( '.hmbkp-edit-schedule-excludes-form' ).show().append( backButton );
+				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
 			}
 		);
@@ -183,6 +194,8 @@ jQuery( document ).ready( function( $ ) {
 
 	// Edit schedule form submit
 	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
+
+		$( this ).find( 'button[type="submit"]' ).addClass( 'hmbkp-ajax-loading' );
 
 		$( '.hmbkp-error span' ).remove();
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
@@ -259,8 +272,6 @@ jQuery( document ).ready( function( $ ) {
 	}
 
 	$( '.hmbkp-run' ).live( 'click', function( e ) {
-
-		$.ajaxSetup( { 'cache' : false } );
 
 		ajaxRequest = $.get(
 			ajaxurl,

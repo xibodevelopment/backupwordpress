@@ -20,7 +20,7 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 			<?php echo $schedule::human_filesize( @filesize( $file ) ); ?>
 		</td>
 
-		<td><?php echo hmbkp_human_get_type( $schedule->get_type() ); ?></td>
+		<td><?php echo hmbkp_human_get_type( $file ); ?></td>
 
 		<td>
 
@@ -199,18 +199,14 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 
 function hmbkp_human_get_type( $type ) {
 
-	switch ( $type ) :
+	if ( strpos( $type, 'complete' ) !== false )
+		return __( 'Database and Files', 'hmbkp' );
 
-		case 'complete' :
-			return __( 'Database and Files', 'hmbkp' );
+	if ( strpos( $type, 'file' ) !== false )
+		return __( 'Files', 'hmbkp' );
 
-		case 'file' :
-			return __( 'Files', 'hmbkp' );
-
-		case 'database' :
-			return __( 'Database', 'hmbkp' );
-
-	endswitch;
+	if ( strpos( $type, 'database' ) !== false )
+		return __( 'Database', 'hmbkp' );
 
 }
 
