@@ -68,6 +68,8 @@ if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' 
  */
 function hmbkp_init() {
 
+	hmbkp_setup_default_schedules();
+
 	$plugin_data = get_plugin_data( __FILE__ );
 
 	// define the plugin version
