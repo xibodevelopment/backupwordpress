@@ -1,6 +1,6 @@
 <div id="hmbkp-constants">
 
-    <p><?php printf( __( 'You can %s any of the following %s in your %s to control advanced settings. %s. Defined %s will be highlighted.', 'hmbkp' ), '<code>define</code>', '<code>Constants</code>', '<code>wp-config.php</code>', '<a href="http://codex.wordpress.org/Editing_wp-config.php">' . __( 'The Codex can help', 'hmbkp' ) . '</a>', '<code>Constants</code>' ); ?></p>
+    <p><?php printf( __( 'You can %s any of the following %s in your %s to control advanced settings. %s. Defined %s will be highlighted.', 'hmbkp' ), '<code>define</code>', '<code>' . __( 'Constants', 'hmbkp' ) , '</code>', '<code>wp-config.php</code>', '<a href="http://codex.wordpress.org/Editing_wp-config.php">' . __( 'The Codex can help', 'hmbkp' ) . '</a>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>' ); ?></p>
 
     <dl>
 
