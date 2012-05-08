@@ -1,0 +1,433 @@
+# Translation of 1.6.8 in Serbian
+# This file is distributed under the same license as the 1.6.8 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2012-05-08 14:39+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: 1.6.8\n"
+"POT-Creation-Date: \n"
+"Last-Translator: Tom Willmot <tom@humanmade.co.uk>\n"
+"Language-Team: \n"
+
+#: admin.menus.php:82
+msgid "Help with translation"
+msgstr "Pomozite sa prevođenjem"
+
+#: admin.backup-button.php:3
+msgid "cancel"
+msgstr "otkaži"
+
+#: admin.constants.php:23
+#: admin.constants.php:26
+msgid "Backup %s only, your %s won't be backed up. Defaults to %s."
+msgstr ""
+
+#: admin.menus.php:65
+msgid "The information below is for version %s. View the readme.txt file for help specific to version %s."
+msgstr ""
+
+#: admin.menus.php:75
+msgid "FAQ"
+msgstr "Česta pitanja"
+
+#: admin.constants.php:3
+#: admin.menus.php:76
+#: admin.settings.php:5
+msgid "Constants"
+msgstr "Konstante"
+
+#: admin.menus.php:81
+msgid "Support Forums"
+msgstr "Forum za podršku"
+
+#: admin.settings.php:5
+msgid "You can define %s in your %s to control some settings. A full list of %s can be found in the %s. Defined settings will not be editable below."
+msgstr ""
+
+#: admin.settings.php:5
+msgid "help panel"
+msgstr "Površina za pomoć"
+
+#: admin.settings.php:94
+msgid "Save Changes"
+msgstr "Sačuvajte promene"
+
+#: functions/core.functions.php:339
+msgid "This %s file ensures that other people cannot download your backup files."
+msgstr "Ova %s datoteka osigurava da drugi ljudi ne mogu skinuti vaše rezervne kopije."
+
+#: functions/interface.functions.php:48
+msgid "Settings saved."
+msgstr "Podešavanja sačuvana."
+
+#: admin.actions.php:70
+msgid "You have entered an invalid number of backups."
+msgstr "Uneli ste nepravilan broj rezervnih kopija."
+
+#: admin.actions.php:79
+msgid "%s is an invalid email address."
+msgstr "%s je nepravilna email adresa."
+
+#: admin.actions.php:249
+#: functions/interface.functions.php:89
+#: functions/interface.functions.php:99
+#: functions/interface.functions.php:109
+#: functions/interface.functions.php:119
+#: functions/interface.functions.php:129
+#: functions/interface.functions.php:139
+#: functions/interface.functions.php:149
+msgid "BackUpWordPress has detected a problem."
+msgstr "BackUpWordPress je detektovao problem."
+
+#: admin.actions.php:249
+msgid "%s is returning a %s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %s for more details."
+msgstr "%s vraća odgovor koji može ukazivati na to da se zakazane operacije(cron jobs) ne izvršavaju pravilno. BackUpWordPress svoje zakazano pravljenje rezervnih kopija zasniva na zakazanim operacijama. Pogledajte %s za više detalja."
+
+#: admin.backup-button.php:7
+msgid "Back Up Now"
+msgstr "Napravite rezervnu kopiju"
+
+#: admin.backups-table.php:13
+msgid "Size"
+msgstr "Veličina"
+
+#: admin.backups-table.php:14
+msgid "Actions"
+msgstr "Akcije"
+
+#: admin.backups-table.php:21
+msgid "Total %s"
+msgstr "Ukupno %s"
+
+#: admin.constants.php:3
+msgid "You can %s any of the following %s in your %s to control advanced settings. %s. Defined %s will be highlighted."
+msgstr "Možete %s bilo koju od sledećih %s u vašem %s da bi kontrolisali napredna podešavanja. %s. Definisani %s će biti istaknuti."
+
+#: admin.constants.php:3
+msgid "The Codex can help"
+msgstr "Kodeks može pomoći"
+
+#: admin.constants.php:8
+msgid "The path to folder you would like to store your backup files in, defaults to %s."
+msgstr "Putanja do direktorijuma u kome bi želeli da čuvate vaše rezervne datoteke, podrazumevano %s."
+
+#: admin.constants.php:11
+msgid "The path to your %s executable. Will be used for the %s part of the back up if available."
+msgstr "Putanja do vaše %s izvršne. Biće korišćena za %s deo rezervne kopije ukoliko je moguće."
+
+#: admin.constants.php:11
+#: admin.constants.php:14
+#: admin.constants.php:23
+#: admin.constants.php:26
+#: admin.status.php:14
+#: admin.status.php:17
+msgid "database"
+msgstr "baza podataka"
+
+#: admin.constants.php:14
+msgid "The path to your %s executable. Will be used to zip up your %s and %s if available."
+msgstr ""
+
+#: admin.constants.php:14
+#: admin.constants.php:23
+#: admin.constants.php:26
+#: admin.status.php:14
+#: admin.status.php:20
+msgid "files"
+msgstr "datoteke"
+
+#: admin.constants.php:17
+msgid "Completely disables the automatic back up. You can still back up using the \"Back Up Now\" button. Defaults to %s."
+msgstr "Kompletno onemogućava automatsko kreiranje rezervnih kopija. Još uvek možete napraviti rezervnu kopiju korišćenjem dugmeta \"Napravi rezervnu kopiju\". Podrazumeva se %s."
+
+#: admin.constants.php:20
+msgid "Number of backups to keep, older backups will be deleted automatically when a new backup is completed. Detaults to %s."
+msgstr ""
+
+#: admin.constants.php:29
+msgid "The time that the daily back up should run. Defaults to %s."
+msgstr ""
+
+#: admin.constants.php:32
+msgid "Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s."
+msgstr ""
+
+#: admin.constants.php:35
+msgid "Comma separated list of files or directories to exclude, the backups directory is automatically excluded."
+msgstr ""
+
+#: admin.constants.php:38
+msgid "The capability to use when calling %s. Defaults to %s."
+msgstr ""
+
+#: admin.menus.php:10
+#: admin.page.php:7
+msgid "Manage Backups"
+msgstr "Rad sa rezervnim kopijama."
+
+#: admin.menus.php:10
+#: admin.menus.php:34
+msgid "Backups"
+msgstr "Rezervne kopije"
+
+#: admin.menus.php:65
+msgid "You are not using the latest stable version of BackUpWordPress"
+msgstr "Ne koristite zadnju stabilnu verziju BackUpWordPress-a"
+
+#: admin.menus.php:79
+msgid "For more information:"
+msgstr "Za više informacija:"
+
+#: admin.page.php:11
+#: admin.settings.php:3
+msgid "Settings"
+msgstr "Podešavanja"
+
+#: admin.page.php:23
+msgid "You need to fix the issues detailed above before BackUpWordPress can start."
+msgstr "Morate srediti greške prikazane iznad pre nego što pokrenete BackUpWordPress."
+
+#: admin.page.php:29
+msgid "If you need help getting things working you are more than welcome to email us at %s and we'll do what we can to help."
+msgstr "Ukoliko vam je potrebna pomoć pri podešavanju više ste nego dobrodošli da pošaljete email na %s a mi ćemo se potruditi da vam pomognemo."
+
+#: admin.settings.php:16
+msgid "Automatic Backups"
+msgstr "Automatsko pravljenje rezervnih kopija"
+
+#: admin.settings.php:22
+msgid "Backup my site automatically."
+msgstr "Napravi rezervnu kopiju automatski."
+
+#: admin.settings.php:27
+msgid "No automatic backups."
+msgstr "Nema automatskih rezervnih kopija."
+
+#: admin.settings.php:36
+msgid "Frequency of backups"
+msgstr "Učestalost pravljenja rezervnih kopija"
+
+#: admin.settings.php:40
+msgid "Automatic backups will occur"
+msgstr "Automatsko pravljenje rezervnih kopija će biti odrađeno"
+
+#: admin.settings.php:43
+msgid "Daily"
+msgstr "Dnevno"
+
+#: admin.settings.php:44
+msgid "Weekly"
+msgstr "Nedeljno"
+
+#: admin.settings.php:45
+msgid "Fortnightly"
+msgstr "Jednom u dve nedelje"
+
+#: admin.settings.php:46
+msgid "Monthly"
+msgstr "Mesečno"
+
+#: admin.settings.php:55
+msgid "What to Backup"
+msgstr "Šta ulazi u rezervnu kopiju"
+
+#: admin.settings.php:59
+msgid "Backup my"
+msgstr "Napravi rezervnu kopiju mojih"
+
+#: admin.settings.php:62
+msgid "database &amp; files"
+msgstr "baza podataka &amp; datoteke"
+
+#: admin.settings.php:63
+msgid "database only"
+msgstr "samo bazu podataka"
+
+#: admin.settings.php:64
+msgid "files only"
+msgstr "samo datoteke"
+
+#: admin.settings.php:72
+msgid "Number of backups"
+msgstr "Broj rezervnih kopija"
+
+#: admin.settings.php:73
+msgid "The last %s backups will be stored on the server."
+msgstr "Zadnjih %s rezervnih kopija će biti čuvano na serveru."
+
+#: admin.settings.php:77
+msgid "Email backups"
+msgstr "Posalji rezervne kopije na email"
+
+#: admin.settings.php:78
+msgid "A copy of the backup file will be emailed to this address. Disabled if left blank."
+msgstr "Rezervna kopija će biti poslata na ovu email adresu. Onemogućeno ukoliko ostavite prazno."
+
+#: admin.settings.php:82
+msgid "Excludes"
+msgstr "Izuzetci"
+
+#: admin.settings.php:85
+msgid "A comma separated list of file and directory paths that you do <strong>not</strong> want to backup."
+msgstr ""
+
+#: admin.settings.php:86
+msgid "e.g."
+msgstr "npr"
+
+#: admin.status.php:9
+msgid "Automatic backups are %s."
+msgstr "Automatske rezervne kopije su %s."
+
+#: admin.status.php:9
+msgid "disabled"
+msgstr "onemogućeno"
+
+#: admin.status.php:14
+msgid "&amp;"
+msgstr ""
+
+#: admin.status.php:25
+msgid "Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s on %s and be saved to %s."
+msgstr ""
+
+#: admin.status.php:25
+msgid "It's currently %s"
+msgstr "Trenutno je %s"
+
+#: admin.status.php:31
+msgid "Your site is %s. Backups will be compressed and should be smaller than this."
+msgstr "Vaš sajt je %s. Rezervna kopija će biti kompresovana i trebala bi biti manja od ovoga."
+
+#: admin.status.php:31
+msgid "Calculating Size..."
+msgstr "Računanje veličine..."
+
+#: admin.status.php:34
+msgid "A copy of each backup will be emailed to %s."
+msgstr "Kopija svake rezervne kopije će biti poslata emailom na %s."
+
+#: admin.status.php:38
+msgid "The following paths will be excluded from your backups %s."
+msgstr "Sledeće putanje će biti izuzete iz vaših rezervnih kopija %s."
+
+#: functions/backup.actions.php:12
+msgid "Dumping database"
+msgstr ""
+
+#: functions/backup.actions.php:22
+msgid "Creating zip archive"
+msgstr "Kreiranje zip arhive"
+
+#: functions/backup.functions.php:19
+msgid "Removing old backups"
+msgstr "Uklanjanje starih rezervnih kopija"
+
+#: functions/backup.functions.php:147
+#: functions/backup.functions.php:157
+msgid "Backup of %s"
+msgstr "Rezervna kopija od %s"
+
+#: functions/backup.functions.php:148
+msgid ""
+"BackUpWordPress has completed a backup of your site %s.\n"
+"\n"
+"The backup file should be attached to this email.\n"
+"\n"
+"You can also download the backup file by clicking the link below:\n"
+"\n"
+"%s\n"
+"\n"
+"Kind Regards\n"
+"\n"
+" The Happy BackUpWordPress Backup Emailing Robot"
+msgstr ""
+
+#: functions/backup.functions.php:158
+msgid ""
+"BackUpWordPress has completed a backup of your site %s.\n"
+"\n"
+"Unfortunately the backup file was too large to attach to this email.\n"
+"\n"
+"You can download the backup file by clicking the link below:\n"
+"\n"
+"%s\n"
+"\n"
+"Kind Regards\n"
+"\n"
+" The Happy BackUpWordPress Backup Emailing Robot"
+msgstr ""
+
+#: functions/interface.functions.php:25
+msgid "Download"
+msgstr ""
+
+#: functions/interface.functions.php:26
+msgid "Delete"
+msgstr "Obriši"
+
+#: functions/interface.functions.php:67
+#: functions/interface.functions.php:79
+msgid "BackUpWordPress is almost ready."
+msgstr "BackUpWordPress je skoro spreman."
+
+#: functions/interface.functions.php:67
+msgid "The backups directory can't be created because your %s directory isn't writable, run %s or %s or create the folder yourself."
+msgstr ""
+
+#: functions/interface.functions.php:79
+msgid "Your backups directory isn't writable. run %s or %s or set the permissions yourself."
+msgstr ""
+
+#: functions/interface.functions.php:89
+msgid " %s is running in %s. Please contact your host and ask them to disable %s."
+msgstr ""
+
+#: functions/interface.functions.php:99
+msgid "You have both %s and %s defined so there isn't anything to back up."
+msgstr ""
+
+#: functions/interface.functions.php:109
+msgid "The following email address's are not valid: %s."
+msgstr ""
+
+#: functions/interface.functions.php:119
+msgid "The last backup email failed to send. It's likely that the file is too large."
+msgstr ""
+
+#: functions/interface.functions.php:129
+msgid "Your custom backups directory %s doesn't exist and can't be created, your backups will be saved to %s instead."
+msgstr ""
+
+#: functions/interface.functions.php:139
+msgid "Your custom backups directory %s isn't writable, new backups will be saved to %s instead."
+msgstr ""
+
+#: functions/interface.functions.php:149
+msgid "You have defined a custom exclude list but the following paths don't exist %s, are you sure you entered them correctly?"
+msgstr ""
+
+#: functions/interface.functions.php:159
+msgid "BackUpWordPress detected issues with your last backup."
+msgstr ""
+
+#: hm-backup/hm-backup.php:532
+msgid "The backup file was not created"
+msgstr ""
+
+#: hm-backup/hm-backup.php:603
+msgid "The following files are unreadable and couldn't be backed up: "
+msgstr ""
+
+#: plugin.php:47
+msgid "BackUpWordPress requires PHP version 5.2.4 or greater."
+msgstr ""
+
+#: plugin.php:58
+msgid "BackUpWordPress requires WordPress version %s."
+msgstr ""
+
