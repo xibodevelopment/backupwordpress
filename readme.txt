@@ -1,9 +1,9 @@
 === BackUpWordPress ===
 Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
-Requires at least: 3.1
-Tested up to: 3.3
-Stable tag: 1.6.7
+Requires at least: 3.1.4
+Tested up to: 3.3.2
+Stable tag: 1.6.8
 
 Simple automated back ups of your WordPress powered website.
 
@@ -98,6 +98,17 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6.8
+
+* French translation props Christophe - http://catarina.fr.
+* Updated Spanish Translation props DD666 - https://github.com/radinamatic.
+* Serbian translation props StefanRistic - https://github.com/StefanRistic.
+* Lithuanian translation props Vincent G - http://www.Host1Free.com.
+* Romanian translation.
+* Fix conflict with WP Remote.
+* Fix a minor issue where invalid email address's were still stored.
+* The root path that is backed up can now be controlled by defining `HMBKP_PATH`.
 
 #### 1.6.7
 
