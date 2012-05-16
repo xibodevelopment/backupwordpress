@@ -108,7 +108,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Romanian translation.
 * Fix conflict with WP Remote.
 * Fix a minor issue where invalid email address's were still stored.
-* The root path that is backed up can now be controlled by defining `HMBKP_PATH`.
+* The root path that is backed up can now be controlled by defining `HMBKP_ROOT`.
 
 #### 1.6.7
 
