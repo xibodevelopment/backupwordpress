@@ -169,7 +169,10 @@ function hmbkp_request_download_backup() {
 
 	hmbkp_path();
 
-	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( hmbkp_conform_dir( ABSPATH ), site_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+	// Get the wp dir if not in root.
+	$site_root = str_replace( str_replace( home_url(), '', site_url() ), '', ABSPATH );
+
+	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( hmbkp_conform_dir( $site_root ), home_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
 
 	exit;
 
