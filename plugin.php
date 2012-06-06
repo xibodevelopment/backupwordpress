@@ -60,7 +60,7 @@ if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' 
 	deactivate_plugins( __FILE__ );
 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( sprintf( __( 'BackUpWordPress requires WordPress version %s.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
+		die( sprintf( __( 'BackUpWordPress requires WordPress version %s of greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
 
 }
 
