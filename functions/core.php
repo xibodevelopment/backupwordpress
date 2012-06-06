@@ -97,6 +97,21 @@ function hmbkp_update() {
 
 	endif;
 
+	// Version 1 to 2 
+	if ( version_compare ( '2.0' , get_option( 'hmbkp_plugin_version' ) ) ) {
+		
+		/**
+		 * Setup a backwards compatible schedule
+		 */
+		$complete_weekly = new HMBKP_Scheduled_Backup( 'backup' );
+		$complete_weekly->set_type( 'complete' );
+		$complete_weekly->set_reoccurrence( 'daily' );
+		$complete_weekly->set_max_backups( 10 );
+		$complete_weekly->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
+		$complete_weekly->save();
+
+	}
+
 	// Update the stored version
 	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION )
 		update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
