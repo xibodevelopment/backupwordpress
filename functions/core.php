@@ -47,19 +47,8 @@ function hmbkp_deactivate() {
  */
 function hmbkp_update() {
 
-	// Every update
-	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
-
-		hmbkp_deactivate();
-
-		// Force .htaccess to be re-written
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
-			unlink( hmbkp_path() . '/.htaccess' );
-
-	}
-
 	// Update from backUpWordPress 0.4.5
-	if ( get_option( 'bkpwp_max_backups' ) ) :
+	if ( get_option( 'bkpwp_max_backups' ) ) {
 
 		// Carry over the custom path
 		if ( $legacy_path = get_option( 'bkpwppath' ) )
@@ -95,7 +84,7 @@ function hmbkp_update() {
 
 		wp_clear_scheduled_hook( 'bkpwp_schedule_bkpwp_hook' );
 
-	endif;
+	}
 
 	// Version 1 to 2 
 	if ( version_compare ( '2.0' , get_option( 'hmbkp_plugin_version' ) ) ) {
@@ -109,6 +98,17 @@ function hmbkp_update() {
 		$complete_weekly->set_max_backups( 10 );
 		$complete_weekly->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
 		$complete_weekly->save();
+
+	}
+	
+	// Every update
+	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		hmbkp_deactivate();
+
+		// Force .htaccess to be re-written
+		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+			unlink( hmbkp_path() . '/.htaccess' );
 
 	}
 
