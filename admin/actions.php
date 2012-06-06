@@ -74,7 +74,7 @@ function hmbkp_request_download_backup() {
 
 	hmbkp_path();
 
-	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( hmbkp_conform_dir( ABSPATH ), site_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( HM_Backup::conform_dir( ABSPATH ), site_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
 
 	exit;
 
@@ -353,15 +353,15 @@ add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 function hmbkp_constant_changes() {
 
 	// If a custom backup path has been set or changed
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) != ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
 		hmbkp_path_move( $from, HMBKP_PATH );
 
 	// If a custom backup path has been removed
-	if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_conform_dir( hmbkp_path_default() ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
+	if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && HM_Backup::conform_dir( hmbkp_path_default() ) != ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
 		hmbkp_path_move( $from, hmbkp_path_default() );
 
 	// If the custom path has changed and the new directory isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && hmbkp_conform_dir( HMBKP_PATH ) != ( $from = hmbkp_conform_dir( get_option( 'hmbkp_path' ) ) ) && $from != hmbkp_path_default() && !is_writable( HMBKP_PATH ) && is_dir( $from ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) != ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) && $from != hmbkp_path_default() && !is_writable( HMBKP_PATH ) && is_dir( $from ) )
 		hmbkp_path_move( $from, hmbkp_path_default() );
 
 }

@@ -221,7 +221,7 @@ function hmbkp_path() {
 		$path = HMBKP_PATH;
 
 	// If the dir doesn't exist or isn't writable then use wp-content/backups instead
-	if ( ( ! $path || ! is_writable( $path ) ) && hmbkp_conform_dir( $path ) != hmbkp_path_default() )
+	if ( ( ! $path || ! is_writable( $path ) ) && HM_Backup::conform_dir( $path ) != hmbkp_path_default() )
     	$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
@@ -246,7 +246,7 @@ function hmbkp_path() {
 	if ( ! file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
 		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
-    return hmbkp_conform_dir( $path );
+    return HM_Backup::conform_dir( $path );
 }
 
 /**
@@ -255,7 +255,7 @@ function hmbkp_path() {
  * @return string path
  */
 function hmbkp_path_default() {
-	return hmbkp_conform_dir( WP_CONTENT_DIR . '/backups' );
+	return HM_Backup::conform_dir( WP_CONTENT_DIR . '/backups' );
 }
 
 /**
@@ -320,7 +320,7 @@ function hmbkp_get_email_address( $type = 'array' ) {
  */
 function hmbkp_possible() {
 
-	if ( ! is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) || hmbkp_is_safe_mode_active() )
+	if ( ! is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) || HM_Backup::is_safe_mode_active() )
 		return false;
 
 	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
@@ -353,12 +353,4 @@ function hmbkp_cleanup() {
 
     endif;
 
-}
-
-function hmbkp_conform_dir( $dir ) {
-	return HM_Backup::conform_dir( $dir );
-}
-
-function hmbkp_is_safe_mode_active() {
-	return HM_Backup::is_safe_mode_active();
 }
