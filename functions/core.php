@@ -134,7 +134,7 @@ function hmbkp_setup_default_schedules() {
 	$complete_weekly->save();
 
 	function hmbkp_default_schedules_setup_warning() {
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has setup your default schedules.', 'hmbkp' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files.', 'hmbkp' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has setup your default schedules.', 'hmbkp' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules below.', 'hmbkp' ) . '</p></div>';
 	}
 	add_action( 'admin_notices', 'hmbkp_default_schedules_setup_warning' );
 
