@@ -46,7 +46,7 @@ if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 if ( version_compare( phpversion(), '5.2.4', '<' ) ) {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( HMBKP_PLUGIN_PATH . '/plugin.php' );
+	deactivate_plugins( __FILE__ );
 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
 		die( __( 'BackUpWordPress requires PHP version 5.2.4 or greater.', 'hmbkp' ) );
@@ -57,7 +57,7 @@ if ( version_compare( phpversion(), '5.2.4', '<' ) ) {
 if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( HMBKP_PLUGIN_PATH . '/plugin.php' );
+	deactivate_plugins( __FILE__ );
 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
 		die( sprintf( __( 'BackUpWordPress requires WordPress version %s.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
