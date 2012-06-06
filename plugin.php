@@ -27,15 +27,18 @@ Author URI: http://hmn.md/
 */
 
 define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
-define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
-define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
-define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
+define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define( 'HMBKP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.2' );
+
 define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
 if ( ! defined( 'HMBKP_SECURE_KEY' ) )
 	define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
 
-// max memory limit isn't defined in old versions of WordPress
+// Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
 
