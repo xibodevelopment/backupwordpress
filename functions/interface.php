@@ -66,7 +66,7 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If safe mode is active
-	if ( hmbkp_is_safe_mode_active() ) :
+	if ( HM_Backup::is_safe_mode_active() ) :
 
 	    function hmbkp_safe_mode_warning() {
 	    	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( ' %s is running in %s. Please contact your host and ask them to disable %s.', 'hmbkp' ), '<code>PHP</code>', '<a href="http://php.net/manual/en/features.safe-mode.php"><code>Safe Mode</code></a>', '<code>Safe Mode</code>' ) . '</p></div>';

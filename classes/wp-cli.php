@@ -12,7 +12,7 @@ class BackUpCommand extends WP_CLI_Command {
 	public function __construct( $args, $assoc_args ) {
 
 		// Make sure it's possible to do a backup
-		if ( hmbkp_is_safe_mode_active() ) {
+		if ( HM_Backup::is_safe_mode_active() ) {
 			WP_CLI::error( 'Backup not possible when php is running safe_mode on' );
 			return false;
 		}
