@@ -20,7 +20,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
             <input type="email" name="<?php echo $this->get_field_name( 'email' ); ?>" value="<?php echo $this->get_field_value( 'email' ); ?>" />
 
-            <p class="description">Receive a notification email when a backup completes, if the backup is small enough (&larr;) 10mb) then it will be attached to the email. Separate multiple email address's with a comma.</p>
+            <p class="description">Receive a notification email when a backup completes, if the backup is small enough (&lt; 10mb) then it will be attached to the email. Separate multiple email address's with a comma.</p>
 
         </label>
 
