@@ -88,8 +88,8 @@ function hmbkp_init() {
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
-		wp_enqueue_script( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ) );
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp_fancybox' ) );
+		wp_enqueue_script( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ), HMBKP_VERSION );
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp_fancybox' ), HMBKP_VERSION );
 
 		wp_localize_script( 'hmbkp', 'objectL10n', array(
 			'update'				=> __( 'Update', 'hmbkp' ),
@@ -99,8 +99,8 @@ function hmbkp_init() {
 			'remove_exclude_rule'	=> __( "Are you sure you want to remove this exclude rule?\n\n'Cancel' to go back, 'OK' to delete.\n", 'hmbkp' )
 		) );
 
-		wp_enqueue_style( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.css' );
-		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css' );
+		wp_enqueue_style( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.css', false, HMBKP_VERSION );
+		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css', false, HMBKP_VERSION );
 
 	}
 
