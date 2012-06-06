@@ -142,6 +142,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
 	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
 
-// Plugin activation and deactivation
+// Hook in the activation and deactivation actions
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
