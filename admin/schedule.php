@@ -17,7 +17,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	case 'daily' :
 
-		$reoccurrence = sprintf( __( 'daily on %s at %s', 'hmbkp' ), '<span>' . $day . '</span>', '<span>' . date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) . '</span>' );
+		$reoccurrence = sprintf( __( 'daily at %s', 'hmbkp' ), '<span>' . date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) . '</span>' );
 
 	break;
 
