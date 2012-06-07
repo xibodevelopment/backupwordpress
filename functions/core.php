@@ -109,7 +109,7 @@ function hmbkp_update() {
 			$legacy_schedule->set_type( 'complete' );
 
 		// Backup schedule
-		$legacy_schedule->set_reoccurrence( get_option( 'hmbkp_schedule_frequency', 'daily' ) );
+		$legacy_schedule->set_reoccurrence( str_replace( 'hmbkp_', '', get_option( 'hmbkp_schedule_frequency', 'daily' ) ) );
 
 		// Max backups
 		if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
