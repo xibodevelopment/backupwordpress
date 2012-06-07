@@ -91,13 +91,48 @@ function hmbkp_update() {
 		
 		/**
 		 * Setup a backwards compatible schedule
+		 *
+		 * @todo Only set this up if there are some existing backup files?
 		 */
-		$complete_weekly = new HMBKP_Scheduled_Backup( 'backup' );
-		$complete_weekly->set_type( 'complete' );
-		$complete_weekly->set_reoccurrence( 'daily' );
-		$complete_weekly->set_max_backups( 10 );
-		$complete_weekly->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
-		$complete_weekly->save();
+		$legacy_schedule = new HMBKP_Scheduled_Backup( 'backup' );
+		
+		// Automatic backups disabled?
+		
+		// Backup type
+        if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) )
+        	$legacy_schedule->set_type( 'files' );
+		
+		elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) )
+        	$legacy_schedule->set_type( 'database' );
+        	
+        else
+			$legacy_schedule->set_type( 'complete' );
+
+		// Backup schedule
+		$legacy_schedule->set_reoccurrence( get_option( 'hmbkp_schedule_frequency', 'daily' ) );
+
+		// Max backups
+		if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
+			$legacy_schedule->set_max_backups( (int) HMBKP_MAX_BACKUPS );
+
+		else
+			$legacy_schedule->set_max_backups( (int) get_option( 'hmbkp_max_backups', 10 ) );
+		
+		// Excludes
+		if ( get_option( 'hmbkp_excludes' ) )
+			$legacy_schedule->set_excludes( get_option( 'hmbkp_excludes' ) );
+		
+		// Backup email
+		if ( defined( 'HMBKP_EMAIL' ) && is_email( HMBKP_EMAIL ) )
+			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => HMBKP_EMAIL ) );
+
+		elseif ( is_email( get_option( 'hmbkp_email_address' ) ) )
+			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => get_option( 'hmbkp_email_address' ) ) );
+		
+		// Set the archive filename to what it used to be
+		$legacy_schedule->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
+
+		$legacy_schedule->save();
 
 	}
 	
@@ -202,25 +237,6 @@ function hmbkp_rmdirtree( $dir ) {
 }
 
 /**
- * Calculate the total filesize of all backups
- *
- * @return string
- */
-function hmbkp_total_filesize() {
-
-	$files = hmbkp_get_backups();
-	$filesize = 0;
-
-	clearstatcache();
-
-   	foreach ( $files as $f )
-		$filesize += @filesize( $f );
-
-	return hmbkp_size_readable( $filesize );
-
-}
-
-/**
  * Get the path to the backups directory
  *
  * Will try to create it if it doesn't exist
@@ -303,27 +319,6 @@ function hmbkp_path_move( $from, $to ) {
 	endif;
 
 	hmbkp_rmdirtree( $from );
-
-}
-
-/**
- *	Returns defined email address or email address saved in options.
- *	If none set, return empty string.
- */
-function hmbkp_get_email_address( $type = 'array' ) {
-
-	$email = '';
-
-	if ( defined( 'HMBKP_EMAIL' ) && HMBKP_EMAIL )
-		$email = HMBKP_EMAIL;
-
-	elseif ( get_option( 'hmbkp_email_address' ) )
-		$email = get_option( 'hmbkp_email_address' );
-
-	if ( ! empty( $email ) && $type == 'array' )
-		$email = array_filter( array_map( 'trim', explode( ',', $email ) ) );
-
-	return $email;
 
 }
 
