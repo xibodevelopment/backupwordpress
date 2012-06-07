@@ -75,26 +75,6 @@ function hmbkp_admin_notices() {
 
 	endif;
 
-	// If the email address is invalid
-	if ( hmbkp_get_email_address() && array_diff( hmbkp_get_email_address(), array_filter( hmbkp_get_email_address(), 'is_email' ) ) ) :
-
-		function hmbkp_email_invalid_warning() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'The following email address\'s are not valid: %s.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_diff( hmbkp_get_email_address(), array_filter( hmbkp_get_email_address(), 'is_email' ) ) ) . '</code>' ) . '</p></div>';
-		}
-		add_action( 'admin_notices', 'hmbkp_email_invalid_warning' );
-
-	endif;
-
-	// If the email failed to send
-	if ( hmbkp_get_email_address() && get_option( 'hmbkp_email_error' ) ) :
-
-		function hmbkp_email_failed_warning() {
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . __( 'The last backup email failed to send. It\'s likely that the file is too large.', 'hmbkp' ) . '</p></div>';
-		}
-		add_action( 'admin_notices', 'hmbkp_email_failed_warning' );
-
-	endif;
-
 	// If a custom backups directory is defined and it doesn't exist and can't be created
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! is_dir( HMBKP_PATH ) ) :
 
