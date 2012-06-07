@@ -86,25 +86,25 @@ function hmbkp_update() {
 
 	}
 
-	// Version 1 to 2 
+	// Version 1 to 2
 	if ( version_compare ( '2.0' , get_option( 'hmbkp_plugin_version' ) ) ) {
-		
+
 		/**
 		 * Setup a backwards compatible schedule
 		 *
 		 * @todo Only set this up if there are some existing backup files?
 		 */
 		$legacy_schedule = new HMBKP_Scheduled_Backup( 'backup' );
-		
+
 		// Automatic backups disabled?
-		
+
 		// Backup type
         if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) )
         	$legacy_schedule->set_type( 'files' );
-		
+
 		elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) )
         	$legacy_schedule->set_type( 'database' );
-        	
+
         else
 			$legacy_schedule->set_type( 'complete' );
 
@@ -117,25 +117,30 @@ function hmbkp_update() {
 
 		else
 			$legacy_schedule->set_max_backups( (int) get_option( 'hmbkp_max_backups', 10 ) );
-		
+
 		// Excludes
 		if ( get_option( 'hmbkp_excludes' ) )
 			$legacy_schedule->set_excludes( get_option( 'hmbkp_excludes' ) );
-		
+
 		// Backup email
 		if ( defined( 'HMBKP_EMAIL' ) && is_email( HMBKP_EMAIL ) )
 			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => HMBKP_EMAIL ) );
 
 		elseif ( is_email( get_option( 'hmbkp_email_address' ) ) )
 			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => get_option( 'hmbkp_email_address' ) ) );
-		
+
 		// Set the archive filename to what it used to be
 		$legacy_schedule->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
 
 		$legacy_schedule->save();
 
+		// Remove the legacy options
+		foreach ( array( 'hmbkp_email', 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency' ) as $option_name )
+			delete_option( $option_name );
+
+
 	}
-	
+
 	// Every update
 	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
