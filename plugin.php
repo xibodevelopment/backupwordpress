@@ -82,7 +82,7 @@ function hmbkp_init() {
 	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 	// Fire the update action
-	if ( HMBKP_VERSION > get_option( 'hmbkp_plugin_version' ) )
+	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
 		hmbkp_update();
 
 	// Load admin css and js
