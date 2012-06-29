@@ -154,6 +154,7 @@ function hmbkp_ajax_request_do_backup() {
 }
 add_action( 'wp_ajax_hmbkp_backup', 'hmbkp_ajax_request_do_backup' );
 
+
 /**
  * Send the download file to the browser and
  * then redirect back to the backups page
@@ -169,7 +170,7 @@ function hmbkp_request_download_backup() {
 
 	hmbkp_path();
 
-	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( hmbkp_conform_dir( ABSPATH ), site_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( hmbkp_conform_dir( HMBKP_SITE_PATH ), home_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
 
 	exit;
 
