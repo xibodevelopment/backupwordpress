@@ -233,9 +233,9 @@ function hmbkp_calculate() {
     	// Get rid of any cached filesizes
     	clearstatcache();
 
-		foreach ( HM_Backup::get_instance()->files() as $file )
-			$filesize += (float) @filesize( ABSPATH . $file );
-
+		foreach ( HM_Backup::get_instance()->files() as $file ) 
+			$filesize += (float) @filesize( trailingslashit( HM_Backup::get_instance()->root ) . $file );
+		
 	}
 
     // Cache in a transient for a week
