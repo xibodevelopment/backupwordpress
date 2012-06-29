@@ -31,6 +31,8 @@ define( 'HMBKP_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_PLUGIN_URL', WP_PLUGIN_URL . '/' . HMBKP_PLUGIN_SLUG );
 define( 'HMBKP_REQUIRED_WP_VERSION', '3.1' );
 
+define( 'HMBKP_SITE_PATH', str_replace( str_replace( home_url(), '', site_url() ) . '/', '/', ABSPATH ) );
+
 if ( ! defined( 'HMBKP_SECURE_KEY' ) )
 	define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
 
