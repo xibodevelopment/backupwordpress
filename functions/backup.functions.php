@@ -228,11 +228,13 @@ function hmbkp_invalid_custom_excludes() {
 
 	$invalid_rules = array();
 
+	$root = trailingslashit( ( defined( 'HMBKP_ROOT' ) ) ? HMBKP_ROOT : ABSPATH );
+	
 	// Check if any absolute path excludes actually exist
 	if ( $excludes = hmbkp_get_excludes() )
 
 		foreach ( explode( ',', $excludes ) as $rule )
-			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && ! file_exists( $rule ) && ! file_exists( ABSPATH . $rule ) && ! file_exists( trailingslashit( ABSPATH ) . $rule ) )
+			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && ! file_exists( $rule ) && ! file_exists( $root . $rule ) && ! file_exists( trailingslashit( $root ) . $rule ) )
 				$invalid_rules[] = $rule;
 
 	return array_filter( $invalid_rules );
