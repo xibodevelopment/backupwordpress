@@ -262,6 +262,8 @@ function hmnkp_edit_schedule_submit() {
 		else
 			$schedule->set_max_backups( (int) $_GET['hmbkp_schedule_max_backups'] );
 
+		$schedule->delete_old_backups();
+
 	}
 
 	foreach ( HMBKP_Services::get_services( $schedule ) as $service )

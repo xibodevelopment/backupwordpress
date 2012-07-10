@@ -195,6 +195,10 @@ jQuery( document ).ready( function( $ ) {
 	// Edit schedule form submit
 	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
 
+		// Warn that backups will be deleted if max backups has been set to less than the number of backups currently stored
+		if ( Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( objectL10n.remove_old_backups ) )
+			return false;
+
 		$( this ).find( 'button[type="submit"]' ).addClass( 'hmbkp-ajax-loading' );
 
 		$( '.hmbkp-error span' ).remove();
