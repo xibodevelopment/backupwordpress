@@ -68,7 +68,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
-		$this->assertEmpty( $this->backup->errors() );
+		$this->assertEmpty( $this->backup->get_errors() );
 
 	}
 
@@ -93,7 +93,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 	$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
 	 	$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
-	 	$this->assertEmpty( $this->backup->errors() );
+	 	$this->assertEmpty( $this->backup->get_errors() );
 
 	}
 
@@ -119,7 +119,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
-		$this->assertEmpty( $this->backup->errors() );
+		$this->assertEmpty( $this->backup->get_errors() );
 
 	}
 
