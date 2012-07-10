@@ -1,3 +1,5 @@
+<pre><?php print_r( get_option( 'cron' ) ); ?></pre>
+
 <?php $schedules = new HMBKP_Schedules; ?>
 
 <div>
@@ -10,7 +12,7 @@
 
 	<?php endforeach; ?>
 
-		<li><a class="fancybox add-new-h2" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
+		<li><a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
 
 	</ul>
 
@@ -19,7 +21,7 @@
 
 else
 	$schedule = reset( $schedules->get_schedules() );
-
+	
 	if ( ! $schedule )
 		return; ?>
 

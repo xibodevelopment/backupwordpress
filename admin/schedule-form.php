@@ -36,11 +36,11 @@
 
     	<label>
 
-    		<?php _e( 'Number of backups to keep', 'hmbkp' ); ?>
+    		<?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?>
 
     		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo $schedule->get_max_backups(); ?>" />
 
-            <p class="description">The number of previous backups to store on the server. Backups will be deleted.</p>
+            <p class="description"><?php _e( 'The number of previous backups to store on the server. past this limit the oldest backups will be deleted automatically.', 'hmbkp' ); ?></p>
 
     	</label>
 

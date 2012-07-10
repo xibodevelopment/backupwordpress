@@ -372,6 +372,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$this->options['reoccurrence'] = $reoccurrence;
 
+		// If we already had a schedule, make sure it's changed			
+		if ( wp_next_scheduled( $this->schedule_hook ) ) {
+
+			wp_clear_scheduled_hook( $this->schedule_hook );
+
+			$this->schedule();	
+
+		}
+
 	}
 
 	/**
@@ -562,7 +571,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @access private
 	 */
-	private function delete_old_backups() {
+	public function delete_old_backups() {
 
 		if ( count( $this->get_backups() ) <= $this->get_max_backups() )
 	   		return;
@@ -583,10 +592,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( empty( $filepath ) || ! is_string( $filepath ) )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
 
+		// Make sure it exists
 		if ( ! file_exists( $filepath ) )
 			throw new Exception( $filepath . ' doesn\'t exist' );
 
-		// TODO what about if slug changes
+		// Make sure it was created by this schedule
 		if ( strpos( $filepath, $this->get_id() ) === false )
 			throw new Exception( 'That backup wasn\'t created by this schedule' );
 
