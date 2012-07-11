@@ -35,7 +35,7 @@
     			<tr>
     			    <td data-hmbkp-exclude-rule="<?php echo $exclude; ?>">
 
-    			    	<span class="code"><?php echo str_ireplace( untrailingslashit( ABSPATH ), '', $exclude ); ?></span>
+    			    	<span class="code"><?php echo str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ); ?></span>
 
     	<?php if ( $key ) { ?>
 
