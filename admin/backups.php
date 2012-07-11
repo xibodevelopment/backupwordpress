@@ -1,5 +1,3 @@
-<pre><?php print_r( get_option( 'cron' ) ); ?></pre>
-
 <?php $schedules = new HMBKP_Schedules; ?>
 
 <div>
