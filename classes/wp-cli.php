@@ -17,10 +17,6 @@ class BackUpCommand extends WP_CLI_Command {
 			return false;
 		}
 
-		remove_action( 'hmbkp_backup_started', 'hmbkp_set_status', 10, 0 );
-		remove_action( 'hmbkp_mysqldump_started', 'hmbkp_set_status_dumping_database' );
-		remove_action( 'hmbkp_archive_started', 'hmbkp_set_status_archiving' );
-
 		add_action( 'hmbkp_mysqldump_started', function() {
 			WP_CLI::line( 'Backup: Dumping database...' );
 		} );
