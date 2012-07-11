@@ -47,6 +47,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $schedule_running_filepath = '';
 
 	/**
+	 * The schedule start time
+	 *
+	 * (default value: current_time( 'timestamp' ))
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $schedule_start_time = 0;
+
+	/**
 	 * Take a file size and return a human readable
 	 * version
 	 *
@@ -344,6 +354,24 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+	public function get_schedule_start_time() {
+
+		if ( ! $this->schedule_start_time )
+			$this->set_schedule_start_time( current_time( 'timestamp' ) );
+
+		return $this->schedule_start_time;
+
+	}
+
+	public function set_schedule_start_time( $timestamp ) {
+
+		if ( (int) $timestamp === $timestamp )
+			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid UNIX timestamp' );
+
+		$this->schedule_start_time = $timestamp;
+
+	}
+
 	/**
 	 * Get the schedule reoccurrence
 	 *
@@ -370,16 +398,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ! in_array( $reoccurrence, array_keys( wp_get_schedules() ) ) )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid cron reoccurrence' );
 
+		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
+			return;
+
 		$this->options['reoccurrence'] = $reoccurrence;
 
-		// If we already had a schedule, make sure it's changed			
-		if ( wp_next_scheduled( $this->schedule_hook ) ) {
-
-			wp_clear_scheduled_hook( $this->schedule_hook );
-
-			$this->schedule();	
-
-		}
+		$this->schedule();
 
 	}
 
@@ -404,9 +428,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_next_occurrence() {
 
-		if ( ! $next = wp_next_scheduled( $this->schedule_hook ) )
-			return $this->schedule();
-
 		return wp_next_scheduled( $this->schedule_hook );
 
 	}
@@ -418,8 +439,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function schedule() {
 
-		wp_schedule_event( current_time( 'timestamp' ) + $this->get_interval(), $this->get_reoccurrence(), $this->schedule_hook );
+		// Clear any existing hooks
+		wp_clear_scheduled_hook( $this->schedule_hook );
 
+		wp_schedule_event( $this->get_schedule_start_time() + $this->get_interval(), $this->get_reoccurrence(), $this->schedule_hook );
+
+		// Hook the backu into the schedule hook
 		add_action( $this->schedule_hook, array( $this, 'run' ) );
 
 	}
@@ -636,19 +661,17 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * this schedule.
 	 *
 	 * @access public
-	 * @param bool $remove_backups. (default: false)
 	 */
-	public function cancel( $remove_backups = true ) {
+	public function cancel() {
 
 		// Delete the schedule optoins
 		delete_option( 'hmbkp_schedule_' . $this->get_id() );
 
-		// Clear the scheduled event
-		wp_unschedule_event( $this->get_next_occurrence(), $this->schedule_hook );
+		// Clear any existing schedules
+		wp_clear_scheduled_hook( $this->schedule_hook );
 
 		// Delete it's backups
-		if ( $remove_backups )
-			$this->delete_backups();
+		$this->delete_backups();
 
 	}
 
