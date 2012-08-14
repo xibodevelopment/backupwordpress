@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-14 14:04+0100\n"
-"PO-Revision-Date: 2012-08-14 14:04+0100\n"
+"POT-Creation-Date: 2012-08-14 14:40+0100\n"
+"PO-Revision-Date: 2012-08-14 14:41+0100\n"
 "Last-Translator: Flo Edelmann <florian-edelmann@online.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -27,9 +27,9 @@ msgid "Settings"
 msgstr "Paramètres"
 
 #: admin.settings.php:5
-#, fuzzy, php-format
+#, php-format
 msgid "You can define %1$s in your %2$s to control some settings. A full list of %3$s can be found in the %4$s. Defined settings will not be editable below."
-msgstr "Vous pouvez définir des %s dans votre %s pour contrôler certains paramètres. Une liste complète des %s est disponible dans le %s. La valeur des paramètres ne peut pas être modifié ici."
+msgstr "Vous pouvez définir des %1$s dans votre %2$s pour contrôler certains paramètres. Une liste complète des %3$s est disponible dans le %4$s. La valeur des paramètres ne peut pas être modifié ici."
 
 #: admin.settings.php:5
 #: admin.constants.php:3
@@ -192,9 +192,9 @@ msgid "Back Up Now"
 msgstr "Sauvegarder maintenant"
 
 #: admin.constants.php:3
-#, fuzzy, php-format
+#, php-format
 msgid "You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted."
-msgstr "Vous pouvez %s chacun des éléments suivants %s dans votre %s pour contrôler les options avancées. %s. Le %s défini sera mis en évidence."
+msgstr "Vous pouvez %1$s chacun des éléments suivants %2$s dans votre %3$s pour contrôler les options avancées. %4$s. Le %5$s défini sera mis en évidence."
 
 #: admin.constants.php:3
 msgid "The Codex can help"
@@ -206,9 +206,9 @@ msgid "The path to folder you would like to store your backup files in, defaults
 msgstr "Le chemin du répertoire où vous souhaitez stocker vos sauvegardes, par défaut : %s"
 
 #: admin.constants.php:11
-#, fuzzy, php-format
+#, php-format
 msgid "The path to your %1$s executable. Will be used for the %2$s part of the back up if available."
-msgstr "Chemin vers votre exécutable %s. Il sera utilisé pour réaliser la partie %s de la sauvegarde s'il est disponible."
+msgstr "Chemin vers votre exécutable %1$s. Il sera utilisé pour réaliser la partie %2$s de la sauvegarde s'il est disponible."
 
 #: admin.constants.php:11
 #: admin.constants.php:14
@@ -220,9 +220,9 @@ msgid "database"
 msgstr "base de données"
 
 #: admin.constants.php:14
-#, fuzzy, php-format
+#, php-format
 msgid "The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available."
-msgstr "Chemin vers votre exécutable %s. Il sera utilisé pour compresser vos %s et votre %s s'il est disponible."
+msgstr "Chemin vers votre exécutable %1$s. Il sera utilisé pour compresser vos %2$s et votre %3$s s'il est disponible."
 
 #: admin.constants.php:14
 #: admin.constants.php:23
@@ -244,9 +244,9 @@ msgstr "Nombre de sauvegardes à conserver, les plus anciennes sont automatiquem
 
 #: admin.constants.php:23
 #: admin.constants.php:26
-#, fuzzy, php-format
+#, php-format
 msgid "Backup %1$s only, your %2$s won't be backed up. Defaults to %3$s."
-msgstr "Sauvegarde %s seulement, vos %s ne seront pas sauvegardés. Par défaut à %s."
+msgstr "Sauvegarde %1$s seulement, vos %2$s ne seront pas sauvegardés. Par défaut à %3$s."
 
 #: admin.constants.php:29
 #, php-format
@@ -263,9 +263,9 @@ msgid "Comma separated list of files or directories to exclude, the backups dire
 msgstr "Liste des fichiers ou des répertoires à exclure, le répertoire des sauvegardes est automatiquement exclu."
 
 #: admin.constants.php:38
-#, fuzzy, php-format
+#, php-format
 msgid "The capability to use when calling %1$s. Defaults to %2$s."
-msgstr "Capacité à utiliser lors de l'appel à %s. La valeur par défaut est %s."
+msgstr "Capacité à utiliser lors de l'appel à %1$s. La valeur par défaut est %2$s."
 
 #: admin.constants.php:41
 #, fuzzy, php-format
@@ -293,9 +293,9 @@ msgid "BackUpWordPress has detected a problem."
 msgstr "BackUpWordPress a détecté un problème."
 
 #: admin.actions.php:249
-#, fuzzy, php-format
+#, php-format
 msgid "%1$s is returning a %2$s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details."
-msgstr "%s a renvoyé la réponse %s qui semble indiquer que les travaux cron ne s'achèvent pas correctement. BackUpWordPress ne fonctionne que si wp-cron peux lancer les sauvegardes programmées. Voir la %s pour plus de détails."
+msgstr "%1$s a renvoyé la réponse %2$s qui semble indiquer que les travaux cron ne s'achèvent pas correctement. BackUpWordPress ne fonctionne que si wp-cron peux lancer les sauvegardes programmées. Voir la %3$s pour plus de détails."
 
 #: admin.menus.php:10
 #: admin.menus.php:34
@@ -307,9 +307,9 @@ msgid "You are not using the latest stable version of BackUpWordPress"
 msgstr "Vous n'utilisez pas la dernière version de BackUpWordPress."
 
 #: admin.menus.php:65
-#, fuzzy, php-format
+#, php-format
 msgid "The information below is for version %1$s. View the <code>readme.txt</code> file for help specific to version %2$s."
-msgstr "Les informations qui suivent concernent la version %s. Lisez le fichier readme.txt pour une aide spécifique à la version %s."
+msgstr "Les informations qui suivent concernent la version %1$s. Lisez le fichier <code>readme.txt</code> pour une aide spécifique à la version %2$s."
 
 #: admin.menus.php:75
 msgid "FAQ"
@@ -350,11 +350,11 @@ msgid "&amp;"
 msgstr "&amp;"
 
 #: admin.status.php:32
-#, fuzzy, php-format
+#, php-format
 msgid "Your %1$s will be automatically backed up %2$s. The next backup will occur at %3$s on %4$s and be saved to %5$s."
 msgid_plural "Your %1$s will be automatically backed up %2$s. The next backup will occur at %3$s on %4$s and be saved to %5$s."
-msgstr[0] "La sauvegarde %s sera effectuée automatiquement <code>%s</code>. La prochaine aura lieu à %s le %s et sera sauvegardé sous %s."
-msgstr[1] "La sauvegarde %s sera effectuée automatiquement <code>%s</code>. La prochaine aura lieu à %s le %s et sera sauvegardé sous %s."
+msgstr[0] "La sauvegarde %1$s sera effectuée automatiquement %2$s. La prochaine aura lieu à %3$s le %4$s et sera sauvegardé sous %5$s."
+msgstr[1] "La sauvegarde %1$s sera effectuée automatiquement %2$s. La prochaine aura lieu à %3$s le %4$s et sera sauvegardé sous %5$s."
 
 #: admin.status.php:39
 #, php-format
@@ -406,53 +406,53 @@ msgid "BackUpWordPress is almost ready."
 msgstr "BackUpWordPress est prêt."
 
 #: functions/interface.functions.php:67
-#, fuzzy, php-format
+#, php-format
 msgid "The backups directory can't be created because your %1$s directory isn't writable, run %2$s or %3$s or create the folder yourself."
-msgstr "Le répertoire des sauvegardes ne peut pas être créé car vous il n'est pas possible d'écrire dans %s, lancez %s ou %s ou créez le répertoire vous même."
+msgstr "Le répertoire des sauvegardes ne peut pas être créé car vous il n'est pas possible d'écrire dans %1$s, lancez %2$s ou %3$s ou créez le répertoire vous même."
 
 #: functions/interface.functions.php:79
-#, fuzzy, php-format
+#, php-format
 msgid "Your backups directory isn't writable, run %1$s or %2$s or set the permissions yourself."
-msgstr "Il n'est pas possible d'écrire dans le répertoire des sauvegardes, lancez %s ou %s ou changez les permissions vous même."
+msgstr "Il n'est pas possible d'écrire dans le répertoire des sauvegardes, lancez %1$s ou %2$s ou changez les permissions vous même."
 
 #: functions/interface.functions.php:89
-#, fuzzy, php-format
-msgid " %1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
-msgstr "%s est actif sur %s. Contactez votre administrateur et demandez lui de désactiver %s."
+#, php-format
+msgid "%1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
+msgstr "%1$s est actif sur %2$s. Contactez votre administrateur et demandez lui de désactiver %3$s."
 
 #: functions/interface.functions.php:89
 msgid "http://php.net/manual/en/features.safe-mode.php"
-msgstr ""
+msgstr "http://php.net/manual/fr/features.safe-mode.php"
 
 #: functions/interface.functions.php:89
 msgid "Safe Mode"
-msgstr ""
+msgstr "Safe Mode"
 
 #: functions/interface.functions.php:99
-#, fuzzy, php-format
+#, php-format
 msgid "You have both %1$s and %2$s defined so there isn't anything to back up."
-msgstr "Vous avez défini %s et %smais il n'y a rien à sauvegarder."
+msgstr "Vous avez défini %1$s et %2$s mais il n'y a rien à sauvegarder."
 
 #: functions/interface.functions.php:110
-#, fuzzy, php-format
+#, php-format
 msgid "The following email address is not valid: %s."
 msgid_plural "The following email addresses are not valid: %s."
-msgstr[0] "L'adresse de courriel suivante n'est pas valide : %s"
-msgstr[1] "L'adresse de courriel suivante n'est pas valide : %s"
+msgstr[0] "L'adresse de courriel suivante n'est pas valide: %s"
+msgstr[1] "Les adresses de courriel suivante ne sont pas valides: %s"
 
 #: functions/interface.functions.php:120
 msgid "The last backup email failed to send. It's likely that the file is too large."
 msgstr "L'envoi de la dernière sauvegarde par courriel a échoué. C'est probablement que le fichier est trop volumineux."
 
 #: functions/interface.functions.php:130
-#, fuzzy, php-format
+#, php-format
 msgid "Your custom backups directory %1$s doesn't exist and can't be created, your backups will be saved to %2$s instead."
-msgstr "Le répertoire de sauvegarde spécifié %s n'existe pas et ne peut être créé; les sauvegardes seront stockées dans %s à la place."
+msgstr "Le répertoire de sauvegarde spécifié %1$s n'existe pas et ne peut être créé; les sauvegardes seront stockées dans %2$s à la place."
 
 #: functions/interface.functions.php:140
-#, fuzzy, php-format
+#, php-format
 msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
-msgstr "Il n'est pas possible d'écrire dans le répertoire de sauvegarde spécifié %s; les sauvegardes seront stockées dans %s à la place."
+msgstr "Il n'est pas possible d'écrire dans le répertoire de sauvegarde spécifié %1$s; les sauvegardes seront stockées dans %2$s à la place."
 
 #: functions/interface.functions.php:150
 #, php-format
@@ -482,7 +482,7 @@ msgid "Backup of %s"
 msgstr "Sauvegarde de %s"
 
 #: functions/backup.functions.php:148
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "BackUpWordPress has completed a backup of your site %1$s.\\n"
 "\\n"
@@ -496,20 +496,20 @@ msgid ""
 "\\n"
 " The Happy BackUpWordPress Backup Emailing Robot"
 msgstr ""
-"BackUpWordPress a terminé la sauvegarde de votre site %s.\n"
+"BackUpWordPress a terminé la sauvegarde de votre site %1$s.\n"
 "\n"
 "Le fichier de sauvegarde est joint à cet email.\n"
 "\n"
 "Vous pouvez également télécharger cette sauvegarde en suivant le lien ci-dessous :\n"
 "\n"
-"%s\n"
+"%2$s\n"
 "\n"
 "Cordialement\n"
 "\n"
 "Votre toujours souriant Robot BackUpWordPress "
 
 #: functions/backup.functions.php:158
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "BackUpWordPress has completed a backup of your site %1$s.\\n"
 "\\n"
@@ -523,13 +523,13 @@ msgid ""
 "\\n"
 " The Happy BackUpWordPress Backup Emailing Robot"
 msgstr ""
-"BackUpWordPress a terminé la sauvegarde de votre site %s.\n"
+"BackUpWordPress a terminé la sauvegarde de votre site %1$s.\n"
 "\n"
 "Le fichier de sauvegarde est trop volumineux pour être joint à cet email.\n"
 "\n"
 "Vous pouvez le télécharger en suivant le lien ci-dessous :\n"
 "\n"
-"%s\n"
+"%2$s\n"
 "\n"
 "Cordialement\n"
 "\n"

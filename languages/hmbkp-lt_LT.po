@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-14 14:08+0100\n"
-"PO-Revision-Date: 2012-08-14 14:08+0100\n"
+"POT-Creation-Date: 2012-08-14 14:41+0100\n"
+"PO-Revision-Date: 2012-08-14 14:44+0100\n"
 "Last-Translator: Flo Edelmann <florian-edelmann@online.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -208,9 +208,9 @@ msgid "The path to folder you would like to store your backup files in, defaults
 msgstr "Aplanko, kuriame norėtumėte laikyti savo atsargines kopijas adresas. Pagal nutylėjimą %s."
 
 #: admin.constants.php:11
-#, fuzzy, php-format
+#, php-format
 msgid "The path to your %1$s executable. Will be used for the %2$s part of the back up if available."
-msgstr "Adresas į Jūsų %s yra vykdomasis. Jis bus naudojamas %s atsarginės kopijos daliai, jeigu tik tai bus įmanoma."
+msgstr "Adresas į Jūsų %1$s yra vykdomasis. Jis bus naudojamas %2$s atsarginės kopijos daliai, jeigu tik tai bus įmanoma."
 
 #: admin.constants.php:11
 #: admin.constants.php:14
@@ -222,9 +222,9 @@ msgid "database"
 msgstr "duomenų bazė"
 
 #: admin.constants.php:14
-#, fuzzy, php-format
+#, php-format
 msgid "The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available."
-msgstr "Adresas į Jūsų %s yra vykdomasis. Jis bus naudojamas suspaudžiant Jūsų %s ir %s, jeigu tik bus įmanoma."
+msgstr "Adresas į Jūsų %1$s yra vykdomasis. Jis bus naudojamas suspaudžiant Jūsų %2$s ir %3$s, jeigu tik bus įmanoma."
 
 #: admin.constants.php:14
 #: admin.constants.php:23
@@ -409,32 +409,32 @@ msgid "BackUpWordPress is almost ready."
 msgstr "BackUpWordPress beveik paruoštas."
 
 #: functions/interface.functions.php:67
-#, fuzzy, php-format
+#, php-format
 msgid "The backups directory can't be created because your %1$s directory isn't writable, run %2$s or %3$s or create the folder yourself."
-msgstr "Atsarginių kopijų katalogas negali būti sukurtas, nes Jūsų %s katalogas nėra įrašytinas, paleiskite %s  arba %s, arba sukurkite aplanką pats."
+msgstr "Atsarginių kopijų katalogas negali būti sukurtas, nes Jūsų %1$s katalogas nėra įrašytinas, paleiskite %2$s  arba %3$s, arba sukurkite aplanką pats."
 
 #: functions/interface.functions.php:79
-#, fuzzy, php-format
+#, php-format
 msgid "Your backups directory isn't writable, run %1$s or %2$s or set the permissions yourself."
-msgstr "Jūsų %s katalogas nėra įrašytinas, paleiskite %s  arba %s, arba pakeiskite leidimus pats."
+msgstr "Jūsų %s katalogas nėra įrašytinas, paleiskite %1$s  arba %2$s, arba pakeiskite leidimus pats."
 
 #: functions/interface.functions.php:89
-#, fuzzy, php-format
-msgid " %1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
-msgstr "%s vyksta %s. Prašome susisiekti su savo priglobos tiekėju ir paprašyti jo išjungti %s."
+#, php-format
+msgid "%1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
+msgstr "%1$s vyksta %2$s. Prašome susisiekti su savo priglobos tiekėju ir paprašyti jo išjungti %3$s."
 
 #: functions/interface.functions.php:89
 msgid "http://php.net/manual/en/features.safe-mode.php"
-msgstr ""
+msgstr "http://php.net/manual/en/features.safe-mode.php"
 
 #: functions/interface.functions.php:89
 msgid "Safe Mode"
-msgstr ""
+msgstr "Safe Mode"
 
 #: functions/interface.functions.php:99
-#, fuzzy, php-format
+#, php-format
 msgid "You have both %1$s and %2$s defined so there isn't anything to back up."
-msgstr "Jūs apibūdinote abudu - ir %s, ir %s , todėl nėra nieko, kieno atsarginę kopiją būtų galima sukurti."
+msgstr "Jūs apibūdinote abudu - ir %1$s, ir %2$s , todėl nėra nieko, kieno atsarginę kopiją būtų galima sukurti."
 
 #: functions/interface.functions.php:110
 #, php-format
@@ -449,14 +449,14 @@ msgid "The last backup email failed to send. It's likely that the file is too la
 msgstr ""
 
 #: functions/interface.functions.php:130
-#, fuzzy, php-format
+#, php-format
 msgid "Your custom backups directory %1$s doesn't exist and can't be created, your backups will be saved to %2$s instead."
-msgstr "Jūsų individualizuotas atsarginių kopijų katalogas %s  neegzistuoja ir negali būti sukurtas, todėl Jūsų atsarginės kopijos bus įrašytos į %s, vietoje nurodytojo katalogo."
+msgstr "Jūsų individualizuotas atsarginių kopijų katalogas %1$s  neegzistuoja ir negali būti sukurtas, todėl Jūsų atsarginės kopijos bus įrašytos į %2$s, vietoje nurodytojo katalogo."
 
 #: functions/interface.functions.php:140
-#, fuzzy, php-format
+#, php-format
 msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
-msgstr "Jūsų individualizuotas atsarginių kopijų katalogas %s nėra įrašytinas, todėl naujos atsarginės kopijos bus įrašytos į %s, vietoje nurodytojo katalogo."
+msgstr "Jūsų individualizuotas atsarginių kopijų katalogas %1$s nėra įrašytinas, todėl naujos atsarginės kopijos bus įrašytos į %2$s, vietoje nurodytojo katalogo."
 
 #: functions/interface.functions.php:150
 #, php-format
@@ -486,7 +486,7 @@ msgid "Backup of %s"
 msgstr "%s atsarginė kopija"
 
 #: functions/backup.functions.php:148
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "BackUpWordPress has completed a backup of your site %1$s.\\n"
 "\\n"
@@ -500,20 +500,20 @@ msgid ""
 "\\n"
 " The Happy BackUpWordPress Backup Emailing Robot"
 msgstr ""
-"BackUpWordpress baigė kurti Jūsų tinklalapio %s atsarginę kopiją.\n"
+"BackUpWordpress baigė kurti Jūsų tinklalapio %1$s atsarginę kopiją.\n"
 "\n"
 "Atsarginės kopijos rinkmena turėtų būti pridėta prie šio elektroninio laiško.\n"
 "\n"
 "Jūs taip pat galite parsisiųsti atsarginės kopijos rinkmeną, paspausdamas nuorodą žemiau:\n"
 "\n"
-"%s\n"
+"%2$s\n"
 "\n"
 "Pagarbiai\n"
 "\n"
 "Laimingas BackUpWordPress Elektroninių laiškų siuntimo Robotas"
 
 #: functions/backup.functions.php:158
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "BackUpWordPress has completed a backup of your site %1$s.\\n"
 "\\n"
@@ -527,13 +527,13 @@ msgid ""
 "\\n"
 " The Happy BackUpWordPress Backup Emailing Robot"
 msgstr ""
-"BackUpWordpress baigė kurti Jūsų tinklalapio %s atsarginę kopiją.\n"
+"BackUpWordpress baigė kurti Jūsų tinklalapio %1$s atsarginę kopiją.\n"
 "\n"
 "Nelaimei, atsarginės kopijos rinkmena buvo per didelė, kad ją būtų galima prisegti prie šio elektroninio laiško.\n"
 "\n"
 "Jūs taip pat galite parsisiųsti atsarginės kopijos rinkmeną, paspausdamas nuorodą žemiau:\n"
 "\n"
-"%s\n"
+"%2$s\n"
 "\n"
 "Pagarbiai\n"
 "\n"

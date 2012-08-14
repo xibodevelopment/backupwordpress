@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-14 14:09+0100\n"
-"PO-Revision-Date: 2012-08-14 14:09+0100\n"
+"POT-Creation-Date: 2012-08-14 14:54+0100\n"
+"PO-Revision-Date: 2012-08-14 14:55+0100\n"
 "Last-Translator: Flo Edelmann <florian-edelmann@online.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -409,32 +409,32 @@ msgid "BackUpWordPress is almost ready."
 msgstr ""
 
 #: functions/interface.functions.php:67
-#, fuzzy, php-format
+#, php-format
 msgid "The backups directory can't be created because your %1$s directory isn't writable, run %2$s or %3$s or create the folder yourself."
-msgstr "Imposibil de creat directorul de backup-uri, deoarece directorul %s nu este inscriptibil, a alerga %s sau %s sau pentru a crea folderul-te."
+msgstr "Imposibil de creat directorul de backup-uri, deoarece directorul %1$s nu este inscriptibil, a alerga %2$s sau %3$s sau pentru a crea folderul-te."
 
 #: functions/interface.functions.php:79
-#, fuzzy, php-format
+#, php-format
 msgid "Your backups directory isn't writable, run %1$s or %2$s or set the permissions yourself."
-msgstr "Directorul de backup-uri nu este inscriptibil. a alerga %s sau %s sau setaţi permisiunile-te."
+msgstr "Directorul de backup-uri nu este inscriptibil. a alerga %1$s sau %2$s sau setaţi permisiunile-te."
 
 #: functions/interface.functions.php:89
 #, php-format
-msgid " %1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
+msgid "%1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
 msgstr ""
 
 #: functions/interface.functions.php:89
 msgid "http://php.net/manual/en/features.safe-mode.php"
-msgstr ""
+msgstr "http://php.net/manual/ro/features.safe-mode.php"
 
 #: functions/interface.functions.php:89
 msgid "Safe Mode"
-msgstr ""
+msgstr "Safe Mode"
 
 #: functions/interface.functions.php:99
-#, fuzzy, php-format
+#, php-format
 msgid "You have both %1$s and %2$s defined so there isn't anything to back up."
-msgstr "Aveţi atât %s şi %s definite astfel încât nu există nimic de rezervă."
+msgstr "Aveţi atât %1$s şi %2$s definite astfel încât nu există nimic de rezervă."
 
 #: functions/interface.functions.php:110
 #, php-format
@@ -449,14 +449,14 @@ msgid "The last backup email failed to send. It's likely that the file is too la
 msgstr ""
 
 #: functions/interface.functions.php:130
-#, fuzzy, php-format
+#, php-format
 msgid "Your custom backups directory %1$s doesn't exist and can't be created, your backups will be saved to %2$s instead."
-msgstr "Directorul de backup-uri personalizate %s nu există şi nu pot fi create, copiile de rezervă va fi salvată la %s în schimb."
+msgstr "Directorul de backup-uri personalizate %1$s nu există şi nu pot fi create, copiile de rezervă va fi salvată la %2$s în schimb."
 
 #: functions/interface.functions.php:140
-#, fuzzy, php-format
+#, php-format
 msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
-msgstr "Directorul de backup-uri personalizate %s nu este inscriptibil, backup-uri noi va fi salvat în %s în schimb."
+msgstr "Directorul de backup-uri personalizate %1$s nu este inscriptibil, backup-uri noi va fi salvat în %2$s în schimb."
 
 #: functions/interface.functions.php:150
 #, php-format
@@ -486,7 +486,7 @@ msgid "Backup of %s"
 msgstr "Copie de rezervă a %s"
 
 #: functions/backup.functions.php:148
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "BackUpWordPress has completed a backup of your site %1$s.\\n"
 "\\n"
@@ -500,20 +500,20 @@ msgid ""
 "\\n"
 " The Happy BackUpWordPress Backup Emailing Robot"
 msgstr ""
-"BackUpWordpress ha completado una copia de seguridad de tu web %s.\n"
+"BackUpWordpress ha completado una copia de seguridad de tu web %1$s.\n"
 "\n"
 "El archivo de copia de seguridad se encuentra adjunto a este correo electrónico.\n"
 "\n"
 "También puedes descargarlo desde el enlace indicado más abajo:\n"
 "\n"
-"%s\n"
+"%2$s\n"
 "\n"
 "Un saludo\n"
 "\n"
 "El feliz robot de BackUpWordPress Email"
 
 #: functions/backup.functions.php:158
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "BackUpWordPress has completed a backup of your site %1$s.\\n"
 "\\n"
@@ -527,11 +527,11 @@ msgid ""
 "\\n"
 " The Happy BackUpWordPress Backup Emailing Robot"
 msgstr ""
-"BackUpWordpress ha completado una copia de seguridad de tu web %s.\n"
+"BackUpWordpress ha completado una copia de seguridad de tu web %1$s.\n"
 "\n"
 "Desafortunadamente el archivo de copia de seguridad creado es demasiado pesado para enviar como archivo adjunto, pero puedes descargarlo desde enlace indicado aquí:\n"
 "\n"
-"%s\n"
+"%2$s\n"
 "\n"
 "Un saludo\n"
 "\n"

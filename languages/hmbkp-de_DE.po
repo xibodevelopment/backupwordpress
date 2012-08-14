@@ -2,10 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BackUpWordPress\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-14 13:53+0100\n"
-"PO-Revision-Date: 2012-08-14 13:58+0100\n"
+"POT-Creation-Date: 2012-08-14 14:32+0100\n"
+"PO-Revision-Date: 2012-08-14 14:54+0100\n"
 "Last-Translator: Flo Edelmann <florian-edelmann@online.de>\n"
-"Language-Team: Human Made Limited <support@humanmade.co.uk>\n"
+"Language-Team: Flo Edelmann <florian-edelmann@online.de>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -414,7 +414,7 @@ msgstr "Dein Backup-Verzeichnis ist nicht schreibbar. Führe %1$s oder %2$s aus 
 
 #: functions/interface.functions.php:89
 #, php-format
-msgid " %1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
+msgid "%1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
 msgstr "%1$s läuft im %2$s. Bitte kontaktiere deinen Administrator und bitte ihn, den %3$s zu deaktivieren."
 
 #: functions/interface.functions.php:89
