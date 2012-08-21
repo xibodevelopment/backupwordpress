@@ -27,7 +27,7 @@ BackUpWordPress will back up your entire site including your database and all yo
 
 The BackUpWordPress plugin is hosted github, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
 
-We'd also love help translating the plugin into more languages, if you can help then please contact support@humanmade.co.uk or send us a pull request.
+We'd also love help translating the plugin into more languages, if you can help then please contact support@hmn.md or send us a pull request.
 
 == Installation ==
 
@@ -91,7 +91,7 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
+You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
 
 == Screenshots ==
 
@@ -339,7 +339,7 @@ Fix some silly 1.0 bugs
 
 #### 1.0
 
-1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [humanmade](http://humanmade.co.uk) the chaps behind [WP Remote](https://wpremote.com)
+1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [humanmade](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
 
 #### Previous
 
