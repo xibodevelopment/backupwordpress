@@ -17,7 +17,7 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 		</th>
 
 		<td class="code">
-			<?php echo $schedule::human_filesize( @filesize( $file ) ); ?>
+			<?php echo HMBKP_Scheduled_Backup::human_filesize( @filesize( $file ) ); ?>
 		</td>
 
 		<td><?php echo hmbkp_human_get_type( $file, $schedule ); ?></td>
