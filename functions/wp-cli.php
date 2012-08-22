@@ -92,7 +92,7 @@ usage: wp backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [-
 	 --files_only                   Backup files only, default to off
 	 --database_only                Backup database only, defaults to off
 	 --path                         dir that the backup should be save in, defaults to wp-content/backups/
-	 --root                         dir that should be backed up, defaults to ABSPATH
+	 --root                         dir that should be backed up, defaults to site root.
 	 --zip_command_path             path to your zip binary, standard locations are automatically used
 	 --mysqldump_command_path       path to your mysqldump binary, standard locations are automatically used
 

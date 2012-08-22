@@ -232,7 +232,7 @@ function hmbkp_invalid_custom_excludes() {
 	if ( $excludes = hmbkp_get_excludes() )
 
 		foreach ( explode( ',', $excludes ) as $rule )
-			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && ! file_exists( $rule ) && ! file_exists( ABSPATH . $rule ) && ! file_exists( trailingslashit( ABSPATH ) . $rule ) )
+			if ( ( $rule = trim( $rule ) ) && in_array( substr( $rule, 0, 1 ), array( '/', '\\' ) ) && ! file_exists( $rule ) && ! file_exists( hmbkp_get_home_path() . $rule ) && ! file_exists( trailingslashit( hmbkp_get_home_path() ) . $rule ) )
 				$invalid_rules[] = $rule;
 
 	return array_filter( $invalid_rules );

@@ -234,7 +234,7 @@ function hmbkp_calculate() {
     	clearstatcache();
 
 		foreach ( HM_Backup::get_instance()->files() as $file )
-			$filesize += (float) @filesize( ABSPATH . $file );
+			$filesize += (float) @filesize( hmbkp_get_home_path() . $file );
 
 	}
 
@@ -306,6 +306,30 @@ function hmbkp_setup_schedule() {
 
 	wp_schedule_event( $scheduletime_UTC, $schedule_frequency, 'hmbkp_schedule_backup_hook' );
 }
+
+
+/**
+ * Get the absolute filesystem path to the root of the WordPress installation
+ * A clone of the get_home_path function found in wp-admin
+ *
+ * @uses get_option
+ * @return string Full filesystem path to the root of the WordPress installation
+ */
+function hmbkp_get_home_path() {
+	$home = get_option( 'home' );
+	$siteurl = get_option( 'siteurl' );
+	if ( $home != '' && $home != $siteurl ) {
+		$wp_path_rel_to_home = str_replace( $home, '', $siteurl ); /* $siteurl - $home */
+		$pos = strrpos( $_SERVER["SCRIPT_FILENAME"], $wp_path_rel_to_home );
+		$home_path = substr( $_SERVER["SCRIPT_FILENAME"], 0, $pos );
+		$home_path = trailingslashit( $home_path );
+	} else {
+		$home_path = ABSPATH;
+	}
+
+	return $home_path;
+}
+
 
 /**
  * Get the path to the backups directory
