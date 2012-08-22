@@ -10,19 +10,35 @@ if ( ( ! empty( $_POST['hmbkp_settings_submit'] ) ) && ( ! wp_next_scheduled( 'h
 
 <?php else :
 
-    if ( ! hmbkp_get_database_only() && ! hmbkp_get_files_only() )
-    	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code> ' . __( '&amp;', 'hmbkp' ) . ' <code>' . __( 'files', 'hmbkp' ) . '</code>';
+    if ( ! hmbkp_get_database_only() && ! hmbkp_get_files_only() ) :
+    	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code> ' . __( '&amp;', 'hmbkp' ) .  ' <code>' . __( 'files', 'hmbkp' ) . '</code>';
+    	$count = 2;
 
-    elseif ( hmbkp_get_database_only() )
+    elseif ( hmbkp_get_database_only() ) :
     	$what_to_backup = '<code>' . __( 'database', 'hmbkp' ) . '</code>';
+    	$count = 1;
 
-    else
-    	$what_to_backup = '<code>' . __( 'files', 'hmbkp' ) . '</code>'; ?>
+    else :
+    	$what_to_backup = '<code>' . __( 'files', 'hmbkp' ) . '</code>';
+    	$count = 2;
 
-    	<?php $offset = current_time( 'timestamp' ) - time();
+    endif;
+
+		$offset = current_time( 'timestamp' ) - time();
 		$schedules = wp_get_schedules();
-    	$schedule = $schedules[wp_get_schedule( 'hmbkp_schedule_backup_hook' )]['display'];
-    	printf( __( 'Your %s will be automatically backed up <code>%s</code>. The next backup will occur at %s on %s and be saved to %s.', 'hmbkp' ), $what_to_backup , $schedule, '<code>' . date_i18n( get_option( 'time_format' ), wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( get_option( 'time_format' ) ) ) . '">' . date_i18n( get_option( 'date_format' ), wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>', '<code>' . hmbkp_path() . '</code>' ); ?>
+   	$schedule = $schedules[wp_get_schedule( 'hmbkp_schedule_backup_hook' )]['display'];
+    printf(
+    	_n(
+    		'Your %1$s will be automatically backed up %2$s. The next backup will occur at %3$s on %4$s and be saved to %5$s.', // singular
+    		'Your %1$s will be automatically backed up %2$s. The next backup will occur at %3$s on %4$s and be saved to %5$s.', // plural
+    		$count, 'hmbkp'
+    	),
+    	$what_to_backup,
+    	'<code>' . $schedule . '</code>',
+    	'<code>' . date_i18n( get_option( 'time_format' ), wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>',
+    	'<code title="' . sprintf( __( 'It\'s currently %s', 'hmbkp' ), date_i18n( get_option( 'time_format' ) ) ) . '">' . date_i18n( get_option( 'date_format' ),	wp_next_scheduled( 'hmbkp_schedule_backup_hook' ) + $offset ) . '</code>',
+    	'<code>' . hmbkp_path() . '</code>'
+    ); ?>
 
 <?php endif; ?>
 
