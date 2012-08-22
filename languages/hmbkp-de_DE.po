@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BackUpWordPress\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-14 14:32+0100\n"
-"PO-Revision-Date: 2012-08-14 14:54+0100\n"
+"POT-Creation-Date: 2012-08-22 15:49+0100\n"
+"PO-Revision-Date: 2012-08-22 15:49+0100\n"
 "Last-Translator: Flo Edelmann <florian-edelmann@online.de>\n"
 "Language-Team: Flo Edelmann <florian-edelmann@online.de>\n"
 "Language: \n"
@@ -18,364 +18,99 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin.settings.php:3
-#: admin.page.php:11
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: admin.settings.php:5
-#, php-format
-msgid "You can define %1$s in your %2$s to control some settings. A full list of %3$s can be found in the %4$s. Defined settings will not be editable below."
-msgstr "Du kannst %1$s in deinem %2$s definieren, um einige Einstellungen vorzunehmen. Eine komplette Liste der %3$s kannst du im %4$s finden. Definierte Einstellungen sind unten nicht veränderbar."
-
-#: admin.settings.php:5
-#: admin.constants.php:3
-#: admin.menus.php:76
-msgid "Constants"
-msgstr "Konstanten"
-
-#: admin.settings.php:5
-msgid "help panel"
-msgstr "Hilfe-Panel"
-
-#: admin.settings.php:16
-msgid "Automatic Backups"
-msgstr "Automatische Backups"
-
-#: admin.settings.php:22
-msgid "Backup my site automatically."
-msgstr "Sichere meine Seite automatisch."
-
-#: admin.settings.php:27
-msgid "No automatic backups."
-msgstr "Keine automatischen Backups."
-
-#: admin.settings.php:36
-msgid "Frequency of backups"
-msgstr "Häufigkeit der Backups"
-
-#: admin.settings.php:40
-msgid "Automatic backups will occur"
-msgstr "Automatische Backups werden ausgeführt:"
-
-#: admin.settings.php:43
-msgid "Daily"
-msgstr "Täglich"
-
-#: admin.settings.php:44
-msgid "Weekly"
-msgstr "Wöchentlich"
-
-#: admin.settings.php:45
-msgid "Fortnightly"
-msgstr "Vierzehntägig"
-
-#: admin.settings.php:46
-msgid "Monthly"
-msgstr "Monatlich"
-
-#: admin.settings.php:55
-msgid "What to Backup"
-msgstr "Zu sichernde Daten"
-
-#: admin.settings.php:59
-msgid "Backup my"
-msgstr "Sichere meine"
-
-#: admin.settings.php:62
-msgid "database &amp; files"
-msgstr "Datenbank &amp; Dateien"
-
-#: admin.settings.php:63
-msgid "database only"
-msgstr "Datenbank"
-
-#: admin.settings.php:64
-msgid "files only"
-msgstr "Dateien"
-
-#: admin.settings.php:72
-msgid "Number of backups"
-msgstr "Anzahl der Backups"
-
-#: admin.settings.php:73
-#, php-format
-msgid "The last %s backups will be stored on the server."
-msgstr "Die letzten %s Backups werden auf dem Server gespeichert bleiben."
-
-#: admin.settings.php:77
-msgid "Email backups"
-msgstr "Backup-E-Mail"
-
-#: admin.settings.php:78
-msgid "A copy of the backup file will be emailed to this address. Disabled if left blank."
-msgstr "Eine Kopie der Backup-Datei wird per E-Mail an diese Adresse gesendet. Leerlassen zum deaktivieren."
-
-#: admin.settings.php:82
-msgid "Excludes"
-msgstr "Ausnahmen"
-
-#: admin.settings.php:85
-msgid "A comma separated list of file and directory paths that you do <strong>not</strong> want to backup."
-msgstr "Eine kommagetrennte  Liste von Datei- und Verzeichnispfaden, die du <strong>nicht</strong> sichern möchtest."
-
-#: admin.settings.php:86
-#: admin.constants.php:8
-#: admin.constants.php:11
-#: admin.constants.php:14
-#: admin.constants.php:17
-#: admin.constants.php:20
-#: admin.constants.php:23
-#: admin.constants.php:26
-#: admin.constants.php:29
-#: admin.constants.php:32
-#: admin.constants.php:35
-#: admin.constants.php:38
-#: admin.constants.php:41
-msgid "e.g."
-msgstr "z.B."
-
-#: admin.settings.php:94
-msgid "Save Changes"
-msgstr "Änderungen speichern"
-
-#: admin.backups-table.php:12
-#, php-format
-msgid "1 backup completed"
-msgid_plural "%d backups completed"
-msgstr[0] "1 Backup fertiggestellt"
-msgstr[1] "%d Backups fertiggestellt"
-
-#: admin.backups-table.php:13
-msgid "Size"
-msgstr "Größe"
-
-#: admin.backups-table.php:14
-msgid "Actions"
-msgstr "Aktionen"
-
-#: admin.backups-table.php:20
-#, php-format
-msgid "Only the most recent backup will be saved"
-msgid_plural "The %d most recent backups will be saved"
-msgstr[0] "Nur das neueste Backup wird gespeichert"
-msgstr[1] "Die %d neuesten Backups werden gespeichert"
-
-#: admin.backups-table.php:21
-#, php-format
-msgid "Total %s"
-msgstr "Insgesamt %s"
-
-#: admin.page.php:7
-#: admin.menus.php:10
-msgid "Manage Backups"
-msgstr "Backups verwalten"
-
-#: admin.page.php:23
-msgid "You need to fix the issues detailed above before BackUpWordPress can start."
-msgstr "Du musst die Probleme, die oben beschrieben werden, beheben, bevor BackUpWordPress starten kann."
-
-#: admin.page.php:29
-#, php-format
-msgid "If you need help getting things working you are more than welcome to email us at %s and we'll do what we can to help."
-msgstr "Wenn du Hilfe brauchst, sende uns ruhig eine E-Mail an %s (am besten auf Englisch) und wir werden sehen, was wir tun können."
-
-#: admin.backup-button.php:3
-msgid "cancel"
-msgstr "abbrechen"
-
-#: admin.backup-button.php:7
-msgid "Back Up Now"
-msgstr "Jetzt sichern"
-
-#: admin.constants.php:3
-#, php-format
-msgid "You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted."
-msgstr "Du kannst jede der folgenden %2$s in deinem %3$s %1$sn, um erweiterte Einstellungen vorzunehmen. %4$s. Definierte %5$s werden hervorgehoben."
-
-#: admin.constants.php:3
-msgid "The Codex can help"
-msgstr "Der Codex kann helfen"
-
-#: admin.constants.php:8
-#, php-format
-msgid "The path to folder you would like to store your backup files in, defaults to %s."
-msgstr "Der Pfad zum Verzeichnis, in dem du die Backups speichern möchtest. Standard: %s"
-
-#: admin.constants.php:11
-#, php-format
-msgid "The path to your %1$s executable. Will be used for the %2$s part of the back up if available."
-msgstr "Der Pfad zur ausführbaren %1$s-Datei. Wird für den %2$s-Teil des Backups genutzt, wenn verfügbar."
-
-#: admin.constants.php:11
-#: admin.constants.php:14
-#: admin.constants.php:23
-#: admin.constants.php:26
-#: admin.status.php:14
-#: admin.status.php:18
-msgid "database"
-msgstr "Datenbank"
-
-#: admin.constants.php:14
-#, php-format
-msgid "The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available."
-msgstr "Der Pfad zur ausführbaren %1$s-Datei. Wird genutzt, um deine %2$s und %3$s als ZIP-Archiv zu komprimieren, wenn verfügbar."
-
-#: admin.constants.php:14
-#: admin.constants.php:23
-#: admin.constants.php:26
-#: admin.status.php:14
-#: admin.status.php:22
-msgid "files"
-msgstr "Dateien"
-
-#: admin.constants.php:17
-#, php-format
-msgid "Completely disables the automatic back up. You can still back up using the \"Back Up Now\" button. Defaults to %s."
-msgstr "Deaktiviert die automatischen Backups vollständig. Du kannst trotzdem Backups erstellen, indem du den \"Jetzt sichern\"-Button verwendest. Standard: %s"
-
-#: admin.constants.php:20
-#, php-format
-msgid "Number of backups to keep, older backups will be deleted automatically when a new backup is completed. Defaults to %s."
-msgstr "Anzahl der zu behaltenden Backups. Ältere Backups werden automatisch gelöscht, sobald ein neues Backup fertiggestellt ist. Standard: %s"
-
-#: admin.constants.php:23
-#: admin.constants.php:26
-#, php-format
-msgid "Backup %1$s only, your %2$s won't be backed up. Defaults to %3$s."
-msgstr "Nur die %1$s sichern, deine %2$s werden nicht gesichert. Standard: %3$s"
-
-#: admin.constants.php:29
-#, php-format
-msgid "The time that the daily back up should run. Defaults to %s."
-msgstr "Die Zeit, zu der das tägliche Backup laufen soll. Standard: %s"
-
-#: admin.constants.php:32
-#, php-format
-msgid "Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s."
-msgstr "Versuche, eine Kopie des Backups per E-Mail zu senden. Der Wert sollte eine E-Mail-Adresse sein. Standard: %s"
-
-#: admin.constants.php:35
-msgid "Comma separated list of files or directories to exclude, the backups directory is automatically excluded."
-msgstr "Kommagetrennte Liste von Dateien oder Verzeichnissen, die ausgeschlossen werden sollen (das Backup-Verzeichnis ist automatisch ausgeschlossen)."
-
-#: admin.constants.php:38
-#, php-format
-msgid "The capability to use when calling %1$s. Defaults to %2$s."
-msgstr "Die Rolle, die beim Aufrufen von %1$s benutzt wird. Standard: %2$s"
-
-#: admin.constants.php:41
-#, php-format
-msgid "The root directory that is backed up. Defaults to %s."
-msgstr "Das Wurzelverzeichnis, das gesichert wird. Standard: %s"
-
-#: admin.actions.php:70
-msgid "You have entered an invalid number of backups."
-msgstr "Du hast eine ungültige Anzahl von Backups eingegeben."
-
-#: admin.actions.php:79
-#, php-format
-msgid "%s is an invalid email address."
-msgstr "%s ist eine ungültige E-Mail-Adresse."
-
-#: admin.actions.php:249
-#: functions/interface.functions.php:89
-#: functions/interface.functions.php:99
-#: functions/interface.functions.php:110
-#: functions/interface.functions.php:120
-#: functions/interface.functions.php:130
-#: functions/interface.functions.php:140
-#: functions/interface.functions.php:150
-msgid "BackUpWordPress has detected a problem."
-msgstr "BackUpWordPress hat ein Problem entdeckt."
-
-#: admin.actions.php:249
-#, php-format
-msgid "%1$s is returning a %2$s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details."
-msgstr "%1$s gibt eine %2$s-Antwort zurück. Das könnte bedeuten, dass deine Cron-Jobs nicht richtig aufgerufen werden. BackUpWordPress benutzt wp-cron, um geplante Backups auszuführen.  Sieh dir das %3$s an für mehr Details."
-
-#: admin.menus.php:10
-#: admin.menus.php:34
-msgid "Backups"
-msgstr "Backups"
-
-#: admin.menus.php:65
-msgid "You are not using the latest stable version of BackUpWordPress"
-msgstr "Du benutzt nicht die neueste stabile BackUpWordPress-Version"
-
-#: admin.menus.php:65
-#, php-format
-msgid "The information below is for version %1$s. View the <code>readme.txt</code> file for help specific to version %2$s."
-msgstr "Diese Informationen sind für Version %1$s. Sieh dir die <code>readme.txt</code>-Datei  für Hilfe speziell für Version %2$s an."
-
-#: admin.menus.php:75
-msgid "FAQ"
-msgstr "FAQ"
-
-#: admin.menus.php:79
-msgid "For more information:"
-msgstr "Für mehr Informationen:"
-
-#: admin.menus.php:81
-msgid "Support Forums"
-msgstr "Support-Foren"
-
-#: admin.menus.php:82
-msgid "Help with translation"
-msgstr "Beim Übersetzen helfen"
-
-#: plugin.php:47
+#: plugin.php:52
 msgid "BackUpWordPress requires PHP version 5.2.4 or greater."
 msgstr "BackUpWordPress benötigt PHP Version 5.2.4 oder höher."
 
-#: plugin.php:58
+#: plugin.php:63
 #, php-format
-msgid "BackUpWordPress requires WordPress version %s."
-msgstr "BackUpWordPress benötigt WordPress Version %s."
+msgid "BackUpWordPress requires WordPress version %s or greater."
+msgstr "BackUpWordPress benötigt WordPress Version %s oder größer."
 
-#: admin.status.php:9
+#: plugin.php:95
+#: admin/schedule-form.php:52
+msgid "Update"
+msgstr "Update"
+
+#: plugin.php:96
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: plugin.php:97
+msgid ""
+"Are you sure you want to delete this schedule? All of it's backups will also be deleted.\n"
+"\n"
+"'Cancel' to go back, 'OK' to delete.\n"
+msgstr ""
+"Bist du sicher, dass du diesen Plan löschen möchtest? Alle enthaltenen Backups werden ebenfalls gelöscht.\n"
+"\n"
+"Drücke auf 'Abbrechen' zum Zurückgehen, 'OK' zum Löschen.\n"
+
+#: plugin.php:98
+msgid ""
+"Are you sure you want to delete this backup?\n"
+"\n"
+"'Cancel' to go back, 'OK' to delete.\n"
+msgstr ""
+"Bist du sicher, dass du dieses Backup löschen möchtest?\n"
+"\n"
+"Drücke auf 'Abbrechen' zum Zurückgehen, 'OK' zum Löschen.\n"
+
+#: plugin.php:99
+msgid ""
+"Are you sure you want to remove this exclude rule?\n"
+"\n"
+"'Cancel' to go back, 'OK' to delete.\n"
+msgstr ""
+"Bist du sicher, dass du diese Ausnahmeregel entfernen möchtest?\n"
+"\n"
+"Drücke auf 'Abbrechen' zum Zurückgehen, 'OK' zum Löschen.\n"
+
+#: plugin.php:100
+msgid ""
+"Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that's what you want?\n"
+"\n"
+"'Cancel' to go back, 'OK' to delete.\n"
+msgstr ""
+"Wenn du die Anzahl der Backups, die auf diesem Server gespeichert werden, reduzierst, werden einige deiner existierenden Backups gelöscht. Bist du sicher, dass du das willst?\n"
+"\n"
+"Drücke auf 'Abbrechen' zum Zurückgehen, 'OK' zum Löschen.\n"
+
+#: classes/schedule.php:460
+msgid "Backup started"
+msgstr "Backup gestartet"
+
+#: classes/schedule.php:511
+msgid "Creating zip archive"
+msgstr "ZIP-Archiv wird erstellt"
+
+#: classes/schedule.php:517
+msgid "Dumping database"
+msgstr "Datenbank wird gedump"
+
+#: classes/email.php:19
+msgid "Email notification"
+msgstr "E-Mail-Benachrichtigung"
+
+#: classes/email.php:50
 #, php-format
-msgid "Automatic backups are %s."
-msgstr "Automatische Backups sind %s."
+msgid "Send an email notification to %s"
+msgstr "Sende E-Mail-Benachrichtigungen an %s"
 
-#: admin.status.php:9
-msgid "disabled"
-msgstr "deaktiviert"
-
-#: admin.status.php:14
-msgid "&amp;"
-msgstr "&amp;"
-
-#: admin.status.php:32
+#: classes/email.php:72
 #, php-format
-msgid "Your %1$s will be automatically backed up %2$s. The next backup will occur at %3$s on %4$s and be saved to %5$s."
-msgid_plural "Your %1$s will be automatically backed up %2$s. The next backup will occur at %3$s on %4$s and be saved to %5$s."
-msgstr[0] "Deine %1$s wird automatisch %2$s gesichert. Das nächste Backup findet am %3$s um %4$s statt und wird nach %5$s gespeichert."
-msgstr[1] "Deine %1$s werden automatisch %2$s gesichert. Das nächste Backup findet am %3$s um %4$s statt und wird nach %5$s gespeichert."
+msgid "%s isn't a valid email"
+msgstr "%s ist keine gültige E-Mail-Adresse"
 
-#: admin.status.php:39
+#: classes/email.php:127
 #, php-format
-msgid "It's currently %s"
-msgstr "Es ist jetzt %s"
+msgid "Backup of %s Failed"
+msgstr "Backup von %s fehlgeschlagen"
 
-#: admin.status.php:47
+#: classes/email.php:137
 #, php-format
-msgid "Your site is %s. Backups will be compressed and should be smaller than this."
-msgstr "Deine Seite ist %s groß. Die Backups werden komprimiert und sollten kleiner sein."
-
-#: admin.status.php:47
-msgid "Calculating Size..."
-msgstr "Größe berechnen..."
-
-#: admin.status.php:50
-#, php-format
-msgid "A copy of each backup will be emailed to %s."
-msgstr "Eine Kopie jedes Backups wird an %s gesendet."
-
-#: admin.status.php:54
-#, php-format
-msgid "The following paths will be excluded from your backups %s."
-msgstr "Die folgenden Pfade werden von deinen Backups ausgeschlossen sein: %s"
+msgid "Backup of %s"
+msgstr "Backup von %s"
 
 #: hm-backup/hm-backup.php:532
 msgid "The backup file was not created"
@@ -385,155 +120,635 @@ msgstr "Die Backup-Datei wurde nicht angelegt"
 msgid "The following files are unreadable and couldn't be backed up: "
 msgstr "Die folgenden Dateien sind nicht lesbar und konnten nicht gesichert werden:"
 
-#: functions/interface.functions.php:25
-msgid "Download"
-msgstr "Download"
-
-#: functions/interface.functions.php:26
-msgid "Delete"
-msgstr "Löschen"
-
-#: functions/interface.functions.php:48
-msgid "Settings saved."
-msgstr "Einstellungen gespeichert."
-
-#: functions/interface.functions.php:67
-#: functions/interface.functions.php:79
-msgid "BackUpWordPress is almost ready."
-msgstr "BackUpWordPress ist fast fertig."
-
-#: functions/interface.functions.php:67
+#: admin/constants.php:3
 #, php-format
-msgid "The backups directory can't be created because your %1$s directory isn't writable, run %2$s or %3$s or create the folder yourself."
-msgstr "Das Backup-Verzeichnis kann nicht erstellt werden, weil dein %1$s-Verzeichnis nicht schreibbar ist. Führe %2$s oder %3$s aus oder erstelle das Verzeichnis selbst."
+msgid "You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted."
+msgstr "Du kannst jede der folgenden %2$s in deinem %3$s %1$sn, um erweiterte Einstellungen vorzunehmen. %4$s. Definierte %5$s werden hervorgehoben."
 
-#: functions/interface.functions.php:79
+#: admin/constants.php:3
+msgid "Constants"
+msgstr "Konstanten"
+
+#: admin/constants.php:3
+msgid "The Codex can help"
+msgstr "Der Codex kann helfen"
+
+#: admin/constants.php:8
 #, php-format
-msgid "Your backups directory isn't writable, run %1$s or %2$s or set the permissions yourself."
-msgstr "Dein Backup-Verzeichnis ist nicht schreibbar. Führe %1$s oder %2$s aus oder setze die Berechtigungen selbst."
+msgid "The path to folder you would like to store your backup files in, defaults to %s."
+msgstr "Der Pfad zum Verzeichnis, in dem du die Backups speichern möchtest. Standard: %s"
 
-#: functions/interface.functions.php:89
+#: admin/constants.php:8
+#: admin/constants.php:11
+#: admin/constants.php:14
+#: admin/constants.php:17
+#: admin/constants.php:20
+#: admin/constants.php:23
+#: admin/constants.php:26
+#: admin/constants.php:29
+#: admin/constants.php:32
+#: admin/constants.php:35
+#: admin/constants.php:38
+#: admin/constants.php:41
+msgid "e.g."
+msgstr "z.B."
+
+#: admin/constants.php:11
 #, php-format
-msgid "%1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
-msgstr "%1$s läuft im %2$s. Bitte kontaktiere deinen Administrator und bitte ihn, den %3$s zu deaktivieren."
+msgid "The path to your %1$s executable. Will be used for the %2$s part of the back up if available."
+msgstr "Der Pfad zur ausführbaren %1$s-Datei. Wird für den %2$s-Teil des Backups genutzt, wenn verfügbar."
 
-#: functions/interface.functions.php:89
-msgid "http://php.net/manual/en/features.safe-mode.php"
-msgstr "http://php.net/manual/de/features.safe-mode.php"
+#: admin/constants.php:11
+#: admin/constants.php:14
+#: admin/constants.php:23
+#: admin/constants.php:26
+msgid "database"
+msgstr "Datenbank"
 
-#: functions/interface.functions.php:89
-msgid "Safe Mode"
-msgstr "Safe Mode"
-
-#: functions/interface.functions.php:99
+#: admin/constants.php:14
 #, php-format
-msgid "You have both %1$s and %2$s defined so there isn't anything to back up."
-msgstr "Du hast sowohl %1$s, als auch %2$s definiert. Deswegen gibt es nichts zu sichern."
+msgid "The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available."
+msgstr "Der Pfad zur ausführbaren %1$s-Datei. Wird genutzt, um deine %2$s und %3$s als ZIP-Archiv zu komprimieren, wenn verfügbar."
 
-#: functions/interface.functions.php:110
+#: admin/constants.php:14
+#: admin/constants.php:23
+#: admin/constants.php:26
+msgid "files"
+msgstr "Dateien"
+
+#: admin/constants.php:17
 #, php-format
-msgid "The following email address is not valid: %s."
-msgid_plural "The following email addresses are not valid: %s."
-msgstr[0] "Die folgende E-Mail-Adresse ist ungültig: %s"
-msgstr[1] "Die folgenden E-Mail-Adressen sind ungültig: %s"
+msgid "Completely disables the automatic back up. You can still back up using the \"Back Up Now\" button. Defaults to %s."
+msgstr "Deaktiviert die automatischen Backups vollständig. Du kannst trotzdem Backups erstellen, indem du den \"Jetzt sichern\"-Button verwendest. Standard: %s"
 
-#: functions/interface.functions.php:120
-msgid "The last backup email failed to send. It's likely that the file is too large."
-msgstr "Das letzte Backup-E-Mail konnte nicht gesendet werden. Wahrscheinlich ist die Datei zu groß."
-
-#: functions/interface.functions.php:130
+#: admin/constants.php:20
 #, php-format
-msgid "Your custom backups directory %1$s doesn't exist and can't be created, your backups will be saved to %2$s instead."
-msgstr "Dein angepasstes Backup-Verzeichnis %1$s existiert nicht und kann nicht erstellt werden, neue Backups werden stattdessen nach %2$s gespeichert."
+msgid "Number of backups to keep, older backups will be deleted automatically when a new backup is completed. Defaults to %s."
+msgstr "Anzahl der zu behaltenden Backups. Ältere Backups werden automatisch gelöscht, sobald ein neues Backup fertiggestellt ist. Standard: %s"
 
-#: functions/interface.functions.php:140
+#: admin/constants.php:23
+#: admin/constants.php:26
 #, php-format
-msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
-msgstr "Dein angepasstes Backup-Verzeichnis %1$s ist nicht schreibbar, neue Backups werden stattdessen nach %2$s gespeichert."
+msgid "Backup %1$s only, your %2$s won't be backed up. Defaults to %3$s."
+msgstr "Nur die %1$s sichern, deine %2$s werden nicht gesichert. Standard: %3$s"
 
-#: functions/interface.functions.php:150
+#: admin/constants.php:29
 #, php-format
-msgid "You have defined a custom exclude list but the following paths don't exist %s, are you sure you entered them correctly?"
-msgstr "Du hast eine Ausnahmen-Liste definiert, aber die folgenden Pfade existieren nicht: %s. Bist du sicher, dass du sie korrekt eingegeben hast?"
+msgid "The time that the daily back up should run. Defaults to %s."
+msgstr "Die Zeit, zu der das tägliche Backup laufen soll. Standard: %s"
 
-#: functions/interface.functions.php:160
-msgid "BackUpWordPress detected issues with your last backup."
-msgstr "BackUpWordPress hat Probleme bei deinem letzten Backup bemerkt."
-
-#: functions/backup.actions.php:12
-msgid "Dumping database"
-msgstr "Datenbank wird gedump"
-
-#: functions/backup.actions.php:22
-msgid "Creating zip archive"
-msgstr "ZIP-Archiv wird erstellt"
-
-#: functions/backup.functions.php:19
-msgid "Removing old backups"
-msgstr "Alte Backups werden gelöscht"
-
-#: functions/backup.functions.php:147
-#: functions/backup.functions.php:157
+#: admin/constants.php:32
 #, php-format
-msgid "Backup of %s"
-msgstr "Backup von %s"
+msgid "Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s."
+msgstr "Versuche, eine Kopie des Backups per E-Mail zu senden. Der Wert sollte eine E-Mail-Adresse sein. Standard: %s"
 
-#: functions/backup.functions.php:148
+#: admin/constants.php:35
+msgid "Comma separated list of files or directories to exclude, the backups directory is automatically excluded."
+msgstr "Kommagetrennte Liste von Dateien oder Verzeichnissen, die ausgeschlossen werden sollen (das Backup-Verzeichnis ist automatisch ausgeschlossen)."
+
+#: admin/constants.php:38
 #, php-format
-msgid ""
-"BackUpWordPress has completed a backup of your site %1$s.\\n"
-"\\n"
-"The backup file should be attached to this email.\\n"
-"\\n"
-"You can also download the backup file by clicking the link below:\\n"
-"\\n"
-"%2$s\\n"
-"\\n"
-"Kind Regards\\n"
-"\\n"
-" The Happy BackUpWordPress Backup Emailing Robot"
+msgid "The capability to use when calling %1$s. Defaults to %2$s."
+msgstr "Die Rolle, die beim Aufrufen von %1$s benutzt wird. Standard: %2$s"
+
+#: admin/constants.php:41
+#, php-format
+msgid "The root directory that is backed up. Defaults to %s."
+msgstr "Das Wurzelverzeichnis, das gesichert wird. Standard: %s"
+
+#: admin/schedule-form.php:7
+msgid "Schedule Settings"
+msgstr "Plan-Einstellungen"
+
+#: admin/schedule-form.php:11
+msgid "Backup"
+msgstr "Backup"
+
+#: admin/schedule-form.php:14
+msgid "Both Database &amp; files"
+msgstr "Datenbank &amp; Dateien"
+
+#: admin/schedule-form.php:15
+msgid "Files only"
+msgstr "Dateien"
+
+#: admin/schedule-form.php:16
+msgid "Database only"
+msgstr "Datenbank"
+
+#: admin/schedule-form.php:23
+msgid "Schedule"
+msgstr "Plan"
+
+#: admin/schedule-form.php:39
+msgid "Number of backups to store on this server"
+msgstr "Anzahl der Backups, die auf dem Server gespeichert bleiben"
+
+#: admin/schedule-form.php:43
+msgid "The number of previous backups to store on the server. past this limit the oldest backups will be deleted automatically."
+msgstr "Die Anzahl der vorherigen Backups, die auf dem Server gespeichert bleiben sollen. Über diesem Limit werden die ältesten Backups automatisch gelöscht."
+
+#: admin/schedule.php:16
+msgid "hourly on the hour"
 msgstr ""
-"BackUpWordPress hat ein Backup deiner Seite %1$s fertiggestellt.\n"
-"\n"
-"Die Backup-Datei sollte an diese E-Mail angehängt sein.\n"
-"\n"
-"Du kannst es auch herunterladen, indem du den folgenden Link anklickst:\n"
-"\n"
-"%2$s\n"
-"\n"
-"Liebe Grüße\n"
-"\n"
-" Der glückliche BackUpWordPress-Backup-E-Mail-Roboter"
 
-#: functions/backup.functions.php:158
+#: admin/schedule.php:16
 #, php-format
-msgid ""
-"BackUpWordPress has completed a backup of your site %1$s.\\n"
-"\\n"
-"Unfortunately the backup file was too large to attach to this email.\\n"
-"\\n"
-"You can download the backup file by clicking the link below:\\n"
-"\\n"
-"%2$s\\n"
-"\\n"
-"Kind Regards\\n"
-"\\n"
-" The Happy BackUpWordPress Backup Emailing Robot"
+msgid "hourly at %s minutes past the hour"
 msgstr ""
-"BackUpWordPress hat ein Backup deiner Seite %1$s fertiggestellt.\n"
-"\n"
-"Leider war die Backup-Datei zu groß, um sie an dieses E-Mail anzuhängen.\n"
-"\n"
-"Du kannst es aber herunterladen, indem du den folgenden Link anklickst:\n"
-"\n"
-"%2$s\n"
-"\n"
-"Liebe Grüße\n"
-"\n"
-" Der glückliche BackUpWordPress-Backup-E-Mail-Roboter"
 
-#: functions/core.functions.php:339
+#: admin/schedule.php:22
+#, php-format
+msgid "daily at %s"
+msgstr ""
+
+#: admin/schedule.php:34
+#, php-format
+msgid "every 12 hours at %s &amp; %s"
+msgstr ""
+
+#: admin/schedule.php:40
+#, php-format
+msgid "weekly on %s at %s"
+msgstr ""
+
+#: admin/schedule.php:46
+#, php-format
+msgid "fortnightly on %s at %s"
+msgstr ""
+
+#: admin/schedule.php:53
+#, php-format
+msgid "on the %s of each month at %s"
+msgstr ""
+
+#: admin/schedule.php:59
+msgid "server"
+msgstr "Server"
+
+#: admin/schedule.php:66
+#, php-format
+msgid "store the only the last backup %s"
+msgstr ""
+
+#: admin/schedule.php:72
+#, php-format
+msgid "don't store any backups %s"
+msgstr ""
+
+#: admin/schedule.php:78
+#, php-format
+msgid "store only the last %s backups %s"
+msgstr ""
+
+#: admin/schedule.php:87
+#, php-format
+msgid "Backup my %s %s %s, %s. %s"
+msgstr ""
+
+#: admin/schedule.php:87
+msgid "Backups will be compressed and should be smaller than this."
+msgstr "Die Backups werden komprimiert und sollten kleiner sein."
+
+#: admin/schedule-form-excludes.php:7
+msgid "Manage Exclude"
+msgstr "Ausnahmen verwalten"
+
+#: admin/schedule-form-excludes.php:13
+msgid "New Exclude Rule"
+msgstr "Neue Ausnahmeregel"
+
+#: admin/schedule-form-excludes.php:17
+msgid "Preview"
+msgstr "Vorschau"
+
+#: admin/schedule-form-excludes.php:27
+msgid "Exclude Rules"
+msgstr "Ausnahmeregeln"
+
+#: admin/schedule-form-excludes.php:42
+msgid "Remove"
+msgstr "Entfernen"
+
+#: admin/schedule-form-excludes.php:59
+msgid "Excluded"
+msgstr "Ausnehmen"
+
+#: admin/schedule-form-excludes.php:60
+msgid "Included"
+msgstr "Einschließen"
+
+#: admin/schedule-form-excludes.php:63
+msgid "Unreadable"
+msgstr "Nicht lesbar"
+
+#: admin/schedule-form-excludes.php:86
+msgid "Unreadable files can't be backed up"
+msgstr "Nicht lesbare Dateien können nicht gesichert werden"
+
+#: admin/schedule-form-excludes.php:92
+#, php-format
+msgid "Your site is %s. Backups will be compressed and so will be smaller."
+msgstr "Deine Seite ist %s groß. Die Backups werden komprimiert und sollten kleiner sein."
+
+#: admin/schedule-form-excludes.php:98
+msgid "Close"
+msgstr "Schließen"
+
+#: admin/actions.php:163
+msgid "BackUpWordPress has detected a problem."
+msgstr "BackUpWordPress hat ein Problem entdeckt."
+
+#: admin/actions.php:163
+#, php-format
+msgid "%1$s is returning a %2$s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details."
+msgstr "%1$s gibt eine %2$s-Antwort zurück. Das könnte bedeuten, dass deine Cron-Jobs nicht richtig aufgerufen werden. BackUpWordPress benutzt wp-cron, um geplante Backups auszuführen.  Sieh dir das %3$s an für mehr Details."
+
+#: admin/actions.php:232
+msgid "Backup type cannot be empty"
+msgstr "Backup-Typ kann nicht leer sein"
+
+#: admin/actions.php:235
+msgid "Invalid backup type"
+msgstr "Ungültiger Backup-Typ"
+
+#: admin/actions.php:245
+msgid "Schedule cannot be empty"
+msgstr "Aufgaben können nicht leer sein"
+
+#: admin/actions.php:248
+msgid "Invalid schedule"
+msgstr "Ungültige Aufgaben"
+
+#: admin/actions.php:258
+msgid "Max backups must be more than 1"
+msgstr "Maximale Anzahl der Backups muss größer als 1 sein"
+
+#: admin/actions.php:261
+msgid "Max backups must be a number"
+msgstr "Maximale Anzahl der Backups muss eine Nummer sein"
+
+#: admin/actions.php:334
+#, php-format
+msgid "%s matches 1 file."
+msgid_plural "%s matches %d files"
+msgstr[0] "%s passt auf eine Datei."
+msgstr[1] "%s passt auf %d Dateien."
+
+#: admin/actions.php:338
+#, php-format
+msgid "%s didn't match any files."
+msgstr "%s passt auf keine Dateien."
+
+#: admin/page.php:5
+msgid "Manage Backups"
+msgstr "Backups verwalten"
+
+#: admin/page.php:13
+msgid "You need to fix the issues detailed above before BackUpWordPress can start."
+msgstr "Du musst die Probleme, die oben beschrieben werden, beheben, bevor BackUpWordPress starten kann."
+
+#: admin/page.php:17
+#, php-format
+msgid "If you need help getting things working you are more than welcome to email us at %s and we'll do what we can."
+msgstr "Wenn du Hilfe brauchst, sende uns ruhig eine E-Mail an %s (am besten auf Englisch) und wir werden tun, was wir können."
+
+#: admin/backups.php:13
+msgid "add schedule"
+msgstr "Aufgabe hinzufügen"
+
+#: admin/backups.php:36
+#, php-format
+msgid "1 backup completed"
+msgid_plural "%d backups completed"
+msgstr[0] "1 Backup fertiggestellt"
+msgstr[1] "%d Backups fertiggestellt"
+
+#: admin/backups.php:37
+msgid "Size"
+msgstr "Größe"
+
+#: admin/backups.php:38
+msgid "Type"
+msgstr "Typ"
+
+#: admin/backups.php:39
+msgid "Actions"
+msgstr "Aktionen"
+
+#: admin/backups.php:62
+msgid "This is where your backups will appear once you have one."
+msgstr "Hier erscheinen deine Backups, sobald du welche hast."
+
+#: admin/menu.php:10
+#: admin/menu.php:34
+msgid "Backups"
+msgstr "Backups"
+
+#: admin/menu.php:69
+msgid "You are not using the latest stable version of BackUpWordPress"
+msgstr "Du benutzt nicht die neueste stabile BackUpWordPress-Version"
+
+#: admin/menu.php:69
+#, php-format
+msgid "The information below is for version %1$s. View the %2$s file for help specific to version %3$s."
+msgstr "Diese Informationen sind für Version %1$s. Sieh dir die %2$s-Datei  für Hilfe speziell für Version %3$s an."
+
+#: admin/menu.php:75
+msgid "FAQ"
+msgstr "FAQ"
+
+#: admin/menu.php:79
+msgid "For more information:"
+msgstr "Für mehr Informationen:"
+
+#: admin/menu.php:81
+msgid "Support Forums"
+msgstr "Support-Foren"
+
+#: admin/menu.php:82
+msgid "Help with translation"
+msgstr "Beim Übersetzen helfen"
+
+#: functions/core.php:192
+msgid "BackUpWordPress has setup your default schedules."
+msgstr "BackUpWordPress hat deine Standard-Pläne eingerichtet."
+
+#: functions/core.php:192
+msgid "By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules below."
+msgstr "Standardmäßig macht BackUpWordPress täglich ein Backup deiner Datenbank und wöchentlich eines deiner Datenbank und deiner Dateien. Du kannst diese Pläne hier bearbeiten."
+
+#: functions/core.php:273
 #, php-format
 msgid "This %s file ensures that other people cannot download your backup files."
 msgstr "Diese %s-Datei garantiert, dass andere Leute nicht deine Backup-Dateien herunterladen können."
 
+#: functions/interface.php:27
+msgid "Download"
+msgstr "Download"
+
+#: functions/interface.php:28
+#: functions/interface.php:215
+msgid "Delete"
+msgstr "Löschen"
+
+#: functions/interface.php:50
+#: functions/interface.php:62
+msgid "BackUpWordPress is almost ready."
+msgstr "BackUpWordPress ist fast fertig."
+
+#: functions/interface.php:50
+#, php-format
+msgid "The backups directory can't be created because your %1$s directory isn't writable, run %2$s or %3$s or create the folder yourself."
+msgstr "Das Backup-Verzeichnis kann nicht erstellt werden, weil dein %1$s-Verzeichnis nicht schreibbar ist. Führe %2$s oder %3$s aus oder erstelle das Verzeichnis selbst."
+
+#: functions/interface.php:62
+#, php-format
+msgid "Your backups directory isn't writable, run %1$s or %2$s or set the permissions yourself."
+msgstr "Dein Backup-Verzeichnis ist nicht schreibbar. Führe %1$s oder %2$s aus oder setze die Berechtigungen selbst."
+
+#: functions/interface.php:72
+#, php-format
+msgid "%1$s is running in %2$s. Please contact your host and ask them to disable %3$s."
+msgstr "%1$s läuft im %2$s. Bitte kontaktiere deinen Administrator und bitte ihn, den %3$s zu deaktivieren."
+
+#: functions/interface.php:72
+msgid "http://php.net/manual/en/features.safe-mode.php"
+msgstr "http://php.net/manual/de/features.safe-mode.php"
+
+#: functions/interface.php:72
+msgid "Safe Mode"
+msgstr "Safe Mode"
+
+#: functions/interface.php:82
+#, php-format
+msgid "Your custom backups directory %1$s doesn't exist and can't be created, your backups will be saved to %2$s instead."
+msgstr "Dein angepasstes Backup-Verzeichnis %1$s existiert nicht und kann nicht erstellt werden, neue Backups werden stattdessen nach %2$s gespeichert."
+
+#: functions/interface.php:92
+#, php-format
+msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
+msgstr "Dein angepasstes Backup-Verzeichnis %1$s ist nicht schreibbar, neue Backups werden stattdessen nach %2$s gespeichert."
+
+#: functions/interface.php:102
+msgid "BackUpWordPress detected issues with your last backup."
+msgstr "BackUpWordPress hat Probleme bei deinem letzten Backup bemerkt."
+
+#: functions/interface.php:182
+msgid "Database and Files"
+msgstr "Datenbank und Dateien"
+
+#: functions/interface.php:185
+msgid "Files"
+msgstr "Dateien"
+
+#: functions/interface.php:188
+msgid "Database"
+msgstr "Datenbank"
+
+#: functions/interface.php:193
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: functions/interface.php:201
+msgid "cancel"
+msgstr "abbrechen"
+
+#: functions/interface.php:207
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: functions/interface.php:210
+msgid "Excludes"
+msgstr "Ausnahmen"
+
+#: functions/interface.php:213
+msgid "Run now"
+msgstr "Jetzt ausführen"
+
+#~ msgid ""
+#~ "You can define %1$s in your %2$s to control some settings. A full list of "
+#~ "%3$s can be found in the %4$s. Defined settings will not be editable "
+#~ "below."
+#~ msgstr ""
+#~ "Du kannst %1$s in deinem %2$s definieren, um einige Einstellungen "
+#~ "vorzunehmen. Eine komplette Liste der %3$s kannst du im %4$s finden. "
+#~ "Definierte Einstellungen sind unten nicht veränderbar."
+
+#~ msgid "help panel"
+#~ msgstr "Hilfe-Panel"
+
+#~ msgid "Automatic Backups"
+#~ msgstr "Automatische Backups"
+
+#~ msgid "Backup my site automatically."
+#~ msgstr "Sichere meine Seite automatisch."
+
+#~ msgid "No automatic backups."
+#~ msgstr "Keine automatischen Backups."
+
+#~ msgid "Frequency of backups"
+#~ msgstr "Häufigkeit der Backups"
+
+#~ msgid "Automatic backups will occur"
+#~ msgstr "Automatische Backups werden ausgeführt:"
+
+#~ msgid "Daily"
+#~ msgstr "Täglich"
+
+#~ msgid "Weekly"
+#~ msgstr "Wöchentlich"
+
+#~ msgid "Fortnightly"
+#~ msgstr "Vierzehntägig"
+
+#~ msgid "Monthly"
+#~ msgstr "Monatlich"
+
+#~ msgid "What to Backup"
+#~ msgstr "Zu sichernde Daten"
+
+#~ msgid "Backup my"
+#~ msgstr "Sichere meine"
+
+#~ msgid "Number of backups"
+#~ msgstr "Anzahl der Backups"
+
+#~ msgid "Email backups"
+#~ msgstr "Backup-E-Mail"
+
+#~ msgid ""
+#~ "A copy of the backup file will be emailed to this address. Disabled if "
+#~ "left blank."
+#~ msgstr ""
+#~ "Eine Kopie der Backup-Datei wird per E-Mail an diese Adresse gesendet. "
+#~ "Leerlassen zum deaktivieren."
+
+#~ msgid ""
+#~ "A comma separated list of file and directory paths that you do "
+#~ "<strong>not</strong> want to backup."
+#~ msgstr ""
+#~ "Eine kommagetrennte  Liste von Datei- und Verzeichnispfaden, die du "
+#~ "<strong>nicht</strong> sichern möchtest."
+
+#~ msgid "Save Changes"
+#~ msgstr "Änderungen speichern"
+
+#~ msgid "Only the most recent backup will be saved"
+
+#~ msgid_plural "The %d most recent backups will be saved"
+#~ msgstr[0] "Nur das neueste Backup wird gespeichert"
+#~ msgstr[1] "Die %d neuesten Backups werden gespeichert"
+
+#~ msgid "Total %s"
+#~ msgstr "Insgesamt %s"
+
+#~ msgid "Back Up Now"
+#~ msgstr "Jetzt sichern"
+
+#~ msgid "You have entered an invalid number of backups."
+#~ msgstr "Du hast eine ungültige Anzahl von Backups eingegeben."
+
+#~ msgid "Automatic backups are %s."
+#~ msgstr "Automatische Backups sind %s."
+
+#~ msgid "disabled"
+#~ msgstr "deaktiviert"
+
+#~ msgid "&amp;"
+#~ msgstr "&amp;"
+
+#~ msgid ""
+#~ "Your %1$s will be automatically backed up %2$s. The next backup will "
+#~ "occur at %3$s on %4$s and be saved to %5$s."
+
+#~ msgid_plural ""
+#~ "Your %1$s will be automatically backed up %2$s. The next backup will "
+#~ "occur at %3$s on %4$s and be saved to %5$s."
+#~ msgstr[0] ""
+#~ "Deine %1$s wird automatisch %2$s gesichert. Das nächste Backup findet am "
+#~ "%4$s um %3$s statt und wird nach %5$s gespeichert."
+#~ msgstr[1] ""
+#~ "Deine %1$s werden automatisch %2$s gesichert. Das nächste Backup findet "
+#~ "am %3$s um %4$s statt und wird nach %5$s gespeichert."
+
+#~ msgid "It's currently %s"
+#~ msgstr "Es ist jetzt %s"
+
+#~ msgid "Calculating Size..."
+#~ msgstr "Größe berechnen..."
+
+#~ msgid "A copy of each backup will be emailed to %s."
+#~ msgstr "Eine Kopie jedes Backups wird an %s gesendet."
+
+#~ msgid "The following paths will be excluded from your backups %s."
+#~ msgstr ""
+#~ "Die folgenden Pfade werden von deinen Backups ausgeschlossen sein: %s"
+
+#~ msgid "Settings saved."
+#~ msgstr "Einstellungen gespeichert."
+
+#~ msgid ""
+#~ "You have both %1$s and %2$s defined so there isn't anything to back up."
+#~ msgstr ""
+#~ "Du hast sowohl %1$s, als auch %2$s definiert. Deswegen gibt es nichts zu "
+#~ "sichern."
+
+#~ msgid "The following email address is not valid: %s."
+
+#~ msgid_plural "The following email addresses are not valid: %s."
+#~ msgstr[0] "Die folgende E-Mail-Adresse ist ungültig: %s"
+#~ msgstr[1] "Die folgenden E-Mail-Adressen sind ungültig: %s"
+
+#~ msgid ""
+#~ "The last backup email failed to send. It's likely that the file is too "
+#~ "large."
+#~ msgstr ""
+#~ "Das letzte Backup-E-Mail konnte nicht gesendet werden. Wahrscheinlich ist "
+#~ "die Datei zu groß."
+
+#~ msgid ""
+#~ "You have defined a custom exclude list but the following paths don't "
+#~ "exist %s, are you sure you entered them correctly?"
+#~ msgstr ""
+#~ "Du hast eine Ausnahmen-Liste definiert, aber die folgenden Pfade "
+#~ "existieren nicht: %s. Bist du sicher, dass du sie korrekt eingegeben hast?"
+
+#~ msgid "Removing old backups"
+#~ msgstr "Alte Backups werden gelöscht"
+
+#~ msgid ""
+#~ "BackUpWordPress has completed a backup of your site %1$s.\\n\\nThe backup "
+#~ "file should be attached to this email.\\n\\nYou can also download the "
+#~ "backup file by clicking the link below:\\n\\n%2$s\\n\\nKind Regards\\n\\n "
+#~ "The Happy BackUpWordPress Backup Emailing Robot"
+#~ msgstr ""
+#~ "BackUpWordPress hat ein Backup deiner Seite %1$s fertiggestellt.\n"
+#~ "\n"
+#~ "Die Backup-Datei sollte an diese E-Mail angehängt sein.\n"
+#~ "\n"
+#~ "Du kannst es auch herunterladen, indem du den folgenden Link anklickst:\n"
+#~ "\n"
+#~ "%2$s\n"
+#~ "\n"
+#~ "Liebe Grüße\n"
+#~ "\n"
+#~ " Der glückliche BackUpWordPress-Backup-E-Mail-Roboter"
+
+#~ msgid ""
+#~ "BackUpWordPress has completed a backup of your site %1$s.\\n"
+#~ "\\nUnfortunately the backup file was too large to attach to this email.\\n"
+#~ "\\nYou can download the backup file by clicking the link below:\\n\\n%2$s"
+#~ "\\n\\nKind Regards\\n\\n The Happy BackUpWordPress Backup Emailing Robot"
+#~ msgstr ""
+#~ "BackUpWordPress hat ein Backup deiner Seite %1$s fertiggestellt.\n"
+#~ "\n"
+#~ "Leider war die Backup-Datei zu groß, um sie an dieses E-Mail anzuhängen.\n"
+#~ "\n"
+#~ "Du kannst es aber herunterladen, indem du den folgenden Link anklickst:\n"
+#~ "\n"
+#~ "%2$s\n"
+#~ "\n"
+#~ "Liebe Grüße\n"
+#~ "\n"
+#~ " Der glückliche BackUpWordPress-Backup-E-Mail-Roboter"
