@@ -101,12 +101,12 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 #### 1.6.9
 
-* Updated and improved translations across the board - props elektronikLexikon.
-* German translation - props elektronikLexikon.
+* Updated and improved translations across the board - props @elektronikLexikon.
+* German translation - props @elektronikLexikon.
 * New Basque translation - props Unai ZC.
 * New Dutch translation - Anno De Vries.
 * New Italian translation.
-* Better support for when WordPress is installed in a sub directory - props
+* Better support for when WordPress is installed in a sub directory - props @mattheu
 
 
 #### 1.6.8
