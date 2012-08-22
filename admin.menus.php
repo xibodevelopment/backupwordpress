@@ -62,7 +62,7 @@ function hmbkp_contextual_help() {
 
 	// Check if help is for the right version.
 	if ( ! empty( $plugin->version ) && version_compare( HMBKP_VERSION, $plugin->version, '!=' ) )
-	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %s. View the readme.txt file for help specific to version %s.', 'hmbkp' ) . '</p></div>', '<code>' . $plugin->version . '</code>', '<code>' . HMBKP_VERSION . '</code>' );
+	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %1$s. View the %2$s file for help specific to version %3$s.', 'hmbkp' ) . '</p></div>', '<code>' . $plugin->version . '</code>', '<code>readme.txt</code>', '<code>' . HMBKP_VERSION . '</code>' );
 
 	ob_start();
 	require_once( HMBKP_PLUGIN_PATH . '/admin.constants.php' );
@@ -77,7 +77,7 @@ function hmbkp_contextual_help() {
 
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'hmbkp' ) . '</strong></p>' .
-		'<p><a href="https://github.com/humanmade/backupwordpress" target="_blank">github</a></p>' .
+		'<p><a href="https://github.com/humanmade/backupwordpress" target="_blank">GitHub</a></p>' .
 		'<p><a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">' . __( 'Support Forums', 'hmbkp' ) .'</a></p>' .
 		'<p><a href="http://translate.hmn.md/" target="_blank">' . __( 'Help with translation', 'hmbkp' ) .'</a></p>'
 	);

@@ -2,8 +2,8 @@
 Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.1.4
-Tested up to: 3.3.2
-Stable tag: 1.6.8
+Tested up to: 3.4.1
+Stable tag: 1.6.9
 
 Simple automated back ups of your WordPress powered website.
 
@@ -27,7 +27,7 @@ BackUpWordPress will back up your entire site including your database and all yo
 
 The BackUpWordPress plugin is hosted github, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
 
-We'd also love help translating the plugin into more languages, if you can help then please contact support@humanmade.co.uk or send us a pull request.
+We'd also love help translating the plugin into more languages, if you can help then please contact support@hmn.md or send us a pull request.
 
 == Installation ==
 
@@ -91,13 +91,23 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@humanmade.co.uk for further help/support.
+You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
 
 == Screenshots ==
 
 1. Simple Automated Backups
 
 == Changelog ==
+
+#### 1.6.9
+
+* Updated and improved translations across the board - props elektronikLexikon.
+* German translation - props elektronikLexikon.
+* New Basque translation - props Unai ZC.
+* New Dutch translation - Anno De Vries.
+* New Italian translation.
+* Better support for when WordPress is installed in a sub directory - props
+
 
 #### 1.6.8
 
@@ -108,7 +118,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Romanian translation.
 * Fix conflict with WP Remote.
 * Fix a minor issue where invalid email address's were still stored.
-* The root path that is backed up can now be controlled by defining `HMBKP_PATH`.
+* The root path that is backed up can now be controlled by defining `HMBKP_ROOT`.
 
 #### 1.6.7
 
@@ -339,7 +349,7 @@ Fix some silly 1.0 bugs
 
 #### 1.0
 
-1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [humanmade](http://humanmade.co.uk) the chaps behind [WP Remote](https://wpremote.com)
+1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [humanmade](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
 
 #### Previous
 

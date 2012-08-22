@@ -2,7 +2,7 @@
 
     <h3><?php _e( 'Settings', 'hmbkp' ); ?></h3>
 
-	<p><?php printf( __( 'You can define %s in your %s to control some settings. A full list of %s can be found in the %s. Defined settings will not be editable below.', 'hmbkp' ), '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<code>wp-config.php</code>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<a href="#contextual-help-wrap" class="hmbkp-show-help-tab">' . __( 'help panel' ) . '</a>' ); ?></p>
+	<p><?php printf( __( 'You can define %1$s in your %2$s to control some settings. A full list of %3$s can be found in the %4$s. Defined settings will not be editable below.', 'hmbkp' ), '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<code>wp-config.php</code>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<a href="#contextual-help-wrap" class="hmbkp-show-help-tab">' . __( 'help panel', 'hmbkp' ) . '</a>' ); ?></p>
 
 	<form method="post">
 
@@ -60,8 +60,8 @@
 
 						<select name="hmbkp_what_to_backup" id="hmbkp_what_to_backup" <?php disabled( defined( 'HMBKP_FILES_ONLY' ) || defined( 'HMBKP_DATABASE_ONLY' )  ); ?>>
 							<option value="default" <?php selected( ! get_option( 'hmbkp_files_only' ) && !get_option( 'hmbkp_database_only' ) ); ?>><?php _e( 'database &amp; files', 'hmbkp' ); ?></option>
-							<option <?php selected( hmbkp_get_database_only() ); ?>><?php _e( 'database only', 'hmbkp' ); ?></option>
-							<option <?php selected( hmbkp_get_files_only() ); ?>><?php _e( 'files only', 'hmbkp' ); ?></option>
+							<option value="database_only" <?php selected( hmbkp_get_database_only() ); ?>><?php _e( 'database only', 'hmbkp' ); ?></option>
+							<option value="files_only" <?php selected( hmbkp_get_files_only() ); ?>><?php _e( 'files only', 'hmbkp' ); ?></option>
 						</select>
 
 					</td>
