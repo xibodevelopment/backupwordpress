@@ -126,7 +126,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 				$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
 
-				$message = sprintf( __( "BackUpWordPress was unable to backup your site %s.\n\nHere are the errors that we're encountered\n\n%s\n\nIf the errors above look like Martian, forward this email to support@humanmade.co.uk and we'll take a look\n\nKind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $error_message, $download );
+				$message = sprintf( __( "BackUpWordPress was unable to backup your site %1$s.\n\nHere are the errors that we're encountered\n\n%2$s\n\nIf the errors above look like Martian, forward this email to %3$s and we'll take a look\n\nKind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $error_message, 'support@hmn.md' );
 
 				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 
@@ -139,7 +139,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			// If it's larger than 10MB assume it's not going to be able to send the backup
 			if ( filesize( $file ) < 1000 * 1000 * 10 ) {
 
-				$message = sprintf( __( "BackUpWordPress has completed a backup of your site %s.\n\nThe backup file should be attached to this email.\n\nYou can also download the backup file by clicking the link below:\n\n%s\n\nKind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
+				$message = sprintf( __( "BackUpWordPress has completed a backup of your site %1$s.\n\nThe backup file should be attached to this email.\n\nYou can also download the backup file by clicking the link below:\n\n%2$s\n\nKind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
 
 				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers, $file );
 
@@ -148,7 +148,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			// If we didn't send the email above then send just the notification
 			if ( ! $sent ) {
 
-				$message = sprintf( __( "BackUpWordPress has completed a backup of your site %s.\n\nUnfortunately the backup file was too large to attach to this email.\n\nYou can download the backup file by clicking the link below:\n\n%s\n\nKind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
+				$message = sprintf( __( "BackUpWordPress has completed a backup of your site %1$s.\n\nUnfortunately the backup file was too large to attach to this email.\n\nYou can download the backup file by clicking the link below:\n\n%2$s\n\nKind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
 
 				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 
