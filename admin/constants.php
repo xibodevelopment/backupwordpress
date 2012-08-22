@@ -38,7 +38,7 @@
         <dd><p><?php printf( __( 'The capability to use when calling %1$s. Defaults to %2$s.', 'hmbkp' ), '<code>add_menu_page</code>', '<code>manage_options</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_CAPABILITY', 'edit_posts' );</code></p></dd>
 
         <dt<?php if ( defined( 'HMBKP_ROOT' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_ROOT</code></dt>
-        <dd><p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'hmbkp' ), '<code>' . hmbkp_get_home_path() . '</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p></dd>
+        <dd><p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'hmbkp' ), '<code>' . HM_Backup::get_home_path() . '</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p></dd>
 
     </dl>
 

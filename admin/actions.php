@@ -65,16 +65,17 @@ add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
  */
 function hmbkp_request_download_backup() {
 
-	if ( empty( $_GET['hmbkp_download'] ) )
+	if ( empty( $_GET['hmbkp_download_backup'] ) )
 		return;
 
 	// Force the .htaccess to be rebuilt
 	if ( file_exists( hmbkp_path() . '/.htaccess' ) )
 		unlink( hmbkp_path() . '/.htaccess' );
 
+	// Force the .htacces to be rewritten incase the HMBKP_SECURE_KEY has changed
 	hmbkp_path();
 
-	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( HM_Backup::conform_dir( ABSPATH ), site_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( realpath( HM_Backup::conform_dir( HM_Backup::get_home_path() ) ), home_url(), base64_decode( $_GET['hmbkp_download_backup'] ) ) ), 303 );
 
 	exit;
 
