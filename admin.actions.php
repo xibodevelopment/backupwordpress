@@ -167,9 +167,10 @@ function hmbkp_request_download_backup() {
 	if ( file_exists( hmbkp_path() . '/.htaccess' ) )
 		unlink( hmbkp_path() . '/.htaccess' );
 
+	// Force a refresh of the HMBKP_SECURE_KEY in .htaccess
 	hmbkp_path();
 
-	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( hmbkp_conform_dir( get_home_path() ), home_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
+	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( realpath( hmbkp_conform_dir( get_home_path() ) ), home_url(), base64_decode( $_GET['hmbkp_download'] ) ) ), 303 );
 
 	exit;
 
