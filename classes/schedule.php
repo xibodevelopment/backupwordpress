@@ -142,6 +142,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_ZIP_PATH' ) )
 			$this->set_zip_command_path( HMBKP_ZIP_PATH );
 
+		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' )
+			$this->skip_zip_archive = true;
+
 		// Pass type and excludes up to HM Backup
 		parent::set_type( $this->get_type() );
 		parent::set_excludes( $this->get_excludes() );
