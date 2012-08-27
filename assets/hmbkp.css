@@ -24,8 +24,6 @@ tfoot p { margin: 0; font-weight: normal; }
 .ui-tabs-nav .ui-tabs-selected a { font-weight: bold; color: #000; }
 .hmbkp_schedule { clear: both; overflow: hidden; }
 
-#fancybox-overlay { background-color: rgba( 255, 255, 255, .7 ) !important; }
-
 .fancybox-inner { overflow-x: hidden !important; }
 .fancybox-inner fieldset { max-width: 100%; }
 .hmbkp-form fieldset { float: left; }
