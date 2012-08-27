@@ -49,7 +49,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	public function testFullBackupWithZip() {
 
 		if ( ! $this->backup->get_zip_command_path() )
-            $this->markTestSkipped( 'Empty zip command path' );
+			$this->markTestSkipped( 'Empty zip command path' );
 
 		$this->backup->backup();
 
@@ -60,7 +60,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		$files = $this->backup->get_files();
 		$files[] = $this->backup->get_database_dump_filename();
 
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
+		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, $this->backup->get_root() );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
 		$this->assertEmpty( $this->backup->get_errors() );
@@ -74,21 +74,21 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 */
 	public function testFullBackupWithZipArchive() {
 
-	  	$this->backup->set_zip_command_path( false );
+		$this->backup->set_zip_command_path( false );
 
-	  	$this->backup->backup();
+		$this->backup->backup();
 
-	  	$this->assertEquals( $this->backup->get_archive_method(), 'ziparchive' );
+		$this->assertEquals( $this->backup->get_archive_method(), 'ziparchive' );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
-	 	$files = $this->backup->get_files();
-	 	$files[] = $this->backup->get_database_dump_filename();
+		$files = $this->backup->get_files();
+		$files[] = $this->backup->get_database_dump_filename();
 
-	 	$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
-	 	$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
+		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, $this->backup->get_root() );
+		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
-	 	$this->assertEmpty( $this->backup->get_errors() );
+		$this->assertEmpty( $this->backup->get_errors() );
 
 	}
 
@@ -111,7 +111,7 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		$files = $this->backup->get_files();
 		$files[] = $this->backup->get_database_dump_filename();
 
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files );
+		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, $this->backup->get_root() );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
 		$this->assertEmpty( $this->backup->get_errors() );
