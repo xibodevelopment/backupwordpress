@@ -198,7 +198,7 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 
 	if ( $status = $schedule->get_status() ) { ?>
 
-		<span class="hmbkp-status"><?php echo $status; ?>[<a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel' ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>]</span>
+		<span class="hmbkp-status"><?php echo $status; ?>[<a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>]</span>
 
 	<?php } else { ?>
 
