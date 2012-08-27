@@ -149,7 +149,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		parent::set_type( $this->get_type() );
 		parent::set_excludes( $this->get_excludes() );
 
-		// Set the path
+		// Set the path - TODO remove external function dependancy
 		$this->set_path( hmbkp_path() );
 
 		// Set the archive filename to site name + schedule slug + date
