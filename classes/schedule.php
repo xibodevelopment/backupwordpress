@@ -383,7 +383,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_reoccurrence() {
 
 		if ( empty( $this->options['reoccurrence'] ) )
-			$this->set_reoccurrence( 'weekly' );
+			$this->set_reoccurrence( 'manually' );
 
 		return esc_attr( $this->options['reoccurrence'] );
 
@@ -398,15 +398,19 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function set_reoccurrence( $reoccurrence ) {
 
 		// Check it's valid
-		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ! in_array( $reoccurrence, array_keys( wp_get_schedules() ) ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid cron reoccurrence' );
+		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( wp_get_schedules() ) ) ) && $reoccurrence !== 'manually' )
+			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid cron reoccurrence or "manually"' );
 
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
 			return;
 
 		$this->options['reoccurrence'] = $reoccurrence;
 
-		$this->schedule();
+		if ( $reoccurrence === 'manually' )
+			$this->unschedule();
+
+		else
+			$this->schedule();
 
 	}
 
@@ -443,13 +447,17 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function schedule() {
 
 		// Clear any existing hooks
-		wp_clear_scheduled_hook( $this->schedule_hook );
+		$this->unschedule();
 
 		wp_schedule_event( $this->get_schedule_start_time() + $this->get_interval(), $this->get_reoccurrence(), $this->schedule_hook );
 
 		// Hook the backu into the schedule hook
 		add_action( $this->schedule_hook, array( $this, 'run' ) );
 
+	}
+
+	public function unschedule() {
+		wp_clear_scheduled_hook( $this->schedule_hook );
 	}
 
 	/**

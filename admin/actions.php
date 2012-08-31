@@ -247,10 +247,10 @@ function hmnkp_edit_schedule_submit() {
 
 	if ( isset( $_GET['hmbkp_schedule_reoccurrence'] ) ) {
 
-		if ( ! trim( $_GET['hmbkp_schedule_reoccurrence'] ) )
+		if ( empty( $_GET['hmbkp_schedule_reoccurrence'] ) )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
 
-		elseif ( ! in_array( $_GET['hmbkp_schedule_reoccurrence'], array_keys( wp_get_schedules() ) ) )
+		elseif ( ! in_array( $_GET['hmbkp_schedule_reoccurrence'], array_keys( wp_get_schedules() ) ) && $_GET['hmbkp_schedule_reoccurrence'] !== 'manually' )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'hmbkp' );
 
 		else
@@ -261,10 +261,13 @@ function hmnkp_edit_schedule_submit() {
 	if ( isset( $_GET['hmbkp_schedule_max_backups'] ) ) {
 
 		if ( empty( $_GET['hmbkp_schedule_max_backups'] ) )
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be more than 1', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
 
 		elseif ( ! is_numeric( $_GET['hmbkp_schedule_max_backups'] ) )
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
+
+		elseif ( ! ( $_GET['hmbkp_schedule_max_backups'] >= 1 ) )
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
 
 		else
 			$schedule->set_max_backups( (int) $_GET['hmbkp_schedule_max_backups'] );
@@ -274,7 +277,7 @@ function hmnkp_edit_schedule_submit() {
 	}
 
 	foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-        $errors = $service->save();
+        $errors = array_merge( $errors, $service->save() );
 
 	$schedule->save();
 

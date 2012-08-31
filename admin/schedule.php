@@ -54,6 +54,12 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	break;
 
+	case 'manually' :
+
+		$reoccurrence = __( 'manually', 'hmbkp' );
+
+	break;
+
 endswitch;
 
 $server = '<span title="' . hmbkp_path() . '">' . __( 'server', 'hmbkp' ) . '</span>';

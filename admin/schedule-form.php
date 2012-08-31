@@ -24,6 +24,8 @@
 
     		<select name="hmbkp_schedule_reoccurrence" id="hmbkp_schedule_reoccurrence">
 
+    			<option value="manually">Manual Only</option>
+
 <?php foreach( wp_get_schedules() as $cron_schedule => $cron_details ) : ?>
 
     		    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo $cron_schedule; ?>"><?php echo $cron_details['display']; ?></option>

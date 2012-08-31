@@ -101,6 +101,8 @@ abstract class HMBKP_Service {
 
 		$this->schedule->set_service_options( $classname, $new_data );
 
+		return array();
+
 	}
 
 	/**
