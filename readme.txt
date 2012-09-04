@@ -87,7 +87,7 @@ If you have tried all these then feel free to contact support.
 
 The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php` (note the space between php5 and the location of the file). The file `wp-cron.php` `chmod` must be set to `711`.
 
-**Further Support & Feedbask**
+**Further Support & Feedback**
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
 
