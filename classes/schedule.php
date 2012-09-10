@@ -153,7 +153,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->set_path( hmbkp_path() );
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
+		$this->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
 	}
 
@@ -359,6 +359,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	public function get_schedule_start_time() {
 
+		if ( $this->get_reoccurrence() === 'manually' )
+			return 0;
+
 		if ( ! $this->schedule_start_time )
 			$this->set_schedule_start_time( current_time( 'timestamp' ) );
 
@@ -382,6 +385,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_reoccurrence() {
 
+		// Default to no reoccurrence
 		if ( empty( $this->options['reoccurrence'] ) )
 			$this->set_reoccurrence( 'manually' );
 
@@ -423,6 +427,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_interval() {
 
 		$schedules = wp_get_schedules();
+
+		if ( $this->get_reoccurrence() === 'manually' )
+			return 0;
 
 		return $schedules[$this->get_reoccurrence()]['interval'];
 

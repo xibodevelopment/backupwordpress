@@ -33,11 +33,17 @@ class testScheduleTestCase extends WP_UnitTestCase {
 
 	public function testDefaultReoccurrence() {
 
-		$this->assertEquals( 'weekly', $this->schedule->get_reoccurrence() );
+		$this->assertEquals( 'manually', $this->schedule->get_reoccurrence() );
 
 	}
 
 	public function testDefaultSchedule() {
+
+		$this->assertEquals( 'manually', $this->schedule->get_reoccurrence() );
+
+		$this->assertEmpty( $this->schedule->get_next_occurrence() );
+		$this->assertEmpty( $this->schedule->get_schedule_start_time() );
+		$this->assertEmpty( $this->schedule->get_interval() );
 
 		$this->assertEquals( $this->schedule->get_schedule_start_time() + $this->schedule->get_interval(), $this->schedule->get_next_occurrence() );
 
