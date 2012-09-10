@@ -21,7 +21,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .subsubsub li + li::before { content: "| "; }
 .subsubsub .add-new-h2 { top: 0; }
 
-.ui-tabs-nav .ui-tabs-selected a { font-weight: bold; color: #000; }
+.ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav .ui-state-active a { font-weight: bold; color: #000; }
 .hmbkp_schedule { clear: both; overflow: hidden; }
 
 .fancybox-inner { overflow-x: hidden !important; }
