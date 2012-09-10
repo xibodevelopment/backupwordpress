@@ -330,7 +330,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	    		global $wpdb;
 
-	    		$res = $wpdb->get_results( 'SHOW TABLE STATUS FROM ' . DB_NAME, ARRAY_A );
+	    		$res = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
 
 	    		foreach ( $res as $r )
 	    			$filesize += (float) $r['Data_length'];
