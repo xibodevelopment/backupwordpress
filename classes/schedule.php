@@ -216,8 +216,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_type( $type ) {
 
-		if ( parent::set_type( $type ) !== false )
+		if ( parent::set_type( $type ) !== false ) {
+
 			$this->options['type'] = $type;
+
+			$this->clear_filesize_cache();
+
+		}
 
 	}
 
@@ -246,8 +251,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_excludes( $excludes, $append = false ) {
 
-		if ( parent::set_excludes( $excludes, $append ) !== false )
+		if ( parent::set_excludes( $excludes, $append ) !== false ) {
+
 			$this->options['excludes'] = parent::get_excludes();
+
+			$this->clear_filesize_cache();
+
+		}
 
 	}
 
@@ -357,6 +367,23 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+	/**
+	 * Clear the cached filesize, forces the filesize to be re-calculated the next
+	 * time get_filesize is called
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function clear_filesize_cache() {
+		delete_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
+	}
+
+	/**
+	 * Get the start time for the schedule
+	 *
+	 * @access public
+	 * @return int timestamp || 0 for manual only schedules
+	 */
 	public function get_schedule_start_time() {
 
 		if ( $this->get_reoccurrence() === 'manually' )
@@ -682,11 +709,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function cancel() {
 
-		// Delete the schedule optoins
+		// Delete the schedule options
 		delete_option( 'hmbkp_schedule_' . $this->get_id() );
 
 		// Clear any existing schedules
-		wp_clear_scheduled_hook( $this->schedule_hook );
+		$this->unschedule();
+
+		// Clear the filesize transient
+		$this->clear_filesize_cache();
 
 		// Delete it's backups
 		$this->delete_backups();
