@@ -396,6 +396,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+	/**
+	 * Set the schedule start time.
+	 *
+	 * @access public
+	 * @param int $timestamp
+	 * @return void
+	 */
 	public function set_schedule_start_time( $timestamp ) {
 
 		if ( (string) (int) $timestamp !== (string) $timestamp )
@@ -514,6 +521,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+	/**
+	 * Get the status of the running backup.
+	 *
+	 * @access public
+	 * @return string
+	 */
 	public function get_status() {
 
 		if ( ! file_exists( $this->schedule_running_filepath ) )
@@ -523,6 +536,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+	/**
+	 * Get the filename that the running status is stored in.
+	 *
+	 * @access public
+	 * @return string
+	 */
 	public function get_running_backup_filename() {
 
 		if ( ! file_exists( $this->schedule_running_filepath ) )
@@ -531,7 +550,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		return reset( explode( '::', file_get_contents( $this->schedule_running_filepath ) ) );
 	}
 
-	public function set_status( $message ) {
+	/**
+	 * Set the status of the running backup
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 */
+	protected function set_status( $message ) {
 
 		if ( ! $handle = fopen( $this->schedule_running_filepath, 'w' ) )
 			return;
