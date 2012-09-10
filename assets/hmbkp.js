@@ -1,7 +1,9 @@
 jQuery( document ).ready( function( $ ) {
 
+	// Don't ever cache ajax requests
 	$.ajaxSetup( { 'cache' : false } );
 
+	// Remove the loading class when ajax requests complete
 	$( document ).ajaxComplete( function() {
 		$( '.hmbkp-ajax-loading' ).removeClass( 'hmbkp-ajax-loading' );
 	} );
@@ -195,8 +197,11 @@ jQuery( document ).ready( function( $ ) {
 	// Edit schedule form submit
 	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
 
+		isNewSchedule = $( this ).closest( 'form' ).attr( 'data-schedule-action' ) == 'add' ? true : false;
+		scheduleId = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
+
 		// Warn that backups will be deleted if max backups has been set to less than the number of backups currently stored
-		if ( Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( objectL10n.remove_old_backups ) )
+		if ( ! isNewSchedule && Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( objectL10n.remove_old_backups ) )
 			return false;
 
 		$( this ).find( 'button[type="submit"]' ).addClass( 'hmbkp-ajax-loading' );
@@ -217,7 +222,11 @@ jQuery( document ).ready( function( $ ) {
 					$.fancybox.close();
 
 					// Reload the page so we see changes
-					location.reload( true );
+					if ( isNewSchedule )
+						location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&hmbkp_schedule_id=' + scheduleId );
+
+					else
+						location.reload( true );
 
 				} else {
 

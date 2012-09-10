@@ -210,6 +210,7 @@ add_action( 'wp_ajax_hmbkp_edit_schedule_excludes_load', 'hmbkp_edit_schedule_ex
 function hmbkp_add_schedule_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( date( 'U' ) );
+	$is_new_schedule = true;
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
 
