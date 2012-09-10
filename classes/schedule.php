@@ -349,7 +349,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			}
 
 			// Cache for a day
-			set_transient( time() + 60 * 60 * 24, 'hmbkp_schedule_' . $this->get_id() . '_filesize', $filesize );
+			set_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize', $filesize, time() + 60 * 60 * 24 );
 
 		}
 
