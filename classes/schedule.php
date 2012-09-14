@@ -127,8 +127,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Setup the schedule hook
 		$this->schedule_hook = 'hmbkp_schedule_' . $this->get_id() . '_hook';
 
-		$this->schedule_running_filepath = $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
-
 		// Some properties can be overridden with a defines
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
 			$this->set_root( HMBKP_ROOT );
@@ -142,8 +140,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_ZIP_PATH' ) )
 			$this->set_zip_command_path( HMBKP_ZIP_PATH );
 
-		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' )
-			$this->skip_zip_archive = true;
+		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' && $this->skip_zip_archive = true )
+			$this->set_zip_command_path( false );
 
 		// Pass type and excludes up to HM Backup
 		parent::set_type( $this->get_type() );
@@ -353,8 +351,20 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	    		// Get rid of any cached filesizes
 	    		clearstatcache();
 
-				foreach ( $this->get_files() as $file )
-					$filesize += (float) $file->getSize();
+				$excludes = $this->exclude_string( 'regex' );
+
+				foreach ( $this->get_files() as $file ) {
+
+			    	if ( $file === '.' || $file === '..' || ! $file->isReadable() )
+				        continue;
+
+				    // Excludes
+				    if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', $this->conform_dir( $file->getPathname() ) ) ) )
+				        continue;
+
+				    $filesize += (float) $file->getSize();
+
+				}
 
 			}
 
@@ -365,6 +375,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	    return self::human_filesize( $filesize, null, '%01u %s' );
 
+	}
+
+	/**
+	 * Check whether the filesize has already been calculated and cached.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function is_filesize_cached() {
+		return (bool) get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
 	}
 
 	/**
@@ -480,6 +500,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+	private function get_schedule_running_path() {
+		return $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
+	}
+
 	/**
 	 * Schedule the cron
 	 *
@@ -514,8 +538,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->backup();
 
 		// Delete the backup running file
-		if ( file_exists( $this->schedule_running_filepath ) )
-			unlink( $this->schedule_running_filepath );
+		if ( file_exists( $this->get_schedule_running_path() ) )
+			unlink( $this->get_schedule_running_path() );
 
 		$this->delete_old_backups();
 
@@ -529,10 +553,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_status() {
 
-		if ( ! file_exists( $this->schedule_running_filepath ) )
+		if ( ! file_exists( $this->get_schedule_running_path() ) )
 			return '';
 
-		return end( explode( '::', file_get_contents( $this->schedule_running_filepath ) ) );
+		return end( explode( '::', file_get_contents( $this->get_schedule_running_path() ) ) );
 
 	}
 
@@ -544,10 +568,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_running_backup_filename() {
 
-		if ( ! file_exists( $this->schedule_running_filepath ) )
+		if ( ! file_exists( $this->get_schedule_running_path() ) )
 			return '';
 
-		return reset( explode( '::', file_get_contents( $this->schedule_running_filepath ) ) );
+		return reset( explode( '::', file_get_contents( $this->get_schedule_running_path() ) ) );
 	}
 
 	/**
@@ -559,7 +583,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	protected function set_status( $message ) {
 
-		if ( ! $handle = fopen( $this->schedule_running_filepath, 'w' ) )
+		if ( ! $handle = fopen( $this->get_schedule_running_path(), 'w' ) )
 			return;
 
 		fwrite( $handle, $this->get_archive_filename() . '::' . $message );

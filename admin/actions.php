@@ -147,11 +147,17 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
 
 /**
  * Display the calculated size via ajax
- * @todo
  */
 function hmbkp_ajax_calculate_backup_size() {
 
-	echo hmbkp_calculate();
+	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+		return;
+
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
+
+	$recalculate_filesize = true;
+
+	include_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' );
 
 	exit;
 

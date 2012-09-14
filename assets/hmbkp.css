@@ -40,6 +40,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-form .button-primary { float: right; }
 .hmbkp-form [type="number"] { min-width: 40px; width: 40px; }
 .hmbkp-error span { position: absolute; top: -18px; left: 0; color: red; }
+.hmbkp-error input[type], .hmbkp-error select { border-color: red; }
 
 .hmbkp-form ul { width: 320px; overflow: hidden; }
 .hmbkp-form ul.hmbkp_file_list { background-color: #FFF; max-height: 200px; overflow-y: scroll; display: block; border-radius: 4px; box-sizing: border-box; clear: both; box-shadow: inset 0px 0px 2px #CCC; font-size: 11px; }

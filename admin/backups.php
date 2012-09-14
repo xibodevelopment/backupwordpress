@@ -6,7 +6,7 @@
 
 	<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
 
-		<li><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ); ?> "><?php echo $schedule->get_name(); ?></a></li>
+		<li><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ); ?> "><?php echo $schedule->get_name(); ?> <span class="count">(<?php echo count( $schedule->get_backups() ); ?>)</span></a></li>
 
 	<?php endforeach; ?>
 
@@ -19,7 +19,7 @@
 
 else
 	$schedule = reset( $schedules->get_schedules() );
-	
+
 	if ( ! $schedule )
 		return; ?>
 

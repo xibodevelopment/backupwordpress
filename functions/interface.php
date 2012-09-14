@@ -105,6 +105,15 @@ function hmbkp_admin_notices() {
 
 	endif;
 
+	if ( ! empty( $_GET['reason'] ) ) :
+
+		function hmbkp_backup_failed_notice() {
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress failed to perform the backup.', 'hmbkp' ) . '</strong> ' . __( 'You have likely hit a memory limit.', 'hmbkp' ) . '<a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p></div>';
+		}
+		add_action( 'admin_notices', 'hmbkp_backup_failed_notice' );
+
+	endif;
+
 }
 add_action( 'admin_head', 'hmbkp_admin_notices' );
 
@@ -142,7 +151,7 @@ function hmbkp_backup_errors_message() {
 	return $message;
 
 }
-function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $file_method = 'get_files' ) {
+function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $file_method = 'get_included_files' ) {
 
 	if ( ! is_null( $excludes ) )
 		$schedule->set_excludes( $excludes );
@@ -198,7 +207,7 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 
 	if ( $status = $schedule->get_status() ) { ?>
 
-		<span class="hmbkp-status"><?php echo $status; ?>[<a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>]</span>
+		<span class="hmbkp-status"><?php echo $status; ?> <a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a></span>
 
 	<?php } else { ?>
 
@@ -206,7 +215,7 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 
 		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
 
-	<?php if ( $schedule->get_type() != 'database' ) { ?>
+	<?php if ( $schedule->get_type() !== 'database' ) { ?>
 		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_excludes_load', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a>  |
 	<?php } ?>
 

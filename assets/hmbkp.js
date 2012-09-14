@@ -84,12 +84,20 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp_add_exclude_rule ul' ).remove();
 				$( '.hmbkp_add_exclude_rule p' ).remove();
 
-				$( '.hmbkp_add_exclude_rule' ).append( data );
+				if ( data.indexOf( 'hmbkp_file_list' ) != -1 )
+					$( '.hmbkp_add_exclude_rule' ).append( data );
+
+				else
+					$( '.hmbkp_add_exclude_rule' ).append( '<p>There was an error previewing the exclude rule.</p>' );
 
 				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
 			}
-		);
+		).error( function() {
+
+
+
+		} );
 
 	} );
 
@@ -113,10 +121,10 @@ jQuery( document ).ready( function( $ ) {
 	// Cancel add exclude rule
 	$( document ).on( 'click', '.hmbkp_cancel_save_exclude_rule, .hmbkp-edit-schedule-excludes-form .submit button', function() {
 
-	    $( '.hmbkp_add_exclude_rule ul' ).remove();
-	    $( '.hmbkp_add_exclude_rule p' ).remove();
+		 $( '.hmbkp_add_exclude_rule ul' ).remove();
+		 $( '.hmbkp_add_exclude_rule p' ).remove();
 
-	    $( '.hmbkp-edit-schedule-excludes-form' ).removeClass( 'hmbkp-exclude-preview-open' );
+		 $( '.hmbkp-edit-schedule-excludes-form' ).removeClass( 'hmbkp-exclude-preview-open' );
 
 	} );
 
@@ -262,22 +270,32 @@ jQuery( document ).ready( function( $ ) {
 
 	// Text the cron response using ajax
 	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
-	    function( data ) {
-	    	if ( data != 1 ) {
-		    	$( '.wrap > h2' ).after( data );
-		    }
-	    }
+		 function( data ) {
+			 if ( data != 1 ) {
+				 	$( '.wrap > h2' ).after( data );
+			 }
+		 }
 	);
 
-	// Calculate the estimated backup size // TODO
-	if ( $( '.hmbkp_estimated-size .calculate' ).size() ) {
-		$.get( ajaxurl, { 'action' : 'hmbkp_calculate' },
-		    function( data ) {
-		    	$( '.hmbkp_estimated-size .calculate' ).fadeOut( function() {
-		    		$( this ).empty().append( data );
-		    	} ).fadeIn();
-		    }
-		);
+	// Calculate the estimated backup size
+	if ( $( '.hmbkp-schedule-sentence .calculating' ).size() ) {
+		$.get( ajaxurl, { 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
+			function( data ) {
+
+				if ( data.indexOf( 'title' ) != -1 )
+					$( '.hmbkp-schedule-sentence' ).replaceWith( data );
+
+				// Fail silently for now
+				else
+					$( '.calculating' ).remove();
+
+			}
+		).error( function() {
+
+			// Fail silently for now
+			$( '.calculating' ).remove();
+
+		} );
 	}
 
 	if ( $( '.hmbkp-running' ).size() ) {
@@ -286,23 +304,28 @@ jQuery( document ).ready( function( $ ) {
 
 	$( '.hmbkp-run' ).live( 'click', function( e ) {
 
+		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
+
 		ajaxRequest = $.get(
 			ajaxurl,
-			{ 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
+			{ 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId },
 			function( data ) {
-				$( '.hmbkp-schedule-actions' ).replaceWith( data );
+
+				if ( data.indexOf( 'hmbkp-schedule-actions' ) != -1 )
+					location.reload( true );
+
+				// The backup failed so just redirect back
+				else
+					location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&action=hmbkp_cancel&reason=broken&hmbkp_schedule_id=' + scheduleId );
+
 			}
-		);
+		).error( function() {
+			location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&action=hmbkp_cancel&reason=broken&hmbkp_schedule_id=' + scheduleId );
+		} );
 
 		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
-	  	setTimeout( function() {
-
-			ajaxRequest.abort();
-
-	  		hmbkpRedirectOnBackupComplete();
-
-	  	}, 500 );
+		setTimeout( 'hmbkpRedirectOnBackupComplete', 1000 );
 
 		e.preventDefault();
 

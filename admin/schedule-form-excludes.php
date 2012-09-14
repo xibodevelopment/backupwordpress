@@ -56,14 +56,23 @@
 
         	<ul class="subsubsub">
 
-        		<li><a href="#hmbkp_excluded_files"><?php _e( 'Excluded', 'hmbkp' ); ?></a>(<?php echo count( $schedule->get_excluded_files() ); ?>)</li>
-        		<li><a href="#hmbkp_included_files"><?php _e( 'Included', 'hmbkp' ); ?></a>(<?php echo count( $schedule->get_files() ); ?>)</li>
+	<?php if ( $schedule->get_excluded_files() ) : ?>
 
-    <?php if ( $schedule->get_unreadable_files() ) { ?>
+        		<li><a href="#hmbkp_excluded_files"><?php _e( 'Excluded', 'hmbkp' ); ?></a>(<?php echo count( $schedule->get_excluded_files() ); ?>)</li>
+
+    <?php endif; ?>
+
+        		<li><a href="#hmbkp_included_files"><?php _e( 'Included', 'hmbkp' ); ?></a>(<?php echo count( $schedule->get_included_files() ); ?>)</li>
+
+    <?php if ( $schedule->get_unreadable_files() ) : ?>
+
                 <li><a href="#hmbkp_unreadable_files"><?php _e( 'Unreadable', 'hmbkp' ); ?></a>(<?php echo count( $schedule->get_unreadable_files() ); ?>)</li>
-    <?php } ?>
+
+    <?php endif; ?>
 
         	</ul>
+
+	<?php if ( $schedule->get_excluded_files() ) : ?>
 
         	<div id="hmbkp_excluded_files">
 
@@ -71,13 +80,15 @@
 
         	</div>
 
+    <?php endif; ?>
+
         	<div id="hmbkp_included_files">
 
-        		<?php hmbkp_file_list( $schedule, null, 'get_files' ); ?>
+        		<?php hmbkp_file_list( $schedule, null, 'get_included_files' ); ?>
 
         	</div>
 
-    <?php if ( $schedule->get_unreadable_files() ) { ?>
+    <?php if ( $schedule->get_unreadable_files() ) : ?>
 
             <div id="hmbkp_unreadable_files">
 
@@ -87,7 +98,7 @@
 
             </div>
 
-    <?php } ?>
+    <?php endif; ?>
 
         <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . $schedule->get_filesize( false ) . '</code>' ); ?></p>
 

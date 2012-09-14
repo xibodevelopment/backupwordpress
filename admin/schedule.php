@@ -1,5 +1,8 @@
 <?php
 
+// Calculated filesize
+$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . $schedule->get_filesize() . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">calculating the size of your site&hellip;</code>';
+
 // Backup Type
 $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
 
@@ -90,7 +93,7 @@ foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service )
 
 <div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
-	<?php printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s', 'hmbkp' ), '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . $schedule->get_filesize() . '</code>', '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, implode( '. ', $services ) ); ?>
+	<?php printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, implode( '. ', $services ) ); ?>
 
 	<?php hmbkp_schedule_actions( $schedule ); ?>
 
