@@ -127,7 +127,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Setup the schedule hook
 		$this->schedule_hook = 'hmbkp_schedule_' . $this->get_id() . '_hook';
 
-		// Some properties can be overridden with a defines
+		// Some properties can be overridden with defines
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
 			$this->set_root( HMBKP_ROOT );
 
