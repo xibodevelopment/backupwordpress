@@ -131,8 +131,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
 			$this->set_root( HMBKP_ROOT );
 
-		if ( defined( 'HMBKP_EXCLUDES' ) && HMBKP_EXCLUDES )
-			$this->set_excludes( HMBKP_EXCLUDES );
+		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+			$this->set_path( HMBKP_PATH );
+
+		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+			$this->set_excludes( HMBKP_EXCLUDE, true );
 
 		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
 			$this->set_mysqldump_command_path( HMBKP_MYSQLDUMP_PATH );
