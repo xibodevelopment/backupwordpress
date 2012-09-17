@@ -91,8 +91,6 @@ function hmbkp_update() {
 
 		/**
 		 * Setup a backwards compatible schedule
-		 *
-		 * @todo Only set this up if there are some existing backup files?
 		 */
 		$legacy_schedule = new HMBKP_Scheduled_Backup( 'backup' );
 
@@ -130,7 +128,7 @@ function hmbkp_update() {
 			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => get_option( 'hmbkp_email_address' ) ) );
 
 		// Set the archive filename to what it used to be
-		$legacy_schedule->set_archive_filename( strtolower( sanitize_file_name( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) ) ) . '.zip' );
+		$legacy_schedule->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
 		$legacy_schedule->save();
 
