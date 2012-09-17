@@ -252,7 +252,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_excludes( $excludes, $append = false ) {
 
-		if ( parent::set_excludes( $excludes, $append ) !== false ) {
+		parent::set_excludes( $excludes, $append );
+
+		if ( ! parent::get_excludes() ) {
 
 			$this->options['excludes'] = parent::get_excludes();
 
