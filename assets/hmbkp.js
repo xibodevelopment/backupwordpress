@@ -15,11 +15,6 @@ jQuery( document ).ready( function( $ ) {
 	if ( ! $( '.subsubsub a.current' ).size() )
 		$( '.subsubsub li:first a').addClass( 'current' );
 
-	// Replace fancybox href with ajax url
-	$( '.fancybox' ).each( function() {
-		$( this ).attr( 'href', $( this ).attr( 'href' ).replace( userSettings['url'] + 'wp-admin/tools.php', ajaxurl.replace( location.origin, '' ) ) );
-	} );
-
 	// Initialize fancybox
 	$( '.fancybox' ).fancybox( {
 
