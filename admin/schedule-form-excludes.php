@@ -37,7 +37,7 @@
 
     			    	<span class="code"><?php echo str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ); ?></span>
 
-    	<?php if ( $key ) { ?>
+    	<?php if ( strpos( $schedule->get_path(), $exclude ) === false && ( ! defined( 'HMBKP_EXCLUDE' ) || ( defined( 'HMBKP_EXCLUDE' ) && strpos( HMBKP_EXCLUDE, $exclude ) === false ) ) ) { ?>
 
     					<a href="#" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
