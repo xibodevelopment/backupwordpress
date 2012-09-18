@@ -127,7 +127,6 @@ require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
 // Load the core functions
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/backup.php' );
 
 // Load Services
 require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
