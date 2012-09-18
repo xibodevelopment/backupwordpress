@@ -201,7 +201,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( empty( $this->options['type'] ) )
 			$this->set_type( 'complete' );
 
-		return esc_attr( $this->options['type'] );
+		return $this->options['type'];
 
 	}
 
