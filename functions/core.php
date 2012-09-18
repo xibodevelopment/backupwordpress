@@ -94,8 +94,6 @@ function hmbkp_update() {
 		 */
 		$legacy_schedule = new HMBKP_Scheduled_Backup( 'backup' );
 
-		// Automatic backups disabled?
-
 		// Backup type
         if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) )
         	$legacy_schedule->set_type( 'files' );
@@ -108,6 +106,10 @@ function hmbkp_update() {
 
 		// Backup schedule
 		$legacy_schedule->set_reoccurrence( str_replace( 'hmbkp_', '', get_option( 'hmbkp_schedule_frequency', 'daily' ) ) );
+
+		// Automatic backups disabled?
+		if ( ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP ) || get_option( 'hmbkp_disable_automatic_backup' ) )
+			$legacy_schedule->set_reoccurrence( 'manually' );
 
 		// Max backups
 		if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) )
