@@ -135,7 +135,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->set_path( HMBKP_PATH );
 
 		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
-			$this->set_excludes( HMBKP_EXCLUDE, true );
+			parent::set_excludes( HMBKP_EXCLUDE, true );
 
 		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
 			$this->set_mysqldump_command_path( HMBKP_MYSQLDUMP_PATH );
@@ -148,7 +148,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Pass type and excludes up to HM Backup
 		parent::set_type( $this->get_type() );
-		parent::set_excludes( $this->get_excludes() );
 
 		// Set the path - TODO remove external function dependancy
 		$this->set_path( hmbkp_path() );
@@ -252,11 +251,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_excludes( $excludes, $append = false ) {
 
+		// Use the validation from HM_Backup::set_excludes
 		parent::set_excludes( $excludes, $append );
 
-		if ( ! parent::get_excludes() ) {
+		// If these are valid excludes and they are different save them
+		if ( parent::get_excludes() && $this->options['excludes'] != parent::get_excludes() ) {
 
-			$this->options['excludes'] = parent::get_excludes();
+			$this->options['excludes'] = $append ? array_merge( $this->options['excludes'], parent::get_excludes() ) : parent::get_excludes();;
 
 			$this->clear_filesize_cache();
 
