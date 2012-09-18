@@ -65,26 +65,26 @@ switch ( $schedule->get_reoccurrence() ) :
 
 endswitch;
 
-$server = '<span title="' . hmbkp_path() . '">' . __( 'server', 'hmbkp' ) . '</span>';
+$server = '<span title="' . hmbkp_path() . '">' . __( 'this server', 'hmbkp' ) . '</span>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
 
 	case 1 :
 
-		$backup_to_keep = sprintf( __( 'store the only the last backup %s', 'hmbkp' ), $server );
+		$backup_to_keep = sprintf( __( 'store the only the last backup on %s', 'hmbkp' ), $server );
 
 	break;
 
 	case 0 :
 
-		$backup_to_keep = sprintf( __( 'don\'t store any backups %s', 'hmbkp' ), $server );
+		$backup_to_keep = sprintf( __( 'don\'t store any backups on %s', 'hmbkp' ), $server );
 
 	break;
 
 	default :
 
-		$backup_to_keep = sprintf( __( 'store only the last %1$s backups %2$s', 'hmbkp' ), $schedule->get_max_backups(), $server );
+		$backup_to_keep = sprintf( __( 'store only the last %1$s backups on %2$s', 'hmbkp' ), $schedule->get_max_backups(), $server );
 
 endswitch;
 
