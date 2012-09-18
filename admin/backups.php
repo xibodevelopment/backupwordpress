@@ -10,7 +10,7 @@
 
 	<?php endforeach; ?>
 
-		<li><a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), HMBKP_ADMIN_URL ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
+		<li><a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), admin_url( 'admin-ajax.php' ) ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
 
 	</ul>
 
