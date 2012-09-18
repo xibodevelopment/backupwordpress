@@ -96,7 +96,7 @@ function hmbkp_update() {
 
 		// Backup type
         if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) )
-        	$legacy_schedule->set_type( 'files' );
+        	$legacy_schedule->set_type( 'file' );
 
 		elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) )
         	$legacy_schedule->set_type( 'database' );
