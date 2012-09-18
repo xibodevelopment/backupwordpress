@@ -26,6 +26,9 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		$this->backup = new HM_Backup();
 		$this->backup->set_excludes( '.git/' );
 
+		if ( defined( 'HMBKP_PATH' ) )
+			$this->markTestSkipped( 'Skipped because of defines' );
+
 	}
 
 	/**
