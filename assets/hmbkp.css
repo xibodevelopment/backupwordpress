@@ -76,5 +76,6 @@ div.hmbkp_add_exclude_rule input { min-width: 240px; float: left; }
 .hmbkp-exclude-preview-open .hmbkp_add_exclude_rule { margin: 0; }
 
 table.widefat tbody td { padding: 8px 7px; }
-.hmbkp-edit-schedule-excludes-form td a { float: right; }
+.hmbkp-edit-schedule-excludes-form td a, .hmbkp-edit-schedule-excludes-form td span.reason { float: right; }
+.hmbkp-edit-schedule-excludes-form td span.reason { color: #CCC; }
 input[type="datetime-local"] { border-radius: 3px; border-width: 1px; border-style: solid; box-sizing: border-box; border-color: #DFDFDF; background-color: white; }
