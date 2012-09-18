@@ -213,13 +213,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_type( $type ) {
 
-		if ( parent::set_type( $type ) !== false ) {
+		parent::set_type( $type );
 
-			$this->options['type'] = $type;
+		$this->options['type'] = $type;
 
-			$this->clear_filesize_cache();
-
-		}
+		$this->clear_filesize_cache();
 
 	}
 
