@@ -37,11 +37,19 @@
 
     			    	<span class="code"><?php echo str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ); ?></span>
 
-    	<?php if ( strpos( $schedule->get_path(), $exclude ) === false && ( ! defined( 'HMBKP_EXCLUDE' ) || ( defined( 'HMBKP_EXCLUDE' ) && strpos( HMBKP_EXCLUDE, $exclude ) === false ) ) ) { ?>
+    	<?php if ( strpos( $schedule->get_path(), untrailingslashit( $exclude ) ) !== false ) : ?>
+
+    					<span class="reason">default</span>
+
+    	<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && strpos( HMBKP_EXCLUDE, $exclude ) !== false ) : ?>
+
+    					<span class="reason">defined</span>
+
+    	<?php else : ?>
 
     					<a href="#" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
-    	<?php } ?>
+    	<?php endif; ?>
 
     				</td>
     			</tr>
