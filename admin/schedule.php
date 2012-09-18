@@ -53,7 +53,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	case 'monthly' :
 
-		$reoccurrence = sprintf( __( 'on the %s of each month at %1$s', 'hmbkp' ), '<span ' . $next_backup . '>' . date_i18n( 'jS', $schedule->get_next_occurrence() ) . '</span>', '<span>' . date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) . '</span>' );
+		$reoccurrence = sprintf( __( 'on the %1$s of each month at %2$s', 'hmbkp' ), '<span ' . $next_backup . '>' . date_i18n( 'jS', $schedule->get_next_occurrence() ) . '</span>', '<span>' . date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) . '</span>' );
 
 	break;
 
