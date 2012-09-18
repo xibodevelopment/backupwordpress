@@ -256,6 +256,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			$this->options['excludes'] = $append ? array_merge( $this->options['excludes'], parent::get_excludes() ) : parent::get_excludes();;
 
+			parent::set_excludes( $this->options['excludes'] );
+
 			$this->clear_filesize_cache();
 
 		}
