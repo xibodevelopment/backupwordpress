@@ -104,6 +104,10 @@ function hmbkp_update() {
         else
 			$legacy_schedule->set_type( 'complete' );
 
+		// Daily schedule time
+		if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) && HMBKP_DAILY_SCHEDULE_TIME )
+			$legacy_schedule->set_schedule_start_time( strtotime( HMBKP_DAILY_SCHEDULE_TIME ) );
+
 		// Backup schedule
 		$legacy_schedule->set_reoccurrence( str_replace( 'hmbkp_', '', get_option( 'hmbkp_schedule_frequency', 'daily' ) ) );
 
