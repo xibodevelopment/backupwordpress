@@ -1,7 +1,7 @@
 <?php
 
 // Calculated filesize
-$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . $schedule->get_filesize() . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">calculating the size of your site&hellip;</code>';
+$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_filesize() ) . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your site&hellip;', 'hmbkp' ) . '</code>';
 
 // Backup Type
 $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
@@ -9,14 +9,14 @@ $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
 // Backup Time
 $day = date_i18n( 'l', $schedule->get_next_occurrence() );
 
-$next_backup = 'title="The next backup will be on ' . date_i18n( get_option( 'date_format' ), $schedule->get_next_occurrence() ) . ' at ' . date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) . '"';
+$next_backup = 'title="' . sprintf( __( 'The next backup will be on %1$s at %2$s', 'hmbkp' ), date_i18n( get_option( 'date_format' ), $schedule->get_next_occurrence() ), date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) ) . '"';
 
 // Backup Re-occurrence
 switch ( $schedule->get_reoccurrence() ) :
 
 	case 'hourly' :
 
-		$reoccurrence = date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) == '00' ? sprintf( __( 'hourly on the hour', 'hmbkp' ) ) : sprintf( __( 'hourly at %s minutes past the hour', 'hmbkp' ), '<span ' . $next_backup . '>' . str_replace( '0', '', date_i18n( 'i', $schedule->get_next_occurrence() ) ) ) . '</span>';
+		$reoccurrence = date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence() ) === '00' ? sprintf( __( 'hourly on the hour', 'hmbkp' ) ) : sprintf( __( 'hourly at %s minutes past the hour', 'hmbkp' ), '<span ' . $next_backup . '>' . str_replace( '0', '', date_i18n( 'i', $schedule->get_next_occurrence() ) ) ) . '</span>';
 
 	break;
 
@@ -65,7 +65,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 endswitch;
 
-$server = '<span title="' . hmbkp_path() . '">' . __( 'this server', 'hmbkp' ) . '</span>';
+$server = '<span title="' . esc_attr( hmbkp_path() ) . '">' . __( 'this server', 'hmbkp' ) . '</span>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
@@ -84,7 +84,7 @@ switch ( $schedule->get_max_backups() ) :
 
 	default :
 
-		$backup_to_keep = sprintf( __( 'store only the last %1$s backups on %2$s', 'hmbkp' ), $schedule->get_max_backups(), $server );
+		$backup_to_keep = sprintf( __( 'store only the last %1$s backups on %2$s', 'hmbkp' ), esc_attr( $schedule->get_max_backups() ), $server );
 
 endswitch;
 

@@ -13,16 +13,16 @@ class BackUpCommand extends WP_CLI_Command {
 
 		// Make sure it's possible to do a backup
 		if ( HM_Backup::is_safe_mode_active() ) {
-			WP_CLI::error( 'Backup not possible when php is running safe_mode on' );
+			WP_CLI::error( __( 'Backup not possible when php is running safe_mode on', 'hmbkp' ) );
 			return false;
 		}
 
 		add_action( 'hmbkp_mysqldump_started', function() {
-			WP_CLI::line( 'Backup: Dumping database...' );
+			WP_CLI::line( __( 'Backup: Dumping database...', 'hmbkp' ) );
 		} );
 
 		add_action( 'hmbkp_archive_started', function() {
-			WP_CLI::line( 'Backup: Zipping everything up...' );
+			WP_CLI::line( __( 'Backup: Zipping everything up...', 'hmbkp' ) );
 		} );
 
 		// Clean up any mess left by a previous backup
@@ -37,12 +37,12 @@ class BackUpCommand extends WP_CLI_Command {
 			$hm_backup->set_root( $assoc_args['root'] );
 
 		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! mkdir( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
-			WP_CLI::error( 'Invalid backup path' );
+			WP_CLI::error( __( 'Invalid backup path', 'hmbkp' ) );
 			return false;
 		}
 
 		if ( ! is_dir( $hm_backup->get_root() ) || ! is_readable( $hm_backup->get_root() ) ) {
-			WP_CLI::error( 'Invalid root path' );
+			WP_CLI::error( __( 'Invalid root path', 'hmbkp' ) );
 			return false;
 		}
 
@@ -63,16 +63,14 @@ class BackUpCommand extends WP_CLI_Command {
 
 		$hm_backup->backup();
 
-	    WP_CLI::line( 'Backup: Deleting old backups...' );
-
 		// Delete any old backup files
 	    //hmbkp_delete_old_backups();
 
     	if ( file_exists( $hm_backup->get_archive_filepath() ) )
-			WP_CLI::success( 'Backup Complete: ' . $hm_backup->get_archive_filepath() );
+			WP_CLI::success( __( 'Backup Complete: ', 'hmbkp' ) . $hm_backup->get_archive_filepath() );
 
 		else
-			WP_CLI::error( 'Backup Failed' );
+			WP_CLI::error( __( 'Backup Failed', 'hmbkp' ) );
 
 	}
 

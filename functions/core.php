@@ -193,7 +193,7 @@ function hmbkp_setup_default_schedules() {
 	$complete_weekly->save();
 
 	function hmbkp_default_schedules_setup_warning() {
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has setup your default schedules.', 'hmbkp' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules below.', 'hmbkp' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has setup your default schedules.', 'hmbkp' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules.', 'hmbkp' ) . '</p></div>';
 	}
 	add_action( 'admin_notices', 'hmbkp_default_schedules_setup_warning' );
 
@@ -208,9 +208,9 @@ function hmbkp_setup_default_schedules() {
 function hmbkp_more_reccurences( $reccurrences ) {
 
 	return array_merge( $reccurrences, array(
-	    'weekly' => array( 'interval' => 604800, 'display' => 'Once Weekly' ),
-	    'fortnightly' => array( 'interval' => 1209600, 'display' => 'Once Fortnightly' ),
-	    'monthly' => array( 'interval' => 2629743.83 , 'display' => 'Once Monthly' )
+	    'weekly' 		=> array( 'interval' => 604800, 'display' => 'Once Weekly' ),
+	    'fortnightly'	=> array( 'interval' => 1209600, 'display' => 'Once Fortnightly' ),
+	    'monthly'		=> array( 'interval' => 2629743.83 , 'display' => 'Once Monthly' )
 	) );
 }
 add_filter( 'cron_schedules', 'hmbkp_more_reccurences' );
@@ -224,7 +224,7 @@ add_filter( 'cron_schedules', 'hmbkp_more_reccurences' );
 function hmbkp_rmdirtree( $dir ) {
 
 	if ( is_file( $dir ) )
-		unlink( $dir );
+		@unlink( $dir );
 
     if ( ! is_dir( $dir ) )
     	return false;
@@ -261,32 +261,24 @@ function hmbkp_path() {
 		$path = HMBKP_PATH;
 
 	// If the dir doesn't exist or isn't writable then use wp-content/backups instead
-	if ( ( ! $path || ! is_writable( $path ) ) && HM_Backup::conform_dir( $path ) != hmbkp_path_default() )
+	if ( ( ! $path || ! is_writable( $path ) ) && HM_Backup::conform_dir( $path ) !== hmbkp_path_default() )
     	$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
 	if ( is_writable( dirname( $path ) ) && ! is_dir( $path ) )
 		mkdir( $path, 0755 );
 
-	if ( get_option( 'hmbkp_path' ) != $path )
+	if ( get_option( 'hmbkp_path' ) !== $path )
 		update_option( 'hmbkp_path', $path );
 
-	// Secure the directory with a .htaccess file
-	$htaccess = $path . '/.htaccess';
+	// protect against directory browsing by including a index.html file
+	$index = $path . '/index.html';
 
-	$contents[]	= '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'hmbkp' ), '.htaccess' );
-	$contents[] = '';
-	$contents[] = '<IfModule mod_rewrite.c>';
-	$contents[] = 'RewriteEngine On';
-	$contents[] = 'RewriteCond %{QUERY_STRING} !key=' . md5( HMBKP_SECURE_KEY );
-	$contents[] = 'RewriteRule (.*) - [F]';
-	$contents[] = '</IfModule>';
-	$contents[] = '';
-
-	if ( ! file_exists( $htaccess ) && is_writable( $path ) && require_once( ABSPATH . '/wp-admin/includes/misc.php' ) )
-		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
+	if ( ! file_exists( $index ) && is_writable( $path ) )
+		file_put_contents( $index, '' );
 
     return HM_Backup::conform_dir( $path );
+
 }
 
 /**
@@ -320,7 +312,7 @@ function hmbkp_path_move( $from, $to ) {
 	if ( $handle = opendir( $from ) ) :
 
 	    while ( false !== ( $file = readdir( $handle ) ) )
-	    	if ( $file != '.' && $file != '..' )
+	    	if ( $file !== '.' && $file !== '..' )
 	    		rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
 
 	    closedir( $handle );
@@ -342,9 +334,6 @@ function hmbkp_possible() {
 	if ( ! is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) || HM_Backup::is_safe_mode_active() )
 		return false;
 
-	if ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY && defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY )
-		return false;
-
 	return true;
 }
 
@@ -355,8 +344,6 @@ function hmbkp_possible() {
  */
 function hmbkp_cleanup() {
 
-	delete_option( 'hmbkp_email_error' );
-
 	$hmbkp_path = hmbkp_path();
 
 	if ( ! is_dir( $hmbkp_path ) )
@@ -365,7 +352,7 @@ function hmbkp_cleanup() {
 	if ( $handle = opendir( $hmbkp_path ) ) :
 
     	while ( false !== ( $file = readdir( $handle ) ) )
-    		if ( ! in_array( $file, array( '.', '..', '.htaccess' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' )
+    		if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' )
 				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
 
     	closedir( $handle );

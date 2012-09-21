@@ -6,7 +6,7 @@
  */
 function hmbkp_request_delete_backup() {
 
-	if ( empty( $_GET['hmbkp_delete_backup'] ) )
+	if ( empty( $_GET['hmbkp_delete_backup'] ) || ! check_admin_referer( 'hmbkp-delete_backup' ) )
 		return;
 
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
@@ -25,7 +25,7 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup
  */
 function hmbkp_request_delete_schedule() {
 
-	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' )
+	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' || ! check_admin_referer( 'hmbkp-delete_schedule' ) )
 		return;
 
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
@@ -48,6 +48,8 @@ function hmbkp_ajax_request_do_backup() {
 
 	ignore_user_abort( true );
 
+	hmbkp_cleanup();
+
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
 
 	$schedule->run();
@@ -65,17 +67,10 @@ add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
  */
 function hmbkp_request_download_backup() {
 
-	if ( empty( $_GET['hmbkp_download_backup'] ) )
+	if ( empty( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) )
 		return;
 
-	// Force the .htaccess to be rebuilt
-	if ( file_exists( hmbkp_path() . '/.htaccess' ) )
-		unlink( hmbkp_path() . '/.htaccess' );
-
-	// Force the .htacces to be rewritten incase the HMBKP_SECURE_KEY has changed
-	hmbkp_path();
-
-	wp_redirect( add_query_arg( 'key', md5( HMBKP_SECURE_KEY ), str_replace( realpath( HM_Backup::conform_dir( HM_Backup::get_home_path() ) ), home_url(), base64_decode( $_GET['hmbkp_download_backup'] ) ) ), 303 );
+	wp_redirect( str_replace( realpath( HM_Backup::conform_dir( HM_Backup::get_home_path() ) ), home_url(), base64_decode( $_GET['hmbkp_download_backup'] ) ), 303 );
 
 	exit;
 
@@ -296,6 +291,13 @@ function hmnkp_edit_schedule_submit() {
 }
 add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' );
 
+
+/**
+ * Add an exclude rule
+ *
+ * @access public
+ * @return void
+ */
 function hmbkp_add_exclude_rule() {
 
 	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
@@ -311,6 +313,13 @@ function hmbkp_add_exclude_rule() {
 }
 add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
 
+
+/**
+ * Delete an exclude rule
+ *
+ * @access public
+ * @return void
+ */
 function hmbkp_delete_exclude_rule() {
 
 	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
@@ -328,6 +337,13 @@ function hmbkp_delete_exclude_rule() {
 }
 add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
 
+
+/**
+ * Ajax action for previewing an exclude rule.
+ *
+ * @access public
+ * @return void
+ */
 function hmbkp_preview_exclude_rule() {
 
 	if ( ! empty( $_POST['hmbkp_schedule_id'] ) )
@@ -347,7 +363,7 @@ function hmbkp_preview_exclude_rule() {
 
 	if ( ! empty( $excluded_files) ) { ?>
 
-	<p><?php printf( _n( '%s matches 1 file.', '%s matches %d files', count( $excluded_files ), 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', count( $excluded_files ) ); ?></p>
+	<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', count( $excluded_files ), 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', count( $excluded_files ) ); ?></p>
 
 	<?php } else { ?>
 
@@ -355,7 +371,7 @@ function hmbkp_preview_exclude_rule() {
 
 	<?php } ?>
 
-	<p><button type="button" class="button-primary hmbkp_save_exclude_rule">Exclude</button> <button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule">Cancel</button></p>
+	<p><button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'hmbkp' ); ?></button> <button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'hmbkp' ); ?></button></p>
 
 	<?php exit;
 
@@ -366,13 +382,11 @@ add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
  * Handles changes in the defined Constants
  * that users can define to control advanced
  * settings
- *
- * @return null
  */
 function hmbkp_constant_changes() {
 
 	// If a custom backup path has been set or changed
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) != ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
 		hmbkp_path_move( $from, HMBKP_PATH );
 
 	// If a custom backup path has been removed

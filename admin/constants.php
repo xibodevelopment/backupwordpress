@@ -13,21 +13,6 @@
         <dt<?php if ( defined( 'HMBKP_ZIP_PATH' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_ZIP_PATH</code></dt>
         <dd><p><?php printf( __( 'The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available.', 'hmbkp' ), '<code>zip</code>', '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ZIP_PATH', '/opt/local/bin/zip' );</code></p></dd>
 
-        <dt<?php if ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DISABLE_AUTOMATIC_BACKUP</code></dt>
-        <dd><p><?php printf( __( 'Completely disables the automatic back up. You can still back up using the "Back Up Now" button. Defaults to %s.', 'hmbkp' ), '<code>(bool) false</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_DISABLE_AUTOMATIC_BACKUP', true );</code></p></dd>
-
-        <dt<?php if ( defined( 'HMBKP_MAX_BACKUPS' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_MAX_BACKUPS</code></dt>
-        <dd><p><?php printf( __( 'Number of backups to keep, older backups will be deleted automatically when a new backup is completed. Defaults to %s.', 'hmbkp' ), '<code>(int) 10</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_MAX_BACKUPS', 5 );</code></p></dd>
-
-        <dt<?php if ( defined( 'HMBKP_FILES_ONLY' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_FILES_ONLY</code></dt>
-        <dd><p><?php printf( __( 'Backup %1$s only, your %2$s won\'t be backed up. Defaults to %3$s.', 'hmbkp' ), '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>', '<code>(bool) false</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_FILES_ONLY', true );</code></p></dd>
-
-        <dt<?php if ( defined( 'HMBKP_DATABASE_ONLY' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DATABASE_ONLY</code></dt>
-        <dd><p><?php printf( __( 'Backup %1$s only, your %2$s won\'t be backed up. Defaults to %3$s.', 'hmbkp' ), '<code>' . __( 'database', 'hmbkp' ) . '</code>', '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>(bool) false</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_DATABASE_ONLY', true );</code></p></dd>
-
-        <dt<?php if ( defined( 'HMBKP_DAILY_SCHEDULE_TIME' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_DAILY_SCHEDULE_TIME</code></dt>
-        <dd><p><?php printf( __( 'The time that the daily back up should run. Defaults to %s.', 'hmbkp' ), '<code>23:00</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_DAILY_SCHEDULE_TIME', '07:30' );</code></p></dd>
-
     	<dt<?php if ( defined( 'HMBKP_EMAIL' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_EMAIL</code></dt>
         <dd><p><?php printf( __( 'Attempt to email a copy of your backups. Value should be email address to send backups to. Defaults to %s.', 'hmbkp' ), '<code>(bool) false</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_EMAIL', 'email@example.com' );</code></p></dd>
 

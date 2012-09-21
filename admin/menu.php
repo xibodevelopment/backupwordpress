@@ -31,12 +31,12 @@ function hmbkp_manage_backups() {
 function hmbkp_plugin_action_link( $links, $file ) {
 
 	if ( strpos( $file, HMBKP_PLUGIN_SLUG ) !== false )
-		array_push( $links, '<a href="tools.php?page=' . HMBKP_PLUGIN_SLUG . '">' . __( 'Backups', 'hmbkp' ) . '</a>' );
+		array_push( $links, '<a href="tools.php?page=' . esc_attr( HMBKP_PLUGIN_SLUG ) . '">' . __( 'Backups', 'hmbkp' ) . '</a>' );
 
 	return $links;
 
 }
-add_filter('plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
+add_filter( 'plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
 
 /**
  * Add Contextual Help to Backups tools page.
@@ -66,7 +66,7 @@ function hmbkp_contextual_help() {
 
 	// Check if help is for the right version.
 	if ( ! empty( $plugin->version ) && version_compare( HMBKP_VERSION, $plugin->version, '!=' ) )
-	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %1$s. View the %2$s file for help specific to version %3$s.', 'hmbkp' ) . '</p></div>', '<code>' . $plugin->version . '</code>', '<code>readme.txt</code>', '<code>' . HMBKP_VERSION . '</code>' );
+	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %1$s. View the %2$s file for help specific to version %3$s.', 'hmbkp' ) . '</p></div>', '<code>' . esc_attr( $plugin->version ) . '</code>', '<code>readme.txt</code>', '<code>' . esc_attr( HMBKP_VERSION ) . '</code>' );
 
 	ob_start();
 	require_once( HMBKP_PLUGIN_PATH . '/admin/constants.php' );

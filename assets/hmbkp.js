@@ -293,9 +293,8 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	}
 
-	if ( $( '.hmbkp-running' ).size() ) {
+	if ( $( '.hmbkp-running' ).size() )
 		hmbkpRedirectOnBackupComplete();
-	}
 
 	$( '.hmbkp-run' ).live( 'click', function( e ) {
 
@@ -320,7 +319,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
-		setTimeout( 'hmbkpRedirectOnBackupComplete', 1000 );
+		setTimeout( 'hmbkpRedirectOnBackupComplete();', 1000 );
 
 		e.preventDefault();
 
