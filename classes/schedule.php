@@ -252,7 +252,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// If these are valid excludes and they are different save them
 		if ( parent::get_excludes() && ( empty( $this->options['excludes'] ) || $this->options['excludes'] !== parent::get_excludes() ) ) {
 
-			$this->options['excludes'] = $append ? array_merge( (array) $this->options['excludes'], parent::get_excludes() ) : parent::get_excludes();;
+			$this->options['excludes'] = $append && ! empty( $this->options['excludes'] ) ? array_merge( (array) $this->options['excludes'], parent::get_excludes() ) : parent::get_excludes();;
 
 			parent::set_excludes( $this->options['excludes'] );
 
