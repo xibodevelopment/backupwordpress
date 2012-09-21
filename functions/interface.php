@@ -178,11 +178,11 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 
 			<?php if ( $file->isDir() ) { ?>
 
-		<li title="<?php echo trailingslashit( $file->getPathName() ); ?>"><?php echo trailingslashit( str_ireplace( trailingslashit( $schedule->get_root() ), '', $file->getPathName() ) ); ?></li>
+		<li title="<?php echo esc_attr( $schedule::conform_dir( trailingslashit( $file->getPathName() ) ) ); ?>"><?php echo trailingslashit( str_ireplace( $schedule::conform_dir( trailingslashit( $schedule->get_root() ) ), '', $schedule::conform_dir( $file->getPathName() ) ) ); ?></li>
 
 			<?php } else { ?>
 
-		<li title="<?php echo $file->getPathName(); ?>"><?php echo str_ireplace( trailingslashit( $schedule->get_root() ), '', $file->getPathName() ); ?></li>
+		<li title="<?php echo esc_attr( $schedule::conform_dir( $file->getPathName() ) ); ?>"><?php echo str_ireplace( $schedule::conform_dir( trailingslashit( $schedule->get_root() ) ), '', $schedule::conform_dir( $file->getPathName() ) ); ?></li>
 
 			<?php }
 
