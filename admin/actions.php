@@ -12,7 +12,7 @@ function hmbkp_request_delete_backup() {
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
 	$schedule->delete_backup( base64_decode( urldecode( $_GET['hmbkp_delete_backup'] ) ) );
 
-	wp_redirect( remove_query_arg( array( 'hmbkp_delete_backup', 'hmbkp_schedule_id', '_wpnonce' ) ), 303 );
+	wp_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
 
 	exit;
 
@@ -94,7 +94,7 @@ function hmbkp_request_cancel_backup() {
 
 	hmbkp_cleanup();
 
-	wp_redirect( remove_query_arg( array( 'action', 'hmbkp_schedule_id' ) ), 303 );
+	wp_redirect( remove_query_arg( array( 'action' ) ), 303 );
 
 	exit;
 
