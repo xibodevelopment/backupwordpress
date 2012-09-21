@@ -1,31 +1,31 @@
 === BackUpWordPress ===
-Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot
+Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
-Tested up to: 3.5-alpha-21684
-Stable tag: 1.6.9
+Tested up to: 3.4.2
+Stable tag: 2.0
 
 Simple automated back ups of your WordPress powered website.
 
 == Description ==
 
-BackUpWordPress will back up your entire site including your database and all your files once every day.
+BackUpWordPress will back up your entire site including your database and all your files on a schedule that suits you.
 
 = Features =
 
+* Manage multiple schedules.
 * Super simple to use, no setup required.
 * Uses `zip` and `mysqldump` for faster back ups if they are available.
 * Works in low memory, "shared host" environments.
 * Option to have each backup file emailed to you.
 * Works on Linux & Windows Server.
 * Exclude files and folders from your back ups.
-* Control advanced settings by defining any of the optional `Constants`.
 * Good support should you need help.
-* (Partial) Spanish & Russian translations.
+* Translations for Spanish, German, Chinese, Romanian, Russian, Serbian, Lithuanian, Italian, Czech, Dutch, French, Basque.
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted github, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
+The BackUpWordPress plugin is hosted GitHub, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
 
 = Translations =
 
@@ -97,9 +97,19 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Screenshots ==
 
-1. Simple Automated Backups
+1. Manage multiple schedules.
+2. Choose your schedule, backup type, number of backups to keep and whether to recieve a notification email.
+3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.0
+
+* Ability to have multiple schedules with separate settings & excludes per schedule.
+* Ability to manage exclude rules and see exactly which files are included and excluded.
+* Fix an issue with sites with an `open_basedir` restriction.
+* Backups should now be much more reliable in low memory environments.
+* Lots of other minor improvements and bug fixes.
 
 #### 1.6.9
 
