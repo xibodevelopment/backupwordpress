@@ -277,6 +277,12 @@ function hmbkp_path() {
 	if ( ! file_exists( $index ) && is_writable( $path ) )
 		file_put_contents( $index, '' );
 
+	// Attempt to hide the fact that the backups dir even exists by showing the 404 page
+	$index = $path . '/index.php';
+
+	if ( ! file_exists( $index ) && is_writable( $path ) )
+		file_put_contents( $index, "<?php include_once( get_template_part( '404.php' ); ?>" );
+
     return HM_Backup::conform_dir( $path );
 
 }
