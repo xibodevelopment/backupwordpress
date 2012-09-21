@@ -271,17 +271,11 @@ function hmbkp_path() {
 	if ( get_option( 'hmbkp_path' ) !== $path )
 		update_option( 'hmbkp_path', $path );
 
-	// protect against directory browsing by including a index.html file
+	// Protect against directory browsing by including a index.html file
 	$index = $path . '/index.html';
 
 	if ( ! file_exists( $index ) && is_writable( $path ) )
 		file_put_contents( $index, '' );
-
-	// Attempt to hide the fact that the backups dir even exists by showing the 404 page
-	$index = $path . '/index.php';
-
-	if ( ! file_exists( $index ) && is_writable( $path ) )
-		file_put_contents( $index, "<?php include_once( get_template_part( '404' ); ?>" );
 
     return HM_Backup::conform_dir( $path );
 
