@@ -281,7 +281,7 @@ function hmbkp_path() {
 	$index = $path . '/index.php';
 
 	if ( ! file_exists( $index ) && is_writable( $path ) )
-		file_put_contents( $index, "<?php include_once( get_template_part( '404.php' ); ?>" );
+		file_put_contents( $index, "<?php include_once( get_template_part( '404' ); ?>" );
 
     return HM_Backup::conform_dir( $path );
 
