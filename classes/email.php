@@ -114,7 +114,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			$headers = 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
 
 			// The backup failed, send a message saying as much
-			if ( file_exists( $file ) && ( $errors = array_merge( $this->schedule->get_errors(), $this->schedule->get_warnings() ) ) ) {
+			if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->get_errors(), $this->schedule->get_warnings() ) ) ) {
 
 				$error_message = '';
 
