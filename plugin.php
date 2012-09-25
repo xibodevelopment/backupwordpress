@@ -130,6 +130,7 @@ require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
 
 // Load Services
 require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/requirements.php' );
 
 // Load the email service
 require_once( HMBKP_PLUGIN_PATH . '/classes/email.php' );
