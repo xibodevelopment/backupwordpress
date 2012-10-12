@@ -109,7 +109,6 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Turn off the generic "memory limit probably hit" message as it was showing for too many people.
 * Fix a possible notice when the backup running filename is blank.
 * Include the `wp_error` response in the cron check.
-*
 
 #### 2.0.1
 
