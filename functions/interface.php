@@ -110,7 +110,7 @@ function hmbkp_admin_notices() {
 		function hmbkp_backup_failed_notice() {
 			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress failed to perform the backup.', 'hmbkp' ) . '</strong> ' . __( 'You have likely hit a memory limit.', 'hmbkp' ) . '<a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p></div>';
 		}
-		add_action( 'admin_notices', 'hmbkp_backup_failed_notice' );
+		//add_action( 'admin_notices', 'hmbkp_backup_failed_notice' );
 
 	endif;
 
