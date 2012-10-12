@@ -89,7 +89,7 @@ function hmbkp_request_cancel_backup() {
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
 
 	// Delete the running backup
-	if ( file_exists( trailingslashit( hmbkp_path() ) . $schedule->get_running_backup_filename() ) )
+	if ( $schedule->get_running_backup_filename() && file_exists( trailingslashit( hmbkp_path() ) . $schedule->get_running_backup_filename() ) )
 		unlink( trailingslashit( hmbkp_path() ) . $schedule->get_running_backup_filename() );
 
 	hmbkp_cleanup();
