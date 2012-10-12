@@ -172,6 +172,8 @@ function hmbkp_ajax_cron_test() {
 	else
 		echo 1;
 
+	update_option( 'hmbkp_wp_cron_test_response', $response );
+
 	exit;
 
 }
