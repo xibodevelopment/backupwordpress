@@ -668,6 +668,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @todo look into using recursiveDirectoryIterator and recursiveRegexIterator
 	 * @access public
+	 * @return string[] - file paths of the backups
 	 */
 	public function get_backups() {
 
