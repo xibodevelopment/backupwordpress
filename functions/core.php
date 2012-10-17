@@ -198,6 +198,7 @@ function hmbkp_setup_default_schedules() {
 	add_action( 'admin_notices', 'hmbkp_default_schedules_setup_warning' );
 
 }
+add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
 /**
  * Add weekly, fortnightly and monthly as a cron schedule choices

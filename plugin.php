@@ -103,8 +103,6 @@ function hmbkp_init() {
 
 	}
 
-	hmbkp_setup_default_schedules();
-
 	// Handle any advanced option changes
 	// TODO
 	hmbkp_constant_changes();
@@ -145,3 +143,19 @@ if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
 // Hook in the activation and deactivation actions
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
+
+/**
+ * Function to run when the schedule cron fires
+ * @param  array $args
+ */
+function hmbkp_schedule_hook_run( $schedule_id ) {
+
+	$schedules = new HMBKP_Schedules();
+	$schedule = $schedules->get_schedule( $schedule_id );
+
+	if ( ! $schedule )
+		return;
+
+	$schedule->run();
+}
+add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );

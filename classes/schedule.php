@@ -32,14 +32,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $options = array();
 
 	/**
-	 * The unique hook name for this schedule
-	 *
-	 * @var string
-	 * @access private
-	 */
-	private $schedule_hook = '';
-
-	/**
 	 * The filepath for the .running file which
 	 * is used to track whether a backup is currently in
 	 * progress
@@ -123,9 +115,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Load the options
 		$this->options = array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) );
-
-		// Setup the schedule hook
-		$this->schedule_hook = 'hmbkp_schedule_' . $this->get_id() . '_hook';
 
 		// Some properties can be overridden with defines
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
@@ -412,9 +401,17 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
-		if ( ! $this->schedule_start_time )
-			$this->set_schedule_start_time( current_time( 'timestamp' ) );
+		if ( ! $this->schedule_start_time ) {
 
+			if ( strtotime( '11pm' ) < strtotime( 'now' ) )
+				$date = strtotime( 'tomorrow 11pm' );
+			else
+				$date = strtotime( '11pm' );
+
+			$date -= ( get_option( 'gmt_offset' ) * 3600 );
+			
+			$this->set_schedule_start_time( $date );
+		}
 		return $this->schedule_start_time;
 
 	}
@@ -499,7 +496,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_next_occurrence() {
 
-		return wp_next_scheduled( $this->schedule_hook );
+		return wp_next_scheduled( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 
 	}
 
@@ -517,15 +514,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Clear any existing hooks
 		$this->unschedule();
 
-		wp_schedule_event( $this->get_schedule_start_time() + $this->get_interval(), $this->get_reoccurrence(), $this->schedule_hook );
-
-		// Hook the backu into the schedule hook
-		add_action( $this->schedule_hook, array( $this, 'run' ) );
-
+		wp_schedule_event( $this->get_schedule_start_time(), $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 	}
 
 	public function unschedule() {
-		wp_clear_scheduled_hook( $this->schedule_hook );
+		wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 	}
 
 	/**
