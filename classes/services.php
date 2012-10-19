@@ -90,7 +90,7 @@ abstract class HMBKP_Service {
 
 		$errors = $this->update( $new_data, $old_data );
 
-		if ( $errors = array_flip( $errors ) ) {
+		if ( $errors && $errors = array_flip( $errors ) ) {
 
 			foreach( $errors as $error => &$field )
 				$field = get_class( $this ) . '[' . $field . ']';
