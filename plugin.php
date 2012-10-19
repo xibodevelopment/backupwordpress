@@ -103,7 +103,6 @@ function hmbkp_init() {
 	}
 
 	// Handle any advanced option changes
-	// TODO
 	hmbkp_constant_changes();
 
 }
@@ -156,5 +155,6 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 		return;
 
 	$schedule->run();
+
 }
 add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
