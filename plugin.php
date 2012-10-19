@@ -30,10 +30,10 @@ if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) )
 	define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
 
 if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
-	define( 'HMBKP_PLUGIN_PATH', dirname( __FILE__ ) );
+	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
 if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
-	define( 'HMBKP_PLUGIN_URL', str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, HMBKP_PLUGIN_PATH ) );
+	define( 'HMBKP_PLUGIN_URL', plugins_url( HMBKP_PLUGIN_SLUG ) );
 
 if ( ! defined( 'HMBKP_ADMIN_URL' ) )
 	define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
