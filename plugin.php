@@ -30,11 +30,11 @@ define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
 define( 'HMBKP_PLUGIN_PATH', dirname( __FILE__ ) );
 define( 'HMBKP_PLUGIN_URL', str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, HMBKP_PLUGIN_PATH ) );
 
-if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.2' );
 
 define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
+if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
 
 // Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
