@@ -35,8 +35,6 @@ if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
 
 define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
-if ( ! defined( 'HMBKP_SECURE_KEY' ) )
-	define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
 
 // Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
