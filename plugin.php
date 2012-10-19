@@ -26,13 +26,17 @@ Author URI: http://hmn.md/
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
-define( 'HMBKP_PLUGIN_PATH', dirname( __FILE__ ) );
+if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) )
+	define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
+
+if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
+	define( 'HMBKP_PLUGIN_PATH', dirname( __FILE__ ) );
 
 if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
 	define( 'HMBKP_PLUGIN_URL', str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, HMBKP_PLUGIN_PATH ) );
 
-define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
+if ( ! defined( 'HMBKP_ADMIN_URL' ) )
+	define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
 	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
@@ -62,6 +66,42 @@ if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' 
 		die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
 
 }
+
+// Load the admin menu
+require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
+require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
+
+// Load hm-backup
+if ( ! class_exists( 'HM_Backup' ) )
+	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
+
+// Load the schedules
+require_once( HMBKP_PLUGIN_PATH . '/classes/schedule.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
+
+// Load the core functions
+require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
+require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
+
+// Load Services
+require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
+
+// Load the email service
+require_once( HMBKP_PLUGIN_PATH . '/classes/email.php' );
+
+// Load the wp cli command
+if ( defined( 'WP_CLI' ) && WP_CLI )
+	include( HMBKP_PLUGIN_PATH . '/classes/wp-cli.php' );
+
+// Set the tmp directory to the backup path
+if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
+	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
+
+// Hook in the activation and deactivation actions
+add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
+add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
+
+if ( ! function_exists( 'hmbkp_init' ) ) :
 
 /**
  * Plugin setup
@@ -108,40 +148,6 @@ function hmbkp_init() {
 }
 add_action( 'admin_init', 'hmbkp_init' );
 
-// Load the admin menu
-require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
-require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
-
-// Load hm-backup
-if ( ! class_exists( 'HM_Backup' ) )
-	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
-
-// Load the schedules
-require_once( HMBKP_PLUGIN_PATH . '/classes/schedule.php' );
-require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
-
-// Load the core functions
-require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
-
-// Load Services
-require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
-
-// Load the email service
-require_once( HMBKP_PLUGIN_PATH . '/classes/email.php' );
-
-// Load the wp cli command
-if ( defined( 'WP_CLI' ) && WP_CLI )
-	include( HMBKP_PLUGIN_PATH . '/classes/wp-cli.php' );
-
-// Set the tmp directory to the backup path
-if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
-	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
-
-// Hook in the activation and deactivation actions
-add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
-add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
-
 /**
  * Function to run when the schedule cron fires
  * @param  array $args
@@ -158,3 +164,5 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 
 }
 add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
+
+endif;
