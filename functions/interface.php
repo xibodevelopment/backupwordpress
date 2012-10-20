@@ -8,7 +8,7 @@
 function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 
 	$encoded_file = urlencode( base64_encode( $file ) );
-	$offset = current_time( 'timestamp' ) - time(); ?>
+	$offset = get_option( 'gmt_offset' ) * 3600; ?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 

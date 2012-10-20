@@ -96,8 +96,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
-		// Setup the schedule if it isn't set
-		if ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( wp_get_schedules() ) ) )
+		// Setup the schedule if it isn't set or TODO if it's changed
+		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( wp_get_schedules() ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
 			$this->schedule();
 
 	}
@@ -362,13 +362,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		if ( ! $this->schedule_start_time ) {
 
-			if ( strtotime( '11pm' ) < strtotime( 'now' ) )
-				$date = strtotime( 'tomorrow 11pm' );
+			if ( strtotime( HMBKP_SCHEDULE_TIME ) < strtotime( 'now' ) )
+				$date = strtotime( 'tomorrow ' . HMBKP_SCHEDULE_TIME );
 
 			else
-				$date = strtotime( '11pm' );
+				$date = strtotime( HMBKP_SCHEDULE_TIME );
 
-			$date -= ( get_option( 'gmt_offset' ) * 3600 );
+			// Convert to UTC
+			$date -= get_option( 'gmt_offset' ) * 3600;
 
 			$this->set_schedule_start_time( $date );
 		}
@@ -381,7 +382,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Set the schedule start time.
 	 *
 	 * @access public
-	 * @param int $timestamp
+	 * @param int $timestamp in UTC
 	 * @return void
 	 */
 	public function set_schedule_start_time( $timestamp ) {
@@ -455,9 +456,17 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @access public
 	 */
-	public function get_next_occurrence() {
+	public function get_next_occurrence( $gmt = true ) {
 
-		return wp_next_scheduled( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+		$time = wp_next_scheduled( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+
+		if ( ! $time )
+			$time = 0;
+
+		if ( ! $gmt )
+			$time += get_option( 'gmt_offset' ) * 3600;
+
+		return $time;
 
 	}
 

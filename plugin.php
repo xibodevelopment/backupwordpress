@@ -45,6 +45,9 @@ if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
 
+if ( ! defined( 'HMBKP_SCHEDULE_TIME' ) )
+	define( 'HMBKP_SCHEDULE_TIME', '11pm' );
+
 // Don't activate on anything less than PHP 5.2.4
 if ( version_compare( phpversion(), '5.2.4', '<' ) ) {
 
