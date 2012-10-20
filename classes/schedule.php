@@ -362,14 +362,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		if ( ! $this->schedule_start_time ) {
 
-			if ( strtotime( HMBKP_SCHEDULE_TIME ) < strtotime( 'now' ) )
-				$date = strtotime( 'tomorrow ' . HMBKP_SCHEDULE_TIME );
-
-			else
-				$date = strtotime( HMBKP_SCHEDULE_TIME );
+			$date = strtotime( HMBKP_SCHEDULE_TIME );
 
 			// Convert to UTC
 			$date -= get_option( 'gmt_offset' ) * 3600;
+
+			// if the scheduled time already passed today then start at the next interval instead
+			if ( $date <= strtotime( 'now' ) )
+				$date += $this->get_interval();
 
 			$this->set_schedule_start_time( $date );
 		}
