@@ -96,6 +96,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
+		// Setup the schedule if it isn't set
+		if ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( wp_get_schedules() ) ) )
+			$this->schedule();
+
 	}
 
 	/**
