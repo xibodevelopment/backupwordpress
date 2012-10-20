@@ -33,9 +33,11 @@ function hmbkp_deactivate() {
 	delete_transient( 'hmbkp_running' );
 	delete_transient( 'hmbkp_estimated_filesize' );
 
-	// Clear cron
-	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-	wp_clear_scheduled_hook( 'hmbkp_schedule_single_backup_hook' );
+	// Clear hmbkp crons
+	foreach( get_option( 'cron' ) as $cron )
+		foreach( $cron as $key => $value )
+			if ( strpos( $key, 'hmbkp' ) !== false )
+				wp_clear_scheduled_hook( $key );
 
 	hmbkp_cleanup();
 
