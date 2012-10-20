@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
 Tested up to: 3.5
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 
 Simple automated back ups of your WordPress powered website.
 
@@ -102,6 +102,17 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.0.5
+
+* Re-setup the cron schedules if they get deleted somehow.
+* Delete all BackUpWordPress cron entries when the plugin is deactivated.
+* Introduce the `HMBKP_SCHEDULE_TIME` constant to allow control over the time schedules run.
+* Make sure the schedule times and times of previous backups are shown in local time.
+* Fix a bug that could cause the legacy backup schedule to be created on every update, not just when going from 1.x to 2.x.
+* Improve the usefulness of the `wp-cron.php` response code check.
+* Use the built in `site_format` function for human readable filesizes instead of defining our own function.
+
 
 #### 2.0.4
 
