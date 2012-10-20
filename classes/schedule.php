@@ -470,12 +470,19 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+
+	/**
+	 * Get the path to the backup running file that stores the running backup status
+	 *
+	 * @access private
+	 * @return string
+	 */
 	private function get_schedule_running_path() {
 		return $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
 	}
 
 	/**
-	 * Schedule the cron
+	 * Schedule the backup cron
 	 *
 	 * @access public
 	 */
@@ -485,8 +492,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->unschedule();
 
 		wp_schedule_event( $this->get_schedule_start_time(), $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+
 	}
 
+
+	/**
+	 * Unschedule the backup cron.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function unschedule() {
 		wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 	}
