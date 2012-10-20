@@ -73,7 +73,7 @@ function hmbkp_contextual_help() {
 	$constants = ob_get_clean();
 
 	get_current_screen()->add_help_tab( array( 'title' => __( 'FAQ', 'hmbkp' ), 'id' => 'hmbkp_faq', 'content' => $warning . $plugin->sections['faq'] ) );
-	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'hmbkp' ), 'id' => 'hmbkp_constants', 'content' => $warning . $constants ) );
+	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'hmbkp' ), 'id' => 'hmbkp_constants', 'content' => $constants ) );
 
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'hmbkp' ) . '</strong></p>' .
