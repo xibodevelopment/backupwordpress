@@ -49,51 +49,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $schedule_start_time = 0;
 
 	/**
-	 * Take a file size and return a human readable
-	 * version
-	 *
-	 * @access public
-	 * @static
-	 * @param int $size
-	 * @param string $unit. (default: null)
-	 * @param string $format. (default: '%01.2f %s')
-	 * @param bool $si. (default: true)
-	 * @return int
-	 */
-	public static function human_filesize( $size, $unit = null, $format = '%01.2f %s', $si = true ) {
-
-		// Units
-		if ( $si === true ) :
-			$sizes = array( 'B', 'kB', 'MB', 'GB', 'TB', 'PB' );
-			$mod   = 1000;
-
-		else :
-			$sizes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
-			$mod   = 1024;
-
-		endif;
-
-		$ii = count( $sizes ) - 1;
-
-		// Max unit
-		$unit = array_search( (string) $unit, $sizes );
-
-		if ( is_null( $unit ) || $unit === false )
-			$unit = $ii;
-
-		// Loop
-		$i = 0;
-
-		while ( $unit != $i && $size >= 1024 && $i < $ii ) {
-			$size /= $mod;
-			$i++;
-		}
-
-		return sprintf( $format, $size, $sizes[$i] );
-
-	}
-
-	/**
 	 * Setup the schedule object
 	 *
 	 * Loads the options from the database and populates properties
@@ -365,7 +320,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		}
 
-	    return self::human_filesize( $filesize, null, '%01u %s' );
+	    return size_format( $filesize );
 
 	}
 
