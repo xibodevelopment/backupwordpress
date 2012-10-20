@@ -89,7 +89,7 @@ function hmbkp_update() {
 	}
 
 	// Version 1 to 2
-	if ( version_compare ( '2.0' , get_option( 'hmbkp_plugin_version' ) ) ) {
+	if ( version_compare( '2.0' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		/**
 		 * Setup a backwards compatible schedule
@@ -141,7 +141,7 @@ function hmbkp_update() {
 		$legacy_schedule->save();
 
 		// Remove the legacy options
-		foreach ( array( 'hmbkp_email', 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name )
+		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name )
 			delete_option( $option_name );
 
 
