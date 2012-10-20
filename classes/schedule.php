@@ -364,13 +364,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			if ( strtotime( '11pm' ) < strtotime( 'now' ) )
 				$date = strtotime( 'tomorrow 11pm' );
+
 			else
 				$date = strtotime( '11pm' );
 
 			$date -= ( get_option( 'gmt_offset' ) * 3600 );
-			
+
 			$this->set_schedule_start_time( $date );
 		}
+
 		return $this->schedule_start_time;
 
 	}
