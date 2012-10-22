@@ -35,7 +35,7 @@ function hmbkp_deactivate() {
 
 	// Clear hmbkp crons
 	foreach( get_option( 'cron' ) as $cron )
-		foreach( $cron as $key => $value )
+		foreach( (array) $cron as $key => $value )
 			if ( strpos( $key, 'hmbkp' ) !== false )
 				wp_clear_scheduled_hook( $key );
 
