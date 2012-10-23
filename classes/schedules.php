@@ -41,6 +41,20 @@ class HMBKP_Schedules {
 	}
 
 	/**
+	 * Get a schedule by ID
+	 * 
+	 * @return HMBKP_Scheduled_Backup
+	 */
+	public function get_schedule( $id ) {
+
+		foreach ( $this->schedules as $schedule )
+			if ( $schedule->get_id() == $id )
+				return $schedule;
+
+		return null;
+	}
+
+	/**
 	 * Instantiate the individual scheduled backup objects
 	 *
 	 * @access private

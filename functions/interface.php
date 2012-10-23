@@ -8,7 +8,7 @@
 function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 
 	$encoded_file = urlencode( base64_encode( $file ) );
-	$offset = current_time( 'timestamp' ) - time(); ?>
+	$offset = get_option( 'gmt_offset' ) * 3600; ?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 
@@ -17,7 +17,7 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 		</th>
 
 		<td class="code">
-			<?php echo esc_attr( HMBKP_Scheduled_Backup::human_filesize( @filesize( $file ) ) ); ?>
+			<?php echo esc_attr( size_format( @filesize( $file ) ) ); ?>
 		</td>
 
 		<td><?php echo esc_attr( hmbkp_human_get_type( $file, $schedule ) ); ?></td>
@@ -110,7 +110,7 @@ function hmbkp_admin_notices() {
 		function hmbkp_backup_failed_notice() {
 			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress failed to perform the backup.', 'hmbkp' ) . '</strong> ' . __( 'You have likely hit a memory limit.', 'hmbkp' ) . '<a href="' . add_query_arg( 'action', 'hmbkp_dismiss_error' ) . '" style="float: right;" class="button">Dismiss</a></p></div>';
 		}
-		add_action( 'admin_notices', 'hmbkp_backup_failed_notice' );
+		//add_action( 'admin_notices', 'hmbkp_backup_failed_notice' );
 
 	endif;
 

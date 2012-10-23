@@ -32,14 +32,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $options = array();
 
 	/**
-	 * The unique hook name for this schedule
-	 *
-	 * @var string
-	 * @access private
-	 */
-	private $schedule_hook = '';
-
-	/**
 	 * The filepath for the .running file which
 	 * is used to track whether a backup is currently in
 	 * progress
@@ -55,51 +47,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @access private
 	 */
 	private $schedule_start_time = 0;
-
-	/**
-	 * Take a file size and return a human readable
-	 * version
-	 *
-	 * @access public
-	 * @static
-	 * @param int $size
-	 * @param string $unit. (default: null)
-	 * @param string $format. (default: '%01.2f %s')
-	 * @param bool $si. (default: true)
-	 * @return int
-	 */
-	public static function human_filesize( $size, $unit = null, $format = '%01.2f %s', $si = true ) {
-
-		// Units
-		if ( $si === true ) :
-			$sizes = array( 'B', 'kB', 'MB', 'GB', 'TB', 'PB' );
-			$mod   = 1000;
-
-		else :
-			$sizes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
-			$mod   = 1024;
-
-		endif;
-
-		$ii = count( $sizes ) - 1;
-
-		// Max unit
-		$unit = array_search( (string) $unit, $sizes );
-
-		if ( is_null( $unit ) || $unit === false )
-			$unit = $ii;
-
-		// Loop
-		$i = 0;
-
-		while ( $unit != $i && $size >= 1024 && $i < $ii ) {
-			$size /= $mod;
-			$i++;
-		}
-
-		return sprintf( $format, $size, $sizes[$i] );
-
-	}
 
 	/**
 	 * Setup the schedule object
@@ -123,9 +70,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Load the options
 		$this->options = array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) );
-
-		// Setup the schedule hook
-		$this->schedule_hook = 'hmbkp_schedule_' . $this->get_id() . '_hook';
 
 		// Some properties can be overridden with defines
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
@@ -151,6 +95,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+
+		// Setup the schedule if it isn't set or TODO if it's changed
+		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( wp_get_schedules() ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
+			$this->schedule();
 
 	}
 
@@ -376,7 +324,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		}
 
-	    return self::human_filesize( $filesize, null, '%01u %s' );
+	    return size_format( $filesize );
 
 	}
 
@@ -412,8 +360,19 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
-		if ( ! $this->schedule_start_time )
-			$this->set_schedule_start_time( current_time( 'timestamp' ) );
+		if ( ! $this->schedule_start_time ) {
+
+			$date = strtotime( HMBKP_SCHEDULE_TIME );
+
+			// Convert to UTC
+			$date -= get_option( 'gmt_offset' ) * 3600;
+
+			// if the scheduled time already passed today then start at the next interval instead
+			if ( $date <= strtotime( 'now' ) )
+				$date += $this->get_interval();
+
+			$this->set_schedule_start_time( $date );
+		}
 
 		return $this->schedule_start_time;
 
@@ -423,7 +382,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Set the schedule start time.
 	 *
 	 * @access public
-	 * @param int $timestamp
+	 * @param int $timestamp in UTC
 	 * @return void
 	 */
 	public function set_schedule_start_time( $timestamp ) {
@@ -497,18 +456,33 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @access public
 	 */
-	public function get_next_occurrence() {
+	public function get_next_occurrence( $gmt = true ) {
 
-		return wp_next_scheduled( $this->schedule_hook );
+		$time = wp_next_scheduled( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+
+		if ( ! $time )
+			$time = 0;
+
+		if ( ! $gmt )
+			$time += get_option( 'gmt_offset' ) * 3600;
+
+		return $time;
 
 	}
 
+
+	/**
+	 * Get the path to the backup running file that stores the running backup status
+	 *
+	 * @access private
+	 * @return string
+	 */
 	private function get_schedule_running_path() {
 		return $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
 	}
 
 	/**
-	 * Schedule the cron
+	 * Schedule the backup cron
 	 *
 	 * @access public
 	 */
@@ -517,15 +491,19 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Clear any existing hooks
 		$this->unschedule();
 
-		wp_schedule_event( $this->get_schedule_start_time() + $this->get_interval(), $this->get_reoccurrence(), $this->schedule_hook );
-
-		// Hook the backu into the schedule hook
-		add_action( $this->schedule_hook, array( $this, 'run' ) );
+		wp_schedule_event( $this->get_schedule_start_time(), $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 
 	}
 
+
+	/**
+	 * Unschedule the backup cron.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function unschedule() {
-		wp_clear_scheduled_hook( $this->schedule_hook );
+		wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 	}
 
 	/**
@@ -668,6 +646,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @todo look into using recursiveDirectoryIterator and recursiveRegexIterator
 	 * @access public
+	 * @return string[] - file paths of the backups
 	 */
 	public function get_backups() {
 

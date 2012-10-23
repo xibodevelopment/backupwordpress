@@ -2,8 +2,8 @@
 Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
-Tested up to: 3.4.2
-Stable tag: 2.0.1
+Tested up to: 3.5
+Stable tag: 2.0.6
 
 Simple automated back ups of your WordPress powered website.
 
@@ -102,6 +102,41 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.0.6
+
+* Fix possible warning on plugin activation if the sites cron option is empty.
+* Don't show the version warning in the help for Constants as that comes from the current version.
+
+#### 2.0.5
+
+* Re-setup the cron schedules if they get deleted somehow.
+* Delete all BackUpWordPress cron entries when the plugin is deactivated.
+* Introduce the `HMBKP_SCHEDULE_TIME` constant to allow control over the time schedules run.
+* Make sure the schedule times and times of previous backups are shown in local time.
+* Fix a bug that could cause the legacy backup schedule to be created on every update, not just when going from 1.x to 2.x.
+* Improve the usefulness of the `wp-cron.php` response code check.
+* Use the built in `site_format` function for human readable filesizes instead of defining our own function.
+
+
+#### 2.0.4
+
+* Revert the change to the way the plugin url and path were calculated as it caused regressions on some systems.
+
+#### 2.0.3
+
+* Fix issues with scheduled backups not firing in some cases.
+* Better compatibility when the WP Remote plugin is active alongside BackUpWordPress.
+* Catch and display more WP Cron errors.
+* BackUpWordPress now fails to activate on WordPress 3.3.2 and below.
+* Other minor fixes and improvements.
+
+#### 2.0.2
+
+* Only send backup failed emails if the backup actually failed.
+* Turn off the generic "memory limit probably hit" message as it was showing for too many people.
+* Fix a possible notice when the backup running filename is blank.
+* Include the `wp_error` response in the cron check.
 
 #### 2.0.1
 

@@ -33,9 +33,11 @@ function hmbkp_deactivate() {
 	delete_transient( 'hmbkp_running' );
 	delete_transient( 'hmbkp_estimated_filesize' );
 
-	// Clear cron
-	wp_clear_scheduled_hook( 'hmbkp_schedule_backup_hook' );
-	wp_clear_scheduled_hook( 'hmbkp_schedule_single_backup_hook' );
+	// Clear hmbkp crons
+	foreach( get_option( 'cron' ) as $cron )
+		foreach( (array) $cron as $key => $value )
+			if ( strpos( $key, 'hmbkp' ) !== false )
+				wp_clear_scheduled_hook( $key );
 
 	hmbkp_cleanup();
 
@@ -87,7 +89,7 @@ function hmbkp_update() {
 	}
 
 	// Version 1 to 2
-	if ( version_compare ( '2.0' , get_option( 'hmbkp_plugin_version' ) ) ) {
+	if ( version_compare( '2.0' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		/**
 		 * Setup a backwards compatible schedule
@@ -139,7 +141,7 @@ function hmbkp_update() {
 		$legacy_schedule->save();
 
 		// Remove the legacy options
-		foreach ( array( 'hmbkp_email', 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name )
+		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name )
 			delete_option( $option_name );
 
 
@@ -198,6 +200,7 @@ function hmbkp_setup_default_schedules() {
 	add_action( 'admin_notices', 'hmbkp_default_schedules_setup_warning' );
 
 }
+add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
 /**
  * Add weekly, fortnightly and monthly as a cron schedule choices
