@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
 Tested up to: 3.5
-Stable tag: 2.0.6
+Stable tag: 2.1
 
 Simple automated back ups of your WordPress powered website.
 
@@ -102,6 +102,14 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.1
+
+* Fix possible fatal error when setting schedule to monthly.
+* Fix issues with download backup not working on some shared hosts.
+* Fix issuses with download backup not working on sites with strange characters in the site name.
+* Allow the archive filename to be overriden with a constant.
+*
 
 #### 2.0.6
 
