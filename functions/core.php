@@ -89,7 +89,7 @@ function hmbkp_update() {
 	}
 
 	// Version 1 to 2
-	if ( version_compare( '2.0' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.0' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		/**
 		 * Setup a backwards compatible schedule
@@ -148,13 +148,17 @@ function hmbkp_update() {
 	}
 
 	// Every update
-	if ( version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		hmbkp_deactivate();
 
 		// Force .htaccess to be re-written
 		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
 			unlink( hmbkp_path() . '/.htaccess' );
+
+		// Force index.html to be re-written
+		if ( file_exists( hmbkp_path() . '/index.html' ) )
+			unlink( hmbkp_path() . '/index.html' );
 
 	}
 
