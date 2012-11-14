@@ -386,12 +386,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return void
 	 */
 	public function set_schedule_start_time( $timestamp ) {
-
-		if ( (string) (int) $timestamp !== (string) $timestamp )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid UNIX timestamp' );
-
 		$this->schedule_start_time = $timestamp;
-
 	}
 
 	/**
