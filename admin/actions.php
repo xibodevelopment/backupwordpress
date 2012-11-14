@@ -71,7 +71,7 @@ function hmbkp_request_download_backup() {
 	if ( empty( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) || ! file_exists( base64_decode( $_GET['hmbkp_download_backup'] ) ) )
 		return;
 
-	wp_redirect( str_replace( realpath( HM_Backup::conform_dir( HM_Backup::get_home_path() ) ), home_url(), base64_decode( $_GET['hmbkp_download_backup'] ) ), 303 );
+	wp_redirect( str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) . urlencode( pathinfo( base64_decode( $_GET['hmbkp_download_backup'] ), PATHINFO_BASENAME ) ), 303 );
 
 	exit;
 
