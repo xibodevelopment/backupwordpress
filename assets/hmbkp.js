@@ -298,6 +298,8 @@ jQuery( document ).ready( function( $ ) {
 
 	$( '.hmbkp-run' ).live( 'click', function( e ) {
 
+		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
+
 		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
 		ajaxRequest = $.get(
