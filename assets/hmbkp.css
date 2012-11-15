@@ -49,8 +49,8 @@ tfoot p { margin: 0; font-weight: normal; }
 
 .hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 30px 0 10px; clear: both; margin-left: 10px; }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 47px; display: block; float: left; }
-.hmbkp-schedule-sentence.hmbkp-running::before { background-image: url('wpspin_light.gif'); background-repeat: no-repeat; margin-right: 10px; content: " "; }
 .hmbkp-schedule-sentence.hmbkp-error::before { content: "\2718"; }
+.hmbkp-schedule-sentence.hmbkp-running::before { background-image: url('wpspin_light.gif'); background-repeat: no-repeat; margin-right: 10px; content: " "; }
 .hmbkp-schedule-sentence .hmbkp-status { display: none; font-size: 12px; color: #666; margin: 2px 0 0 26px; }
 .hmbkp-schedule-sentence.hmbkp-running .hmbkp-status { display: block; }
 .hmbkp-schedule-sentence.hmbkp-running .hmbkp-schedule-actions { display: none; }
