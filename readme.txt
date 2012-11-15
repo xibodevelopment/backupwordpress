@@ -108,8 +108,8 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Fix possible fatal error when setting schedule to monthly.
 * Fix issues with download backup not working on some shared hosts.
 * Fix issuses with download backup not working on sites with strange characters in the site name.
-* Allow the archive filename to be overriden with a constant.
-*
+* Fix a bug could cause the update actions to fire on initial activation.
+* Improved reliability when changing backup paths, now with Unit Tests.
 
 #### 2.0.6
 
