@@ -29,6 +29,10 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		if ( defined( 'HMBKP_PATH' ) )
 			$this->markTestSkipped( 'Skipped because of defines' );
 
+		hmbkp_rmdirtree( hmbkp_path() );
+
+		hmbkp_path();
+
 	}
 
 	/**
@@ -39,8 +43,9 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		if ( file_exists( $this->backup->get_archive_filepath() ) )
-			unlink( $this->backup->get_archive_filepath() );
+		hmbkp_rmdirtree( hmbkp_path() );
+
+		unset( $this->backup );
 
 	}
 
