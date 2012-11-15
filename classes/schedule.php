@@ -94,7 +94,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->set_path( hmbkp_path() );
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+		$this->set_archive_filename( implode( '-', array( url_shorten( home_url() ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
 		// Allow the archive filename to be overridden
 		if ( defined ( 'HMBKP_ARCHIVE_FILENAME' ) && HMBKP_ARCHIVE_FILENAME )
