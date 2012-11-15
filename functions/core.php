@@ -267,14 +267,15 @@ function hmbkp_path() {
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
 		$path = HMBKP_PATH;
 
-	// If the dir doesn't exist or isn't writable then use wp-content/backups instead
-	if ( ( ! $path || ! is_writable( $path ) ) && HM_Backup::conform_dir( $path ) !== hmbkp_path_default() )
+	// If the dir doesn't exist or isn't writable then use the default path instead instead
+	if ( ( ! $path || ( is_dir( $path ) && ! is_writable( $path ) ) || ( ! is_dir( $path ) && ! is_writable( dirname( $path ) ) ) ) && get_option( 'hmbkp_path' ) !== get_option( 'hmbkp_default_path' ) )
     	$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
-	if ( is_writable( dirname( $path ) ) && ! is_dir( $path ) )
+	if ( ! is_dir( $path ) && is_writable( dirname( $path ) ) )
 		mkdir( $path, 0755 );
 
+	// If the path has changed then cache it
 	if ( get_option( 'hmbkp_path' ) !== $path )
 		update_option( 'hmbkp_path', $path );
 
@@ -294,7 +295,18 @@ function hmbkp_path() {
  * @return string path
  */
 function hmbkp_path_default() {
-	return HM_Backup::conform_dir( WP_CONTENT_DIR . '/backups' );
+
+	$path = get_option( 'hmbkp_default_path' );
+
+	if ( empty( $path ) ) {
+
+		$path = HM_Backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) . substr( md5( time() ), 0, 10 ) . '-backups' );
+
+		update_option( 'hmbkp_default_path', $path );
+
+	}
+
+	return $path;
 }
 
 /**
@@ -307,20 +319,29 @@ function hmbkp_path_default() {
  */
 function hmbkp_path_move( $from, $to ) {
 
+	if ( ! untrailingslashit( $from ) || ! untrailingslashit( $to ) )
+		return;
+
 	// Create the custom backups directory if it doesn't exist
 	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
 	    mkdir( $to, 0755 );
 
-	if ( ! is_dir( $to ) || ! is_writable( $to ) || ! is_dir( $from ) )
+	if ( ! is_dir( $to ) || ! is_writable( $to ) )
 	    return false;
 
+	update_option( 'hmbkp_path', $to );
+
 	hmbkp_cleanup();
+
+	if ( ! is_dir( $from ) )
+		return false;
 
 	if ( $handle = opendir( $from ) ) :
 
 	    while ( false !== ( $file = readdir( $handle ) ) )
 	    	if ( $file !== '.' && $file !== '..' )
-	    		rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
+	    		if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
+	    			copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
 
 	    closedir( $handle );
 
