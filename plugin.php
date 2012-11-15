@@ -96,6 +96,9 @@ require_once( HMBKP_PLUGIN_PATH . '/classes/email.php' );
 if ( defined( 'WP_CLI' ) && WP_CLI )
 	include( HMBKP_PLUGIN_PATH . '/classes/wp-cli.php' );
 
+// Handle any advanced option changes
+hmbkp_constant_changes();
+
 // Set the tmp directory to the backup path
 if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
 	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
@@ -144,9 +147,6 @@ function hmbkp_init() {
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css', false, HMBKP_VERSION );
 
 	}
-
-	// Handle any advanced option changes
-	hmbkp_constant_changes();
 
 }
 add_action( 'admin_init', 'hmbkp_init' );
