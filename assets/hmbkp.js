@@ -263,7 +263,7 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
-	// Text the cron response using ajax
+	// Test the cron response using ajax
 	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
 		 function( data ) {
 			 if ( data != 1 ) {
@@ -305,21 +305,37 @@ jQuery( document ).ready( function( $ ) {
 			{ 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId },
 			function( data ) {
 
-				if ( data.indexOf( 'hmbkp-schedule-actions' ) != -1 )
+				// Backup Succeeded
+				if ( data.indexOf( 'hmbkp-schedule-actions' ) != -1 ) {
 					location.reload( true );
 
-				// The backup failed so just redirect back
-				else
-					location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&action=hmbkp_cancel&reason=broken&hmbkp_schedule_id=' + scheduleId );
+				}
+
+				// The backup failed so just show the error and offer to have it emailed back
+				else {
+
+					$( '.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
+
+		            $.fancybox( {
+			            'content' 	: data,
+		                'maxWidth'	: 320
+
+		            } );
+
+				}
 
 			}
-		).error( function() {
+
+		// Redirect back on error
+		).error( function( data ) {
 			location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&action=hmbkp_cancel&reason=broken&hmbkp_schedule_id=' + scheduleId );
 		} );
 
-		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
+		setTimeout( function() {
+			hmbkpRedirectOnBackupComplete( scheduleId, false )
+		}, 50 );
 
-		hmbkpRedirectOnBackupComplete();
+		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
 		e.preventDefault();
 
@@ -327,7 +343,7 @@ jQuery( document ).ready( function( $ ) {
 
 } );
 
-function hmbkpRedirectOnBackupComplete( schedule_id ) {
+function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
 	jQuery.get(
 		ajaxurl,
@@ -336,12 +352,14 @@ function hmbkpRedirectOnBackupComplete( schedule_id ) {
 
 			if ( data == 0 ) {
 
-				location.reload( true );
+				if ( redirect === true )
+					location.reload( true );
 
 			} else {
 
-				setTimeout( 'hmbkpRedirectOnBackupComplete();', 500 );
+				setTimeout( 'hmbkpRedirectOnBackupComplete();', 100 );
 
+				jQuery( '.hmbkp-status' ).remove();
 				jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
 
 			}
