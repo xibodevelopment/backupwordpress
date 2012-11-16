@@ -290,7 +290,7 @@ jQuery( document ).ready( function( $ ) {
 	}
 
 	if ( $( '.hmbkp-running' ).size() )
-		hmbkpRedirectOnBackupComplete();
+		hmbkpRedirectOnBackupComplete( $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ), true );
 
 	$( document ).on( 'click', '.hmbkp-run', function( e ) {
 
@@ -369,9 +369,6 @@ jQuery( document ).ready( function( $ ) {
 } );
 
 function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
-
-	if ( typeof( redirect ) === 'undefined' )
-		redirect = true;
 
 	jQuery.post(
 		ajaxurl,
