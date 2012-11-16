@@ -44,22 +44,24 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedu
  */
 function hmbkp_ajax_request_do_backup() {
 
-	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		return;
+
+	// We wan't to display any fatal errors in this ajax request so we can catch them on the other side.
+	error_reporting( E_ERROR );
+	@ini_set( 'display_errors', 'On' );
+	@ini_set( 'html_errors', 'Off' );
 
 	ignore_user_abort( true );
 
 	hmbkp_cleanup();
 
-	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
-
-	// We wan't to display any fatal errors in this ajax request so we can catch them on the other side.
-	error_reporting( E_ERROR );
-	@ini_set( 'display_errors', 'On' );
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_POST['hmbkp_schedule_id'] ) );
 
 	$schedule->run();
 
-	hmbkp_schedule_actions( $schedule );
+	// Force a memory limit error
+	//function a() { a(); } a();
 
 	exit;
 
@@ -129,10 +131,10 @@ add_action( 'admin_init', 'hmbkp_dismiss_error' );
  */
 function hmbkp_ajax_is_backup_in_progress() {
 
-	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		return;
 
-	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_POST['hmbkp_schedule_id'] ) );
 
 	if ( ! $schedule->get_status() )
 		echo 0;
@@ -150,10 +152,10 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
  */
 function hmbkp_ajax_calculate_backup_size() {
 
-	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		return;
 
-	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_POST['hmbkp_schedule_id'] ) );
 
 	$recalculate_filesize = true;
 
@@ -235,52 +237,52 @@ add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
  */
 function hmnkp_edit_schedule_submit() {
 
-	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		return;
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
 
 	$errors = array();
 
-	if ( isset( $_GET['hmbkp_schedule_type'] ) ) {
+	if ( isset( $_POST['hmbkp_schedule_type'] ) ) {
 
-		if ( ! trim( $_GET['hmbkp_schedule_type'] ) )
+		if ( ! trim( $_POST['hmbkp_schedule_type'] ) )
 			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
 
-		elseif ( ! in_array( $_GET['hmbkp_schedule_type'], array( 'complete', 'file', 'database' ) ) )
+		elseif ( ! in_array( $_POST['hmbkp_schedule_type'], array( 'complete', 'file', 'database' ) ) )
 			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
 
 		else
-			$schedule->set_type( $_GET['hmbkp_schedule_type'] );
+			$schedule->set_type( $_POST['hmbkp_schedule_type'] );
 
 	}
 
-	if ( isset( $_GET['hmbkp_schedule_reoccurrence'] ) ) {
+	if ( isset( $_POST['hmbkp_schedule_reoccurrence'] ) ) {
 
-		if ( empty( $_GET['hmbkp_schedule_reoccurrence'] ) )
+		if ( empty( $_POST['hmbkp_schedule_reoccurrence'] ) )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
 
-		elseif ( ! in_array( $_GET['hmbkp_schedule_reoccurrence'], array_keys( wp_get_schedules() ) ) && $_GET['hmbkp_schedule_reoccurrence'] !== 'manually' )
+		elseif ( ! in_array( $_POST['hmbkp_schedule_reoccurrence'], array_keys( wp_get_schedules() ) ) && $_POST['hmbkp_schedule_reoccurrence'] !== 'manually' )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'hmbkp' );
 
 		else
-			$schedule->set_reoccurrence( $_GET['hmbkp_schedule_reoccurrence'] );
+			$schedule->set_reoccurrence( $_POST['hmbkp_schedule_reoccurrence'] );
 
 	}
 
-	if ( isset( $_GET['hmbkp_schedule_max_backups'] ) ) {
+	if ( isset( $_POST['hmbkp_schedule_max_backups'] ) ) {
 
-		if ( empty( $_GET['hmbkp_schedule_max_backups'] ) )
+		if ( empty( $_POST['hmbkp_schedule_max_backups'] ) )
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
 
-		elseif ( ! is_numeric( $_GET['hmbkp_schedule_max_backups'] ) )
+		elseif ( ! is_numeric( $_POST['hmbkp_schedule_max_backups'] ) )
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
 
-		elseif ( ! ( $_GET['hmbkp_schedule_max_backups'] >= 1 ) )
+		elseif ( ! ( $_POST['hmbkp_schedule_max_backups'] >= 1 ) )
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
 
 		else
-			$schedule->set_max_backups( (int) $_GET['hmbkp_schedule_max_backups'] );
+			$schedule->set_max_backups( (int) $_POST['hmbkp_schedule_max_backups'] );
 
 		$schedule->delete_old_backups();
 
@@ -386,23 +388,38 @@ function hmbkp_preview_exclude_rule() {
 }
 add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
-/**
- * Handles changes in the defined Constants
- * that users can define to control advanced
- * settings
- */
-function hmbkp_constant_changes() {
+function hmbkp_display_error_and_offer_to_email_it() {
 
-	// If a custom backup path has been set or changed
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
-	  hmbkp_path_move( $from, HMBKP_PATH );
+	if ( empty( $_POST['hmbkp_error'] ) )
+		return;
 
-	// If a custom backup path has been removed
-	if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_path_default() !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
-	  hmbkp_path_move( $from, hmbkp_path_default() );
+	$error = str_replace( HM_Backup::get_home_path(), '', $_POST['hmbkp_error'] ); ?>
 
-	// If the custom path has changed and the new directory isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) )
-		hmbkp_path_move( HMBKP_PATH, hmbkp_path_default() );
+	<h3><?php _e( 'Your BackUp Failed', 'hmbkp' ); ?></h3>
+
+	<p><?php _e( "Here's the response from the server:" ); ?></p>
+
+	<pre><?php echo esc_attr( $error ); ?></pre>
+
+	<p class="description">You can email details of this error to <a href="http://hmn.md">Human Made Limited</a> so they can look into the issue.<br /><br /></p>
+
+	<button class="button hmbkp-fancybox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
+	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
+
+	<?php exit;
+}
+add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
+
+function hmbkp_send_error_via_email() {
+
+	if ( empty( $_POST['hmbkp_error'] ) )
+		return;
+
+	$error = $_POST['hmbkp_error'];
+
+	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
+
+	exit;
 
 }
+add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );

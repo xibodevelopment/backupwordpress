@@ -8,6 +8,10 @@ jQuery( document ).ready( function( $ ) {
 		$( '.hmbkp-ajax-loading' ).removeClass( 'hmbkp-ajax-loading' );
 	} );
 
+	$( document ).on( 'click', '.hmbkp-fancybox-close', function() {
+	    $.fancybox.close();
+	} );
+
 	// Setup the tabs
 	$( '.hmbkp-tabs' ).tabs();
 
@@ -26,11 +30,7 @@ jQuery( document ).ready( function( $ ) {
 			$( '.hmbkp-tabs' ).tabs();
 
 			if ( $( '.hmbkp-form p.submit:contains(\'Update\')' ).size() )
-				$( '<button type="button" class="button-secondary hmbkp_cancel">' + objectL10n.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
-
-			$( '.hmbkp_cancel' ).click( function() {
-				$.fancybox.close();
-			} );
+				$( '<button type="button" class="button-secondary hmbkp-ajax-loading">' + objectL10n.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
 
 		}
 
@@ -88,11 +88,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
 			}
-		).error( function() {
-
-
-
-		} );
+		)
 
 	} );
 
@@ -264,7 +260,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Test the cron response using ajax
-	$.get( ajaxurl, { 'action' : 'hmbkp_cron_test' },
+	$.post( ajaxurl, { 'action' : 'hmbkp_cron_test' },
 		 function( data ) {
 			 if ( data != 1 ) {
 				 	$( '.wrap > h2' ).after( data );
@@ -274,7 +270,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Calculate the estimated backup size
 	if ( $( '.hmbkp-schedule-sentence .calculating' ).size() ) {
-		$.get( ajaxurl, { 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
+		$.post( ajaxurl, { 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 			function( data ) {
 
 				if ( data.indexOf( 'title' ) != -1 )
@@ -296,21 +292,20 @@ jQuery( document ).ready( function( $ ) {
 	if ( $( '.hmbkp-running' ).size() )
 		hmbkpRedirectOnBackupComplete();
 
-	$( '.hmbkp-run' ).live( 'click', function( e ) {
+	$( document ).on( 'click', '.hmbkp-run', function( e ) {
 
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
 
 		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
-		ajaxRequest = $.get(
+		ajaxRequest = $.post(
 			ajaxurl,
 			{ 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId },
 			function( data ) {
 
 				// Backup Succeeded
-				if ( data.indexOf( 'hmbkp-schedule-actions' ) != -1 ) {
+				if ( ! data ) {
 					location.reload( true );
-
 				}
 
 				// The backup failed so just show the error and offer to have it emailed back
@@ -318,13 +313,41 @@ jQuery( document ).ready( function( $ ) {
 
 					$( '.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
 
-		            $.fancybox( {
-			            'content' 	: data,
-		                'maxWidth'	: 320
+					$.post(
+						ajaxurl,
+						{ 'action' : 'hmbkp_backup_error', 'hmbkp_error' : data },
+						function( data ) {
 
-		            } );
+							if ( ! data )
+								return;
+
+							$.fancybox( {
+				                'maxWidth'	: 500,
+				                'content'	: data,
+				                'modal'		: true
+				            } );
+
+						}
+					);
 
 				}
+
+				$( document ).one( 'click', '.hmbkp_send_error_via_email', function( e ) {
+
+					e.preventDefault();
+
+					$( this ).addClass( 'hmbkp-ajax-loading' );
+
+					$.post(
+					    ajaxurl,
+					    { 'action' : 'hmbkp_email_error', 'hmbkp_error' : data },
+						function( data ) {
+							$.fancybox.close();
+						}
+
+					)
+
+				} );
 
 			}
 
@@ -347,7 +370,7 @@ jQuery( document ).ready( function( $ ) {
 
 function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
-	jQuery.get(
+	jQuery.post(
 		ajaxurl,
 		{ 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 		function( data ) {
