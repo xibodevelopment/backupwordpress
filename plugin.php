@@ -131,8 +131,8 @@ function hmbkp_init() {
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
-		wp_enqueue_script( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ), HMBKP_VERSION );
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp_fancybox' ), HMBKP_VERSION );
+		wp_enqueue_script( 'hmbkp-fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ), HMBKP_VERSION );
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-fancybox' ), HMBKP_VERSION );
 
 		wp_localize_script( 'hmbkp', 'objectL10n', array(
 			'update'				=> __( 'Update', 'hmbkp' ),
