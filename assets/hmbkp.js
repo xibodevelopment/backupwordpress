@@ -370,6 +370,9 @@ jQuery( document ).ready( function( $ ) {
 
 function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
+	if ( typeof( redirect ) === 'undefined' )
+		redirect = true;
+
 	jQuery.post(
 		ajaxurl,
 		{ 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
@@ -382,7 +385,9 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
 			} else {
 
-				setTimeout( 'hmbkpRedirectOnBackupComplete();', 100 );
+				setTimeout( function() {
+					hmbkpRedirectOnBackupComplete( schedule_id, redirect );
+				}, 100 );
 
 				jQuery( '.hmbkp-status' ).remove();
 				jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
