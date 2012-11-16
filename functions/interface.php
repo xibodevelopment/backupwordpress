@@ -231,7 +231,7 @@ function hmbkp_human_get_type( $type, HMBKP_Scheduled_Backup $schedule = null ) 
  */
 function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) { ?>
 
-	<span class="hmbkp-status"><?php echo $schedule->get_status(); ?> <a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a></span>
+	<span class="hmbkp-status"><?php echo $schedule->get_status() ? $schedule->get_status() : __( 'Starting Backup', 'hmbkp' ); ?> <a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a></span>
 
 	<div class="hmbkp-schedule-actions row-actions">
 
