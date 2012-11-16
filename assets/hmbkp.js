@@ -210,7 +210,7 @@ jQuery( document ).ready( function( $ ) {
 
 		e.preventDefault();
 
-		$.post(
+		$.get(
 			ajaxurl + '?' + $( this ).serialize(),
 			{ 'action'	: 'hmnkp_edit_schedule_submit' },
 			function( data ) {

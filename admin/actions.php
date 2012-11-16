@@ -237,52 +237,52 @@ add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
  */
 function hmnkp_edit_schedule_submit() {
 
-	if ( empty( $_POST['hmbkp_schedule_id'] ) )
+	if ( empty( $_GET['hmbkp_schedule_id'] ) )
 		return;
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
 
 	$errors = array();
 
-	if ( isset( $_POST['hmbkp_schedule_type'] ) ) {
+	if ( isset( $_GET['hmbkp_schedule_type'] ) ) {
 
-		if ( ! trim( $_POST['hmbkp_schedule_type'] ) )
+		if ( ! trim( $_GET['hmbkp_schedule_type'] ) )
 			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
 
-		elseif ( ! in_array( $_POST['hmbkp_schedule_type'], array( 'complete', 'file', 'database' ) ) )
+		elseif ( ! in_array( $_GET['hmbkp_schedule_type'], array( 'complete', 'file', 'database' ) ) )
 			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
 
 		else
-			$schedule->set_type( $_POST['hmbkp_schedule_type'] );
+			$schedule->set_type( $_GET['hmbkp_schedule_type'] );
 
 	}
 
-	if ( isset( $_POST['hmbkp_schedule_reoccurrence'] ) ) {
+	if ( isset( $_GET['hmbkp_schedule_reoccurrence'] ) ) {
 
-		if ( empty( $_POST['hmbkp_schedule_reoccurrence'] ) )
+		if ( empty( $_GET['hmbkp_schedule_reoccurrence'] ) )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
 
-		elseif ( ! in_array( $_POST['hmbkp_schedule_reoccurrence'], array_keys( wp_get_schedules() ) ) && $_POST['hmbkp_schedule_reoccurrence'] !== 'manually' )
+		elseif ( ! in_array( $_GET['hmbkp_schedule_reoccurrence'], array_keys( wp_get_schedules() ) ) && $_GET['hmbkp_schedule_reoccurrence'] !== 'manually' )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'hmbkp' );
 
 		else
-			$schedule->set_reoccurrence( $_POST['hmbkp_schedule_reoccurrence'] );
+			$schedule->set_reoccurrence( $_GET['hmbkp_schedule_reoccurrence'] );
 
 	}
 
-	if ( isset( $_POST['hmbkp_schedule_max_backups'] ) ) {
+	if ( isset( $_GET['hmbkp_schedule_max_backups'] ) ) {
 
-		if ( empty( $_POST['hmbkp_schedule_max_backups'] ) )
+		if ( empty( $_GET['hmbkp_schedule_max_backups'] ) )
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
 
-		elseif ( ! is_numeric( $_POST['hmbkp_schedule_max_backups'] ) )
+		elseif ( ! is_numeric( $_GET['hmbkp_schedule_max_backups'] ) )
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
 
-		elseif ( ! ( $_POST['hmbkp_schedule_max_backups'] >= 1 ) )
+		elseif ( ! ( $_GET['hmbkp_schedule_max_backups'] >= 1 ) )
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
 
 		else
-			$schedule->set_max_backups( (int) $_POST['hmbkp_schedule_max_backups'] );
+			$schedule->set_max_backups( (int) $_GET['hmbkp_schedule_max_backups'] );
 
 		$schedule->delete_old_backups();
 
