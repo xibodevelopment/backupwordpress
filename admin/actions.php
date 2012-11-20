@@ -52,6 +52,10 @@ function hmbkp_ajax_request_do_backup() {
 	@ini_set( 'display_errors', 'On' );
 	@ini_set( 'html_errors', 'Off' );
 
+	// Force a memory error for testing purposes
+	//ini_set( 'memory_limit', '2M' );
+	//function a() { a(); } a();
+
 	ignore_user_abort( true );
 
 	hmbkp_cleanup();
@@ -59,9 +63,6 @@ function hmbkp_ajax_request_do_backup() {
 	$schedule = new HMBKP_Scheduled_Backup( urldecode( $_POST['hmbkp_schedule_id'] ) );
 
 	$schedule->run();
-
-	// Force a memory limit error
-	//function a() { a(); } a();
 
 	exit;
 
