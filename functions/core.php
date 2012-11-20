@@ -387,7 +387,7 @@ function hmbkp_path_move( $from, $to ) {
  */
 function hmbkp_possible() {
 
-	if ( ! is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) || HM_Backup::is_safe_mode_active() )
+	if ( ! is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) )
 		return false;
 
 	return true;

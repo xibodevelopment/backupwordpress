@@ -12,10 +12,8 @@ class BackUpCommand extends WP_CLI_Command {
 	public function __construct( $args, $assoc_args ) {
 
 		// Make sure it's possible to do a backup
-		if ( HM_Backup::is_safe_mode_active() ) {
-			WP_CLI::error( __( 'Backup not possible when php is running safe_mode on', 'hmbkp' ) );
-			return false;
-		}
+		if ( HM_Backup::is_safe_mode_active() )
+			WP_CLI::error( sprintf( __( 'BackUpWordPress may not work when php is running with %s on', 'hmbkp' ), 'safe_mode' ) );
 
 		add_action( 'hmbkp_mysqldump_started', function() {
 			WP_CLI::line( __( 'Backup: Dumping database...', 'hmbkp' ) );
