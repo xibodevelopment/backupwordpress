@@ -177,7 +177,7 @@ jQuery( document ).ready( function( $ ) {
 	// Remove exclude rule
 	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form td a', function( e ) {
 
-		$( this ).addClass( 'hmbkp-ajax-loading' );
+		$( this ).addClass( 'hmbkp-ajax-loading' ).text( '' );
 
 		e.preventDefault();
 
