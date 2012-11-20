@@ -51,7 +51,7 @@ Backups are stored on your server in `/wp-content/backups`, you can change the d
 
 You need to download the latest backup file either by clicking download on the backups page or via `FTP`. `Unzip` the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely `phpMyAdmin`).
 
-See this post for more details http://hmn.md/backupwordpress/
+See this post for more details http://hmn.md/backupwordpress-how-to-restore-from-backup-files/.
 
 **Does BackUpWordPress back up the backups directory?**
 
