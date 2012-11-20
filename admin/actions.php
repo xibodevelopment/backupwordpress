@@ -377,26 +377,23 @@ function hmbkp_preview_exclude_rule() {
 	if ( ! empty( $_POST['hmbkp_schedule_excludes'] ) )
 		$excludes = explode( ',', $_POST['hmbkp_schedule_excludes'] );
 
-	if ( ! empty( $_POST['hmbkp_file_method'] ) )
-		$file_method = $_POST['hmbkp_file_method'];
+	hmbkp_file_list( $schedule, $excludes, 'get_excluded_files' );
 
-	hmbkp_file_list( $schedule, $excludes, $file_method );
+	$schedule->set_excludes( $excludes );
 
-	foreach( $schedule->get_excluded_files() as $key => $excluded_file )
-		if ( strpos( $excluded_file, $schedule->get_path() ) === false )
-			$excluded_files[] = $excluded_file;
+	error_log( $schedule->get_excluded_file_count() );
 
-	if ( ! empty( $excluded_files) ) { ?>
+	if ( $schedule->get_excluded_file_count() ) { ?>
 
-	<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', count( $excluded_files ), 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', count( $excluded_files ) ); ?></p>
+		<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', $schedule->get_excluded_file_count(), 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', $schedule->get_excluded_file_count() ); ?></p>
 
 	<?php } else { ?>
 
-	<p><?php printf( __( '%s didn\'t match any files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>' ); ?></p>
+		<p><?php printf( __( '%s didn\'t match any files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>' ); ?></p>
 
 	<?php } ?>
 
-	<p><button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'hmbkp' ); ?></button> <button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'hmbkp' ); ?></button></p>
+		<p><button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'hmbkp' ); ?></button> <button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'hmbkp' ); ?></button></p>
 
 	<?php exit;
 

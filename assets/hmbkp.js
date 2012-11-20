@@ -73,7 +73,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$.post(
 			ajaxurl,
-			{ 'action'	: 'hmbkp_file_list', 'hmbkp_schedule_excludes' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val(), 'hmbkp_file_method' : 'get_excluded_files' },
+			{ 'action'	: 'hmbkp_file_list', 'hmbkp_schedule_excludes' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
 			function( data ) {
 
 				$( '.hmbkp_add_exclude_rule ul' ).remove();

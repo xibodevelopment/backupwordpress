@@ -310,7 +310,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				        continue;
 
 				    // Excludes
-				    if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', $this->conform_dir( $file->getPathname() ) ) ) )
+				    if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
 				        continue;
 
 				    $filesize += (float) $file->getSize();
