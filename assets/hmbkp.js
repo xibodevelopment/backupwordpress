@@ -181,7 +181,7 @@ jQuery( document ).ready( function( $ ) {
 
 		e.preventDefault();
 
-		$.post(
+		$.get(
 			ajaxurl,
 			{ 'action' : 'hmbkp_delete_exclude_rule', 'hmbkp_exclude_rule' : $( this ).closest( 'td' ).attr( 'data-hmbkp-exclude-rule' ), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
 			function( data ) {

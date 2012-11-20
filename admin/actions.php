@@ -333,11 +333,11 @@ add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
  */
 function hmbkp_delete_exclude_rule() {
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( $_GET['hmbkp_schedule_id'] );
 
 	$excludes = $schedule->get_excludes();
 
-	$schedule->set_excludes( array_diff( $excludes, (array) $_POST['hmbkp_exclude_rule'] ) );
+	$schedule->set_excludes( array_diff( $excludes, (array) stripslashes( $_GET['hmbkp_exclude_rule'] ) ) );
 
 	$schedule->save();
 
