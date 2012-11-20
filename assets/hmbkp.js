@@ -289,7 +289,7 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	}
 
-	if ( $( '.hmbkp-running' ).size() )
+	if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).size() )
 		hmbkpRedirectOnBackupComplete( $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ), true );
 
 	$( document ).on( 'click', '.hmbkp-run', function( e ) {
@@ -311,7 +311,7 @@ jQuery( document ).ready( function( $ ) {
 				// The backup failed so just show the error and offer to have it emailed back
 				else {
 
-					$( '.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
+					$( '.hmbkp-schedule-sentence.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
 
 					$.post(
 						ajaxurl,
