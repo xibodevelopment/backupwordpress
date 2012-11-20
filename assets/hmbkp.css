@@ -62,8 +62,8 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; }
 .hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 
-button.hmbkp-ajax-loading { padding-left: 20px; }
-button.hmbkp-ajax-loading::before { background-image: url('wpspin_light.gif'); background-repeat: no-repeat; background-position: 1px -1px; margin-left: -20px; display: inline-block; width: 16px; height: 16px; content: " "; vertical-align: middle; padding-right: 3px; }
+.hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; }
+.hmbkp-ajax-loading::before { background-image: url('wpspin_light.gif'); background-repeat: no-repeat; background-position: 1px -1px; margin-left: -20px; display: inline-block; width: 16px; height: 16px; content: " "; vertical-align: middle; padding-right: 3px; }
 
 button { height: 14px; }
 
