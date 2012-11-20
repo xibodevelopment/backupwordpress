@@ -193,7 +193,7 @@ add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
  */
 function hmbkp_edit_schedule_load() {
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( $_GET['hmbkp_schedule_id'] );
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
 
@@ -207,7 +207,7 @@ add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
  */
 function hmbkp_edit_schedule_excludes_load() {
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( $_GET['hmbkp_schedule_id'] );
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
@@ -241,7 +241,7 @@ function hmnkp_edit_schedule_submit() {
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
 		return;
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( $_GET['hmbkp_schedule_id'] );
 
 	$errors = array();
 
@@ -311,7 +311,7 @@ add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' )
  */
 function hmbkp_add_exclude_rule() {
 
-	$schedule = new HMBKP_Scheduled_Backup( esc_attr( $_POST['hmbkp_schedule_id'] ) );
+	$schedule = new HMBKP_Scheduled_Backup( $_POST['hmbkp_schedule_id'] );
 
 	$schedule->set_excludes( $_POST['hmbkp_exclude_rule'], true );
 
