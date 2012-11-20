@@ -375,18 +375,22 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 		{ 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 		function( data ) {
 
-			if ( data == 0 ) {
-
-				if ( redirect === true )
+			if ( data === 0 && redirect === true ) {
 					location.reload( true );
 
 			} else {
 
+				if ( data != 0 ) {
+
+					redirect = true;
+
+					jQuery( '.hmbkp-status' ).remove();
+					jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
+
+				}
+
 				setTimeout( function() {
 					hmbkpRedirectOnBackupComplete( schedule_id, redirect );
-
-				jQuery( '.hmbkp-status' ).remove();
-				jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
 				}, 5000 );
 
 			}
