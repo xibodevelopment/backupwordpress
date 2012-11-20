@@ -38,6 +38,8 @@ if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
 if ( ! defined( 'HMBKP_ADMIN_URL' ) )
 	define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
+define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
+
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
 	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
 

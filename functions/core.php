@@ -285,6 +285,25 @@ function hmbkp_path() {
 	if ( ! file_exists( $index ) && is_writable( $path ) )
 		file_put_contents( $index, '' );
 
+	// Protect the directory with a .htaccess file on Apache servers
+	if ( ( require_once( ABSPATH . '/wp-admin/includes/misc.php' ) ) && got_mod_rewrite() ) {
+
+		$htaccess = $path . '/.htaccess';
+
+		$contents[]	= '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'hmbkp' ), '.htaccess' );
+		$contents[] = '';
+		$contents[] = '<IfModule mod_rewrite.c>';
+		$contents[] = 'RewriteEngine On';
+		$contents[] = 'RewriteCond %{QUERY_STRING} !key=' . HMBKP_SECURE_KEY;
+		$contents[] = 'RewriteRule (.*) - [F]';
+		$contents[] = '</IfModule>';
+		$contents[] = '';
+
+		if ( ! file_exists( $htaccess ) && is_writable( $path ) )
+			insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
+
+	}
+
     return HM_Backup::conform_dir( $path );
 
 }

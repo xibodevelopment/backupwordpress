@@ -78,7 +78,21 @@ function hmbkp_request_download_backup() {
 	if ( empty( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) || ! file_exists( base64_decode( $_GET['hmbkp_download_backup'] ) ) )
 		return;
 
-	wp_redirect( str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) . urlencode( pathinfo( base64_decode( $_GET['hmbkp_download_backup'] ), PATHINFO_BASENAME ) ), 303 );
+	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) . urlencode( pathinfo( base64_decode( $_GET['hmbkp_download_backup'] ), PATHINFO_BASENAME ) );
+
+	if ( ( require_once( ABSPATH . '/wp-admin/includes/misc.php' ) ) && got_mod_rewrite() ) {
+
+		// Force the .htaccess to be rebuilt
+		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+			unlink( hmbkp_path() . '/.htaccess' );
+
+		hmbkp_path();
+
+		$url = add_query_arg( 'key', HMBKP_SECURE_KEY, $url );
+
+	}
+
+	wp_redirect( $url, 303 );
 
 	exit;
 
