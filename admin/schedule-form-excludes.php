@@ -37,7 +37,7 @@
 
     			    	<span class="code"><?php echo esc_attr( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
 
-    	<?php if ( strpos( $schedule->get_path(), untrailingslashit( $exclude ) ) !== false ) : ?>
+    	<?php if ( $schedule->get_path() === untrailingslashit( $exclude ) ) : ?>
 
     					<span class="reason"><?php _e( 'default', 'hmbkp' ); ?></span>
 
