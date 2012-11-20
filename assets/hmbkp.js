@@ -358,7 +358,7 @@ jQuery( document ).ready( function( $ ) {
 
 		setTimeout( function() {
 			hmbkpRedirectOnBackupComplete( scheduleId, false )
-		}, 250 );
+		}, 1000 );
 
 		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
@@ -384,10 +384,10 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
 				setTimeout( function() {
 					hmbkpRedirectOnBackupComplete( schedule_id, redirect );
-				}, 250 );
 
 				jQuery( '.hmbkp-status' ).remove();
 				jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
+				}, 5000 );
 
 			}
 		}
