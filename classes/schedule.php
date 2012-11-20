@@ -579,29 +579,31 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	    	case 'hmbkp_mysqldump_started' :
 
-	    		$this->set_status( sprintf( __( 'Dumping Database %s', 'hmbkp' ), '(' . $this->get_mysqldump_method() . ')' ) );
+	    		$this->set_status( sprintf( __( 'Dumping Database %s', 'hmbkp' ), '(<code>' . $this->get_mysqldump_method() . '</code>)' ) );
 
 	    	break;
 
 	    	case 'hmbkp_mysqldump_verify_started' :
 
-	    		$this->set_status( sprintf( __( 'Verifying Database Dump %s', 'hmbkp' ), '(' . $this->get_mysqldump_method() . ')' ) );
+	    		$this->set_status( sprintf( __( 'Verifying Database Dump %s', 'hmbkp' ), '(<code>' . $this->get_mysqldump_method() . '</code>)' ) );
 
 	    	break;
 
 			case 'hmbkp_archive_started' :
 
-	    		$this->set_status( sprintf( __( 'Creating zip archive %s', 'hmbkp' ), '(' . $this->get_archive_method() . ')' ) );
+	    		$this->set_status( sprintf( __( 'Creating zip archive %s', 'hmbkp' ), '(<code>' . $this->get_archive_method() . '</code>)' ) );
 
 	    	break;
 
 	    	case 'hmbkp_archive_verify_started' :
 
-	    		$this->set_status( sprintf( __( 'Verifying Zip Archive %s', 'hmbkp' ), '(' . $this->get_archive_method() . ')' ) );
+	    		$this->set_status( sprintf( __( 'Verifying Zip Archive %s', 'hmbkp' ), '(<code>' . $this->get_archive_method() . '</code>)' ) );
 
 	    	break;
 
 	    	case 'hmbkp_backup_complete' :
+
+	    		$this->set_status( __( 'Finishing Backup', 'hmbkp' ) );
 
 				if ( $this->get_errors() ) {
 
