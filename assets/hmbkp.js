@@ -308,7 +308,7 @@ jQuery( document ).ready( function( $ ) {
 					location.reload( true );
 				}
 
-				// The backup failed so just show the error and offer to have it emailed back
+				// The backup failed, show the error and offer to have it emailed back
 				else {
 
 					$( '.hmbkp-schedule-sentence.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
