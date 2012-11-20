@@ -294,6 +294,8 @@ jQuery( document ).ready( function( $ ) {
 
 	$( document ).on( 'click', '.hmbkp-run', function( e ) {
 
+		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
+
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
 
 		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
@@ -359,8 +361,6 @@ jQuery( document ).ready( function( $ ) {
 		setTimeout( function() {
 			hmbkpRedirectOnBackupComplete( scheduleId, false )
 		}, 1000 );
-
-		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
 		e.preventDefault();
 
