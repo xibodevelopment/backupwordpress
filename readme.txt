@@ -105,11 +105,26 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 #### 2.1
 
+* Stop blocking people with `safe_mode = On` from using the plugin, instead just show a warning.
 * Fix possible fatal error when setting schedule to monthly.
 * Fix issues with download backup not working on some shared hosts.
 * Fix issuses with download backup not working on sites with strange characters in the site name.
 * Fix a bug could cause the update actions to fire on initial activation.
 * Improved reliability when changing backup paths, now with Unit Tests.
+* Generate the lists of excluded, included and unreadable files in a more memory efficient way, no more fatal errors on sites with lots of files.
+* Bring back .htaccess protection of the backups directory on `Apache` servers with `mod_rewrite` enabled.
+* Prepend a random string to the backups directory to make it harder to brute force guess.
+* Fall back to storing the backups directoy in `uploads` if `WP_CONTENT_DIR` isn't writable.
+* Attempt to catch `E_ERROR` level errors (Fatal errors) that happen during the backup process and offer to email them to support.
+* Provide more granular status messages during the backup process.
+* Show a spinner next to the schedule link when a backup is running on a schedule which you are not currently viewing.
+* Improve the feedback when removing an exclude rule.
+* Fix an issue that could cause an exclude rule to be marked as default when it in-fact isn't, thus not letting it be deleted.
+* Add a line encouraging people to rate the plugin if they like it.
+* Change the support line to point to the FAQ before recommending they contact support.
+* Fix the link to the "How to Restore" post in the FAQ.
+* Some string changes for translators, 18 changed strings.
+
 
 #### 2.0.6
 
