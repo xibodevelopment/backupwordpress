@@ -80,7 +80,7 @@ function hmbkp_request_download_backup() {
 
 	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) . urlencode( pathinfo( base64_decode( $_GET['hmbkp_download_backup'] ), PATHINFO_BASENAME ) );
 
-	if ( ( require_once( ABSPATH . '/wp-admin/includes/misc.php' ) ) && got_mod_rewrite() ) {
+	if ( apply_filters( 'got_rewrite', apache_mod_loaded( 'mod_rewrite', true ) ) ) {
 
 		// Force the .htaccess to be rebuilt
 		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
