@@ -103,6 +103,13 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 2.1.1
+
+* Fix a possible fatal error when a backup schedule is instantiated outside of wp-admin.
+* Don't use functions from misc.php as loading it too early can cause fatal errors.
+* Don't hardcode an English string in the JS, use the translated string instead.
+* Minor code cleanup.
+
 #### 2.1
 
 * Stop blocking people with `safe_mode = On` from using the plugin, instead just show a warning.
