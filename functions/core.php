@@ -286,7 +286,7 @@ function hmbkp_path() {
 		file_put_contents( $index, '' );
 
 	// Protect the directory with a .htaccess file on Apache servers
-	if ( ( require_once( ABSPATH . '/wp-admin/includes/misc.php' ) ) && got_mod_rewrite() ) {
+	if ( apply_filters('got_rewrite', apache_mod_loaded('mod_rewrite', true) ) ) {
 
 		$htaccess = $path . '/.htaccess';
 
