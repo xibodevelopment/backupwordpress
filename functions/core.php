@@ -286,7 +286,7 @@ function hmbkp_path() {
 		file_put_contents( $index, '' );
 
 	// Protect the directory with a .htaccess file on Apache servers
-	if ( ( require_once( ABSPATH . '/wp-admin/includes/misc.php' ) ) && got_mod_rewrite() ) {
+	if ( apply_filters('got_rewrite', apache_mod_loaded('mod_rewrite', true) ) ) {
 
 		$htaccess = $path . '/.htaccess';
 
@@ -299,7 +299,7 @@ function hmbkp_path() {
 		$contents[] = '</IfModule>';
 		$contents[] = '';
 
-		if ( ! file_exists( $htaccess ) && is_writable( $path ) )
+		if ( function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) )
 			insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
 	}
