@@ -29,7 +29,7 @@ jQuery( document ).ready( function( $ ) {
 
 			$( '.hmbkp-tabs' ).tabs();
 
-			if ( $( '.hmbkp-form p.submit:contains(\'Update\')' ).size() )
+			if ( $( ".hmbkp-form p.submit:contains('" + objectL10n.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-fancybox-close">' + objectL10n.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
 
 		}
