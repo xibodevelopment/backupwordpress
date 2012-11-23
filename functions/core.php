@@ -299,7 +299,7 @@ function hmbkp_path() {
 		$contents[] = '</IfModule>';
 		$contents[] = '';
 
-		if ( ! file_exists( $htaccess ) && is_writable( $path ) )
+		if ( function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) )
 			insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
 	}
