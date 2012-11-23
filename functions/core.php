@@ -286,7 +286,7 @@ function hmbkp_path() {
 		file_put_contents( $index, '' );
 
 	// Protect the directory with a .htaccess file on Apache servers
-	if ( apply_filters('got_rewrite', apache_mod_loaded('mod_rewrite', true) ) ) {
+	if ( apply_filters( 'got_rewrite', apache_mod_loaded( 'mod_rewrite', true ) ) && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) ) {
 
 		$htaccess = $path . '/.htaccess';
 
@@ -299,8 +299,7 @@ function hmbkp_path() {
 		$contents[] = '</IfModule>';
 		$contents[] = '';
 
-		if ( function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) )
-			insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
+		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
 	}
 
