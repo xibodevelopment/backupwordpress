@@ -261,6 +261,8 @@ function hmbkp_rmdirtree( $dir ) {
  */
 function hmbkp_path() {
 
+	global $is_apache;
+
 	$path = get_option( 'hmbkp_path' );
 
 	// Allow the backups path to be defined
@@ -286,7 +288,7 @@ function hmbkp_path() {
 		file_put_contents( $index, '' );
 
 	// Protect the directory with a .htaccess file on Apache servers
-	if ( apply_filters( 'got_rewrite', apache_mod_loaded( 'mod_rewrite', true ) ) && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) ) {
+	if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) ) {
 
 		$htaccess = $path . '/.htaccess';
 

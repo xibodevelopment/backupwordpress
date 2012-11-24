@@ -75,12 +75,14 @@ add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
  */
 function hmbkp_request_download_backup() {
 
+	global $is_apache;
+
 	if ( empty( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) || ! file_exists( base64_decode( $_GET['hmbkp_download_backup'] ) ) )
 		return;
 
 	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) . urlencode( pathinfo( base64_decode( $_GET['hmbkp_download_backup'] ), PATHINFO_BASENAME ) );
 
-	if ( apply_filters( 'got_rewrite', apache_mod_loaded( 'mod_rewrite', true ) ) ) {
+	if ( $is_apache ) {
 
 		// Force the .htaccess to be rebuilt
 		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
