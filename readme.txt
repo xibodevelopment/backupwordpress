@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
 Tested up to: 3.5
-Stable tag: 2.1
+Stable tag: 2.1.1
 
 Simple automated back ups of your WordPress powered website.
 
@@ -108,6 +108,9 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Fix a possible fatal error when a backup schedule is instantiated outside of wp-admin.
 * Don't use functions from misc.php as loading it too early can cause fatal errors.
 * Don't hardcode an English string in the JS, use the translated string instead.
+* Properly skip dot files, should fix fatal errors on systems with `open_basedir` restrictions.
+* Don't call `apache_mod_loaded` as it caused wierd DNS issue on some sites, use `global $is_apache` instead.
+* Fix a possible double full stop at the end of the schedule sentence.
 * Minor code cleanup.
 
 #### 2.1
