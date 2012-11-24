@@ -306,8 +306,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				foreach ( $this->get_files() as $file ) {
 
-			    	if ( $file === '.' || $file === '..' || ! $file->isReadable() )
-				        continue;
+					// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
+					if ( method_exists( $file, 'isDot' ) && $file->isDot() )
+						continue;
+
+					if ( ! $file->isReadable() )
+						continue;
 
 				    // Excludes
 				    if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
