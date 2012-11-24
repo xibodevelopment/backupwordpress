@@ -381,8 +381,6 @@ function hmbkp_preview_exclude_rule() {
 
 	$schedule->set_excludes( $excludes );
 
-	error_log( $schedule->get_excluded_file_count() );
-
 	if ( $schedule->get_excluded_file_count() ) { ?>
 
 		<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', $schedule->get_excluded_file_count(), 'hmbkp' ), '<code>' . implode( '</code>, <code>', $excludes ) . '</code>', $schedule->get_excluded_file_count() ); ?></p>
