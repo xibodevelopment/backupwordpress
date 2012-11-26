@@ -333,7 +333,7 @@ add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' )
  */
 function hmbkp_add_exclude_rule() {
 
-	if ( empty( $_GET['hmbkp_schedule_id'] ) )
+	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		exit;
 
 	$schedule = new HMBKP_Scheduled_Backup( $_POST['hmbkp_schedule_id'] );
@@ -385,7 +385,7 @@ add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
  */
 function hmbkp_preview_exclude_rule() {
 
-	if ( empty( $_GET['hmbkp_schedule_id'] ) || empty( $_POST['hmbkp_schedule_excludes'] ) )
+	if ( empty( $_POST['hmbkp_schedule_id'] ) || empty( $_POST['hmbkp_schedule_excludes'] ) )
 		exit;
 
 	$schedule = new HMBKP_Scheduled_Backup( $_POST['hmbkp_schedule_id'] );
