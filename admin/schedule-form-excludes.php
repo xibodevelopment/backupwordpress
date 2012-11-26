@@ -10,9 +10,11 @@
 
         	<label for="hmbkp-new-exclude-rule">
 
-                <?php _e( 'New Exclude Rule', 'hmbkp' ); ?>
+                <?php _e( 'New Exclude Rule[s]', 'hmbkp' ); ?>
 
-                <input id="hmbkp-new-exclude-rule" type="text" class="code" placeholder=".git/, *.mp3, wp-content/uploads/" />
+                <input id="hmbkp-new-exclude-rule" type="text" class="code" placeholder="" />
+
+                <span class="howto">Enter new exclude rules as a comma separated list, e.g. <code>.git/, *.mp3, wp-content/uploads/</code></span>
 
                 <button type="button" class="button-secondary hmbkp_preview_exclude_rule"><?php _e( 'Preview', 'hmbkp' ); ?></button>
 

@@ -94,7 +94,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->set_path( hmbkp_path() );
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->set_archive_filename( implode( '-', array( sanitize_title( url_shorten( home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
 		// Setup the schedule if it isn't set or TODO if it's changed
 		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( wp_get_schedules() ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
@@ -306,8 +306,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				foreach ( $this->get_files() as $file ) {
 
-			    	if ( $file === '.' || $file === '..' || ! $file->isReadable() )
-				        continue;
+					// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
+					if ( method_exists( $file, 'isDot' ) && $file->isDot() )
+						continue;
+
+					if ( ! $file->isReadable() )
+						continue;
 
 				    // Excludes
 				    if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
