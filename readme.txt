@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
 Tested up to: 3.5
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 
 Simple automated back ups of your WordPress powered website.
 
@@ -102,6 +102,13 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.1.2
+
+* Fix an issue that could stop the settings panel from closing on save on servers which return `'0'` for ajax requests.
+* Fix an issue that could cause the backup root to be set to `/` on sites with `site_url` and `home` set to different domains.
+* The mysqldump fallback function will now be used if `mysqldump` produces an empty file.
+* Fix a possible PHP `NOTICE` on Apache servers.
 
 #### 2.1.1
 
