@@ -216,7 +216,7 @@ jQuery( document ).ready( function( $ ) {
 			function( data ) {
 
 				// Assume success if no data passed back
-				if ( ! data ) {
+				if ( ! data || data == 0 ) {
 
 					$.fancybox.close();
 
@@ -306,7 +306,7 @@ jQuery( document ).ready( function( $ ) {
 			function( data ) {
 
 				// Backup Succeeded
-				if ( ! data ) {
+				if ( ! data || data == 0 ) {
 					location.reload( true );
 				}
 
@@ -320,7 +320,7 @@ jQuery( document ).ready( function( $ ) {
 						{ 'action' : 'hmbkp_backup_error', 'hmbkp_error' : data },
 						function( data ) {
 
-							if ( ! data )
+							if ( ! data || data == 0 )
 								return;
 
 							$.fancybox( {
@@ -375,8 +375,8 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 		{ 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 		function( data ) {
 
-			if ( data === 0 && redirect === true ) {
-					location.reload( true );
+			if ( data == 0 && redirect === true ) {
+				location.reload( true );
 
 			} else {
 
