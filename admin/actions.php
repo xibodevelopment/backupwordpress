@@ -47,7 +47,7 @@ function hmbkp_ajax_request_do_backup() {
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		return;
 
-	// We wan't to display any fatal errors in this ajax request so we can catch them on the other side.
+	// We want to display any fatal errors in this ajax request so we can catch them on the other side.
 	error_reporting( E_ERROR );
 	@ini_set( 'display_errors', 'On' );
 	@ini_set( 'html_errors', 'Off' );
