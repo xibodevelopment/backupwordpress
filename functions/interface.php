@@ -47,7 +47,7 @@ function hmbkp_admin_notices() {
 		 function hmbkp_path_exists_warning() {
 			  $php_user = exec( 'whoami' );
 			$php_group = reset( explode( ' ', exec( 'groups' ) ) );
-		 	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress is almost ready.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable, run %2$s or %3$s or create the folder yourself.', 'hmbkp' ), '<code>wp-content</code>', '<code>chown ' . $php_user . ':' . $php_group . ' ' . WP_CONTENT_DIR . '</code>', '<code>chmod 777 ' . WP_CONTENT_DIR . '</code>' ) . '</p></div>';
+		 	echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress is almost ready.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable, run %2$s or %3$s or create the folder yourself.', 'hmbkp' ), '<code>wp-content</code>', '<code>chown ' . $php_user . ':' . $php_group . ' ' . dirname( hmbkp_path() ) . '</code>', '<code>chmod 777 ' . dirname( hmbkp_path() ) . '</code>' ) . '</p></div>';
 		 }
 		 add_action( 'admin_notices', 'hmbkp_path_exists_warning' );
 
