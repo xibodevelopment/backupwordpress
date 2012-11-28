@@ -103,6 +103,11 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 2.1.4
+
+* Don't repeatedly try to create the backups directory in the `uploads` if `uploads` isn't writable.
+* Show the correct path in the warning message when the backups path can't be created.
+
 #### 2.1.3
 
 * Fix a regression in `2.1.2` that broke previewing and adding new exclude rules.
