@@ -420,12 +420,6 @@ function hmbkp_cleanup() {
 
     endif;
 
-    $schedules = new HMBKP_Schedules;
-
-    // Ensure we don't have more backups than we should
-    foreach( $schedules->get_schedules() as $schedule )
-    	$schedule->delete_old_backups();
-
 }
 
 /**
