@@ -417,7 +417,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function set_reoccurrence( $reoccurrence ) {
 
 		// Check it's valid
-		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( wp_get_schedules() ) ) ) && $reoccurrence !== 'manually' )
+		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( hmbkp_cron_schedules() ) ) ) && $reoccurrence !== 'manually' )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid cron reoccurrence or "manually"' );
 
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
@@ -441,7 +441,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_interval() {
 
-		$schedules = wp_get_schedules();
+		$schedules = hmbkp_cron_schedules();
 
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
