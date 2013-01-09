@@ -46,6 +46,8 @@ else
 
     	<?php if ( $schedule->get_backups() ) :
 
+    		$schedule->delete_old_backups();
+
     	    foreach ( $schedule->get_backups() as $file ) :
 
     	        if ( ! file_exists( $file ) )

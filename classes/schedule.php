@@ -515,6 +515,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Mark the backup as started
 		$this->set_status( __( 'Starting Backup', 'hmbkp' ) );
 
+		// Delete old backups now in-case we fatal error during the backup process
+		$this->delete_old_backups();
+
 		$this->backup();
 
 		// Delete the backup running file

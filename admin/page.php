@@ -1,5 +1,3 @@
-<?php hmbkp_cleanup(); ?>
-
 <div class="wrap">
 
 	<?php screen_icon( HMBKP_PLUGIN_SLUG ); ?>
