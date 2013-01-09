@@ -561,7 +561,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @param string $message
 	 * @return void
 	 */
-	protected function set_status( $message ) {
+	public function set_status( $message ) {
 
 		if ( ! $handle = fopen( $this->get_schedule_running_path(), 'w' ) )
 			return;
