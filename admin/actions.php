@@ -285,7 +285,7 @@ function hmnkp_edit_schedule_submit() {
 		if ( empty( $_GET['hmbkp_schedule_reoccurrence'] ) )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
 
-		elseif ( ! in_array( $_GET['hmbkp_schedule_reoccurrence'], array_keys( wp_get_schedules() ) ) && $_GET['hmbkp_schedule_reoccurrence'] !== 'manually' )
+		elseif ( ! in_array( $_GET['hmbkp_schedule_reoccurrence'], array_keys( hmbkp_cron_schedules() ) ) && $_GET['hmbkp_schedule_reoccurrence'] !== 'manually' )
 			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'hmbkp' );
 
 		else

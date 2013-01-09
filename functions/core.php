@@ -207,20 +207,22 @@ function hmbkp_setup_default_schedules() {
 add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
 /**
- * Add weekly, fortnightly and monthly as a cron schedule choices
+ * Return an array of cron schedules
  *
- * @param array $reccurrences
  * @return array $reccurrences
  */
-function hmbkp_more_reccurences( $reccurrences ) {
+function hmbkp_cron_schedules() {
 
-	return array_merge( $reccurrences, array(
-	    'weekly' 		=> array( 'interval' => 604800, 'display' => 'Once Weekly' ),
-	    'fortnightly'	=> array( 'interval' => 1209600, 'display' => 'Once Fortnightly' ),
-	    'monthly'		=> array( 'interval' => 2629743.83 , 'display' => 'Once Monthly' )
-	) );
+	return array(
+		'hourly'     	=> array( 'interval' => 3600, 					'display' => __( 'Once Hourly' ) ),
+		'twicedaily' 	=> array( 'interval' => 43200,					'display' => __( 'Twice Daily' ) ),
+		'daily'      	=> array( 'interval' => 86400,					'display' => __( 'Once Daily' ) ),
+	    'weekly' 		=> array( 'interval' => 604800,					'display' => __( 'Once Weekly', 'hmbkp' ) ),
+	    'fortnightly'	=> array( 'interval' => 1209600,				'display' => __( 'Once Fortnightly', 'hmbkp' ) ),
+	    'monthly'		=> array( 'interval' => 2629743.83 ,			'display' => __( 'Once Monthly', 'hmbkp' ) )
+	);
+
 }
-add_filter( 'cron_schedules', 'hmbkp_more_reccurences' );
 
 /**
  * Recursively delete a directory including

@@ -26,7 +26,7 @@
 
     			<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-<?php foreach( wp_get_schedules() as $cron_schedule => $cron_details ) : ?>
+<?php foreach( hmbkp_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
     		    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>"><?php echo esc_attr( $cron_details['display'] ); ?></option>
 
