@@ -38,7 +38,13 @@ if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
 if ( ! defined( 'HMBKP_ADMIN_URL' ) )
 	define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
-define( 'HMBKP_SECURE_KEY', md5( ABSPATH . time() ) );
+$key = array( ABSPATH, time() );
+
+foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT' ) as $constant )
+	if ( defined( $constant ) )
+		$key[] = $constant;
+
+define( 'HMBKP_SECURE_KEY', md5( shuffle( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
 	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
