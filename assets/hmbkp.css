@@ -87,3 +87,17 @@ table.widefat tbody td { padding: 8px 7px; }
 input[type="datetime-local"] { border-radius: 3px; border-width: 1px; border-style: solid; box-sizing: border-box; border-color: #DFDFDF; background-color: white; }
 
 pre { background-color: #eee; padding: 10px; white-space: normal; }
+
+@media only screen and ( max-width : 321px ) {
+
+div.hmbkp_add_exclude_rule input { width: 100% !important; }
+
+.hmbkp_preview_exclude_rule { float: left !important; width: 100% !important; height: 40px !important;  }
+
+.hmbkp-form .button-primary  { float: right !important; width: 100% !important; height: 40px !important; }
+
+.hmbkp-form .hmbkp-edit-schedule-form .button-primary  { float: right !important; width: 49% !important; height: 40px !important; }
+
+.hmbkp-form .hmbkp-fancybox-close { float: left !important; width: 49% !important; height: 40px !important; }
+
+}
