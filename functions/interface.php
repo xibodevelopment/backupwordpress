@@ -170,11 +170,11 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 				continue;
 
 			// Show only unreadable files
-			if ( $file_method === 'get_unreadable_files' && $file->isReadable() )
+			if ( $file_method === 'get_unreadable_files' && @realpath( $file->getPathname() ) && $file->isReadable() )
 			   	continue;
 
 			// Skip unreadable files
-			elseif ( $file_method !== 'get_unreadable_files' && ! $file->isReadable() )
+			elseif ( $file_method !== 'get_unreadable_files' && ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) )
 				continue;
 
 			// Show only included files
@@ -187,7 +187,7 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 			    if ( ! $exclude_string || ! preg_match( '(' .  $exclude_string . ')', str_ireplace( trailingslashit( $schedule->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
 			    	continue;
 
-			if ( $file->isDir() ) { ?>
+			if ( @realpath( $file->getPathname() ) && ! $file->isReadable() && $file->isDir() ) { ?>
 
 		<li title="<?php echo esc_attr( HM_Backup::conform_dir( trailingslashit( $file->getPathName() ) ) ); ?>"><?php echo esc_html( ltrim( trailingslashit( str_ireplace( HM_Backup::conform_dir( trailingslashit( $schedule->get_root() ) ), '', HM_Backup::conform_dir( $file->getPathName() ) ) ), '/' ) ); ?></li>
 

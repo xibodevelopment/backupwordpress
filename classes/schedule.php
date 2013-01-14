@@ -310,7 +310,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 					if ( method_exists( $file, 'isDot' ) && $file->isDot() )
 						continue;
 
-					if ( ! $file->isReadable() )
+					if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() )
 						continue;
 
 				    // Excludes
