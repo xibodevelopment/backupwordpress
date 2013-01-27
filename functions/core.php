@@ -352,24 +352,28 @@ function hmbkp_path_default() {
  */
 function hmbkp_path_move( $from, $to ) {
 
-	if ( ! untrailingslashit( $from ) || ! untrailingslashit( $to ) )
+	if ( ! trim( untrailingslashit( trim( $from ) ) ) || ! trim( untrailingslashit( trim( $to ) ) ) )
 		return;
 
-	// Create the custom backups directory if it doesn't exist
+	// Create the new directory if it doesn't exist
 	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
 	    mkdir( $to, 0755 );
 
+	// Bail if we couldn't
 	if ( ! is_dir( $to ) || ! is_writable( $to ) )
 	    return false;
 
 	update_option( 'hmbkp_path', $to );
 
-	hmbkp_cleanup();
-
+	// Bail if the old directory doesn't exist
 	if ( ! is_dir( $from ) )
 		return false;
 
-	if ( $handle = opendir( $from ) ) :
+	// Cleanup before we start moving things
+	hmbkp_cleanup();
+
+	// Move any existing backups
+	if ( $handle = opendir( $from ) ) {
 
 	    while ( false !== ( $file = readdir( $handle ) ) )
 	    	if ( $file !== '.' && $file !== '..' )
@@ -378,7 +382,7 @@ function hmbkp_path_move( $from, $to ) {
 
 	    closedir( $handle );
 
-	endif;
+	}
 
 	hmbkp_rmdirtree( $from );
 
