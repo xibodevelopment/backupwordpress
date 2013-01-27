@@ -107,10 +107,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 // Handle any advanced option changes
 hmbkp_constant_changes();
 
-// Set the tmp directory to the backup path
-if ( ! defined( 'PCLZIP_TEMPORARY_DIR' ) )
-	define( 'PCLZIP_TEMPORARY_DIR', trailingslashit( hmbkp_path() ) );
-
 // Hook in the activation and deactivation actions
 add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
