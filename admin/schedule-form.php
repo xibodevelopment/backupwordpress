@@ -1,6 +1,6 @@
 <form method="post" class="hmbkp-form" novalidate data-schedule-action="<?php if ( isset( $is_new_schedule ) ) { ?>add<?php } else { ?>edit<?php } ?>">
 
-	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
+	<input type="hidden" name="hmbkp_schedule_id" value="<?php esc_attr_e( $schedule->get_id() ); ?>" />
 
 	<fieldset class="hmbkp-edit-schedule-form">
 
@@ -28,7 +28,7 @@
 
 <?php foreach( hmbkp_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-    		    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>"><?php echo esc_attr( $cron_details['display'] ); ?></option>
+    		    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'] ); ?></option>
 
 <?php endforeach; ?>
 
@@ -40,7 +40,7 @@
 
     		<?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?>
 
-    		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
+    		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php esc_attr_e( $schedule->get_max_backups() ); ?>" />
 
             <p class="description"><?php _e( 'The number of previous backups to store on the server. past this limit older backups will be deleted automatically.', 'hmbkp' ); ?></p>
 

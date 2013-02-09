@@ -5,7 +5,7 @@
     <dl>
 
         <dt<?php if ( defined( 'HMBKP_PATH' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_PATH</code></dt>
-        <dd><p><?php printf( __( 'The path to folder you would like to store your backup files in, defaults to %s.', 'hmbkp' ), '<code>' . hmbkp_path_default() . '</code>' ); ?></p><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p></dd>
+        <dd><p><?php printf( __( 'The path to folder you would like to store your backup files in, defaults to %s.', 'hmbkp' ), '<code>' . esc_html( hmbkp_path_default() ) . '</code>' ); ?></p><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p></dd>
 
         <dt<?php if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_MYSQLDUMP_PATH</code></dt>
         <dd><p><?php printf( __( 'The path to your %1$s executable. Will be used for the %2$s part of the back up if available.', 'hmbkp' ), '<code>mysqldump</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?></p><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_MYSQLDUMP_PATH', '/opt/local/bin/mysqldump' );</code></p></dd>

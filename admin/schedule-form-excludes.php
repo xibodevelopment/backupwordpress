@@ -1,6 +1,6 @@
 <form method="post" class="hmbkp-form">
 
-    <input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
+    <input type="hidden" name="hmbkp_schedule_id" value="<?php esc_attr_e( $schedule->get_id() ); ?>" />
 
     <fieldset class="hmbkp-edit-schedule-excludes-form">
 
@@ -35,9 +35,9 @@
     <?php foreach( $schedule->get_excludes() as $key => $exclude ) : ?>
 
     			<tr>
-    			    <td data-hmbkp-exclude-rule="<?php echo esc_attr( $exclude ); ?>">
+    			    <td data-hmbkp-exclude-rule="<?php esc_attr_e( $exclude ); ?>">
 
-    			    	<span class="code"><?php echo esc_attr( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
+    			    	<span class="code"><?php esc_attr_e( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
 
     	<?php if ( $schedule->get_path() === untrailingslashit( $exclude ) ) : ?>
 
@@ -68,15 +68,15 @@
 
 	<?php if ( $schedule->get_excluded_file_count() ) : ?>
 
-        		<li><a href="#hmbkp_excluded_files"><?php _e( 'Excluded', 'hmbkp' ); ?></a>(<?php echo $schedule->get_excluded_file_count(); ?>)</li>
+        		<li><a href="#hmbkp_excluded_files"><?php _e( 'Excluded', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_excluded_file_count() ); ?>)</li>
 
     <?php endif; ?>
 
-        		<li><a href="#hmbkp_included_files"><?php _e( 'Included', 'hmbkp' ); ?></a>(<?php echo $schedule->get_included_file_count(); ?>)</li>
+        		<li><a href="#hmbkp_included_files"><?php _e( 'Included', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_included_file_count() ); ?>)</li>
 
     <?php if ( $schedule->get_unreadable_file_count() ) : ?>
 
-                <li><a href="#hmbkp_unreadable_files"><?php _e( 'Unreadable', 'hmbkp' ); ?></a>(<?php echo $schedule->get_unreadable_file_count(); ?>)</li>
+                <li><a href="#hmbkp_unreadable_files"><?php _e( 'Unreadable', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_unreadable_file_count() ); ?>)</li>
 
     <?php endif; ?>
 
@@ -110,7 +110,7 @@
 
     <?php endif; ?>
 
-        <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . $schedule->get_filesize( false ) . '</code>' ); ?></p>
+        <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . esc_html( $schedule->get_filesize( false ) ) . '</code>' ); ?></p>
 
         </div>
 

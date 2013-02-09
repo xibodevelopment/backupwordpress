@@ -6,16 +6,16 @@
 
 	<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
 
-		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php echo esc_attr( $schedule->get_name() ); ?> <span class="count">(<?php echo count( $schedule->get_backups() ); ?>)</span></a></li>
+		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php esc_html_e( $schedule->get_name() ); ?> <span class="count">(<?php esc_attr_e( count( $schedule->get_backups() ) ); ?>)</span></a></li>
 
 	<?php endforeach; ?>
 
-		<li><a class="fancybox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), admin_url( 'admin-ajax.php' ) ) ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
+		<li><a class="fancybox" href="<?php esc_attr_e( esc_url( add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), admin_url( 'admin-ajax.php' ) ) ) ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
 
 	</ul>
 
 <?php if ( ! empty( $_GET['hmbkp_schedule_id'] ) )
-	$schedule = new HMBKP_Scheduled_Backup( $_GET['hmbkp_schedule_id'] );
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 else
 	$schedule = reset( $schedules->get_schedules() );
@@ -23,7 +23,7 @@ else
 	if ( ! $schedule )
 		return; ?>
 
-	<div data-hmbkp-schedule-id="<?php echo esc_attr( $schedule->get_id() ); ?>" class="hmbkp_schedule">
+	<div data-hmbkp-schedule-id="<?php esc_attr_e( $schedule->get_id() ); ?>" class="hmbkp_schedule">
 
 		<?php require( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 

@@ -45,7 +45,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 		if ( $emails = $this->get_email_address_array() ) {
 
-			$email = '<code>' . implode( '</code>, <code>', $emails ) . '</code>';
+			$email = '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $emails ) ) . '</code>';
 
 			return sprintf( __( 'Send an email notification to %s', 'hmbkp' ), $email );
 
@@ -69,7 +69,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			if ( ! empty( $new_data['email'] ) )
 				foreach( explode( ',', $new_data['email'] ) as $email )
 					if ( ! is_email( trim( $email ) ) )
-						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), esc_attr( $email ) );
+						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), esc_html( $email ) );
 
 
 			if ( ! empty( $errors['email'] ) )
@@ -126,7 +126,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 				$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
 
-				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'hmbkp' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $error_message, 'support@hmn.md' );
+				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'hmbkp' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $error_message ), 'support@hmn.md' );
 
 				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 
@@ -139,7 +139,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			// If it's larger than 10MB assume it's not going to be able to send the backup
 			if ( filesize( $file ) < 1000 * 1000 * 10 ) {
 
-				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
+				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $download ) );
 
 				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers, $file );
 
@@ -148,7 +148,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			// If we didn't send the email above then send just the notification
 			if ( ! $sent ) {
 
-				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Unfortunately the backup file was too large to attach to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
+				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Unfortunately the backup file was too large to attach to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $download ) );
 
 				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 
