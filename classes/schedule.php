@@ -407,7 +407,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( empty( $this->options['reoccurrence'] ) )
 			$this->set_reoccurrence( 'manually' );
 
-		return esc_attr( $this->options['reoccurrence'] );
+		return $this->options['reoccurrence'];
 
 	}
 
