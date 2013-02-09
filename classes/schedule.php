@@ -161,7 +161,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_type( $type ) {
 
-		if ( $this->options['type'] === $type )
+		if ( isset( $this->options['type'] ) && $this->options['type'] === $type )
 			return;
 
 		parent::set_type( $type );
