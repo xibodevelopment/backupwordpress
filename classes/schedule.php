@@ -16,37 +16,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $id = '';
 
 	/**
-	 * The slugified version of the schedule name
-	 *
-	 * @var string
-	 * @access private
-	 */
-	private $slug = '';
-
-	/**
 	 * The raw schedule options from the database
 	 *
 	 * @var array
 	 * @access private
 	 */
 	private $options = array();
-
-	/**
-	 * The filepath for the .running file which
-	 * is used to track whether a backup is currently in
-	 * progress
-	 */
-	private $schedule_running_filepath = '';
-
-	/**
-	 * The schedule start time
-	 *
-	 * (default value: current_time( 'timestamp' ))
-	 *
-	 * @var mixed
-	 * @access private
-	 */
-	private $schedule_start_time = 0;
 
 	/**
 	 * Setup the schedule object
