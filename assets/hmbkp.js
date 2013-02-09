@@ -29,8 +29,8 @@ jQuery( document ).ready( function( $ ) {
 
 			$( '.hmbkp-tabs' ).tabs();
 
-			if ( $( ".hmbkp-form p.submit:contains('" + objectL10n.update + "')" ).size() )
-				$( '<button type="button" class="button-secondary hmbkp-fancybox-close">' + objectL10n.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
+			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
+				$( '<button type="button" class="button-secondary hmbkp-fancybox-close">' + hmbkp.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
 
 		}
 
@@ -39,7 +39,7 @@ jQuery( document ).ready( function( $ ) {
 	// Show delete confirm message for delete schedule
 	$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function( e ) {
 
-		if ( ! confirm( objectL10n.delete_schedule ) )
+		if ( ! confirm( hmbkp.delete_schedule ) )
 			e.preventDefault();
 
 	} );
@@ -47,7 +47,7 @@ jQuery( document ).ready( function( $ ) {
 	// Show delete confirm message for delete backup
 	$( document ).on( 'click', '.hmbkp_manage_backups_row .delete-action', function( e ) {
 
-		if ( ! confirm( objectL10n.delete_backup ) )
+		if ( ! confirm( hmbkp.delete_backup ) )
 			e.preventDefault();
 
 	} );
@@ -55,7 +55,7 @@ jQuery( document ).ready( function( $ ) {
 	// Show delete confirm message for remove exclude rule
 	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form .delete-action', function( e ) {
 
-		if ( ! confirm( objectL10n.remove_exclude_rule ) )
+		if ( ! confirm( hmbkp.remove_exclude_rule ) )
 			e.preventDefault();
 
 	} );
@@ -200,7 +200,7 @@ jQuery( document ).ready( function( $ ) {
 		scheduleId = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
 
 		// Warn that backups will be deleted if max backups has been set to less than the number of backups currently stored
-		if ( ! isNewSchedule && Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( objectL10n.remove_old_backups ) )
+		if ( ! isNewSchedule && Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( hmbkp.remove_old_backups ) )
 			return false;
 
 		$( this ).find( 'button[type="submit"]' ).addClass( 'hmbkp-ajax-loading' );
