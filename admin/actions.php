@@ -188,7 +188,7 @@ add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
  */
 function hmbkp_ajax_cron_test() {
 
-	$response = wp_remote_head( site_url( 'wp-cron.php' ) );
+	$response = wp_remote_head( site_url( 'wp-cron.php' ), array( 'timeout' => 30 ) );
 
 	if ( is_wp_error( $response ) )
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
