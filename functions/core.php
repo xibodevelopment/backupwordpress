@@ -132,7 +132,6 @@ function hmbkp_update() {
 		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name )
 			delete_option( $option_name );
 
-
 	}
 
 	// Every update
