@@ -104,12 +104,12 @@ require_once( HMBKP_PLUGIN_PATH . '/classes/email.php' );
 if ( defined( 'WP_CLI' ) && WP_CLI )
 	include( HMBKP_PLUGIN_PATH . '/classes/wp-cli.php' );
 
+// Hook in the activation and deactivation actions
+register_activation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
+register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
+
 // Handle any advanced option changes
 hmbkp_constant_changes();
-
-// Hook in the activation and deactivation actions
-add_action( 'activate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
-add_action( 'deactivate_' . HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
 
 if ( ! function_exists( 'hmbkp_init' ) ) :
 
