@@ -5,6 +5,7 @@
  */
 function hmbkp_activate() {
 
+	// Run deactivate on activation in-case it was deactivated manually
 	hmbkp_deactivate();
 
 }
