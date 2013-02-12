@@ -28,7 +28,11 @@ class testScheduleTestCase extends WP_UnitTestCase {
 	}
 
 	public function tearDown() {
+		
+		$this->schedule->cancel();
+		
 		unset( $this->schedule );
+	
 	}
 
 	public function testDefaultReoccurrence() {
