@@ -221,6 +221,9 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
  */
 function hmbkp_rmdirtree( $dir ) {
 
+	if ( strpos( HM_Backup::get_home_path(), $dir ) !== false )
+		throw new Exception( 'You can only delete directories inside your WordPress installation' );
+
 	if ( is_file( $dir ) )
 		@unlink( $dir );
 
