@@ -108,6 +108,21 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Don't repeatedly try to create the backups directory in the `uploads` if `uploads` isn't writable.
 * Show the correct path in the warning message when the backups path can't be created.
 * Include any user defined auth keys and salts when generating the HMBKP_SECRET_KEY.
+* Stop relying on the built in WordPress schedules as other plugins can mess with them.
+* Delete old backups everytime the backups page is viewed in an attempt to ensure old backups are always cleaned up.
+* Improve modals on small screens and mobile devices.
+* Use the retina spinner on retina screens.
+* Update buttons to the new 3.5 style.
+* Fix a possible fatal error caused when a symlink points to a location that is outside an `open_basedir` restriction.
+* Fix an issue that could cause backups using PclZip with a custom backups path to fail.
+* Security hardening by improving escaping, sanitizitation and validation.
+* Increase the timeout on the ajax cron check, should fix issues with cron errors showing on slow sites.
+* Only clear the cached backup filesize if the backup type changes.
+* Add unit tests for all the schedule recurrences.
+* Fix an issue which could cause weekly and monthly schedules to fail.
+* Add an `uninstall.php` file which removes all BackUpWordPress data and options.
+* Catch a possible fatal error in `RecursiveDirectoryIterator::hasChildren`.
+* Fix an issue that could cause mysqldump errors to be ignored thus causing the backup process to use an incomplete mysqldump file.
 
 #### 2.1.3
 
