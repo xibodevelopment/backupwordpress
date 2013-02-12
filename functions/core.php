@@ -223,6 +223,7 @@ function hmbkp_cron_schedules() {
 	);
 
 }
+add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 
 /**
  * Recursively delete a directory including
