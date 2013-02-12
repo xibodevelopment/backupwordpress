@@ -53,19 +53,51 @@ class testScheduleTestCase extends WP_UnitTestCase {
 
 	}
 
-	public function testSetReoccurrence() {
+	public function testSetHourlySchedule() {
 
-		$this->schedule->set_reoccurrence( 'daily' );
+		$this->schedule->set_reoccurrence( 'hourly' );
 
-		$this->assertEquals( 'daily', $this->schedule->get_reoccurrence() );
+		$this->assertEquals( 'hourly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
 
 	}
 
-	public function testSetSchedule() {
+	public function testSetTwiceDailySchedule() {
 
 		$this->schedule->set_reoccurrence( 'daily' );
 
 		$this->assertEquals( 'daily', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetDailySchedule() {
+
+		$this->schedule->set_reoccurrence( 'twicedaily' );
+
+		$this->assertEquals( 'twicedaily', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}	
+
+	public function testSetWeeklySchedule() {
+
+		$this->schedule->set_reoccurrence( 'weekly' );
+
+		$this->assertEquals( 'weekly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}	
+	
+	public function testSetMonthlySchedule() {
+
+		$this->schedule->set_reoccurrence( 'monthly' );
+
+		$this->assertEquals( 'monthly', $this->schedule->get_reoccurrence() );
 
 		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
 
