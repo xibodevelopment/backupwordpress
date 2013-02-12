@@ -342,7 +342,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
-		if ( ! $this->schedule_start_time ) {
+		if ( empty( $this->schedule_start_time ) ) {
 
 			$date = strtotime( HMBKP_SCHEDULE_TIME );
 
