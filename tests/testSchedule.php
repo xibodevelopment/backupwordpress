@@ -91,6 +91,16 @@ class testScheduleTestCase extends WP_UnitTestCase {
 
 		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
 
+	}
+
+	public function testSetFortnightlySchedule() {
+
+		$this->schedule->set_reoccurrence( 'fortnightly' );
+
+		$this->assertEquals( 'fortnightly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
 	}	
 	
 	public function testSetMonthlySchedule() {
