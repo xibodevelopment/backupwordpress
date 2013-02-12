@@ -344,7 +344,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		if ( empty( $this->schedule_start_time ) ) {
 
-			$date = strtotime( HMBKP_SCHEDULE_TIME );
+			if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME )
+				$date = strtotime( HMBKP_SCHEDULE_TIME );
+
+			else
+				$date = strtotime( '11pm' );
 
 			// Convert to UTC
 			$date -= get_option( 'gmt_offset' ) * 3600;
