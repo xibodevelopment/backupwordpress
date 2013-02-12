@@ -17,30 +17,17 @@ function hmbkp_activate() {
  */
 function hmbkp_deactivate() {
 
-	// Options to delete
-	$options = array(
-		'hmbkp_zip_path',
-		'hmbkp_mysqldump_path',
-		'hmbkp_path',
-		'hmbkp_running',
-		'hmbkp_status',
-		'hmbkp_complete',
-		'hmbkp_email_error'
-	);
-
-	foreach ( $options as $option )
-		delete_option( $option );
-
-	delete_transient( 'hmbkp_running' );
-	delete_transient( 'hmbkp_estimated_filesize' );
-
-	// Clear hmbkp crons
-	foreach( get_option( 'cron' ) as $cron )
-		foreach( (array) $cron as $key => $value )
-			if ( strpos( $key, 'hmbkp' ) !== false )
-				wp_clear_scheduled_hook( $key );
-
+	// Clean up the backups directory
 	hmbkp_cleanup();
+
+	// Remove the plugin data cache
+	delete_transient( 'hmbkp_plugin_data' );
+
+	$schedules = new HMBKP_Schedules;
+
+	// Clear schedule crons
+	foreach ( $schedules->get_schedules() as $schedule )
+		$schedule->unschedule();
 
 }
 
