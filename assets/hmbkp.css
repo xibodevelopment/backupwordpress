@@ -86,7 +86,7 @@ table.widefat tbody td { padding: 8px 7px; }
 .hmbkp-edit-schedule-excludes-form td span.reason { color: #CCC; }
 input[type="datetime-local"] { border-radius: 3px; border-width: 1px; border-style: solid; box-sizing: border-box; border-color: #DFDFDF; background-color: white; }
 
-pre { background-color: #eee; padding: 10px; white-space: normal; }
+pre { background-color: #eee; padding: 10px; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word; }
 
 @media only screen and ( max-width : 321px ) {
 
