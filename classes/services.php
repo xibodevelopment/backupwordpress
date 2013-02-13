@@ -170,7 +170,7 @@ class HMBKP_Services {
 	 *
 	 * @access public
 	 */
-    public function get_services( HMBKP_Scheduled_Backup $schedule = null ) {
+    public static function get_services( HMBKP_Scheduled_Backup $schedule = null ) {
 
     	if ( is_null( $schedule ) )
     		return self::instance()->services;
@@ -186,7 +186,7 @@ class HMBKP_Services {
 	 *
 	 * @access public
 	 */
-    public function register( $filepath, $classname ) {
+    public static function register( $filepath, $classname ) {
 
     	if ( ! file_exists( $filepath ) )
     		throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid filepath' );
@@ -200,7 +200,7 @@ class HMBKP_Services {
 	 *
 	 * @access public
 	 */
-    public function unregister( $filepath ) {
+    public static function unregister( $filepath ) {
 
     	if ( ! isset( self::instance()->services[$filepath] ) )
     		throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a registered service' );
@@ -216,7 +216,7 @@ class HMBKP_Services {
 	 * @param string $class
 	 * @return array An array of instantiated classes
 	 */
-	private function instantiate( $class ) {
+	private static function instantiate( $class ) {
 
 		if ( ! class_exists( $class ) )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
