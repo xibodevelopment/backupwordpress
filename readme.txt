@@ -107,9 +107,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 * Stop storing a list of unreadable files in the backup warnings as it's too memory intensive.
 * Revert the custom `RecursiveDirectoryIterator` as it caused an infinite loop on some servers.
-* Show all errors and warnings in the popup shown when a backup completes.
-* Write the .backup_error and .backup_warning files everytime an error or warning happens instead of waiting until the end of the backups process
+* Show all errors and warnings in the popup shown when a manual backup completes.
+* Write the .backup_error and .backup_warning files everytime an error or warning happens instead of waiting until the end of the backups process.
 * Fix a couple of `PHP E_STRICT` notices.
+* Catch more errors during the manual backup process and expose them to the user.
 
 #### 2.2
 
