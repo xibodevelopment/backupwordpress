@@ -48,7 +48,7 @@ function hmbkp_ajax_request_do_backup() {
 		exit;
 
 	// We want to display any fatal errors in this ajax request so we can catch them on the other side.
-	error_reporting( E_ERROR );
+	error_reporting( E_ERROR | E_USER_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR );
 	@ini_set( 'display_errors', 'On' );
 	@ini_set( 'html_errors', 'Off' );
 
