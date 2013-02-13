@@ -623,6 +623,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	    		$this->set_status( __( 'Finishing Backup', 'hmbkp' ) );
 
+	    	break;
+
+	    	case 'hmbkp_error' :
+
 				if ( $this->get_errors() ) {
 
 			    	$file = $this->get_path() . '/.backup_errors';
@@ -638,6 +642,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			    	fclose( $handle );
 
 			    }
+
+			break;
+
+			case 'hmbkp_warning' : 
 
 			    if ( $this->get_warnings() ) {
 
