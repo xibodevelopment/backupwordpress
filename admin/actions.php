@@ -71,10 +71,11 @@ function hmbkp_ajax_request_do_backup() {
 	foreach ( $errors as $error_set )
 		$error_message .= implode( "\n\r", $error_set );
 
-	if ( file_exists( $schedule->get_archive_filepath() ) )
+	if ( $error_message && file_exists( $schedule->get_archive_filepath() ) )
 		$error_message .= 'HMBKP_SUCCESS';
 
-	echo $error_message;
+	if ( trim( $error_message ) )
+		echo $error_message;
 
 	exit;
 
