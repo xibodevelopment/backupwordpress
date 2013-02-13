@@ -306,9 +306,8 @@ jQuery( document ).ready( function( $ ) {
 			function( data ) {
 
 				// Backup Succeeded
-				if ( ! data || data == 0 ) {
+				if ( ! data || data == 0 )
 					location.reload( true );
-				}
 
 				// The backup failed, show the error and offer to have it emailed back
 				else {
@@ -375,7 +374,7 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 		{ 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 		function( data ) {
 
-			if ( data == 0 && redirect === true ) {
+			if ( data == 0 && redirect === true && ! $( '.hmbkp_error' ).size() ) {
 				location.reload( true );
 
 			} else {
