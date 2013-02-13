@@ -441,7 +441,7 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	if ( empty( $_POST['hmbkp_error'] ) )
 		exit;
 
-	$error = $_POST['hmbkp_error']; 
+	$error = wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) ); 
 
 	$error = str_replace( 'HMBKP_SUCCESS', '', $error, $succeeded ); 
 
@@ -473,7 +473,7 @@ function hmbkp_send_error_via_email() {
 	if ( empty( $_POST['hmbkp_error'] ) )
 		exit;
 
-	$error = sanitize_text_field( $_POST['hmbkp_error'] );
+	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
 
 	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
 
