@@ -374,7 +374,7 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 		{ 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 		function( data ) {
 
-			if ( data == 0 && redirect === true && ! $( '.hmbkp_error' ).size() ) {
+			if ( data == 0 && redirect === true && ! jQuery( '.hmbkp-error' ).size() ) {
 				location.reload( true );
 
 			} else {
