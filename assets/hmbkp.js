@@ -300,61 +300,18 @@ jQuery( document ).ready( function( $ ) {
 
 		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
-		ajaxRequest = $.post(
+		ajaxRequest = $.post( 
 			ajaxurl,
-			{ 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId },
-			function( data ) {
+			{ 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
+		).done( function( data ) {
 
-				// Backup Succeeded
-				if ( ! data || data == 0 )
-					location.reload( true );
-
-				// The backup failed, show the error and offer to have it emailed back
-				else {
-
-					$( '.hmbkp-schedule-sentence.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
-
-					$.post(
-						ajaxurl,
-						{ 'action' : 'hmbkp_backup_error', 'hmbkp_error' : data },
-						function( data ) {
-
-							if ( ! data || data == 0 )
-								return;
-
-							$.fancybox( {
-				                'maxWidth'	: 500,
-				                'content'	: data,
-				                'modal'		: true
-				            } );
-
-						}
-					);
-
-				}
-
-				$( document ).one( 'click', '.hmbkp_send_error_via_email', function( e ) {
-
-					e.preventDefault();
-
-					$( this ).addClass( 'hmbkp-ajax-loading' );
-
-					$.post(
-					    ajaxurl,
-					    { 'action' : 'hmbkp_email_error', 'hmbkp_error' : data },
-						function( data ) {
-							$.fancybox.close();
-						}
-
-					)
-
-				} );
-
-			}
+			catchResponseAndOfferToEmail( data );
 
 		// Redirect back on error
-		).error( function( data ) {
-			location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&action=hmbkp_cancel&reason=broken&hmbkp_schedule_id=' + scheduleId );
+		} ).fail( function( jqXHR, textStatus ) {
+
+			catchResponseAndOfferToEmail( jqXHR.responseText );
+
 		} );
 
 		setTimeout( function() {
@@ -366,6 +323,56 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 } );
+
+function catchResponseAndOfferToEmail( data ) {
+
+	// Backup Succeeded
+	if ( ! data || data == 0 )
+		location.reload( true );
+
+	// The backup failed, show the error and offer to have it emailed back
+	else {
+
+		jQuery( '.hmbkp-schedule-sentence.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
+
+		jQuery.post(
+			ajaxurl,
+			{ 'action' : 'hmbkp_backup_error', 'hmbkp_error' : data },
+			function( data ) {
+
+				if ( ! data || data == 0 )
+					return;
+
+				jQuery.fancybox( {
+	                'maxWidth'	: 500,
+	                'content'	: data,
+	                'modal'		: true
+	            } );
+
+			}
+		);
+
+	}
+
+	jQuery( document ).one( 'click', '.hmbkp_send_error_via_email', function( e ) {
+
+		e.preventDefault();
+
+		jQuery( this ).addClass( 'hmbkp-ajax-loading' );
+
+		jQuery.post(
+		    ajaxurl,
+		    { 'action' : 'hmbkp_email_error', 'hmbkp_error' : data },
+			function( data ) {
+				jQuery.fancybox.close();
+			}
+
+		)
+
+	} );
+
+}
+
 
 function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
