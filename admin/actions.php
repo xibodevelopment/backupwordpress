@@ -64,6 +64,18 @@ function hmbkp_ajax_request_do_backup() {
 
 	$schedule->run();
 
+	$errors = array_merge( $schedule->get_errors(), $schedule->get_warnings() );
+
+	$error_message = '';
+
+	foreach ( $errors as $error_set )
+		$error_message .= implode( "\n\r", $error_set );
+
+	if ( file_exists( $schedule->get_archive_filepath() ) )
+		$error_message .= 'HMBKP_SUCCESS';
+
+	echo $error_message;
+
 	exit;
 
 }
@@ -428,9 +440,19 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	if ( empty( $_POST['hmbkp_error'] ) )
 		exit;
 
-	$error = str_replace( HM_Backup::get_home_path(), '', sanitize_text_field( $_POST['hmbkp_error'] ) ); ?>
+	$error = $_POST['hmbkp_error']; 
 
-	<h3><?php _e( 'Your BackUp Failed', 'hmbkp' ); ?></h3>
+	$error = str_replace( 'HMBKP_SUCCESS', '', $error, $succeeded ); 
+
+	if ( $succeeded ) { ?>
+
+		<h3><?php _e( 'Your backup completed but with the following errors / warnings', 'hmbkp' ); ?></h3>
+
+	<?php } else { ?>
+
+		<h3><?php _e( 'Your backUp failed', 'hmbkp' ); ?></h3>
+
+	<?php } ?>
 
 	<p><?php _e( 'Here\'s the response from the server:', 'hmbkp' ); ?></p>
 
