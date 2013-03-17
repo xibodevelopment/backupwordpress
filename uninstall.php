@@ -3,8 +3,12 @@
 if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
 	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
+if ( ! defined( 'HMBKP_SCHEDULE_TIME' ) )
+	define( 'HMBKP_SCHEDULE_TIME', '11pm' );
+
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
 require_once( HMBKP_PLUGIN_PATH . '/classes/schedule.php' );
 require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
