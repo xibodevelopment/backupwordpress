@@ -103,6 +103,12 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 2.2.2
+
+* Fix a fatal error when uninstalling.
+* Fix a possible notice when using the plugin on a server without internet access.
+* Don't show the wp-cron error message when `WP_USE_ALTERNATE_CRON` is defined as true.
+
 #### 2.2.1
 
 * Stop storing a list of unreadable files in the backup warnings as it's too memory intensive.
