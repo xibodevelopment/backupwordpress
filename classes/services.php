@@ -26,6 +26,9 @@ abstract class HMBKP_Service {
 	 */
 	abstract protected function field();
 
+	/**
+	 * Help text that should be output in the Constants help tab
+	 */
 	abstract protected static function constant();
 
 	/**
