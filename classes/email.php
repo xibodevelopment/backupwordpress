@@ -20,7 +20,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
             <input type="email" name="<?php echo $this->get_field_name( 'email' ); ?>" value="<?php echo $this->get_field_value( 'email' ); ?>" />
 
-            <p class="description"><?php _e( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; 10mb) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ); ?></p>
+            <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
 
         </label>
 
@@ -35,6 +35,13 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	public function form() {
 		return '';
 	}
+
+	public static function constant() { ?>
+
+		<dt<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_ATTACHMENT_MAX_FILESIZE</code></dt>
+		<dd><p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p></dd>
+
+	<?php }
 
 	/**
 	 * The sentence fragment that is output as part of the schedule sentence
@@ -136,8 +143,8 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 			$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
 
-			// If it's larger than 10MB assume it's not going to be able to send the backup
-			if ( filesize( $file ) < 1000 * 1000 * 10 ) {
+			// If it's larger than the max attachment size limit assume it's not going to be able to send the backup
+			if ( filesize( $file ) < hmbkp_get_max_attachment_size() ) {
 
 				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $download ) );
 

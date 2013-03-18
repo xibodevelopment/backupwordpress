@@ -26,6 +26,8 @@ abstract class HMBKP_Service {
 	 */
 	abstract protected function field();
 
+	abstract protected static function constant();
+
 	/**
 	 * Validate and sanitize data before it's saved.
 	 *

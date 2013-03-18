@@ -437,3 +437,21 @@ function hmbkp_constant_changes() {
 		hmbkp_path_move( HMBKP_PATH, hmbkp_path_default() );
 
 }
+
+/**
+ * Get the max email attachment filesize
+ *
+ * Can be overridden by defining HMBKP_ATTACHMENT_MAX_FILESIZE
+ *
+ * return int the filesize
+ */
+function hmbkp_get_max_attachment_size() {
+
+	$max_size = '10mb';
+
+	if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) && wp_convert_hr_to_bytes( HMBKP_ATTACHMENT_MAX_FILESIZE ) )
+		$max_size = HMBKP_ATTACHMENT_MAX_FILESIZE;
+
+	return wp_convert_hr_to_bytes( $max_size );
+
+}

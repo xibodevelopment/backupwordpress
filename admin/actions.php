@@ -203,6 +203,14 @@ add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
  */
 function hmbkp_ajax_cron_test() {
 
+	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
+
+		echo 1;
+
+		exit;
+
+	}
+
 	$response = wp_remote_head( site_url( 'wp-cron.php' ), array( 'timeout' => 30 ) );
 
 	if ( is_wp_error( $response ) )
