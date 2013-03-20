@@ -29,7 +29,7 @@ abstract class HMBKP_Service {
 	/**
 	 * Help text that should be output in the Constants help tab
 	 */
-	abstract protected static function constant();
+	public static function constant() {}
 
 	/**
 	 * Validate and sanitize data before it's saved.
