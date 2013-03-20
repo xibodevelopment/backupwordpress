@@ -7,6 +7,12 @@
 abstract class HMBKP_Service {
 
 	/**
+	 * Human readable name for this service
+	 * @var string
+	 */
+	public $name;
+
+	/**
 	 * The instance HMBKP_Backup_Schedule that this service is
 	 * is currently working with
 	 */
