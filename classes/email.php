@@ -7,6 +7,7 @@
  */
 class HMBKP_Email_Service extends HMBKP_Service {
 
+	public $name = 'Email';
 	/**
 	 * Output the email form field
 	 *
