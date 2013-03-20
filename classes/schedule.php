@@ -250,8 +250,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_service_options( $service, $option = null ) {
 
-		if ( ! is_null( $option ) && isset( $this->options[$service][$option] ) )
-			return $this->options[$service][$option];
+		if ( ! is_null( $option ) {
+
+			if ( isset( $this->options[$service][$option] ) )
+				return $this->options[$service][$option];
+
+			return array();
+
+		}
 
 		if ( isset( $this->options[$service] ) )
 			return $this->options[$service];
