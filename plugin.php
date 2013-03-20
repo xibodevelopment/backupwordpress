@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.2.2
+Version: 2.2.1
 Author URI: http://hmn.md/
 */
 
@@ -27,7 +27,7 @@ Author URI: http://hmn.md/
 */
 
 if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) )
-	define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
+	define( 'HMBKP_PLUGIN_SLUG', 'BackUpWordPress' );
 
 if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
 	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
@@ -135,8 +135,8 @@ function hmbkp_init() {
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
-		wp_enqueue_script( 'hmbkp-fancybox', plugins_url('/assets/fancyBox/source/jquery.fancybox.js', __FILE__) , array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
-		wp_enqueue_script( 'hmbkp', plugins_url('/assets/hmbkp.js', __FILE__) , array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-fancybox' ), sanitize_title( HMBKP_VERSION ) );
+		wp_enqueue_script( 'hmbkp-fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-fancybox' ), sanitize_title( HMBKP_VERSION ) );
 
 		wp_localize_script( 'hmbkp', 'hmbkp', array(
 			'update'				=> __( 'Update', 'hmbkp' ),
@@ -147,8 +147,8 @@ function hmbkp_init() {
 			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
 		) );
 
-		wp_enqueue_style( 'hmbkp_fancybox', plugins_url('/assets/fancyBox/source/jquery.fancybox.css', __FILE__ ) , false, HMBKP_VERSION );
-		wp_enqueue_style( 'hmbkp', plugins_url('/assets/hmbkp.css', __FILE__) , false, HMBKP_VERSION );
+		wp_enqueue_style( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.css', false, HMBKP_VERSION );
+		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css', false, HMBKP_VERSION );
 
 	}
 
