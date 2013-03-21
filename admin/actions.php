@@ -43,7 +43,7 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedu
  * Perform a manual backup via ajax
  */
 function hmbkp_ajax_request_do_backup() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		exit;
 
@@ -162,7 +162,7 @@ add_action( 'admin_init', 'hmbkp_dismiss_error' );
  * Display the running status via ajax
  */
 function hmbkp_ajax_is_backup_in_progress() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		exit;
 
@@ -183,7 +183,7 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
  * Display the calculated size via ajax
  */
 function hmbkp_ajax_calculate_backup_size() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		exit;
 
@@ -202,7 +202,7 @@ add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
  * Test the cron response and if it's not 200 show a warning message
  */
 function hmbkp_ajax_cron_test() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
 
 		echo 1;
@@ -447,7 +447,7 @@ function hmbkp_preview_exclude_rule() {
 add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
 function hmbkp_display_error_and_offer_to_email_it() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_error'] ) )
 		exit;
 
@@ -479,7 +479,7 @@ function hmbkp_display_error_and_offer_to_email_it() {
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
 
 function hmbkp_send_error_via_email() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_error'] ) )
 		exit;
 
