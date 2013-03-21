@@ -139,6 +139,7 @@ function hmbkp_init() {
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-fancybox' ), sanitize_title( HMBKP_VERSION ) );
 
 		wp_localize_script( 'hmbkp', 'hmbkp', array(
+			'nonce'         => wp_create_nonce('hmbkp_nonce'),
 			'update'				=> __( 'Update', 'hmbkp' ),
 			'cancel'				=> __( 'Cancel', 'hmbkp' ),
 			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
