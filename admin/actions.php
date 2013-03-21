@@ -15,7 +15,7 @@ function hmbkp_request_delete_backup() {
 
 	wp_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
 
-	exit;
+	die;
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
@@ -34,7 +34,7 @@ function hmbkp_request_delete_schedule() {
 
 	wp_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action', '_wpnonce' ) ), 303 );
 
-	exit;
+	die;
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedule' );
@@ -45,7 +45,7 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedu
 function hmbkp_ajax_request_do_backup() {
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	//header( 'HTTP/1.1 500 Internal Server Error' );
 
@@ -79,8 +79,8 @@ function hmbkp_ajax_request_do_backup() {
 	if ( trim( $error_message ) )
 		echo $error_message;
 
-	exit;
-
+	//die;
+die;
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
 
@@ -111,7 +111,7 @@ function hmbkp_request_download_backup() {
 
 	wp_redirect( $url, 303 );
 
-	exit;
+	die;
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
@@ -135,7 +135,7 @@ function hmbkp_request_cancel_backup() {
 
 	wp_redirect( remove_query_arg( array( 'action' ) ), 303 );
 
-	exit;
+	die;
 
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
@@ -153,7 +153,7 @@ function hmbkp_dismiss_error() {
 
 	wp_redirect( remove_query_arg( 'action' ), 303 );
 
-	exit;
+	die;
 
 }
 add_action( 'admin_init', 'hmbkp_dismiss_error' );
@@ -164,7 +164,7 @@ add_action( 'admin_init', 'hmbkp_dismiss_error' );
 function hmbkp_ajax_is_backup_in_progress() {
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) ) );
 
@@ -174,8 +174,8 @@ function hmbkp_ajax_is_backup_in_progress() {
 	else
 		hmbkp_schedule_actions( $schedule );
 
-	exit;
-
+	//die;
+die;
 }
 add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' );
 
@@ -185,7 +185,7 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
 function hmbkp_ajax_calculate_backup_size() {
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) ) );
 
@@ -193,8 +193,8 @@ function hmbkp_ajax_calculate_backup_size() {
 
 	include_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' );
 
-	exit;
-
+	//die;
+	die;
 }
 add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
 
@@ -207,8 +207,8 @@ function hmbkp_ajax_cron_test() {
 
 		echo 1;
 
-		exit;
-
+		//die;
+		die;
 	}
 
 	$response = wp_remote_head( site_url( 'wp-cron.php' ), array( 'timeout' => 30 ) );
@@ -222,8 +222,8 @@ function hmbkp_ajax_cron_test() {
 	else
 		echo 1;
 
-	exit;
-
+	//die;
+	die;
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
@@ -233,13 +233,13 @@ add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 function hmbkp_edit_schedule_load() {
 
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
 
-	exit;
+	die;
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
@@ -250,13 +250,13 @@ add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
 function hmbkp_edit_schedule_excludes_load() {
 
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
-	exit;
+	die;
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_excludes_load', 'hmbkp_edit_schedule_excludes_load' );
@@ -271,7 +271,7 @@ function hmbkp_add_schedule_load() {
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
 
-	exit;
+	die;
 
 }
 add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
@@ -284,7 +284,7 @@ add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
 function hmnkp_edit_schedule_submit() {
 
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
@@ -352,7 +352,7 @@ function hmnkp_edit_schedule_submit() {
 	if ( $errors )
 		echo json_encode( $errors );
 
-	exit;
+	die;
 
 }
 add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' );
@@ -365,9 +365,9 @@ add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' )
  * @return void
  */
 function hmbkp_add_exclude_rule() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
 
@@ -377,8 +377,8 @@ function hmbkp_add_exclude_rule() {
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
-	exit;
-
+	//die;
+die;
 }
 add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
 
@@ -392,7 +392,7 @@ add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
 function hmbkp_delete_exclude_rule() {
 
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
@@ -404,7 +404,7 @@ function hmbkp_delete_exclude_rule() {
 
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
-	exit;
+	die;
 
 }
 add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
@@ -417,9 +417,9 @@ add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
  * @return void
  */
 function hmbkp_preview_exclude_rule() {
-
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_schedule_id'] ) || empty( $_POST['hmbkp_schedule_excludes'] ) )
-		exit;
+		die;
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
 
@@ -441,7 +441,8 @@ function hmbkp_preview_exclude_rule() {
 
 		<p><button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'hmbkp' ); ?></button> <button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'hmbkp' ); ?></button></p>
 
-	<?php exit;
+	<?php //die;
+	die;
 
 }
 add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
@@ -449,7 +450,7 @@ add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 function hmbkp_display_error_and_offer_to_email_it() {
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_error'] ) )
-		exit;
+		die;
 
 	$error = wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) ); 
 
@@ -474,20 +475,21 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	<button class="button hmbkp-fancybox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
 	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
 
-	<?php exit;
+	<?php //die;
+	die;
 }
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
 
 function hmbkp_send_error_via_email() {
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	if ( empty( $_POST['hmbkp_error'] ) )
-		exit;
+		die;
 
 	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
 
 	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
 
-	exit;
-
+	//die;
+die;
 }
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
