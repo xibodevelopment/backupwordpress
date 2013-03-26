@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the 2.x package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-02-12 21:42:56+0000\n"
+"PO-Revision-Date: 2013-03-26 14:40:49+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,7 +10,27 @@ msgstr ""
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: 2.x\n"
 
-#: ../admin/actions.php:439
+#: ../admin/actions.php:493
+msgid "Your backup completed but with the following errors / warnings, it's probably ok to ignore these."
+msgstr ""
+
+#: ../admin/actions.php:497
+msgid "Your backup failed"
+msgstr ""
+
+#: ../classes/email.php:29
+msgid "Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address's with a comma."
+msgstr ""
+
+#: ../classes/email.php:48
+msgid "The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s."
+msgstr ""
+
+#: ../classes/error.php:148
+msgid "Your backup could not be completed because you have run out of disk space."
+msgstr ""
+
+#: ../admin/actions.php:505
 msgid "You can email details of this error to %s so they can look into the issue."
 msgstr ""
 
@@ -38,7 +58,7 @@ msgstr ""
 msgid "Once Monthly"
 msgstr ""
 
-#: ../admin/actions.php:442
+#: ../admin/actions.php:509
 msgid "Email to Support"
 msgstr ""
 
@@ -50,11 +70,7 @@ msgstr ""
 msgid "New Exclude Rule[s]"
 msgstr ""
 
-#: ../admin/actions.php:433
-msgid "Your BackUp Failed"
-msgstr ""
-
-#: ../admin/actions.php:435
+#: ../admin/actions.php:501
 msgid "Here's the response from the server:"
 msgstr ""
 
@@ -66,27 +82,27 @@ msgstr ""
 msgid "rate it on the plugin directory"
 msgstr ""
 
-#: ../classes/schedule.php:523 ../functions/interface.php:243
+#: ../classes/schedule.php:529 ../functions/interface.php:245
 msgid "Starting Backup"
 msgstr ""
 
-#: ../classes/schedule.php:596
+#: ../classes/schedule.php:606
 msgid "Dumping Database %s"
 msgstr ""
 
-#: ../classes/schedule.php:602
+#: ../classes/schedule.php:612
 msgid "Verifying Database Dump %s"
 msgstr ""
 
-#: ../classes/schedule.php:608
+#: ../classes/schedule.php:618
 msgid "Creating zip archive %s"
 msgstr ""
 
-#: ../classes/schedule.php:614
+#: ../classes/schedule.php:624
 msgid "Verifying Zip Archive %s"
 msgstr ""
 
-#: ../classes/schedule.php:620
+#: ../classes/schedule.php:630
 msgid "Finishing Backup"
 msgstr ""
 
@@ -102,35 +118,35 @@ msgstr ""
 msgid "The time that your schedules should run. Defaults to %s."
 msgstr "Laiks, kurā tiek veiktas ik dienas rezerves kopija. Pēc noklusējuma: %s"
 
-#: ../plugin.php:144
+#: ../plugin.php:145
 msgid "Are you sure you want to delete this schedule? All of it's backups will also be deleted."
 msgstr "Vai tiešām vēlaties izdzēst šo grafiku? Visas tā rezerves kopijas arī tiks izdzēstas."
 
-#: ../plugin.php:144 ../plugin.php:145 ../plugin.php:146 ../plugin.php:147
+#: ../plugin.php:145 ../plugin.php:146 ../plugin.php:147 ../plugin.php:148
 msgid "'Cancel' to go back, 'OK' to delete."
 msgstr "Spied 'Atcelt' lai dotos atpakaļ, vai 'OK', lai izdzēstu."
 
-#: ../plugin.php:145
+#: ../plugin.php:146
 msgid "Are you sure you want to delete this backup?"
 msgstr "Vai tiešām vēlaties izdzēst šo rezerves kopiju? "
 
-#: ../plugin.php:146
+#: ../plugin.php:147
 msgid "Are you sure you want to remove this exclude rule?"
 msgstr "Vai tiešām vēlaties izdzēst šos izņēmumus?"
 
-#: ../plugin.php:147
+#: ../plugin.php:148
 msgid "Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that's what you want?"
 msgstr "Samazinot rezerves kopiju skaitu, cik tiek glabātas uz servera, varat pazaudēt jau saglabātās kopijas. Vai tiešām to vēlaties?  "
 
-#: ../admin/actions.php:307
+#: ../admin/actions.php:348
 msgid "Max backups can't be empty"
 msgstr "Norādiet rezerves kopiju skaitu"
 
-#: ../admin/actions.php:313
+#: ../admin/actions.php:354
 msgid "Max backups must be greater than 0"
 msgstr "Maksimālais rezerves kopiju skaits ir jābūt lielākam par 0"
 
-#: ../admin/actions.php:419
+#: ../admin/actions.php:470
 msgid "Exclude"
 msgstr "Nav iekļauts"
 
@@ -202,23 +218,19 @@ msgstr "saglabāt tikai pēdējo %1$s rezerves kopiju %2$s"
 msgid "Backup my %1$s %2$s %3$s, %4$s. %5$s"
 msgstr "Izveidot rezerves kopiju %1$s %2$s %3$s, %4$s. %5$s"
 
-#: ../classes/email.php:23
-msgid "Receive a notification email when a backup completes, if the backup is small enough (&lt; 10mb) then it will be attached to the email. Separate multiple email address's with a comma."
-msgstr "Varat saņemt paziņojumus epastā, kad rezerves kopija ir izveidota, ja tā ir pietiekoši maza (&lt; 10mb), tad to ir iespējams saņemt epasta pielikumā. Varat norādīt arī vairākus epastus tos atdalot ar komatiem. "
-
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid "BackUpWordPress was unable to backup your site %1$s."
 msgstr "BackUpWordPress nevarēja izveidot rezerves kopiju Jūsu mājas lapai %1$s. "
 
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid "Here are the errors that we're encountered:"
 msgstr "Kļūdas, kuras radās veidojot rezerves kopiju:"
 
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid "If the errors above look like Martian, forward this email to %3$s and we'll take a look"
 msgstr "ja šis kļūdas paziņojums Jums liekas nesaprotams,  pārsūtiet to uz epastu %3$s (angļu valodā) un mēs centīsimies palīdzēt. "
 
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid ""
 "Kind Regards,\n"
 "The Apologetic BackUpWordPress Backup Emailing Robot"
@@ -226,19 +238,19 @@ msgstr ""
 "Ar sveicieniem,\n"
 "BackUpWordPress Robots"
 
-#: ../classes/email.php:142 ../classes/email.php:151
+#: ../classes/email.php:155 ../classes/email.php:164
 msgid "BackUpWordPress has completed a backup of your site %1$s."
 msgstr "BackUpWordPress ir izveidojis rezerves kopiju Jūsu mājas lapai %1$s."
 
-#: ../classes/email.php:142
+#: ../classes/email.php:155
 msgid "The backup file should be attached to this email."
 msgstr "Rezerves kopijai vajadzētu būtu epasta pielikumā."
 
-#: ../classes/email.php:142 ../classes/email.php:151
+#: ../classes/email.php:155 ../classes/email.php:164
 msgid "You can download the backup file by clicking the link below:"
 msgstr "Lai lejupielādētu izveidoto rezerves kopiju spiediet uz zemāk esošo saiti:"
 
-#: ../classes/email.php:142 ../classes/email.php:151
+#: ../classes/email.php:155 ../classes/email.php:164
 msgid ""
 "Kind Regards,\n"
 "The Happy BackUpWordPress Backup Emailing Robot"
@@ -246,7 +258,7 @@ msgstr ""
 "Ar Sveicieniem,\n"
 "Priecīgais BackUpWordPress Robots"
 
-#: ../classes/email.php:151
+#: ../classes/email.php:164
 msgid "Unfortunately the backup file was too large to attach to this email."
 msgstr "Diemžēl rezerves kopija bija pārāk liela, lai to nosūtītu epastā."
 
@@ -294,15 +306,15 @@ msgstr "Nepieciešamā mape netika izveidota, jo mapei %1$s nav nepieciešamās 
 msgid "BackUpWordPress has setup your default schedules."
 msgstr "BackUpWordPress ir iestatījis Jūsu noklusētos grafikus."
 
-#: ../classes/email.php:127
+#: ../classes/email.php:140
 msgid "Backup of %s Failed"
 msgstr "Rezerves kopija %s netika izveidota"
 
-#: ../classes/email.php:50
+#: ../classes/email.php:63
 msgid "Send an email notification to %s"
 msgstr "Nosūtīt epasta paziņojumu uz %s"
 
-#: ../classes/email.php:72
+#: ../classes/email.php:85
 msgid "%s isn't a valid email"
 msgstr "epasts %s ir norādīts nepareizi "
 
@@ -310,7 +322,7 @@ msgstr "epasts %s ir norādīts nepareizi "
 msgid "Backups will be compressed and should be smaller than this."
 msgstr "Rezerves kopija tiks saspiesta, tāpēc tā aizņems mazāk vietas."
 
-#: ../classes/email.php:19
+#: ../classes/email.php:25
 msgid "Email notification"
 msgstr "Epasta paziņojumi"
 
@@ -330,7 +342,7 @@ msgstr "Skaits, cik rezerves kopijas tiks glabātas uz servera."
 msgid "Schedule Settings"
 msgstr "Rezerves Kopiju Uzstādījumi"
 
-#: ../admin/actions.php:441 ../admin/schedule-form-excludes.php:119
+#: ../admin/actions.php:508 ../admin/schedule-form-excludes.php:119
 msgid "Close"
 msgstr "Aizvērt"
 
@@ -354,7 +366,7 @@ msgstr "Tiks izmantos %1$s. Tas tiks izmantots lai arhivētu %2$s un %3$s ja tie
 msgid "BackUpWordPress requires WordPress version %s or greater."
 msgstr "BackUpWordPress nepieciešams WordPress %s vai jaunāka versija."
 
-#: ../plugin.php:143 ../admin/actions.php:419
+#: ../plugin.php:144 ../admin/actions.php:471
 msgid "Cancel"
 msgstr "Atcelt"
 
@@ -365,7 +377,7 @@ msgstr "Tiks izmantots %1$s. Mēs izmantosim %2$s, lai veidotu rezerves kopiju, 
 #: ../admin/constants.php:8 ../admin/constants.php:11 ../admin/constants.php:14
 #: ../admin/constants.php:17 ../admin/constants.php:20
 #: ../admin/constants.php:23 ../admin/constants.php:26
-#: ../admin/constants.php:29
+#: ../admin/constants.php:29 ../classes/email.php:48
 msgid "e.g."
 msgstr "Kā piemēram"
 
@@ -373,7 +385,7 @@ msgstr "Kā piemēram"
 msgid "You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted."
 msgstr "Jūs vara %1$s ar jebkuru no šiem %2$s Jūsu %3$s, lai kontrolētu papildus uzstādījumus. %4$s. %5$s būs izcelti."
 
-#: ../admin/actions.php:194 ../admin/actions.php:197
+#: ../admin/actions.php:234 ../admin/actions.php:237
 msgid "%1$s is returning a %2$s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details."
 msgstr "%1$s atgriež %2$s, kas varētu nozīmēt to, ka nestrādā 'cron jobs'. BackUpWordPress izmantot wp-cron, lai veiktu savus uzdevumus. Vairāk informāciju iegūsiet apskatot %3$s."
 
@@ -393,15 +405,15 @@ msgstr "Jūsu izvēlētā mape %1$s neeksistē, tāpēc rezerves kopija tika sag
 msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
 msgstr "Jūsu izvēlētajā mapē %1$s nebija iespējams ierakstīt, tāpēc rezerves kopija tika saglabāta mapē \"%2$s."
 
-#: ../functions/interface.php:243
+#: ../functions/interface.php:245
 msgid "cancel"
 msgstr "atcelt"
 
-#: ../functions/interface.php:247
+#: ../functions/interface.php:249
 msgid "Settings"
 msgstr "Iestatījumi"
 
-#: ../functions/interface.php:250
+#: ../functions/interface.php:252
 msgid "Excludes"
 msgstr "Izņēmumi"
 
@@ -425,37 +437,33 @@ msgstr "Datubāzi un failus"
 msgid "Database"
 msgstr "Datubāze"
 
-#: ../hm-backup/hm-backup.php:958
-msgid "The following files are unreadable and couldn't be backed up: "
-msgstr "Šie faili ir nesalasāmi (unreadable), tāpēc tie netiks iekļauti rezerves kopijā:"
-
-#: ../admin/actions.php:194 ../admin/actions.php:197
+#: ../admin/actions.php:234 ../admin/actions.php:237
 #: ../functions/interface.php:72 ../functions/interface.php:82
 #: ../functions/interface.php:92
 msgid "BackUpWordPress has detected a problem."
 msgstr "BackUpWordPress ir konstatējis problēmas. "
 
-#: ../admin/actions.php:277
+#: ../admin/actions.php:318
 msgid "Backup type cannot be empty"
 msgstr "Norādiet rezerves kopijas veidu"
 
-#: ../admin/actions.php:280
+#: ../admin/actions.php:321
 msgid "Invalid backup type"
 msgstr "Nepareizs rezerves kopijas formāts"
 
-#: ../admin/actions.php:292
+#: ../admin/actions.php:333
 msgid "Schedule cannot be empty"
 msgstr "Grafiks nevar palikt tukšs"
 
-#: ../admin/actions.php:295
+#: ../admin/actions.php:336
 msgid "Invalid schedule"
 msgstr "Nesaderīgs grafiks"
 
-#: ../admin/actions.php:310
+#: ../admin/actions.php:351
 msgid "Max backups must be a number"
 msgstr "Maksimālajam rezerves kopiju skaitu jānorāda kā numuru"
 
-#: ../admin/actions.php:415
+#: ../admin/actions.php:465
 msgid "%s didn't match any files."
 msgstr "%s nesakrīt ar nevienu failu. "
 
@@ -515,23 +523,23 @@ msgstr "Rezerves kopijas"
 msgid "You are not using the latest stable version of BackUpWordPress"
 msgstr "Jūs neizmantojat jaunāko BackUpWordPress versiju."
 
-#: ../admin/menu.php:75
+#: ../admin/menu.php:77
 msgid "FAQ"
 msgstr "FAQ"
 
-#: ../admin/constants.php:3 ../admin/menu.php:76
+#: ../admin/constants.php:3 ../admin/menu.php:79
 msgid "Constants"
 msgstr "Konstantes"
 
-#: ../admin/menu.php:79
+#: ../admin/menu.php:82
 msgid "For more information:"
 msgstr "Vairāk informācijai:"
 
-#: ../admin/menu.php:81
+#: ../admin/menu.php:84
 msgid "Support Forums"
 msgstr "Atbalsta Forums"
 
-#: ../admin/menu.php:82
+#: ../admin/menu.php:85
 msgid "Help with translation"
 msgstr "Palīdzi ar tulkojumu"
 
@@ -599,7 +607,7 @@ msgstr "Pārvaldīt izņēmumus"
 msgid "Schedule"
 msgstr "Cik bieži"
 
-#: ../plugin.php:142 ../admin/schedule-form.php:54
+#: ../plugin.php:143 ../admin/schedule-form.php:54
 msgid "Update"
 msgstr "Atjaunināt"
 
@@ -607,11 +615,11 @@ msgstr "Atjaunināt"
 msgid "hourly at %s minutes past the hour"
 msgstr "ik stundu, %s minūtes pāri"
 
-#: ../functions/interface.php:253
+#: ../functions/interface.php:255
 msgid "Run now"
 msgstr "Palaist tulīt"
 
-#: ../functions/interface.php:28 ../functions/interface.php:255
+#: ../functions/interface.php:28 ../functions/interface.php:257
 msgid "Delete"
 msgstr "Izdzēst"
 
@@ -619,7 +627,7 @@ msgstr "Izdzēst"
 msgid "BackUpWordPress requires PHP version 5.2.4 or greater."
 msgstr "BackUpWordPress nepieciešams PHP 5.2.4 vai jaunāka versija."
 
-#: ../classes/email.php:137
+#: ../classes/email.php:150
 msgid "Backup of %s"
 msgstr "Backup von %s"
 
