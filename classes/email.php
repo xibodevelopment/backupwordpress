@@ -14,6 +14,12 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	public $name = 'Email';
 
 	/**
+	 * Whether to show this service in the tabbed interface of destinations
+	 * @var boolean
+	 */
+	public $isTabVisible = false;
+
+	/**
 	 * Output the email form field
 	 *
 	 * @access  public
