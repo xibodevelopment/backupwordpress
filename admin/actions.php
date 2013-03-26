@@ -45,11 +45,11 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedu
  * Perform a manual backup via ajax
  */
 function hmbkp_ajax_request_do_backup() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
-
-	//header( 'HTTP/1.1 500 Internal Server Error' );
 
 	// We want to display any fatal errors in this ajax request so we can catch them on the other side.
 	error_reporting( E_ERROR | E_USER_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR );
@@ -59,6 +59,9 @@ function hmbkp_ajax_request_do_backup() {
 	// Force a memory error for testing purposes
 	//ini_set( 'memory_limit', '2M' );
 	//function a() { a(); } a();
+
+	// Force a 500 error for testing purposes
+	//header( 'HTTP/1.1 500 Internal Server Error' );
 
 	ignore_user_abort( true );
 
@@ -72,9 +75,8 @@ function hmbkp_ajax_request_do_backup() {
 
 	$error_message = '';
 
-	foreach ( $errors as $error_set ) {
+	foreach ( $errors as $error_set )
 		$error_message .= implode( "\n\r", $error_set );
-	}
 
 	if ( $error_message && file_exists( $schedule->get_archive_filepath() ) )
 		$error_message .= 'HMBKP_SUCCESS';
@@ -83,6 +85,7 @@ function hmbkp_ajax_request_do_backup() {
 		echo $error_message;
 
 	die;
+
 }
 
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
@@ -168,7 +171,9 @@ add_action( 'admin_init', 'hmbkp_dismiss_error' );
  * Display the running status via ajax
  */
 function hmbkp_ajax_is_backup_in_progress() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
 
@@ -181,6 +186,7 @@ function hmbkp_ajax_is_backup_in_progress() {
 		hmbkp_schedule_actions( $schedule );
 
 	die;
+
 }
 
 add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' );
@@ -189,7 +195,9 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
  * Display the calculated size via ajax
  */
 function hmbkp_ajax_calculate_backup_size() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
 
@@ -200,6 +208,7 @@ function hmbkp_ajax_calculate_backup_size() {
 	include_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' );
 
 	die;
+
 }
 
 add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
@@ -208,12 +217,15 @@ add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
  * Test the cron response and if it's not 200 show a warning message
  */
 function hmbkp_ajax_cron_test() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
 
 		echo 1;
 
 		die;
+	
 	}
 
 	$response = wp_remote_head( site_url( 'wp-cron.php' ), array( 'timeout' => 30 ) );
@@ -228,7 +240,6 @@ function hmbkp_ajax_cron_test() {
 		echo 1;
 
 	die;
-}
 
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
@@ -351,9 +362,8 @@ function hmnkp_edit_schedule_submit() {
 	}
 
 	// Save the service options
-	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service )
 		$errors = array_merge( $errors, $service->save() );
-	}
 
 	$schedule->save();
 
@@ -374,7 +384,9 @@ add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' )
  * @return void
  */
 function hmbkp_add_exclude_rule() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
 
@@ -387,6 +399,7 @@ function hmbkp_add_exclude_rule() {
 	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
 
 	die;
+
 }
 
 add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
@@ -427,7 +440,9 @@ add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
  * @return void
  */
 function hmbkp_preview_exclude_rule() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( empty( $_POST['hmbkp_schedule_id'] ) || empty( $_POST['hmbkp_schedule_excludes'] ) )
 		die;
 
@@ -463,7 +478,9 @@ function hmbkp_preview_exclude_rule() {
 add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
 function hmbkp_display_error_and_offer_to_email_it() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( empty( $_POST['hmbkp_error'] ) )
 		die;
 
@@ -471,13 +488,11 @@ function hmbkp_display_error_and_offer_to_email_it() {
 
 	$error = str_replace( 'HMBKP_SUCCESS', '', $error, $succeeded );
 
-	if ( $succeeded ) {
-		?>
+	if ( $succeeded ) { ?>
 
 		<h3><?php _e( 'Your backup completed but with the following errors / warnings', 'hmbkp' ); ?></h3>
 
-	<?php }
-	else { ?>
+	<?php } else { ?>
 
 		<h3><?php _e( 'Your backUp failed', 'hmbkp' ); ?></h3>
 
@@ -494,12 +509,15 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
 
 	<?php die;
+
 }
 
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
 
 function hmbkp_send_error_via_email() {
+	
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	
 	if ( empty( $_POST['hmbkp_error'] ) )
 		die;
 
@@ -508,6 +526,7 @@ function hmbkp_send_error_via_email() {
 	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
 
 	die;
+
 }
 
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
