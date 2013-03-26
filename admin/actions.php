@@ -490,11 +490,11 @@ function hmbkp_display_error_and_offer_to_email_it() {
 
 	if ( $succeeded ) { ?>
 
-		<h3><?php _e( 'Your backup completed but with the following errors / warnings', 'hmbkp' ); ?></h3>
+		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'hmbkp' ); ?></h3>
 
 	<?php } else { ?>
 
-		<h3><?php _e( 'Your backUp failed', 'hmbkp' ); ?></h3>
+		<h3><?php _e( 'Your backup failed', 'hmbkp' ); ?></h3>
 
 	<?php } ?>
 
