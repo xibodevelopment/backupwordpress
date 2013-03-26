@@ -241,6 +241,8 @@ function hmbkp_ajax_cron_test() {
 
 	die;
 
+}
+
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
 /**
