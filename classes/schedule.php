@@ -638,7 +638,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			    	$file = $this->get_path() . '/.backup_errors';
 
 					if ( file_exists( $file ) )
-						unlink( $file );
+						@unlink( $file );
 
 			    	if ( ! $handle = @fopen( $file, 'w' ) )
 			    		return;
@@ -658,7 +658,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 					$file = $this->get_path() . '/.backup_warnings';
 
 					if ( file_exists( $file ) )
-			  			unlink( $file );
+			  			@unlink( $file );
 
 					if ( ! $handle = @fopen( $file, 'w' ) )
 			  	  		return;
