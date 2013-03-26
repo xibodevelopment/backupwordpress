@@ -106,6 +106,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 #### 2.2.2
 
 * Fix a fatal error when uninstalling.
+* Updated translations for Brazilian, French, Danish, Spanish, Czech, Slovakian, Polish, Italian, German, Latvian, Hebrew, Chinese & Dutch.
 * Fix a possible notice when using the plugin on a server without internet access.
 * Don't show the wp-cron error message when `WP_USE_ALTERNATE_CRON` is defined as true.
 * Ability to override the max attachment size for email notifications using the new `HMBKP_MAX_ATTACHMENT_SIZE` constant.
