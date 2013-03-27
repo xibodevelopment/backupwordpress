@@ -13,6 +13,12 @@ abstract class HMBKP_Service {
 	public $name;
 
 	/**
+	 * Determines whether to show or hide the service tab in destinations form
+	 * @var boolean
+	 */
+	public $isTabVisible;
+
+	/**
 	 * The instance HMBKP_Backup_Schedule that this service is
 	 * is currently working with
 	 */
