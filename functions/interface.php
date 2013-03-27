@@ -262,19 +262,9 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 
 		<a class="delete-action" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ), 'hmbkp-delete_schedule' ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
-<<<<<<< HEAD
-
 </div>
 <?php }
-=======
-		<?php // capture output
-		$output = ob_get_clean();
-		echo apply_filters( 'hmbkp_schedule_actions_menu', $output, $schedule ); ?> 
->>>>>>> 7ee581d2c1490d29c534b2a0d8638c0fff9160d5
 
-	</div>
-
-<?php }
 
 /**
  * Load the backup errors file
