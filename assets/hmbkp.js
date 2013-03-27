@@ -73,7 +73,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$.post(
 			ajaxurl,
-			{ 'nonce' : hmbkp.nonce, 'action'	: 'hmbkp_file_list', 'hmbkp_schedule_excludes' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
+			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_file_list', 'hmbkp_schedule_excludes' : $( '.hmbkp_add_exclude_rule input' ).val(), 'hmbkp_schedule_id' : $( '[name="hmbkp_schedule_id"]' ).val() },
 			function( data ) {
 
 				$( '.hmbkp_add_exclude_rule ul' ).remove();
@@ -378,7 +378,7 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
 	jQuery.post(
 		ajaxurl,
-		{ 'nonce':hmbkp.nonce,'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
+		{ 'nonce':hmbkp.nonce, 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 		function( data ) {
 
 			if ( data == 0 && redirect === true && ! jQuery( '.hmbkp-error' ).size() ) {

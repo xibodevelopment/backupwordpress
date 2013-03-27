@@ -29,7 +29,7 @@
         <dd><p><?php printf( __( 'The time that your schedules should run. Defaults to %s.', 'hmbkp' ), '<code>23:00</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_SCHEDULE_TIME', '07:30' );</code></p></dd>
 
         <?php foreach ( HMBKP_Services::get_services() as $file => $service )
-            echo wp_kses_post( $service::constant() ); ?>
+            echo wp_kses_post( call_user_func( array( $service, 'constant' ) ) ); ?>
 
     </dl>
 

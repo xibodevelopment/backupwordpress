@@ -3,7 +3,7 @@ Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
 Tested up to: 3.5
-Stable tag: 2.2.1
+Stable tag: 2.2.4
 
 Simple automated back ups of your WordPress powered website.
 
@@ -103,11 +103,28 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 2.2.4
+
+* Fix a fatal error on PHP 5.2, sorry! (again.)
+
+#### 2.2.3
+
+* Fix a parse error, sorry!
+
 #### 2.2.2
 
 * Fix a fatal error when uninstalling.
+* Updated translations for Brazilian, French, Danish, Spanish, Czech, Slovakian, Polish, Italian, German, Latvian, Hebrew, Chinese & Dutch.
 * Fix a possible notice when using the plugin on a server without internet access.
 * Don't show the wp-cron error message when `WP_USE_ALTERNATE_CRON` is defined as true.
+* Ability to override the max attachment size for email notifications using the new `HMBKP_MAX_ATTACHMENT_SIZE` constant.
+* Nonce some ajax request.
+* Silence warnings created if `is_executable`, `escapeshellcmd` or `escapeshellarg` are disabled.
+* Handle situations where the mysql port is set to something wierd.
+* Fallback to `mysql_connect` on system that disable `mysql_pconnect`.
+* You can now force the `--single-transaction` param when using `mysqldump` by defining `HMBKP_MYSQLDUMP_SINGLE_TRANSACTION`. 
+* Unit tests for `HM_Backup::is_safe_mode_available()`.
+* Silence possible PHP Warnings when unlinking files.
 
 #### 2.2.1
 

@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the 2.x package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-02-12 21:42:56+0000\n"
+"PO-Revision-Date: 2013-03-26 14:40:48+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,7 +10,27 @@ msgstr ""
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: 2.x\n"
 
-#: ../admin/actions.php:439
+#: ../admin/actions.php:493
+msgid "Your backup completed but with the following errors / warnings, it's probably ok to ignore these."
+msgstr ""
+
+#: ../admin/actions.php:497
+msgid "Your backup failed"
+msgstr ""
+
+#: ../classes/email.php:29
+msgid "Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address's with a comma."
+msgstr ""
+
+#: ../classes/email.php:48
+msgid "The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s."
+msgstr ""
+
+#: ../classes/error.php:148
+msgid "Your backup could not be completed because you have run out of disk space."
+msgstr ""
+
+#: ../admin/actions.php:505
 msgid "You can email details of this error to %s so they can look into the issue."
 msgstr ""
 
@@ -38,7 +58,7 @@ msgstr ""
 msgid "Once Monthly"
 msgstr ""
 
-#: ../admin/actions.php:442
+#: ../admin/actions.php:509
 msgid "Email to Support"
 msgstr "Sende eine E-Mail an den Support"
 
@@ -50,11 +70,7 @@ msgstr "Wenn du BackUpWordPress nützlich findest, %s."
 msgid "New Exclude Rule[s]"
 msgstr "Neue Ausnahme/n"
 
-#: ../admin/actions.php:433
-msgid "Your BackUp Failed"
-msgstr "Dein Backup ist fehlgeschlagen"
-
-#: ../admin/actions.php:435
+#: ../admin/actions.php:501
 msgid "Here's the response from the server:"
 msgstr "Hier ist die Antwort des Servers:"
 
@@ -66,27 +82,27 @@ msgstr "Wenn du Hilfe brauchst, die Dinge zum Laufen zu bekommen, besuche die FA
 msgid "rate it on the plugin directory"
 msgstr "bewerte es bitte im \"Plugin Directory\""
 
-#: ../classes/schedule.php:523 ../functions/interface.php:243
+#: ../classes/schedule.php:529 ../functions/interface.php:245
 msgid "Starting Backup"
 msgstr "Starte Backup"
 
-#: ../classes/schedule.php:596
+#: ../classes/schedule.php:606
 msgid "Dumping Database %s"
 msgstr "Sichere Datenbank %s"
 
-#: ../classes/schedule.php:602
+#: ../classes/schedule.php:612
 msgid "Verifying Database Dump %s"
 msgstr "Prüfe die Sicherung der Datenbank %s"
 
-#: ../classes/schedule.php:608
+#: ../classes/schedule.php:618
 msgid "Creating zip archive %s"
 msgstr "Erstelle ZIP-Archiv %s"
 
-#: ../classes/schedule.php:614
+#: ../classes/schedule.php:624
 msgid "Verifying Zip Archive %s"
 msgstr "Prüfe ZIP-Archiv %s"
 
-#: ../classes/schedule.php:620
+#: ../classes/schedule.php:630
 msgid "Finishing Backup"
 msgstr "Backup fertigstellen"
 
@@ -102,35 +118,35 @@ msgstr "%1$s läuft im %2$s, bitte kontaktiere deinen Hoster und bitte ihn dies 
 msgid "The time that your schedules should run. Defaults to %s."
 msgstr "Die Dauer, über die deine geplanten Aufgaben laufen sollen. Standard: %s."
 
-#: ../plugin.php:144
+#: ../plugin.php:145
 msgid "Are you sure you want to delete this schedule? All of it's backups will also be deleted."
 msgstr "Bist du sicher, dass dieser Plan gelöscht werden soll? Alle zugehörigen Backups werden mit diesem Schritt auch gelöscht."
 
-#: ../plugin.php:144 ../plugin.php:145 ../plugin.php:146 ../plugin.php:147
+#: ../plugin.php:145 ../plugin.php:146 ../plugin.php:147 ../plugin.php:148
 msgid "'Cancel' to go back, 'OK' to delete."
 msgstr "'Abbrechen' zum Zurückkehren, 'OK' zum Löschen."
 
-#: ../plugin.php:145
+#: ../plugin.php:146
 msgid "Are you sure you want to delete this backup?"
 msgstr "Bist du sicher, dass du dieses Backup löschen möchtest?"
 
-#: ../plugin.php:146
+#: ../plugin.php:147
 msgid "Are you sure you want to remove this exclude rule?"
 msgstr "Bist du sicher, dass du diese Ausschlussregel entfernen möchtest?"
 
-#: ../plugin.php:147
+#: ../plugin.php:148
 msgid "Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that's what you want?"
 msgstr "Das Verringern der Anzahl der Backups, die auf diesem Server vorgehalten werden, bewirkt, dass einige existierende Backups gelöscht werden. Bist du sicher, dass du dies möchtest?"
 
-#: ../admin/actions.php:307
+#: ../admin/actions.php:348
 msgid "Max backups can't be empty"
 msgstr "Die maximale Anzahl Backups kann nicht leer sein."
 
-#: ../admin/actions.php:313
+#: ../admin/actions.php:354
 msgid "Max backups must be greater than 0"
 msgstr "Die maximale Anzahl Backups muss größer als 0 sein."
 
-#: ../admin/actions.php:419
+#: ../admin/actions.php:470
 msgid "Exclude"
 msgstr "Ausschließen"
 
@@ -202,23 +218,19 @@ msgstr "behalte nur die letzten %1$s Backups auf %2$s"
 msgid "Backup my %1$s %2$s %3$s, %4$s. %5$s"
 msgstr "Erstelle ein Backup meiner %1$s %2$s %3$s, %4$s. %5$s"
 
-#: ../classes/email.php:23
-msgid "Receive a notification email when a backup completes, if the backup is small enough (&lt; 10mb) then it will be attached to the email. Separate multiple email address's with a comma."
-msgstr "Erhalte eine E-Mail, wenn ein Backup fertiggestellt wurde. Ist das Backup nicht zu groß (&lt; 10 MB), wird es an die E-Mail angehängt. Einzelne E-Mail-Adressen können durch Kommata getrennt angegeben werden."
-
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid "BackUpWordPress was unable to backup your site %1$s."
 msgstr "BackUpWordPress konnte deine Seite %1$s nicht sichern."
 
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid "Here are the errors that we're encountered:"
 msgstr "Hier sind die Fehler, auf die wir gestoßen sind:"
 
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid "If the errors above look like Martian, forward this email to %3$s and we'll take a look"
 msgstr "Wenn dir die Fehlermeldung oben wie ein Marsmensch vorkommt, dann leite diese E-Mail weiter an %3$s und wir schauen und das an."
 
-#: ../classes/email.php:129
+#: ../classes/email.php:142
 msgid ""
 "Kind Regards,\n"
 "The Apologetic BackUpWordPress Backup Emailing Robot"
@@ -226,19 +238,19 @@ msgstr ""
 "Mit freundlichen Grüßen\n"
 "Der Untröstliche BackUpWordpress Backup-E-Mail-Roboter "
 
-#: ../classes/email.php:142 ../classes/email.php:151
+#: ../classes/email.php:155 ../classes/email.php:164
 msgid "BackUpWordPress has completed a backup of your site %1$s."
 msgstr "BackUpWordPress hat ein Backup deiner Seite %1$s fertiggestellt."
 
-#: ../classes/email.php:142
+#: ../classes/email.php:155
 msgid "The backup file should be attached to this email."
 msgstr "Die Backup-Datei sollte dieser E-Mail angehängt sein."
 
-#: ../classes/email.php:142 ../classes/email.php:151
+#: ../classes/email.php:155 ../classes/email.php:164
 msgid "You can download the backup file by clicking the link below:"
 msgstr "Du kannst die Backup-Datei herunterladen, indem du auf den folgenden Link klickst:"
 
-#: ../classes/email.php:142 ../classes/email.php:151
+#: ../classes/email.php:155 ../classes/email.php:164
 msgid ""
 "Kind Regards,\n"
 "The Happy BackUpWordPress Backup Emailing Robot"
@@ -246,7 +258,7 @@ msgstr ""
 "Mit freundlichen Grüßen\n"
 "Der Glückliche BackUpWordPress Backup-E-Mail-Roboter"
 
-#: ../classes/email.php:151
+#: ../classes/email.php:164
 msgid "Unfortunately the backup file was too large to attach to this email."
 msgstr "Unglücklicherweise war die Backup-Datei zu groß, um sie dieser E-Mail anzuhängen."
 
@@ -294,15 +306,15 @@ msgstr "Das Backup-Verzeichnis kann nicht erstellt werden, weil dein %1$s-Verzei
 msgid "BackUpWordPress has setup your default schedules."
 msgstr "BackUpWordPress hat deine Standard-Pläne eingerichtet."
 
-#: ../classes/email.php:127
+#: ../classes/email.php:140
 msgid "Backup of %s Failed"
 msgstr "Backup von %s fehlgeschlagen"
 
-#: ../classes/email.php:50
+#: ../classes/email.php:63
 msgid "Send an email notification to %s"
 msgstr "Sende E-Mail-Benachrichtigungen an %s"
 
-#: ../classes/email.php:72
+#: ../classes/email.php:85
 msgid "%s isn't a valid email"
 msgstr "%s ist keine gültige E-Mail-Adresse"
 
@@ -310,7 +322,7 @@ msgstr "%s ist keine gültige E-Mail-Adresse"
 msgid "Backups will be compressed and should be smaller than this."
 msgstr "Die Backups werden komprimiert und sollten kleiner sein."
 
-#: ../classes/email.php:19
+#: ../classes/email.php:25
 msgid "Email notification"
 msgstr "E-Mail-Benachrichtigung"
 
@@ -330,7 +342,7 @@ msgstr "Anzahl der Backups, die auf dem Server gespeichert bleiben"
 msgid "Schedule Settings"
 msgstr "Plan-Einstellungen"
 
-#: ../admin/actions.php:441 ../admin/schedule-form-excludes.php:119
+#: ../admin/actions.php:508 ../admin/schedule-form-excludes.php:119
 msgid "Close"
 msgstr "Schließen"
 
@@ -354,7 +366,7 @@ msgstr "Der Pfad zur ausführbaren %1$s-Datei. Wird genutzt, um deine %2$s und %
 msgid "BackUpWordPress requires WordPress version %s or greater."
 msgstr "BackUpWordPress benötigt WordPress Version %s oder größer."
 
-#: ../plugin.php:143 ../admin/actions.php:419
+#: ../plugin.php:144 ../admin/actions.php:471
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -365,7 +377,7 @@ msgstr "Der Pfad zur ausführbaren %1$s-Datei. Wird für den %2$s-Teil des Backu
 #: ../admin/constants.php:8 ../admin/constants.php:11 ../admin/constants.php:14
 #: ../admin/constants.php:17 ../admin/constants.php:20
 #: ../admin/constants.php:23 ../admin/constants.php:26
-#: ../admin/constants.php:29
+#: ../admin/constants.php:29 ../classes/email.php:48
 msgid "e.g."
 msgstr "z.B."
 
@@ -373,7 +385,7 @@ msgstr "z.B."
 msgid "You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted."
 msgstr "Du kannst jede der folgenden %2$s in deinem %3$s %1$sn, um erweiterte Einstellungen vorzunehmen. %4$s. Definierte %5$s werden hervorgehoben."
 
-#: ../admin/actions.php:194 ../admin/actions.php:197
+#: ../admin/actions.php:234 ../admin/actions.php:237
 msgid "%1$s is returning a %2$s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details."
 msgstr "%1$s gibt eine %2$s-Antwort zurück. Das könnte bedeuten, dass deine Cron-Jobs nicht richtig aufgerufen werden. BackUpWordPress benutzt wp-cron, um geplante Backups auszuführen.  Sieh dir das %3$s an für mehr Details."
 
@@ -393,15 +405,15 @@ msgstr "Dein angepasstes Backup-Verzeichnis %1$s existiert nicht und kann nicht 
 msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
 msgstr "Dein angepasstes Backup-Verzeichnis %1$s ist nicht schreibbar, neue Backups werden stattdessen nach %2$s gespeichert."
 
-#: ../functions/interface.php:243
+#: ../functions/interface.php:245
 msgid "cancel"
 msgstr "abbrechen"
 
-#: ../functions/interface.php:247
+#: ../functions/interface.php:249
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: ../functions/interface.php:250
+#: ../functions/interface.php:252
 msgid "Excludes"
 msgstr "Ausnahmen"
 
@@ -425,37 +437,33 @@ msgstr "Datenbank und Dateien"
 msgid "Database"
 msgstr "Datenbank"
 
-#: ../hm-backup/hm-backup.php:958
-msgid "The following files are unreadable and couldn't be backed up: "
-msgstr "Die folgenden Dateien sind nicht lesbar und konnten nicht gesichert werden:"
-
-#: ../admin/actions.php:194 ../admin/actions.php:197
+#: ../admin/actions.php:234 ../admin/actions.php:237
 #: ../functions/interface.php:72 ../functions/interface.php:82
 #: ../functions/interface.php:92
 msgid "BackUpWordPress has detected a problem."
 msgstr "BackUpWordPress hat ein Problem entdeckt."
 
-#: ../admin/actions.php:277
+#: ../admin/actions.php:318
 msgid "Backup type cannot be empty"
 msgstr "Backup-Typ kann nicht leer sein"
 
-#: ../admin/actions.php:280
+#: ../admin/actions.php:321
 msgid "Invalid backup type"
 msgstr "Ungültiger Backup-Typ"
 
-#: ../admin/actions.php:292
+#: ../admin/actions.php:333
 msgid "Schedule cannot be empty"
 msgstr "Aufgaben können nicht leer sein"
 
-#: ../admin/actions.php:295
+#: ../admin/actions.php:336
 msgid "Invalid schedule"
 msgstr "Ungültige Aufgaben"
 
-#: ../admin/actions.php:310
+#: ../admin/actions.php:351
 msgid "Max backups must be a number"
 msgstr "Maximale Anzahl der Backups muss eine Zahl sein"
 
-#: ../admin/actions.php:415
+#: ../admin/actions.php:465
 msgid "%s didn't match any files."
 msgstr "%s passt auf keine Dateien."
 
@@ -515,23 +523,23 @@ msgstr "Backups"
 msgid "You are not using the latest stable version of BackUpWordPress"
 msgstr "Du benutzt nicht die neueste stabile BackUpWordPress-Version"
 
-#: ../admin/menu.php:75
+#: ../admin/menu.php:77
 msgid "FAQ"
 msgstr "FAQ"
 
-#: ../admin/constants.php:3 ../admin/menu.php:76
+#: ../admin/constants.php:3 ../admin/menu.php:79
 msgid "Constants"
 msgstr "Konstanten"
 
-#: ../admin/menu.php:79
+#: ../admin/menu.php:82
 msgid "For more information:"
 msgstr "Für mehr Informationen:"
 
-#: ../admin/menu.php:81
+#: ../admin/menu.php:84
 msgid "Support Forums"
 msgstr "Support-Foren"
 
-#: ../admin/menu.php:82
+#: ../admin/menu.php:85
 msgid "Help with translation"
 msgstr "Beim Übersetzen helfen"
 
@@ -599,7 +607,7 @@ msgstr "Ausnahmen verwalten"
 msgid "Schedule"
 msgstr "Plan"
 
-#: ../plugin.php:142 ../admin/schedule-form.php:54
+#: ../plugin.php:143 ../admin/schedule-form.php:54
 msgid "Update"
 msgstr "Update"
 
@@ -607,11 +615,11 @@ msgstr "Update"
 msgid "hourly at %s minutes past the hour"
 msgstr "stündlich, %s Minuten nach der vollen Stunde"
 
-#: ../functions/interface.php:253
+#: ../functions/interface.php:255
 msgid "Run now"
 msgstr "Jetzt ausführen"
 
-#: ../functions/interface.php:28 ../functions/interface.php:255
+#: ../functions/interface.php:28 ../functions/interface.php:257
 msgid "Delete"
 msgstr "Löschen"
 
@@ -619,7 +627,7 @@ msgstr "Löschen"
 msgid "BackUpWordPress requires PHP version 5.2.4 or greater."
 msgstr "BackUpWordPress benötigt PHP Version 5.2.4 oder höher."
 
-#: ../classes/email.php:137
+#: ../classes/email.php:150
 msgid "Backup of %s"
 msgstr "Backup von %s"
 
