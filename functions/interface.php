@@ -260,11 +260,10 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 
 		<a class="delete-action" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ), 'hmbkp-delete_schedule' ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
-
-
 	</div>
 
 <?php }
+
 
 /**
  * Load the backup errors file
