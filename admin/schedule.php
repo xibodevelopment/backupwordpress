@@ -72,7 +72,7 @@ switch ( $schedule->get_max_backups() ) :
 
 	case 1 :
 
-		$backup_to_keep = sprintf( __( 'store the only the last backup on %s', 'hmbkp' ), $server );
+		$backup_to_keep = sprintf( __( 'store only the last backup on %s', 'hmbkp' ), $server );
 
 	break;
 
