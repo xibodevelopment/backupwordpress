@@ -252,17 +252,16 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 		<a class="fancybox" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_edit_schedule_excludes_load', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-ajax.php' ) ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a>  |
 	<?php } ?>
 
-		<?php
-		// capture output
+		<?php // capture output
 		$output = ob_get_clean();
-		echo apply_filters( 'hmbkp_schedule_actions_menu', $output, $schedule );
-		?>
+		echo apply_filters( 'hmbkp_schedule_actions_menu', $output, $schedule ); ?>
 
 		<a class="hmbkp-run" href="<?php echo add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-ajax.php' ) ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>  |
 
 		<a class="delete-action" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ), 'hmbkp-delete_schedule' ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
-</div>
+	</div>
+
 <?php }
 
 

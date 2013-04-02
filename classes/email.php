@@ -14,7 +14,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	public $name = 'Email';
 
 	/**
-	 * Whether to show this service in the tabbed interface of destinations
+	 * Determines whether to show or hide the service tab in destinations form
 	 * @var boolean
 	 */
 	public $isTabVisible = false;
