@@ -8,8 +8,8 @@ jQuery( document ).ready( function( $ ) {
 		$( '.hmbkp-ajax-loading' ).removeClass( 'hmbkp-ajax-loading' );
 	} );
 
-	$( document ).on( 'click', '.hmbkp-fancybox-close', function() {
-	    $.fancybox.close();
+	$( document ).on( 'click', '.hmbkp-colorbox-close', function() {
+	    $.colorbox.close();
 	} );
 
 	// Setup the tabs
@@ -19,23 +19,28 @@ jQuery( document ).ready( function( $ ) {
 	if ( ! $( '.subsubsub a.current' ).size() )
 		$( '.subsubsub li:first a').addClass( 'current' );
 
-	// Initialize fancybox
-	$( '.fancybox' ).fancybox( {
-
-		'modal'		: true,
-		'type'		: 'ajax',
-		'maxWidth'	: 320,
-		'afterShow'	: function() {
+	// Initialize colorbox
+	$( '.colorbox' ).colorbox( {
+		maxHeight: "100%",
+		escKey : false,
+		overlayClose		: false,
+		onLoad : function(){
+			$('#cboxClose').remove();
+		},
+		onComplete	: function() {
 
 			$( '.hmbkp-tabs' ).tabs();
-
+			$.colorbox.resize();
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
-				$( '<button type="button" class="button-secondary hmbkp-fancybox-close">' + hmbkp.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
+				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
 
 		}
 
 	} );
 
+	$( document).on('click', '.ui-tabs-anchor', function( e ){
+		$.colorbox.resize();
+	});
 	// Show delete confirm message for delete schedule
 	$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function( e ) {
 
@@ -218,7 +223,7 @@ jQuery( document ).ready( function( $ ) {
 				// Assume success if no data passed back
 				if ( ! data || data == 0 ) {
 
-					$.fancybox.close();
+					$.colorbox.close();
 
 					// Reload the page so we see changes
 					if ( isNewSchedule )
@@ -343,10 +348,15 @@ function catchResponseAndOfferToEmail( data ) {
 				if ( ! data || data == 0 )
 					return;
 
-				jQuery.fancybox( {
-	                'maxWidth'	: 500,
-	                'content'	: data,
-	                'modal'		: true
+				jQuery.colorbox( {
+									maxHeight: "100%",
+	                data	: data,
+	                overlayClose : false,
+					        escKey : false,
+									onLoad : function(){
+										$('#cboxClose').remove();
+										$.colorbox.resize();
+									}
 	            } );
 
 			}
@@ -364,7 +374,7 @@ function catchResponseAndOfferToEmail( data ) {
 		    ajaxurl,
 		    { 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_email_error', 'hmbkp_error' : data },
 			function( data ) {
-				jQuery.fancybox.close();
+				jQuery.colorbox.close();
 			}
 
 		)

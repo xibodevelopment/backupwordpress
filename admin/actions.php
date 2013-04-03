@@ -505,7 +505,7 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'hmbkp' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?>
 		<br /><br /></p>
 
-	<button class="button hmbkp-fancybox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
+	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
 	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
 
 	<?php die;
