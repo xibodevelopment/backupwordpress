@@ -30,10 +30,10 @@ jQuery( document ).ready( function( $ ) {
 		onComplete	: function() {
 
 			$( '.hmbkp-tabs' ).tabs();
-			$.colorbox.resize();
+
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
-
+			$.colorbox.resize();
 		}
 
 	} );
