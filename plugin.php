@@ -135,7 +135,6 @@ function hmbkp_init() {
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
-		//wp_enqueue_script( 'hmbkp-fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
 		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/jquery.colorbox-min.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
@@ -149,7 +148,6 @@ function hmbkp_init() {
 			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
 		) );
 
-		//wp_enqueue_style( 'hmbkp_fancybox', HMBKP_PLUGIN_URL . '/assets/fancyBox/source/jquery.fancybox.css', false, HMBKP_VERSION );
 		wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css', false, HMBKP_VERSION );
 
