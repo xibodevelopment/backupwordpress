@@ -98,6 +98,6 @@ div.hmbkp_add_exclude_rule input { width: 100% !important; }
 
 .hmbkp-form .hmbkp-edit-schedule-form .button-primary  {  width: 49% !important; }
 
-.hmbkp-form .hmbkp-fancybox-close { float: left !important; width: 49% !important; height: 40px !important; }
-
-}
+.hmbkp-form .hmbkp-colorbox-close { float: left !important; width: 49% !important; height: 40px !important; }
+	.hmbkp-edit-schedule-excludes-form table {max-width: 100%;}
+} /* end media query */

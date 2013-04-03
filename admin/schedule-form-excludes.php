@@ -22,7 +22,7 @@
 
         </div>
 
-        <table class="widefat fixed">
+        <table class="widefat">
 
         	<thead>
         		<tr>
