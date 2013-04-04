@@ -27,7 +27,7 @@ Author URI: http://hmn.md/
 */
 
 if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) )
-	define( 'HMBKP_PLUGIN_SLUG', 'backupwordpress' );
+	define( 'HMBKP_PLUGIN_SLUG', basename( dirname( __FILE__ ) ) );
 
 if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
 	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
