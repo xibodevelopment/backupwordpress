@@ -117,7 +117,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Updated translations for Brazilian, French, Danish, Spanish, Czech, Slovakian, Polish, Italian, German, Latvian, Hebrew, Chinese & Dutch.
 * Fix a possible notice when using the plugin on a server without internet access.
 * Don't show the wp-cron error message when `WP_USE_ALTERNATE_CRON` is defined as true.
-* Ability to override the max attachment size for email notifications using the new `HMBKP_MAX_ATTACHMENT_SIZE` constant.
+* Ability to override the max attachment size for email notifications using the new `HMBKP_ATTACHMENT_MAX_FILESIZE` constant.
 * Nonce some ajax request.
 * Silence warnings created if `is_executable`, `escapeshellcmd` or `escapeshellarg` are disabled.
 * Handle situations where the mysql port is set to something wierd.
