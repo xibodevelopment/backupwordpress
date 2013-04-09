@@ -21,6 +21,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Initialize colorbox
 	$( '.colorbox' ).colorbox( {
+		innerWidth: "320px",
 		maxHeight: "100%",
 		escKey : false,
 		overlayClose		: false,
@@ -349,6 +350,7 @@ function catchResponseAndOfferToEmail( data ) {
 					return;
 
 				jQuery.colorbox( {
+									innerWidth: "320px",
 									maxHeight: "100%",
 	                data	: data,
 	                overlayClose : false,
