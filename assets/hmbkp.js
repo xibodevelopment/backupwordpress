@@ -356,8 +356,8 @@ function catchResponseAndOfferToEmail( data ) {
 	                overlayClose : false,
 					        escKey : false,
 									onLoad : function(){
-										$('#cboxClose').remove();
-										$.colorbox.resize();
+										jQuery('#cboxClose').remove();
+										jQuery.colorbox.resize();
 									}
 	            } );
 
