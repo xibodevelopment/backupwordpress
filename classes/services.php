@@ -39,7 +39,7 @@ abstract class HMBKP_Service {
 	/**
 	 * The field to output as part of the schedule settings
 	 *
-	 * If you don't want a field return ''; here and use @field instead
+	 * If you don't want a field return ''; here and use @form instead
 	 */
 	abstract protected function field();
 
