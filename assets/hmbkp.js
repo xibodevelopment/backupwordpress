@@ -21,27 +21,32 @@ jQuery( document ).ready( function( $ ) {
 
 	// Initialize colorbox
 	$( '.colorbox' ).colorbox( {
-		innerWidth: "320px",
-		maxHeight: "100%",
-		escKey : false,
-		overlayClose		: false,
-		onLoad : function(){
+		'transition'	: 'fade',
+		'scrolling'		: false,
+		'innerWidth'	: "320px",
+		'maxHeight'		: "100%",
+		'escKey'		: false,
+		'overlayClose'	: false,
+		'onLoad'		: function() {
 			$('#cboxClose').remove();
 		},
-		onComplete	: function() {
+		'onComplete'	: function() {
 
 			$( '.hmbkp-tabs' ).tabs();
 
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
-				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button></p>' ).appendTo( '.hmbkp-form p.submit' );
+				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
+			
 			$.colorbox.resize();
+		
 		}
 
 	} );
 
-	$( document).on('click', '.ui-tabs-anchor', function( e ){
+	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
 		$.colorbox.resize();
-	});
+	} );
+	
 	// Show delete confirm message for delete schedule
 	$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function( e ) {
 
@@ -93,6 +98,8 @@ jQuery( document ).ready( function( $ ) {
 
 				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
+				$.colorbox.resize();
+
 			}
 		)
 
@@ -122,6 +129,8 @@ jQuery( document ).ready( function( $ ) {
 		 $( '.hmbkp_add_exclude_rule p' ).remove();
 
 		 $( '.hmbkp-edit-schedule-excludes-form' ).removeClass( 'hmbkp-exclude-preview-open' );
+
+		 $.colorbox.resize();
 
 	} );
 
@@ -175,6 +184,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
+				$.colorbox.resize();
 			}
 		);
 
@@ -185,6 +195,8 @@ jQuery( document ).ready( function( $ ) {
 
 		$( this ).addClass( 'hmbkp-ajax-loading' ).text( '' );
 
+		$.colorbox.resize();
+
 		e.preventDefault();
 
 		$.get(
@@ -194,6 +206,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
+				$.colorbox.resize();
 			}
 		);
 
@@ -350,15 +363,15 @@ function catchResponseAndOfferToEmail( data ) {
 					return;
 
 				jQuery.colorbox( {
-									innerWidth: "320px",
-									maxHeight: "100%",
-	                data	: data,
-	                overlayClose : false,
-					        escKey : false,
-									onLoad : function(){
-										jQuery('#cboxClose').remove();
-										jQuery.colorbox.resize();
-									}
+					'innerWidth'	: "320px",
+					'maxHeight'		: "100%",
+	                'data'			: data,
+	                'overlayClose'	: false,
+			    	'escKey'		: false,
+					'onLoad'		: function() {
+						jQuery( '#cboxClose' ).remove();
+						jQuery.colorbox.resize();
+					}
 	            } );
 
 			}
@@ -384,7 +397,6 @@ function catchResponseAndOfferToEmail( data ) {
 	} );
 
 }
-
 
 function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 
