@@ -1,6 +1,6 @@
 [submodule "hm-backup"]
 	path = hm-backup
 	url = git@github.com:humanmade/hm-backup.git
-[submodule "assets/fancyBox"]
-	path = assets/fancyBox
-	url = https://github.com/fancyapps/fancyBox.git
+[submodule "assets/colorbox"]
+	path = assets/colorbox
+	url = git://github.com/jackmoore/colorbox.git
