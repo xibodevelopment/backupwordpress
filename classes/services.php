@@ -25,6 +25,11 @@ abstract class HMBKP_Service {
 	protected $schedule;
 
 	/**
+	 * Used to determine if the service is in use or not
+	 */
+	abstract protected function is_service_active();
+
+	/**
 	 * The form to output as part of the schedule settings
 	 *
 	 * If you don't want a whole form return ''; here and use @field instead

@@ -71,6 +71,13 @@ class HMBKP_Email_Service extends HMBKP_Service {
 		}
 
 	}
+	
+	/**
+	 * Used to determine if the service is in use or not
+	 */
+	public function is_service_active() {
+		return (bool) $this->get_email_address_array();
+	}
 
 	/**
 	 * Validate the email and return an error if validation fails
