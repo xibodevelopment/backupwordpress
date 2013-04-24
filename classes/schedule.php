@@ -32,13 +32,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $options = array();
 
 	/**
-	 * The filepath for the .running file which
-	 * is used to track whether a backup is currently in
-	 * progress
-	 */
-	private $schedule_running_filepath = '';
-
-	/**
 	 * The schedule start time
 	 *
 	 * (default value: current_time( 'timestamp' ))
