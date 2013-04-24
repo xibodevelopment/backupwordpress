@@ -143,7 +143,7 @@ abstract class HMBKP_Service {
 }
 
 /**
- * A singleton to handle the registering, unregistering
+ * A singleton to handle the registering, de-registering
  * and storage of services
  */
 class HMBKP_Services {
@@ -222,7 +222,7 @@ class HMBKP_Services {
     }
 
 	/**
-	 * Unregister an existing service
+	 * De-register an existing service
 	 *
 	 * @access public
 	 */
