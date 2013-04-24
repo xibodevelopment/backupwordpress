@@ -29,21 +29,21 @@ abstract class HMBKP_Service {
 	/**
 	 * Used to determine if the service is in use or not
 	 */
-	abstract protected function is_service_active();
+	abstract public function is_service_active();
 
 	/**
 	 * The form to output as part of the schedule settings
 	 *
 	 * If you don't want a whole form return ''; here and use @field instead
 	 */
-	abstract protected function form();
+	abstract public function form();
 
 	/**
 	 * The field to output as part of the schedule settings
 	 *
 	 * If you don't want a field return ''; here and use @form instead
 	 */
-	abstract protected function field();
+	abstract public function field();
 
 	/**
 	 * Help text that should be output in the Constants help tab
@@ -57,14 +57,14 @@ abstract class HMBKP_Service {
 	 * @param  array $old_data  The old data thats going to be overwritten
 	 * @return array $error     Array of validation errors e.g. return array( 'email' => 'not valid' );
 	 */
-	abstract protected function update( &$new_data, $old_data );
+	abstract public function update( &$new_data, $old_data );
 
 	/**
 	 * The string to be output as part of the schedule sentence
 	 *
 	 * @return string
 	 */
-	abstract protected function display();
+	abstract public function display();
 
 	/**
 	 * Receives actions from the backup
@@ -73,7 +73,7 @@ abstract class HMBKP_Service {
 	 *
 	 * @see  HM_Backup::do_action for a list of the actions
 	 */
-	abstract protected function action( $action );
+	abstract public function action( $action );
 
 	/**
 	 * Utility for getting a formated html input name attribute
