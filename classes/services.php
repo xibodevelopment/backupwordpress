@@ -123,9 +123,9 @@ abstract class HMBKP_Service {
 
 		}
 
-		// only overwrite settings if they changed
-		if( ! empty( $new_data ) )
-		$this->schedule->set_service_options( $classname, $new_data );
+		// Only overwrite settings if they changed
+		if ( ! empty( $new_data ) )
+		    $this->schedule->set_service_options( $classname, $new_data );
 
 		return array();
 
