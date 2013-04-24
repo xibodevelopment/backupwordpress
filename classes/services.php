@@ -240,20 +240,23 @@ class HMBKP_Services {
 	 * Instantiate the individual service classes
 	 *
 	 * @access private
-	 * @param string $class
+	 * @param string $classname
 	 * @return array An array of instantiated classes
 	 */
-	private static function instantiate( $class ) {
+	private static function instantiate( $classname ) {
 
-		if ( ! class_exists( $class ) )
+		if ( ! class_exists( $classname ) )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
 
-		$$class = new $class;
+        /**
+         * @var HMBKP_Service
+         */
+        $class = new $classname;
 
 		if ( self::instance()->schedule )
-			$$class->set_schedule( self::instance()->schedule );
+			$class->set_schedule( self::instance()->schedule );
 
-		return $$class;
+		return $class;
 
 	}
 
