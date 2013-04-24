@@ -195,6 +195,7 @@ class HMBKP_Services {
 	 * Get the array of registered services
 	 *
 	 * @access public
+     * @return HMBKP_SERVICE[]
 	 */
     public static function get_services( HMBKP_Scheduled_Backup $schedule = null ) {
 
