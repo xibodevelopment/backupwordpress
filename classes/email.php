@@ -58,7 +58,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	/**
 	 * The sentence fragment that is output as part of the schedule sentence
 	 *
-	 * @return string The sentence fragment
+	 * @return string
 	 */
 	public function display() {
 
