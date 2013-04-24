@@ -338,7 +338,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Check whether the filesize has already been calculated and cached.
 	 *
 	 * @access public
-	 * @return void
+	 * @return bool
 	 */
 	public function is_filesize_cached() {
 		return (bool) get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
