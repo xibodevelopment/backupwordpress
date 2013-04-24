@@ -21,6 +21,8 @@ abstract class HMBKP_Service {
 	/**
 	 * The instance HMBKP_Backup_Schedule that this service is
 	 * is currently working with
+     *
+     * @var HMBKP_Scheduled_Backup
 	 */
 	protected $schedule;
 
