@@ -70,6 +70,8 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 		}
 
+        return '';
+
 	}
 	
 	/**
