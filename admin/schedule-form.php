@@ -44,7 +44,7 @@
 
 				<?php
 					// Calculated filesize
-					$file_size = $schedule->get_filesize() * 1024 * 1024;
+					$file_size = $schedule->get_filesize();
 					$total = $schedule->get_max_backups();
 				  $total_size = $file_size * $total;
 				?>

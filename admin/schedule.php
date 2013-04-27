@@ -1,7 +1,7 @@
 <?php
 
 // Calculated filesize
-$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_filesize() ) . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your site&hellip;', 'hmbkp' ) . '</code>';
+$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_file_size() ) . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your site&hellip;', 'hmbkp' ) . '</code>';
 
 // Backup Type
 $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
