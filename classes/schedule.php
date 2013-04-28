@@ -343,8 +343,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Convenience function to format the file size
-	 * @param bool $cached
 	 *
+	 * @param bool $cached
 	 * @return bool|string
 	 */
 	public function get_formatted_file_size( $cached = true ){
