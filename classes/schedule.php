@@ -32,13 +32,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $options = array();
 
 	/**
-	 * The filepath for the .running file which
-	 * is used to track whether a backup is currently in
-	 * progress
-	 */
-	private $schedule_running_filepath = '';
-
-	/**
 	 * The schedule start time
 	 *
 	 * (default value: current_time( 'timestamp' ))
@@ -356,7 +349,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Check whether the filesize has already been calculated and cached.
 	 *
 	 * @access public
-	 * @return void
+	 * @return bool
 	 */
 	public function is_filesize_cached() {
 		return (bool) get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );

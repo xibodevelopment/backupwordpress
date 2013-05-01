@@ -21,27 +21,29 @@ abstract class HMBKP_Service {
 	/**
 	 * The instance HMBKP_Backup_Schedule that this service is
 	 * is currently working with
+     *
+     * @var HMBKP_Scheduled_Backup
 	 */
 	protected $schedule;
 
 	/**
 	 * Used to determine if the service is in use or not
 	 */
-	abstract protected function is_service_active();
+	abstract public function is_service_active();
 
 	/**
 	 * The form to output as part of the schedule settings
 	 *
 	 * If you don't want a whole form return ''; here and use @field instead
 	 */
-	abstract protected function form();
+	abstract public function form();
 
 	/**
 	 * The field to output as part of the schedule settings
 	 *
 	 * If you don't want a field return ''; here and use @form instead
 	 */
-	abstract protected function field();
+	abstract public function field();
 
 	/**
 	 * Help text that should be output in the Constants help tab
@@ -55,14 +57,14 @@ abstract class HMBKP_Service {
 	 * @param  array $old_data  The old data thats going to be overwritten
 	 * @return array $error     Array of validation errors e.g. return array( 'email' => 'not valid' );
 	 */
-	abstract protected function update( &$new_data, $old_data );
+	abstract public function update( &$new_data, $old_data );
 
 	/**
 	 * The string to be output as part of the schedule sentence
 	 *
 	 * @return string
 	 */
-	abstract protected function display();
+	abstract public function display();
 
 	/**
 	 * Receives actions from the backup
@@ -71,7 +73,7 @@ abstract class HMBKP_Service {
 	 *
 	 * @see  HM_Backup::do_action for a list of the actions
 	 */
-	abstract protected function action( $action );
+	abstract public function action( $action );
 
 	/**
 	 * Utility for getting a formated html input name attribute
@@ -121,9 +123,9 @@ abstract class HMBKP_Service {
 
 		}
 
-		// only overwrite settings if they changed
-		if( ! empty( $new_data ) )
-		$this->schedule->set_service_options( $classname, $new_data );
+		// Only overwrite settings if they changed
+		if ( ! empty( $new_data ) )
+		    $this->schedule->set_service_options( $classname, $new_data );
 
 		return array();
 
@@ -141,7 +143,7 @@ abstract class HMBKP_Service {
 }
 
 /**
- * A singleton to handle the registering, unregistering
+ * A singleton to handle the registering, de-registering
  * and storage of services
  */
 class HMBKP_Services {
@@ -193,6 +195,7 @@ class HMBKP_Services {
 	 * Get the array of registered services
 	 *
 	 * @access public
+     * @return HMBKP_SERVICE[]
 	 */
     public static function get_services( HMBKP_Scheduled_Backup $schedule = null ) {
 
@@ -220,7 +223,7 @@ class HMBKP_Services {
     }
 
 	/**
-	 * Unregister an existing service
+	 * De-register an existing service
 	 *
 	 * @access public
 	 */
@@ -237,20 +240,23 @@ class HMBKP_Services {
 	 * Instantiate the individual service classes
 	 *
 	 * @access private
-	 * @param string $class
+	 * @param string $classname
 	 * @return array An array of instantiated classes
 	 */
-	private static function instantiate( $class ) {
+	private static function instantiate( $classname ) {
 
-		if ( ! class_exists( $class ) )
+		if ( ! class_exists( $classname ) )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
 
-		$$class = new $class;
+        /**
+         * @var HMBKP_Service
+         */
+        $class = new $classname;
 
 		if ( self::instance()->schedule )
-			$$class->set_schedule( self::instance()->schedule );
+			$class->set_schedule( self::instance()->schedule );
 
-		return $$class;
+		return $class;
 
 	}
 
