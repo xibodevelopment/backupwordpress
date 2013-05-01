@@ -45,7 +45,7 @@
         <p class="description"><?php _e( 'The number of previous backups to store on the server. past this limit older backups will be deleted automatically.', 'hmbkp' ); ?></p>
 
 				<p class="description"><?php _e( 'Maximum possible size the backup files could amount to: ', '' ); ?><code><?php echo size_format( $schedule->get_filesize() * $schedule->get_max_backups(), 2 ); ?></code></p>
-				
+
     	</label>
 
         <?php foreach ( HMBKP_Services::get_services( $schedule ) as $service )
