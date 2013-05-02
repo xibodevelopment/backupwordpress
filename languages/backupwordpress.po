@@ -99,6 +99,12 @@ msgstr ""
 msgid "Max backups must be greater than 0"
 msgstr ""
 
+#: ../admin/actions.php:461
+msgid "%s matches 1 file."
+msgid_plural "%1$s matches %2$d files."
+msgstr[0] ""
+msgstr[1] ""
+
 #: ../admin/actions.php:465
 #, php-format
 msgid "%s didn't match any files."
