@@ -39,7 +39,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-form label .description { line-height: 16px; margin-top: 10px; float: none; }
 .hmbkp-form p.submit { margin: 20px 0 0; padding: 0; }
 .hmbkp-form .button-primary { float: right; }
-.hmbkp-form [type="number"] { min-width: 40px; width: 40px; }
+.hmbkp-form [type="number"] { min-width: 50px; width: 50px; }
 .hmbkp-error span { position: absolute; top: -14px; right: 1px; color: #FFF; background-color: red; white-space: nowrap; line-height: 16px; font-size: 11px; padding: 0 3px; border-radius: 3px 3px 0 0; }
 .hmbkp-error input[type], .hmbkp-error select { border-color: red; border-top-right-radius: 0; }
 
