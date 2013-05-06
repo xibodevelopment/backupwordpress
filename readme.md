@@ -1,4 +1,5 @@
-=== BackUpWordPress ===
+# BackUpWordPress
+
 Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
@@ -7,11 +8,11 @@ Stable tag: 2.2.4
 
 Simple automated back ups of your WordPress powered website.
 
-== Description ==
+## Description
 
 BackUpWordPress will back up your entire site including your database and all your files on a schedule that suits you.
 
-= Features =
+### Features
 
 * Manage multiple schedules.
 * Super simple to use, no setup required.
@@ -23,15 +24,15 @@ BackUpWordPress will back up your entire site including your database and all yo
 * Good support should you need help.
 * Translations for Spanish, German, Chinese, Romanian, Russian, Serbian, Lithuanian, Italian, Czech, Dutch, French, Basque.
 
-= Help develop this plugin =
+### Help develop this plugin
 
 The BackUpWordPress plugin is hosted GitHub, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
 
-= Translations =
+### Translations
 
 We'd also love help translating the plugin into more languages, if you can help then please contact support@hmn.md or visit http://translate.hmn.md/.
 
-== Installation ==
+## Installation
 
 1. Install BackUpWordPress either via the WordPress.org plugin directory, or by uploading the files to your server.
 2. Activate the plugin.
@@ -39,7 +40,7 @@ We'd also love help translating the plugin into more languages, if you can help 
 
 The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site.
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions
 
 **Where does BackUpWordPress store the backup files?**
 
@@ -95,13 +96,13 @@ For development issues, feature requests or anybody wishing to help out with dev
 
 You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
 
-== Screenshots ==
+## Screenshots
 
 1. Manage multiple schedules.
 2. Choose your schedule, backup type, number of backups to keep and whether to recieve a notification email.
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
-== Changelog ==
+## Changelog
 
 #### 2.2.4
 
