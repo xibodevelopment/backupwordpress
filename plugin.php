@@ -56,27 +56,8 @@ if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 if ( ! defined( 'HMBKP_SCHEDULE_TIME' ) )
 	define( 'HMBKP_SCHEDULE_TIME', '11pm' );
 
-// Don't activate on anything less than PHP 5.2.4
-if ( version_compare( phpversion(), '5.2.4', '<' ) ) {
-
-	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( __FILE__ );
-
-	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( __( 'BackUpWordPress requires PHP version 5.2.4 or greater.', 'hmbkp' ) );
-
-}
-
-// Don't activate on old versions of WordPress
-if ( version_compare( get_bloginfo( 'version' ), HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
-
-	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( __FILE__ );
-
-	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
-
-}
+if( ! defined( 'HMBKP_REQUIRED_PHP_VERSION' ) )
+	define( 'HMBKP_REQUIRED_PHP_VERSION', '5.2.4' );
 
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
@@ -107,6 +88,37 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
+
+/**
+ * Perform compatibility checks
+ */
+function hmbkp_activate(){
+	
+	// Don't activate on anything less than PHP 5.2.4
+	if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
+
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		deactivate_plugins( __FILE__ );
+
+		if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+			die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ) );
+
+	}
+
+// Don't activate on old versions of WordPress
+
+	global $wp_version;
+
+	if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		deactivate_plugins( __FILE__ );
+
+		if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+			die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
+
+	}
+}
 
 // Handle any advanced option changes
 hmbkp_constant_changes();
