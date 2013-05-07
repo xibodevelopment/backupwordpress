@@ -428,8 +428,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Set the schedule reoccurrence
 	 *
-	 * @access public
-	 * @param string $reoccurrence
+	 * @param $reoccurrence
+	 * @throws Exception
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
