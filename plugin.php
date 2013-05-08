@@ -89,11 +89,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
 
-/**
- * Perform compatibility checks
- */
-function hmbkp_activate(){
-	
+
 	// Don't activate on anything less than PHP 5.2.4
 	if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
 
@@ -118,7 +114,7 @@ function hmbkp_activate(){
 			die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
 
 	}
-}
+
 
 // Handle any advanced option changes
 hmbkp_constant_changes();
