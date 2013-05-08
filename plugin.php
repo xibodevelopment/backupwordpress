@@ -90,30 +90,30 @@ register_activation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
 
 
-	// Don't activate on anything less than PHP 5.2.4
-	if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
+// Don't activate on anything less than PHP 5.2.4
+if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
 
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		deactivate_plugins( __FILE__ );
+	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	deactivate_plugins( __FILE__ );
 
-		if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-			die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ) );
+	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+		die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ) );
 
-	}
+}
 
 // Don't activate on old versions of WordPress
 
-	global $wp_version;
+global $wp_version;
 
-	if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		deactivate_plugins( __FILE__ );
+	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	deactivate_plugins( __FILE__ );
 
-		if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-			die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
+	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+		die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
 
-	}
+}
 
 
 // Handle any advanced option changes
