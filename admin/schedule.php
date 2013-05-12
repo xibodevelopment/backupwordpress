@@ -57,11 +57,14 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	break;
 
-	case 'hmbkp_manually' :
+	case 'manually' :
 
 		$reoccurrence = __( 'manually', 'hmbkp' );
 
 	break;
+
+	default:
+		wp_die( "Invalid reoccurence");
 
 endswitch;
 

@@ -26,10 +26,10 @@
 
     			<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-<?php foreach( wp_get_schedules() as $cron_schedule => $cron_details ) : ?>
-	<?php if( preg_match( "/^hmbkp_/", $cron_schedule ) ) : ?>
+<?php foreach( $schedule->schedules_filter( wp_get_schedules() ) as $cron_schedule => $cron_details ) : ?>
+
     		    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'] ); ?></option>
-	<?php endif; ?>
+
 <?php endforeach; ?>
 
     		</select>
