@@ -129,7 +129,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_name() {
 
-		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
+		return ucwords( $this->get_type() ) . ' ' . substr( $this->get_reoccurrence(), 6 );
 
 	}
 

@@ -105,9 +105,9 @@ class testScheduleTestCase extends WP_UnitTestCase {
 	
 	public function testSetMonthlySchedule() {
 
-		$this->schedule->set_reoccurrence( 'monthly' );
+		$this->schedule->set_reoccurrence( 'hmbkp_monthly' );
 
-		$this->assertEquals( 'monthly', $this->schedule->get_reoccurrence() );
+		$this->assertEquals( 'hmbkp_monthly', $this->schedule->get_reoccurrence() );
 
 		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
 
