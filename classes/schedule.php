@@ -86,11 +86,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Set the path - TODO remove external function dependancy
 		$this->set_path( hmbkp_path() );
 
+		$hmbkp_schedules = $this->schedules_filter( wp_get_schedules() );
+
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
 		// Setup the schedule if it isn't set
-		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( hmbkp_cron_schedules() ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
+		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( hmbkp_cron_schedules( $hmbkp_schedules ) ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
 			$this->schedule();
 
 	}
@@ -433,8 +435,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
+		$hmbkp_schedules = $this->schedules_filter( wp_get_schedules() );
+
 		// Check it's valid
-		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( hmbkp_cron_schedules() ) ) ) && $reoccurrence !== 'manually' )
+		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( hmbkp_cron_schedules($hmbkp_schedules) ) ) ) && $reoccurrence !== 'manually' )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid cron reoccurrence or "manually"' );
 
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
@@ -458,13 +462,23 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_interval() {
 
-		$schedules = hmbkp_cron_schedules();
+		$hmbkp_schedules = $this->schedules_filter( wp_get_schedules() );
 
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
-		return $schedules[$this->get_reoccurrence()]['interval'];
+		return $hmbkp_schedules[$this->get_reoccurrence()]['interval'];
 
+	}
+
+	public function schedules_filter( $schedules ){
+
+		foreach ( $schedules as $key => $arr ) {
+			if( ! preg_match("/^hmbkp_/", $key ) )
+				unset( $schedules[$key] );
+		}
+
+		return $schedules;
 	}
 
 	/**

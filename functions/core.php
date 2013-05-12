@@ -201,12 +201,12 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 function hmbkp_cron_schedules( $schedules ) {
 
 	$hmbkp_schedules = array(
-		'hourly'     	=> array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) ),
-		'twicedaily' 	=> array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) ),
-		'daily'      	=> array( 'interval' => DAY_IN_SECONDS, 'display'       => __( 'Once Daily', 'hmbkp' ) ),
-	  'weekly' 		  => array( 'interval' => WEEK_IN_SECONDS, 'display'      => __( 'Once Weekly', 'hmbkp' ) ),
-	  'fortnightly'	=> array( 'interval' => 2 * WEEK_IN_SECONDS , 'display' => __( 'Once Fortnightly', 'hmbkp' ) ),
-	  'monthly'		  => array( 'interval' => 30 * DAY_IN_SECONDS, 'display'  => __( 'Once Monthly', 'hmbkp' ) )
+		'hmbkp_hourly'     	=> array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) ),
+		'hmbkp_twicedaily' 	=> array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) ),
+		'hmbkp_daily'      	=> array( 'interval' => DAY_IN_SECONDS, 'display'       => __( 'Once Daily', 'hmbkp' ) ),
+	  'hmbkp_weekly' 		  => array( 'interval' => WEEK_IN_SECONDS, 'display'      => __( 'Once Weekly', 'hmbkp' ) ),
+	  'hmbkp_fortnightly'	=> array( 'interval' => 2 * WEEK_IN_SECONDS , 'display' => __( 'Once Fortnightly', 'hmbkp' ) ),
+	  'hmbkp_monthly'		  => array( 'interval' => 30 * DAY_IN_SECONDS, 'display'  => __( 'Once Monthly', 'hmbkp' ) )
 	);
 
 	$new_schedules = array_merge( $schedules, $hmbkp_schedules );
