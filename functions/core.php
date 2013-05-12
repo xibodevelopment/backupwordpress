@@ -198,9 +198,9 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
  *
  * @return array $reccurrences
  */
-function hmbkp_cron_schedules() {
+function hmbkp_cron_schedules( $schedules ) {
 
-	return array(
+	$hmbkp_schedules = array(
 		'hourly'     	=> array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) ),
 		'twicedaily' 	=> array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) ),
 		'daily'      	=> array( 'interval' => DAY_IN_SECONDS, 'display'       => __( 'Once Daily', 'hmbkp' ) ),
@@ -209,6 +209,9 @@ function hmbkp_cron_schedules() {
 	  'monthly'		  => array( 'interval' => 30 * DAY_IN_SECONDS, 'display'  => __( 'Once Monthly', 'hmbkp' ) )
 	);
 
+	$new_schedules = array_merge( $schedules, $hmbkp_schedules );
+
+	return $new_schedules;
 }
 add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 
