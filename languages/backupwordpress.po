@@ -146,6 +146,12 @@ msgstr ""
 msgid "add schedule"
 msgstr ""
 
+#: ../admin/backups.php:36
+msgid "1 backup completed"
+msgid_plural "%d backups completed"
+msgstr[0] ""
+msgstr[1] ""
+
 #: ../admin/backups.php:37
 msgid "Size"
 msgstr ""
