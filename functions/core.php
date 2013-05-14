@@ -193,11 +193,12 @@ function hmbkp_setup_default_schedules() {
 }
 add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
-/**
- * Return an array of cron schedules
- *
- * @return array $reccurrences
- */
+	/**
+	 * Return an array of cron schedules
+	 *
+	 * @param $schedules
+	 * @return mixed
+	 */
 function hmbkp_cron_schedules( $schedules ) {
 
 	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) );
@@ -211,12 +212,14 @@ function hmbkp_cron_schedules( $schedules ) {
 }
 add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 
-/**
- * Recursively delete a directory including
- * all the files and sub-directories.
- *
- * @param string $dir
- */
+	/**
+	 * Recursively delete a directory including
+	 * all the files and sub-directories.
+	 * @param $dir
+	 *
+	 * @return bool
+	 * @throws Exception
+	 */
 function hmbkp_rmdirtree( $dir ) {
 
 	if ( strpos( HM_Backup::get_home_path(), $dir ) !== false )

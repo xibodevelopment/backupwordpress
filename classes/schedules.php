@@ -42,7 +42,8 @@ class HMBKP_Schedules {
 
 	/**
 	 * Get a schedule by ID
-	 * 
+	 *
+	 * @param $id
 	 * @return HMBKP_Scheduled_Backup
 	 */
 	public function get_schedule( $id ) {

@@ -43,11 +43,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Setup the schedule object
-	 *
 	 * Loads the options from the database and populates properties
-	 *
-	 * @access public
-	 * @param string $id
+	 * @param $id
 	 */
 	public function __construct( $id ) {
 
@@ -91,6 +88,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
+		$next_occurence = $this->get_next_occurrence();
 		// Setup the schedule if it isn't set
 		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys(  $hmbkp_schedules ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
 			$this->schedule();
@@ -226,8 +224,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Set the maximum number of backups to keep
 	 *
-	 * @access public
-	 * @param int $max
+	 * @param $max
+	 * @throws Exception
 	 */
 	public function set_max_backups( $max ) {
 
@@ -241,7 +239,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Get the array of services options for this schedule
 	 *
-	 * @access public
+	 * @param      $service
+	 * @param null $option
+	 *
 	 * @return array
 	 */
 	public function get_service_options( $service, $option = null ) {
@@ -613,8 +613,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Hook into the actions fired in HM Backup and set the status
-	 *
-	 * @return null
+	 * @param $action
 	 */
 	protected function do_action( $action ) {
 
@@ -745,8 +744,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Delete a specific back up file created by this schedule
 	 *
-	 * @access public
-	 * @param string $filepath
+	 * @param $filepath
+	 * @throws Exception
 	 */
 	public function delete_backup( $filepath ) {
 

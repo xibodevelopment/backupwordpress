@@ -169,7 +169,7 @@
 
 		/**
 		 * Function to run when the schedule cron fires
-		 * @param  array $args
+		 * @param $schedule_id
 		 */
 		function hmbkp_schedule_hook_run( $schedule_id ) {
 
