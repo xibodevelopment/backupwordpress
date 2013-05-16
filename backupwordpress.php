@@ -135,7 +135,7 @@
 				define( 'HMBKP_VERSION', $plugin_data['Version'] );
 
 			// Load translations
-			load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
+			//load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 			// Fire the update action
 			if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
