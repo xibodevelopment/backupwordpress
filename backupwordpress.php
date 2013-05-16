@@ -131,9 +131,7 @@
 			$plugin_data = get_plugin_data( __FILE__ );
 
 			// define the plugin version
-			if(WP_DEBUG == true)
-				define( 'HMBKP_VERSION', rand(1,1000) );
-			else
+
 				define( 'HMBKP_VERSION', $plugin_data['Version'] );
 
 			// Load translations
