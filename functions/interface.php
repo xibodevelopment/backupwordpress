@@ -3,7 +3,7 @@
 	/**
 	 * Displays a row in the manage backups table
 	 *
-	 * @param                        $file
+	 * @param string $file
 	 * @param HMBKP_Scheduled_Backup $schedule
 	 */
 function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
@@ -112,8 +112,8 @@ add_action( 'admin_head', 'hmbkp_admin_notices' );
 	/**
 	 * Hook in an change the plugin description when BackUpWordPress is activated
 	 *
-	 * @param $plugins
-	 * @return mixed
+	 * @param array $plugins
+	 * @return array $plugins
 	 */
 function hmbkp_plugin_row( $plugins ) {
 

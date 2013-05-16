@@ -44,7 +44,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Setup the schedule object
 	 * Loads the options from the database and populates properties
-	 * @param $id
+	 *
+	 * @param string $id
+	 * @throws Exception
 	 */
 	public function __construct( $id ) {
 
@@ -224,7 +226,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Set the maximum number of backups to keep
 	 *
-	 * @param $max
+	 * @param int $max
 	 * @throws Exception
 	 */
 	public function set_max_backups( $max ) {
@@ -241,7 +243,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @param      $service
 	 * @param null $option
-	 *
 	 * @return array
 	 */
 	public function get_service_options( $service, $option = null ) {
@@ -431,7 +432,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Set the schedule reoccurrence
 	 *
-	 * @param $reoccurrence
+	 * @param string $reoccurrence
 	 * @throws Exception
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
@@ -744,7 +745,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Delete a specific back up file created by this schedule
 	 *
-	 * @param $filepath
+	 * @param string $filepath
 	 * @throws Exception
 	 */
 	public function delete_backup( $filepath ) {

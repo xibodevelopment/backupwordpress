@@ -88,9 +88,8 @@ abstract class HMBKP_Service {
 	/**
 	 * Get the value of a field
 	 *
-	 * @param        $name
-	 * @param string $esc
-	 *
+	 * @param string $name The name of the field
+	 * @param string $esc  The field value
 	 * @return string
 	 */
 	protected function get_field_value( $name, $esc = 'esc_attr' ) {
@@ -198,10 +197,9 @@ class HMBKP_Services {
 	 * Get the array of registered services
 	 *
 	 * @param HMBKP_Scheduled_Backup $schedule
-	 *
-	 * @return array
+	 * @return HMBKP_SERVICE[]
 	 */
-	public static function get_services( HMBKP_Scheduled_Backup $schedule = null ) {
+		public static function get_services( HMBKP_Scheduled_Backup $schedule = null ) {
 
     	if ( is_null( $schedule ) )
     		return self::instance()->services;
@@ -243,9 +241,9 @@ class HMBKP_Services {
 	/**
 	 * Instantiate the individual service classes
 	 *
-	 * @param $classname
+	 * @param string $classname
 	 *
-	 * @return mixed
+	 * @return array An array of instantiated classes
 	 * @throws Exception
 	 */
 	private static function instantiate( $classname ) {

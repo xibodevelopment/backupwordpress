@@ -197,7 +197,7 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 	 * Return an array of cron schedules
 	 *
 	 * @param $schedules
-	 * @return mixed
+	 * @return array $reccurrences
 	 */
 function hmbkp_cron_schedules( $schedules ) {
 
@@ -215,8 +215,8 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 	/**
 	 * Recursively delete a directory including
 	 * all the files and sub-directories.
-	 * @param $dir
 	 *
+	 * @param string $dir
 	 * @return bool
 	 * @throws Exception
 	 */
