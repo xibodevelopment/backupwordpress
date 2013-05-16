@@ -85,12 +85,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Set the path - TODO remove external function dependancy
 		$this->set_path( hmbkp_path() );
 
-		$hmbkp_schedules = $this->schedules_filter( wp_get_schedules() );
+		$hmbkp_schedules = $this->get_cron_schedules();
 
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
-		$next_occurence = $this->get_next_occurrence();
 		// Setup the schedule if it isn't set
 		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys(  $hmbkp_schedules ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
 			$this->schedule();
@@ -437,7 +436,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
-		$hmbkp_schedules = $this->schedules_filter( wp_get_schedules() );
+		$hmbkp_schedules = $this->get_cron_schedules();
 
 		// Check it's valid
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && $reoccurrence !== 'manually' )
@@ -464,7 +463,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_interval() {
 
-		$hmbkp_schedules = $this->schedules_filter( wp_get_schedules() );
+		$hmbkp_schedules = $this->get_cron_schedules();
 
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
@@ -473,8 +472,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
-	public function schedules_filter( $schedules ){
+	/**
+	 * Return an array of BackUpWordPress cron schedules
+	 *
+	 * @return array
+	 */
+	public function get_cron_schedules(){
 
+		$schedules = wp_get_schedules();
+
+		// remove any schedule whose key is not prefixed with 'hmbkp_'
 		foreach ( $schedules as $key => $arr ) {
 			if( ! preg_match("/^hmbkp_/", $key ) )
 				unset( $schedules[$key] );
