@@ -18,4 +18,5 @@
 
 	<p class="howto"><?php printf( __( 'If you need help getting things working then check the FAQ by clicking on help in the top right hand corner of this page.', 'hmbkp' ), '<a href="mailto:support@hmn.md">support@hmn.md</a>' ); ?></p>
 
+	<?php do_action( 'hmbkp_main_page_end' ); ?>
 </div>
