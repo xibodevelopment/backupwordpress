@@ -5,7 +5,7 @@
  *
  * @extends WP_UnitTestCase
  */
-class testMoveBackUpPathTestCase extends WP_UnitTestCase {
+class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Contains the current backup instance

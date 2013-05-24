@@ -6,7 +6,7 @@
  *
  * @extends WP_UnitTestCase
  */
-class testScheduleTestCase extends WP_UnitTestCase {
+class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Contains the current backup schedule instance
@@ -28,11 +28,11 @@ class testScheduleTestCase extends WP_UnitTestCase {
 	}
 
 	public function tearDown() {
-		
+
 		$this->schedule->cancel();
-		
+
 		unset( $this->schedule );
-	
+
 	}
 
 	public function testDefaultReoccurrence() {
@@ -81,7 +81,7 @@ class testScheduleTestCase extends WP_UnitTestCase {
 
 		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
 
-	}	
+	}
 
 	public function testSetWeeklySchedule() {
 
@@ -101,8 +101,8 @@ class testScheduleTestCase extends WP_UnitTestCase {
 
 		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
 
-	}	
-	
+	}
+
 	public function testSetMonthlySchedule() {
 
 		$this->schedule->set_reoccurrence( 'hmbkp_monthly' );
