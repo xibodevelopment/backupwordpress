@@ -677,7 +677,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			break;
 
-			case 'hmbkp_warning' : 
+			case 'hmbkp_warning' :
 
 			    if ( $this->get_warnings() ) {
 
