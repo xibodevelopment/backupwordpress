@@ -38,9 +38,9 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
-			
+
 			$.colorbox.resize();
-		
+
 		}
 
 	} );
@@ -48,7 +48,7 @@ jQuery( document ).ready( function( $ ) {
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
 		$.colorbox.resize();
 	} );
-	
+
 	// Show delete confirm message for delete schedule
 	$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function( e ) {
 
@@ -321,7 +321,7 @@ jQuery( document ).ready( function( $ ) {
 
 		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
-		ajaxRequest = $.post( 
+		ajaxRequest = $.post(
 			ajaxurl,
 			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
 		).done( function( data ) {
