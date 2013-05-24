@@ -207,9 +207,9 @@ function hmbkp_cron_schedules( $schedules ) {
 	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) );
 	$schedules['hmbkp_twicedaily'] 	= array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
 	$schedules['hmbkp_daily']      	= array( 'interval' => DAY_IN_SECONDS, 'display'       => __( 'Once Daily', 'hmbkp' ) );
-	$schedules['hmbkp_weekly'] 		  = array( 'interval' => WEEK_IN_SECONDS, 'display'      => __( 'Once Weekly', 'hmbkp' ) );
+	$schedules['hmbkp_weekly'] 		= array( 'interval' => WEEK_IN_SECONDS, 'display'      => __( 'Once Weekly', 'hmbkp' ) );
 	$schedules['hmbkp_fortnightly']	= array( 'interval' => 2 * WEEK_IN_SECONDS , 'display' => __( 'Once Fortnightly', 'hmbkp' ) );
-	$schedules['hmbkp_monthly']		  = array( 'interval' => 30 * DAY_IN_SECONDS, 'display'  => __( 'Once Monthly', 'hmbkp' ) );
+	$schedules['hmbkp_monthly']		= array( 'interval' => 30 * DAY_IN_SECONDS, 'display'  => __( 'Once Monthly', 'hmbkp' ) );
 
 	return $schedules;
 }
