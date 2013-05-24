@@ -26,11 +26,11 @@
 
     			<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-<?php foreach( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+                <?php foreach( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-    		    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'] ); ?></option>
+                    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'] ); ?></option>
 
-<?php endforeach; ?>
+                <?php endforeach; ?>
 
     		</select>
 
@@ -42,9 +42,7 @@
 
     		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php esc_attr_e( $schedule->get_max_backups() ); ?>" />
 
-        <p class="description"><?php _e( 'The number of previous backups to store on the server. past this limit older backups will be deleted automatically.', 'hmbkp' ); ?></p>
-
-				<p class="description"><?php _e( 'Maximum possible size the backup files could amount to: ', '' ); ?><code><?php echo size_format( $schedule->get_filesize() * $schedule->get_max_backups(), 2 ); ?></code></p>
+            <p class="description"><?php printf( __( 'Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' ); ?></p>
 
     	</label>
 
