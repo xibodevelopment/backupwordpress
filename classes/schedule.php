@@ -129,6 +129,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_name() {
 
 		$reoccurence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
+
 		return ucwords( $this->get_type() ) . ' ' . $reoccurence;
 
 	}
