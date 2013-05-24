@@ -21,14 +21,16 @@ jQuery( document ).ready( function( $ ) {
 
 	// Initialize colorbox
 	$( '.colorbox' ).colorbox( {
-		'transition'	: 'fade',
+		'initialWidth'	: '320px',
+		'initialHeight'	: '100px',
+		'transition'	: 'elastic',
 		'scrolling'		: false,
 		'innerWidth'	: "320px",
 		'maxHeight'		: "100%",
 		'escKey'		: false,
 		'overlayClose'	: false,
 		'onLoad'		: function() {
-			$('#cboxClose').remove();
+			$( '#cboxClose' ).remove();
 		},
 		'onComplete'	: function() {
 
