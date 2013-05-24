@@ -137,6 +137,22 @@ function hmbkp_update() {
 
 	}
 
+	// Update from 2.2.4
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.2.5' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		$schedules = new HMBKP_Schedules;
+
+		// Loop through all schedules and re-set the reccurrence to include hmbkp_
+		foreach ( $schedules->get_schedules() as $schedule ) {
+
+			$schedule->set_reoccurrence( 'hmbkp_' . str_replace( 'hmbkp_', '', $schedule->get_reoccurrence() ) );
+
+			$schedule->save();
+
+		}
+
+	}
+
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
