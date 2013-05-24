@@ -14,7 +14,7 @@
 
 <?php endif; ?>
 
-	<p class="howto"><?php printf( __( 'If your finding BackUpWordPress useful, please %s.', 'hmbkp' ), '<a href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">' . __( 'rate it on the plugin directory', 'hmbkp' ) . '</a>' ); ?></p>
+	<p class="howto"><?php printf( __( 'If you\'re finding BackUpWordPress useful, please %s.', 'hmbkp' ), '<a href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">' . __( 'rate it on the plugin directory', 'hmbkp' ) . '</a>' ); ?></p>
 
 	<p class="howto"><?php printf( __( 'If you need help getting things working then check the FAQ by clicking on help in the top right hand corner of this page.', 'hmbkp' ), '<a href="mailto:support@hmn.md">support@hmn.md</a>' ); ?></p>
 

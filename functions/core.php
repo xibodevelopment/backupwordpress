@@ -5,6 +5,9 @@
  */
 function hmbkp_activate() {
 
+	// loads the translation files
+	hmbkp_plugin_textdomain();
+
 	// Run deactivate on activation in-case it was deactivated manually
 	hmbkp_deactivate();
 
@@ -99,7 +102,7 @@ function hmbkp_update() {
 			$legacy_schedule->set_schedule_start_time( strtotime( HMBKP_DAILY_SCHEDULE_TIME ) );
 
 		// Backup schedule
-		$legacy_schedule->set_reoccurrence( str_replace( 'hmbkp_', '', get_option( 'hmbkp_schedule_frequency', 'daily' ) ) );
+		$legacy_schedule->set_reoccurrence( get_option( 'hmbkp_schedule_frequency', 'hmbkp_daily' ) );
 
 		// Automatic backups disabled?
 		if ( ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP ) || get_option( 'hmbkp_disable_automatic_backup' ) )
@@ -171,7 +174,7 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$database_daily = new HMBKP_Scheduled_Backup( 'default-1' );
 	$database_daily->set_type( 'database' );
-	$database_daily->set_reoccurrence( 'daily' );
+	$database_daily->set_reoccurrence( 'hmbkp_daily' );
 	$database_daily->set_max_backups( 14 );
 	$database_daily->save();
 
@@ -181,7 +184,7 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$complete_weekly = new HMBKP_Scheduled_Backup( 'default-2' );
 	$complete_weekly->set_type( 'complete' );
-	$complete_weekly->set_reoccurrence( 'weekly' );
+	$complete_weekly->set_reoccurrence( 'hmbkp_weekly' );
 	$complete_weekly->set_max_backups( 12 );
 	$complete_weekly->save();
 
@@ -193,31 +196,33 @@ function hmbkp_setup_default_schedules() {
 }
 add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
-/**
- * Return an array of cron schedules
- *
- * @return array $reccurrences
- */
-function hmbkp_cron_schedules() {
+	/**
+	 * Return an array of cron schedules
+	 *
+	 * @param $schedules
+	 * @return array $reccurrences
+	 */
+function hmbkp_cron_schedules( $schedules ) {
 
-	return array(
-		'hourly'     	=> array( 'interval' => 3600, 		 'display' => __( 'Once Hourly' ) ),
-		'twicedaily' 	=> array( 'interval' => 43200,		 'display' => __( 'Twice Daily' ) ),
-		'daily'      	=> array( 'interval' => 86400,		 'display' => __( 'Once Daily' ) ),
-	    'weekly' 		=> array( 'interval' => 604800,		 'display' => __( 'Once Weekly', 'hmbkp' ) ),
-	    'fortnightly'	=> array( 'interval' => 1209600,	 'display' => __( 'Once Fortnightly', 'hmbkp' ) ),
-	    'monthly'		=> array( 'interval' => 2629743.83,  'display' => __( 'Once Monthly', 'hmbkp' ) )
-	);
+	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) );
+	$schedules['hmbkp_twicedaily'] 	= array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
+	$schedules['hmbkp_daily']      	= array( 'interval' => DAY_IN_SECONDS, 'display'       => __( 'Once Daily', 'hmbkp' ) );
+	$schedules['hmbkp_weekly'] 		  = array( 'interval' => WEEK_IN_SECONDS, 'display'      => __( 'Once Weekly', 'hmbkp' ) );
+	$schedules['hmbkp_fortnightly']	= array( 'interval' => 2 * WEEK_IN_SECONDS , 'display' => __( 'Once Fortnightly', 'hmbkp' ) );
+	$schedules['hmbkp_monthly']		  = array( 'interval' => 30 * DAY_IN_SECONDS, 'display'  => __( 'Once Monthly', 'hmbkp' ) );
 
+	return $schedules;
 }
 add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 
-/**
- * Recursively delete a directory including
- * all the files and sub-directories.
- *
- * @param string $dir
- */
+	/**
+	 * Recursively delete a directory including
+	 * all the files and sub-directories.
+	 *
+	 * @param string $dir
+	 * @return bool
+	 * @throws Exception
+	 */
 function hmbkp_rmdirtree( $dir ) {
 
 	if ( strpos( HM_Backup::get_home_path(), $dir ) !== false )
@@ -455,3 +460,30 @@ function hmbkp_get_max_attachment_size() {
 	return wp_convert_hr_to_bytes( $max_size );
 
 }
+
+	/**
+	 * Loads the plugin text domain for translation
+	 * This setup allows a user to just drop his custom translation files into the WordPress language directory
+	 * Files will need to be in a subdirectory with the name of the textdomain 'backupwordpress-do'
+	 */
+	function hmbkp_plugin_textdomain() {
+
+		/** Set unique textdomain string */
+		$textdomain = 'hmbkp';
+
+		/** The 'plugin_locale' filter is also used by default in load_plugin_textdomain() */
+		$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
+
+		/** Set filter for WordPress languages directory */
+		$hmbkp_wp_lang_dir = apply_filters(
+			'hmbkp_do_filter_wp_lang_dir',
+				trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain )  . $textdomain . '-' . $locale . '.mo'
+		);
+
+		/** Translations: First, look in WordPress' "languages" folder = custom & update-secure! */
+		load_textdomain( $textdomain, $hmbkp_wp_lang_dir );
+
+		/** Translations: Secondly, look in plugin's "languages" folder = default */
+		load_plugin_textdomain( $textdomain, FALSE, HMBKP_PLUGIN_SLUG . '/languages/' );
+
+	} // end plugin_textdomain

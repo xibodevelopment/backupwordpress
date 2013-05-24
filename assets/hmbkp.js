@@ -365,9 +365,9 @@ function catchResponseAndOfferToEmail( data ) {
 				jQuery.colorbox( {
 					'innerWidth'	: "320px",
 					'maxHeight'		: "100%",
-	                'data'			: data,
-	                'overlayClose'	: false,
-			    	'escKey'		: false,
+	        'html'			: data,
+	        'overlayClose'	: false,
+			    'escKey'		: false,
 					'onLoad'		: function() {
 						jQuery( '#cboxClose' ).remove();
 						jQuery.colorbox.resize();

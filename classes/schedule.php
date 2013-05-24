@@ -43,11 +43,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Setup the schedule object
-	 *
 	 * Loads the options from the database and populates properties
 	 *
-	 * @access public
 	 * @param string $id
+	 * @throws Exception
 	 */
 	public function __construct( $id ) {
 
@@ -86,11 +85,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Set the path - TODO remove external function dependancy
 		$this->set_path( hmbkp_path() );
 
+		$hmbkp_schedules = $this->get_cron_schedules();
+
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
 		// Setup the schedule if it isn't set
-		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( hmbkp_cron_schedules() ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
+		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys(  $hmbkp_schedules ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
 			$this->schedule();
 
 	}
@@ -127,7 +128,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_name() {
 
-		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
+		$reoccurence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
+		return ucwords( $this->get_type() ) . ' ' . $reoccurence;
 
 	}
 
@@ -223,8 +225,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Set the maximum number of backups to keep
 	 *
-	 * @access public
 	 * @param int $max
+	 * @throws Exception
 	 */
 	public function set_max_backups( $max ) {
 
@@ -238,7 +240,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Get the array of services options for this schedule
 	 *
-	 * @access public
+	 * @param      $service
+	 * @param null $option
 	 * @return array
 	 */
 	public function get_service_options( $service, $option = null ) {
@@ -330,8 +333,19 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		}
 
-	    return size_format( $filesize );
+	    return $filesize;
 
+	}
+
+	/**
+	 * Convenience function to format the file size
+	 *
+	 * @param bool $cached
+	 * @return bool|string
+	 */
+	public function get_formatted_file_size( $cached = true ){
+
+		return size_format( $this->get_filesize( $cached ) );
 	}
 
 	/**
@@ -417,13 +431,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Set the schedule reoccurrence
 	 *
-	 * @access public
 	 * @param string $reoccurrence
+	 * @throws Exception
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
+		$hmbkp_schedules = $this->get_cron_schedules();
+
 		// Check it's valid
-		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( hmbkp_cron_schedules() ) ) ) && $reoccurrence !== 'manually' )
+		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && $reoccurrence !== 'manually' )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid cron reoccurrence or "manually"' );
 
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
@@ -447,13 +463,31 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_interval() {
 
-		$schedules = hmbkp_cron_schedules();
+		$hmbkp_schedules = $this->get_cron_schedules();
 
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
-		return $schedules[$this->get_reoccurrence()]['interval'];
+		return $hmbkp_schedules[$this->get_reoccurrence()]['interval'];
 
+	}
+
+	/**
+	 * Return an array of BackUpWordPress cron schedules
+	 *
+	 * @return array
+	 */
+	public function get_cron_schedules(){
+
+		$schedules = wp_get_schedules();
+
+		// remove any schedule whose key is not prefixed with 'hmbkp_'
+		foreach ( $schedules as $key => $arr ) {
+			if( ! preg_match("/^hmbkp_/", $key ) )
+				unset( $schedules[$key] );
+		}
+
+		return $schedules;
 	}
 
 	/**
@@ -587,8 +621,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Hook into the actions fired in HM Backup and set the status
-	 *
-	 * @return null
+	 * @param $action
 	 */
 	protected function do_action( $action ) {
 
@@ -719,8 +752,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Delete a specific back up file created by this schedule
 	 *
-	 * @access public
 	 * @param string $filepath
+	 * @throws Exception
 	 */
 	public function delete_backup( $filepath ) {
 
