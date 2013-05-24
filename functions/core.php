@@ -145,7 +145,10 @@ function hmbkp_update() {
 		// Loop through all schedules and re-set the reccurrence to include hmbkp_
 		foreach ( $schedules->get_schedules() as $schedule ) {
 
-			$schedule->set_reoccurrence( 'hmbkp_' . str_replace( 'hmbkp_', '', $schedule->get_reoccurrence() ) );
+			$reoccurrence = $schedule->get_reoccurrence();
+
+			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false )
+				$schedule->set_reoccurrence( 'hmbkp_' . $schedule->get_reoccurrence() );
 
 			$schedule->save();
 
