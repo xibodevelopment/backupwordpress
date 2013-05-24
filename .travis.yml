@@ -24,6 +24,9 @@ env:
     - WP_VERSION=3.3.2 WP_MULTISITE=1
     - WP_VERSION=3.2.1 WP_MULTISITE=1
 
+before_install:
+    - git submodule update --init --recursive
+
 # Grab the setup script and execute
 before_script:
     - wget https://raw.github.com/benbalter/wordpress-plugin-tests/setup/setup.sh
