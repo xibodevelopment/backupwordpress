@@ -51,7 +51,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function __construct( $id ) {
 
 		// Verify the schedule id
-		if ( ! is_string( $id ) || ! trim( $id ) || ! is_string( $id ) )
+		if ( ! is_string( $id ) || ! trim( $id ) )
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
 
 		// Setup HM Backup
