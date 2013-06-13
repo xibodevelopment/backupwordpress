@@ -101,7 +101,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 		if ( isset( $previous_encoding ) )
 			mb_internal_encoding( $previous_encoding );
 
-		return $extracted ?: array();
+		return $extracted;
 
 	}
 
