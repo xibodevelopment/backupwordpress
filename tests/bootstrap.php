@@ -12,7 +12,7 @@
  */
 
 $GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array( 'backupwordpress/backupwordpress.php' ),
+	'active_plugins' => array( 'BackUpWordPress/backupwordpress.php' ),
 );
 
 require dirname( __FILE__ ) . '/lib/bootstrap.php';
