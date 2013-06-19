@@ -14,14 +14,14 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 
 		<th scope="row">
-			<?php esc_html_e( date_i18n( get_option( 'date_format' ) . ' - ' . get_option( 'time_format' ), @filemtime( $file ) + $offset ) ); ?>
+			<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' - ' . get_option( 'time_format' ), @filemtime( $file ) + $offset ) ); ?>
 		</th>
 
 		<td class="code">
-			<?php esc_html_e( size_format( @filesize( $file ) ) ); ?>
+			<?php echo esc_html( size_format( @filesize( $file ) ) ); ?>
 		</td>
 
-		<td><?php esc_html_e( hmbkp_human_get_type( $file, $schedule ) ); ?></td>
+		<td><?php echo esc_html( hmbkp_human_get_type( $file, $schedule ) ); ?></td>
 
 		<td>
 
@@ -239,10 +239,10 @@ function hmbkp_human_get_type( $type, HMBKP_Scheduled_Backup $schedule = null ) 
  * @return void
  */
 function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
-	
+
 	// Start output buffering
 	ob_start(); ?>
-	
+
 	<span class="hmbkp-status"><?php echo $schedule->get_status() ? $schedule->get_status() : __( 'Starting Backup', 'hmbkp' ); ?> <a href="<?php echo add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), HMBKP_ADMIN_URL ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a></span>
 
 	<div class="hmbkp-schedule-actions row-actions">
