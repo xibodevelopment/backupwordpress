@@ -392,7 +392,7 @@ function hmbkp_path_move( $from, $to ) {
 	if ( $handle = opendir( $from ) ) {
 
 	    while ( false !== ( $file = readdir( $handle ) ) )
-	    	if ( $file !== '.' && $file !== '..' )
+	    	if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' )
 	    		if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
 	    			copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
 
