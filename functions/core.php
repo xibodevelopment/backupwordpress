@@ -355,6 +355,7 @@ function hmbkp_path_default() {
 	}
 
 	return $path;
+
 }
 
 /**
