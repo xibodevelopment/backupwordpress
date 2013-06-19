@@ -16,7 +16,7 @@
 
                 <button type="button" class="button-secondary hmbkp_preview_exclude_rule"><?php _e( 'Preview', 'hmbkp' ); ?></button>
 
-                <span class="howto">Enter new exclude rules as a comma separated list, e.g. <code>.git/, *.mp3, wp-content/uploads/</code></span>
+                <span class="howto"><?php printf( __( 'Enter new exclude rules as a comma separated list, e.g. %s', 'hmbkp' ), '<code>.git/, *.mp3, wp-content/uploads/</code>' ); ?></span>
 
             </label>
 
