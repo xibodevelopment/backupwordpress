@@ -425,6 +425,9 @@ function hmbkp_possible() {
  */
 function hmbkp_cleanup() {
 
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+		return;
+
 	$hmbkp_path = hmbkp_path();
 
 	if ( ! is_dir( $hmbkp_path ) )
