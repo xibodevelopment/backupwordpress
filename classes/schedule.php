@@ -570,6 +570,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( file_exists( $this->get_schedule_running_path() ) )
 			unlink( $this->get_schedule_running_path() );
 
+		// Delete old backups again
 		$this->delete_old_backups();
 
 	}
