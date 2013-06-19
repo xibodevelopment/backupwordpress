@@ -554,6 +554,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function run() {
 
+		// Don't run if this schedule is already running
+		if ( $this->get_running_backup_filename() )
+			return;
+
 		// Mark the backup as started
 		$this->set_status( __( 'Starting Backup', 'hmbkp' ) );
 
