@@ -287,7 +287,7 @@ function hmbkp_path() {
 		$path = HMBKP_PATH;
 
 	// If the dir doesn't exist or isn't writable then use the default path instead instead
-	if ( ( ! $path || ( is_dir( $path ) && ! is_writable( $path ) ) || ( ! is_dir( $path ) && ! is_writable( dirname( $path ) ) ) ) && get_option( 'hmbkp_path' ) !== get_option( 'hmbkp_default_path' ) )
+	if ( ( ! $path || ( is_dir( $path ) && ! is_writable( $path ) ) || ( ! is_dir( $path ) && ! is_writable( dirname( $path ) ) ) ) && $path !== get_option( 'hmbkp_default_path' ) )
     	$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
