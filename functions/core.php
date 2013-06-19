@@ -400,7 +400,9 @@ function hmbkp_path_move( $from, $to ) {
 
 	}
 
-	hmbkp_rmdirtree( $from );
+	// Only delete the old directory if it's inside WP_CONTENT_DIR
+	if ( strpos( $from, WP_CONTENT_DIR ) !== false )
+		hmbkp_rmdirtree( $from );
 
 }
 
