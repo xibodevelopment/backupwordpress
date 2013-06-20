@@ -142,6 +142,33 @@ abstract class HMBKP_Service {
 		$this->schedule = $schedule;
 	}
 
+	/**
+	 * Gets the settings for a similar destination from the existing schedules
+	 * so that we can copy them into the form to avoid having to type them again
+	 */
+	protected function fetch_destination_settings() {
+
+		$service = get_class( $this );
+
+		$schedules_obj = new HMBKP_Schedules();
+
+		$schedules = $schedules_obj->get_schedules();
+
+		foreach ( $schedules as $schedule ) {
+
+			if( $schedule->get_id() != $this->schedule->get_id() ) {
+
+				$options = $schedule->get_service_options( $service );
+				if ( ! empty( $options ) ) {
+					return $options;
+				}
+			}
+
+		}
+
+		return array();
+	}
+
 }
 
 /**
