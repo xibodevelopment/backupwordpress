@@ -25,7 +25,7 @@
         <dt<?php if ( defined( 'HMBKP_ROOT' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_ROOT</code></dt>
         <dd><p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'hmbkp' ), '<code>' . HM_Backup::get_home_path() . '</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p></dd>
 
-        <dt<?php if ( defined( 'HMBKP_SCHEDULE_TIME' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_SCHEDULE_TIME</code></dt>
+        <dt<?php if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME !== '11pm' ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_SCHEDULE_TIME</code></dt>
         <dd><p><?php printf( __( 'The time that your schedules should run. Defaults to %s.', 'hmbkp' ), '<code>23:00</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_SCHEDULE_TIME', '07:30' );</code></p></dd>
 
         <?php foreach ( HMBKP_Services::get_services() as $file => $service )
