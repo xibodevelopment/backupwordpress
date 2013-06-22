@@ -1,9 +1,9 @@
 === BackUpWordPress ===
-Contributors: humanmade, joehoyle, mattheu, tcrsavage, willmot, cuvelier, pauldewouters
+Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
 Tested up to: 3.5
-Stable tag: 2.2.4
+Stable tag: 2.3 beta
 
 Simple automated back ups of your WordPress powered website.
 
@@ -103,6 +103,33 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 2.3
+
+* Replace Fancybox with Colorbox as Fancybox 2 isn't GPL compatible.
+* Use the correct `HMBKP_ATTACHMENT_MAX_FILESIZE` constant consistently in the help section.
+* Correct filename for some mis-named translation files.
+* Show the total estimated disk space a schedule could take up (max backups * estimated site size).
+* Fix a typo (your -> you're).
+* Use the new time Constants and define backwords compatible ones for > than 3.5.
+* Play nice with custom cron intervals.
+* Main plugin file is now `backupwordpress.php` for consistency.
+* Add Paul De Wouters (`pauldewouters`) as a contributor, welcome Paul!
+* Don't remove non-backup files from custom backup paths.
+* Fix a regression where setting a custom path which didn't exist could cause you to lose existing backups.
+* When moving paths only move backup files.
+* Make some untranslatable strings translatable.
+* Don't allow a single schedule to run in multiple threads at once, should finally fix edge case issues where some load balancer / proxies were causing multiple backups per run.
+* Only highlight the `HMBKP_SCHEDULE_TIME` constant in help if it's not the default value.
+* Remove help text for deprecated `HMBKP_EMAIL`.
+* Default to allways specificing `--single-transaction` when using `mysqldump` to backup the database, can be disabled by setting the `HMBKP_MYSQLDUMP_SINGLE_TRANSACTION` to `false`.
+* Silence a `PHP Warning` if `mysql_pconnect` has been disabled.
+* Ensure dot directories `.` & `..` are always skipped when looping the filesystem.
+* Work around a warning in the latest version of MySQL when using the `-p` flag with `mysqldunmp`.
+* Fix issues on IIS that could cause the root directory to be incorrectly calculated.
+* Fix an issue on IIS that could cause the download backup url to be incorrect.
+* Fix an issue on IIS that could mean your existing backups are lost when moving backup directory.
+* Avoid a `PHP FATAL ERROR` if the `mysql_set_charset` doesn't exist.
+
 #### 2.2.4
 
 * Fix a fatal error on PHP 5.2, sorry! (again.)
@@ -122,7 +149,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Silence warnings created if `is_executable`, `escapeshellcmd` or `escapeshellarg` are disabled.
 * Handle situations where the mysql port is set to something wierd.
 * Fallback to `mysql_connect` on system that disable `mysql_pconnect`.
-* You can now force the `--single-transaction` param when using `mysqldump` by defining `HMBKP_MYSQLDUMP_SINGLE_TRANSACTION`. 
+* You can now force the `--single-transaction` param when using `mysqldump` by defining `HMBKP_MYSQLDUMP_SINGLE_TRANSACTION`.
 * Unit tests for `HM_Backup::is_safe_mode_available()`.
 * Silence possible PHP Warnings when unlinking files.
 

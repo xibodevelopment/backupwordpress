@@ -5,11 +5,11 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.2.5
+Version: 2.3 beta
 Author URI: http://hmn.md/
 */
 
-/*  Copyright 2011 Human Made Limited  (email : support@hmn.md)
+/*  Copyright 2013 Human Made Limited  (email : support@hmn.md)
 
 		This program is free software; you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
