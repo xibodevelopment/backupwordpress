@@ -134,66 +134,62 @@ if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 // Handle any advanced option changes
 hmbkp_constant_changes();
 
-if ( ! function_exists( 'hmbkp_init' ) ) :
+/**
+ * Plugin setup
+ *
+ * @return null
+ */
+function hmbkp_init() {
 
-	/**
-	 * Plugin setup
-	 *
-	 * @return null
-	 */
-	function hmbkp_init() {
+	$plugin_data = get_plugin_data( __FILE__ );
 
-		$plugin_data = get_plugin_data( __FILE__ );
+	// define the plugin version
+	define( 'HMBKP_VERSION', $plugin_data['Version'] );
 
-		// define the plugin version
-		define( 'HMBKP_VERSION', $plugin_data['Version'] );
+	// Load translations
+	//load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
 
-		// Load translations
-		//load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
+	// Fire the update action
+	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
+		hmbkp_update();
 
-		// Fire the update action
-		if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
-			hmbkp_update();
+	// Load admin css and js
+	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
-		// Load admin css and js
-		if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
+		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/jquery.colorbox-min.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
-			wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/jquery.colorbox-min.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
-			wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
+		wp_localize_script( 'hmbkp', 'hmbkp', array(
+			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
+			'update'				=> __( 'Update', 'hmbkp' ),
+			'cancel'				=> __( 'Cancel', 'hmbkp' ),
+			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+		) );
 
-			wp_localize_script( 'hmbkp', 'hmbkp', array(
-				'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
-				'update'				=> __( 'Update', 'hmbkp' ),
-				'cancel'				=> __( 'Cancel', 'hmbkp' ),
-				'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-				'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-				'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-				'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
-			) );
-
-			wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
-			wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css', false, HMBKP_VERSION );
-
-		}
+		wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
+		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css', false, HMBKP_VERSION );
 
 	}
-	add_action( 'admin_init', 'hmbkp_init' );
 
-	/**
-	 * Function to run when the schedule cron fires
-	 * @param $schedule_id
-	 */
-	function hmbkp_schedule_hook_run( $schedule_id ) {
+}
+add_action( 'admin_init', 'hmbkp_init' );
 
-		$schedules = new HMBKP_Schedules();
-		$schedule = $schedules->get_schedule( $schedule_id );
+/**
+ * Function to run when the schedule cron fires
+ * @param $schedule_id
+ */
+function hmbkp_schedule_hook_run( $schedule_id ) {
 
-		if ( ! $schedule )
-			return;
+	$schedules = new HMBKP_Schedules();
+	$schedule = $schedules->get_schedule( $schedule_id );
 
-		$schedule->run();
+	if ( ! $schedule )
+		return;
 
-	}
-	add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
+	$schedule->run();
 
-endif;
+}
+add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
