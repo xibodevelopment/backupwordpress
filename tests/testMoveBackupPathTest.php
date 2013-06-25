@@ -25,7 +25,7 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		$this->backup = new HM_Backup();
 		$this->backup->set_type( 'database' );
 
-		$this->custom_path = trailingslashit( WP_CONTENT_DIR ) . 'test-custom';
+		$this->custom_path = HM_backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) . 'test-custom' );
 
 		// Remove the custom path if it already exists
 		hmbkp_rmdirtree( $this->custom_path );
@@ -137,6 +137,9 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
 		chmod( $this->custom_path, 0555 );
+
+		if ( is_writable( $this->custom_path ) )
+			$this->markTestSkipped( 'The custom path was still writable' );
 
 		hmbkp_constant_changes();
 
