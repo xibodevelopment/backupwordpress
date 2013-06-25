@@ -131,7 +131,6 @@ if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 
 }
 
-
 // Handle any advanced option changes
 hmbkp_constant_changes();
 
