@@ -35,13 +35,12 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 		$files = array();
 
 		foreach( $filepaths as $filepath )
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', $filepath );
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', $this->conform_dir( (string) $filepath ) );
 
 		foreach( $extracted as $fileInfo )
 			$files[] = untrailingslashit( $fileInfo['filename'] );
 
-		foreach( $filenames as $filename )
-			$this->assertContains( untrailingslashit( $filename ), $files );
+		$this->assertEquals( $filenames, $files );
 
 	}
 
@@ -63,8 +62,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 		foreach( $extracted as $fileInfo )
 			$files[] = $fileInfo['filename'];
 
-		foreach( $filenames as $filename )
-			$this->assertNotContains( $filename, $files );
+		$this->assertNotEquals( $filenames, $files );
 
 	}
 
@@ -102,6 +100,37 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 			mb_internal_encoding( $previous_encoding );
 
 		return $extracted;
+
+	}
+
+    /**
+	 * Sanitize a directory path
+	 *
+	 * @access public
+	 * @static
+	 * @param string $dir
+	 * @param bool $rel. (default: false)
+	 * @return string $dir
+	 */
+	private function conform_dir( $dir, $recursive = false ) {
+
+		// Assume empty dir is root
+		if ( ! $dir )
+			$dir = '/';
+
+		// Replace single forward slash (looks like double slash because we have to escape it)
+		$dir = str_replace( '\\', '/', $dir );
+		$dir = str_replace( '//', '/', $dir );
+
+		// Remove the trailing slash
+		if ( $dir !== '/' )
+			$dir = untrailingslashit( $dir );
+
+		// Carry on until completely normalized
+		if ( ! $recursive && self::conform_dir( $dir, true ) != $dir )
+			return self::conform_dir( $dir );
+
+		return (string) $dir;
 
 	}
 
