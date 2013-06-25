@@ -43,9 +43,11 @@ $key = array( ABSPATH, time() );
 
 foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' ) as $constant )
 	if ( defined( $constant ) )
-		$key[] = $constant;
+		$key[] = constant( $constant );
 
-define( 'HMBKP_SECURE_KEY', md5( shuffle( $key ) ) );
+shuffle( $key );
+
+define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
 	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
