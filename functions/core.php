@@ -227,12 +227,12 @@ function hmbkp_setup_default_schedules() {
 }
 add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
-	/**
-	 * Return an array of cron schedules
-	 *
-	 * @param $schedules
-	 * @return array $reccurrences
-	 */
+/**
+ * Return an array of cron schedules
+ *
+ * @param $schedules
+ * @return array $reccurrences
+ */
 function hmbkp_cron_schedules( $schedules ) {
 
 	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) );
@@ -246,14 +246,14 @@ function hmbkp_cron_schedules( $schedules ) {
 }
 add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 
-	/**
-	 * Recursively delete a directory including
-	 * all the files and sub-directories.
-	 *
-	 * @param string $dir
-	 * @return bool
-	 * @throws Exception
-	 */
+/**
+ * Recursively delete a directory including
+ * all the files and sub-directories.
+ *
+ * @param string $dir
+ * @return bool
+ * @throws Exception
+ */
 function hmbkp_rmdirtree( $dir ) {
 
 	if ( strpos( HM_Backup::get_home_path(), $dir ) !== false )
@@ -447,7 +447,7 @@ function hmbkp_cleanup() {
 	if ( ! is_dir( $hmbkp_path ) )
 		return;
 
-	if ( $handle = opendir( $hmbkp_path ) ) :
+	if ( $handle = opendir( $hmbkp_path ) ) {
 
     	while ( false !== ( $file = readdir( $handle ) ) )
     		if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' )
@@ -455,7 +455,7 @@ function hmbkp_cleanup() {
 
     	closedir( $handle );
 
-    endif;
+    }
 
 }
 
@@ -505,22 +505,19 @@ function hmbkp_get_max_attachment_size() {
  */
 function hmbkp_plugin_textdomain() {
 
-	/** Set unique textdomain string */
+	// Set unique textdomain string
 	$textdomain = 'hmbkp';
 
-	/** The 'plugin_locale' filter is also used by default in load_plugin_textdomain() */
+	// The 'plugin_locale' filter is also used by default in load_plugin_textdomain()
 	$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
 
-	/** Set filter for WordPress languages directory */
-	$hmbkp_wp_lang_dir = apply_filters(
-		'hmbkp_do_filter_wp_lang_dir',
-			trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain )  . $textdomain . '-' . $locale . '.mo'
-	);
+	// Set filter for WordPress languages directory
+	$hmbkp_wp_lang_dir = apply_filters( 'hmbkp_do_filter_wp_lang_dir', trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain )  . $textdomain . '-' . $locale . '.mo' );
 
-	/** Translations: First, look in WordPress' "languages" folder = custom & update-secure! */
+	// Translations: First, look in WordPress' "languages" folder = custom & update-secure!
 	load_textdomain( $textdomain, $hmbkp_wp_lang_dir );
 
-	/** Translations: Secondly, look in plugin's "languages" folder = default */
+	// Translations: Secondly, look in plugin's "languages" folder = default
 	load_plugin_textdomain( $textdomain, FALSE, HMBKP_PLUGIN_SLUG . '/languages/' );
 
-} // end plugin_textdomain
+}
