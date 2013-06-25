@@ -25,11 +25,9 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		$this->backup = new HM_Backup();
 		$this->backup->set_type( 'database' );
 
-		// Remove the backup directory if it exists
-		hmbkp_rmdirtree( hmbkp_path() );
-
 		$this->custom_path = trailingslashit( WP_CONTENT_DIR ) . 'test-custom';
 
+		// Remove the custom path if it already exists
 		hmbkp_rmdirtree( $this->custom_path );
 
 		$this->backup->set_path( hmbkp_path() );
@@ -45,10 +43,11 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 	public function tearDown() {
 
 		hmbkp_rmdirtree( $this->custom_path );
+		hmbkp_rmdirtree( hmbkp_path() );
+		hmbkp_rmdirtree( hmbkp_path_default() );
 
 		delete_option( 'hmbkp_path' );
-
-		hmbkp_rmdirtree( hmbkp_path() );
+		delete_option( 'hmbkp_default_path' );
 
 		unset( $this->backup );
 
