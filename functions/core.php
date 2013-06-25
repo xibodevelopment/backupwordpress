@@ -349,7 +349,7 @@ function hmbkp_path_default() {
 
 	if ( empty( $path ) ) {
 
-		$path = HM_Backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' );
+		$path = HM_Backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' );
 
 		update_option( 'hmbkp_default_path', $path );
 
@@ -360,7 +360,7 @@ function hmbkp_path_default() {
 	// If the backups dir can't be created in WP_CONTENT_DIR then fallback to uploads
 	if ( ( ( ! is_dir( $path ) && ! is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! is_writable( $path ) ) ) && strpos( $path, $upload_dir['basedir'] ) === false ) {
 
-		hmbkp_path_move( $path, $path = HM_Backup::conform_dir( trailingslashit( $upload_dir['basedir'] ) . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' ) );
+		hmbkp_path_move( $path, $path = HM_Backup::conform_dir( trailingslashit( $upload_dir['basedir'] ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) - 'backups' ) );
 
 		update_option( 'hmbkp_default_path', $path );
 
