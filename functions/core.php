@@ -169,10 +169,6 @@ function hmbkp_update() {
 			delete_option( 'hmbkp_path' );
 			delete_option( 'hmbkp_default_path' );
 
-			error_log( $old_path );
-			error_log( hmbkp_path() );
-			error_log( hmbkp_path() );
-
 			hmbkp_path_move( $old_path, hmbkp_path() );
 
 		}
