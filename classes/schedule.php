@@ -287,53 +287,88 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_filesize( $cached = true ) {
 
-		if ( ! $cached || ! $filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' ) ) {
+		if ( $cached ) {
 
-			$filesize = 0;
+			// Check if we have the filesize in the cache
+			$filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
+			
+			// If we do and it's not still calculating then return it straight away
+			if ( $filesize && $filesize !== 'calculating' )
+				return $filesize;
 
-	    	// Don't include database if file only
-			if ( $this->get_type() != 'file' ) {
+			// If the filesize is calculating in another thread then we should wait for it to finish
+			if ( $filesize === 'calculating' ) {
 
-	    		global $wpdb;
+				global $wpdb;
 
-	    		$res = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
+				$counter = 1;
 
-	    		foreach ( $res as $r )
-	    			$filesize += (float) $r['Data_length'];
+				// Keep checking the cached filesize to see if the other thread is finished
+				while ( 'calculating' === ( $filesize = $wpdb->get_var( "SELECT option_value FROM $wpdb->options WHERE option_name = '_transient_hmbkp_schedule_" . $this->get_id() . "_filesize'" ) ) ) {
 
-	    	}
-
-	    	// Don't include files if database only
-	   		if ( $this->get_type() != 'database' ) {
-
-	    		// Get rid of any cached filesizes
-	    		clearstatcache();
-
-				$excludes = $this->exclude_string( 'regex' );
-
-				foreach ( $this->get_files() as $file ) {
-
-					// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
-					if ( method_exists( $file, 'isDot' ) && $file->isDot() )
-						continue;
-
-					if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() )
-						continue;
-
-				    // Excludes
-				    if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
-				        continue;
-
-				    $filesize += (float) $file->getSize();
-
+					// Check once every 10 seconds
+					sleep( 10 );
+					
+					// Only run for a maximum of 5 minutes (30*10)
+					if ( $counter === 30 )
+						break;
+					
+					$counter++;
+				
 				}
+
+				// If we have the filesize then return it
+				if ( $filesize && $filesize !== 'calculating' )
+					return $filesize;
 
 			}
 
-			// Cache for a day
-			set_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize', $filesize, time() + 60 * 60 * 24 );
+		}
+
+		// If we don't have it in cache then mark it as calculating
+		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize', 'calculating', time() + HOUR_IN_SECONDS );
+
+    	// Don't include database if file only
+		if ( $this->get_type() != 'file' ) {
+
+    		global $wpdb;
+
+    		$res = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
+
+    		foreach ( $res as $r )
+    			$filesize += (float) $r['Data_length'];
+
+    	}
+
+    	// Don't include files if database only
+   		if ( $this->get_type() != 'database' ) {
+
+    		// Get rid of any cached filesizes
+    		clearstatcache();
+
+			$excludes = $this->exclude_string( 'regex' );
+
+			foreach ( $this->get_files() as $file ) {
+
+				// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
+				if ( method_exists( $file, 'isDot' ) && $file->isDot() )
+					continue;
+
+				if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() )
+					continue;
+
+			    // Excludes
+			    if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
+			        continue;
+
+			    $filesize += (float) $file->getSize();
+
+			}
 
 		}
+		
+		// Cache for a day
+		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize', $filesize, time() + DAY_IN_SECONDS );
 
 	    return $filesize;
 
@@ -357,7 +392,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return bool
 	 */
 	public function is_filesize_cached() {
-		return (bool) get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
+
+		$size = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
+
+		return ! ( ! $size || $size === 'calculating' );
+	
 	}
 
 	/**
