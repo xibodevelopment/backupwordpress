@@ -20,6 +20,52 @@ require dirname( __FILE__ ) . '/lib/bootstrap.php';
 class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 
 	/**
+	 * Assert that a zip archive exactly matches the array
+	 * of filenames
+	 *
+	 * @access public
+	 * @param string path to zip file
+	 * @param array of filenames to check for
+	 * @return null
+	 */
+	function assertArchiveEquals( $zip_file, $filepaths, $root = ABSPATH ) {
+
+		$extracted = $this->pclzip_extract_as_string( $zip_file );
+
+		$files = array();
+
+		foreach( $filepaths as $filepath )
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', $this->conform_dir( (string) $filepath ) );
+
+		foreach( $extracted as $fileInfo )
+			$files[] = untrailingslashit( $fileInfo['filename'] );
+
+		$this->assertEquals( $filenames, $files );
+
+	}
+
+	/**
+	 * Assert that a zip archive doesn't match the array of filenames
+	 *
+	 * @access public
+	 * @param string path to zip file
+	 * @param array of filenames to check for
+	 * @return null
+	 */
+	function assertArchiveNotEquals( $zip_file, $filenames ) {
+
+		$extracted = $this->pclzip_extract_as_string( $zip_file );
+
+		$files = array();
+
+		foreach( $extracted as $fileInfo )
+			$files[] = $fileInfo['filename'];
+
+		$this->assertNotEquals( $filenames, $files );
+
+	}
+
+	/**
 	 * Assert that a zip archive contains the array
 	 * of filenames
 	 *
@@ -40,7 +86,9 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 		foreach( $extracted as $fileInfo )
 			$files[] = untrailingslashit( $fileInfo['filename'] );
 
-		$this->assertEquals( $filenames, $files );
+		foreach( $filenames as $filename )
+			$this->assertContains( $filename, $files );
+
 
 	}
 
@@ -62,7 +110,9 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 		foreach( $extracted as $fileInfo )
 			$files[] = $fileInfo['filename'];
 
-		$this->assertNotEquals( $filenames, $files );
+		foreach( $filenames as $filename )
+			$this->assertNotContains( $filename, $files );
+
 
 	}
 
