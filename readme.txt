@@ -2,8 +2,8 @@
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
-Tested up to: 3.5
-Stable tag: 2.3 beta
+Tested up to: 3.6
+Stable tag: 2.2.4
 
 Simple automated back ups of your WordPress powered website.
 
@@ -129,6 +129,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Fix an issue on IIS that could cause the download backup url to be incorrect.
 * Fix an issue on IIS that could mean your existing backups are lost when moving backup directory.
 * Avoid a `PHP FATAL ERROR` if the `mysql_set_charset` doesn't exist.
+* All unit tests now pass under IIS on Windows.
+* Prefix the backup directory with `backupwordpress-` so that it's easier to identify.
+* Re-calculate the backup directory name on plugin update and move backups.
+* Fix some issues with how `HMBKP_SECURE_KEY` was generated.
 
 #### 2.2.4
 
@@ -166,7 +170,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 * Don't repeatedly try to create the backups directory in the `uploads` if `uploads` isn't writable.
 * Show the correct path in the warning message when the backups path can't be created.
-* Include any user defined auth keys and salts when generating the HMBKP_SECRET_KEY.
+* Include any user defined auth keys and salts when generating the HMBKP_SECURE_KEY.
 * Stop relying on the built in WordPress schedules as other plugins can mess with them.
 * Delete old backups everytime the backups page is viewed in an attempt to ensure old backups are always cleaned up.
 * Improve modals on small screens and mobile devices.
