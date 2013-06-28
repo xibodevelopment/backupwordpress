@@ -292,15 +292,15 @@ function hmbkp_path() {
 
 	global $is_apache;
 
-	$path = get_option( 'hmbkp_path' );
+	$path = untrailingslashit( get_option( 'hmbkp_path' ) );
 
 	// Allow the backups path to be defined
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
-		$path = HMBKP_PATH;
+		$path = untrailingslashit( HMBKP_PATH );
 
 	// If the dir doesn't exist or isn't writable then use the default path instead instead
 	if ( ( ! $path || ( is_dir( $path ) && ! is_writable( $path ) ) || ( ! is_dir( $path ) && ! is_writable( dirname( $path ) ) ) ) && $path !== hmbkp_path_default() )
-    	$path = hmbkp_path_default();
+		$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
 	if ( ! is_dir( $path ) && is_writable( dirname( $path ) ) )
@@ -345,7 +345,7 @@ function hmbkp_path() {
  */
 function hmbkp_path_default() {
 
-	$path = get_option( 'hmbkp_default_path' );
+	$path = untrailingslashit( get_option( 'hmbkp_default_path' ) );
 
 	if ( empty( $path ) ) {
 
