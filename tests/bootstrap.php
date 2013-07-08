@@ -1,23 +1,15 @@
 <?php
-/**
- * Bootstrap the testing environment
- * Uses wordpress tests (http://github.com/nb/wordpress-tests/) which uses PHPUnit
- * @package wordpress-plugin-tests
- *
- * Usage: change the below array to any plugin(s) you want activated during the tests
- *        value should be the path to the plugin relative to /wp-content/
- *
- * Note: Do note change the name of this file. PHPUnit will automatically fire this file when run.
- *
- */
 
-$GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array( 'backupwordpress/backupwordpress.php' ),
-);
+require_once '/srv/www/wp-tests/includes/functions.php';
 
-require dirname( __FILE__ ) . '/lib/bootstrap.php';
+function _manually_load_plugin() {
+	require dirname( dirname( __FILE__ ) ) . '/backupwordpress.php';
+}
+tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
-class HM_Backup_UnitTestCase extends WP_UnitTestCase{
+require '/srv/www/wp-tests/includes/bootstrap.php';
+
+class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 	/**
 	 * Assert that a zip archive exactly matches the array
@@ -165,6 +157,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase{
 	private function conform_dir( $dir, $recursive = false ) {
 
 		// Assume empty dir is root
+		// @todo don't assume, error
 		if ( ! $dir )
 			$dir = '/';
 
