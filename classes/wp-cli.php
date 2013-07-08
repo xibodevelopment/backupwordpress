@@ -90,4 +90,4 @@ EOB
 	}
 
 }
-WP_CLI::addCommand( 'backup', 'BackUpCommand' );
+WP_CLI::add_command( 'backup', 'BackUpCommand' );
