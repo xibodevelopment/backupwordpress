@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the 2.x package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-03-26 14:40:48+0000\n"
+"PO-Revision-Date: 2013-07-08 11:39:32+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,23 +12,23 @@ msgstr ""
 
 #: ../admin/actions.php:493
 msgid "Your backup completed but with the following errors / warnings, it's probably ok to ignore these."
-msgstr ""
+msgstr "La sauvegarde s'est achevée, mais a généré les erreurs suivantes, vous pouvez probablement les ignorer."
 
 #: ../admin/actions.php:497
 msgid "Your backup failed"
-msgstr ""
+msgstr "La sauvegarde a échoué"
 
 #: ../classes/email.php:29
 msgid "Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address's with a comma."
-msgstr ""
+msgstr "Recevoir un email de notification lorsqu'une sauvegarde s'achève, si l'archive est assez petite (&lt; %s) alors il sera joint à l'email. Utiliser une virgule pour séparer les adresses email."
 
 #: ../classes/email.php:48
 msgid "The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s."
-msgstr ""
+msgstr "La taille maximum du fichier de sauvegarde qui sera joint à l'email de notification de sauvegarde. Par défaut %s."
 
 #: ../classes/error.php:148
 msgid "Your backup could not be completed because you have run out of disk space."
-msgstr ""
+msgstr "La sauvegarde a échoué: espace disque insuffisant."
 
 #: ../admin/actions.php:505
 msgid "You can email details of this error to %s so they can look into the issue."
@@ -52,7 +52,7 @@ msgstr "Une fois par semaine"
 
 #: ../functions/core.php:208
 msgid "Once Fortnightly"
-msgstr "Toutes les 2 semaines"
+msgstr "Une fois tous les quinze jours"
 
 #: ../functions/core.php:209
 msgid "Once Monthly"
@@ -60,7 +60,7 @@ msgstr "Une fois par mois"
 
 #: ../admin/actions.php:509
 msgid "Email to Support"
-msgstr "Contacter l'aide par courrier électronique"
+msgstr "Envoyer un email au support technique"
 
 #: ../admin/page.php:17
 msgid "If your finding BackUpWordPress useful, please %s."
