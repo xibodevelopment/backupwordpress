@@ -2,9 +2,9 @@
 
 /* Path to the WordPress codebase you'd like to test. Add a backslash in the end. */
 //define( 'ABSPATH', getenv( 'WP_CORE_DIR' ) . '/' );
-define( 'ABSPATH', '../../../../wordpress/' );
+define( 'ABSPATH', realpath( '../../../../wordpress' ) . '/' );
 
-define( 'WP_CONTENT_DIR', ABSPATH . '../content' );
+define( 'WP_CONTENT_DIR', realpath( ABSPATH . '../content' ) );
 
 // Set path to MU Plugins.
 //define( 'WPMU_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins-mu' );
