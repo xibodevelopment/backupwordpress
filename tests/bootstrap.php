@@ -1,13 +1,13 @@
 <?php
 
-require_once '/srv/www/wp-tests/includes/functions.php';
+require_once getenv( 'WP_TESTS_DIR' ) . '/includes/functions.php';
 
 function _manually_load_plugin() {
 	require dirname( dirname( __FILE__ ) ) . '/backupwordpress.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
-require '/srv/www/wp-tests/includes/bootstrap.php';
+require getenv( 'WP_TESTS_DIR' ) . '/includes/bootstrap.php';
 
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
