@@ -291,7 +291,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			// Check if we have the filesize in the cache
 			$filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
-			
+
 			// If we do and it's not still calculating then return it straight away
 			if ( $filesize && $filesize !== 'calculating' )
 				return $filesize;
@@ -308,13 +308,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 					// Check once every 10 seconds
 					sleep( 10 );
-					
+
 					// Only run for a maximum of 5 minutes (30*10)
 					if ( $counter === 30 )
 						break;
-					
+
 					$counter++;
-				
+
 				}
 
 				// If we have the filesize then return it
@@ -366,7 +366,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			}
 
 		}
-		
+
 		// Cache for a day
 		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize', $filesize, time() + DAY_IN_SECONDS );
 
@@ -396,7 +396,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$size = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
 
 		return ! ( ! $size || $size === 'calculating' );
-	
+
 	}
 
 	/**
