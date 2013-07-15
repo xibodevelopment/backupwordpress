@@ -8,6 +8,18 @@
 class HMBKP_Email_Service extends HMBKP_Service {
 
 	/**
+	 * Human readable name for this service
+	 * @var string
+	 */
+	public $name = 'Email';
+
+	/**
+	 * Determines whether to show or hide the service tab in destinations form
+	 * @var boolean
+	 */
+	public $isTabVisible = false;
+
+	/**
 	 * Output the email form field
 	 *
 	 * @access  public
@@ -20,7 +32,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
             <input type="email" name="<?php echo $this->get_field_name( 'email' ); ?>" value="<?php echo $this->get_field_value( 'email' ); ?>" />
 
-            <p class="description"><?php _e( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; 10mb) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ); ?></p>
+            <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
 
         </label>
 
@@ -36,21 +48,37 @@ class HMBKP_Email_Service extends HMBKP_Service {
 		return '';
 	}
 
+	public static function constant() { ?>
+
+		<dt<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_ATTACHMENT_MAX_FILESIZE</code></dt>
+		<dd><p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p></dd>
+
+	<?php }
+
 	/**
 	 * The sentence fragment that is output as part of the schedule sentence
 	 *
-	 * @return string The sentence fragment
+	 * @return string
 	 */
 	public function display() {
 
 		if ( $emails = $this->get_email_address_array() ) {
 
-			$email = '<code>' . implode( '</code>, <code>', $emails ) . '</code>';
+			$email = '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $emails ) ) . '</code>';
 
 			return sprintf( __( 'Send an email notification to %s', 'hmbkp' ), $email );
 
 		}
 
+        return '';
+
+	}
+	
+	/**
+	 * Used to determine if the service is in use or not
+	 */
+	public function is_service_active() {
+		return (bool) $this->get_email_address_array();
 	}
 
 	/**
@@ -69,7 +97,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			if ( ! empty( $new_data['email'] ) )
 				foreach( explode( ',', $new_data['email'] ) as $email )
 					if ( ! is_email( trim( $email ) ) )
-						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), esc_attr( $email ) );
+						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), esc_html( $email ) );
 
 
 			if ( ! empty( $errors['email'] ) )
@@ -126,9 +154,9 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 				$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
 
-				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'hmbkp' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $error_message, 'support@hmn.md' );
+				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'hmbkp' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $error_message ), 'support@hmn.md' );
 
-				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
+				wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 
 				return;
 
@@ -136,21 +164,21 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 			$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
 
-			// If it's larger than 10MB assume it's not going to be able to send the backup
-			if ( filesize( $file ) < 1000 * 1000 * 10 ) {
+			// If it's larger than the max attachment size limit assume it's not going to be able to send the backup
+			if ( filesize( $file ) < hmbkp_get_max_attachment_size() ) {
 
-				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
+				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $download ) );
 
-				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers, $file );
+				wp_mail( $this->get_email_address_array(), $subject, $message, $headers, $file );
 
 			}
 
 			// If we didn't send the email above then send just the notification
 			if ( ! $sent ) {
 
-				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Unfortunately the backup file was too large to attach to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $download );
+				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Unfortunately the backup file was too large to attach to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $download ) );
 
-				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
+				wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 
 			}
 
