@@ -20,6 +20,7 @@ env:
 
 notifications:
   hipchat: dd6fd66a04b2e8e8c8b2b1fc47f081@BackUpWordPress
+  email: false
 
 # Grab the setup script and execute
 before_script:
