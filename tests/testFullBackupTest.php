@@ -6,7 +6,7 @@
  *
  * @extends WP_UnitTestCase
  */
-class testFullBackUpTestCase extends WP_UnitTestCase {
+class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Contains the current backup instance
@@ -29,6 +29,8 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 		if ( defined( 'HMBKP_PATH' ) )
 			$this->markTestSkipped( 'Skipped because of defines' );
 
+		hmbkp_path();
+
 	}
 
 	/**
@@ -39,8 +41,12 @@ class testFullBackUpTestCase extends WP_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		if ( file_exists( $this->backup->get_archive_filepath() ) )
-			unlink( $this->backup->get_archive_filepath() );
+		hmbkp_rmdirtree( hmbkp_path() );
+
+		delete_option( 'hmbkp_path' );
+		delete_option( 'hmbkp_default_path' );
+
+		unset( $this->backup );
 
 	}
 
