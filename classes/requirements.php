@@ -47,7 +47,7 @@ class HMBKP_Requirements {
     public static function register( $class, $group = 'misc' ) {
 
 		if ( ! class_exists( $class ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
+			return new WP_Error( 'invalid argument', 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
 
 		self::$requirements[$group][] = $class;
 
@@ -63,7 +63,7 @@ class HMBKP_Requirements {
 	private static function instantiate( $class ) {
 
 		if ( ! class_exists( $class ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
+			return new WP_Error( 'invalid argument', 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
 
 		$$class = new $class;
 
