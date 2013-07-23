@@ -10,7 +10,7 @@
 
 		<tr>
 			<td><?php echo $requirement->name(); ?></td>
-			<td><code><?php echo $requirement->result(); ?></code></td>
+			<td><pre><?php echo $requirement->result(); ?></pre></td>
 		</tr>
 
 	<?php endforeach; ?>

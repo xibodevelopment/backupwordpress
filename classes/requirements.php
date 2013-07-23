@@ -312,7 +312,7 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 		if ( ! $cron )
 			return false;
 
-		return print_r( $cron, true );
+		return var_export( $cron, TRUE );
 
 	}
 
@@ -569,7 +569,7 @@ class HMBKP_Requirement_WP_Cron_Test_Response extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		return print_r( get_option( 'hmbkp_wp_cron_test_response' ), true );
+		return  var_export( get_option( 'hmbkp_wp_cron_test_response' ), TRUE);
 
 	}
 
@@ -615,8 +615,7 @@ class HMBKP_Requirement_SERVER extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		return print_r( $_SERVER, true );
-
+		return var_export( $_SERVER, TRUE);
 	}
 
 }
