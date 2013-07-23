@@ -879,3 +879,15 @@ class HMBKP_Requirement_PHP_Define_HMBKP_EXCLUDE extends HMBKP_Requirement {
 }
 
 HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_EXCLUDE', 'constants' );
+
+class HMBKP_Requirement_Active_Plugins extends HMBKP_Requirement {
+
+	var $name = 'Active Plugins';
+
+	protected function test(){
+
+		return var_export( get_option('active_plugins'), false );
+	}
+}
+
+HMBKP_Requirements::register( 'HMBKP_Requirement_Active_Plugins' );
