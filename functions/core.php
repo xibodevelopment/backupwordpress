@@ -6,7 +6,7 @@
 function hmbkp_activate() {
 
 	// loads the translation files
-	hmbkp_plugin_textdomain();
+	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_LANG_DIR );
 
 	// Run deactivate on activation in-case it was deactivated manually
 	hmbkp_deactivate();
@@ -495,29 +495,5 @@ function hmbkp_get_max_attachment_size() {
 		$max_size = HMBKP_ATTACHMENT_MAX_FILESIZE;
 
 	return wp_convert_hr_to_bytes( $max_size );
-
-}
-
-/**
- * Loads the plugin text domain for translation
- * This setup allows a user to just drop his custom translation files into the WordPress language directory
- * Files will need to be in a subdirectory with the name of the textdomain 'backupwordpress-do'
- */
-function hmbkp_plugin_textdomain() {
-
-	// Set unique textdomain string
-	$textdomain = 'hmbkp';
-
-	// The 'plugin_locale' filter is also used by default in load_plugin_textdomain()
-	$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
-
-	// Set filter for WordPress languages directory
-	$hmbkp_wp_lang_dir = apply_filters( 'hmbkp_do_filter_wp_lang_dir', trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain )  . $textdomain . '-' . $locale . '.mo' );
-
-	// Translations: First, look in WordPress' "languages" folder = custom & update-secure!
-	load_textdomain( $textdomain, $hmbkp_wp_lang_dir );
-
-	// Translations: Secondly, look in plugin's "languages" folder = default
-	load_plugin_textdomain( $textdomain, FALSE, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 }
