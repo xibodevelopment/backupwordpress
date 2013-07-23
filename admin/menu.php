@@ -83,6 +83,7 @@ function hmbkp_contextual_help() {
 	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'hmbkp' ), 'id' => 'hmbkp_constants', 'content' => wp_kses_post( $constants ) ) );
 	get_current_screen()->add_help_tab( array( 'title' => __( 'Server Info', 'hmbkp' ), 'id' => 'hmbkp_server', 'content' => $server ) );
 
+
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'hmbkp' ) . '</strong></p>' .
 		'<p><a href="https://github.com/humanmade/backupwordpress" target="_blank">GitHub</a></p>' .
