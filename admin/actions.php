@@ -540,10 +540,11 @@ function hmbkp_send_error_via_email() {
 
 	add_filter( 'wp_mail_content_type', 'hmbkp_set_html_content_type' );
 
-	$sent = wp_mail( 'support@humanmade.co.uk',
-			'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ),
-		$error,
-			'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n"
+	$sent = wp_mail(
+		'support@humanmade.co.uk', // recipient
+		'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), // subject
+		$error, // body
+		'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" // headers
 	);
 
 	// Reset content-type to avoid conflicts -- http://core.trac.wordpress.org/ticket/23578
