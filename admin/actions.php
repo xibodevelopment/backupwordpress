@@ -479,6 +479,9 @@ function hmbkp_preview_exclude_rule() {
 
 add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
+/**
+ * Displays info about the error that occured and prompts user to email it
+ */
 function hmbkp_display_error_and_offer_to_email_it() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
@@ -516,6 +519,10 @@ function hmbkp_display_error_and_offer_to_email_it() {
 
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
 
+
+/**
+ * Sends an email with the error and debugging info
+ */
 function hmbkp_send_error_via_email() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
@@ -525,10 +532,35 @@ function hmbkp_send_error_via_email() {
 
 	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
 
-	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
+	ob_start();
+
+	require_once 'server.php';
+
+	$error .= ob_get_clean();
+
+	add_filter( 'wp_mail_content_type', 'hmbkp_set_html_content_type' );
+
+	$sent = wp_mail( 'support@humanmade.co.uk',
+			'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ),
+		$error,
+			'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n"
+	);
+
+	// Reset content-type to avoid conflicts -- http://core.trac.wordpress.org/ticket/23578
+	remove_filter( 'wp_mail_content_type', 'hmbkp_set_html_content_type' );
 
 	die;
 
 }
 
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
+
+/**
+ * Set email type as HTML
+ * @return string
+ */
+function hmbkp_set_html_content_type() {
+
+	return 'text/html';
+}
+
