@@ -26,7 +26,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	 */
 	public function field() { ?>
 
-		<label>
+	<label>
 
             <?php _e( 'Email notification', 'hmbkp' ); ?>
 
@@ -169,7 +169,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), esc_html( $download ) );
 
-				wp_mail( $this->get_email_address_array(), $subject, $message, $headers, $file );
+				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers, $file );
 
 			}
 
