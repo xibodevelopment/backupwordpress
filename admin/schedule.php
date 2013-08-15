@@ -105,7 +105,7 @@ foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service ) {
 
 <div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
-	<?php printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s Send a copy of each backup to these external locations: %6$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg, implode( ', ', array_filter( $services ) ) ); ?>
+	<?php printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s Send a copy of each backup to: %6$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg, implode( ', ', array_filter( $services ) ) ); ?>
 
 	<?php hmbkp_schedule_actions( $schedule ); ?>
 
