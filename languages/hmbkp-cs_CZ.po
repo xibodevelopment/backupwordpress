@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the 2.x package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-03-26 14:40:48+0000\n"
+"PO-Revision-Date: 2013-07-08 11:42:29+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,23 +12,23 @@ msgstr ""
 
 #: ../admin/actions.php:493
 msgid "Your backup completed but with the following errors / warnings, it's probably ok to ignore these."
-msgstr ""
+msgstr "Zálohování skončilo s těmito chybami/varováními, ale je možné je ignorovat."
 
 #: ../admin/actions.php:497
 msgid "Your backup failed"
-msgstr ""
+msgstr "Zálohování se nezdařilo."
 
 #: ../classes/email.php:29
 msgid "Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address's with a comma."
-msgstr ""
+msgstr "Odeslat oznámení o provedení zálohy a pokud je záloha malá (&lt; %s) tak bude připojena k tomuto emailu. Adresy více příjemců oddělte čárkou."
 
 #: ../classes/email.php:48
 msgid "The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s."
-msgstr ""
+msgstr "Maximální velikost souboru se zálohou, která bude připojena k oznamovacímu emailu. Výchozí velikost je %s."
 
 #: ../classes/error.php:148
 msgid "Your backup could not be completed because you have run out of disk space."
-msgstr ""
+msgstr "Zálohování nelze dokončit protože není dostatek místa pro uložení zálohy."
 
 #: ../admin/actions.php:505
 msgid "You can email details of this error to %s so they can look into the issue."
