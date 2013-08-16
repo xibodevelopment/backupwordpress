@@ -287,6 +287,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_filesize( $cached = true ) {
 
+		$filesize = 0;
+		
 		if ( $cached ) {
 
 			// Check if we have the filesize in the cache
