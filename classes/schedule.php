@@ -799,7 +799,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Delete a specific back up file created by this schedule
-	 * @param $filepath
+	 * @param string $filepath
 	 * @return bool|WP_Error
 	 * @throws Exception
 	 */

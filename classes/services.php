@@ -253,7 +253,7 @@ class HMBKP_Services {
 
 	/**
 	 * De-register an existing service
-	 * @param $filepath
+	 * @param string $filepath
 	 * @return bool|WP_Error
 	 */
 	public static function unregister( $filepath ) {
