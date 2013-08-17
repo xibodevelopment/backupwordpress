@@ -799,15 +799,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Delete a specific back up file created by this schedule
-	 *
-	 * @param string $filepath
+	 * @param $filepath
+	 * @return bool|WP_Error
 	 * @throws Exception
 	 */
 	public function delete_backup( $filepath ) {
 
 		// Check that it's a valid filepath
 		if ( empty( $filepath ) || ! is_string( $filepath ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
+			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ) ), __METHOD__ );
 
 		// Make sure it exists
 		if ( ! file_exists( $filepath ) )
@@ -819,6 +819,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		unlink( $filepath );
 
+		return true;
 	}
 
 	/**

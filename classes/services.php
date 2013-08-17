@@ -253,16 +253,17 @@ class HMBKP_Services {
 
 	/**
 	 * De-register an existing service
-	 *
-	 * @access public
+	 * @param $filepath
+	 * @return bool|WP_Error
 	 */
-    public static function unregister( $filepath ) {
+	public static function unregister( $filepath ) {
 
     	if ( ! isset( self::instance()->services[$filepath] ) )
-    		throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a registered service' );
+				return new WP_Error( 'hmbkp_unrecognized_service_error', sprintf( __( 'Argument 1 for %s must be a registered service', ' hmbkp' ), __METHOD__ ) );
 
     	unset( self::instance()->services[$filepath] );
 
+			return true;
     }
 
 	/**
