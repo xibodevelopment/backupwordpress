@@ -73,6 +73,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
 			parent::set_excludes( HMBKP_EXCLUDE, true );
 
+		parent::set_excludes($this->default_excludes(), true );
+
 		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
 			$this->set_mysqldump_command_path( HMBKP_MYSQLDUMP_PATH );
 
@@ -868,6 +870,22 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Delete it's backups
 		$this->delete_backups();
 
+	}
+
+	/**
+	 * Sets the default excluded folders fr a schedule
+	 *
+	 * @return Array
+	 */
+	protected function default_excludes() {
+
+		$excluded = array(
+			trailingslashit( WP_CONTENT_DIR ) . 'updraft' , // updraftplus
+			trailingslashit( WP_CONTENT_DIR ) . 'backups' , // wponlinebackup
+			trailingslashit( HM_Backup::get_home_path() ) . 'wp-snapshots' , // duplicator
+		);
+
+		return apply_filters( 'hmbkp_default_excludes', $excluded );
 	}
 
 }
