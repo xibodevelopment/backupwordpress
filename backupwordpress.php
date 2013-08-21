@@ -183,7 +183,7 @@ add_action( 'admin_init', 'hmbkp_init' );
  */
 function hmbkp_schedule_hook_run( $schedule_id ) {
 
-	$schedules = new HMBKP_Schedules();
+	$schedules = HMBKP_Schedules::get_instance();
 	$schedule = $schedules->get_schedule( $schedule_id );
 
 	if ( ! $schedule )
