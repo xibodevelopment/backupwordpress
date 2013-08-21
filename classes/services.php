@@ -150,7 +150,7 @@ abstract class HMBKP_Service {
 
 		$service = get_class( $this );
 
-		$schedules_obj = new HMBKP_Schedules();
+		$schedules_obj = HMBKP_Schedules::get_instance();
 
 		$schedules = $schedules_obj->get_schedules();
 
