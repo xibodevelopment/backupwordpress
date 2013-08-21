@@ -896,6 +896,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$excluded[] = trailingslashit( ABSPATH ) . 'wp-snapshots';
 		}
 
+		if ( defined( 'WP_BACKUP_DIR' ) && is_dir( WP_BACKUP_DIR ) )
+			$excluded[] = WP_BACKUP_DIR;
+
+		// version control dirs
+		$excluded[] = '.svn/';
+		$excluded[] = '.git/';
+
 		return apply_filters( 'hmbkp_default_excludes', $excluded );
 	}
 
