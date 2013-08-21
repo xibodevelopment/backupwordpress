@@ -246,7 +246,7 @@ jQuery( document ).ready( function( $ ) {
 				// Assume success if no data passed back
 				if ( ! data || data == 0 ) {
 					// nothing
-
+					$.colorbox.close();
 				} else {
 
 					// Get the errors json string

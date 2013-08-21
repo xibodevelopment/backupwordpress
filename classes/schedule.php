@@ -877,13 +877,25 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @return Array
 	 */
-	protected function default_excludes() {
+	public function default_excludes() {
 
-		$excluded = array(
-			trailingslashit( WP_CONTENT_DIR ) . 'updraft' , // updraftplus
-			trailingslashit( WP_CONTENT_DIR ) . 'backups' , // wponlinebackup
-			trailingslashit( HM_Backup::get_home_path() ) . 'wp-snapshots' , // duplicator
-		);
+		$excluded = array();
+
+		// updraftplus plugin
+		if ( is_dir( trailingslashit( WP_CONTENT_DIR ) . 'updraft' ) ) {
+			$excluded[] = trailingslashit( WP_CONTENT_DIR ) . 'updraft';
+		}
+
+		//wponlinebackup plugin
+		if ( is_dir( trailingslashit( WP_CONTENT_DIR ) . 'backups' ) ) {
+			$excluded[] = trailingslashit( WP_CONTENT_DIR ) . 'backups';
+		}
+
+		//duplicator plugin
+
+		if ( is_dir( trailingslashit( ABSPATH ) . 'wp-snapshots' ) ) {
+			$excluded[] = trailingslashit( ABSPATH ) . 'wp-snapshots';
+		}
 
 		return apply_filters( 'hmbkp_default_excludes', $excluded );
 	}
