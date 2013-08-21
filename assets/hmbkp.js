@@ -246,7 +246,7 @@ jQuery( document ).ready( function( $ ) {
 						location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&hmbkp_schedule_id=' + scheduleId );
 
 					else
-						location.reload( true );
+						location.reload();
 
 				} else {
 
