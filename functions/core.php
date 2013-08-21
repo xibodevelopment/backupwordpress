@@ -26,7 +26,7 @@ function hmbkp_deactivate() {
 	// Remove the plugin data cache
 	delete_transient( 'hmbkp_plugin_data' );
 
-	$schedules = new HMBKP_Schedules;
+	$schedules = HMBKP_Schedules::get_instance();
 
 	// Clear schedule crons
 	foreach ( $schedules->get_schedules() as $schedule )
@@ -140,7 +140,7 @@ function hmbkp_update() {
 	// Update from 2.2.4
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.2.5' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		$schedules = new HMBKP_Schedules;
+		$schedules = HMBKP_Schedules::get_instance();
 
 		// Loop through all schedules and re-set the reccurrence to include hmbkp_
 		foreach ( $schedules->get_schedules() as $schedule ) {
@@ -194,7 +194,7 @@ function hmbkp_update() {
  */
 function hmbkp_setup_default_schedules() {
 
-	$schedules = new HMBKP_Schedules;
+	$schedules = HMBKP_Schedules::get_instance();
 
 	if ( $schedules->get_schedules() )
 		return;
