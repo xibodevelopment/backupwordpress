@@ -103,6 +103,20 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 2.4
+
+* Fix a PHP strict error
+* Save and close as separate buttons
+* Fix bug that caused multiple notification emails
+* Fixes typo in database option name
+* Updated translation files
+* Improve PHP docblocks
+* Make schedules class a singleton
+* Exclude popular backup plugin folders by default
+* exclude version control folders by default
+* use WP_Error instead of Exception for delete schedule action
+* Fix broken localization
+
 #### 2.3
 
 * Replace Fancybox with Colorbox as Fancybox 2 isn't GPL compatible.
