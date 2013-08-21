@@ -892,7 +892,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		//duplicator plugin
-
 		if ( is_dir( trailingslashit( ABSPATH ) . 'wp-snapshots' ) ) {
 			$excluded[] = trailingslashit( ABSPATH ) . 'wp-snapshots';
 		}
