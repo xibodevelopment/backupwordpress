@@ -46,8 +46,8 @@ function hmbkp_admin_notices() {
 	if ( ! is_dir( hmbkp_path() ) ) :
 
 		function hmbkp_path_exists_warning() {
-			$php_user = exec( 'whoami' );
-			$php_group = reset( explode( ' ', exec( 'groups' ) ) );
+			$php_user = ( hmbkp_is_exec_available() ) ? exec( 'whoami' ) : 'unknown';
+			$php_group = reset( explode( ' ', ( hmbkp_is_exec_available() ) ? exec( 'groups' ) : 'unknown' ) );
 			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress is almost ready.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable, run %2$s or %3$s or create the folder yourself.', 'hmbkp' ), '<code>wp-content</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( hmbkp_path() ) ) . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_path_exists_warning' );
@@ -58,8 +58,8 @@ function hmbkp_admin_notices() {
 	if ( is_dir( hmbkp_path() ) && ! is_writable( hmbkp_path() ) ) :
 
 		function hmbkp_writable_path_warning() {
-			$php_user = exec( 'whoami' );
-			$php_group = reset( explode( ' ', exec( 'groups' ) ) );
+			$php_user = ( hmbkp_is_exec_available() ) ? exec( 'whoami' ) : 'unknown';
+			$php_group = reset( explode( ' ', ( hmbkp_is_exec_available() ) ? exec( 'groups' ) : 'unknown' ) );
 			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress is almost ready.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your backups directory isn\'t writable, run %1$s or %2$s or set the permissions yourself.', 'hmbkp' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' ) . '</p></div>';
 		}
 		add_action( 'admin_notices', 'hmbkp_writable_path_warning' );
@@ -291,5 +291,36 @@ function hmbkp_backup_warnings() {
 		return '';
 
 	return file_get_contents( hmbkp_path() . '/.backup_warnings' );
+
+}
+
+
+/**
+ * Check whether exec has been disabled.
+ */
+function hmbkp_is_exec_available() {
+
+	// Are we in Safe Mode
+	if ( hmbkp_is_safe_mode_active() )
+		return false;
+
+	// Is exec or disabled?
+	if ( array_intersect( array( 'exec' ), array_map( 'trim', explode( ',', @ini_get( 'disable_functions' ) ) ) ) )
+		return false;
+
+	// Can we issue a simple echo command?
+	if ( ! @exec( 'echo backupwordpress' ) )
+		return false;
+
+	return true;
+
+}
+
+function hmbkp_is_safe_mode_active( $ini_get_callback = 'ini_get' ) {
+
+	if ( ( $safe_mode = @call_user_func( $ini_get_callback, 'safe_mode' ) ) && strtolower( $safe_mode ) != 'off' )
+		return true;
+
+	return false;
 
 }
