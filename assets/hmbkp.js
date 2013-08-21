@@ -10,6 +10,13 @@ jQuery( document ).ready( function( $ ) {
 
 	$( document ).on( 'click', '.hmbkp-colorbox-close', function() {
 	    $.colorbox.close();
+		// Reload the page so we see changes
+		if ( typeof isNewSchedule !== 'undefined' && isNewSchedule === true )
+			location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&hmbkp_schedule_id=' + scheduleId );
+
+		else
+			location.reload();
+
 	} );
 
 	// Setup the tabs
@@ -238,15 +245,7 @@ jQuery( document ).ready( function( $ ) {
 
 				// Assume success if no data passed back
 				if ( ! data || data == 0 ) {
-
-					$.colorbox.close();
-
-					// Reload the page so we see changes
-					if ( isNewSchedule )
-						location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&hmbkp_schedule_id=' + scheduleId );
-
-					else
-						location.reload( true );
+					// nothing
 
 				} else {
 
