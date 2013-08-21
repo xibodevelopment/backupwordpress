@@ -109,13 +109,12 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Save and close as separate buttons
 * Fix bug that caused multiple notification emails
 * Fixes typo in database option name
-* Updated translation files
+* Updated translations
 * Improve PHP docblocks
 * Make schedules class a singleton
 * Exclude popular backup plugin folders by default
-* exclude version control folders by default
-* use WP_Error instead of Exception for delete schedule action
-* Fix broken localization
+* Exclude version control folders by default
+* Fix broken localisation
 
 #### 2.3
 
