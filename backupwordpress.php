@@ -36,6 +36,9 @@ if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
 if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
 	define( 'HMBKP_PLUGIN_URL', plugin_dir_url(  __FILE__  ) );
 
+
+define( 'HMBKP_PLUGIN_LANG_DIR', apply_filters( 'hmbkp_filter_lang_dir', HMBKP_PLUGIN_SLUG . '/languages/' ) );
+
 if ( ! defined( 'HMBKP_ADMIN_URL' ) )
 	define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 
@@ -146,9 +149,6 @@ function hmbkp_init() {
 	// define the plugin version
 	define( 'HMBKP_VERSION', $plugin_data['Version'] );
 
-	// Load translations
-	//load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_SLUG . '/languages/' );
-
 	// Fire the update action
 	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
 		hmbkp_update();
@@ -193,3 +193,29 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 
 }
 add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
+
+
+/**
+ * Loads the plugin text domain for translation
+ * This setup allows a user to just drop his custom translation files into the WordPress language directory
+ * Files will need to be in a subdirectory with the name of the textdomain 'backupwordpress-do'
+ */
+function hmbkp_plugin_textdomain() {
+
+	// Set unique textdomain string
+	$textdomain = 'hmbkp';
+
+	// The 'plugin_locale' filter is also used by default in load_plugin_textdomain()
+	$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
+
+	// Set filter for WordPress languages directory
+	$hmbkp_wp_lang_dir = apply_filters( 'hmbkp_do_filter_wp_lang_dir', trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain )  . $textdomain . '-' . $locale . '.mo' );
+
+	// Translations: First, look in WordPress' "languages" folder = custom & update-secure!
+	load_textdomain( $textdomain, $hmbkp_wp_lang_dir );
+
+	// Translations: Secondly, look in plugin's "languages" folder = default
+	load_plugin_textdomain( $textdomain, FALSE, HMBKP_PLUGIN_SLUG . '/languages/' );
+
+}
+add_action( 'init', 'hmbkp_plugin_textdomain', 1);
