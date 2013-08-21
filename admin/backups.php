@@ -1,4 +1,4 @@
-<?php $schedules = new HMBKP_Schedules; ?>
+<?php $schedules = HMBKP_Schedules::get_instance(); ?>
 
 <div>
 
