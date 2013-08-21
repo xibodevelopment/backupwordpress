@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.3.3
 Tested up to: 3.6
-Stable tag: 2.3
+Stable tag: 2.3.1
 
 Simple automated back ups of your WordPress powered website.
 
@@ -103,7 +103,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
-#### 2.4
+#### 2.3.1
 
 * Fix a PHP strict error
 * Save and close as separate buttons
