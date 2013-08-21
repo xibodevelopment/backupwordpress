@@ -39,7 +39,7 @@
 
     			    	<span class="code"><?php esc_attr_e( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
 
-    	<?php if ( $schedule->get_path() === untrailingslashit( $exclude ) ) : ?>
+    	<?php if ( ( $schedule->get_path() === untrailingslashit( $exclude ) ) || ( in_array( $exclude, $schedule->default_excludes() ) ) ) : ?>
 
     					<span class="reason"><?php _e( 'default', 'hmbkp' ); ?></span>
 
