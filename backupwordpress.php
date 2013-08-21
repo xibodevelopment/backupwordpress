@@ -161,8 +161,8 @@ function hmbkp_init() {
 
 		wp_localize_script( 'hmbkp', 'hmbkp', array(
 			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
-			'update'				=> __( 'Save', 'hmbkp' ),
-			'cancel'				=> __( 'Close', 'hmbkp' ),
+			'update'				=> __( 'Update', 'hmbkp' ),
+			'cancel'				=> __( 'Cancel', 'hmbkp' ),
 			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
 			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
 			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",

@@ -51,7 +51,7 @@
 
     	<p class="submit">
 
-		    <button type="submit" class="button-primary"><?php _e( 'Save', 'hmbkp' ); ?></button>
+		    <button type="submit" class="button-primary"><?php _e( 'Update', 'hmbkp' ); ?></button>
 
 		</p>
 
