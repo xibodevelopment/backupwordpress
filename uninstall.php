@@ -13,7 +13,7 @@ require_once( HMBKP_PLUGIN_PATH . '/classes/schedule.php' );
 require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
 
-$schedules = new HMBKP_Schedules;
+$schedules = HMBKP_Schedules::get_instance();
 
 // Cancel all the schedules and delete all the backups
 foreach ( $schedules->get_schedules() as $schedule )
