@@ -4,6 +4,3 @@
 [submodule "assets/colorbox"]
 	path = assets/colorbox
 	url = git://github.com/jackmoore/colorbox.git
-[submodule "tests/lib"]
-	path = tests/lib
-	url = https://github.com/humanmade/wp-tests-lib.git
