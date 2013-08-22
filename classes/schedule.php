@@ -46,13 +46,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Loads the options from the database and populates properties
 	 *
 	 * @param string $id
-	 * @throws Exception
 	 */
 	public function __construct( $id ) {
 
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
+			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ), __METHOD__  );
 
 		// Setup HM Backup
 		parent::__construct();
@@ -230,15 +229,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Set the maximum number of backups to keep
 	 *
 	 * @param int $max
-	 * @throws Exception
+	 * @return WP_Error
 	 */
 	public function set_max_backups( $max ) {
 
 		if ( empty( $max ) || ! is_int( $max ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid integer' );
+			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid integer', 'hmbkp' ) ), __METHOD__ );
 
 		$this->options['max_backups'] = $max;
 
+		return true;
 	}
 
 	/**
@@ -477,7 +477,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Set the schedule reoccurrence
 	 *
 	 * @param string $reoccurrence
-	 * @throws Exception
+	 * @return bool|WP_Error
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
@@ -485,7 +485,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Check it's valid
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && $reoccurrence !== 'manually' )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid cron reoccurrence or "manually"' );
+			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
 
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
 			return;
@@ -498,6 +498,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		else
 			$this->schedule();
 
+		return true;
 	}
 
 	/**
@@ -803,7 +804,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Delete a specific back up file created by this schedule
 	 * @param string $filepath
 	 * @return bool|WP_Error
-	 * @throws Exception
 	 */
 	public function delete_backup( $filepath ) {
 
@@ -813,11 +813,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Make sure it exists
 		if ( ! file_exists( $filepath ) )
-			throw new Exception( $filepath . ' doesn\'t exist' );
+			return new WP_Error( 'hmbkp_file_error', sprintf( __( '%s dpesn\'t exist', 'hmbkp' ) ), $filepath );
 
 		// Make sure it was created by this schedule
 		if ( strpos( $filepath, $this->get_id() ) === false )
-			throw new Exception( 'That backup wasn\'t created by this schedule' );
+			return new WP_Error( 'hmbkp_backup_error', sprintf( __( 'That backup wasn\'t created by this schedule', 'hmbkp' ) ) );
 
 		unlink( $filepath );
 

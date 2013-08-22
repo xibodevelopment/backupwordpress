@@ -240,15 +240,18 @@ class HMBKP_Services {
 	/**
 	 * Register a new service
 	 *
-	 * @access public
+	 * @param $filepath
+	 * @param $classname
+	 * @return bool|WP_Error
 	 */
-    public static function register( $filepath, $classname ) {
+	public static function register( $filepath, $classname ) {
 
     	if ( ! file_exists( $filepath ) )
-    		throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid filepath' );
+				return new WP_Error( 'hmbkp_invalid_path_error', sprintf( __( 'Argument 1 for %s must be a valid filepath', ' hmbkp' ), __METHOD__ ) );
 
-		self::instance()->services[$filepath] = $classname;
+			self::instance()->services[$filepath] = $classname;
 
+			return true;
     }
 
 	/**
