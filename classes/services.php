@@ -275,12 +275,11 @@ class HMBKP_Services {
 	 * @param string $classname
 	 *
 	 * @return array An array of instantiated classes
-	 * @throws Exception
 	 */
 	private static function instantiate( $classname ) {
 
 		if ( ! class_exists( $classname ) )
-			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
+			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class' , 'hmbkp' ) ), __METHOD__ );
 
         /**
          * @var HMBKP_Service
