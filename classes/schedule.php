@@ -897,6 +897,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$excluded[] = trailingslashit( ABSPATH ) . 'wp-snapshots';
 		}
 
+		//BackupBuddy plugin
+		if ( is_dir( trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups' ) ) {
+			$excluded[] = trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups';
+		}
+
 		if ( defined( 'WP_BACKUP_DIR' ) && is_dir( WP_BACKUP_DIR ) )
 			$excluded[] = WP_BACKUP_DIR;
 
