@@ -882,19 +882,17 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$excluded = array();
 
-		// updraftplus plugin
-		if ( is_dir( trailingslashit( WP_CONTENT_DIR ) . 'updraft' ) ) {
-			$excluded[] = trailingslashit( WP_CONTENT_DIR ) . 'updraft';
-		}
+		$blacklisted = array(
+			'updraft' => trailingslashit( WP_CONTENT_DIR ) . 'updraft',
+			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . 'backups',
+			'duplicator' => trailingslashit( ABSPATH ) . 'wp-snapshots',
+			'backupbuddy' => trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups'
+		);
 
-		//wponlinebackup plugin
-		if ( is_dir( trailingslashit( WP_CONTENT_DIR ) . 'backups' ) ) {
-			$excluded[] = trailingslashit( WP_CONTENT_DIR ) . 'backups';
-		}
-
-		//duplicator plugin
-		if ( is_dir( trailingslashit( ABSPATH ) . 'wp-snapshots' ) ) {
-			$excluded[] = trailingslashit( ABSPATH ) . 'wp-snapshots';
+		foreach ( $blacklisted as $key => $path ) {
+			if ( is_dir( $path ) ) {
+				$excluded[] = $path;
+			}
 		}
 
 		if ( defined( 'WP_BACKUP_DIR' ) && is_dir( WP_BACKUP_DIR ) )
