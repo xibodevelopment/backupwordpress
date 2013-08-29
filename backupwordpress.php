@@ -89,18 +89,18 @@ if ( ! class_exists( 'HM_Backup' ) )
 	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
 
 // Load the schedules
-require_once( HMBKP_PLUGIN_PATH . '/classes/schedule.php' );
-require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/class-schedule.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/class-schedules.php' );
 
 // Load the core functions
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
 
 // Load Services
-require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/class-services.php' );
 
 // Load the email service
-require_once( HMBKP_PLUGIN_PATH . '/classes/email.php' );
+require_once( HMBKP_PLUGIN_PATH . '/classes/class-email.php' );
 
 // Load the wp cli command
 if ( defined( 'WP_CLI' ) && WP_CLI )
