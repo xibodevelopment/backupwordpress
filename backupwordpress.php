@@ -156,8 +156,8 @@ function hmbkp_init() {
 	// Load admin css and js
 	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
 
-		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/jquery.colorbox-min.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
+		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
 		wp_localize_script( 'hmbkp', 'hmbkp', array(
 			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
