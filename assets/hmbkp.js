@@ -217,6 +217,8 @@ jQuery( document ).ready( function( $ ) {
 	// Edit schedule form submit
 	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
 
+		var $isDestinationSettingsForm = $( this ).find( 'button[type="submit"]' ).hasClass( "dest-settings-save" );
+
 		isNewSchedule = $( this ).closest( 'form' ).attr( 'data-schedule-action' ) == 'add' ? true : false;
 		scheduleId = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
 
@@ -237,7 +239,7 @@ jQuery( document ).ready( function( $ ) {
 			function( data ) {
 
 				// Assume success if no data passed back
-				if ( ! data || data == 0 ) {
+				if ( ( ! data || data == 0 ) && ( $isDestinationSettingsForm === false ) ) {
 
 					$.colorbox.close();
 
@@ -248,10 +250,12 @@ jQuery( document ).ready( function( $ ) {
 					else
 						location.reload();
 
+				} else if( ! data || data == 0 ) {
+					// nothing for now
 				} else {
 
 					// Get the errors json string
-					errors = JSON.parse( data );
+					var errors = JSON.parse( data );
 
 					// Loop through the errors
 					$.each( errors, function( key, value ) {
