@@ -935,7 +935,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			$pos = strpos( $folder, $needle );
 
-			$default_path = get_option("hmbkp_default_path" );
+			$default_path = get_option( "hmbkp_default_path" );
 
 			if( ( false !== $pos ) && ( $folder !== $default_path ) ) {
 
