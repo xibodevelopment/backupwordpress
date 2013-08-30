@@ -882,6 +882,20 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$excluded = array();
 
+		// Leftover backup folders can be either under content dir, or under the uploads dir
+		$hmbkp_folders = array_merge(
+			$this->find_backup_folders( "backupwordpress-", WP_CONTENT_DIR ),
+			$this->find_backup_folders( "backupwordpress-", WP_CONTENT_DIR . "/uploads" )
+		);
+
+
+		if ( ! empty( $hmbkp_folders ) ) {
+			foreach ( $hmbkp_folders as $path ) {
+				$excluded[] = $path;
+			}
+
+		}
+
 		$blacklisted = array(
 			'updraft' => trailingslashit( WP_CONTENT_DIR ) . 'updraft',
 			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . 'backups',
@@ -903,6 +917,35 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$excluded[] = '.git/';
 
 		return apply_filters( 'hmbkp_default_excludes', $excluded );
+	}
+
+
+	/**
+	 * Returns an array with the BackUpWordPress backup folders in the specified directory
+	 *
+	 * @param $needle
+	 * @param $haystack
+	 * @return array
+	 */
+	protected function find_backup_folders( $needle, $haystack ) {
+
+		$found_folders = array();
+
+		foreach ( glob( $haystack . "/*", GLOB_ONLYDIR | GLOB_NOSORT ) as $folder ) {
+
+			$pos = strpos( $folder, $needle );
+
+			$default_path = get_option( "hmbkp_default_path" );
+
+			if( ( false !== $pos ) && ( $folder !== $default_path ) ) {
+
+				$found_folders[] = $folder;
+
+			}
+
+		}
+
+		return $found_folders;
 	}
 
 }
