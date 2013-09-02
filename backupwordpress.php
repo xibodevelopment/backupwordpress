@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.3.2
+Version: 2.3.3
 Author URI: http://hmn.md/
 */
 
@@ -169,8 +169,8 @@ function hmbkp_init() {
 			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
 		) );
 
-		wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . '/assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
-		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . '/assets/hmbkp.css', false, HMBKP_VERSION );
+		wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
+		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
 
 	}
 
