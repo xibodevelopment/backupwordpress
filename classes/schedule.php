@@ -51,7 +51,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) )
-			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ), __METHOD__  ) );
+			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
 
 		// Setup HM Backup
 		parent::__construct();
