@@ -46,7 +46,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Loads the options from the database and populates properties
 	 *
 	 * @param string $id
+	 * @throws Exception
 	 */
+
 	public function __construct( $id ) {
 
 		// Verify the schedule id
