@@ -51,7 +51,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) )
-			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ), __METHOD__  ) );
+			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
 
 		// Setup HM Backup
 		parent::__construct();
@@ -66,8 +66,22 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
 			$this->set_root( HMBKP_ROOT );
 
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
+
+			if ( strlen( ini_get( 'open_basedir' ) ) > 0 ) {
+
+				$dirs = explode( PATH_SEPARATOR, ini_get( 'open_basedir' ) );
+
+				if ( ! in_array( HMBKP_PATH, $dirs ) )
+					throw new Exception( __( 'This folder is restricted by the <code>open_basedir</code> directive', 'hmbkp' ) );
+
+
+			}
+
 			$this->set_path( HMBKP_PATH );
+
+		}
+
 
 		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
 			parent::set_excludes( HMBKP_EXCLUDE, true );
