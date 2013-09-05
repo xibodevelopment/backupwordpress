@@ -234,4 +234,4 @@ function hmbkp_plugin_textdomain() {
 	load_plugin_textdomain( $textdomain, FALSE, HMBKP_PLUGIN_SLUG . '/languages/' );
 
 }
-add_action( 'init', 'hmbkp_plugin_textdomain', 1);
+add_action( 'init', 'hmbkp_plugin_textdomain', 1 );

@@ -4,9 +4,36 @@
 
 	<ul class="subsubsub">
 
-	<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
+		<?php
+		// possible titles
+		$titles = array(
+			'complete-hourly'      => __( 'Complete Hourly', 'hmbkp' ),
+			'file-hourly'          => __( 'File Hourly', 'hmbkp' ),
+			'database-hourly'      => __( 'Database Hourly', 'hmbkp' ),
+			'complete-twicedaily'  => __( 'Complete Twicedaily', 'hmbkp' ),
+			'file-twicedaily'      => __( 'File Twicedaily', 'hmbkp' ),
+			'database-twicedaily'  => __( 'Database Twicedaily', 'hmbkp' ),
+			'complete-daily'       => __( 'Complete Daily', 'hmbkp' ),
+			'file-daily'           => __( 'File Daily', 'hmbkp' ),
+			'database-daily'       => __( 'Database Daily', 'hmbkp' ),
+			'complete-weekly'      => __( 'Complete Weekly', 'hmbkp' ),
+			'file-weekly'          => __( 'File Weekly', 'hmbkp' ),
+			'database-weekly'      => __( 'Database Weekly', 'hmbkp' ),
+			'complete-fortnightly' => __( 'Complete Fortnightly', 'hmbkp' ),
+			'file-fortnightly'     => __( 'File Fortnightly', 'hmbkp' ),
+			'database-fortnightly' => __( 'Database Fortnightly', 'hmbkp' ),
+			'complete-monthly'     => __( 'Complete Monthly', 'hmbkp' ),
+			'file-monthly'         => __( 'File Monthly', 'hmbkp' ),
+			'database-monthly'     => __( 'Database Monthly', 'hmbkp' ),
+			'complete-manually'    => __( 'Complete Manually', 'hmbkp' ),
+			'file-manually'        => __( 'File Manually', 'hmbkp' ),
+			'database-manually'    => __( 'Database Manually', 'hmbkp' )
+		);
 
-		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php echo esc_html( $schedule->get_name() ); ?> <span class="count">(<?php echo count( $schedule->get_backups() ); ?>)</span></a></li>
+
+		?>
+	<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
+		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php echo esc_html( $titles[$schedule->get_slug()] ); ?> <span class="count">(<?php echo count( $schedule->get_backups() ); ?>)</span></a></li>
 
 	<?php endforeach; ?>
 
