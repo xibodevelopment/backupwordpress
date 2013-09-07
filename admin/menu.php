@@ -76,7 +76,13 @@ function hmbkp_contextual_help() {
 	if ( $plugin && ! is_wp_error( $plugin ) )
 		get_current_screen()->add_help_tab( array( 'title' => __( 'FAQ', 'hmbkp' ), 'id' => 'hmbkp_faq', 'content' => wp_kses_post( $warning . $plugin->sections['faq'] ) ) );
 	
+	ob_start();
+	require_once( HMBKP_PLUGIN_PATH . '/admin/server.php' );
+	$server = ob_get_clean();
+
 	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'hmbkp' ), 'id' => 'hmbkp_constants', 'content' => wp_kses_post( $constants ) ) );
+	get_current_screen()->add_help_tab( array( 'title' => __( 'Server Info', 'hmbkp' ), 'id' => 'hmbkp_server', 'content' => $server ) );
+
 
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'hmbkp' ) . '</strong></p>' .

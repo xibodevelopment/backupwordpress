@@ -112,6 +112,9 @@ require_once( HMBKP_PLUGIN_PATH . '/classes/schedules.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
 require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
 
+// Load the compatibility tests
+require_once( HMBKP_PLUGIN_PATH . '/classes/requirements.php' );
+
 // Load Services
 require_once( HMBKP_PLUGIN_PATH . '/classes/services.php' );
 
