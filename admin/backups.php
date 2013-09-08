@@ -7,33 +7,33 @@
 		<?php
 		// possible titles
 		$titles = array(
-			'complete-hourly'      => __( 'Complete Hourly', 'hmbkp' ),
-			'file-hourly'          => __( 'File Hourly', 'hmbkp' ),
-			'database-hourly'      => __( 'Database Hourly', 'hmbkp' ),
-			'complete-twicedaily'  => __( 'Complete Twicedaily', 'hmbkp' ),
-			'file-twicedaily'      => __( 'File Twicedaily', 'hmbkp' ),
-			'database-twicedaily'  => __( 'Database Twicedaily', 'hmbkp' ),
-			'complete-daily'       => __( 'Complete Daily', 'hmbkp' ),
-			'file-daily'           => __( 'File Daily', 'hmbkp' ),
-			'database-daily'       => __( 'Database Daily', 'hmbkp' ),
-			'complete-weekly'      => __( 'Complete Weekly', 'hmbkp' ),
-			'file-weekly'          => __( 'File Weekly', 'hmbkp' ),
-			'database-weekly'      => __( 'Database Weekly', 'hmbkp' ),
-			'complete-fortnightly' => __( 'Complete Fortnightly', 'hmbkp' ),
-			'file-fortnightly'     => __( 'File Fortnightly', 'hmbkp' ),
-			'database-fortnightly' => __( 'Database Fortnightly', 'hmbkp' ),
-			'complete-monthly'     => __( 'Complete Monthly', 'hmbkp' ),
-			'file-monthly'         => __( 'File Monthly', 'hmbkp' ),
-			'database-monthly'     => __( 'Database Monthly', 'hmbkp' ),
-			'complete-manually'    => __( 'Complete Manually', 'hmbkp' ),
-			'file-manually'        => __( 'File Manually', 'hmbkp' ),
-			'database-manually'    => __( 'Database Manually', 'hmbkp' )
+			'complete-hourly'      => esc_html__( 'Complete Hourly', 'hmbkp' ),
+			'file-hourly'          => esc_html__( 'File Hourly', 'hmbkp' ),
+			'database-hourly'      => esc_html__( 'Database Hourly', 'hmbkp' ),
+			'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'hmbkp' ),
+			'file-twicedaily'      => esc_html__( 'File Twicedaily', 'hmbkp' ),
+			'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'hmbkp' ),
+			'complete-daily'       => esc_html__( 'Complete Daily', 'hmbkp' ),
+			'file-daily'           => esc_html__( 'File Daily', 'hmbkp' ),
+			'database-daily'       => esc_html__( 'Database Daily', 'hmbkp' ),
+			'complete-weekly'      => esc_html__( 'Complete Weekly', 'hmbkp' ),
+			'file-weekly'          => esc_html__( 'File Weekly', 'hmbkp' ),
+			'database-weekly'      => esc_html__( 'Database Weekly', 'hmbkp' ),
+			'complete-fortnightly' => esc_html__( 'Complete Fortnightly', 'hmbkp' ),
+			'file-fortnightly'     => esc_html__( 'File Fortnightly', 'hmbkp' ),
+			'database-fortnightly' => esc_html__( 'Database Fortnightly', 'hmbkp' ),
+			'complete-monthly'     => esc_html__( 'Complete Monthly', 'hmbkp' ),
+			'file-monthly'         => esc_html__( 'File Monthly', 'hmbkp' ),
+			'database-monthly'     => esc_html__( 'Database Monthly', 'hmbkp' ),
+			'complete-manually'    => esc_html__( 'Complete Manually', 'hmbkp' ),
+			'file-manually'        => esc_html__( 'File Manually', 'hmbkp' ),
+			'database-manually'    => esc_html__( 'Database Manually', 'hmbkp' )
 		);
 
 
 		?>
 	<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
-		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php echo esc_html( $titles[$schedule->get_slug()] ); ?> <span class="count">(<?php echo count( $schedule->get_backups() ); ?>)</span></a></li>
+		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php printf( $titles[$schedule->get_slug()] ) ; ?> <span class="count">(<?php echo count( $schedule->get_backups() ); ?>)</span></a></li>
 
 	<?php endforeach; ?>
 
