@@ -67,7 +67,7 @@ else {
 
 				<tr>
 
-					<th scope="col"><?php printf( _n( '1 backup completed', '%d backups completed', count( $schedule->get_backups() ),  'hmbkp' ), count( $schedule->get_backups() ) ); ?></th>
+					<th scope="col"><?php backups_number( $schedule ); ?></th>
 		    		<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
 		    		<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
 		    		<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
@@ -108,3 +108,18 @@ else {
 	</div>
 
 </div>
+
+<?php
+function backups_number( $schedule, $zero = false, $one = false, $more = false ) {
+
+	$number = count( $schedule->get_backups() );
+
+	if ( $number > 1 )
+		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'hmbkp' ) : $more );
+	elseif ( $number == 0 )
+		$output = ( false === $zero ) ? __( 'No Backups Completed', 'hmbkp' ) : $zero;
+	else // must be one
+		$output = ( false === $one ) ? __( '1 Backup Completed', 'hmbkp' ) : $one;
+
+	echo apply_filters( 'backups_number', $output, $number );
+}
