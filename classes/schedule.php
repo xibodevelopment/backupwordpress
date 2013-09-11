@@ -117,7 +117,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_slug() {
 
 		// We cache slug in $this to save expensive calls to sanitize_title
-		if ( isset( $this->slug ) )
+		if ( isset( $this->slug ) && strlen( $this->slug > 0 ) )
 			return $this->slug;
 
 		return $this->slug = sanitize_title( $this->get_name() );
