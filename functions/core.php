@@ -257,7 +257,7 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 function hmbkp_rmdirtree( $dir ) {
 
 	if ( strpos( HM_Backup::get_home_path(), $dir ) !== false )
-		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'hmbpk' ) ) );
+		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'hmbkp' ) ) );
 
 	if ( is_file( $dir ) )
 		@unlink( $dir );
@@ -348,7 +348,12 @@ function hmbkp_path_default() {
 
 	$path = untrailingslashit( get_option( 'hmbkp_default_path' ) );
 
-	if ( empty( $path ) ) {
+	$content_dir = HM_Backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) );
+
+	$pos = strpos( $path, $content_dir );
+
+	// no path set or current path doesn't match the database value
+	if ( empty( $path ) || ( false === $pos ) || ( 0 !== $pos ) ) {
 
 		$path = HM_Backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' );
 

@@ -46,12 +46,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * Loads the options from the database and populates properties
 	 *
 	 * @param string $id
+	 * @throws Exception
 	 */
+
 	public function __construct( $id ) {
 
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) )
-			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ), __METHOD__  ) );
+			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
 
 		// Setup HM Backup
 		parent::__construct();
@@ -115,7 +117,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_slug() {
 
 		// We cache slug in $this to save expensive calls to sanitize_title
-		if ( isset( $this->slug ) )
+		if ( isset( $this->slug ) && strlen( $this->slug > 0 ) )
 			return $this->slug;
 
 		return $this->slug = sanitize_title( $this->get_name() );
@@ -882,19 +884,31 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$excluded = array();
 
-		// updraftplus plugin
-		if ( is_dir( trailingslashit( WP_CONTENT_DIR ) . 'updraft' ) ) {
-			$excluded[] = trailingslashit( WP_CONTENT_DIR ) . 'updraft';
+		// Leftover backup folders can be either under content dir, or under the uploads dir
+		$hmbkp_folders = array_merge(
+			$this->find_backup_folders( "backupwordpress-", WP_CONTENT_DIR ),
+			$this->find_backup_folders( "backupwordpress-", WP_CONTENT_DIR . "/uploads" )
+		);
+
+
+		if ( ! empty( $hmbkp_folders ) ) {
+			foreach ( $hmbkp_folders as $path ) {
+				$excluded[] = $path;
+			}
+
 		}
 
-		//wponlinebackup plugin
-		if ( is_dir( trailingslashit( WP_CONTENT_DIR ) . 'backups' ) ) {
-			$excluded[] = trailingslashit( WP_CONTENT_DIR ) . 'backups';
-		}
+		$blacklisted = array(
+			'updraft' => trailingslashit( WP_CONTENT_DIR ) . 'updraft',
+			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . 'backups',
+			'duplicator' => trailingslashit( ABSPATH ) . 'wp-snapshots',
+			'backupbuddy' => trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups'
+		);
 
-		//duplicator plugin
-		if ( is_dir( trailingslashit( ABSPATH ) . 'wp-snapshots' ) ) {
-			$excluded[] = trailingslashit( ABSPATH ) . 'wp-snapshots';
+		foreach ( $blacklisted as $key => $path ) {
+			if ( is_dir( $path ) ) {
+				$excluded[] = $path;
+			}
 		}
 
 		if ( defined( 'WP_BACKUP_DIR' ) && is_dir( WP_BACKUP_DIR ) )
@@ -905,6 +919,35 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$excluded[] = '.git/';
 
 		return apply_filters( 'hmbkp_default_excludes', $excluded );
+	}
+
+
+	/**
+	 * Returns an array with the BackUpWordPress backup folders in the specified directory
+	 *
+	 * @param $needle
+	 * @param $haystack
+	 * @return array
+	 */
+	protected function find_backup_folders( $needle, $haystack ) {
+
+		$found_folders = array();
+
+		foreach ( glob( $haystack . "/*", GLOB_ONLYDIR | GLOB_NOSORT ) as $folder ) {
+
+			$pos = strpos( $folder, $needle );
+
+			$default_path = get_option( "hmbkp_default_path" );
+
+			if( ( false !== $pos ) && ( $folder !== $default_path ) ) {
+
+				$found_folders[] = $folder;
+
+			}
+
+		}
+
+		return $found_folders;
 	}
 
 }

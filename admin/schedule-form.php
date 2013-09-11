@@ -28,7 +28,7 @@
 
                 <?php foreach( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-                    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'] ); ?></option>
+                    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?></option>
 
                 <?php endforeach; ?>
 
