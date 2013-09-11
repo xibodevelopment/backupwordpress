@@ -168,12 +168,18 @@ function hmbkp_init() {
 	// Fire the update action
 	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
 		hmbkp_update();
+}
+add_action( 'admin_init', 'hmbkp_init' );
 
+function hmbkp_load_scripts() {
 	// Load admin css and js
-	if ( isset( $_GET['page'] ) && $_GET['page'] == HMBKP_PLUGIN_SLUG ) {
+	$screen = get_current_screen();
 
-		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'jquery-ui-tabs', 'jquery-ui-widget', 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
+	if ( 'tools_page_backupwordpress' === $screen->id ) {
+
+		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
+
+		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
 		wp_localize_script( 'hmbkp', 'hmbkp', array(
 			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
@@ -185,13 +191,22 @@ function hmbkp_init() {
 			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
 		) );
 
-		wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
-		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
+
 
 	}
 
 }
-add_action( 'admin_init', 'hmbkp_init' );
+add_action( 'admin_print_scripts-tools_page_backupwordpress', 'hmbkp_load_scripts' );
+
+function hmbkp_load_styles(){
+
+	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
+
+	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
+
+}
+add_action( 'admin_print_styles-tools_page_backupwordpress', 'hmbkp_load_styles' );
+
 
 /**
  * Function to run when the schedule cron fires
