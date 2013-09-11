@@ -185,7 +185,7 @@ function hmbkp_load_scripts() {
 			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
 			'update'				=> __( 'Update', 'hmbkp' ),
 			'cancel'				=> __( 'Cancel', 'hmbkp' ),
-			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
 			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
 			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
 			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
@@ -229,7 +229,7 @@ add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
 /**
  * Loads the plugin text domain for translation
  * This setup allows a user to just drop his custom translation files into the WordPress language directory
- * Files will need to be in a subdirectory with the name of the textdomain 'backupwordpress-do'
+ * Files will need to be in a subdirectory with the name of the textdomain 'hmbkp'
  */
 function hmbkp_plugin_textdomain() {
 
@@ -246,7 +246,7 @@ function hmbkp_plugin_textdomain() {
 	load_textdomain( $textdomain, $hmbkp_wp_lang_dir );
 
 	// Translations: Secondly, look in plugin's "languages" folder = default
-	load_plugin_textdomain( $textdomain, FALSE, HMBKP_PLUGIN_SLUG . '/languages/' );
+	load_plugin_textdomain( $textdomain, false, HMBKP_PLUGIN_LANG_DIR );
 
 }
-add_action( 'init', 'hmbkp_plugin_textdomain', 1);
+add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
