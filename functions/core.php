@@ -29,8 +29,9 @@ function hmbkp_deactivate() {
 	$schedules = HMBKP_Schedules::get_instance();
 
 	// Clear schedule crons
-	foreach ( $schedules->get_schedules() as $schedule )
+	foreach ( $schedules->get_schedules() as $schedule ) {
 		$schedule->unschedule();
+	}
 
 }
 
@@ -67,20 +68,21 @@ function hmbkp_update() {
 			'bkpwp_status'
 		);
 
-		foreach ( $legacy_options as $option )
+		foreach ( $legacy_options as $option ) {
 			delete_option( $option );
+		}
 
-	    global $wp_roles;
+		global $wp_roles;
 
-		$wp_roles->remove_cap( 'administrator','manage_backups' );
-		$wp_roles->remove_cap( 'administrator','download_backups' );
+		$wp_roles->remove_cap( 'administrator', 'manage_backups' );
+		$wp_roles->remove_cap( 'administrator', 'download_backups' );
 
 		wp_clear_scheduled_hook( 'bkpwp_schedule_bkpwp_hook' );
 
 	}
 
 	// Version 1 to 2
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.0' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		/**
 		 * Setup a backwards compatible schedule
@@ -88,13 +90,13 @@ function hmbkp_update() {
 		$legacy_schedule = new HMBKP_Scheduled_Backup( 'backup' );
 
 		// Backup type
-        if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) )
-        	$legacy_schedule->set_type( 'file' );
+		if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) )
+			$legacy_schedule->set_type( 'file' );
 
 		elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) )
-        	$legacy_schedule->set_type( 'database' );
+			$legacy_schedule->set_type( 'database' );
 
-        else
+		else
 			$legacy_schedule->set_type( 'complete' );
 
 		// Daily schedule time
@@ -132,13 +134,14 @@ function hmbkp_update() {
 		$legacy_schedule->save();
 
 		// Remove the legacy options
-		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name )
+		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name ) {
 			delete_option( $option_name );
+		}
 
 	}
 
 	// Update from 2.2.4
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.2.5' , get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.2.5', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		$schedules = HMBKP_Schedules::get_instance();
 
@@ -222,9 +225,11 @@ function hmbkp_setup_default_schedules() {
 	function hmbkp_default_schedules_setup_warning() {
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has setup your default schedules.', 'hmbkp' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules.', 'hmbkp' ) . '</p></div>';
 	}
+
 	add_action( 'admin_notices', 'hmbkp_default_schedules_setup_warning' );
 
 }
+
 add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
 /**
@@ -235,15 +240,16 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
  */
 function hmbkp_cron_schedules( $schedules ) {
 
-	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display'      => __( 'Once Hourly', 'hmbkp' ) );
-	$schedules['hmbkp_twicedaily'] 	= array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
-	$schedules['hmbkp_daily']      	= array( 'interval' => DAY_IN_SECONDS, 'display'       => __( 'Once Daily', 'hmbkp' ) );
-	$schedules['hmbkp_weekly'] 		= array( 'interval' => WEEK_IN_SECONDS, 'display'      => __( 'Once Weekly', 'hmbkp' ) );
-	$schedules['hmbkp_fortnightly']	= array( 'interval' => 2 * WEEK_IN_SECONDS , 'display' => __( 'Once Fortnightly', 'hmbkp' ) );
-	$schedules['hmbkp_monthly']		= array( 'interval' => 30 * DAY_IN_SECONDS, 'display'  => __( 'Once Monthly', 'hmbkp' ) );
+	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'hmbkp' ) );
+	$schedules['hmbkp_twicedaily']  = array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
+	$schedules['hmbkp_daily']       = array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'hmbkp' ) );
+	$schedules['hmbkp_weekly']      = array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'hmbkp' ) );
+	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Fortnightly', 'hmbkp' ) );
+	$schedules['hmbkp_monthly']     = array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'hmbkp' ) );
 
 	return $schedules;
 }
+
 add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 
 /**
@@ -262,10 +268,10 @@ function hmbkp_rmdirtree( $dir ) {
 	if ( is_file( $dir ) )
 		@unlink( $dir );
 
-    if ( ! is_dir( $dir ) )
-    	return false;
+	if ( ! is_dir( $dir ) )
+		return false;
 
-    $files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 	foreach ( $files as $file ) {
 
@@ -322,7 +328,7 @@ function hmbkp_path() {
 	// Protect the directory with a .htaccess file on Apache servers
 	if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) ) {
 
-		$contents[]	= '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'hmbkp' ), '.htaccess' );
+		$contents[] = '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'hmbkp' ), '.htaccess' );
 		$contents[] = '';
 		$contents[] = '<IfModule mod_rewrite.c>';
 		$contents[] = 'RewriteEngine On';
@@ -335,7 +341,7 @@ function hmbkp_path() {
 
 	}
 
-    return HM_Backup::conform_dir( $path );
+	return HM_Backup::conform_dir( $path );
 
 }
 
@@ -381,7 +387,7 @@ function hmbkp_path_default() {
  * location
  *
  * @param string $from path to move the backups dir from
- * @param string $to path to move the backups dir to
+ * @param string $to   path to move the backups dir to
  * @return void
  */
 function hmbkp_path_move( $from, $to ) {
@@ -391,11 +397,11 @@ function hmbkp_path_move( $from, $to ) {
 
 	// Create the new directory if it doesn't exist
 	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
-	    mkdir( $to, 0755 );
+		mkdir( $to, 0755 );
 
 	// Bail if we couldn't
 	if ( ! is_dir( $to ) || ! is_writable( $to ) )
-	    return false;
+		return false;
 
 	update_option( 'hmbkp_path', $to );
 
@@ -409,12 +415,13 @@ function hmbkp_path_move( $from, $to ) {
 	// Move any existing backups
 	if ( $handle = opendir( $from ) ) {
 
-	    while ( false !== ( $file = readdir( $handle ) ) )
-	    	if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' )
-	    		if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
-	    			copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
+		while ( false !== ( $file = readdir( $handle ) ) ) {
+			if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' )
+				if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
+					copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
+		}
 
-	    closedir( $handle );
+		closedir( $handle );
 
 	}
 
@@ -455,13 +462,14 @@ function hmbkp_cleanup() {
 
 	if ( $handle = opendir( $hmbkp_path ) ) {
 
-    	while ( false !== ( $file = readdir( $handle ) ) )
-    		if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' )
+		while ( false !== ( $file = readdir( $handle ) ) ) {
+			if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' )
 				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
+		}
 
-    	closedir( $handle );
+		closedir( $handle );
 
-    }
+	}
 
 }
 
@@ -474,11 +482,11 @@ function hmbkp_constant_changes() {
 
 	// If a custom backup path has been set or changed
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
-	  hmbkp_path_move( $from, HMBKP_PATH );
+		hmbkp_path_move( $from, HMBKP_PATH );
 
 	// If a custom backup path has been removed
 	if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_path_default() !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
-	  hmbkp_path_move( $from, hmbkp_path_default() );
+		hmbkp_path_move( $from, hmbkp_path_default() );
 
 	// If the custom path has changed and the new directory isn't writable
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) )
