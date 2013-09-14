@@ -141,7 +141,7 @@ jQuery( document ).ready( function( $ ) {
 
 		// Get the current fieldset
 		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
-		var toFieldset = 'fieldset.' + $( this ).attr( 'data-hmbkp-fieldset' );
+		var toFieldset   = 'fieldset.' + $( this ).attr( 'data-hmbkp-fieldset' );
 
 		// Show the one we are moving too
 		$( toFieldset ).show().find( 'p.submit button' ).data( 'hmbkp-previous-fieldset', fromFieldset );
@@ -160,7 +160,7 @@ jQuery( document ).ready( function( $ ) {
 
 		// Get the current fieldset
 		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
-		var toFieldset = $( this ).data( 'hmbkp-previous-fieldset' );
+		var toFieldset   = $( this ).data( 'hmbkp-previous-fieldset' );
 
 		// Show the one we are moving too
 		$( toFieldset ).show();
@@ -220,7 +220,7 @@ jQuery( document ).ready( function( $ ) {
 		var $isDestinationSettingsForm = $( this ).find( 'button[type="submit"]' ).hasClass( "dest-settings-save" );
 
 		isNewSchedule = $( this ).closest( 'form' ).attr( 'data-schedule-action' ) == 'add' ? true : false;
-		scheduleId = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
+		scheduleId    = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
 
 		// Warn that backups will be deleted if max backups has been set to less than the number of backups currently stored
 		if ( ! isNewSchedule && Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( hmbkp.remove_old_backups ) )
@@ -245,7 +245,7 @@ jQuery( document ).ready( function( $ ) {
 
 					// Reload the page so we see changes
 					if ( isNewSchedule )
-						location.replace( '//' + location.host + location.pathname  + '?page=backupwordpress&hmbkp_schedule_id=' + scheduleId );
+						location.replace( '//' + location.host + location.pathname + '?page=backupwordpress&hmbkp_schedule_id=' + scheduleId );
 
 					else
 						location.reload();
