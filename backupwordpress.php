@@ -181,17 +181,19 @@ function hmbkp_load_scripts() {
 
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
-		wp_localize_script( 'hmbkp', 'hmbkp', array(
-			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
-			'update'				=> __( 'Update', 'hmbkp' ),
-			'cancel'				=> __( 'Cancel', 'hmbkp' ),
-			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
-		) );
-
-
+		wp_localize_script(
+			'hmbkp',
+			'hmbkp',
+			array(
+				'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
+				'update'				=> __( 'Update', 'hmbkp' ),
+				'cancel'				=> __( 'Cancel', 'hmbkp' ),
+				'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+				'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+				'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+				'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+			)
+		);
 
 	}
 
@@ -215,7 +217,7 @@ add_action( 'admin_print_styles-tools_page_backupwordpress', 'hmbkp_load_styles'
 function hmbkp_schedule_hook_run( $schedule_id ) {
 
 	$schedules = HMBKP_Schedules::get_instance();
-	$schedule = $schedules->get_schedule( $schedule_id );
+	$schedule  = $schedules->get_schedule( $schedule_id );
 
 	if ( ! $schedule )
 		return;

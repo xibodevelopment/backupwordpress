@@ -33,7 +33,7 @@
 
 		?>
 	<?php foreach ( $schedules->get_schedules() as $schedule ) : ?>
-		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php printf( $titles[$schedule->get_slug()] ) ; ?> <span class="count">(<?php echo count( $schedule->get_backups() ); ?>)</span></a></li>
+		<li<?php if ( $schedule->get_status() ) { ?> class="hmbkp-running"<?php } ?>><a<?php if ( ! empty ( $_GET['hmbkp_schedule_id'] ) && $schedule->get_id() == $_GET['hmbkp_schedule_id'] ) { ?> class="current"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php printf( $titles[$schedule->get_slug()] ); ?> <span class="count">(<?php echo esc_html( count( $schedule->get_backups() ) ); ?>)</span></a></li>
 
 	<?php endforeach; ?>
 
@@ -78,20 +78,22 @@ else {
 
 		    <tbody>
 
-    	<?php if ( $schedule->get_backups() ) :
+    	<?php
 
-    		$schedule->delete_old_backups();
+			if ( $schedule->get_backups() ) :
 
-    	    foreach ( $schedule->get_backups() as $file ) :
+				$schedule->delete_old_backups();
 
-    	        if ( ! file_exists( $file ) )
-    	    		continue;
+					foreach ( $schedule->get_backups() as $file ) :
 
-    	        hmbkp_get_backup_row( $file, $schedule );
+						if ( ! file_exists( $file ) )
+							continue;
 
-    	    endforeach;
+							hmbkp_get_backup_row( $file, $schedule );
 
-    	else : ?>
+					endforeach;
+
+			else : ?>
 
     	<tr>
 

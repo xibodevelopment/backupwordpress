@@ -32,7 +32,7 @@
 
         	<tbody>
 
-    <?php foreach( $schedule->get_excludes() as $key => $exclude ) : ?>
+    <?php foreach ( $schedule->get_excludes() as $key => $exclude ) : ?>
 
     			<tr>
     			    <td data-hmbkp-exclude-rule="<?php esc_attr_e( $exclude ); ?>">
