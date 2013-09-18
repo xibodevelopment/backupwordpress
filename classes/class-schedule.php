@@ -902,7 +902,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			'updraft' => trailingslashit( WP_CONTENT_DIR ) . 'updraft',
 			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . 'backups',
 			'duplicator' => trailingslashit( ABSPATH ) . 'wp-snapshots',
-			'backupbuddy' => trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups'
+			'backupbuddy' => trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups',
+			'wpdbmanager'  => trailingslashit( WP_CONTENT_DIR ) . 'backup-db',
 		);
 
 		foreach ( $blacklisted as $key => $path ) {
@@ -910,9 +911,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				$excluded[] = $path;
 			}
 		}
-
-		if ( defined( 'WP_BACKUP_DIR' ) && is_dir( WP_BACKUP_DIR ) )
-			$excluded[] = WP_BACKUP_DIR;
 
 		// version control dirs
 		$excluded[] = '.svn/';
