@@ -30,7 +30,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
             <?php _e( 'Email notification', 'hmbkp' ); ?>
 
-            <input type="email" name="<?php echo $this->get_field_name( 'email' ); ?>" value="<?php echo $this->get_field_value( 'email' ); ?>" />
+            <input type="email" name="<?php esc_attr_e( $this->get_field_name( 'email' ) ); ?>" value="<?php esc_attr_e( $this->get_field_value( 'email' ) ); ?>" />
 
             <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
 
@@ -70,7 +70,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 		}
 
-        return '';
+		return '';
 
 	}
 	
@@ -95,7 +95,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 		if ( isset( $new_data['email'] ) ) {
 
 			if ( ! empty( $new_data['email'] ) )
-				foreach( explode( ',', $new_data['email'] ) as $email )
+				foreach ( explode( ',', $new_data['email'] ) as $email )
 					if ( ! is_email( trim( $email ) ) )
 						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), esc_html( $email ) );
 
@@ -137,9 +137,9 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			$sent = false;
 
 			$download = add_query_arg( 'hmbkp_download', base64_encode( $file ), HMBKP_ADMIN_URL );
-			$domain = parse_url( home_url(), PHP_URL_HOST ) . parse_url( home_url(), PHP_URL_PATH );
+			$domain   = parse_url( home_url(), PHP_URL_HOST ) . parse_url( home_url(), PHP_URL_PATH );
 
-			$headers = 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+			$headers  = 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
 
 			// The backup failed, send a message saying as much
 			if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->get_errors(), $this->schedule->get_warnings() ) ) ) {
