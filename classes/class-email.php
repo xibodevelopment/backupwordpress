@@ -96,7 +96,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 			if ( ! empty( $new_data['email'] ) )
 				foreach ( explode( ',', $new_data['email'] ) as $email )
-					if ( ! is_email( trim( $email ) ) )
+					if ( ! is_email( $email ) )
 						$errors['email'] = sprintf( esc_html( '%s isn\'t a valid email',  'hmbkp' ), $email );
 
 			if ( ! empty( $errors['email'] ) )
