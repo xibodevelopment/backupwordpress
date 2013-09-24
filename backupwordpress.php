@@ -80,22 +80,6 @@ if ( ! defined( 'WEEK_IN_SECONDS' ) )
 if ( ! defined( 'YEAR_IN_SECONDS' ) )
 	define( 'YEAR_IN_SECONDS',  365 * DAY_IN_SECONDS    );
 
-if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
-
-	if ( strlen( ini_get( 'open_basedir' ) ) > 0 ) {
-
-		$dirs = explode( PATH_SEPARATOR, ini_get( 'open_basedir' ) );
-
-		if ( ! in_array( HMBKP_PATH, $dirs ) )
-			add_action( 'admin_notices', 'hmbkp_warning' );
-
-	}
-}
-
-function hmbkp_warning() {
-	echo '<div class="error"><p>' . __( 'It appears that the HMBKP_PATH constant value is incompatible with the open_basedir directive restrictions. Please fix this and try again', 'hmbkp' ) . '</p></div>';
-}
-
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
 require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
