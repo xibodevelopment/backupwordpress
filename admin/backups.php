@@ -67,7 +67,7 @@ else {
 
 				<tr>
 
-					<th scope="col"><?php backups_number( $schedule ); ?></th>
+					<th scope="col"><?php hmbkp_backups_number( $schedule ); ?></th>
 		    		<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
 		    		<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
 		    		<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
@@ -112,7 +112,7 @@ else {
 </div>
 
 <?php
-function backups_number( $schedule, $zero = false, $one = false, $more = false ) {
+function hmbkp_backups_number( $schedule, $zero = false, $one = false, $more = false ) {
 
 	$number = count( $schedule->get_backups() );
 
@@ -123,5 +123,5 @@ function backups_number( $schedule, $zero = false, $one = false, $more = false )
 	else // must be one
 		$output = ( false === $one ) ? __( '1 Backup Completed', 'hmbkp' ) : $one;
 
-	echo apply_filters( 'backups_number', $output, $number );
+	echo apply_filters( 'hmbkp_backups_number', $output, $number );
 }
