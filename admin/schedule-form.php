@@ -11,9 +11,9 @@
     		<?php _e( 'Backup', 'hmbkp' ); ?>
 
     		<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
-    			<option<?php selected( $schedule->get_type(), 'complete'); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
-    			<option<?php selected( $schedule->get_type(), 'file'); ?> value="file"><?php _e( 'Files only', 'hmbkp' ); ?></option>
-    			<option<?php selected( $schedule->get_type(), 'database'); ?> value="database"><?php _e( 'Database only', 'hmbkp' ); ?></option>
+    			<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
+    			<option<?php selected( $schedule->get_type(), 'file' ); ?> value="file"><?php _e( 'Files only', 'hmbkp' ); ?></option>
+    			<option<?php selected( $schedule->get_type(), 'database' ); ?> value="database"><?php _e( 'Database only', 'hmbkp' ); ?></option>
     		</select>
 
     	</label>
@@ -26,9 +26,9 @@
 
     			<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-                <?php foreach( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+                <?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-                    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'] ); ?></option>
+                    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?></option>
 
                 <?php endforeach; ?>
 
@@ -46,8 +46,12 @@
 
     	</label>
 
-        <?php foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-            $service->field(); ?>
+        <?php
+
+				foreach ( HMBKP_Services::get_services( $schedule ) as $service )
+					$service->field();
+
+				?>
 
     	<p class="submit">
 

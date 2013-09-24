@@ -66,7 +66,7 @@ function hmbkp_contextual_help() {
 
 	// Check if help is for the right version.
 	if ( ! empty( $plugin->version ) && version_compare( HMBKP_VERSION, $plugin->version, '!=' ) )
-	    $warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %1$s. View the %2$s file for help specific to version %3$s.', 'hmbkp' ) . '</p></div>', '<code>' . esc_attr( $plugin->version ) . '</code>', '<code>readme.txt</code>', '<code>' . esc_attr( HMBKP_VERSION ) . '</code>' );
+		$warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %1$s. View the %2$s file for help specific to version %3$s.', 'hmbkp' ) . '</p></div>', '<code>' . esc_attr( $plugin->version ) . '</code>', '<code>readme.txt</code>', '<code>' . esc_attr( HMBKP_VERSION ) . '</code>' );
 
 	ob_start();
 	require_once( HMBKP_PLUGIN_PATH . '/admin/constants.php' );
