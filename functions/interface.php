@@ -203,13 +203,11 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 
 				<li title="<?php echo esc_attr( HM_Backup::conform_dir( trailingslashit( $file->getPathName() ) ) ); ?>"><?php echo esc_html( ltrim( trailingslashit( str_ireplace( HM_Backup::conform_dir( trailingslashit( $schedule->get_root() ) ), '', HM_Backup::conform_dir( $file->getPathName() ) ) ), '/' ) ); ?></li>
 
-			<?php }
-			else { ?>
+			<?php } else { ?>
 
 				<li title="<?php echo esc_attr( HM_Backup::conform_dir( $file->getPathName() ) ); ?>"><?php echo esc_html( ltrim( str_ireplace( HM_Backup::conform_dir( trailingslashit( $schedule->get_root() ) ), '', HM_Backup::conform_dir( $file->getPathName() ) ), '/' ) ); ?></li>
 
-			<?php
-			}
+			<?php }
 
 		endforeach; ?>
 
