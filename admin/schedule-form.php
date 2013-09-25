@@ -8,7 +8,7 @@
 
     	<label>
 
-    		<?php _e( 'Backup', 'hmbkp' ); ?>
+				<?php _e( 'Backup', 'hmbkp' ); ?>
 
     		<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
     			<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
@@ -20,17 +20,17 @@
 
     	<label>
 
-    		<?php _e( 'Schedule', 'hmbkp' ); ?>
+				<?php _e( 'Schedule', 'hmbkp' ); ?>
 
     		<select name="hmbkp_schedule_reoccurrence" id="hmbkp_schedule_reoccurrence">
 
     			<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-                <?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+					<?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-                    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?></option>
+						 <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?></option>
 
-                <?php endforeach; ?>
+					<?php endforeach; ?>
 
     		</select>
 
@@ -38,26 +38,36 @@
 
     	<label>
 
-    		<?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?>
+				<?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?>
 
     		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php esc_attr_e( $schedule->get_max_backups() ); ?>" />
 
-            <p class="description"><?php printf( __( 'Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' ); ?></p>
+				<p class="description"><?php printf( __( 'Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' ); ?></p>
 
     	</label>
 
-        <?php
+			<label>
 
-				foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-					$service->field();
+				<?php _e( 'Schedule start time', 'hmbkp' ); ?>
 
-				?>
+				<input type="text" id="hmbkp_schedule_start_time" name="hmbkp_schedule_start_time" value="<?php echo esc_attr( $schedule->get_schedule_start_time() ); ?>" />
+
+				<p class="description">The start time for the scheduled backup to run. Overrides the default time and the constant value if set.</p>
+
+			</label>
+
+			<?php
+
+			foreach ( HMBKP_Services::get_services( $schedule ) as $service )
+				$service->field();
+
+			?>
 
     	<p class="submit">
 
 		    <button type="submit" class="button-primary"><?php _e( 'Update', 'hmbkp' ); ?></button>
 
-		</p>
+			</p>
 
 	</fieldset>
 
