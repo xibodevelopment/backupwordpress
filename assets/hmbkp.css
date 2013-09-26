@@ -35,7 +35,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-form legend { padding: 0 0 20px; font-size: 1.17em; font-weight: bold; }
 .hmbkp-form label > * { float: right; }
 .hmbkp-form label.hidden { display: none; }
-.hmbkp-form label > input[type="text"], .hmbkp-form label > select { min-width: 200px; }
+.hmbkp-form label > input[type="text"], .hmbkp-form label > select, .hmbkp-form label > input[type="password"] { min-width: 200px; }
 .hmbkp-form label .description { line-height: 16px; margin-top: 10px; float: none; }
 .hmbkp-form p.submit { margin: 20px 0 0; padding: 0; }
 .hmbkp-form .button-primary { float: right; }
