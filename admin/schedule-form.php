@@ -46,6 +46,16 @@
 
     	</label>
 
+		<label>
+
+			<?php _e( 'Schedule start time', 'hmbkp' ); ?>
+
+			<input type="text" id="hmbkp_schedule_start_time" name="hmbkp_schedule_start_time" value="<?php echo esc_attr( $schedule->get_schedule_start_time() ); ?>" />
+
+			<p class="description">The start time for the scheduled backup to run. Overrides the default time and the constant value if set.</p>
+
+		</label>
+
         <?php
 
 				foreach ( HMBKP_Services::get_services( $schedule ) as $service )
