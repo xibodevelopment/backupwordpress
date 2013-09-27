@@ -161,9 +161,12 @@ function hmbkp_load_scripts() {
 
 	if ( 'tools_page_backupwordpress' === $screen->id ) {
 
-		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
+		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
 
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
+
+		wp_enqueue_script( 'hmbkp-timepicker', HMBKP_PLUGIN_URL . 'assets/timepicker/jquery.timepicker.min.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
+
 
 		wp_localize_script(
 			'hmbkp',
@@ -189,6 +192,8 @@ function hmbkp_load_styles(){
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
 
 	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
+
+	wp_enqueue_style( 'hmbkp-timepicker', HMBKP_PLUGIN_URL . 'assets/timepicker/jquery.timepicker.css', false, HMBKP_VERSION );
 
 }
 add_action( 'admin_print_styles-tools_page_backupwordpress', 'hmbkp_load_styles' );

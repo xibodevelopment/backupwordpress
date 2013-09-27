@@ -39,6 +39,10 @@ jQuery( document ).ready( function( $ ) {
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
 
+			// datepicker
+				$('#hmbkp_schedule_start_time').timepicker();
+
+
 			$.colorbox.resize();
 
 		}
