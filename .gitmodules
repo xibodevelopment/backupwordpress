@@ -4,3 +4,6 @@
 [submodule "assets/colorbox"]
 	path = assets/colorbox
 	url = git://github.com/jackmoore/colorbox.git
+[submodule "assets/datetimepicker"]
+	path = assets/datetimepicker
+	url = https://github.com/trentrichardson/jQuery-Timepicker-Addon.git
