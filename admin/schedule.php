@@ -95,21 +95,27 @@ $email_msg = '';
 
 foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service ) {
 
-	if ( 'Email' == $service->name ) {
-		$email_msg = $service->display();
-	} elseif ( $service->is_service_active() ) {
-		$services[] = $service->display();
-	}
+	if ( 'Email' == $service->name )
+		$email_msg = esc_html( $service->display() );
 
+	elseif ( $service->is_service_active() )
+		$services[] = esc_html( $service->display() );
 
 }
-?>
+
+if ( count( $services ) > 1 ) {
+
+	$services[count( $services ) -2] .= ' & ' . $services[count( $services ) -1];
+
+	array_pop( $services );
+
+} ?>
 
 <div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
 	<?php
 	if ( ! empty( $services ) )
-		printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s Send a copy of each backup to: %6$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg, implode( ', ', array_filter( $services ) ) );
+		printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s Send a copy of each backup to %6$s.', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg, implode( ', ', array_filter( $services ) ) );
 	else
 		printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg );
 	?>
