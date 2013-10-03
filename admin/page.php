@@ -18,6 +18,6 @@
 
 	<p class="howto"><?php printf( __( 'If you need help getting things working then check the FAQ by clicking on help in the top right hand corner of this page.', 'hmbkp' ), '<a href="mailto:support@hmn.md">support@hmn.md</a>' ); ?></p>
 
-	<p class="howto"><?php printf( __( 'Wish you could store your backups in a safer place? Our %1$spremium add-ons%2$s enable automatic backups to Dropbox, FTP, Google Drive and more.', 'hmbkp' ), '<a href="http://bwp.hmn.md">', '</a>' ); ?></p>
+	<p class="howto"><?php printf( __( 'Wish you could store your backups in a safer place? Our %1$spremium extensions%2$s enable automatic backups to Dropbox, FTP, Google Drive and more.', 'hmbkp' ), '<a href="http://bwp.hmn.md">', '</a>' ); ?></p>
 
 </div>
