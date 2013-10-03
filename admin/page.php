@@ -2,7 +2,10 @@
 
 	<?php screen_icon( HMBKP_PLUGIN_SLUG ); ?>
 
-	<h2><?php _e( 'Manage Backups', 'hmbkp' ); ?></h2>
+	<h2>
+		<?php _e( 'Manage Backups', 'hmbkp' ); ?>
+		<a id="Intercom" class="add-new-h2" href="mailto:support@hmn.md"><?php _e( 'Support', 'hmbkp' ); ?></a>
+	</h2>
 
 <?php if ( hmbkp_possible() ) : ?>
 

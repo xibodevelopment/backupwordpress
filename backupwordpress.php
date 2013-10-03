@@ -156,10 +156,6 @@ function hmbkp_init() {
 add_action( 'admin_init', 'hmbkp_init' );
 
 function hmbkp_load_scripts() {
-	// Load admin css and js
-	$screen = get_current_screen();
-
-	if ( 'tools_page_backupwordpress' === $screen->id ) {
 
 		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
 
@@ -179,10 +175,26 @@ function hmbkp_load_scripts() {
 			)
 		);
 
-	}
-
 }
 add_action( 'admin_print_scripts-tools_page_backupwordpress', 'hmbkp_load_scripts' );
+
+function load_intercom_script() {
+	global $current_user;
+	?>
+	<script id="IntercomSettingsScriptTag">
+		window.intercomSettings = {
+			email: "<?php echo $current_user->user_email; ?>",
+			created_at: <?php echo strtotime( $current_user->user_registered ); ?>,
+			app_id: "7f1l4qyq",
+			user_id: "<?php echo $current_user->ID; ?>",
+			name: "Demo User",
+			widget      : { activator: '#Intercom' }
+		};
+	</script>
+	<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()</script>
+
+<?php }
+add_action( 'admin_footer-tools_page_backupwordpress', 'load_intercom_script' );
 
 function hmbkp_load_styles(){
 
@@ -236,3 +248,44 @@ function hmbkp_plugin_textdomain() {
 
 }
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
+
+
+add_action( 'contextual_help', 'wptuts_screen_help', 10, 3 );
+function wptuts_screen_help( $contextual_help, $screen_id, $screen ) {
+	// The add_help_tab function for screen was introduced in WordPress 3.3.
+	if ( ! method_exists( $screen, 'add_help_tab' ) )
+		return $contextual_help;
+	global $hook_suffix;
+	// List screen properties
+	$variables = '<ul style="width:50%;float:left;"> <strong>Screen variables </strong>'
+			. sprintf( '<li> Screen id : %s</li>', $screen_id )
+			. sprintf( '<li> Screen base : %s</li>', $screen->base )
+			. sprintf( '<li>Parent base : %s</li>', $screen->parent_base )
+			. sprintf( '<li> Parent file : %s</li>', $screen->parent_file )
+			. sprintf( '<li> Hook suffix : %s</li>', $hook_suffix )
+			. '</ul>';
+	// Append global $hook_suffix to the hook stems
+	$hooks = array(
+		"load-$hook_suffix",
+		"admin_print_styles-$hook_suffix",
+		"admin_print_scripts-$hook_suffix",
+		"admin_head-$hook_suffix",
+		"admin_footer-$hook_suffix"
+	);
+	// If add_meta_boxes or add_meta_boxes_{screen_id} is used, list these too
+	if ( did_action( 'add_meta_boxes_' . $screen_id ) )
+		$hooks[] = 'add_meta_boxes_' . $screen_id;
+	if ( did_action( 'add_meta_boxes' ) )
+		$hooks[] = 'add_meta_boxes';
+	// Get List HTML for the hooks
+	$hooks = '<ul style="width:50%;float:left;"> <strong>Hooks </strong> <li>' . implode( '</li><li>', $hooks ) . '</li></ul>';
+	// Combine $variables list with $hooks list.
+	$help_content = $variables . $hooks;
+	// Add help panel
+	$screen->add_help_tab( array(
+		'id'      => 'wptuts-screen-help',
+		'title'   => 'Screen Information',
+		'content' => $help_content,
+	));
+	return $contextual_help;
+}
