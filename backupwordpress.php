@@ -169,6 +169,7 @@ function hmbkp_load_scripts() {
 			'hmbkp',
 			'hmbkp',
 			array(
+				'page_slug'    => HMBKP_PLUGIN_SLUG,
 				'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
 				'update'				=> __( 'Update', 'hmbkp' ),
 				'cancel'				=> __( 'Cancel', 'hmbkp' ),
