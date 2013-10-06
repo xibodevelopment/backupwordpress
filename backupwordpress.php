@@ -183,6 +183,7 @@ function load_intercom_script() {
 	?>
 	<script id="IntercomSettingsScriptTag">
 		window.intercomSettings = {
+			"user_hash": "<?php echo hash_hmac( "sha256", $current_user->ID, "fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK" ); ?>",
 			email: "<?php echo $current_user->user_email; ?>",
 			created_at: <?php echo strtotime( $current_user->user_registered ); ?>,
 			app_id: "7f1l4qyq",
