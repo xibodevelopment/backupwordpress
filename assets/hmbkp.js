@@ -41,6 +41,8 @@ jQuery( document ).ready( function( $ ) {
 
 			$.colorbox.resize();
 
+			$('#hmbkp_schedule_start_time').datetimepicker( {timeFormat: "hh:mm tt"});
+
 		}
 
 	} );

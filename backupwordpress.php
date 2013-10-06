@@ -165,6 +165,10 @@ function hmbkp_load_scripts() {
 
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
+		wp_enqueue_script( 'hmbkp-timepicker', HMBKP_PLUGIN_URL . 'assets/datetimepicker/dist/jquery-ui-timepicker-addon.min.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ), sanitize_title( HMBKP_VERSION ) );
+
+		wp_enqueue_script( 'hmbkp-slider-access', HMBKP_PLUGIN_URL . 'assets/datetimepicker/dist/jquery-ui-sliderAccess.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider'  ), sanitize_title( HMBKP_VERSION ) );
+
 		wp_localize_script(
 			'hmbkp',
 			'hmbkp',
@@ -189,6 +193,10 @@ function hmbkp_load_styles(){
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
 
 	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
+
+	wp_enqueue_style( 'jquery-ui', 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', false, HMBKP_VERSION );
+
+	wp_enqueue_style( 'hmbkp-timepicker', HMBKP_PLUGIN_URL . 'assets/timepicker/dist/jquery-ui-timepicker-addon.min.css', false, HMBKP_VERSION );
 
 }
 add_action( 'admin_print_styles-tools_page_backupwordpress', 'hmbkp_load_styles' );
