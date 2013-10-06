@@ -97,7 +97,7 @@ else {
 
     	<tr>
 
-    		<td class="hmbkp-no-backups" colspan="3"><?php _e( 'This is where your backups will appear once you have one.', 'hmbkp' ); ?></td>
+    		<td class="hmbkp-no-backups" colspan="3"><?php _e( 'This is where your backups will appear once you have some.', 'hmbkp' ); ?></td>
 
     	</tr>
 
