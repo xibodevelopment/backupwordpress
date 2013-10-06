@@ -21,7 +21,6 @@ function hmbkp_request_delete_backup() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
 
 /**
@@ -41,7 +40,6 @@ function hmbkp_request_delete_schedule() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedule' );
 
 /**
@@ -90,7 +88,6 @@ function hmbkp_ajax_request_do_backup() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
 
 /**
@@ -123,7 +120,6 @@ function hmbkp_request_download_backup() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
 
 /**
@@ -148,7 +144,6 @@ function hmbkp_request_cancel_backup() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
 
 /**
@@ -167,7 +162,6 @@ function hmbkp_dismiss_error() {
 	die;
 
 }
-
 add_action( 'admin_init', 'hmbkp_dismiss_error' );
 
 /**
@@ -191,7 +185,6 @@ function hmbkp_ajax_is_backup_in_progress() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' );
 
 /**
@@ -213,7 +206,6 @@ function hmbkp_ajax_calculate_backup_size() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
 
 /**
@@ -245,7 +237,6 @@ function hmbkp_ajax_cron_test() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
 /**
@@ -263,7 +254,6 @@ function hmbkp_edit_schedule_load() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
 
 /**
@@ -281,7 +271,6 @@ function hmbkp_edit_schedule_excludes_load() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_edit_schedule_excludes_load', 'hmbkp_edit_schedule_excludes_load' );
 
 /**
@@ -297,7 +286,6 @@ function hmbkp_add_schedule_load() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
 
 /**
@@ -378,9 +366,7 @@ function hmnkp_edit_schedule_submit() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' );
-
 
 /**
  * Add an exclude rule
@@ -406,9 +392,7 @@ function hmbkp_add_exclude_rule() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
-
 
 /**
  * Delete an exclude rule
@@ -434,7 +418,6 @@ function hmbkp_delete_exclude_rule() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
 
 
@@ -477,7 +460,6 @@ function hmbkp_preview_exclude_rule() {
 	<?php die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
 function hmbkp_display_error_and_offer_to_email_it() {
@@ -514,7 +496,6 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	<?php die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
 
 function hmbkp_send_error_via_email() {
