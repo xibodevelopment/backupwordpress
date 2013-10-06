@@ -21,4 +21,14 @@
 
 	<p class="howto"><?php printf( __( 'If you need help getting things working then check the FAQ by clicking on help in the top right hand corner of this page.', 'hmbkp' ), '<a href="mailto:support@hmn.md">support@hmn.md</a>' ); ?></p>
 
+	<p id="optin-message" class="howto">
+
+		<?php $opted_in = get_option( 'hmbkp_intercom_opt_in' ); ?>
+
+		<input id="toggle_optin_value" type="checkbox" <?php checked( $opted_in ); ?>>
+
+		<?php printf( __( 'Allow BackUpWordPress to send information about my configuration for support purposes.', 'hmbkp' ) ); ?>
+
+	</p>
+
 </div>

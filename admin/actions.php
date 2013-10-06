@@ -512,5 +512,21 @@ function hmbkp_send_error_via_email() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
+
+/**
+ * Toggles the optin setting
+ */
+function set_support_optin_value() {
+
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+
+	$support_opt_in = filter_var($_POST['optin'], FILTER_VALIDATE_BOOLEAN);
+
+	if ( update_option( 'hmbkp_intercom_opt_in', $support_opt_in ) )
+		wp_send_json_success();
+	else
+		wp_send_json_error();
+
+}
+add_action( 'wp_ajax_toggle_optin_value', 'set_support_optin_value' );

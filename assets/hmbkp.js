@@ -12,6 +12,22 @@ jQuery( document ).ready( function( $ ) {
 	    $.colorbox.close();
 	} );
 
+	$( 'input#toggle_optin_value' ).on( 'change', function(){
+		$.post(
+				ajaxurl,
+				{ nonce: hmbkp.nonce, action: 'toggle_optin_value', optin: this.checked },
+				function( data ) {
+					var status, message = '';
+					if (data.success === true){
+						message = ' <span>Setting saved</span> ';
+					} else {
+						message = ' <span>Setting not saved!</span> ';
+					}
+							$(message).insertAfter('input#toggle_optin_value').fadeOut('slow');
+				}
+		);
+	});
+
 	// Setup the tabs
 	$( '.hmbkp-tabs' ).tabs();
 
