@@ -34,9 +34,41 @@
 
     		</select>
 
-    	</label>
+			</label>
 
-    	<label>
+			<label>
+
+				<?php _e( 'Schedule start', 'hmbkp' ); ?>
+
+				<input type="number" min="0" max="24" step="1" value="7" name="hmbkp_schedule_start_hours" id="hmbkp_schedule_start_hours"> Hours
+
+				<input type="number" min="0" max="59" step="1" value="30" name="hmbkp_schedule_start_minutes" id="hmbkp_schedule_start_minutes"> Minutes
+
+			</label>
+
+		<label>
+
+			<?php _e( 'Schedule weekday', 'hmbkp' ); ?>
+
+			<select id="hmbkp_schedule_start_day_of_week" name="hmbkp_schedule_start_day_of_week">
+				<option>Monday</option>
+				<option>Tuesday</option>
+				<option>Wednesday</option>
+				<option>Thursday</option>
+				<option>Friday</option>
+				<option>Saturday</option>
+				<option>Sunday</option>
+			</select>
+		</label>
+
+		<label>
+
+			<?php _e( 'Schedule day of month', 'hmbkp' ); ?>
+
+			<input type="number" min="0" max="31" step="1" value="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_start_day_of_month">
+		</label>
+
+		<label>
 
     		<?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?>
 
