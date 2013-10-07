@@ -23,7 +23,8 @@ jQuery( document ).ready( function( $ ) {
 					} else {
 						message = ' <span>Setting not saved!</span> ';
 					}
-							$(message).insertAfter('input#toggle_optin_value').fadeOut('slow');
+					$(message).insertAfter('input#toggle_optin_value').fadeOut('slow');
+					location.reload();
 				}
 		);
 	});
