@@ -530,3 +530,15 @@ function set_support_optin_value() {
 
 }
 add_action( 'wp_ajax_toggle_optin_value', 'set_support_optin_value' );
+
+function load_server_info() {
+
+	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
+
+	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
+
+	include_once HMBKP_PLUGIN_PATH . 'admin/server.php';
+
+	die();
+}
+add_action( 'wp_ajax_load_server_info', 'load_server_info' );

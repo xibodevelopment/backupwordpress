@@ -451,3 +451,16 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 	);
 
 }
+
+jQuery( document ).ready( function( $ ){
+	$( 'a#intercom-info').colorbox({
+			'initialWidth'	: '320px',
+			'initialHeight'	: '100px',
+			'transition'	: 'elastic',
+			'scrolling'		: true,
+			'innerWidth'	: "320px",
+			'maxHeight'		: "100%",
+			'escKey'		: false,
+			'overlayClose'	: false
+	});
+});

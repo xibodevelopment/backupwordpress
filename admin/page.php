@@ -29,6 +29,8 @@
 
 		<?php printf( __( 'Allow BackUpWordPress to send information about my configuration for support purposes.', 'hmbkp' ) ); ?>
 
+		<a id="intercom-info" class="button secondary" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_server_info' ), admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>">More info</a>
+
 	</p>
 
 </div>
