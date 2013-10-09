@@ -96,7 +96,7 @@ $email_msg = '';
 foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service ) {
 
 	if ( 'Email' == $service->name )
-		$email_msg = esc_html( $service->display() );
+		$email_msg = wp_kses_post( $service->display() );
 
 	elseif ( $service->is_service_active() )
 		$services[] = esc_html( $service->display() );
