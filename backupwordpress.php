@@ -179,7 +179,7 @@ function hmbkp_load_scripts() {
 }
 add_action( 'admin_print_scripts-tools_page_backupwordpress', 'hmbkp_load_scripts' );
 
-function load_intercom_script() {
+function hmbkp_load_intercom_script() {
 
 	$user_info = hmbkp_fetch_user_info_json(); ?>
 
@@ -191,7 +191,7 @@ function load_intercom_script() {
 <?php }
 
 if ( get_option( 'hmbkp_intercom_opt_in' ) )
-	add_action( 'admin_footer-tools_page_backupwordpress', 'load_intercom_script' );
+	add_action( 'admin_footer-tools_page_backupwordpress', 'hmbkp_load_intercom_script' );
 
 function hmbkp_load_styles(){
 

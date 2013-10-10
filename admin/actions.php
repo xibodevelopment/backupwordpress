@@ -293,7 +293,7 @@ add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
  *
  * Validate and either return errors or update the schedule
  */
-function hmnkp_edit_schedule_submit() {
+function hmbkp_edit_schedule_submit() {
 
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
 		die;
@@ -366,7 +366,7 @@ function hmnkp_edit_schedule_submit() {
 	die;
 
 }
-add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' );
+add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
 
 /**
  * Add an exclude rule
@@ -517,7 +517,7 @@ add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
 /**
  * Toggles the optin setting
  */
-function set_support_optin_value() {
+function hmbkp_set_support_optin_value() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
@@ -529,9 +529,9 @@ function set_support_optin_value() {
 		wp_send_json_error();
 
 }
-add_action( 'wp_ajax_toggle_optin_value', 'set_support_optin_value' );
+add_action( 'wp_ajax_toggle_optin_value', 'hmbkp_set_support_optin_value' );
 
-function load_server_info() {
+function hmbkp_load_server_info() {
 
 	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
 
@@ -541,4 +541,4 @@ function load_server_info() {
 
 	die();
 }
-add_action( 'wp_ajax_load_server_info', 'load_server_info' );
+add_action( 'wp_ajax_load_server_info', 'hmbkp_load_server_info' );
