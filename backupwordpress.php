@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.3.4-beta
+Version: 2.4 beta
 Author URI: http://hmn.md/
 */
 
@@ -165,6 +165,7 @@ function hmbkp_load_scripts() {
 		'hmbkp',
 		'hmbkp',
 		array(
+			'page_slug'    => HMBKP_PLUGIN_SLUG,
 			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
 			'update'				=> __( 'Update', 'hmbkp' ),
 			'cancel'				=> __( 'Cancel', 'hmbkp' ),
@@ -180,8 +181,8 @@ add_action( 'admin_print_scripts-tools_page_backupwordpress', 'hmbkp_load_script
 
 function load_intercom_script() {
 
-	$user_info = hmbkp_fetch_user_info_json();
-	?>
+	$user_info = hmbkp_fetch_user_info_json(); ?>
+
 	<script id="IntercomSettingsScriptTag">
 		window.intercomSettings = <?php echo $user_info; ?>;
 	</script>
@@ -189,7 +190,7 @@ function load_intercom_script() {
 
 <?php }
 
-if ( false != ( $hmbkp_intercom_opt_in = get_option( 'hmbkp_intercom_opt_in' ) ) )
+if ( get_option( 'hmbkp_intercom_opt_in' ) )
 	add_action( 'admin_footer-tools_page_backupwordpress', 'load_intercom_script' );
 
 function hmbkp_load_styles(){
@@ -245,7 +246,6 @@ function hmbkp_plugin_textdomain() {
 }
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
 
-
 function hmbkp_fetch_user_info_json() {
 
 	global $current_user;
@@ -254,7 +254,7 @@ function hmbkp_fetch_user_info_json() {
 
 	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
 
-	foreach( HMBKP_Requirements::get_requirement_groups() as $group ) {
+	foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) {
 
 		foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
 

@@ -103,7 +103,7 @@ foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service ) {
 
 }
 
-if ( count( $services ) > 1 ) {
+if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 	$services[count( $services ) -2] .= ' & ' . $services[count( $services ) -1];
 

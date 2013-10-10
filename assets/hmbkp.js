@@ -262,7 +262,7 @@ jQuery( document ).ready( function( $ ) {
 
 					// Reload the page so we see changes
 					if ( isNewSchedule )
-						location.replace( '//' + location.host + location.pathname + '?page=backupwordpress&hmbkp_schedule_id=' + scheduleId );
+						location.replace( '//' + location.host + location.pathname + '?page=' + hmbkp.page_slug + '&hmbkp_schedule_id=' + scheduleId );
 
 					else
 						location.reload();
