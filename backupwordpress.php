@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.3.4-beta
+Version: 2.4 beta
 Author URI: http://hmn.md/
 */
 
@@ -169,6 +169,7 @@ function hmbkp_load_scripts() {
 			'hmbkp',
 			'hmbkp',
 			array(
+				'page_slug'    => HMBKP_PLUGIN_SLUG,
 				'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
 				'update'				=> __( 'Update', 'hmbkp' ),
 				'cancel'				=> __( 'Cancel', 'hmbkp' ),
