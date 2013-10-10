@@ -36,9 +36,9 @@
 
 			</label>
 
-			<label>
+			<label id="schedule-start" class="recurring-setting">
 
-				<?php _e( 'Schedule start', 'hmbkp' ); ?>
+				<?php _e( 'Start Time', 'hmbkp' ); ?>
 
 				<input type="number" min="0" max="24" step="1" value="7" name="hmbkp_schedule_start_hours" id="hmbkp_schedule_start_hours"> Hours
 
@@ -46,26 +46,36 @@
 
 			</label>
 
-		<label>
+		<label id="start-day" class="recurring-setting">
 
-			<?php _e( 'Schedule weekday', 'hmbkp' ); ?>
+			<?php _e( 'Start Day', 'hmbkp' ); ?>
 
 			<select id="hmbkp_schedule_start_day_of_week" name="hmbkp_schedule_start_day_of_week">
+
 				<option>Monday</option>
+
 				<option>Tuesday</option>
+
 				<option>Wednesday</option>
+
 				<option>Thursday</option>
+
 				<option>Friday</option>
+
 				<option>Saturday</option>
+
 				<option>Sunday</option>
+
 			</select>
+
 		</label>
 
-		<label>
+		<label id="start-date" class="recurring-setting">
 
-			<?php _e( 'Schedule day of month', 'hmbkp' ); ?>
+			<?php _e( 'Start Date', 'hmbkp' ); ?>
 
 			<input type="number" min="0" max="31" step="1" value="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_start_day_of_month">
+
 		</label>
 
 		<label>

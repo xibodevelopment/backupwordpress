@@ -39,6 +39,39 @@ jQuery( document ).ready( function( $ ) {
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
 
+
+			$( '.recurring-setting' ).hide();
+
+			$( document ).on( 'change', 'select#hmbkp_schedule_reoccurrence', function( ){
+				var selectedSchedule = $( this ).val();
+				var settingFields = $( '.recurring-setting' );
+				switch( selectedSchedule ) {
+
+					case 'manually':
+						settingFields.hide();
+						break;
+
+					case 'hmbkp_hourly' :
+					case 'hmbkp_daily' :
+					case 'hmbkp_twicedaily' :
+						settingFields.hide();
+						$( '#schedule-start' ).show();
+						break;
+
+					case 'hmbkp_weekly' :
+					case 'hmbkp_fortnightly' :
+						settingFields.hide();
+						$( '#start-day' ).show();
+						break;
+
+					case 'hmbkp_monthly' :
+						settingFields.hide();
+						$( 'start-date' ).show();
+						break;
+
+				}
+			});
+
 			$.colorbox.resize();
 
 		}
