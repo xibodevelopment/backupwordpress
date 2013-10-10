@@ -511,3 +511,13 @@ function hmbkp_get_max_attachment_size() {
 	return wp_convert_hr_to_bytes( $max_size );
 
 }
+
+function hmbkp_is_path_accessible( $dir ) {
+
+	if ( strpos( HM_Backup::get_home_path(), $dir ) === false ) {
+		// path is inaccessible
+		return false;
+	}
+
+	return true;
+}
