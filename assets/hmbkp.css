@@ -34,6 +34,7 @@ tfoot p { margin: 0; font-weight: normal; }
 
 .hmbkp-form legend { padding: 0 0 20px; font-size: 1.17em; font-weight: bold; }
 .hmbkp-form label > * { float: right; }
+.hmbkp-form #schedule-start > * { float : none; }
 .hmbkp-form label.hidden { display: none; }
 .hmbkp-form label > input[type="text"], .hmbkp-form label > select, .hmbkp-form label > input[type="password"] { min-width: 200px; }
 .hmbkp-form label > input[type="checkbox"] { margin-top: 6px; }
