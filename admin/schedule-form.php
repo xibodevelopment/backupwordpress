@@ -40,7 +40,7 @@
 
 			<?php _e( 'Start Day', 'hmbkp' ); ?>
 
-			<select id="hmbkp_schedule_start_day_of_week" name="recurrence[hmbkp_schedule_start_day_of_week]">
+			<select id="hmbkp_schedule_start_day_of_week" name="hmbkp_recurrence[hmbkp_schedule_start_day_of_week]">
 
 				<option>Monday</option>
 
@@ -64,7 +64,7 @@
 
 			<?php _e( 'Start Day of month', 'hmbkp' ); ?>
 
-			<input type="number" min="0" max="31" step="1" value="1" id="hmbkp_schedule_start_day_of_month" name="recurrence[hmbkp_schedule_start_day_of_month]">
+			<input type="number" min="0" max="31" step="1" value="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_recurrence[hmbkp_schedule_start_day_of_month]">
 
 		</label>
 
@@ -72,9 +72,9 @@
 
 			<?php _e( 'Start Time', 'hmbkp' ); ?>
 
-			<input type="number" min="0" max="24" step="1" value="7" name="recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours"> Hours
+			<input type="number" min="0" max="24" step="1" value="7" name="hmbkp_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours"> Hours
 
-			<input type="number" min="0" max="59" step="1" value="30" name="recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes"> Minutes
+			<input type="number" min="0" max="59" step="1" value="30" name="hmbkp_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes"> Minutes
 
 			<p class="description">If twice daily, second backup will fire 12 hours after set time.</p>
 		</label>
