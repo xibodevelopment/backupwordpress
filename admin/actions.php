@@ -23,6 +23,10 @@ function hmbkp_request_delete_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
 
+/**
+ * Enable support and then redirect back to the backups page
+ * @return void
+ */
 function hmbkp_request_enable_support() {
 
 	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) )
@@ -137,7 +141,7 @@ function hmbkp_request_download_backup() {
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
 
 /**
- * cancels a running backup then redirect
+ * Cancels a running backup then redirect
  * back to the backups page
  */
 function hmbkp_request_cancel_backup() {
@@ -447,7 +451,6 @@ function hmbkp_delete_exclude_rule() {
 }
 add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
 
-
 /**
  * Ajax action for previewing an exclude rule.
  *
@@ -541,6 +544,11 @@ function hmbkp_send_error_via_email() {
 }
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
 
+/**
+ * Load the enable support modal contents
+ *
+ * @return void
+ */
 function hmbkp_load_enable_support () {
 
 	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
@@ -548,5 +556,6 @@ function hmbkp_load_enable_support () {
 	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
 
 	die();
+
 }
 add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
