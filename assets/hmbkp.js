@@ -62,6 +62,7 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
+	// Resize the colorbox when switching tabs
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
 		$.colorbox.resize();
 	} );

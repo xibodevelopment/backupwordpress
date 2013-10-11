@@ -9,14 +9,15 @@ class HMBKP_Requirements {
 	/**
 	 * The array of requirements
 	 *
-	 * Should be of the format array( __FILE__ => __CLASS__ );
+	 * Should be of the format array( (string) group => __CLASS__ );
 	 * @var array
 	 */
 	private static $requirements = array();
 
 
 	/**
-	 * Get the array of registered services
+	 * Get the array of registered requirements
+	 *
 	 * @param bool $group
 	 * @return array
 	 */
@@ -32,6 +33,7 @@ class HMBKP_Requirements {
 
 	/**
 	 * Get the requirement groups
+	 *
 	 * @return array
 	 */
 	public static function get_requirement_groups() {
@@ -41,7 +43,8 @@ class HMBKP_Requirements {
 	}
 
 	/**
-	 * Register a new service
+	 * Register a new requirement
+	 *
 	 * @param        $class
 	 * @param string $group
 	 * @return WP_Error
@@ -56,7 +59,7 @@ class HMBKP_Requirements {
 	}
 
 	/**
-	 * Instantiate the individual service classes
+	 * Instantiate the individual requirement classes
 	 *
 	 * @access private
 	 * @param string $class
@@ -76,7 +79,7 @@ class HMBKP_Requirements {
 }
 
 /**
- * An abstract service class, individual requirements should
+ * An abstract requirement class, individual requirements should
  * extend this class
  */
 abstract class HMBKP_Requirement {
@@ -90,9 +93,7 @@ abstract class HMBKP_Requirement {
 	 * @return mixed
 	 */
 	public function name() {
-
 		return $this->name;
-
 	}
 
 	/**

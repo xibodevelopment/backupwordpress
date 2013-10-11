@@ -196,7 +196,6 @@ if ( get_option( 'hmbkp_intercom_opt_in' ) )
 function hmbkp_load_styles(){
 
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
-
 	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
 
 }
