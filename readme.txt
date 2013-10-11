@@ -105,29 +105,32 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 #### 2.4
 
-* Support for new premium extensions with a subtle upsell
-* Exclude the WP DB Manager backups directory by default
-* We now use Intercom to offer support directly from within the plugin, opt-in of course
-* More i18n fixes / improvements
-* We no longer show download links if your backups directory isn't web accessible
-* Fix a bug that caused the plugin activation and deactivation hooks from firing
+* Support for new premium extensions with a subtle upsell.
+* Exclude the WP DB Manager backups directory by default.
+* We now use Intercom to offer support directly from within the plugin, opt-in of course.
+* More i18n fixes / improvements.
+* We no longer show download links if your backups directory isn't web accessible.
+* Fix a bug that caused the plugin activation and deactivation hooks from firing.
+* Correctly handle `MYSQL TIMESTAMP` columns in database dumps.
+* `mysqldump` and `zip` are now correctly recognosied on SmartOS.
+* Schedule names are now translatable.
 
 #### 2.3.2
 
-* Correct version number
+* Correct version number.
 
 #### 2.3.1
 
-* Fix a PHP strict error
-* Save and close as separate buttons
-* Fix bug that caused multiple notification emails
-* Fixes typo in database option name
-* Updated translations
-* Improve PHP docblocks
-* Make schedules class a singleton
-* Exclude popular backup plugin folders by default
-* Exclude version control folders by default
-* Fix broken localisation
+* Fix a PHP strict error.
+* Save and close as separate buttons.
+* Fix bug that caused multiple notification emails.
+* Fixes typo in database option name.
+* Updated translations.
+* Improve PHP docblocks.
+* Make schedules class a singleton.
+* Exclude popular backup plugin folders by default.
+* Exclude version control folders by default.
+* Fix broken localisation.
 
 #### 2.3
 
