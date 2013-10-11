@@ -43,33 +43,38 @@ jQuery( document ).ready( function( $ ) {
 			$( '.recurring-setting' ).hide();
 
 			$( document ).on( 'change', 'select#hmbkp_schedule_reoccurrence', function( ){
-				var selectedSchedule = $( this ).val();
-				var settingFields = $( '.recurring-setting' );
+
+				var selectedSchedule = $( this ).val(),
+				    settingFields = $( '.recurring-setting' );
+
 				switch( selectedSchedule ) {
 
 					case 'manually':
 						settingFields.hide();
 						break;
 
-					case 'hmbkp_hourly' :
-					case 'hmbkp_daily' :
+					case 'hmbkp_hourly' : // fall through
+					case 'hmbkp_daily' : // fall through
 					case 'hmbkp_twicedaily' :
 						settingFields.hide();
 						$( '#schedule-start' ).show();
 						break;
 
-					case 'hmbkp_weekly' :
+					case 'hmbkp_weekly' : // fall through
 					case 'hmbkp_fortnightly' :
 						settingFields.hide();
 						$( '#start-day' ).show();
+						$( '#schedule-start' ).show();
 						break;
 
 					case 'hmbkp_monthly' :
 						settingFields.hide();
-						$( 'start-date' ).show();
+						$( '#schedule-start' ).show();
+						$( '#start-date' ).show();
 						break;
 
 				}
+				$.colorbox.resize();
 			});
 
 			$.colorbox.resize();
