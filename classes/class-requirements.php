@@ -564,25 +564,25 @@ HMBKP_Requirements::register( 'HMBKP_Requirement_Calculated_Size', 'Site' );
 /**
  * Class HMBKP_Requirement_WP_Cron_Test_Response
  */
-class HMBKP_Requirement_WP_Cron_Test_Response extends HMBKP_Requirement {
+class HMBKP_Requirement_WP_Cron_Test extends HMBKP_Requirement {
 
 	/**
 	 * @var string
 	 */
-	var $name = 'WP Cron Response';
+	var $name = 'WP Cron Test Failed';
 
 	/**
 	 * @return mixed
 	 */
 	protected function test() {
 
-		return get_option( 'hmbkp_wp_cron_test_response' );
+		return (bool) get_option( 'hmbkp_wp_cron_test_failed' );
 
 	}
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_WP_Cron_Test_Response' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_WP_Cron_Test', 'Site' );
 
 /**
  * Class HMBKP_Requirement_PHP_API
