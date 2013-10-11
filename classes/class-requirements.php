@@ -551,7 +551,7 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		$schedule = new HMBKP_Scheduled_Backup( 'test' );
+		$schedule = new HMBKP_Scheduled_Backup( 'support' );
 
 		return $schedule->get_formatted_file_size();
 
