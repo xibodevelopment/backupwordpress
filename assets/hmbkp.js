@@ -12,23 +12,6 @@ jQuery( document ).ready( function( $ ) {
 	    $.colorbox.close();
 	} );
 
-	$( 'input#toggle_optin_value' ).on( 'change', function(){
-		$.post(
-				ajaxurl,
-				{ nonce: hmbkp.nonce, action: 'toggle_optin_value', optin: this.checked },
-				function( data ) {
-					var status, message = '';
-					if (data.success === true){
-						message = ' <span>Setting saved</span> ';
-					} else {
-						message = ' <span>Setting not saved!</span> ';
-					}
-					$(message).insertAfter('input#toggle_optin_value').fadeOut('slow');
-					location.reload();
-				}
-		);
-	});
-
 	// Setup the tabs
 	$( '.hmbkp-tabs' ).tabs();
 
@@ -154,44 +137,6 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
-	// Toggle additional fieldsets on
-	$( document ).on( 'click', '.hmbkp-toggle-fieldset', function() {
-
-		// Get the current fieldset
-		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
-		var toFieldset   = 'fieldset.' + $( this ).attr( 'data-hmbkp-fieldset' );
-
-		// Show the one we are moving too
-		$( toFieldset ).show().find( 'p.submit button' ).data( 'hmbkp-previous-fieldset', fromFieldset );
-
-		// Animate
-		$( fromFieldset ).animate( {
-			marginLeft : '-100%'
-		}, 'fast', function() {
-			$( this ).hide();
-		} );
-
-	} );
-
-	// Toggle additional fieldsets off
-	$( document ).on( 'click', '.hmbkp-form fieldset + fieldset p.submit button', function() {
-
-		// Get the current fieldset
-		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
-		var toFieldset   = $( this ).data( 'hmbkp-previous-fieldset' );
-
-		// Show the one we are moving too
-		$( toFieldset ).show();
-
-		$( toFieldset ).animate( {
-				marginLeft : '0'
-			}, 'fast', function() {
-				$( fromFieldset ).hide();
-			}
-		);
-
-	} );
-
 	// Add exclude rule
 	$( document ).on( 'click', '.hmbkp_save_exclude_rule', function() {
 
@@ -239,6 +184,10 @@ jQuery( document ).ready( function( $ ) {
 
 		isNewSchedule = $( this ).closest( 'form' ).attr( 'data-schedule-action' ) == 'add' ? true : false;
 		scheduleId    = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
+
+		// Only continue if we have a schedule id
+		if ( typeof( scheduleId ) == 'undefined' )
+			return;
 
 		// Warn that backups will be deleted if max backups has been set to less than the number of backups currently stored
 		if ( ! isNewSchedule && Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( hmbkp.remove_old_backups ) )
@@ -452,16 +401,3 @@ function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
 	);
 
 }
-
-jQuery( document ).ready( function( $ ){
-	$( 'a#intercom-info').colorbox({
-			'initialWidth'	: '320px',
-			'initialHeight'	: '100px',
-			'transition'	: 'elastic',
-			'scrolling'		: true,
-			'innerWidth'	: "320px",
-			'maxHeight'		: "100%",
-			'escKey'		: false,
-			'overlayClose'	: false
-	});
-});

@@ -23,6 +23,20 @@ function hmbkp_request_delete_backup() {
 }
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
 
+function hmbkp_request_enable_support() {
+
+	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) )
+		return;
+
+	update_option( 'hmbkp_enable_support', true );
+
+	wp_redirect( remove_query_arg( 'null' ) , 303 );
+
+	die;
+
+}
+add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_enable_support' );
+
 /**
  * Delete a schedule and all it's backups and then redirect
  * back to the backups page
@@ -514,31 +528,12 @@ function hmbkp_send_error_via_email() {
 }
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
 
-/**
- * Toggles the optin setting
- */
-function set_support_optin_value() {
-
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
-
-	$support_opt_in = filter_var($_POST['optin'], FILTER_VALIDATE_BOOLEAN);
-
-	if ( update_option( 'hmbkp_intercom_opt_in', $support_opt_in ) )
-		wp_send_json_success();
-	else
-		wp_send_json_error();
-
-}
-add_action( 'wp_ajax_toggle_optin_value', 'set_support_optin_value' );
-
-function load_server_info() {
+function hmbkp_load_enable_support () {
 
 	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
 
-	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
-
-	include_once HMBKP_PLUGIN_PATH . 'admin/server.php';
+	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
 
 	die();
 }
-add_action( 'wp_ajax_load_server_info', 'load_server_info' );
+add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );

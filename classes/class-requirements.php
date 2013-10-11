@@ -101,22 +101,28 @@ abstract class HMBKP_Requirement {
 	 */
 	public function result() {
 
-		if ( is_string( $this->test() ) && $this->test() )
-			return $this->test();
+		$test = $this->test();
 
-		if ( is_bool( $this->test() ) && $this->test() )
-			return 'Yes';
+		if ( is_string( $test ) && $test )
+			return $test;
 
-		return 'No';
+		if ( is_bool( $test ) || empty( $test ) ) {
+
+			if ( $test )
+				return 'Yes';
+
+			else
+				return 'No';
+
+		}
+
+		return var_export( $test, true );
 
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function passed() {
+	public function raw_result() {
 
-		return (bool) $this->test();
+		return $this->test();
 
 	}
 
@@ -313,7 +319,7 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 		if ( ! $cron )
 			return false;
 
-		return var_export( $cron, true );
+		return $cron;
 
 	}
 
@@ -547,7 +553,7 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 
 		$schedule = new HMBKP_Scheduled_Backup( 'test' );
 
-		return $schedule->get_filesize();
+		return $schedule->get_formatted_file_size();
 
 	}
 
@@ -570,7 +576,7 @@ class HMBKP_Requirement_WP_Cron_Test_Response extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		return  var_export( get_option( 'hmbkp_wp_cron_test_response' ), true );
+		return get_option( 'hmbkp_wp_cron_test_response' );
 
 	}
 
@@ -616,7 +622,8 @@ class HMBKP_Requirement_SERVER extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		return var_export( $_SERVER, true );
+		return $_SERVER;
+
 	}
 
 }
@@ -703,7 +710,7 @@ class HMBKP_Requirement_PHP_Open_Basedir extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP <code>open_basedir</code> Restriction';
+	var $name = 'PHP open_basedir Restriction';
 
 	/**
 	 * @return string
@@ -887,8 +894,10 @@ class HMBKP_Requirement_Active_Plugins extends HMBKP_Requirement {
 
 	protected function test(){
 
-		return var_export( get_option('active_plugins'), true );
+		return get_option( 'active_plugins' );
+
 	}
+
 }
 
 HMBKP_Requirements::register( 'HMBKP_Requirement_Active_Plugins' );

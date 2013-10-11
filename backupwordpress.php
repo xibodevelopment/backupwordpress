@@ -179,19 +179,46 @@ function hmbkp_load_scripts() {
 }
 add_action( 'admin_print_scripts-tools_page_backupwordpress', 'hmbkp_load_scripts' );
 
-function load_intercom_script() {
+/**
+ * Load Intercom and send across user information and server info
+ *
+ * Only loaded if the user has opted in.
+ *
+ * @return void
+ */
+function hmbkp_load_intercom_script() {
 
-	$user_info = hmbkp_fetch_user_info_json(); ?>
+	if ( ! get_option( 'hmbkp_enable_support' ) )
+		return;
+
+	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
+
+	foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) {
+
+		foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
+
+			$info[sanitize_title( $requirement->name() )] = $requirement->result();
+
+		}
+
+	}
+
+	$current_user = wp_get_current_user();
+
+	$info['user_hash'] = hash_hmac( "sha256", $current_user->user_email, "fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK" );
+	$info['email'] = $current_user->user_email;
+	$info['created_at'] = strtotime( $current_user->user_registered );
+	$info['app_id'] = "7f1l4qyq";
+	$info['name'] = $current_user->user_nicename;
+	$info['widget'] = array( 'activator' => '#intercom' ); ?>
 
 	<script id="IntercomSettingsScriptTag">
-		window.intercomSettings = <?php echo $user_info; ?>;
+		window.intercomSettings = <?php echo json_encode( $info ); ?>;
 	</script>
 	<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()</script>
 
 <?php }
-
-if ( get_option( 'hmbkp_intercom_opt_in' ) )
-	add_action( 'admin_footer-tools_page_backupwordpress', 'load_intercom_script' );
+add_action( 'admin_footer-tools_page_backupwordpress', 'hmbkp_load_intercom_script' );
 
 function hmbkp_load_styles(){
 
@@ -244,32 +271,3 @@ function hmbkp_plugin_textdomain() {
 
 }
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
-
-function hmbkp_fetch_user_info_json() {
-
-	global $current_user;
-
-	$info = null;
-
-	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
-
-	foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) {
-
-		foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
-
-			$info[$requirement->name()] = $requirement->result();
-
-		}
-
-	}
-
-	$info['user_hash'] = hash_hmac( "sha256", $current_user->ID, "fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK" );
-	$info['email'] = $current_user->user_email;
-	$info['created_at'] = strtotime( $current_user->user_registered );
-	$info['app_id'] = "7f1l4qyq";
-	$info['user_id'] = $current_user->ID;
-	$info['name'] = $current_user->user_nicename;
-	$info['widget'] = array( 'activator' => '#Intercom' );
-
-	return json_encode( $info );
-}
