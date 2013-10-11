@@ -21,8 +21,25 @@ function hmbkp_request_delete_backup() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
+
+/**
+ * Enable support and then redirect back to the backups page
+ * @return void
+ */
+function hmbkp_request_enable_support() {
+
+	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) )
+		return;
+
+	update_option( 'hmbkp_enable_support', true );
+
+	wp_redirect( remove_query_arg( 'null' ) , 303 );
+
+	die;
+
+}
+add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_enable_support' );
 
 /**
  * Delete a schedule and all it's backups and then redirect
@@ -41,7 +58,6 @@ function hmbkp_request_delete_schedule() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedule' );
 
 /**
@@ -90,7 +106,6 @@ function hmbkp_ajax_request_do_backup() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
 
 /**
@@ -123,11 +138,10 @@ function hmbkp_request_download_backup() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
 
 /**
- * cancels a running backup then redirect
+ * Cancels a running backup then redirect
  * back to the backups page
  */
 function hmbkp_request_cancel_backup() {
@@ -148,7 +162,6 @@ function hmbkp_request_cancel_backup() {
 	die;
 
 }
-
 add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
 
 /**
@@ -167,7 +180,6 @@ function hmbkp_dismiss_error() {
 	die;
 
 }
-
 add_action( 'admin_init', 'hmbkp_dismiss_error' );
 
 /**
@@ -191,7 +203,6 @@ function hmbkp_ajax_is_backup_in_progress() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' );
 
 /**
@@ -213,7 +224,6 @@ function hmbkp_ajax_calculate_backup_size() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
 
 /**
@@ -225,6 +235,8 @@ function hmbkp_ajax_cron_test() {
 
 	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
 
+		delete_option( 'hmbkp_wp_cron_test_failed' );
+
 		echo 1;
 
 		die;
@@ -233,19 +245,29 @@ function hmbkp_ajax_cron_test() {
 
 	$response = wp_remote_head( site_url( 'wp-cron.php' ), array( 'timeout' => 30 ) );
 
-	if ( is_wp_error( $response ) )
+	if ( is_wp_error( $response ) ) {
+
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
-	elseif ( wp_remote_retrieve_response_code( $response ) != 200 )
+		update_option( 'hmbkp_wp_cron_test_failed', true );
+
+	} elseif ( wp_remote_retrieve_response_code( $response ) != 200 ) {
+
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
-	else
+		update_option( 'hmbkp_wp_cron_test_failed', true );
+
+	} else {
+
 		echo 1;
+
+		delete_option( 'hmbkp_wp_cron_test_failed' );
+
+	}
 
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
 /**
@@ -263,7 +285,6 @@ function hmbkp_edit_schedule_load() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_edit_schedule_load', 'hmbkp_edit_schedule_load' );
 
 /**
@@ -281,7 +302,6 @@ function hmbkp_edit_schedule_excludes_load() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_edit_schedule_excludes_load', 'hmbkp_edit_schedule_excludes_load' );
 
 /**
@@ -297,7 +317,6 @@ function hmbkp_add_schedule_load() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
 
 /**
@@ -378,9 +397,7 @@ function hmnkp_edit_schedule_submit() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' );
-
 
 /**
  * Add an exclude rule
@@ -406,9 +423,7 @@ function hmbkp_add_exclude_rule() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
-
 
 /**
  * Delete an exclude rule
@@ -434,9 +449,7 @@ function hmbkp_delete_exclude_rule() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
-
 
 /**
  * Ajax action for previewing an exclude rule.
@@ -477,7 +490,6 @@ function hmbkp_preview_exclude_rule() {
 	<?php die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
 function hmbkp_display_error_and_offer_to_email_it() {
@@ -514,7 +526,6 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	<?php die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
 
 function hmbkp_send_error_via_email() {
@@ -531,5 +542,20 @@ function hmbkp_send_error_via_email() {
 	die;
 
 }
-
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
+
+/**
+ * Load the enable support modal contents
+ *
+ * @return void
+ */
+function hmbkp_load_enable_support () {
+
+	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
+
+	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
+
+	die();
+
+}
+add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );

@@ -23,5 +23,5 @@ foreach ( $schedules->get_schedules() as $schedule )
 hmbkp_rmdirtree( hmbkp_path() );
 
 // Remove all the options
-foreach ( array( 'hmbkp_plugin_version', 'hmbkp_path', 'hmbkp_default_path' ) as $option )
+foreach ( array( 'hmbkp_enable_support', 'hmbkp_plugin_version', 'hmbkp_path', 'hmbkp_default_path' ) as $option )
 	delete_option( $option );

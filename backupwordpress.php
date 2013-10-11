@@ -36,7 +36,6 @@ if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
 if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
 	define( 'HMBKP_PLUGIN_URL', plugin_dir_url(  __FILE__  ) );
 
-
 define( 'HMBKP_PLUGIN_LANG_DIR', apply_filters( 'hmbkp_filter_lang_dir', HMBKP_PLUGIN_SLUG . '/languages/' ) );
 
 if ( ! defined( 'HMBKP_ADMIN_URL' ) )
@@ -107,8 +106,8 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 	include( HMBKP_PLUGIN_PATH . '/classes/wp-cli.php' );
 
 // Hook in the activation and deactivation actions
-register_activation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_activate' );
-register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/plugin.php', 'hmbkp_deactivate' );
+register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
+register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_deactivate' );
 
 // Don't activate on anything less than PHP 5.2.4
 if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
@@ -156,39 +155,73 @@ function hmbkp_init() {
 add_action( 'admin_init', 'hmbkp_init' );
 
 function hmbkp_load_scripts() {
-	// Load admin css and js
-	$screen = get_current_screen();
 
-	if ( 'tools_page_backupwordpress' === $screen->id ) {
+	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
 
-		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
+	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
-		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
-
-		wp_localize_script(
-			'hmbkp',
-			'hmbkp',
-			array(
-				'page_slug'    => HMBKP_PLUGIN_SLUG,
-				'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
-				'update'				=> __( 'Update', 'hmbkp' ),
-				'cancel'				=> __( 'Cancel', 'hmbkp' ),
-				'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-				'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-				'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-				'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
-			)
-		);
-
-	}
+	wp_localize_script(
+		'hmbkp',
+		'hmbkp',
+		array(
+			'page_slug'    => HMBKP_PLUGIN_SLUG,
+			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
+			'update'				=> __( 'Update', 'hmbkp' ),
+			'cancel'				=> __( 'Cancel', 'hmbkp' ),
+			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+		)
+	);
 
 }
 add_action( 'admin_print_scripts-tools_page_backupwordpress', 'hmbkp_load_scripts' );
 
+/**
+ * Load Intercom and send across user information and server info
+ *
+ * Only loaded if the user has opted in.
+ *
+ * @return void
+ */
+function hmbkp_load_intercom_script() {
+
+	if ( ! get_option( 'hmbkp_enable_support' ) )
+		return;
+
+	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
+
+	foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) {
+
+		foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
+
+			$info[$requirement->name()] = $requirement->result();
+
+		}
+
+	}
+
+	$current_user = wp_get_current_user();
+
+	$info['user_hash'] = hash_hmac( "sha256", $current_user->user_email, "fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK" );
+	$info['email'] = $current_user->user_email;
+	$info['created_at'] = strtotime( $current_user->user_registered );
+	$info['app_id'] = "7f1l4qyq";
+	$info['name'] = $current_user->user_nicename;
+	$info['widget'] = array( 'activator' => '#intercom' ); ?>
+
+	<script id="IntercomSettingsScriptTag">
+		window.intercomSettings = <?php echo json_encode( $info ); ?>;
+	</script>
+	<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()</script>
+
+<?php }
+add_action( 'admin_footer-tools_page_backupwordpress', 'hmbkp_load_intercom_script' );
+
 function hmbkp_load_styles(){
 
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
-
 	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
 
 }
