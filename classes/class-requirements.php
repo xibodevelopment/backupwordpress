@@ -156,6 +156,8 @@ HMBKP_Requirements::register( 'HMBKP_Requirement_Zip_Archive', 'PHP' );
 
 /**
  * Class HMBKP_Requirement_Directory_Iterator_Follow_Symlinks
+ *
+ * Tests whether the FOLLOW_SYMLINKS class constant is available on Directory Iterator
  */
 class HMBKP_Requirement_Directory_Iterator_Follow_Symlinks extends HMBKP_Requirement {
 
@@ -182,13 +184,15 @@ HMBKP_Requirements::register( 'HMBKP_Requirement_Directory_Iterator_Follow_Symli
 
 /**
  * Class HMBKP_Requirement_Zip_Command
+ *
+ * Tests whether the zip command is available and if it is what path it's available at
  */
-class HMBKP_Requirement_Zip_Command extends HMBKP_Requirement {
+class HMBKP_Requirement_Zip_Command_Path extends HMBKP_Requirement {
 
 	/**
 	 * @var string
 	 */
-	var $name = 'zip';
+	var $name = 'zip command';
 
 	/**
 	 * @return string
@@ -203,17 +207,19 @@ class HMBKP_Requirement_Zip_Command extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_Zip_Command' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Zip_Command_Path', 'Server' );
 
 /**
  * Class HMBKP_Requirement_Mysqldump_Command
+ *
+ * Tests whether the zip command is available and if it is what path it's available at
  */
-class HMBKP_Requirement_Mysqldump_Command extends HMBKP_Requirement {
+class HMBKP_Requirement_Mysqldump_Command_Path extends HMBKP_Requirement {
 
 	/**
 	 * @var string
 	 */
-	var $name = 'mysqldump';
+	var $name = 'mysqldump command';
 
 	/**
 	 * @return string
@@ -228,7 +234,7 @@ class HMBKP_Requirement_Mysqldump_Command extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_Mysqldump_Command' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Mysqldump_Command_Path', 'Server' );
 
 /**
  * Class HMBKP_Requirement_PHP_User
@@ -238,7 +244,7 @@ class HMBKP_Requirement_PHP_User extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP User';
+	var $name = 'User';
 
 	/**
 	 * @return string
@@ -261,7 +267,7 @@ class HMBKP_Requirement_PHP_Group extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP Group[s]';
+	var $name = 'Group[s]';
 
 	/**
 	 * @return string
@@ -284,7 +290,7 @@ class HMBKP_Requirement_PHP_Version extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP Version';
+	var $name = 'Version';
 
 	/**
 	 * @return string
@@ -325,7 +331,7 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_Cron_Array' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Cron_Array', 'Site' );
 
 /**
  * Class HMBKP_Requirement_Safe_Mode
@@ -376,7 +382,7 @@ HMBKP_Requirements::register( 'HMBKP_Requirement_Shell_Exec', 'PHP' );
 /**
  * Class HMBKP_Requirement_Memory_Limit
  */
-class HMBKP_Requirement_Memory_Limit extends HMBKP_Requirement {
+class HMBKP_Requirement_PHP_Memory_Limit extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -394,7 +400,7 @@ class HMBKP_Requirement_Memory_Limit extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_Memory_Limit', 'PHP' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Memory_Limit', 'PHP' );
 
 /**
  * Class HMBKP_Requirement_Backup_Path
@@ -592,7 +598,7 @@ class HMBKP_Requirement_PHP_API extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP Interface';
+	var $name = 'Interface';
 
 	/**
 	 * @return string
@@ -605,7 +611,7 @@ class HMBKP_Requirement_PHP_API extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_API', 'Server' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_API', 'PHP' );
 
 /**
  * Class HMBKP_Requirement_SERVER
@@ -615,7 +621,7 @@ class HMBKP_Requirement_SERVER extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP SERVER Global';
+	var $name = '$_SERVER';
 
 	/**
 	 * @return mixed
@@ -628,7 +634,7 @@ class HMBKP_Requirement_SERVER extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_SERVER' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_SERVER', 'PHP' );
 
 /**
  * Class HMBKP_Requirement_Server_Software
@@ -638,7 +644,7 @@ class HMBKP_Requirement_Server_Software extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'Server Sofware';
+	var $name = 'Server';
 
 	/**
 	 * @return bool
@@ -664,7 +670,7 @@ class HMBKP_Requirement_Server_OS extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'Server OS';
+	var $name = 'OS';
 
 	/**
 	 * @return string
@@ -687,7 +693,7 @@ class HMBKP_Requirement_PHP_Disable_Functions extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP Disabled Functions';
+	var $name = 'Disabled Functions';
 
 	/**
 	 * @return string
@@ -710,7 +716,7 @@ class HMBKP_Requirement_PHP_Open_Basedir extends HMBKP_Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'PHP open_basedir Restriction';
+	var $name = 'open_basedir';
 
 	/**
 	 * @return string
@@ -728,9 +734,9 @@ HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Open_Basedir', 'PHP' );
 /* CONSTANTS */
 
 /**
- * Class HMBKP_Requirement_PHP_Define_HMBKP_PATH
+ * Class HMBKP_Requirement_Define_HMBKP_PATH
  */
-class HMBKP_Requirement_PHP_Define_HMBKP_PATH extends HMBKP_Requirement {
+class HMBKP_Requirement_Define_HMBKP_PATH extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -748,12 +754,12 @@ class HMBKP_Requirement_PHP_Define_HMBKP_PATH extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_PATH', 'constants' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_PATH', 'constants' );
 
 /**
- * Class HMBKP_Requirement_PHP_Define_HMBKP_ROOT
+ * Class HMBKP_Requirement_Define_HMBKP_ROOT
  */
-class HMBKP_Requirement_PHP_Define_HMBKP_ROOT extends HMBKP_Requirement {
+class HMBKP_Requirement_Define_HMBKP_ROOT extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -771,12 +777,12 @@ class HMBKP_Requirement_PHP_Define_HMBKP_ROOT extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_ROOT', 'constants' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_ROOT', 'constants' );
 
 /**
- * Class HMBKP_Requirement_PHP_Define_HMBKP_MYSQLDUMP_PATH
+ * Class HMBKP_Requirement_Define_HMBKP_MYSQLDUMP_PATH
  */
-class HMBKP_Requirement_PHP_Define_HMBKP_MYSQLDUMP_PATH extends HMBKP_Requirement {
+class HMBKP_Requirement_Define_HMBKP_MYSQLDUMP_PATH extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -794,12 +800,12 @@ class HMBKP_Requirement_PHP_Define_HMBKP_MYSQLDUMP_PATH extends HMBKP_Requiremen
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_MYSQLDUMP_PATH', 'constants' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_MYSQLDUMP_PATH', 'constants' );
 
 /**
- * Class HMBKP_Requirement_PHP_Define_HMBKP_ZIP_PATH
+ * Class HMBKP_Requirement_Define_HMBKP_ZIP_PATH
  */
-class HMBKP_Requirement_PHP_Define_HMBKP_ZIP_PATH extends HMBKP_Requirement {
+class HMBKP_Requirement_Define_HMBKP_ZIP_PATH extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -817,12 +823,12 @@ class HMBKP_Requirement_PHP_Define_HMBKP_ZIP_PATH extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_ZIP_PATH', 'constants' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_ZIP_PATH', 'constants' );
 
 /**
- * Class HMBKP_Requirement_PHP_Define_HMBKP_CAPABILITY
+ * Class HMBKP_Requirement_Define_HMBKP_CAPABILITY
  */
-class HMBKP_Requirement_PHP_Define_HMBKP_CAPABILITY extends HMBKP_Requirement {
+class HMBKP_Requirement_Define_HMBKP_CAPABILITY extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -840,12 +846,12 @@ class HMBKP_Requirement_PHP_Define_HMBKP_CAPABILITY extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_CAPABILITY', 'constants' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_CAPABILITY', 'constants' );
 
 /**
- * Class HMBKP_Requirement_PHP_Define_HMBKP_EMAIL
+ * Class HMBKP_Requirement_Define_HMBKP_EMAIL
  */
-class HMBKP_Requirement_PHP_Define_HMBKP_EMAIL extends HMBKP_Requirement {
+class HMBKP_Requirement_Define_HMBKP_EMAIL extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -863,12 +869,12 @@ class HMBKP_Requirement_PHP_Define_HMBKP_EMAIL extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_EMAIL', 'constants' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_EMAIL', 'constants' );
 
 /**
- * Class HMBKP_Requirement_PHP_Define_HMBKP_EXCLUDE
+ * Class HMBKP_Requirement_Define_HMBKP_EXCLUDE
  */
-class HMBKP_Requirement_PHP_Define_HMBKP_EXCLUDE extends HMBKP_Requirement {
+class HMBKP_Requirement_Define_HMBKP_EXCLUDE extends HMBKP_Requirement {
 
 	/**
 	 * @var string
@@ -886,7 +892,7 @@ class HMBKP_Requirement_PHP_Define_HMBKP_EXCLUDE extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_Define_HMBKP_EXCLUDE', 'constants' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_EXCLUDE', 'constants' );
 
 class HMBKP_Requirement_Active_Plugins extends HMBKP_Requirement {
 
@@ -900,7 +906,8 @@ class HMBKP_Requirement_Active_Plugins extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_Active_Plugins' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Active_Plugins', 'Site' );
+
 class HMBKP_Requirement_Home_Url extends HMBKP_Requirement {
 
 	var $name = 'Home URL';
