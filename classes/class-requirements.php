@@ -901,3 +901,30 @@ class HMBKP_Requirement_Active_Plugins extends HMBKP_Requirement {
 }
 
 HMBKP_Requirements::register( 'HMBKP_Requirement_Active_Plugins' );
+class HMBKP_Requirement_Home_Url extends HMBKP_Requirement {
+
+	var $name = 'Home URL';
+
+	protected function test(){
+
+		return home_url();
+
+	}
+
+}
+
+HMBKP_Requirements::register( 'HMBKP_Requirement_Home_Url', 'Site' );
+
+class HMBKP_Requirement_Site_Url extends HMBKP_Requirement {
+
+	var $name = 'Site URL';
+
+	protected function test(){
+
+		return site_url();
+
+	}
+
+}
+
+HMBKP_Requirements::register( 'HMBKP_Requirement_Site_Url', 'Site' );
