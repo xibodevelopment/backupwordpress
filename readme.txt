@@ -105,8 +105,12 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 #### 2.4
 
-* Support for new premium extensions
-* ?
+* Support for new premium extensions with a subtle upsell
+* Exclude the WP DB Manager backups directory by default
+* We now use Intercom to offer support directly from within the plugin, opt-in of course
+* More i18n fixes / improvements
+* We no longer show download links if your backups directory isn't web accessible
+* Fix a bug that caused the plugin activation and deactivation hooks from firing
 
 #### 2.3.2
 
