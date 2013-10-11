@@ -196,7 +196,7 @@ function hmbkp_load_intercom_script() {
 
 		foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
 
-			$info[sanitize_title( $requirement->name() )] = $requirement->result();
+			$info[$requirement->name()] = $requirement->result();
 
 		}
 
