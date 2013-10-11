@@ -33,8 +33,8 @@ function hmbkp_deactivate() {
 		$schedule->unschedule();
 	}
 
-	// delete the Intercom support optin option
-	delete_option( 'hmbkp_intercom_opt_in' );
+	// Opt them out of support
+	delete_option( 'hmbkp_enable_support' );
 
 }
 
