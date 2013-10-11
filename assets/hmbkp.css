@@ -88,19 +88,21 @@ table.widefat tbody td { padding: 8px 7px; }
 .hmbkp-edit-schedule-excludes-form td a, .hmbkp-edit-schedule-excludes-form td span.reason { float: right; }
 .hmbkp-edit-schedule-excludes-form td span.reason { color: #CCC; }
 input[type="datetime-local"] { border-radius: 3px; border-width: 1px; border-style: solid; box-sizing: border-box; border-color: #DFDFDF; background-color: white; }
+.server-info { overflow: auto; max-height: 320px; }
+.server-info pre { max-height: 100px; overflow-x:hidden; }
+pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; word-wrap: normal !important; }
 
-pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; }
 
 @media only screen and ( max-width : 321px ) {
 
-div.hmbkp_add_exclude_rule input { width: 100% !important; }
+	div.hmbkp_add_exclude_rule input { width: 100% !important; }
 
-.hmbkp_preview_exclude_rule { float: left !important; width: 100% !important; height: 40px !important;  }
+	.hmbkp_preview_exclude_rule { float: left !important; width: 100% !important; height: 40px !important;  }
 
-.hmbkp-form .button-primary  { float: right !important; width: 100% !important; height: 40px !important; }
+	.hmbkp-form .button-primary  { float: right !important; width: 100% !important; height: 40px !important; }
 
-.hmbkp-form .hmbkp-edit-schedule-form .button-primary  {  width: 49% !important; }
+	.hmbkp-form .hmbkp-edit-schedule-form .button-primary  {  width: 49% !important; }
 
-.hmbkp-form .hmbkp-colorbox-close { float: left !important; width: 49% !important; height: 40px !important; }
+	.hmbkp-form .hmbkp-colorbox-close { float: left !important; width: 49% !important; height: 40px !important; }
 
 } /* end media query */

@@ -45,6 +45,7 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
+	// Resize the colorbox when switching tabs
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
 		$.colorbox.resize();
 	} );
@@ -136,44 +137,6 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
-	// Toggle additional fieldsets on
-	$( document ).on( 'click', '.hmbkp-toggle-fieldset', function() {
-
-		// Get the current fieldset
-		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
-		var toFieldset   = 'fieldset.' + $( this ).attr( 'data-hmbkp-fieldset' );
-
-		// Show the one we are moving too
-		$( toFieldset ).show().find( 'p.submit button' ).data( 'hmbkp-previous-fieldset', fromFieldset );
-
-		// Animate
-		$( fromFieldset ).animate( {
-			marginLeft : '-100%'
-		}, 'fast', function() {
-			$( this ).hide();
-		} );
-
-	} );
-
-	// Toggle additional fieldsets off
-	$( document ).on( 'click', '.hmbkp-form fieldset + fieldset p.submit button', function() {
-
-		// Get the current fieldset
-		var fromFieldset = 'fieldset.' + $( this ).closest( 'fieldset' ).attr( 'class' );
-		var toFieldset   = $( this ).data( 'hmbkp-previous-fieldset' );
-
-		// Show the one we are moving too
-		$( toFieldset ).show();
-
-		$( toFieldset ).animate( {
-				marginLeft : '0'
-			}, 'fast', function() {
-				$( fromFieldset ).hide();
-			}
-		);
-
-	} );
-
 	// Add exclude rule
 	$( document ).on( 'click', '.hmbkp_save_exclude_rule', function() {
 
@@ -221,6 +184,10 @@ jQuery( document ).ready( function( $ ) {
 
 		isNewSchedule = $( this ).closest( 'form' ).attr( 'data-schedule-action' ) == 'add' ? true : false;
 		scheduleId    = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
+
+		// Only continue if we have a schedule id
+		if ( typeof( scheduleId ) == 'undefined' )
+			return;
 
 		// Warn that backups will be deleted if max backups has been set to less than the number of backups currently stored
 		if ( ! isNewSchedule && Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( hmbkp.remove_old_backups ) )

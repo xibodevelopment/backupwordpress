@@ -33,6 +33,9 @@ function hmbkp_deactivate() {
 		$schedule->unschedule();
 	}
 
+	// Opt them out of support
+	delete_option( 'hmbkp_enable_support' );
+
 }
 
 /**
