@@ -55,7 +55,7 @@
 
 </div>
 
-<p class="howto"><?php _( 'You can disable support in the future by deactivating BackUpWordPress.', 'hmbkp' ); ?></p>
+<p class="howto"><?php _e( 'You can disable support in the future by deactivating BackUpWordPress.', 'hmbkp' ); ?></p>
 
 <form class="hmbkp-form" method="POST">
 
