@@ -42,7 +42,7 @@ jQuery( document ).ready( function( $ ) {
 
 			$( '.recurring-setting' ).hide();
 
-			$( document ).on( 'change', 'select#hmbkp_schedule_reoccurrence', function( ){
+			$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function( ){
 
 				var selectedSchedule = $( this ).val(),
 				    settingFields = $( '.recurring-setting' );

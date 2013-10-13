@@ -39,7 +39,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @var mixed
 	 * @access private
 	 */
-	private $schedule_start_time = 0;
+	//private $schedule_start_time = 0;
 
 	/**
 	 * Setup the schedule object
@@ -428,13 +428,33 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
-		if ( empty( $this->schedule_start_time ) ) {
+		// already determined start date
+		if ( $this->options['schedule_start_time'] != 0 )
+			return $this->options['schedule_start_time'];
+
+		if ( empty( $this->options['schedule_start_itme'] ) ) {
 
 			if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME )
 				$date = strtotime( HMBKP_SCHEDULE_TIME );
 
-			else
-				$date = strtotime( '11pm' );
+			elseif ( isset( $_GET['hmbkp_schedule_recurrence'] ) ) {
+
+				// new schedule
+				$hmbkp_schedule_recurrence['type'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_type'] );
+
+				$hmbkp_schedule_recurrence['day_of_week'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
+
+				$hmbkp_schedule_recurrence['day_of_month'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
+
+				$hmbkp_schedule_recurrence['hours'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
+
+				$hmbkp_schedule_recurrence['minutes'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
+
+				$hmbkp_schedule_recurrence['ampm'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_ampm'] );
+
+				$date = $this->determine_start_date( $hmbkp_schedule_recurrence );
+
+			}
 
 			// Convert to UTC
 			$date -= get_option( 'gmt_offset' ) * 3600;
@@ -446,7 +466,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->set_schedule_start_time( $date );
 		}
 
-		return $this->schedule_start_time;
+		return $this->options['schedule_start_time'];
 
 	}
 
@@ -458,7 +478,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return void
 	 */
 	public function set_schedule_start_time( $timestamp ) {
-		$this->schedule_start_time = $timestamp;
+		$this->options['schedule_start_time'] = $timestamp;
 	}
 
 	/**
@@ -477,9 +497,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	}
 
 	/**
-	 * Set the schedule reoccurrence
+	 * Set the schedule recurrence
 	 *
-	 * @param string $reoccurrence
+	 * @param string $recurrence
 	 * @return bool|WP_Error
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
@@ -502,6 +522,63 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->schedule();
 
 		return true;
+	}
+
+	/**
+	 * Creates a
+	 * @param array $args
+	 * @return int
+	 */
+	protected function determine_start_date( $args = array() ) {
+
+		$schedule_start = 0;
+
+		$date_now = date( "Y-m-d" );
+
+		$month_now = date( "F" );
+
+		$year_now = date( "Y" );
+
+		if ( empty ( $args ) )
+			return;
+
+		switch ( $args['type'] ) {
+
+			case 'hmbkp_hourly':
+			case 'hmbkp_daily':
+			case 'hmbkp_twicedaily':
+				$schedule_start = $date_now . ' '
+						. $args['hours'] . ':'
+						. $args['minutes'] . ':00 '
+						. $args['ampm'];
+				break;
+
+			case 'hmbkp_weekly':
+			case 'hmbkp_fortnightly':
+				$schedule_start = 'next ' . $args['day_of_week'] . ' '
+						. $args['hours'] . ':'
+						. $args['minutes'] . ':00 '
+						. $args['ampm'];
+				break;
+
+			case 'hmbkp_monthly':
+				$schedule_start = $args['day_of_month'] . ' '
+						. $month_now . ' '
+						. $year_now . ' '
+						. $args['hours'] . ':'
+						. $args['minutes'] . ':00 '
+						. $args['ampm'];
+				break;
+			
+			default:
+				break;
+
+		}
+
+		if ( $timestamp = strtotime( $schedule_start ) )
+			return $timestamp;
+		else
+		return new WP_Error( 'hmbkp_invalid_timestamp', sprintf( __( 'Invalid date', 'hmbkp' ) ) );
 	}
 
 	/**
@@ -579,7 +656,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Clear any existing hooks
 		$this->unschedule();
 
-		wp_schedule_event( $this->get_schedule_start_time(), $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+		$schedule_timestamp = $this->get_schedule_start_time();
+		wp_schedule_event( $schedule_timestamp, $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 
 	}
 

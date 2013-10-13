@@ -349,18 +349,18 @@ function hmnkp_edit_schedule_submit() {
 
 	}
 
-	if ( isset( $_GET['hmbkp_schedule_reoccurrence'] ) ) {
+	if ( isset( $_GET['hmbkp_schedule_recurrence'] ) ) {
 
-		$schedule_reoccurrence = sanitize_text_field( $_GET['hmbkp_schedule_reoccurrence'] );
+		$hmbkp_schedule_recurrence['type'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_type'] );
 
-		if ( empty( $schedule_reoccurrence ) )
-			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
+		if ( empty( $hmbkp_schedule_recurrence ) )
+			$errors['hmbkp_schedule_recurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
 
-		elseif ( ! in_array( $schedule_reoccurrence, array_keys( $schedule->get_cron_schedules() ) ) && $schedule_reoccurrence !== 'manually' )
-			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'hmbkp' );
+		elseif ( ! in_array( $hmbkp_schedule_recurrence['type'], array_keys( $schedule->get_cron_schedules() ) ) && $hmbkp_schedule_recurrence['type'] !== 'manually' )
+			$errors['hmbkp_schedule_recurrence'] = __( 'Invalid schedule', 'hmbkp' );
 
 		else
-			$schedule->set_reoccurrence( $schedule_reoccurrence );
+			$schedule->set_reoccurrence( $hmbkp_schedule_recurrence['type'] );
 
 	}
 
