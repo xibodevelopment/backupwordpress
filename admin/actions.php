@@ -362,6 +362,21 @@ function hmnkp_edit_schedule_submit() {
 		else
 			$schedule->set_reoccurrence( $hmbkp_schedule_recurrence['type'] );
 
+		// new schedule
+		$hmbkp_schedule_recurrence['type'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_type'] );
+
+		$hmbkp_schedule_recurrence['day_of_week'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
+
+		$hmbkp_schedule_recurrence['day_of_month'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
+
+		$hmbkp_schedule_recurrence['hours'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
+
+		$hmbkp_schedule_recurrence['minutes'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
+
+		$hmbkp_schedule_recurrence['ampm'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_ampm'] );
+
+		$schedule->set_schedule_start_time( $hmbkp_schedule_recurrence );
+
 	}
 
 	if ( isset( $_GET['hmbkp_schedule_max_backups'] ) ) {

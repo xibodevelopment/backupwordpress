@@ -425,74 +425,49 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_schedule_start_time() {
 
-		if ( $this->get_reoccurrence() === 'manually' )
-			return 0;
-
-		// already determined start date
-		if ( $this->options['schedule_start_time'] != 0 )
+		if ( ! empty( $this->options['schedule_start_time'] ) )
 			return $this->options['schedule_start_time'];
 
-		if ( empty( $this->options['schedule_start_itme'] ) ) {
-
-			if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME )
-				$date = strtotime( HMBKP_SCHEDULE_TIME );
-
-			elseif ( isset( $_GET['hmbkp_schedule_recurrence'] ) ) {
-
-				// new schedule
-				$hmbkp_schedule_recurrence['type'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_type'] );
-
-				$hmbkp_schedule_recurrence['day_of_week'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
-
-				$hmbkp_schedule_recurrence['day_of_month'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
-
-				$hmbkp_schedule_recurrence['hours'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
-
-				$hmbkp_schedule_recurrence['minutes'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
-
-				$hmbkp_schedule_recurrence['ampm'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_ampm'] );
-
-				$date = $this->determine_start_date( $hmbkp_schedule_recurrence );
-
-			}
-
-			// Convert to UTC
-			$date -= get_option( 'gmt_offset' ) * 3600;
-
-			// if the scheduled time already passed today then start at the next interval instead
-			if ( $date <= strtotime( 'now' ) )
-				$date += $this->get_interval();
-
-			$this->set_schedule_start_time( $date );
-		}
-
-		return $this->options['schedule_start_time'];
+		else
+			return 0;
 
 	}
 
 	/**
 	 * Set the schedule start time.
 	 *
-	 * @access public
-	 * @param int $timestamp in UTC
-	 * @return void
+	 * @param array $recurrence
 	 */
-	public function set_schedule_start_time( $timestamp ) {
-		$this->options['schedule_start_time'] = $timestamp;
+	public function set_schedule_start_time( $recurrence = array() ) {
+
+		$this->options['schedule_start_time'] = $this->determine_start_date( $recurrence );
+
+		$this->options['recurrence'] = $recurrence;
+
 	}
 
 	/**
-	 * Get the schedule reoccurrence
+	 * Returns the recurrence settings
+	 *
+	 * @return mixed
+	 */
+	public function get_recurrence_settings(){
+
+		return $this->options['recurrence'];
+	}
+
+	/**
+	 * Get the schedule recurrence
 	 *
 	 * @access public
 	 */
 	public function get_reoccurrence() {
 
 		// Default to no reoccurrence
-		if ( empty( $this->options['reoccurrence'] ) )
+		if ( empty( $this->options['recurrence']['type'] ) )
 			$this->set_reoccurrence( 'manually' );
 
-		return $this->options['reoccurrence'];
+		return $this->options['recurrence']['type'];
 
 	}
 
@@ -502,20 +477,20 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @param string $recurrence
 	 * @return bool|WP_Error
 	 */
-	public function set_reoccurrence( $reoccurrence ) {
+	public function set_reoccurrence( $recurrence ) {
 
 		$hmbkp_schedules = $this->get_cron_schedules();
 
 		// Check it's valid
-		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && $reoccurrence !== 'manually' )
+		if ( ! is_string( $recurrence ) || ! trim( $recurrence ) || ( ! in_array( $recurrence, array_keys( $hmbkp_schedules ) ) ) && $recurrence !== 'manually' )
 			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
 
-		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
+		if ( isset( $this->options['recurrence']['type'] ) && $this->options['recurrence']['type'] === $recurrence )
 			return;
 
-		$this->options['reoccurrence'] = $reoccurrence;
+		$this->options['recurrence']['type'] = $recurrence;
 
-		if ( $reoccurrence === 'manually' )
+		if ( $recurrence === 'manually' )
 			$this->unschedule();
 
 		else
@@ -575,10 +550,17 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		}
 
-		if ( $timestamp = strtotime( $schedule_start ) )
+		if ( $timestamp = strtotime( $schedule_start ) ) {
+			// Convert to UTC
+			$timestamp -= get_option( 'gmt_offset' ) * 3600;
+
+			// if the scheduled time already passed today then start at the next interval instead
+			if ( $timestamp <= strtotime( 'now' ) )
+				$timestamp += $this->get_interval();
+
 			return $timestamp;
-		else
-		return new WP_Error( 'hmbkp_invalid_timestamp', sprintf( __( 'Invalid date', 'hmbkp' ) ) );
+		} else
+			return new WP_Error( 'hmbkp_invalid_timestamp', sprintf( __( 'Invalid date', 'hmbkp' ) ) );
 	}
 
 	/**

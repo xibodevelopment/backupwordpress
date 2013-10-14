@@ -42,39 +42,10 @@ jQuery( document ).ready( function( $ ) {
 
 			$( '.recurring-setting' ).hide();
 
+			toggleScheduleFields( $('select#hmbkp_schedule_recurrence_type').val() );
+
 			$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function( ){
-
-				var selectedSchedule = $( this ).val(),
-				    settingFields = $( '.recurring-setting' );
-
-				switch( selectedSchedule ) {
-
-					case 'manually':
-						settingFields.hide();
-						break;
-
-					case 'hmbkp_hourly' : // fall through
-					case 'hmbkp_daily' : // fall through
-					case 'hmbkp_twicedaily' :
-						settingFields.hide();
-						$( '#schedule-start' ).show();
-						break;
-
-					case 'hmbkp_weekly' : // fall through
-					case 'hmbkp_fortnightly' :
-						settingFields.hide();
-						$( '#start-day' ).show();
-						$( '#schedule-start' ).show();
-						break;
-
-					case 'hmbkp_monthly' :
-						settingFields.hide();
-						$( '#schedule-start' ).show();
-						$( '#start-date' ).show();
-						break;
-
-				}
-				$.colorbox.resize();
+				toggleScheduleFields( $( this ).val() );
 			});
 
 			$.colorbox.resize();
@@ -353,6 +324,44 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 } );
+
+function toggleScheduleFields( recurrence  ){
+
+	recurrence = typeof recurrence !== 'undefined' ? recurrence : 'manually';
+
+	var settingFields = jQuery( '.recurring-setting' );
+
+	switch( recurrence ) {
+
+		case 'manually':
+			settingFields.hide();
+			break;
+
+		case 'hmbkp_hourly' : // fall through
+		case 'hmbkp_daily' : // fall through
+		case 'hmbkp_twicedaily' :
+			settingFields.hide();
+			jQuery( '#schedule-start' ).show();
+			break;
+
+		case 'hmbkp_weekly' : // fall through
+		case 'hmbkp_fortnightly' :
+			settingFields.hide();
+			jQuery( '#start-day' ).show();
+			jQuery( '#schedule-start' ).show();
+			break;
+
+		case 'hmbkp_monthly' :
+			settingFields.hide();
+			jQuery( '#schedule-start' ).show();
+			jQuery( '#start-date' ).show();
+			break;
+
+	}
+
+	jQuery.colorbox.resize();
+
+}
 
 function catchResponseAndOfferToEmail( data ) {
 
