@@ -9,4 +9,4 @@ http://codex.wordpress.org/WordPress_Coding_Standards
 
 ## Workflow ##
 Develop on a feature branch and send a pull request for review.
-Assign the pull request to @pdewouters
+Assign the pull request to aul de Wouters [@pdewouters](https://github.com/pdewouters)
