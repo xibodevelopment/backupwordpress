@@ -209,7 +209,10 @@ function hmbkp_load_intercom_script() {
 	$info['created_at'] = strtotime( $current_user->user_registered );
 	$info['app_id'] = "7f1l4qyq";
 	$info['name'] = $current_user->user_nicename;
-	$info['widget'] = array( 'activator' => '#intercom' ); ?>
+	$info['widget'] = array( 'activator' => '#intercom' );
+
+	$info = apply_filters( 'hmbkp_intercom_data', $info );
+	?>
 
 	<script id="IntercomSettingsScriptTag">
 		window.intercomSettings = <?php echo json_encode( $info ); ?>;
