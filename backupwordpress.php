@@ -116,7 +116,7 @@ if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
 	deactivate_plugins( __FILE__ );
 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ) );
+		die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'backupwordpress' ), HMBKP_REQUIRED_PHP_VERSION ) );
 
 }
 
@@ -129,7 +129,7 @@ if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 	deactivate_plugins( __FILE__ );
 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
+		die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'backupwordpress' ), HMBKP_REQUIRED_WP_VERSION ) );
 
 }
 
@@ -166,12 +166,12 @@ function hmbkp_load_scripts() {
 		array(
 			'page_slug'    => HMBKP_PLUGIN_SLUG,
 			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
-			'update'				=> __( 'Update', 'hmbkp' ),
-			'cancel'				=> __( 'Cancel', 'hmbkp' ),
-			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+			'update'				=> __( 'Update', 'backupwordpress' ),
+			'cancel'				=> __( 'Cancel', 'backupwordpress' ),
+			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n"
 		)
 	);
 
@@ -249,12 +249,12 @@ add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
 /**
  * Loads the plugin text domain for translation
  * This setup allows a user to just drop his custom translation files into the WordPress language directory
- * Files will need to be in a subdirectory with the name of the textdomain 'hmbkp'
+ * Files will need to be in a subdirectory with the name of the textdomain 'backupwordpress'
  */
 function hmbkp_plugin_textdomain() {
 
 	// Set unique textdomain string
-	$textdomain = 'hmbkp';
+	$textdomain = 'backupwordpress';
 
 	// The 'plugin_locale' filter is also used by default in load_plugin_textdomain()
 	$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );

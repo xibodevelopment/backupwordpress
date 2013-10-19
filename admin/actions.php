@@ -247,13 +247,13 @@ function hmbkp_ajax_cron_test() {
 
 	if ( is_wp_error( $response ) ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
 	} elseif ( wp_remote_retrieve_response_code( $response ) != 200 ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
@@ -339,10 +339,10 @@ function hmnkp_edit_schedule_submit() {
 		$schedule_type = sanitize_text_field( $_GET['hmbkp_schedule_type'] );
 
 		if ( ! trim( $schedule_type ) )
-			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'backupwordpress' );
 
 		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) )
-			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
+			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'backupwordpress' );
 
 		else
 			$schedule->set_type( $schedule_type );
@@ -354,10 +354,10 @@ function hmnkp_edit_schedule_submit() {
 		$schedule_reoccurrence = sanitize_text_field( $_GET['hmbkp_schedule_reoccurrence'] );
 
 		if ( empty( $schedule_reoccurrence ) )
-			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'backupwordpress' );
 
 		elseif ( ! in_array( $schedule_reoccurrence, array_keys( $schedule->get_cron_schedules() ) ) && $schedule_reoccurrence !== 'manually' )
-			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'hmbkp' );
+			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'backupwordpress' );
 
 		else
 			$schedule->set_reoccurrence( $schedule_reoccurrence );
@@ -369,13 +369,13 @@ function hmnkp_edit_schedule_submit() {
 		$schedule_max_backups = sanitize_text_field( $_GET['hmbkp_schedule_max_backups'] );
 
 		if ( empty( $schedule_max_backups ) )
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'backupwordpress' );
 
 		elseif ( ! is_numeric( $schedule_max_backups ) )
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'backupwordpress' );
 
 		elseif ( ! ( $schedule_max_backups >= 1 ) )
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'backupwordpress' );
 
 		else
 			$schedule->set_max_backups( (int) $schedule_max_backups );
@@ -474,17 +474,17 @@ function hmbkp_preview_exclude_rule() {
 
 	if ( $schedule->get_excluded_file_count() ) { ?>
 
-		<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', $schedule->get_excluded_file_count(), 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>', $schedule->get_excluded_file_count() ); ?></p>
+		<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', $schedule->get_excluded_file_count(), 'backupwordpress' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>', $schedule->get_excluded_file_count() ); ?></p>
 
 	<?php } else { ?>
 
-		<p><?php printf( __( '%s didn\'t match any files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>' ); ?></p>
+		<p><?php printf( __( '%s didn\'t match any files.', 'backupwordpress' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>' ); ?></p>
 
 	<?php } ?>
 
 	<p>
-		<button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'hmbkp' ); ?></button>
-		<button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'hmbkp' ); ?></button>
+		<button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'backupwordpress' ); ?></button>
+		<button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'backupwordpress' ); ?></button>
 	</p>
 
 	<?php die;
@@ -505,23 +505,23 @@ function hmbkp_display_error_and_offer_to_email_it() {
 
 	if ( $succeeded ) { ?>
 
-		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'hmbkp' ); ?></h3>
+		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'backupwordpress' ); ?></h3>
 
 	<?php } else { ?>
 
-		<h3><?php _e( 'Your backup failed', 'hmbkp' ); ?></h3>
+		<h3><?php _e( 'Your backup failed', 'backupwordpress' ); ?></h3>
 
 	<?php } ?>
 
-	<p><?php _e( 'Here\'s the response from the server:', 'hmbkp' ); ?></p>
+	<p><?php _e( 'Here\'s the response from the server:', 'backupwordpress' ); ?></p>
 
 	<pre><?php esc_html_e( $error ); ?></pre>
 
-	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'hmbkp' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?>
+	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'backupwordpress' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?>
 		<br /><br /></p>
 
-	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
-	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
+	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'backupwordpress' ); ?></button>
+	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'backupwordpress' ); ?></button>
 
 	<?php die;
 

@@ -7,27 +7,27 @@
 		<?php
 		// possible titles
 		$titles = array(
-			'complete-hourly'      => esc_html__( 'Complete Hourly', 'hmbkp' ),
-			'file-hourly'          => esc_html__( 'File Hourly', 'hmbkp' ),
-			'database-hourly'      => esc_html__( 'Database Hourly', 'hmbkp' ),
-			'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'hmbkp' ),
-			'file-twicedaily'      => esc_html__( 'File Twicedaily', 'hmbkp' ),
-			'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'hmbkp' ),
-			'complete-daily'       => esc_html__( 'Complete Daily', 'hmbkp' ),
-			'file-daily'           => esc_html__( 'File Daily', 'hmbkp' ),
-			'database-daily'       => esc_html__( 'Database Daily', 'hmbkp' ),
-			'complete-weekly'      => esc_html__( 'Complete Weekly', 'hmbkp' ),
-			'file-weekly'          => esc_html__( 'File Weekly', 'hmbkp' ),
-			'database-weekly'      => esc_html__( 'Database Weekly', 'hmbkp' ),
-			'complete-fortnightly' => esc_html__( 'Complete Fortnightly', 'hmbkp' ),
-			'file-fortnightly'     => esc_html__( 'File Fortnightly', 'hmbkp' ),
-			'database-fortnightly' => esc_html__( 'Database Fortnightly', 'hmbkp' ),
-			'complete-monthly'     => esc_html__( 'Complete Monthly', 'hmbkp' ),
-			'file-monthly'         => esc_html__( 'File Monthly', 'hmbkp' ),
-			'database-monthly'     => esc_html__( 'Database Monthly', 'hmbkp' ),
-			'complete-manually'    => esc_html__( 'Complete Manually', 'hmbkp' ),
-			'file-manually'        => esc_html__( 'File Manually', 'hmbkp' ),
-			'database-manually'    => esc_html__( 'Database Manually', 'hmbkp' )
+			'complete-hourly'      => esc_html__( 'Complete Hourly', 'backupwordpress' ),
+			'file-hourly'          => esc_html__( 'File Hourly', 'backupwordpress' ),
+			'database-hourly'      => esc_html__( 'Database Hourly', 'backupwordpress' ),
+			'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'backupwordpress' ),
+			'file-twicedaily'      => esc_html__( 'File Twicedaily', 'backupwordpress' ),
+			'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'backupwordpress' ),
+			'complete-daily'       => esc_html__( 'Complete Daily', 'backupwordpress' ),
+			'file-daily'           => esc_html__( 'File Daily', 'backupwordpress' ),
+			'database-daily'       => esc_html__( 'Database Daily', 'backupwordpress' ),
+			'complete-weekly'      => esc_html__( 'Complete Weekly', 'backupwordpress' ),
+			'file-weekly'          => esc_html__( 'File Weekly', 'backupwordpress' ),
+			'database-weekly'      => esc_html__( 'Database Weekly', 'backupwordpress' ),
+			'complete-fortnightly' => esc_html__( 'Complete Fortnightly', 'backupwordpress' ),
+			'file-fortnightly'     => esc_html__( 'File Fortnightly', 'backupwordpress' ),
+			'database-fortnightly' => esc_html__( 'Database Fortnightly', 'backupwordpress' ),
+			'complete-monthly'     => esc_html__( 'Complete Monthly', 'backupwordpress' ),
+			'file-monthly'         => esc_html__( 'File Monthly', 'backupwordpress' ),
+			'database-monthly'     => esc_html__( 'Database Monthly', 'backupwordpress' ),
+			'complete-manually'    => esc_html__( 'Complete Manually', 'backupwordpress' ),
+			'file-manually'        => esc_html__( 'File Manually', 'backupwordpress' ),
+			'database-manually'    => esc_html__( 'Database Manually', 'backupwordpress' )
 		);
 
 
@@ -37,7 +37,7 @@
 
 	<?php endforeach; ?>
 
-		<li><a class="colorbox" href="<?php esc_attr_e( esc_url( add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), admin_url( 'admin-ajax.php' ) ) ) ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
+		<li><a class="colorbox" href="<?php esc_attr_e( esc_url( add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), admin_url( 'admin-ajax.php' ) ) ) ); ?>"> + <?php _e( 'add schedule', 'backupwordpress' ); ?></a></li>
 
 	</ul>
 
@@ -68,9 +68,9 @@ else {
 				<tr>
 
 					<th scope="col"><?php hmbkp_backups_number( $schedule ); ?></th>
-		    		<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
-		    		<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
-		    		<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
+		    		<th scope="col"><?php _e( 'Size', 'backupwordpress' ); ?></th>
+		    		<th scope="col"><?php _e( 'Type', 'backupwordpress' ); ?></th>
+		    		<th scope="col"><?php _e( 'Actions', 'backupwordpress' ); ?></th>
 
 				</tr>
 
@@ -97,7 +97,7 @@ else {
 
     	<tr>
 
-    		<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'hmbkp' ); ?></td>
+    		<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'backupwordpress' ); ?></td>
 
     	</tr>
 
@@ -117,11 +117,11 @@ function hmbkp_backups_number( $schedule, $zero = false, $one = false, $more = f
 	$number = count( $schedule->get_backups() );
 
 	if ( $number > 1 )
-		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'hmbkp' ) : $more );
+		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'backupwordpress' ) : $more );
 	elseif ( $number == 0 )
-		$output = ( false === $zero ) ? __( 'No Backups Completed', 'hmbkp' ) : $zero;
+		$output = ( false === $zero ) ? __( 'No Backups Completed', 'backupwordpress' ) : $zero;
 	else // must be one
-		$output = ( false === $one ) ? __( '1 Backup Completed', 'hmbkp' ) : $one;
+		$output = ( false === $one ) ? __( '1 Backup Completed', 'backupwordpress' ) : $one;
 
 	echo apply_filters( 'hmbkp_backups_number', $output, $number );
 }
