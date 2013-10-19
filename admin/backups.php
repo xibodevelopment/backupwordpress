@@ -8,25 +8,25 @@
 		// possible titles
 		$titles = array(
 			'complete-hourly'      => esc_html__( 'Complete Hourly', 'backupwordpress' ),
-			'file-hourly'          => esc_html__( 'File Hourly', 'backupwordpress' ),
+			'file-hourly'          => esc_html__( 'Files Hourly', 'backupwordpress' ),
 			'database-hourly'      => esc_html__( 'Database Hourly', 'backupwordpress' ),
 			'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'backupwordpress' ),
-			'file-twicedaily'      => esc_html__( 'File Twicedaily', 'backupwordpress' ),
+			'file-twicedaily'      => esc_html__( 'Files Twicedaily', 'backupwordpress' ),
 			'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'backupwordpress' ),
 			'complete-daily'       => esc_html__( 'Complete Daily', 'backupwordpress' ),
-			'file-daily'           => esc_html__( 'File Daily', 'backupwordpress' ),
+			'file-daily'           => esc_html__( 'Files Daily', 'backupwordpress' ),
 			'database-daily'       => esc_html__( 'Database Daily', 'backupwordpress' ),
 			'complete-weekly'      => esc_html__( 'Complete Weekly', 'backupwordpress' ),
-			'file-weekly'          => esc_html__( 'File Weekly', 'backupwordpress' ),
+			'file-weekly'          => esc_html__( 'Files Weekly', 'backupwordpress' ),
 			'database-weekly'      => esc_html__( 'Database Weekly', 'backupwordpress' ),
 			'complete-fortnightly' => esc_html__( 'Complete Fortnightly', 'backupwordpress' ),
-			'file-fortnightly'     => esc_html__( 'File Fortnightly', 'backupwordpress' ),
+			'file-fortnightly'     => esc_html__( 'Files Fortnightly', 'backupwordpress' ),
 			'database-fortnightly' => esc_html__( 'Database Fortnightly', 'backupwordpress' ),
 			'complete-monthly'     => esc_html__( 'Complete Monthly', 'backupwordpress' ),
-			'file-monthly'         => esc_html__( 'File Monthly', 'backupwordpress' ),
+			'file-monthly'         => esc_html__( 'Files Monthly', 'backupwordpress' ),
 			'database-monthly'     => esc_html__( 'Database Monthly', 'backupwordpress' ),
 			'complete-manually'    => esc_html__( 'Complete Manually', 'backupwordpress' ),
-			'file-manually'        => esc_html__( 'File Manually', 'backupwordpress' ),
+			'file-manually'        => esc_html__( 'Files Manually', 'backupwordpress' ),
 			'database-manually'    => esc_html__( 'Database Manually', 'backupwordpress' )
 		);
 
