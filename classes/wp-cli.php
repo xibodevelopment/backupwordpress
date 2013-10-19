@@ -65,7 +65,7 @@ class BackUpCommand extends WP_CLI_Command {
 	    //hmbkp_delete_old_backups();
 
     	if ( file_exists( $hm_backup->get_archive_filepath() ) )
-			WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $hm_backup->get_archive_filepath() );
+			WP_CLI::success( __( 'Backup Complete:', 'backupwordpress' ) . ' ' . $hm_backup->get_archive_filepath() );
 
 		else
 			WP_CLI::error( __( 'Backup Failed', 'backupwordpress' ) );
