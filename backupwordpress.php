@@ -151,6 +151,7 @@ function hmbkp_init() {
 	// Fire the update action
 	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
 		hmbkp_update();
+
 }
 add_action( 'admin_init', 'hmbkp_init' );
 
@@ -270,3 +271,22 @@ function hmbkp_plugin_textdomain() {
 
 }
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
+
+function hmbkp_display_server_info_tab() {
+
+	require_once( HMBKP_PLUGIN_PATH . '/classes/class-requirements.php' );
+
+	ob_start();
+	require_once 'admin/server-info.php';
+	$info = ob_get_clean();
+
+	get_current_screen()->add_help_tab(
+		array(
+			'title' => __( 'Server Info', 'backupwordpress' ),
+			'id' => 'hmbkp_server',
+			'content' => $info
+		)
+	);
+
+}
+add_action( 'load-tools_page_backupwordpress', 'hmbkp_display_server_info_tab' );
