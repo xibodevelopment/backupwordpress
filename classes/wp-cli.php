@@ -34,7 +34,7 @@ class BackUpCommand extends WP_CLI_Command {
 		if ( ! empty( $assoc_args['root'] ) )
 			$hm_backup->set_root( $assoc_args['root'] );
 
-		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! mkdir( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
+		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! wp_mkdir_p( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
 			WP_CLI::error( __( 'Invalid backup path', 'hmbkp' ) );
 			return false;
 		}

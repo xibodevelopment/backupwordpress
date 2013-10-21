@@ -314,7 +314,7 @@ function hmbkp_path() {
 
 	// Create the backups directory if it doesn't exist
 	if ( ! is_dir( $path ) && is_writable( dirname( $path ) ) )
-		mkdir( $path, 0755 );
+		wp_mkdir_p( $path );
 
 	// If the path has changed then cache it
 	if ( get_option( 'hmbkp_path' ) !== $path )
@@ -400,7 +400,7 @@ function hmbkp_path_move( $from, $to ) {
 
 	// Create the new directory if it doesn't exist
 	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
-		mkdir( $to, 0755 );
+		wp_mkdir_p( $to );
 
 	// Bail if we couldn't
 	if ( ! is_dir( $to ) || ! is_writable( $to ) )
