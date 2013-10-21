@@ -64,7 +64,7 @@ switch ( $schedule->get_reoccurrence() ) :
 	break;
 
 	default:
-		wp_die( 'Invalid reoccurence' );
+		$schedule->set_reoccurrence( 'manually' );
 
 endswitch;
 
