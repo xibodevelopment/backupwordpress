@@ -430,7 +430,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_schedule_start_time( $recurrence = array() ) {
 
-		$this->options['schedule_start_time'] = $this->determine_start_date( $recurrence );
+		if ( 'manually' === $recurrence['type'] )
+			$this->options['schedule_start_time'] = 0;
+
+		else
+			$this->options['schedule_start_time'] = $this->determine_start_date( $recurrence );
 
 		$this->options['recurrence'] = $recurrence;
 
