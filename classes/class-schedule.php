@@ -32,16 +32,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $options = array();
 
 	/**
-	 * The schedule start time
-	 *
-	 * (default value: current_time( 'timestamp' ))
-	 *
-	 * @var mixed
-	 * @access private
-	 */
-	//private $schedule_start_time = 0;
-
-	/**
 	 * Setup the schedule object
 	 * Loads the options from the database and populates properties
 	 *
