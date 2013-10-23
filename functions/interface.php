@@ -9,7 +9,10 @@
 function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 
 	$encoded_file = urlencode( base64_encode( $file ) );
-	$offset       = get_option( 'gmt_offset' ) * 3600; ?>
+	$offset       = get_option( 'gmt_offset' ) * 3600;
+
+	$hmbkp_admin_page = ( is_multisite() ) ? 'settings.php' : 'tools.php';
+	?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
 
@@ -26,10 +29,10 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 		<td>
 
 			<?php if (  hmbkp_is_path_accessible( hmbkp_path() )  ) : ?>
-			<a href="<?php echo wp_nonce_url( admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() ), 'hmbkp-download_backup' ); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
+			<a href="<?php echo wp_nonce_url( admin_url( $hmbkp_admin_page . '?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() ), 'hmbkp-download_backup' ); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
 			<?php endif; ?>
 
-			<a href="<?php echo wp_nonce_url( admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() ), 'hmbkp-delete_backup' ); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+			<a href="<?php echo wp_nonce_url( admin_url( $hmbkp_admin_page . '?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() ), 'hmbkp-delete_backup' ); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
 		</td>
 
@@ -127,8 +130,10 @@ add_action( 'admin_head', 'hmbkp_admin_notices' );
  */
 function hmbkp_plugin_row( $plugins ) {
 
+	$hmbkp_admin_page = ( is_multisite() ) ? 'settings.php' : 'tools.php';
+
 	if ( isset( $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php'] ) )
-		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>Tools &rarr; Backups</strong>', 'Find me under <strong><a href="' . admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG ) . '">Tools &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
+		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>Tools &rarr; Backups</strong>', 'Find me under <strong><a href="' . admin_url( $hmbkp_admin_page . '?page=' . HMBKP_PLUGIN_SLUG ) . '">Tools &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
 
 	return $plugins;
 

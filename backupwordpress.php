@@ -38,8 +38,13 @@ if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
 
 define( 'HMBKP_PLUGIN_LANG_DIR', apply_filters( 'hmbkp_filter_lang_dir', HMBKP_PLUGIN_SLUG . '/languages/' ) );
 
-if ( ! defined( 'HMBKP_ADMIN_URL' ) )
-	define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
+if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
+	if ( is_multisite() )
+		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
+	else
+		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'settings.php' ) ) );
+}
+
 
 $key = array( ABSPATH, time() );
 

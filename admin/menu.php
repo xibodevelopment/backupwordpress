@@ -36,7 +36,7 @@ function hmbkp_manage_backups() {
 function hmbkp_plugin_action_link( $links, $file ) {
 
 	if ( strpos( $file, HMBKP_PLUGIN_SLUG ) !== false )
-		array_push( $links, '<a href="tools.php?page=' . esc_attr( HMBKP_PLUGIN_SLUG ) . '">' . __( 'Backups', 'hmbkp' ) . '</a>' );
+		array_push( $links, '<a href="' . esc_url( HMBKP_ADMIN_URL ) . '">' . __( 'Backups', 'hmbkp' ) . '</a>' );
 
 	return $links;
 
