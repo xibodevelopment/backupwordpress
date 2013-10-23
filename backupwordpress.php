@@ -40,7 +40,7 @@ define( 'HMBKP_PLUGIN_LANG_DIR', apply_filters( 'hmbkp_filter_lang_dir', HMBKP_P
 
 if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
 	if ( is_multisite() )
-		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'settings.php' ) ) );
+		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, network_admin_url( 'settings.php' ) ) );
 	else
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 }
