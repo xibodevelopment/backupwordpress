@@ -21,7 +21,7 @@ function hmbkp_request_delete_backup() {
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_backup' );
 
 /**
  * Enable support and then redirect back to the backups page
@@ -39,7 +39,7 @@ function hmbkp_request_enable_support() {
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_enable_support' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_enable_support' );
 
 /**
  * Delete a schedule and all it's backups and then redirect
@@ -58,7 +58,7 @@ function hmbkp_request_delete_schedule() {
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedule' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_schedule' );
 
 /**
  * Perform a manual backup via ajax
@@ -138,7 +138,7 @@ function hmbkp_request_download_backup() {
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_download_backup' );
 
 /**
  * Cancels a running backup then redirect
@@ -162,7 +162,7 @@ function hmbkp_request_cancel_backup() {
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_cancel_backup' );
 
 /**
  * Dismiss an error and then redirect
