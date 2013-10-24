@@ -211,7 +211,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$.get(
 			ajaxurl + '?' + $( this ).serialize(),
-			{ 'action'	: 'hmnkp_edit_schedule_submit' },
+			{ 'action'	: 'hmbkp_edit_schedule_submit' },
 			function( data ) {
 
 				// Assume success if no data passed back
@@ -233,23 +233,25 @@ jQuery( document ).ready( function( $ ) {
 					// Get the errors json string
 					var errors = JSON.parse( data );
 
+					$('span.error').empty();
+
 					// Loop through the errors
 					$.each( errors, function( key, value ) {
 
 						// Focus the first field that errored
 						if ( typeof( hmbkp_focused ) == 'undefined' ) {
 
-							$( '[name="' + key + '"]' ).focus();
+							$( '#' + key ).focus();
 
 							hmbkp_focused = true;
 
 						}
 
 						// Add an error class to all fields with errors
-						$( '[name="' + key + '"]' ).closest( 'label' ).addClass( 'hmbkp-error' );
+						$( '#' + key ).closest( 'label' ).addClass( 'hmbkp-error' );
 
 						// Add the error message
-						$( '[name="' + key + '"]' ).after( '<span>' + value + '</span>' );
+						$( '#' + key ).after( '<span class="hmbkp-error">' + value + '</span>' );
 
 					} );
 

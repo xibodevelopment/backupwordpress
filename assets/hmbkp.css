@@ -30,7 +30,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-form fieldset { float: left; }
 .js .hmbkp-form fieldset + fieldset { display: none; margin-right: -100%; }
 
-.hmbkp-form label { display: block; line-height: 25px; padding-bottom: 20px; border-bottom: 1px dotted #CCC; margin-bottom: 20px; width: 320px; position: relative; }
+.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; border-bottom: 1px dotted #CCC; margin-bottom: 20px; width: 320px; position: relative; }
 
 .hmbkp-form legend { padding: 0 0 20px; font-size: 1.17em; font-weight: bold; }
 .hmbkp-form label > * { float: right; }
