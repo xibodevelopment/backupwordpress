@@ -5,9 +5,6 @@
  */
 function hmbkp_activate() {
 
-	// loads the translation files
-	load_plugin_textdomain( 'backupwordpress', false, HMBKP_PLUGIN_LANG_DIR );
-
 	// Run deactivate on activation in-case it was deactivated manually
 	hmbkp_deactivate();
 

@@ -271,4 +271,4 @@ function hmbkp_plugin_textdomain() {
 	load_plugin_textdomain( $textdomain, false, HMBKP_PLUGIN_LANG_DIR );
 
 }
-add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
+add_action( 'plugins_loaded', 'hmbkp_plugin_textdomain', 1 );
