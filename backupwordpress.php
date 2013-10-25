@@ -7,6 +7,8 @@ Description: Simple automated backups of your WordPress powered website. Once ac
 Author: Human Made Limited
 Version: 2.4
 Author URI: http://hmn.md/
+Text Domain: backupwordpress
+Domain Path: /languages
 */
 
 /*
