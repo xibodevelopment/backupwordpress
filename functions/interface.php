@@ -11,10 +11,13 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 	$encoded_file = urlencode( base64_encode( $file ) );
 	$offset       = get_option( 'gmt_offset' ) * 3600;
 
-	if ( is_multisite() )
-		$settings_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
-	else
-		$settings_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+	if ( is_multisite() ) {
+		$delete_action_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+		$download_action_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+	} else {
+		$delete_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+		$download_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+	}
 	?>
 
 	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
@@ -32,10 +35,10 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 		<td>
 
 			<?php if (  hmbkp_is_path_accessible( hmbkp_path() )  ) : ?>
-			<a href="<?php echo wp_nonce_url( $settings_url, 'hmbkp-download_backup' ); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
+			<a href="<?php echo wp_nonce_url( $download_action_url, 'hmbkp-download_backup' ); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
 			<?php endif; ?>
 
-			<a href="<?php echo wp_nonce_url( $settings_url, 'hmbkp-delete_backup' ); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+			<a href="<?php echo wp_nonce_url( $delete_action_url, 'hmbkp-delete_backup' ); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
 		</td>
 
