@@ -433,7 +433,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$defaults = array(
 			'type'         => 'manually',
 			'day_of_week'  => 'monday',
-			'day_of_month' => '',
+			'day_of_month' => '15',
 			'hours'        => '11',
 			'minutes'      => '00',
 			'ampm'         => 'pm'
