@@ -85,7 +85,7 @@
 
 			<label for="hmbkp_schedule_start_hours"><?php _e( 'Hours', 'hmbkp' ); ?></label>
 
-			<input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( ( isset( $recurrence_settings['minutes'] ) ) ? $recurrence_settings['minutes'] : '00' ); ?>">
+			<input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( ( isset( $recurrence_settings['minutes'] ) ) ? $recurrence_settings['minutes'] : '0' ); ?>">
 
 			<label for="hmbkp_schedule_start_minutes"><?php _e( 'Minutes', 'hmbkp' ); ?></label>
 
