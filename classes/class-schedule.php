@@ -426,9 +426,22 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Set the schedule start time.
 	 *
-	 * @param array $recurrence
+	 * @param array $args
 	 */
-	public function set_schedule_start_time( $recurrence = array() ) {
+	public function set_schedule_start_time( $args = array() ) {
+
+		$defaults = array(
+			'type'         => 'manually',
+			'day_of_week'  => 'monday',
+			'day_of_month' => '',
+			'hours'        => '11',
+			'minutes'      => '00',
+			'ampm'         => 'pm'
+		);
+
+		$recurrence = wp_parse_args( $args, $defaults );
+
+		$recurrence = apply_filters( 'hmbkp_get_start_args', $recurrence );
 
 		if ( 'manually' === $recurrence['type'] )
 			$time = 0;
