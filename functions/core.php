@@ -211,7 +211,7 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$database_daily = new HMBKP_Scheduled_Backup( 'default-1' );
 	$database_daily->set_type( 'database' );
-	$database_daily->set_reoccurrence( 'hmbkp_daily' );
+	$database_daily->set_schedule_start_time( array( 'type' => 'hmbkp_daily' ) );
 	$database_daily->set_max_backups( 14 );
 	$database_daily->save();
 
@@ -221,7 +221,7 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$complete_weekly = new HMBKP_Scheduled_Backup( 'default-2' );
 	$complete_weekly->set_type( 'complete' );
-	$complete_weekly->set_reoccurrence( 'hmbkp_weekly' );
+	$complete_weekly->set_schedule_start_time( array( 'type' => 'hmbkp_weekly' ) );
 	$complete_weekly->set_max_backups( 12 );
 	$complete_weekly->save();
 
