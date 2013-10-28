@@ -473,9 +473,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_reoccurrence() {
 
-		// Default to no reoccurrence
 		if ( empty( $this->options['recurrence']['type'] ) )
-			$this->set_reoccurrence( 'manually' );
+			return 'manually';
 
 		return $this->options['recurrence']['type'];
 
@@ -494,11 +493,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Check it's valid
 		if ( ! is_string( $recurrence ) || ! trim( $recurrence ) || ( ! in_array( $recurrence, array_keys( $hmbkp_schedules ) ) ) && $recurrence !== 'manually' )
 			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron recurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
-
-		if ( isset( $this->options['recurrence']['type'] ) && $this->options['recurrence']['type'] === $recurrence )
-			return;
-
-		$this->options['recurrence']['type'] = $recurrence;
 
 		if ( $recurrence === 'manually' )
 			$this->unschedule();
@@ -649,6 +643,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->unschedule();
 
 		$schedule_timestamp = $this->get_schedule_start_time();
+
 		wp_schedule_event( $schedule_timestamp, $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 
 	}
