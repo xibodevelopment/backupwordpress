@@ -452,6 +452,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$this->options['recurrence'] = $recurrence;
 
+		$this->set_reoccurrence( $this->options['recurrence']['type'] );
+
 	}
 
 	/**
@@ -491,7 +493,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Check it's valid
 		if ( ! is_string( $recurrence ) || ! trim( $recurrence ) || ( ! in_array( $recurrence, array_keys( $hmbkp_schedules ) ) ) && $recurrence !== 'manually' )
-			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
+			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron recurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
 
 		if ( isset( $this->options['recurrence']['type'] ) && $this->options['recurrence']['type'] === $recurrence )
 			return;
