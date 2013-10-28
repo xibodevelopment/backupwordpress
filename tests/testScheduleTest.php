@@ -55,7 +55,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	public function testSetHourlySchedule() {
 
-		$this->schedule->set_reoccurrence( 'hmbkp_hourly' );
+		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_hourly' ) );
 
 		$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
 
@@ -65,17 +65,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	public function testSetTwiceDailySchedule() {
 
-		$this->schedule->set_reoccurrence( 'hmbkp_daily' );
-
-		$this->assertEquals( 'hmbkp_daily', $this->schedule->get_reoccurrence() );
-
-		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
-
-	}
-
-	public function testSetDailySchedule() {
-
-		$this->schedule->set_reoccurrence( 'hmbkp_twicedaily' );
+		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_twicedaily' ) );
 
 		$this->assertEquals( 'hmbkp_twicedaily', $this->schedule->get_reoccurrence() );
 
@@ -83,9 +73,19 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
+	public function testSetDailySchedule() {
+
+		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_daily' ) );
+
+		$this->assertEquals( 'hmbkp_daily', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
 	public function testSetWeeklySchedule() {
 
-		$this->schedule->set_reoccurrence( 'hmbkp_weekly' );
+		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_weekly' ) );
 
 		$this->assertEquals( 'hmbkp_weekly', $this->schedule->get_reoccurrence() );
 
@@ -95,7 +95,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	public function testSetFortnightlySchedule() {
 
-		$this->schedule->set_reoccurrence( 'hmbkp_fortnightly' );
+		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_fortnightly' ) );
 
 		$this->assertEquals( 'hmbkp_fortnightly', $this->schedule->get_reoccurrence() );
 
@@ -105,7 +105,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	public function testSetMonthlySchedule() {
 
-		$this->schedule->set_reoccurrence( 'hmbkp_monthly' );
+		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_monthly' ) );
 
 		$this->assertEquals( 'hmbkp_monthly', $this->schedule->get_reoccurrence() );
 
