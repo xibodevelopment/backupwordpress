@@ -214,8 +214,7 @@ jQuery( document ).ready( function( $ ) {
 			{ 'action'	: 'hmbkp_edit_schedule_submit' },
 			function( data ) {
 
-				// Assume success if no data passed back
-				if ( ( ! data || data == 0 ) && ( $isDestinationSettingsForm === false ) ) {
+				if ( ( data.success === true ) && ( $isDestinationSettingsForm === false ) ) {
 
 					$.colorbox.close();
 
@@ -226,12 +225,12 @@ jQuery( document ).ready( function( $ ) {
 					else
 						location.reload();
 
-				} else if( ! data || data == 0 ) {
+				} else if( data.success === true ) {
 					// nothing for now
 				} else {
 
 					// Get the errors json string
-					var errors = JSON.parse( data );
+					var errors = data.data;
 
 					$('span.error').empty();
 

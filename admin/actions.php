@@ -433,16 +433,21 @@ function hmbkp_edit_schedule_submit() {
 
 	}
 
-	// Save the service options
-	foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-		$errors = array_merge( $errors, $service->save() );
-
-	$schedule->save();
-
 	if ( $errors )
-		echo json_encode( $errors );
+		wp_send_json_error( $errors );
+	else {
 
-	die;
+		$schedule->set_schedule_start_time( $hmbkp_schedule_recurrence );
+
+		// Save the service options
+		foreach ( HMBKP_Services::get_services( $schedule ) as $service )
+			$errors = array_merge( $errors, $service->save() );
+
+		$schedule->save();
+
+		wp_send_json_success();
+	}
+
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
