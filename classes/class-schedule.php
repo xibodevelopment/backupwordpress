@@ -463,7 +463,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_recurrence_settings(){
 
-		return $this->options['recurrence'];
+		if ( ! empty( $this->options['recurrence'] ) )
+			return $this->options['recurrence'];
+
+		return false;
 	}
 
 	/**
