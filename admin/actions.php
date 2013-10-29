@@ -380,7 +380,7 @@ function hmbkp_edit_schedule_submit() {
 			$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'backupwordpress' );
 		}
 
-		if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
+		if ( ! empty( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
 			$hmbkp_schedule_recurrence['hours'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
 
 		$options = array(
@@ -390,10 +390,11 @@ function hmbkp_edit_schedule_submit() {
 
 		if ( false === filter_var( $hmbkp_schedule_recurrence['hours'], FILTER_VALIDATE_INT, array( 'options' => $options  ) ) )
 			$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 1 and 12', 'backupwordpress' );
-		}
+		} else
+			$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be a number', 'backupwordpress' );
 
-		if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
-			$hmbkp_schedule_recurrence['minutes'] = absint( ltrim( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'], '0' ) );
+		if ( ! empty( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
+			$hmbkp_schedule_recurrence['minutes'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
 
 		$options = array(
 			'min_range' => 0,
@@ -405,7 +406,8 @@ function hmbkp_edit_schedule_submit() {
 
 		$hmbkp_schedule_recurrence['ampm'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_ampm'] );
 
-		}
+		} else
+			$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be a number', 'backupwordpress' );
 
 	}
 

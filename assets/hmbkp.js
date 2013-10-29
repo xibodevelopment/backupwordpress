@@ -232,8 +232,6 @@ jQuery( document ).ready( function( $ ) {
 					// Get the errors json string
 					var errors = data.data;
 
-					$('span.error').empty();
-
 					// Loop through the errors
 					$.each( errors, function( key, value ) {
 
@@ -247,10 +245,13 @@ jQuery( document ).ready( function( $ ) {
 						}
 
 						// Add an error class to all fields with errors
-						$( '#' + key ).closest( 'label' ).addClass( 'hmbkp-error' );
+						$( 'label[for=' + key + ']' ).addClass( 'hmbkp-error' );
+
+						$( '#' + key).next( 'span' ).remove();
 
 						// Add the error message
 						$( '#' + key ).after( '<span class="hmbkp-error">' + value + '</span>' );
+
 
 					} );
 
