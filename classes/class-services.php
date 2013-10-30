@@ -174,7 +174,7 @@ abstract class HMBKP_Service {
 	/**
 	 * Handles passing service specific data to Intercom
 	 */
-	abstract public function intercom_data();
+	public static function intercom_data() {}
 
 }
 
