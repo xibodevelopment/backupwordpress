@@ -176,6 +176,8 @@ abstract class HMBKP_Service {
 	 */
 	public static function intercom_data() {}
 
+	public static function intercom_data_html() {}
+
 }
 
 /**
