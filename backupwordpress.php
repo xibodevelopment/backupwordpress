@@ -203,6 +203,9 @@ function hmbkp_load_intercom_script() {
 
 	}
 
+	foreach ( HMBKP_Services::get_services() as $file => $service )
+		array_merge( $info, call_user_func( array( $service, 'intercom_data' ) ) );
+
 	$current_user = wp_get_current_user();
 
 	$info['user_hash'] = hash_hmac( "sha256", $current_user->user_email, "fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK" );
