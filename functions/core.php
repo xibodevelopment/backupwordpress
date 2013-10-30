@@ -517,7 +517,7 @@ function hmbkp_get_max_attachment_size() {
 
 function hmbkp_is_path_accessible( $dir ) {
 
-	if ( strpos( HM_Backup::get_home_path(), $dir ) === false ) {
+	if ( strpos( $dir, HM_Backup::get_home_path() ) === false ) {
 		// path is inaccessible
 		return false;
 	}
