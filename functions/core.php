@@ -313,8 +313,8 @@ function hmbkp_path() {
 		$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
-	if ( ! is_dir( $path ) && wp_is_writable( dirname( $path ) ) )
-		mkdir( $path, 0755 );
+	if ( ! is_dir( $path ) && is_writable( dirname( $path ) ) )
+		wp_mkdir_p( $path );
 
 	// If the path has changed then cache it
 	if ( get_option( 'hmbkp_path' ) !== $path )
@@ -399,8 +399,8 @@ function hmbkp_path_move( $from, $to ) {
 		return;
 
 	// Create the new directory if it doesn't exist
-	if ( wp_is_writable( dirname( $to ) ) && ! is_dir( $to ) )
-		mkdir( $to, 0755 );
+	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
+		wp_mkdir_p( $to );
 
 	// Bail if we couldn't
 	if ( ! is_dir( $to ) || ! wp_is_writable( $to ) )
@@ -517,7 +517,7 @@ function hmbkp_get_max_attachment_size() {
 
 function hmbkp_is_path_accessible( $dir ) {
 
-	if ( strpos( HM_Backup::get_home_path(), $dir ) === false ) {
+	if ( strpos( $dir, HM_Backup::get_home_path() ) === false ) {
 		// path is inaccessible
 		return false;
 	}
