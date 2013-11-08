@@ -872,6 +872,29 @@ class HMBKP_Requirement_Define_HMBKP_EMAIL extends HMBKP_Requirement {
 HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_EMAIL', 'constants' );
 
 /**
+ * Class HMBKP_Requirement_Define_HMBKP_ATTACHMENT_MAX_FILESIZE
+ */
+class HMBKP_Requirement_Define_HMBKP_ATTACHMENT_MAX_FILESIZE extends HMBKP_Requirement {
+
+	/**
+	 * @var string
+	 */
+	var $name = 'HMBKP_ATTACHMENT_MAX_FILESIZE';
+
+	/**
+	 * @return string
+	 */
+	protected function test() {
+
+		return defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ? HMBKP_ATTACHMENT_MAX_FILESIZE : '';
+
+	}
+
+}
+
+HMBKP_Requirements::register( 'HMBKP_Requirement_Define_HMBKP_ATTACHMENT_MAX_FILESIZE', 'constants' );
+
+/**
  * Class HMBKP_Requirement_Define_HMBKP_EXCLUDE
  */
 class HMBKP_Requirement_Define_HMBKP_EXCLUDE extends HMBKP_Requirement {

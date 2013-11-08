@@ -310,7 +310,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				$counter = 1;
 
 				// Keep checking the cached filesize to see if the other thread is finished
-				while ( 'calculating' === ( $filesize = $wpdb->get_var( "SELECT option_value FROM $wpdb->options WHERE option_name = '_transient_hmbkp_schedule_" . $this->get_id() . "_filesize'" ) ) ) {
+				while ( 'calculating' === ( $filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' ) ) ) {
 
 					// Check once every 10 seconds
 					sleep( 10 );
