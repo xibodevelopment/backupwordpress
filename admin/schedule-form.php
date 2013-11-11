@@ -81,15 +81,16 @@
 
 			<p><?php _e( 'Start time', 'hmbkp' ); ?></p>
 
-			<input type="number" min="1" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( ( isset( $recurrence_settings['hours'] ) ) ? $recurrence_settings['hours'] : '23' ); ?>">
+			<label for="hmbkp_schedule_start_hours"><input type="number" min="1" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( ( isset( $recurrence_settings['hours'] ) ) ? $recurrence_settings['hours'] : '23' ); ?>">
 
-			<label for="hmbkp_schedule_start_hours"><?php _e( 'Hours', 'hmbkp' ); ?></label>
+			<?php _e( 'Hours', 'hmbkp' ); ?></label>
 
-			<input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( ( isset( $recurrence_settings['minutes'] ) ) ? $recurrence_settings['minutes'] : '00' ); ?>">
+			<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( ( isset( $recurrence_settings['minutes'] ) ) ? $recurrence_settings['minutes'] : '00' ); ?>">
 
-			<label for="hmbkp_schedule_start_minutes"><?php _e( 'Minutes', 'hmbkp' ); ?></label>
+			<?php _e( 'Minutes', 'hmbkp' ); ?></label>
 
 			<p class="twice-js description">If twice daily, second backup will fire 12 hours after set time.</p>
+
 		</div>
 
 		<div>
