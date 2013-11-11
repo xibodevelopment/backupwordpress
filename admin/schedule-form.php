@@ -50,18 +50,18 @@
 
 				<?php
 				$weekdays = array(
-					'monday',
-					'tuesday',
-					'wednesday',
-					'thursday',
-					'friday',
-					'saturday',
-					'sunday'
+					'monday' => __( 'Monday', 'hmbkp' ),
+					'tuesday' => __( 'Tuesday', 'hmbkp' ),
+					'wednesday' => __( 'Wednesday', 'hmbkp' ),
+					'thursday' => __( 'Thursday', 'hmbkp' ),
+					'friday' => __( 'Friday', 'hmbkp' ),
+					'saturday' => __( 'Saturday', 'hmbkp' ),
+					'sunday' => __( 'Sunday', 'hmbkp' )
 				);
 
-				foreach ( $weekdays as $day ) : ?>
+				foreach ( $weekdays as $key => $day ) : ?>
 
-					<option value="<?php echo esc_attr( $day ) ?>" <?php selected( ( isset( $recurrence_settings['day_of_week'] ) ) ? $recurrence_settings['day_of_week'] : '', $day ); ?>><?php echo esc_html( ucwords( $day )); ?></option>
+					<option value="<?php echo esc_attr( $key ) ?>" <?php selected( ( isset( $recurrence_settings['day_of_week'] ) ) ? $recurrence_settings['day_of_week'] : '', $key ); ?>><?php echo esc_html( $day ); ?></option>
 
 				<?php endforeach; ?>
 
