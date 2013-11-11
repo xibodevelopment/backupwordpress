@@ -42,10 +42,10 @@ jQuery( document ).ready( function( $ ) {
 
 			$( '.recurring-setting' ).hide();
 
-			toggleScheduleFields( $('select#hmbkp_schedule_recurrence_type').val() );
+			hmbkpToggleScheduleFields( $('select#hmbkp_schedule_recurrence_type').val() );
 
 			$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function( ){
-				toggleScheduleFields( $( this ).val() );
+				hmbkpToggleScheduleFields( $( this ).val() );
 			});
 
 			$.colorbox.resize();
@@ -308,12 +308,12 @@ jQuery( document ).ready( function( $ ) {
 			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
 		).done( function( data ) {
 
-			catchResponseAndOfferToEmail( data );
+			hmbkpCatchResponseAndOfferToEmail( data );
 
 		// Redirect back on error
 		} ).fail( function( jqXHR, textStatus ) {
 
-			catchResponseAndOfferToEmail( jqXHR.responseText );
+					hmbkpCatchResponseAndOfferToEmail( jqXHR.responseText );
 
 		} );
 
@@ -327,7 +327,7 @@ jQuery( document ).ready( function( $ ) {
 
 } );
 
-function toggleScheduleFields( recurrence  ){
+function hmbkpToggleScheduleFields( recurrence  ){
 
 	recurrence = typeof recurrence !== 'undefined' ? recurrence : 'manually';
 
@@ -365,7 +365,7 @@ function toggleScheduleFields( recurrence  ){
 
 }
 
-function catchResponseAndOfferToEmail( data ) {
+function hmbkpCatchResponseAndOfferToEmail( data ) {
 
 	// Backup Succeeded
 	if ( ! data || data == 0 )
