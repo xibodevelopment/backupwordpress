@@ -507,7 +507,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	}
 
 	/**
-	 * Creates a
+	 * Sets the backup recurrence schedule
+	 *
 	 * @param array $args
 	 * @return int
 	 */
@@ -566,8 +567,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				$timestamp += $this->get_interval();
 
 			return $timestamp;
-		} else
+		} else {
 			return 0;
+		}
+
 	}
 
 	/**
