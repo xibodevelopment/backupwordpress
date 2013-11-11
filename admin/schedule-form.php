@@ -99,7 +99,7 @@
 
 			<label for="hmbkp_schedule_start_ampm"><?php _e( 'AM/PM', 'hmbkp' ); ?></label>
 
-			<p class="description">If twice daily, second backup will fire 12 hours after set time.</p>
+			<p class="twice-js description">If twice daily, second backup will fire 12 hours after set time.</p>
 		</div>
 
 		<div>

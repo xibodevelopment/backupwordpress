@@ -331,7 +331,9 @@ function hmbkpToggleScheduleFields( recurrence  ){
 
 	recurrence = typeof recurrence !== 'undefined' ? recurrence : 'manually';
 
-	var settingFields = jQuery( '.recurring-setting' );
+	var settingFields = jQuery( '.recurring-setting'),
+			scheduleSettingFields = jQuery( '#schedule-start'),
+			twiceDailyNote = jQuery( 'p.twice-js' );
 
 	switch( recurrence ) {
 
@@ -340,23 +342,31 @@ function hmbkpToggleScheduleFields( recurrence  ){
 			break;
 
 		case 'hmbkp_hourly' : // fall through
-		case 'hmbkp_daily' : // fall through
+		case 'hmbkp_daily' :
+			settingFields.hide();
+			scheduleSettingFields.show();
+			twiceDailyNote.hide();
+			break;
+
 		case 'hmbkp_twicedaily' :
 			settingFields.hide();
-			jQuery( '#schedule-start' ).show();
+			scheduleSettingFields.show();
+			twiceDailyNote.show();
 			break;
 
 		case 'hmbkp_weekly' : // fall through
 		case 'hmbkp_fortnightly' :
 			settingFields.hide();
 			jQuery( '#start-day' ).show();
-			jQuery( '#schedule-start' ).show();
+			scheduleSettingFields.show();
+			twiceDailyNote.hide();
 			break;
 
 		case 'hmbkp_monthly' :
 			settingFields.hide();
-			jQuery( '#schedule-start' ).show();
+			scheduleSettingFields.show();
 			jQuery( '#start-date' ).show();
+			twiceDailyNote.hide();
 			break;
 
 	}
