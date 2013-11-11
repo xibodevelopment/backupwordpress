@@ -81,23 +81,13 @@
 
 			<p><?php _e( 'Start time', 'hmbkp' ); ?></p>
 
-			<input type="number" min="1" max="12" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( ( isset( $recurrence_settings['hours'] ) ) ? $recurrence_settings['hours'] : '11' ); ?>">
+			<input type="number" min="1" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( ( isset( $recurrence_settings['hours'] ) ) ? $recurrence_settings['hours'] : '23' ); ?>">
 
 			<label for="hmbkp_schedule_start_hours"><?php _e( 'Hours', 'hmbkp' ); ?></label>
 
 			<input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( ( isset( $recurrence_settings['minutes'] ) ) ? $recurrence_settings['minutes'] : '00' ); ?>">
 
 			<label for="hmbkp_schedule_start_minutes"><?php _e( 'Minutes', 'hmbkp' ); ?></label>
-
-			<select id="hmbkp_schedule_start_ampm" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_ampm]">
-
-				<option value="am" <?php selected( ( isset( $recurrence_settings['ampm'] ) ) ? $recurrence_settings['ampm'] : '', 'am' ); ?>><?php _e( 'AM', 'hmbkp' ); ?></option>
-
-				<option value="pm" <?php selected( ( isset( $recurrence_settings['ampm'] ) ) ? $recurrence_settings['ampm'] : '', 'pm' ); ?>><?php _e( 'PM', 'hmbkp' ); ?></option>
-
-			</select>
-
-			<label for="hmbkp_schedule_start_ampm"><?php _e( 'AM/PM', 'hmbkp' ); ?></label>
 
 			<p class="twice-js description">If twice daily, second backup will fire 12 hours after set time.</p>
 		</div>

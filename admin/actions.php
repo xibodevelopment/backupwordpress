@@ -385,11 +385,11 @@ function hmbkp_edit_schedule_submit() {
 
 			$options = array(
 				'min_range' => 1,
-				'max_range' => 12
+				'max_range' => 23
 			);
 
 			if ( false === filter_var( $hmbkp_schedule_recurrence['hours'], FILTER_VALIDATE_INT, array( 'options' => $options ) ) )
-				$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 1 and 12', 'backupwordpress' );
+				$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 1 and 23', 'backupwordpress' );
 		} else {
 			$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be a number', 'backupwordpress' );
 		}
@@ -404,8 +404,6 @@ function hmbkp_edit_schedule_submit() {
 
 			if ( false === filter_var( $hmbkp_schedule_recurrence['minutes'], FILTER_VALIDATE_INT, array( 'options' => $options ) ) )
 				$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'backupwordpress' );
-
-			$hmbkp_schedule_recurrence['ampm'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_ampm'] );
 
 		} else
 			$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be a number', 'backupwordpress' );

@@ -435,8 +435,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			'day_of_week'  => 'monday',
 			'day_of_month' => '15',
 			'hours'        => '11',
-			'minutes'      => '00',
-			'ampm'         => 'pm'
+			'minutes'      => '00'
 		);
 
 		$recurrence = wp_parse_args( $args, $defaults );
@@ -525,32 +524,35 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( empty ( $args ) )
 			return;
 
+		if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME )
+			$hm = HMBKP_SCHEDULE_TIME;
+		else
+			$hm = $args['hours'] . ':' . $args['minutes'] . ':00';
+
 		switch ( $args['type'] ) {
 
 			case 'hmbkp_hourly':
 			case 'hmbkp_daily':
 			case 'hmbkp_twicedaily':
-				$schedule_start = $date_now . ' '
-						. $args['hours'] . ':'
-						. $args['minutes'] . ':00 '
-						. $args['ampm'];
+				$schedule_start = $date_now
+						. ' '
+						. $hm;
 				break;
 
 			case 'hmbkp_weekly':
 			case 'hmbkp_fortnightly':
-				$schedule_start = 'next ' . $args['day_of_week'] . ' '
-						. $args['hours'] . ':'
-						. $args['minutes'] . ':00 '
-						. $args['ampm'];
+				$schedule_start = 'next '
+						. $args['day_of_week']
+						. ' '
+						. $hm;
 				break;
 
 			case 'hmbkp_monthly':
-				$schedule_start = $args['day_of_month'] . ' '
+				$schedule_start = $args['day_of_month']
+						. ' '
 						. $month_now . ' '
 						. $year_now . ' '
-						. $args['hours'] . ':'
-						. $args['minutes'] . ':00 '
-						. $args['ampm'];
+            . $hm;
 				break;
 			
 			default:
