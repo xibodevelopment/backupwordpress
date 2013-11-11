@@ -79,7 +79,7 @@
 
 		<div id="schedule-start" class="recurring-setting">
 
-			<p><?php _e( 'Start time', 'backupwordpress' ); ?></p>
+			<p><?php _e( 'Start time', 'hmbkp' ); ?></p>
 
 			<input type="number" min="1" max="12" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( ( isset( $recurrence_settings['hours'] ) ) ? $recurrence_settings['hours'] : '11' ); ?>">
 
