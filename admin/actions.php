@@ -430,9 +430,9 @@ function hmbkp_edit_schedule_submit() {
 
 	}
 
-	if ( $errors )
+	if ( $errors ) {
 		wp_send_json_error( $errors );
-	else {
+	} else {
 
 		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
@@ -446,10 +446,10 @@ function hmbkp_edit_schedule_submit() {
 		foreach ( HMBKP_Services::get_services( $schedule ) as $service )
 			$errors = array_merge( $errors, $service->save() );
 
+		$schedule->save();
+
 		// Remove any old backups in-case max backups was reduced
 		$schedule->delete_old_backups();
-
-		$schedule->save();
 
 		wp_send_json_success();
 	}
