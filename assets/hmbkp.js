@@ -235,22 +235,24 @@ jQuery( document ).ready( function( $ ) {
 					// Loop through the errors
 					$.each( errors, function( key, value ) {
 
+						var selector = key.replace(/(:|\.|\[|\])/g,'\\$1');
+
 						// Focus the first field that errored
 						if ( typeof( hmbkp_focused ) == 'undefined' ) {
 
-							$( '#' + key ).focus();
+							$( '#' + selector ).focus();
 
 							hmbkp_focused = true;
 
 						}
 
 						// Add an error class to all fields with errors
-						$( 'label[for=' + key + ']' ).addClass( 'hmbkp-error' );
+						$( 'label[for=' + selector + ']' ).addClass( 'hmbkp-error' );
 
-						$( '#' + key).next( 'span' ).remove();
+						$( '#' + selector ).next( 'span' ).remove();
 
 						// Add the error message
-						$( '#' + key ).after( '<span class="hmbkp-error">' + value + '</span>' );
+						$( '#' + selector ).after( '<span class="hmbkp-error">' + value + '</span>' );
 
 
 					} );
