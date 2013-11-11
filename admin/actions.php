@@ -428,21 +428,21 @@ function hmbkp_edit_schedule_submit() {
 
 	}
 
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
+	// Save the service options
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service )
+		$errors = array_merge( $errors, $service->save() );
+
 	if ( $errors ) {
 		wp_send_json_error( $errors );
 	} else {
-
-		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 		$schedule->set_schedule_start_time( $hmbkp_schedule_recurrence );
 
 		$schedule->set_type( $schedule_type );
 
 		$schedule->set_max_backups( $schedule_settings['schedule_max_backups'] );
-
-		// Save the service options
-		foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-			$errors = array_merge( $errors, $service->save() );
 
 		$schedule->save();
 
