@@ -9,7 +9,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	$( document ).on( 'click', '.hmbkp-colorbox-close', function() {
-	    $.colorbox.close();
+	    $.colorbox.close(); location.reload();
 	} );
 
 	// Setup the tabs
