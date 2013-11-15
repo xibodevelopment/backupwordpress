@@ -63,9 +63,77 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
+	public function testSetHourlyFutureSchedule() {
+
+		$future_time = date( 'H', time() + 7200 ); // 2 hours from now
+		$recurrence = array(
+			'type'         => 'hmbkp_hourly',
+			'hours'        => $future_time,
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetHourlyPastSchedule() {
+
+		$past_time = date( 'H', time() - 7200 ); // 2 hours in the past
+		$recurrence = array(
+			'type'         => 'hmbkp_hourly',
+			'hours'        => $past_time,
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
 	public function testSetTwiceDailySchedule() {
 
 		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_twicedaily' ) );
+
+		$this->assertEquals( 'hmbkp_twicedaily', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetTwiceDailyFutureSchedule() {
+
+		$future_time = date( 'H', time() + 7200 ); // 2 hours from now
+		$recurrence = array(
+			'type'         => 'hmbkp_twicedaily',
+			'hours'        => $future_time,
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_twicedaily', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetTwiceDailyPastSchedule() {
+
+		$past_time = date( 'H', time() - 7200 ); // 2 hours in the past
+		$recurrence = array(
+			'type'         => 'hmbkp_twicedaily',
+			'hours'        => $past_time,
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
 
 		$this->assertEquals( 'hmbkp_twicedaily', $this->schedule->get_reoccurrence() );
 
@@ -83,9 +151,81 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
+	public function testSetDailyFutureSchedule() {
+
+		$future_time = date( 'H', time() + 7200 ); // 2 hours from now
+		$recurrence = array(
+			'type'         => 'hmbkp_daily',
+			'hours'        => $future_time,
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_daily', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetDailyPastSchedule() {
+
+		$past_time = date( 'H', time() - 7200 ); // 2 hours in the past
+		$recurrence = array(
+			'type'         => 'hmbkp_daily',
+			'hours'        => $past_time,
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_daily', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
 	public function testSetWeeklySchedule() {
 
 		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_weekly' ) );
+
+		$this->assertEquals( 'hmbkp_weekly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetWeeklyFutureSchedule() {
+
+		$tomorrow = date( 'l', strtotime( '+1 day' ) );
+
+		$recurrence = array(
+			'type'         => 'hmbkp_weekly',
+			'day_of_week'  => strtolower( $tomorrow ),
+			'hours'        => '11',
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_weekly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetWeeklyPastSchedule() {
+
+		$yesterday = date( 'l', strtotime( '-1 day' ) );
+
+		$recurrence = array(
+			'type'         => 'hmbkp_weekly',
+			'day_of_week'  => strtolower( $yesterday ),
+			'hours'        => '11',
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
 
 		$this->assertEquals( 'hmbkp_weekly', $this->schedule->get_reoccurrence() );
 
@@ -103,9 +243,81 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
+	public function testSetFortnightlyFutureSchedule() {
+
+		$tomorrow = date( 'l', strtotime( '+1 day' ) );
+
+		$recurrence = array(
+			'type'         => 'hmbkp_fortnightly',
+			'day_of_week'  => strtolower( $tomorrow ),
+			'hours'        => '11',
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_fortnightly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetFortnightlyPastSchedule() {
+
+		$yesterday = date( 'l', strtotime( '-1 day' ) );
+
+		$recurrence = array(
+			'type'         => 'hmbkp_fortnightly',
+			'day_of_week'  => strtolower( $yesterday ),
+			'hours'        => '11',
+			'minutes'      => '00'
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_fortnightly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
 	public function testSetMonthlySchedule() {
 
 		$this->schedule->set_schedule_start_time( array( 'type' => 'hmbkp_monthly' ) );
+
+		$this->assertEquals( 'hmbkp_monthly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetMonthlyFutureSchedule() {
+
+		$five_days_in_future = date( 'j', strtotime( '+5 days' ) );
+
+		$recurrence = array(
+			'type'         => 'hmbkp_monthly',
+			'day_of_month' => $five_days_in_future
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
+
+		$this->assertEquals( 'hmbkp_monthly', $this->schedule->get_reoccurrence() );
+
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->schedule->get_next_occurrence() );
+
+	}
+
+	public function testSetMonthlyPastSchedule() {
+
+		$five_days_in_past = date( 'j', strtotime( '-5 days' ) );
+
+		$recurrence = array(
+			'type'         => 'hmbkp_monthly',
+			'day_of_month' => $five_days_in_past
+		);
+
+		$this->schedule->set_schedule_start_time( $recurrence );
 
 		$this->assertEquals( 'hmbkp_monthly', $this->schedule->get_reoccurrence() );
 
