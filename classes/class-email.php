@@ -185,6 +185,10 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 	}
 
+	public static function intercom_data() { return array(); }
+
+	public static function intercom_data_html() {}
+
 }
 
 // Register the service

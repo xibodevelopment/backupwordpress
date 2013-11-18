@@ -19,4 +19,12 @@
 
 	</table>
 
-<?php endforeach; ?>
+<?php endforeach;
+
+foreach ( HMBKP_Services::get_services() as $file => $service )
+	echo wp_kses_post( call_user_func( array( $service, 'intercom_data_html' ) ) );
+
+
+
+
+
