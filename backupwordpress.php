@@ -204,7 +204,7 @@ function hmbkp_load_intercom_script() {
 	}
 
 	foreach ( HMBKP_Services::get_services() as $file => $service )
-		array_merge( $info, call_user_func( array( $service, 'intercom_data' ) ) );
+		array_merge( $info, (array)call_user_func( array( $service, 'intercom_data' ) ) );
 
 	$current_user = wp_get_current_user();
 
