@@ -171,6 +171,13 @@ abstract class HMBKP_Service {
 		return array();
 	}
 
+	/**
+	 * Handles passing service specific data to Intercom
+	 */
+	public static function intercom_data() {}
+
+	public static function intercom_data_html() {}
+
 }
 
 /**
