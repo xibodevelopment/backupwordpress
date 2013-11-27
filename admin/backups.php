@@ -57,7 +57,7 @@ else {
 	if ( ! $schedule )
 		return; ?>
 
-	<div data-hmbkp-schedule-id="<?php esc_attr( $schedule->get_id() ); ?>" class="hmbkp_schedule">
+	<div data-hmbkp-schedule-id="<?php echo esc_attr( $schedule->get_id() ); ?>" class="hmbkp_schedule">
 
 		<?php require( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 
