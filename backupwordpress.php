@@ -293,3 +293,27 @@ function hmbkp_display_server_info_tab() {
 
 }
 add_action( 'load-tools_page_backupwordpress', 'hmbkp_display_server_info_tab' );
+
+/**
+ * Ensure BackUpWordPress is loaded before addons
+ */
+function hmbkp_load_first() {
+
+	$active_plugins = get_option( 'active_plugins' );
+
+	$plugin_path = plugin_basename( __FILE__ );
+
+	$key = array_search( $plugin_path, $active_plugins );
+
+	if ( $key > 0 ) {
+
+		array_splice( $active_plugins, $key, 1 );
+
+		array_unshift( $active_plugins, $plugin_path );
+
+		update_option( 'active_plugins', $active_plugins );
+
+	}
+
+}
+add_action( 'activated_plugin', 'hmbkp_load_first' );
