@@ -896,8 +896,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$blacklisted = array(
 			'updraft'      => trailingslashit( WP_CONTENT_DIR ) . 'updraft',
 			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . 'backups',
-			'duplicator' => trailingslashit( ABSPATH ) . 'wp-snapshots',
-			'backupbuddy' => trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups',
+			'duplicator'   => trailingslashit( ABSPATH ) . 'wp-snapshots',
+			'backupbuddy'  => trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups',
 			'wpdbmanager'  => trailingslashit( WP_CONTENT_DIR ) . 'backup-db',
 			'supercache'   => trailingslashit( WP_CONTENT_DIR ) . 'cache'
 		);
