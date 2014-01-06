@@ -935,7 +935,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			if ( ( false !== $pos ) && ( $folder !== $default_path ) ) {
 
-				$found_folders[] = $folder;
+				$found_folders[] = trailingslashit( $folder );
 
 			}
 
