@@ -899,6 +899,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			'duplicator' => trailingslashit( ABSPATH ) . 'wp-snapshots',
 			'backupbuddy' => trailingslashit( WP_CONTENT_DIR ) . 'uploads/backupbuddy_backups',
 			'wpdbmanager'  => trailingslashit( WP_CONTENT_DIR ) . 'backup-db',
+			'supercache'   => trailingslashit( WP_CONTENT_DIR ) . 'cache'
 		);
 
 		foreach ( $blacklisted as $key => $path ) {
