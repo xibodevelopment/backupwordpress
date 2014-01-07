@@ -168,8 +168,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$this->options['type'] = $type;
 
-		$this->clear_filesize_cache();
-
 	}
 
 	/**
@@ -296,7 +294,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $cached ) {
 
 			// Check if we have the filesize in the cache
-			$filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
+			$filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type()  . '_filesize' );
 
 			// If we do and it's not still calculating then return it straight away
 			if ( $filesize && $filesize !== 'calculating' )
@@ -310,7 +308,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				$counter = 1;
 
 				// Keep checking the cached filesize to see if the other thread is finished
-				while ( 'calculating' === ( $filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' ) ) ) {
+				while ( 'calculating' === ( $filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type()  . '_filesize' ) ) ) {
 
 					// Check once every 10 seconds
 					sleep( 10 );
@@ -332,7 +330,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// If we don't have it in cache then mark it as calculating
-		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize', 'calculating', time() + HOUR_IN_SECONDS );
+		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', 'calculating', time() + HOUR_IN_SECONDS );
 
 		// Don't include database if file only
 		if ( $this->get_type() != 'file' ) {
@@ -375,7 +373,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// Cache for a day
-		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize', $filesize, time() + DAY_IN_SECONDS );
+		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', $filesize, time() + DAY_IN_SECONDS );
 
 		return $filesize;
 
@@ -400,7 +398,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function is_filesize_cached() {
 
-		$size = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
+		$size = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize' );
 
 		return ! ( ! $size || $size === 'calculating' );
 
@@ -414,7 +412,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return void
 	 */
 	public function clear_filesize_cache() {
-		delete_transient( 'hmbkp_schedule_' . $this->get_id() . '_filesize' );
+		delete_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize' );
 	}
 
 	/**

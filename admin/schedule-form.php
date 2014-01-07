@@ -1,6 +1,6 @@
 <form method="post" class="hmbkp-form" novalidate data-schedule-action="<?php if ( isset( $is_new_schedule ) ) { ?>add<?php } else { ?>edit<?php } ?>">
 
-	<input type="hidden" name="hmbkp_schedule_id" value="<?php esc_attr_e( $schedule->get_id() ); ?>" />
+	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
 
 	<fieldset class="hmbkp-edit-schedule-form">
 
@@ -26,11 +26,15 @@
 
     			<option value="manually"><?php _e( 'Manual Only', 'backupwordpress' ); ?></option>
 
-                <?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+          <?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-                    <option<?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php esc_attr_e( $cron_schedule ); ?>"><?php esc_html_e( $cron_details['display'], 'backupwordpress' ); ?></option>
+         		<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
 
-                <?php endforeach; ?>
+					<?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?>
+
+				</option>
+
+          <?php endforeach; ?>
 
     		</select>
 
@@ -40,7 +44,7 @@
 
     		<?php _e( 'Number of backups to store on this server', 'backupwordpress' ); ?>
 
-    		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php esc_attr_e( $schedule->get_max_backups() ); ?>" />
+    		<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
 
             <p class="description"><?php printf( __( 'Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups', 'backupwordpress' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' ); ?></p>
 
