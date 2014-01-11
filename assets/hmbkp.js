@@ -26,7 +26,7 @@ jQuery( document ).ready( function( $ ) {
 		'transition'	: 'elastic',
 		'scrolling'		: false,
 		'innerWidth'	: "320px",
-		'maxHeight'		: "100%",
+		'maxHeight'		: "85%", //85% Takes into account the WP Admin bar.
 		'escKey'		: false,
 		'overlayClose'	: false,
 		'onLoad'		: function() {
@@ -38,8 +38,6 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
-
-			$.colorbox.resize();
 
 		}
 
