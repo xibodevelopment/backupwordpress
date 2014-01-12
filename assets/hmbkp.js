@@ -19,14 +19,18 @@ jQuery( document ).ready( function( $ ) {
 	if ( ! $( '.subsubsub a.current' ).size() )
 		$( '.subsubsub li:first a').addClass( 'current' );
 
+	var resize_options = {
+		height: '85%'
+	};
+
 	// Initialize colorbox
 	$( '.colorbox' ).colorbox( {
 		'initialWidth'	: '320px',
 		'initialHeight'	: '100px',
 		'transition'	: 'elastic',
-		'scrolling'		: false,
+		'scrolling'		: true,
 		'innerWidth'	: "320px",
-		'maxHeight'		: "100%",
+		'maxHeight'		: "85%", //85% Takes into account the WP Admin bar.
 		'escKey'		: false,
 		'overlayClose'	: false,
 		'onLoad'		: function() {
@@ -38,9 +42,6 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
-
-			$.colorbox.resize();
-
 		}
 
 	} );
@@ -132,8 +133,6 @@ jQuery( document ).ready( function( $ ) {
 		 $( '.hmbkp_add_exclude_rule p' ).remove();
 
 		 $( '.hmbkp-edit-schedule-excludes-form' ).removeClass( 'hmbkp-exclude-preview-open' );
-
-		 $.colorbox.resize();
 
 	} );
 
@@ -337,7 +336,7 @@ function catchResponseAndOfferToEmail( data ) {
 
 				jQuery.colorbox( {
 					'innerWidth'	: "320px",
-					'maxHeight'		: "100%",
+					'maxHeight'		: "85%",
 			        'html'			: data,
 			        'overlayClose'	: false,
 				    'escKey'		: false,
