@@ -43,6 +43,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-form [type="number"] { min-width: 50px; width: 50px; }
 .hmbkp-error span { position: absolute; top: -14px; right: 1px; color: #FFF; background-color: red; white-space: nowrap; line-height: 16px; font-size: 11px; padding: 0 3px; border-radius: 3px 3px 0 0; }
 .hmbkp-error input[type], .hmbkp-error select { border-color: red; border-top-right-radius: 0; }
+.hmbkp-edit-schedule-excludes-form .code{word-break: break-word;}
 
 .hmbkp-form ul { width: 320px; overflow: hidden; }
 .hmbkp-form ul.hmbkp_file_list { background-color: #FFF; display: block; border-radius: 4px; box-sizing: border-box; clear: both; box-shadow: inset 0px 0px 2px #CCC; font-size: 11px; }
