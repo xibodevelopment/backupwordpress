@@ -19,6 +19,8 @@ jQuery( document ).ready( function( $ ) {
 	if ( ! $( '.subsubsub a.current' ).size() )
 		$( '.subsubsub li:first a').addClass( 'current' );
 
+	// Carries the same resize options we want
+	// to use to all other .resize()
 	var resize_options = {
 		height: '85%'
 	};
@@ -30,7 +32,7 @@ jQuery( document ).ready( function( $ ) {
 		'transition'	: 'elastic',
 		'scrolling'		: true,
 		'innerWidth'	: "320px",
-		'maxHeight'		: "85%", //85% Takes into account the WP Admin bar.
+		'maxHeight'		: resize_options.height, //85% Takes into account the WP Admin bar.
 		'escKey'		: false,
 		'overlayClose'	: false,
 		'onLoad'		: function() {
@@ -48,7 +50,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Resize the colorbox when switching tabs
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
-		$.colorbox.resize();
+		$.colorbox.resize(resize_options);
 	} );
 
 	// Show delete confirm message for delete schedule
@@ -102,7 +104,7 @@ jQuery( document ).ready( function( $ ) {
 
 				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
-				$.colorbox.resize();
+				$.colorbox.resize(resize_options);
 
 			}
 		)
@@ -148,7 +150,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize();
+				$.colorbox.resize(resize_options);
 			}
 		);
 
@@ -159,7 +161,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$( this ).addClass( 'hmbkp-ajax-loading' ).text( '' );
 
-		$.colorbox.resize();
+		$.colorbox.resize(resize_options);
 
 		e.preventDefault();
 
@@ -170,7 +172,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize();
+				$.colorbox.resize(resize_options);
 			}
 		);
 
@@ -342,7 +344,7 @@ function catchResponseAndOfferToEmail( data ) {
 				    'escKey'		: false,
 					'onLoad'		: function() {
 						jQuery( '#cboxClose' ).remove();
-						jQuery.colorbox.resize();
+						jQuery.colorbox.resize(resize_options);
 					}
 		        } );
 
