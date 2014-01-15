@@ -10,7 +10,7 @@ Author URI: http://hmn.md/
 */
 
 /*
-Copyright 2011 - 2013 Human Made Limited  (email : support@hmn.md)
+Copyright 2011 - 2014 Human Made Limited  (email : support@hmn.md)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
