@@ -251,6 +251,9 @@ class HMBKP_Requirement_PHP_User extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
+		if ( ! HM_Backup::is_shell_exec_available() )
+			return;
+
 		return shell_exec( 'whoami' );
 
 	}
