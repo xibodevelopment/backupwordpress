@@ -880,9 +880,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$excluded = array();
 
 		// Leftover backup folders can be either under content dir, or under the uploads dir
+		$hmn_upload_dir = wp_upload_dir();
+
 		$hmbkp_folders = array_merge(
 			$this->find_backup_folders( 'backupwordpress-', WP_CONTENT_DIR ),
-			$this->find_backup_folders( 'backupwordpress-', WP_CONTENT_DIR . '/uploads' )
+			$this->find_backup_folders( 'backupwordpress-', $hmn_upload_dir['path'] )
 		);
 
 
@@ -897,7 +899,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			'updraft'      => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'updraft' ),
 			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backups' ),
 			'duplicator'   => trailingslashit( ABSPATH ) . trailingslashit( 'wp-snapshots' ),
-			'backupbuddy'  => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'uploads/backupbuddy_backups' ),
+			'backupbuddy'  => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backupbuddy_backups' ),
 			'wpdbmanager'  => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
 			'supercache'   => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' )
 		);
@@ -927,15 +929,21 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$found_folders = array();
 
-		foreach ( glob( $haystack . '/*', GLOB_ONLYDIR | GLOB_NOSORT ) as $folder ) {
+		$folders_to_search = glob( $haystack . '/*', GLOB_ONLYDIR | GLOB_NOSORT );
 
-			$pos = strpos( $folder, $needle );
+		if ( ! empty( $folders_to_search ) ) {
 
-			$default_path = get_option( 'hmbkp_default_path' );
+			foreach ( $folders_to_search as $folder ) {
 
-			if ( ( false !== $pos ) && ( $folder !== $default_path ) ) {
+				$pos = strpos( $folder, $needle );
 
-				$found_folders[] = trailingslashit( $folder );
+				$default_path = get_option( 'hmbkp_default_path' );
+
+				if ( ( false !== $pos ) && ( $folder !== $default_path ) ) {
+
+					$found_folders[] = trailingslashit( $folder );
+
+				}
 
 			}
 
