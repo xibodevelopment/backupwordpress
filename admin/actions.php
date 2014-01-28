@@ -339,10 +339,10 @@ function hmnkp_edit_schedule_submit() {
 		$schedule_type = sanitize_text_field( $_GET['hmbkp_schedule_type'] );
 
 		if ( ! trim( $schedule_type ) )
-			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'backupwordpress' );
 
 		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) )
-			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
+			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'backupwordpress' );
 
 		else
 			$schedule->set_type( $schedule_type );
@@ -354,10 +354,10 @@ function hmnkp_edit_schedule_submit() {
 		$schedule_reoccurrence = sanitize_text_field( $_GET['hmbkp_schedule_reoccurrence'] );
 
 		if ( empty( $schedule_reoccurrence ) )
-			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'backupwordpress' );
 
 		elseif ( ! in_array( $schedule_reoccurrence, array_keys( $schedule->get_cron_schedules() ) ) && $schedule_reoccurrence !== 'manually' )
-			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'hmbkp' );
+			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'backupwordpress' );
 
 		else
 			$schedule->set_reoccurrence( $schedule_reoccurrence );
@@ -369,13 +369,13 @@ function hmnkp_edit_schedule_submit() {
 		$schedule_max_backups = sanitize_text_field( $_GET['hmbkp_schedule_max_backups'] );
 
 		if ( empty( $schedule_max_backups ) )
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'backupwordpress' );
 
 		elseif ( ! is_numeric( $schedule_max_backups ) )
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'backupwordpress' );
 
 		elseif ( ! ( $schedule_max_backups >= 1 ) )
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'backupwordpress' );
 
 		else
 			$schedule->set_max_backups( (int) $schedule_max_backups );
