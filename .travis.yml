@@ -13,7 +13,7 @@ php:
 # WP_MULTISITE = whether to test multisite (use either "0" or "1")
 env:
   - WP_VERSION=master WP_MULTISITE=0
-  - WP_VERSION=3.8.0 WP_MULTISITE=0
+  - WP_VERSION=3.8.1 WP_MULTISITE=0
   - WP_VERSION=3.7.1 WP_MULTISITE=0
   - WP_VERSION=3.6.1 WP_MULTISITE=0
   - WP_VERSION=3.5.2 WP_MULTISITE=0
