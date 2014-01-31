@@ -251,6 +251,9 @@ class HMBKP_Requirement_PHP_User extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
+		if ( ! HM_Backup::is_shell_exec_available() )
+			return '';
+
 		return shell_exec( 'whoami' );
 
 	}
@@ -273,6 +276,9 @@ class HMBKP_Requirement_PHP_Group extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
+
+		if ( ! HM_Backup::is_shell_exec_available() )
+			return '';
 
 		return shell_exec( 'groups' );
 
@@ -557,9 +563,13 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		$schedule = new HMBKP_Scheduled_Backup( 'support' );
+		$schedules = HMBKP_Schedules::get_instance();
 
-		return $schedule->get_formatted_file_size();
+		foreach ( $schedules->get_schedules() as $schedule )
+			if ( $schedule->is_filesize_cached() )
+				$backup_sizes[$schedule->get_id()] = $schedule->get_formatted_file_size();
+
+		return $backup_sizes;
 
 	}
 

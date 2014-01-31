@@ -10,7 +10,7 @@ Author URI: http://hmn.md/
 */
 
 /*
-Copyright 2011 - 2013 Human Made Limited  (email : support@hmn.md)
+Copyright 2011 - 2014 Human Made Limited  (email : support@hmn.md)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -311,3 +311,27 @@ function hmbkp_display_server_info_tab() {
 
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_display_server_info_tab' );
+
+/**
+ * Ensure BackUpWordPress is loaded before addons
+ */
+function hmbkp_load_first() {
+
+	$active_plugins = get_option( 'active_plugins' );
+
+	$plugin_path = plugin_basename( __FILE__ );
+
+	$key = array_search( $plugin_path, $active_plugins );
+
+	if ( $key > 0 ) {
+
+		array_splice( $active_plugins, $key, 1 );
+
+		array_unshift( $active_plugins, $plugin_path );
+
+		update_option( 'active_plugins', $active_plugins );
+
+	}
+
+}
+add_action( 'activated_plugin', 'hmbkp_load_first' );
