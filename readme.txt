@@ -111,7 +111,6 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * BackUpWordPress will now always be loaded before any BackUpWordPress Extensions.
 * Fixed an issue that could cause a long modal (excludes) to show underneath the WP admin bar.
 
-
 #### 2.4.1
 
 * Add missing colorbox images
