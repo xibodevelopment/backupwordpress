@@ -16,7 +16,7 @@ function hmbkp_request_delete_backup() {
 	if ( is_wp_error( $deleted ) )
 		echo $deleted->get_error_message();
 
-	wp_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
+	wp_safe_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
 
 	die;
 
@@ -34,7 +34,7 @@ function hmbkp_request_enable_support() {
 
 	update_option( 'hmbkp_enable_support', true );
 
-	wp_redirect( remove_query_arg( 'null' ) , 303 );
+	wp_safe_redirect( remove_query_arg( 'null' ) , 303 );
 
 	die;
 
@@ -53,7 +53,7 @@ function hmbkp_request_delete_schedule() {
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 	$schedule->cancel( true );
 
-	wp_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action', '_wpnonce' ) ), 303 );
+	wp_safe_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action', '_wpnonce' ) ), 303 );
 
 	die;
 
@@ -133,7 +133,7 @@ function hmbkp_request_download_backup() {
 
 	}
 
-	wp_redirect( $url, 303 );
+	wp_safe_redirect( $url, 303 );
 
 	die;
 
@@ -157,7 +157,7 @@ function hmbkp_request_cancel_backup() {
 
 	hmbkp_cleanup();
 
-	wp_redirect( remove_query_arg( array( 'action' ) ), 303 );
+	wp_safe_redirect( remove_query_arg( array( 'action' ) ), 303 );
 
 	die;
 
@@ -175,7 +175,7 @@ function hmbkp_dismiss_error() {
 
 	hmbkp_cleanup();
 
-	wp_redirect( remove_query_arg( 'action' ), 303 );
+	wp_safe_redirect( remove_query_arg( 'action' ), 303 );
 
 	die;
 
