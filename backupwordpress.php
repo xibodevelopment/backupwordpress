@@ -57,7 +57,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.1' );
 
 // Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
