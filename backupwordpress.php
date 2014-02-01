@@ -45,7 +45,6 @@ if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 }
 
-
 $key = array( ABSPATH, time() );
 
 foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' ) as $constant )
@@ -74,7 +73,6 @@ if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 		define( 'HMBKP_ADMIN_PAGE', 'tools_page_' . HMBKP_PLUGIN_SLUG );
 
 }
-
 
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
@@ -165,8 +163,6 @@ function hmbkp_load_scripts() {
 }
 add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
 
-
-
 /**
  * Load Intercom and send across user information and server info
  *
@@ -211,8 +207,6 @@ function hmbkp_load_intercom_script() {
 <?php }
 add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
 
-
-
 function hmbkp_load_styles(){
 
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
@@ -237,7 +231,6 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 
 }
 add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
-
 
 /**
  * Loads the plugin text domain for translation
@@ -269,7 +262,7 @@ function hmbkp_display_server_info_tab() {
 	require_once( HMBKP_PLUGIN_PATH . '/classes/class-requirements.php' );
 
 	ob_start();
-	require_once 'admin/server-info.php';
+	require_once( 'admin/server-info.php' );
 	$info = ob_get_clean();
 
 	get_current_screen()->add_help_tab(
