@@ -7,8 +7,13 @@
  * @return null
  */
 function hmbkp_admin_menu() {
-	add_management_page( __( 'Manage Backups','hmbkp' ), __( 'Backups','hmbkp' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
+
+	if ( is_multisite() )
+		add_submenu_page( 'settings.php', __( 'Manage Backups','hmbkp' ), __( 'Backups','hmbkp' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
+	else
+		add_management_page( __( 'Manage Backups','hmbkp' ), __( 'Backups','hmbkp' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
 }
+add_action( 'network_admin_menu', 'hmbkp_admin_menu' );
 add_action( 'admin_menu', 'hmbkp_admin_menu' );
 
 /**
@@ -31,7 +36,7 @@ function hmbkp_manage_backups() {
 function hmbkp_plugin_action_link( $links, $file ) {
 
 	if ( strpos( $file, HMBKP_PLUGIN_SLUG ) !== false )
-		array_push( $links, '<a href="tools.php?page=' . esc_attr( HMBKP_PLUGIN_SLUG ) . '">' . __( 'Backups', 'hmbkp' ) . '</a>' );
+		array_push( $links, '<a href="' . esc_url( HMBKP_ADMIN_URL ) . '">' . __( 'Backups', 'hmbkp' ) . '</a>' );
 
 	return $links;
 

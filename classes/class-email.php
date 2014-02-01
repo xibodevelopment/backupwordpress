@@ -164,7 +164,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			$subject = sprintf( __( 'Backup of %s', 'hmbkp' ), $domain );
 
 			// If it's larger than the max attachment size limit assume it's not going to be able to send the backup
-			if ( filesize( $file ) < hmbkp_get_max_attachment_size() ) {
+			if ( @filesize( $file ) < hmbkp_get_max_attachment_size() ) {
 
 				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'hmbkp' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(),  $download );
 
