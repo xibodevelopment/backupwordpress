@@ -66,9 +66,6 @@ if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 if ( ! defined( 'HMBKP_SCHEDULE_TIME' ) )
 	define( 'HMBKP_SCHEDULE_TIME', '11pm' );
 
-if ( ! defined( 'HMBKP_REQUIRED_PHP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_PHP_VERSION', '5.2.4' );
-
 if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
 	if ( is_multisite() )
@@ -108,17 +105,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_deactivate' );
-
-// Don't activate on anything less than PHP 5.2.4
-if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
-
-	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( __FILE__ );
-
-	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ) );
-
-}
 
 // Don't activate on old versions of WordPress
 global $wp_version;
