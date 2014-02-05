@@ -319,6 +319,12 @@ jQuery( document ).ready( function( $ ) {
 
 function catchResponseAndOfferToEmail( data ) {
 
+	// Carries the same resize options we want
+	// to use to all other .resize()
+	var resize_options = {
+		height: '85%'
+	};
+
 	// Backup Succeeded
 	if ( ! data || data == 0 )
 		location.reload( true );
