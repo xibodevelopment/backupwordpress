@@ -1,7 +1,7 @@
 === BackUpWordPress ===
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
-Requires at least: 3.3.3
+Requires at least: 3.7.1
 Tested up to: 3.8
 Stable tag: 2.4.2
 

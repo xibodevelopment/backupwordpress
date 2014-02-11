@@ -45,7 +45,6 @@ if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 }
 
-
 $key = array( ABSPATH, time() );
 
 foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' ) as $constant )
@@ -57,7 +56,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.1' );
 
 // Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
@@ -65,24 +64,6 @@ if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 
 if ( ! defined( 'HMBKP_SCHEDULE_TIME' ) )
 	define( 'HMBKP_SCHEDULE_TIME', '11pm' );
-
-if ( ! defined( 'HMBKP_REQUIRED_PHP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_PHP_VERSION', '5.2.4' );
-
-if ( ! defined( 'MINUTE_IN_SECONDS' ) )
-	define( 'MINUTE_IN_SECONDS', 60 );
-
-if ( ! defined( 'HOUR_IN_SECONDS' ) )
-	define( 'HOUR_IN_SECONDS',   60 * MINUTE_IN_SECONDS );
-
-if ( ! defined( 'DAY_IN_SECONDS' ) )
-	define( 'DAY_IN_SECONDS',    24 * HOUR_IN_SECONDS   );
-
-if ( ! defined( 'WEEK_IN_SECONDS' ) )
-	define( 'WEEK_IN_SECONDS',    7 * DAY_IN_SECONDS    );
-
-if ( ! defined( 'YEAR_IN_SECONDS' ) )
-	define( 'YEAR_IN_SECONDS',  365 * DAY_IN_SECONDS    );
 
 if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
@@ -92,7 +73,6 @@ if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 		define( 'HMBKP_ADMIN_PAGE', 'tools_page_' . HMBKP_PLUGIN_SLUG );
 
 }
-
 
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
@@ -123,17 +103,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_deactivate' );
-
-// Don't activate on anything less than PHP 5.2.4
-if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
-
-	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( __FILE__ );
-
-	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ) );
-
-}
 
 // Don't activate on old versions of WordPress
 global $wp_version;
@@ -194,8 +163,6 @@ function hmbkp_load_scripts() {
 }
 add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
 
-
-
 /**
  * Load Intercom and send across user information and server info
  *
@@ -240,8 +207,6 @@ function hmbkp_load_intercom_script() {
 <?php }
 add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
 
-
-
 function hmbkp_load_styles(){
 
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
@@ -266,7 +231,6 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 
 }
 add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
-
 
 /**
  * Loads the plugin text domain for translation
@@ -298,7 +262,7 @@ function hmbkp_display_server_info_tab() {
 	require_once( HMBKP_PLUGIN_PATH . '/classes/class-requirements.php' );
 
 	ob_start();
-	require_once 'admin/server-info.php';
+	require_once( 'admin/server-info.php' );
 	$info = ob_get_clean();
 
 	get_current_screen()->add_help_tab(
