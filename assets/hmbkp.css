@@ -52,21 +52,21 @@ tfoot p { margin: 0; font-weight: normal; }
 
 .hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 30px 0 10px; clear: both; margin-left: 10px; }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 47px; display: block; float: left; }
-.hmbkp-schedule-sentence.hmbkp-error::before { content: "\2718"; }
-.hmbkp-schedule-sentence.hmbkp-running::before { background-image: url('wpspin_light.gif'); background-repeat: no-repeat; margin-right: 10px; content: " "; }
+.hmbkp-schedule-sentence.hmbkp-error:before { content: "\2718"; }
+.hmbkp-schedule-sentence.hmbkp-running:before { width: 16px;height: 47px; margin-right: 10px; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 16px 16px;display: inline-block; }
 .hmbkp-schedule-sentence .hmbkp-status { display: none; font-size: 12px; color: #666; margin: 2px 0 0 26px; }
 .hmbkp-schedule-sentence.hmbkp-running .hmbkp-status { display: block; }
 .hmbkp-schedule-sentence.hmbkp-running .hmbkp-schedule-actions { display: none; }
 .hmbkp-schedule-sentence [title] { border-bottom: 1px dotted #CCC; cursor: help; }
 
-.subsubsub li.hmbkp-running a { background-image: url('wpspin_light.gif'); background-repeat: no-repeat; padding-left: 20px; vertical-align: middle; }
+.subsubsub li.hmbkp-running a:before { width: 16px;height: 16px; margin-right: 10px; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 16px 16px; display: inline-block;vertical-align: middle;}
 .subsubsub li.hmbkp-running a.current { padding: 0; background-image: none; }
 
 .hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; }
 .hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 
 .hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; }
-.hmbkp-ajax-loading::before { background-image: url('wpspin_light-2x.gif'); background-repeat: no-repeat; background-position: 0 -0px; background-size: 16px 16px; margin-left: -4px; display: inline-block; width: 18px; height: 18px; content: " "; vertical-align: middle; padding-right: 1px; }
+.hmbkp-ajax-loading:before {width: 16px;height: 16px; margin-right: 10px; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 16px 16px; vertical-align: middle; display: inline-block; }
 
 button { height: 14px; }
 
