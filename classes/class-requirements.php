@@ -968,3 +968,20 @@ class HMBKP_Requirement_Site_Url extends HMBKP_Requirement {
 }
 
 HMBKP_Requirements::register( 'HMBKP_Requirement_Site_Url', 'Site' );
+
+class HMBKP_Requirement_Display_Name extends HMBKP_Requirement {
+
+	var $name = 'Display Name';
+
+	protected function test(){
+
+		global $current_user;
+
+		get_currentuserinfo();
+
+		return $current_user->display_name;
+	}
+
+}
+
+HMBKP_Requirements::register( 'HMBKP_Requirement_Display_Name', 'Site' );
