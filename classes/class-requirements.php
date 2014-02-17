@@ -977,3 +977,16 @@ class HMBKP_Requirement_Plugin_Version extends HMBKP_Requirement {
 	}
 }
 HMBKP_Requirements::register( 'HMBKP_Requirement_Plugin_Version', 'constants' );
+
+class HMBKP_Requirement_Max_Exec extends HMBKP_Requirement {
+
+	var $name = 'Max execution time';
+
+	protected function test(){
+
+		return @ini_get( 'max_execution_time' );
+
+	}
+
+}
+HMBKP_Requirements::register( 'HMBKP_Requirement_Max_Exec', 'PHP' );
