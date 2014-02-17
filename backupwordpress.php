@@ -196,7 +196,7 @@ function hmbkp_load_intercom_script() {
 	$info['email'] = $current_user->user_email;
 	$info['created_at'] = strtotime( $current_user->user_registered );
 	$info['app_id'] = "7f1l4qyq";
-	$info['name'] = $current_user->user_nicename;
+	$info['name'] = $current_user->display_name;
 	$info['widget'] = array( 'activator' => '#intercom' ); ?>
 
 	<script id="IntercomSettingsScriptTag">
