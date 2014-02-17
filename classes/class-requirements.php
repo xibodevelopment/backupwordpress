@@ -624,29 +624,6 @@ class HMBKP_Requirement_PHP_API extends HMBKP_Requirement {
 HMBKP_Requirements::register( 'HMBKP_Requirement_PHP_API', 'PHP' );
 
 /**
- * Class HMBKP_Requirement_SERVER
- */
-class HMBKP_Requirement_SERVER extends HMBKP_Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = '$_SERVER';
-
-	/**
-	 * @return mixed
-	 */
-	protected function test() {
-
-		return $_SERVER;
-
-	}
-
-}
-
-HMBKP_Requirements::register( 'HMBKP_Requirement_SERVER', 'PHP' );
-
-/**
  * Class HMBKP_Requirement_Server_Software
  */
 class HMBKP_Requirement_Server_Software extends HMBKP_Requirement {
