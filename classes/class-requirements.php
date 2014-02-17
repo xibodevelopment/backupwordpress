@@ -967,7 +967,9 @@ class HMBKP_Requirement_Site_Url extends HMBKP_Requirement {
 
 }
 
-HMBKP_Requirements::register( 'HMBKP_Requirement_Site_Url', 'Site' );class HMBKP_Requirement_Plugin_Version extends HMBKP_Requirement {
+HMBKP_Requirements::register( 'HMBKP_Requirement_Site_Url', 'Site' );
+
+class HMBKP_Requirement_Plugin_Version extends HMBKP_Requirement {
 	var $name = 'Plugin Version';
 
 	protected function test() {
