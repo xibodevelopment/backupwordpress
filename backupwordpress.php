@@ -139,6 +139,9 @@ function hmbkp_init() {
 }
 add_action( 'admin_init', 'hmbkp_init' );
 
+/**
+ * Enqueue plugin scripts
+ */
 function hmbkp_load_scripts() {
 
 	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
@@ -207,6 +210,9 @@ function hmbkp_load_intercom_script() {
 <?php }
 add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
 
+/**
+ * Enqueue the plugin styles
+ */
 function hmbkp_load_styles(){
 
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
@@ -257,6 +263,9 @@ function hmbkp_plugin_textdomain() {
 }
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
 
+/**
+ * Displays the server info in the Help tab
+ */
 function hmbkp_display_server_info_tab() {
 
 	require_once( HMBKP_PLUGIN_PATH . '/classes/class-requirements.php' );

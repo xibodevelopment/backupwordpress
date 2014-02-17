@@ -969,19 +969,13 @@ class HMBKP_Requirement_Site_Url extends HMBKP_Requirement {
 
 HMBKP_Requirements::register( 'HMBKP_Requirement_Site_Url', 'Site' );
 
-class HMBKP_Requirement_Display_Name extends HMBKP_Requirement {
+class HMBKP_Requirement_Max_Exec extends HMBKP_Requirement {
 
-	var $name = 'Display Name';
+	var $name = 'Max execution time';
 
 	protected function test(){
 
-		global $current_user;
-
-		get_currentuserinfo();
-
-		return $current_user->display_name;
+		return @ini_get( 'max_execution_time' );
 	}
-
 }
-
-HMBKP_Requirements::register( 'HMBKP_Requirement_Display_Name', 'Site' );
+HMBKP_Requirements::register( 'HMBKP_Requirement_Max_Exec', 'PHP' );
