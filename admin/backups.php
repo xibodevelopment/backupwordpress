@@ -37,7 +37,7 @@
 
 	<?php endforeach; ?>
 
-		<li><a class="colorbox" href="<?php esc_attr_e( esc_url( add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), admin_url( 'admin-ajax.php' ) ) ) ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
+		<li><a class="colorbox" href="<?php esc_attr_e( esc_url( add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ) ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a></li>
 
 	</ul>
 
@@ -57,7 +57,7 @@ else {
 	if ( ! $schedule )
 		return; ?>
 
-	<div data-hmbkp-schedule-id="<?php esc_attr_e( $schedule->get_id() ); ?>" class="hmbkp_schedule">
+	<div data-hmbkp-schedule-id="<?php echo esc_attr( $schedule->get_id() ); ?>" class="hmbkp_schedule">
 
 		<?php require( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 
