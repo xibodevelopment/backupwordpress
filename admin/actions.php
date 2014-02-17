@@ -67,6 +67,9 @@ function hmbkp_ajax_request_do_backup() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
+	// Fixes an issue on servers which only allow a single session per client 
+	session_write_close();
+
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
 

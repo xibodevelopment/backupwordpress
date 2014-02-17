@@ -32,6 +32,6 @@
 
 	<p class="howto"><?php _e( 'If you need help getting things working then check the FAQ by clicking on help in the top right hand corner of this page.', 'hmbkp' ); ?></p>
 
-	<p class="howto"><strong><?php printf( __( 'Wish you could store your backups in a safer place? Our %1$spremium extensions%2$s enable automatic backups to Dropbox, FTP, Google Drive and more.', 'hmbkp' ), '<a href="http://bwp.hmn.md">', '</a>' ); ?></strong></p>
+	<p class="howto"><strong><?php printf( __( 'Wish you could store your backups in a safer place? Our %1$spremium extensions%2$s enable automatic backups to Dropbox, FTP, Google Drive and more.', 'hmbkp' ), '<a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=wp-admin&utm_campaign=freeplugin">', '</a>' ); ?></strong></p>
 
 </div>

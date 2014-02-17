@@ -309,7 +309,7 @@ function hmbkp_path() {
 		$path = untrailingslashit( HMBKP_PATH );
 
 	// If the dir doesn't exist or isn't writable then use the default path instead instead
-	if ( ( ! $path || ( is_dir( $path ) && ! is_writable( $path ) ) || ( ! is_dir( $path ) && ! is_writable( dirname( $path ) ) ) ) && $path !== hmbkp_path_default() )
+	if ( ( ! $path || ( is_dir( $path ) && ! wp_is_writable( $path ) ) || ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) ) && $path !== hmbkp_path_default() )
 		$path = hmbkp_path_default();
 
 	// Create the backups directory if it doesn't exist
@@ -323,13 +323,13 @@ function hmbkp_path() {
 	// Protect against directory browsing by including a index.html file
 	$index = $path . '/index.html';
 
-	if ( ! file_exists( $index ) && is_writable( $path ) )
+	if ( ! file_exists( $index ) && wp_is_writable( $path ) )
 		file_put_contents( $index, '' );
 
 	$htaccess = $path . '/.htaccess';
 
 	// Protect the directory with a .htaccess file on Apache servers
-	if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && is_writable( $path ) ) {
+	if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && wp_is_writable( $path ) ) {
 
 		$contents[] = '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'hmbkp' ), '.htaccess' );
 		$contents[] = '';
@@ -373,7 +373,7 @@ function hmbkp_path_default() {
 	$upload_dir = wp_upload_dir();
 
 	// If the backups dir can't be created in WP_CONTENT_DIR then fallback to uploads
-	if ( ( ( ! is_dir( $path ) && ! is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! is_writable( $path ) ) ) && strpos( $path, $upload_dir['basedir'] ) === false ) {
+	if ( ( ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! wp_is_writable( $path ) ) ) && strpos( $path, $upload_dir['basedir'] ) === false ) {
 
 		hmbkp_path_move( $path, $path = HM_Backup::conform_dir( trailingslashit( $upload_dir['basedir'] ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' ) );
 
@@ -403,7 +403,7 @@ function hmbkp_path_move( $from, $to ) {
 		wp_mkdir_p( $to );
 
 	// Bail if we couldn't
-	if ( ! is_dir( $to ) || ! is_writable( $to ) )
+	if ( ! is_dir( $to ) || ! wp_is_writable( $to ) )
 		return false;
 
 	update_option( 'hmbkp_path', $to );
@@ -442,7 +442,7 @@ function hmbkp_path_move( $from, $to ) {
  */
 function hmbkp_possible() {
 
-	if ( ! is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) )
+	if ( ! wp_is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) )
 		return false;
 
 	return true;
@@ -492,7 +492,7 @@ function hmbkp_constant_changes() {
 		hmbkp_path_move( $from, hmbkp_path_default() );
 
 	// If the custom path has changed and the new directory isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! wp_is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) )
 		hmbkp_path_move( HMBKP_PATH, hmbkp_path_default() );
 
 }
