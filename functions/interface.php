@@ -68,7 +68,7 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If the backups directory exists but isn't writable
-	if ( is_dir( hmbkp_path() ) && ! is_writable( hmbkp_path() ) ) :
+	if ( is_dir( hmbkp_path() ) && ! wp_is_writable( hmbkp_path() ) ) :
 
 		function hmbkp_writable_path_warning() {
 			$php_user  = exec( 'whoami' );
@@ -103,7 +103,7 @@ function hmbkp_admin_notices() {
 	endif;
 
 	// If a custom backups directory is defined and exists but isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && ! is_writable( HMBKP_PATH ) ) :
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) :
 
 		function hmbkp_custom_path_writable_notice() {
 			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'hmbkp' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' ) . '</p></div>';
