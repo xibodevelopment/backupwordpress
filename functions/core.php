@@ -445,6 +445,11 @@ function hmbkp_possible() {
 	if ( ! wp_is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) )
 		return false;
 
+	$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
+
+	if ( ! is_readable( $test_backup->get_root() ) )
+		return false;
+
 	return true;
 }
 

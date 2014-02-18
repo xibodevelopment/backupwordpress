@@ -124,6 +124,19 @@ function hmbkp_admin_notices() {
 
 	endif;
 
+	$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
+
+	if ( ! is_readable( $test_backup->get_root() ) ) :
+
+		function hmbkp_backup_root_unreadable_notice() {
+			$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong>' . sprintf( __( 'Your backup root path %s isn\'t readable.', 'hmbkp' ), '<code>' . $test_backup->get_root() . '</code>' ) . '</p></div>';
+		}
+
+		add_action( 'admin_notices', 'hmbkp_backup_root_unreadable_notice' );
+
+	endif;
+
 }
 
 add_action( 'admin_head', 'hmbkp_admin_notices' );
