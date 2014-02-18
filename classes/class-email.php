@@ -50,8 +50,21 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 	public static function constant() { ?>
 
-		<dt<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_ATTACHMENT_MAX_FILESIZE</code></dt>
-		<dd><p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?><p class="example"><?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p></dd>
+		<tr<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>>
+
+			<td><code>HMBKP_ATTACHMENT_MAX_FILESIZE</code></td>
+
+			<td>
+
+				<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?>
+				<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
+				<?php } ?>
+
+				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
+
+			</td>
+
+		</tr>
 
 	<?php }
 
@@ -73,7 +86,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 		return '';
 
 	}
-	
+
 	/**
 	 * Used to determine if the service is in use or not
 	 */
@@ -99,14 +112,14 @@ class HMBKP_Email_Service extends HMBKP_Service {
 					if ( ! is_email( $email ) )
 						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
 
-			if ( ! empty( $errors['email'] ) )
-				$new_data['email'] = '';
+					if ( ! empty( $errors['email'] ) )
+						$new_data['email'] = '';
 
-		}
+				}
 
-		return $errors;
+				return $errors;
 
-	}
+			}
 
 	/**
 	 * Get an array or validated email address's
