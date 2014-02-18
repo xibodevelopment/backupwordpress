@@ -563,6 +563,8 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
+		$backup_sizes = array();
+
 		$schedules = HMBKP_Schedules::get_instance();
 
 		foreach ( $schedules->get_schedules() as $schedule )
