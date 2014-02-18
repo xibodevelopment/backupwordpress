@@ -271,7 +271,7 @@ function hmbkp_rmdirtree( $dir ) {
 	if ( is_file( $dir ) )
 		@unlink( $dir );
 
-	if ( ! is_dir( $dir ) )
+	if ( ! is_dir( $dir ) || ! is_readable( $dir ) )
 		return false;
 
 	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );

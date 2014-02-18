@@ -2,8 +2,8 @@
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.7.1
-Tested up to: 3.9-alpha
-Stable tag: 2.4.2
+Tested up to: 3.8.1
+Stable tag: 2.5
 
 Simple automated back ups of your WordPress powered website.
 
@@ -106,6 +106,19 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.5
+
+* BackUpWordPress now requires WordPress 3.7.1 as a minimum.
+* Remove some old back-compat code that was required because we supported older WP versions.
+* It's now possible to change the email address that notification emails are sent from using the `hmbkp_from_email` filter.
+* The spinner is now retina!
+* Close the PHP Session before starting the backup process to work around the 1 request per session issue. Backup status will now work on sites which happen to call `session_start`.
+* Pass `max_execution_time` and the BackUpWordPress Plugin version back to support. * Include the users real name in support requests
+* Stop passing `$_SERVER` with support requests as it can contain things like `.htaccess` passwords on some server configurations.
+* Improve the display of the server info in the enable support popup.
+* New screenshots
+
 
 #### 2.4.2
 

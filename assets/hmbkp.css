@@ -18,7 +18,7 @@ tfoot p { margin: 0; font-weight: normal; }
 .contextual-help-tabs-wrap .updated { margin: 15px 0 0; }
 
 .subsubsub { width: 100%; margin: 20px 0px 0px 0px; border-bottom: 1px solid #EEE; }
-.subsubsub li + li::before { content: "| "; }
+.subsubsub li + li::before { content: "| "; vertical-align: text-top; margin: -1px; display: inline-block; }
 .subsubsub .add-new-h2 { top: 0; }
 
 .ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav .ui-state-active a { font-weight: bold; color: #000; }
@@ -57,9 +57,9 @@ tfoot p { margin: 0; font-weight: normal; }
 .hmbkp-schedule-sentence.hmbkp-running .hmbkp-status { display: block; }
 .hmbkp-schedule-sentence.hmbkp-running .hmbkp-schedule-actions { display: none; }
 .hmbkp-schedule-sentence [title] { border-bottom: 1px dotted #CCC; cursor: help; }
+.hmbkp-schedule-sentence .hmbkp-status[title] { border-bottom: none; }
 
-.subsubsub li.hmbkp-running a:before { width: 16px;height: 16px; margin-right: 10px; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 16px 16px; display: inline-block;vertical-align: middle;}
-.subsubsub li.hmbkp-running a.current { padding: 0; background-image: none; }
+.subsubsub li.hmbkp-running a:not(.current):before { width: 16px; height: 16px; margin: 0 8px 0 3px; content: ""; background: transparent url('spinner-2x.gif') no-repeat left center; background-size: 16px 16px; display: inline-block; margin-bottom: -3px; }
 
 .hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; }
 .hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
