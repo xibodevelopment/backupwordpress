@@ -42,6 +42,9 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
+		if ( file_exists( $this->custom_path ) )
+			chmod( $this->custom_path, 0755 );
+
 		hmbkp_rmdirtree( $this->custom_path );
 		hmbkp_rmdirtree( hmbkp_path() );
 		hmbkp_rmdirtree( hmbkp_path_default() );
@@ -95,6 +98,7 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		hmbkp_constant_changes();
 
 		$this->assertFileNotExists( $this->backup->get_archive_filepath() );
+
 		$this->assertFileExists( str_replace( $this->backup->get_path(), hmbkp_path(), $this->backup->get_archive_filepath() ) );
 
 	}
@@ -144,8 +148,6 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		hmbkp_constant_changes();
 
 		$this->assertEquals( hmbkp_path(), hmbkp_path_default() );
-
-		chmod( $this->custom_path, 0755 );
 
 		$this->assertFileExists( str_replace( $this->backup->get_path(), hmbkp_path_default(), $this->backup->get_archive_filepath() ) );
 
