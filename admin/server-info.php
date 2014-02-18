@@ -8,10 +8,30 @@
 
 		<?php foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) : ?>
 
+			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
+
 			<tr>
-				<td><?php echo $requirement->name(); ?></td>
-				<td><pre><?php echo $requirement->result(); ?></pre></td>
+
+				<td><?php echo esc_html( $requirement->name() ); ?></td>
+
+				<td>
+					<code><?php echo esc_html( $requirement->result() ); ?></code>
+				</td>
+
 			</tr>
+
+			<?php } else { ?>
+
+			<tr>
+
+				<td colspan="2">
+					<?php echo esc_html( $requirement->name() ); ?>
+					<pre><?php echo esc_html( $requirement->result() ); ?></pre>
+				</td>
+
+			</tr>
+
+			<?php } ?>
 
 		<?php endforeach; ?>
 
