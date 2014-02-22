@@ -28,19 +28,13 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 	<label>
 
-<<<<<<< HEAD
-            <?php _e( 'Email notification', 'backupwordpress' ); ?>
-=======
-		<?php _e( 'Email notification', 'hmbkp' ); ?>
->>>>>>> master
+
+		<?php _e( 'Email notification', 'backupwordpress' ); ?>
+
 
 		<input type="email" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
 
-<<<<<<< HEAD
-            <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'backupwordpress' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
-=======
-		<p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
->>>>>>> master
+		<p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'backupwordpress' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
 
 	</label>
 
