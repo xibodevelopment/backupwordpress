@@ -36,10 +36,10 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 
 			<?php if (  hmbkp_is_path_accessible( hmbkp_path() )  ) : ?>
 
-			<a href="<?php echo wp_nonce_url( $download_action_url, 'hmbkp-download_backup' ); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
+			<a href="<?php echo wp_nonce_url( $download_action_url, 'hmbkp-download_backup' ); ?>"><?php _e( 'Download', 'backupwordpress' ); ?></a> |
 			<?php endif; ?>
 
-			<a href="<?php echo wp_nonce_url( $delete_action_url, 'hmbkp-delete_backup' ); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+			<a href="<?php echo wp_nonce_url( $delete_action_url, 'hmbkp-delete_backup' ); ?>" class="delete-action"><?php _e( 'Delete', 'backupwordpress' ); ?></a>
 
 		</td>
 
@@ -131,7 +131,7 @@ function hmbkp_admin_notices() {
 
 		function hmbkp_backup_root_unreadable_notice() {
 			$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
-			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong>' . sprintf( __( 'Your backup root path %s isn\'t readable.', 'hmbkp' ), '<code>' . $test_backup->get_root() . '</code>' ) . '</p></div>';
+			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong>' . sprintf( __( 'Your backup root path %s isn\'t readable.', 'backupwordpress' ), '<code>' . $test_backup->get_root() . '</code>' ) . '</p></div>';
 		}
 
 		add_action( 'admin_notices', 'hmbkp_backup_root_unreadable_notice' );
@@ -291,14 +291,14 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 	// Start output buffering
 	ob_start(); ?>
 
-	<span class="hmbkp-status"><?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'hmbkp' ); ?> <a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), $settings_url ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a></span>
+	<span class="hmbkp-status"><?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'backupwordpress' ); ?> <a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), $settings_url ) ); ?>"><?php _e( 'cancel', 'backupwordpress' ); ?></a></span>
 
 	<div class="hmbkp-schedule-actions row-actions">
 
-		<a class="colorbox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
+		<a class="colorbox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Settings', 'backupwordpress' ); ?></a> |
 
 	<?php if ( $schedule->get_type() !== 'database' ) { ?>
-		<a class="colorbox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule_excludes_load', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a>  |
+		<a class="colorbox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule_excludes_load', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Excludes', 'backupwordpress' ); ?></a>  |
 
 	<?php } ?>
 

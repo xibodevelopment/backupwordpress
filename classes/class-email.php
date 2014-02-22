@@ -59,10 +59,10 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			<td>
 
 				<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?>
-				<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
+				<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
+				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'backupwordpress' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
 
 			</td>
 

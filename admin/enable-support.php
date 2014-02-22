@@ -59,7 +59,7 @@
 
 <form class="hmbkp-form" method="POST">
 
-	<?php wp_nonce_field( 'enable-support', 'hmbkp' ); ?>
+	<?php wp_nonce_field( 'enable-support', 'backupwordpress' ); ?>
 
 	<input type="hidden" name="hmbkp_enable_support" value="1" />
 
