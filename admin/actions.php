@@ -16,12 +16,12 @@ function hmbkp_request_delete_backup() {
 	if ( is_wp_error( $deleted ) )
 		echo $deleted->get_error_message();
 
-	wp_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
+	wp_safe_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
 
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_backup' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_backup' );
 
 /**
  * Enable support and then redirect back to the backups page
@@ -34,12 +34,12 @@ function hmbkp_request_enable_support() {
 
 	update_option( 'hmbkp_enable_support', true );
 
-	wp_redirect( remove_query_arg( 'null' ) , 303 );
+	wp_safe_redirect( remove_query_arg( 'null' ) , 303 );
 
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_enable_support' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_enable_support' );
 
 /**
  * Delete a schedule and all it's backups and then redirect
@@ -53,12 +53,12 @@ function hmbkp_request_delete_schedule() {
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 	$schedule->cancel( true );
 
-	wp_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action', '_wpnonce' ) ), 303 );
+	wp_safe_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action', '_wpnonce' ) ), 303 );
 
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedule' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_schedule' );
 
 /**
  * Perform a manual backup via ajax
@@ -66,6 +66,9 @@ add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_delete_schedu
 function hmbkp_ajax_request_do_backup() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+
+	// Fixes an issue on servers which only allow a single session per client 
+	session_write_close();
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
@@ -133,12 +136,12 @@ function hmbkp_request_download_backup() {
 
 	}
 
-	wp_redirect( $url, 303 );
+	wp_safe_redirect( $url, 303 );
 
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_download_backup' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_download_backup' );
 
 /**
  * Cancels a running backup then redirect
@@ -157,12 +160,12 @@ function hmbkp_request_cancel_backup() {
 
 	hmbkp_cleanup();
 
-	wp_redirect( remove_query_arg( array( 'action' ) ), 303 );
+	wp_safe_redirect( remove_query_arg( array( 'action' ) ), 303 );
 
 	die;
 
 }
-add_action( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_request_cancel_backup' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_cancel_backup' );
 
 /**
  * Dismiss an error and then redirect
@@ -175,7 +178,7 @@ function hmbkp_dismiss_error() {
 
 	hmbkp_cleanup();
 
-	wp_redirect( remove_query_arg( 'action' ), 303 );
+	wp_safe_redirect( remove_query_arg( 'action' ), 303 );
 
 	die;
 

@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://hmn.md/backupwordpress/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.4
+Version: 2.5
 Author URI: http://hmn.md/
 Text Domain: backupwordpress
 Domain Path: /languages
@@ -40,8 +40,12 @@ if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
 
 define( 'HMBKP_PLUGIN_LANG_DIR', apply_filters( 'hmbkp_filter_lang_dir', HMBKP_PLUGIN_SLUG . '/languages/' ) );
 
-if ( ! defined( 'HMBKP_ADMIN_URL' ) )
-	define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
+if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
+	if ( is_multisite() )
+		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, network_admin_url( 'settings.php' ) ) );
+	else
+		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
+}
 
 $key = array( ABSPATH, time() );
 
@@ -54,7 +58,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.3.3' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.1' );
 
 // Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
@@ -63,23 +67,14 @@ if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 if ( ! defined( 'HMBKP_SCHEDULE_TIME' ) )
 	define( 'HMBKP_SCHEDULE_TIME', '11pm' );
 
-if ( ! defined( 'HMBKP_REQUIRED_PHP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_PHP_VERSION', '5.2.4' );
+if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
-if ( ! defined( 'MINUTE_IN_SECONDS' ) )
-	define( 'MINUTE_IN_SECONDS', 60 );
+	if ( is_multisite() )
+		define( 'HMBKP_ADMIN_PAGE', 'settings_page_' . HMBKP_PLUGIN_SLUG );
+	else
+		define( 'HMBKP_ADMIN_PAGE', 'tools_page_' . HMBKP_PLUGIN_SLUG );
 
-if ( ! defined( 'HOUR_IN_SECONDS' ) )
-	define( 'HOUR_IN_SECONDS',   60 * MINUTE_IN_SECONDS );
-
-if ( ! defined( 'DAY_IN_SECONDS' ) )
-	define( 'DAY_IN_SECONDS',    24 * HOUR_IN_SECONDS   );
-
-if ( ! defined( 'WEEK_IN_SECONDS' ) )
-	define( 'WEEK_IN_SECONDS',    7 * DAY_IN_SECONDS    );
-
-if ( ! defined( 'YEAR_IN_SECONDS' ) )
-	define( 'YEAR_IN_SECONDS',  365 * DAY_IN_SECONDS    );
+}
 
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
@@ -110,17 +105,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI )
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_deactivate' );
-
-// Don't activate on anything less than PHP 5.2.4
-if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
-
-	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( __FILE__ );
-
-	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
-		die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'backupwordpress' ), HMBKP_REQUIRED_PHP_VERSION ) );
-
-}
 
 // Don't activate on old versions of WordPress
 global $wp_version;
@@ -157,6 +141,9 @@ function hmbkp_init() {
 }
 add_action( 'admin_init', 'hmbkp_init' );
 
+/**
+ * Enqueue plugin scripts
+ */
 function hmbkp_load_scripts() {
 
 	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
@@ -179,7 +166,7 @@ function hmbkp_load_scripts() {
 	);
 
 }
-add_action( 'admin_print_scripts-tools_page_backupwordpress', 'hmbkp_load_scripts' );
+add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
 
 /**
  * Load Intercom and send across user information and server info
@@ -214,7 +201,7 @@ function hmbkp_load_intercom_script() {
 	$info['email'] = $current_user->user_email;
 	$info['created_at'] = strtotime( $current_user->user_registered );
 	$info['app_id'] = "7f1l4qyq";
-	$info['name'] = $current_user->user_nicename;
+	$info['name'] = $current_user->display_name;
 	$info['widget'] = array( 'activator' => '#intercom' ); ?>
 
 	<script id="IntercomSettingsScriptTag">
@@ -223,16 +210,18 @@ function hmbkp_load_intercom_script() {
 	<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()</script>
 
 <?php }
-add_action( 'admin_footer-tools_page_backupwordpress', 'hmbkp_load_intercom_script' );
+add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
 
+/**
+ * Enqueue the plugin styles
+ */
 function hmbkp_load_styles(){
 
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
 	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
 
 }
-add_action( 'admin_print_styles-tools_page_backupwordpress', 'hmbkp_load_styles' );
-
+add_action( 'admin_print_styles-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_styles' );
 
 /**
  * Function to run when the schedule cron fires
@@ -250,7 +239,6 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 
 }
 add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
-
 
 /**
  * Loads the plugin text domain for translation
@@ -277,12 +265,15 @@ function hmbkp_plugin_textdomain() {
 }
 add_action( 'plugins_loaded', 'hmbkp_plugin_textdomain', 1 );
 
+/**
+ * Displays the server info in the Help tab
+ */
 function hmbkp_display_server_info_tab() {
 
 	require_once( HMBKP_PLUGIN_PATH . '/classes/class-requirements.php' );
 
 	ob_start();
-	require_once 'admin/server-info.php';
+	require_once( 'admin/server-info.php' );
 	$info = ob_get_clean();
 
 	get_current_screen()->add_help_tab(
@@ -294,4 +285,28 @@ function hmbkp_display_server_info_tab() {
 	);
 
 }
-add_action( 'load-tools_page_backupwordpress', 'hmbkp_display_server_info_tab' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_display_server_info_tab' );
+
+/**
+ * Ensure BackUpWordPress is loaded before addons
+ */
+function hmbkp_load_first() {
+
+	$active_plugins = get_option( 'active_plugins' );
+
+	$plugin_path = plugin_basename( __FILE__ );
+
+	$key = array_search( $plugin_path, $active_plugins );
+
+	if ( $key > 0 ) {
+
+		array_splice( $active_plugins, $key, 1 );
+
+		array_unshift( $active_plugins, $plugin_path );
+
+		update_option( 'active_plugins', $active_plugins );
+
+	}
+
+}
+add_action( 'activated_plugin', 'hmbkp_load_first' );

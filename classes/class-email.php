@@ -28,13 +28,21 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 	<label>
 
+<<<<<<< HEAD
             <?php _e( 'Email notification', 'backupwordpress' ); ?>
+=======
+		<?php _e( 'Email notification', 'hmbkp' ); ?>
+>>>>>>> master
 
-            <input type="email" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
+		<input type="email" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
 
+<<<<<<< HEAD
             <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'backupwordpress' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
+=======
+		<p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
+>>>>>>> master
 
-        </label>
+	</label>
 
 	<?php }
 
@@ -50,8 +58,21 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 	public static function constant() { ?>
 
-		<dt<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>><code>HMBKP_ATTACHMENT_MAX_FILESIZE</code></dt>
-		<dd><p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'backupwordpress' ), '<code>10MB</code>' ); ?><p class="example"><?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p></dd>
+		<tr<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>>
+
+			<td><code>HMBKP_ATTACHMENT_MAX_FILESIZE</code></td>
+
+			<td>
+
+				<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?>
+				<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
+				<?php } ?>
+
+				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
+
+			</td>
+
+		</tr>
 
 	<?php }
 
@@ -73,7 +94,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 		return '';
 
 	}
-	
+
 	/**
 	 * Used to determine if the service is in use or not
 	 */
@@ -99,14 +120,14 @@ class HMBKP_Email_Service extends HMBKP_Service {
 					if ( ! is_email( $email ) )
 						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'backupwordpress' ), $email );
 
-			if ( ! empty( $errors['email'] ) )
-				$new_data['email'] = '';
+					if ( ! empty( $errors['email'] ) )
+						$new_data['email'] = '';
 
-		}
+				}
 
-		return $errors;
+				return $errors;
 
-	}
+			}
 
 	/**
 	 * Get an array or validated email address's
@@ -138,7 +159,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			$download = add_query_arg( 'hmbkp_download', base64_encode( $file ), HMBKP_ADMIN_URL );
 			$domain   = parse_url( home_url(), PHP_URL_HOST ) . parse_url( home_url(), PHP_URL_PATH );
 
-			$headers  = 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+			$headers  = 'From: BackUpWordPress <' . apply_filters( 'hmbkp_from_email', get_bloginfo( 'admin_email' ) ) . '>' . "\r\n";
 
 			// The backup failed, send a message saying as much
 			if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->get_errors(), $this->schedule->get_warnings() ) ) ) {
@@ -164,7 +185,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			$subject = sprintf( __( 'Backup of %s', 'backupwordpress' ), $domain );
 
 			// If it's larger than the max attachment size limit assume it's not going to be able to send the backup
-			if ( filesize( $file ) < hmbkp_get_max_attachment_size() ) {
+			if ( @filesize( $file ) < hmbkp_get_max_attachment_size() ) {
 
 				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'backupwordpress' ) . "\n\n" . __( 'The backup file should be attached to this email.', 'backupwordpress' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'backupwordpress' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'backupwordpress' ), home_url(),  $download );
 

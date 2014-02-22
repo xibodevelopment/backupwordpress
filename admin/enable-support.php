@@ -20,7 +20,7 @@
 
 		<?php foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) : ?>
 
-			<?php if ( is_string( $requirement->raw_result() ) || is_bool( $requirement->raw_result() ) ) { ?>
+			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
 
 			<tr>
 

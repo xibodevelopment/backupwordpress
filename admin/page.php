@@ -11,7 +11,7 @@
 
 		<?php } else { ?>
 
-		<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>">Enable Support</a>
+		<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>">Enable Support</a>
 
 		<?php } ?>
 
@@ -33,5 +33,6 @@
 	<p class="howto"><?php _e( 'If you need help getting things working then check the FAQ by clicking on help in the top right hand corner of this page.', 'backupwordpress' ); ?></p>
 
 	<p class="howto"><strong><?php printf( __( 'Wish you could store your backups in a safer place? Our %1$spremium extensions%2$s enable automatic backups to Dropbox, FTP, Google Drive and more.', 'backupwordpress' ), '<a href="http://bwp.hmn.md">', '</a>' ); ?></strong></p>
+
 
 </div>
