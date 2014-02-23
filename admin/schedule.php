@@ -16,7 +16,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	case 'hmbkp_hourly' :
 
-		$reoccurrence = date_i18n( 'i', $schedule->get_next_occurrence( false ) ) === '00' ? '<span ' . $next_backup . '>' . __( 'hourly on the hour', 'backupwordpress' ) . '</span>' : sprintf( __( 'hourly at %s minutes past the hour', 'backupwordpress' ), '<span ' . $next_backup . '>' . str_replace( '0', '', date_i18n( 'i', $schedule->get_next_occurrence( false ) ) ) ) . '</span>';
+		$reoccurrence = date_i18n( 'i', $schedule->get_next_occurrence( false ) ) === '00' ? '<span ' . $next_backup . '>' . __( 'hourly on the hour', 'backupwordpress' ) . '</span>' : sprintf( __( 'hourly at %d minutes past the hour', 'backupwordpress' ), '<span ' . $next_backup . '>' . str_replace( '0', '', date_i18n( 'i', $schedule->get_next_occurrence( false ) ) ) ) . '</span>';
 
 	break;
 
