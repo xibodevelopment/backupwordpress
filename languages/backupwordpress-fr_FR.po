@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BackUpWordPress v2.5\n"
 "Report-Msgid-Bugs-To: hell@hmn.md\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-02-22 19:23:44+0000\n"
+"PO-Revision-Date: 2014-02-23 10:50:36+0000\n"
 "Last-Translator: paul <paul@hmn.md>\n"
 "Language-Team: Human Made Limited\n"
 "MIME-Version: 1.0\n"
@@ -578,12 +578,6 @@ msgstr "montrer"
 msgid "Number of backups to store on this server"
 msgstr "Nombre de sauvegardes à stocker sur le serveur"
 
-#: admin/schedule-form.php:49
-#, php-format
-#@ backupwordpress
-msgid "Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups"
-msgstr "Passé cette limite, les sauvegardes seront automatiquement supprimées. L'horaire stockera un maximum de %s sauvegardes."
-
 #: admin/schedule-form.php:62
 #: backupwordpress.php:159
 #@ backupwordpress
@@ -615,12 +609,6 @@ msgstr "La prochaine sauvegarde sera créée le %1$s à %2$s"
 #@ backupwordpress
 msgid "hourly on the hour"
 msgstr "youyes les heures à l'heure pile"
-
-#: admin/schedule.php:19
-#, php-format
-#@ backupwordpress
-msgid "hourly at %s minutes past the hour"
-msgstr "toutes les heures à l'heure et %s minutes"
 
 #: admin/schedule.php:25
 #, php-format
@@ -803,21 +791,9 @@ msgid "Backup of %s Failed"
 msgstr "Sauvegarde de %s échouée"
 
 #: classes/class-email.php:171
-#, php-format
-#@ backupwordpress
-msgid "BackUpWordPress was unable to backup your site %1$s."
-msgstr "BackUpWordPress n'a pas pu sauvegarder votre site %1$s."
-
-#: classes/class-email.php:171
 #@ backupwordpress
 msgid "Here are the errors that we're encountered:"
 msgstr "Voici les erreurs survenues"
-
-#: classes/class-email.php:171
-#, php-format
-#@ backupwordpress
-msgid "If the errors above look like Martian, forward this email to %3$s and we'll take a look"
-msgstr "Si les erreurs ci-dessus sont du chinois pour vous, envoyez cet e-mail à %3$s et je l'analyserai"
 
 #: classes/class-email.php:171
 #@ backupwordpress
@@ -831,13 +807,6 @@ msgstr "Veuillez accepter les excuses du robot messager de BackUpWordPress"
 #@ backupwordpress
 msgid "Backup of %s"
 msgstr "Sauvegarde de %s"
-
-#: classes/class-email.php:184
-#: classes/class-email.php:193
-#, php-format
-#@ backupwordpress
-msgid "BackUpWordPress has completed a backup of your site %1$s."
-msgstr "BackUpWordPress vient de terminer une sauvegarde de votre site %1$s."
 
 #: classes/class-email.php:184
 #@ backupwordpress
@@ -1179,4 +1148,35 @@ msgstr "Répertoire de sauvegarde incorrect <code>%s</code> doit être une valeu
 #@ backupwordpress
 msgid "Invalid backup type <code>%s</code> must be one of (string) file, database or complete"
 msgstr "Type de sauvegarde incorrect <code>%s</code> les types acceptés sont: fichier, base de données ou complet"
+
+#: admin/schedule-form.php:49
+#, php-format
+#@ backupwordpress
+msgid "Past this limit older backups will be deleted automatically. This schedule will store a maximum of %d of backups"
+msgstr "Au-delà de cette limite, les sauvegardes les plus anciennes seront supprimées automatiquement. Cette configuration stockera un maximum de %d sauvegardes"
+
+#: admin/schedule.php:19
+#, php-format
+#@ backupwordpress
+msgid "hourly at %d minutes past the hour"
+msgstr "toutes les heures et %d minutes"
+
+#: classes/class-email.php:171
+#, php-format
+#@ backupwordpress
+msgid "BackUpWordPress was unable to backup your site %s."
+msgstr "BackUpWordPress n'a pas pu sauvegarder votre site %s"
+
+#: classes/class-email.php:171
+#, php-format
+#@ backupwordpress
+msgid "If the errors above look like Martian, forward this email to %s and we'll take a look"
+msgstr "Si les erreurs ci-dessus vous sont incompréhensibles, envoyez une copie de cet e-mail à %s pour analyse"
+
+#: classes/class-email.php:184
+#: classes/class-email.php:193
+#, php-format
+#@ backupwordpress
+msgid "BackUpWordPress has completed a backup of your site %s."
+msgstr "BackUpWordPress a créé une sauvegarde de votre site %s"
 
