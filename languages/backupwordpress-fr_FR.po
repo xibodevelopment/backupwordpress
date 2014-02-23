@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BackUpWordPress v2.5\n"
-"Report-Msgid-Bugs-To: hell@hmn.md\n"
+"Report-Msgid-Bugs-To: hello@hmn.md\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2014-02-23 10:50:36+0000\n"
 "Last-Translator: paul <paul@hmn.md>\n"
