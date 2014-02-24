@@ -1,5 +1,7 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 /**
  * An abstract service class, individual services should
  * extend this class

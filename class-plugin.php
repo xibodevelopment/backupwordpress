@@ -7,9 +7,6 @@ defined( 'WPINC' ) or die;
  */
 class BackUpWordPress_Plugin {
 
-
-	public $schedules;
-
 	/**
 	 * Simple factory method to get an instance of this class
 	 *
@@ -39,7 +36,6 @@ class BackUpWordPress_Plugin {
 		add_action( 'admin_init', array( $this, 'update' ) );
 
 	}
-
 
 	/**
 	 * Sets up all the action hooks and initializes constants. Includes.
@@ -233,7 +229,6 @@ class BackUpWordPress_Plugin {
 		wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
 
 	}
-
 
 	/**
 	 * Function to run when the schedule cron fires

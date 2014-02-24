@@ -1,5 +1,7 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 /**
  * Delete the backup and then redirect
  * back to the backups page

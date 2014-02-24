@@ -1,5 +1,7 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 /**
  * Displays a row in the manage backups table
  *

@@ -1,5 +1,7 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )
 	require_once dirname( __FILE__ ) . '/../hm-backup/hm-backup.php';

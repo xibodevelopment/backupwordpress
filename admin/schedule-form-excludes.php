@@ -1,3 +1,5 @@
+<?php defined( 'WPINC' ) or die; ?>
+
 <form method="post" class="hmbkp-form">
 
     <input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />

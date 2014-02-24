@@ -1,3 +1,5 @@
+<?php defined( 'WPINC' ) or die; ?>
+
 <div class="wrap">
 
 	<?php screen_icon( HMBKP_PLUGIN_SLUG ); ?>
