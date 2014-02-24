@@ -1,5 +1,9 @@
 <?php
 
+// Load hm-backup
+if ( ! class_exists( 'HM_Backup' ) )
+	require_once dirname( __FILE__ ) . '/../hm-backup/hm-backup.php';
+
 /**
  * Extend HM Backup with scheduling and backup file management
  *
