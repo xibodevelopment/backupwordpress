@@ -1,4 +1,5 @@
 <?php
+defined( 'WPINC' ) or die;
 
 /**
  * Add the backups menu item

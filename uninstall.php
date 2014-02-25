@@ -1,4 +1,9 @@
 <?php
+if ( ! current_user_can( 'activate_plugins' ) )
+	return;
+
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )
+	exit();
 
 if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
 	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );

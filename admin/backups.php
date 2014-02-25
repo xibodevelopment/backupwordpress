@@ -1,4 +1,7 @@
-<?php $schedules = HMBKP_Schedules::get_instance(); ?>
+<?php
+defined( 'WPINC' ) or die;
+
+$schedules = HMBKP_Schedules::get_instance(); ?>
 
 <div>
 
