@@ -5,7 +5,7 @@ Requires at least: 3.7.1
 Tested up to: 3.8.1
 Stable tag: 2.5
 
-Simple automated back ups of your WordPress powered website.
+Simple automated backups of your WordPress powered website.
 
 == Description ==
 
@@ -17,9 +17,9 @@ Simple automated back ups of your WordPress powered website.
 * Works in low memory, "shared host" environments.
 * Manage multiple schedules.
 * Option to have each backup file emailed to you.
-* Uses `zip` and `mysqldump` for faster back ups if they are available.
+* Uses `zip` and `mysqldump` for faster backups if they are available.
 * Works on Linux & Windows Server.
-* Exclude files and folders from your back ups.
+* Exclude files and folders from your backups.
 * Good support should you need help.
 * Translations for Spanish, German, Chinese, Romanian, Russian, Serbian, Lithuanian, Italian, Czech, Dutch, French, Basque.
 
