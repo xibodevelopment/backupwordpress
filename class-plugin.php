@@ -31,7 +31,7 @@ class BackUpWordPress_Plugin {
 
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
 
-		add_action( 'activated_plugin', 'hmbkp_load_first' );
+		add_action( 'activated_plugin', array( $this, 'load_first' ) );
 
 		add_action( 'admin_init', array( $this, 'update' ) );
 
