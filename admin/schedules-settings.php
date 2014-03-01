@@ -32,6 +32,13 @@ function hmbkp_initialize_plugin_options() {
 	$schedules = HMBKP_Schedules::get_instance();
 
 	foreach ( $schedules->get_schedules() as $schedule ) {
+
+		register_setting(
+			$schedule->get_id() . '_section',
+			'hmbkp_schedule_' . $schedule->get_id(),
+			'hmbkp_sanitize_schedule_options'
+		);
+
 		add_settings_section(
 			$schedule->get_id() . '_section',
 			sprintf( __( '%s settings', 'hmbkp' ), $schedule->get_name() ),
@@ -41,17 +48,28 @@ function hmbkp_initialize_plugin_options() {
 
 		add_settings_field(
 			'hmbkp_schedule_type_' . $schedule->get_id(),
-			'Schedule type',
+			__( 'Schedule type', 'hmbkp' ),
 			'hmbkp_schedule_type_display',
 			'hmbkp_schedule_' . $schedule->get_id() . '_options',
 			$schedule->get_id() . '_section'
 		);
 
-		register_setting(
-			$schedule->get_id() . '_section',
-			'hmbkp_schedule_' . $schedule->get_id(),
-			'hmbkp_sanitize_schedule_options'
+		add_settings_field(
+			'hmbkp_schedule_recurrence_' . $schedule->get_id(),
+			__( 'Recurrence', 'hmbkp' ),
+			'hmbkp_schedule_recurrence_display',
+			'hmbkp_schedule_' . $schedule->get_id() . '_options',
+			$schedule->get_id() . '_section'
 		);
+
+		add_settings_field(
+			'hmbkp_schedule_max_backups_' . $schedule->get_id(),
+			__( 'Max Backups', 'hmbkp' ),
+			'hmbkp_schedule_max_backups_display',
+			'hmbkp_schedule_' . $schedule->get_id() . '_options',
+			$schedule->get_id() . '_section'
+		);
+
 	}
 
 }
@@ -88,6 +106,8 @@ function hmbkp_schedule_options_display() { ?>
 			?>
 		</form>
 
+		<?php hmbkp_display_backups_table( $current_schedule ); ?>
+		
 	</div>
 
 <?php
@@ -98,7 +118,9 @@ function hmbkp_plugin_schedules_description_display() {
 	$current_schedule = hmbkp_get_current_schedule_id();
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $current_schedule ) );
 	?>
+
 	<p><?php esc_html_e( 'These are the settings for ' . $schedule->get_name() . '.', 'hmbkp' ); ?></p>
+
 <?php }
 
 function hmbkp_schedule_type_display() {
@@ -107,13 +129,51 @@ function hmbkp_schedule_type_display() {
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $current_schedule ) );
 	?>
 
-	<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
+	<select name="<?php echo "hmbkp_schedule_$current_schedule" ?>[type]" id="hmbkp_schedule_type">
 		<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
 		<option<?php selected( $schedule->get_type(), 'file' ); ?> value="file"><?php _e( 'Files only', 'hmbkp' ); ?></option>
 		<option<?php selected( $schedule->get_type(), 'database' ); ?> value="database"><?php _e( 'Database only', 'hmbkp' ); ?></option>
 	</select>
 
 <?php
+}
+
+function hmbkp_schedule_recurrence_display() {
+
+	$current_schedule = hmbkp_get_current_schedule_id();
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $current_schedule ) );
+	?>
+	<select name="<?php echo "hmbkp_schedule_$current_schedule" ?>[reoccurrence]" id="hmbkp_schedule_reoccurrence">
+
+		<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
+
+		<?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+
+			<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
+
+				<?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?>
+
+			</option>
+
+		<?php endforeach; ?>
+
+	</select>
+<?php
+}
+
+function hmbkp_schedule_max_backups_display() {
+
+	$current_schedule = hmbkp_get_current_schedule_id();
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $current_schedule ) );
+?>
+	<input class="small-text" type="number" name="<?php echo "hmbkp_schedule_$current_schedule" ?>[max_backups]" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
+
+	<p class="description"><?php printf( __( 'Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' ); ?></p>
+<?php
+}
+
+function hmbkp_sanitize_schedule_options( $valid ) {
+	return $valid;
 }
 
 /**
@@ -129,4 +189,74 @@ function hmbkp_get_current_schedule_id() {
 	}
 
 	return 'default-1';
+}
+
+function hmbkp_display_backups_table( $schedule_id ) {
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $schedule_id ) );
+	?>
+
+	<h3 class="title"><?php _e( 'Backups', 'hmbkp' ); ?></h3>
+
+	<table class="widefat">
+
+		<thead>
+
+		<tr>
+
+			<th scope="col"><?php hmbkp_backups_number( $schedule ); ?></th>
+			<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
+			<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
+			<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
+
+		</tr>
+
+		</thead>
+
+		<tbody>
+
+		<?php
+
+		if ( $schedule->get_backups() ) :
+
+			$schedule->delete_old_backups();
+
+			foreach ( $schedule->get_backups() as $file ) :
+
+				if ( ! file_exists( $file ) )
+					continue;
+
+				hmbkp_get_backup_row( $file, $schedule );
+
+			endforeach;
+
+		else : ?>
+
+			<tr>
+
+				<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'hmbkp' ); ?></td>
+
+			</tr>
+
+		<?php endif; ?>
+
+		</tbody>
+
+	</table>
+
+<?php
+}
+
+function hmbkp_backups_number( $schedule, $zero = false, $one = false, $more = false ) {
+
+	$number = count( $schedule->get_backups() );
+
+	if ( $number > 1 )
+		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'hmbkp' ) : $more );
+	elseif ( $number == 0 )
+		$output = ( false === $zero ) ? __( 'No Backups Completed', 'hmbkp' ) : $zero;
+	else // must be one
+		$output = ( false === $one ) ? __( '1 Backup Completed', 'hmbkp' ) : $one;
+
+	echo apply_filters( 'hmbkp_backups_number', $output, $number );
 }

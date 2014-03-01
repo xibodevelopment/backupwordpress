@@ -114,16 +114,4 @@ else {
 </div>
 
 <?php
-function hmbkp_backups_number( $schedule, $zero = false, $one = false, $more = false ) {
 
-	$number = count( $schedule->get_backups() );
-
-	if ( $number > 1 )
-		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'hmbkp' ) : $more );
-	elseif ( $number == 0 )
-		$output = ( false === $zero ) ? __( 'No Backups Completed', 'hmbkp' ) : $zero;
-	else // must be one
-		$output = ( false === $one ) ? __( '1 Backup Completed', 'hmbkp' ) : $one;
-
-	echo apply_filters( 'hmbkp_backups_number', $output, $number );
-}
