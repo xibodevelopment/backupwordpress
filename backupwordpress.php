@@ -75,8 +75,9 @@ if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 }
 
 // Load the admin menu
-require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
-require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
+//require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
+//require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
+require_once( HMBKP_PLUGIN_PATH . '/admin/schedules-settings.php' );
 
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )

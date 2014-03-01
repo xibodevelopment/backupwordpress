@@ -61,6 +61,8 @@ else {
 
 		<?php require( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 
+		<h3 class="title"><?php _e( 'Backups', 'hmbkp' ); ?></h3>
+
 		<table class="widefat">
 
 		    <thead>
