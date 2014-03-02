@@ -25,7 +25,7 @@ jQuery( document ).ready( function( $ ) {
 		height: '85%'
 	};
 
-/*	// Initiaize colorbox
+	// Initiaize colorbox
 	$( '.colorbox' ).colorbox( {
 		'initialWidth'	: '320px',
 		'initialHeight'	: '100px',
@@ -40,13 +40,11 @@ jQuery( document ).ready( function( $ ) {
 		},
 		'onComplete'	: function() {
 
-			$( '.hmbkp-tabs' ).tabs();
-
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
 		}
 
-	} );*/
+	} );
 
 /*	// Resize the colorbox when switching tabs
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
@@ -342,7 +340,7 @@ function catchResponseAndOfferToEmail( data ) {
 				if ( ! data || data == 0 )
 					return;
 
-/*				jQuery.colorbox( {
+				jQuery.colorbox( {
 					'innerWidth'	: "320px",
 					'maxHeight'		: "85%",
 			        'html'			: data,
@@ -352,7 +350,7 @@ function catchResponseAndOfferToEmail( data ) {
 						jQuery( '#cboxClose' ).remove();
 						jQuery.colorbox.resize(resize_options);
 					}
-		        } );*/
+		        } );
 
 			}
 		);
@@ -369,7 +367,7 @@ function catchResponseAndOfferToEmail( data ) {
 		    ajaxurl,
 		    { 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_email_error', 'hmbkp_error' : data },
 			function( data ) {
-				//jQuery.colorbox.close();
+				jQuery.colorbox.close();
 			}
 
 		)
