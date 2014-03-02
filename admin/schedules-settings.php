@@ -56,7 +56,7 @@ function hmbkp_initialize_plugin_options() {
 
 		add_settings_section(
 			$schedule->get_id() . '_section',
-			sprintf( __( '%s settings', 'hmbkp' ), $schedule->get_name() ),
+			sprintf( __( 'Settings for the "%s" schedule', 'hmbkp' ), $schedule->get_name() ),
 			'hmbkp_plugin_schedules_description_display',
 			'hmbkp_schedule_' . $schedule->get_id() . '_options'
 		);
@@ -115,46 +115,51 @@ function hmbkp_schedule_options_display() { ?>
 
 		<h2 class="nav-tab-wrapper">
 
-		<?php
+			<?php
 
-		$active_tab = hmbkp_get_current_schedule_id();
+			$active_tab = hmbkp_get_current_schedule_id();
 
-		$schedules = HMBKP_Schedules::get_instance();
+			$schedules = HMBKP_Schedules::get_instance();
 
-		$current_schedule = $schedules->get_schedule( $active_tab );
+			$current_schedule = $schedules->get_schedule( $active_tab );
 
-		foreach ( $schedules->get_schedules() as $schedule ) {
+			foreach ( $schedules->get_schedules() as $schedule ) {
 
-			$tab_url = add_query_arg( array(
-					'settings-updated' => false,
-					'tab' => $schedule->get_id()
-				) );
+				$tab_url = add_query_arg( array(
+						'settings-updated' => false,
+						'tab' => $schedule->get_id()
+					) );
 
-			// Tab is active if value of $_GET['tab'] is equal to $schedule->get_id()
-			$active = $active_tab === $schedule->get_id() ? ' nav-tab-active' : '';
+				// Tab is active if value of $_GET['tab'] is equal to $schedule->get_id()
+				$active = $active_tab === $schedule->get_id() ? ' nav-tab-active' : '';
 
-			echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $schedule->get_name() ) . '" class="nav-tab' . $active . '">';
-			echo esc_html( $schedule->get_name() );
-			echo '</a>';
-      }
-		?>
+				echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $schedule->get_name() ) . '" class="nav-tab' . $active . '">';
+				echo esc_html( $schedule->get_name() );
+				echo '</a>';
+			}
+			?>
 
 			<a href="" class="nav-tab"><?php esc_html_e( 'Add schedule', 'hmbkp' ); ?></a>
+
 		</h2>
 
 		<div id="tab_container">
-		<?php require_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 
-		<form method="post" action="options.php">
-			<?php
-			settings_fields( $current_schedule->get_id() . '_section' );
-			do_settings_sections( 'hmbkp_schedule_' . $current_schedule->get_id() . '_options' );
-			submit_button();
-			?>
-		</form>
+			<?php require_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 
-		<?php hmbkp_display_backups_table( $current_schedule ); ?>
+			<form method="post" action="options.php">
+
+				<?php
+				settings_fields( $current_schedule->get_id() . '_section' );
+				do_settings_sections( 'hmbkp_schedule_' . $current_schedule->get_id() . '_options' );
+				submit_button();
+				?>
+
+			</form>
+
+			<?php hmbkp_display_backups_table( $current_schedule ); ?>
 		</div>
+
 	</div>
 
 <?php
@@ -193,6 +198,7 @@ function hmbkp_schedule_recurrence_display() {
 	$current_schedule = hmbkp_get_current_schedule_id();
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $current_schedule ) );
 	?>
+
 	<select name="<?php echo "hmbkp_schedule_$current_schedule" ?>[reoccurrence]" id="hmbkp_schedule_reoccurrence">
 
 		<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
@@ -215,7 +221,7 @@ function hmbkp_schedule_max_backups_display() {
 
 	$current_schedule = hmbkp_get_current_schedule_id();
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $current_schedule ) );
-?>
+	?>
 	<input class="small-text" type="number" name="<?php echo "hmbkp_schedule_$current_schedule" ?>[max_backups]" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
 
 	<p class="description"><?php printf( __( 'Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' ); ?></p>
