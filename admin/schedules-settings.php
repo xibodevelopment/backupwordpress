@@ -1,16 +1,28 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 function hmbkp_add_options_page() {
 
-	//Creates a top level menu page called 'Backups'
-	add_menu_page(
-		__( 'BackUpWordPress Settings', 'hmbkp' ),
-		__( 'Backups', 'hmbkp' ),
-		'manage_options',
-		'backupwordpress',
-		'hmbkp_schedule_options_display'
-	);
+	if ( is_multisite() )
+		add_submenu_page(
+			'settings.php',
+			__( 'Manage Backups','hmbkp' ),
+			__( 'Backups','hmbkp' ),
+			( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options',
+			HMBKP_PLUGIN_SLUG,
+			'hmbkp_schedule_options_display'
+		);
+	else
+		add_management_page(
+			__( 'Manage Backups','hmbkp' ),
+			__( 'Backups','hmbkp' ),
+			( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options',
+			HMBKP_PLUGIN_SLUG,
+			'hmbkp_schedule_options_display'
+		);
 
+	/*
 	$schedules = HMBKP_Schedules::get_instance();
 
 	foreach ( $schedules->get_schedules() as $schedule ) {
@@ -22,11 +34,14 @@ function hmbkp_add_options_page() {
 			'hmbkp_schedule_' . $schedule->get_id() . '_options',
 			'hmbkp_schedule_options_display'
 		);
-	}
+	}*/
 
 }
 add_action( 'admin_menu', 'hmbkp_add_options_page' );
 
+/**
+ * Sets up the plugin setting fields and sections
+ */
 function hmbkp_initialize_plugin_options() {
 
 	$schedules = HMBKP_Schedules::get_instance();
@@ -75,44 +90,79 @@ function hmbkp_initialize_plugin_options() {
 }
 add_action( 'admin_init', 'hmbkp_initialize_plugin_options' );
 
+/**
+ * Renders the settings page and tabs
+ */
 function hmbkp_schedule_options_display() { ?>
 
 	<div class="wrap">
 
-		<h2><?php esc_html_e( 'Schedules', 'hmbkp' ); ?></h2>
+		<h2>
+			<?php _e( 'Manage Backups', 'hmbkp' ); ?>
 
-		<?php settings_errors();
+			<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
 
-		$schedules = HMBKP_Schedules::get_instance(); ?>
+				<a id="intercom" class="add-new-h2" href="mailto:support@hmn.md"><?php _e( 'Support', 'hmbkp' ); ?></a>
+
+			<?php } else { ?>
+
+				<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>">Enable Support</a>
+
+			<?php } ?>
+		</h2>
+
+		<?php settings_errors(); ?>
 
 		<h2 class="nav-tab-wrapper">
 
 		<?php
-		$current_schedule = hmbkp_get_current_schedule_id();
+
+		$active_tab = hmbkp_get_current_schedule_id();
+
+		$schedules = HMBKP_Schedules::get_instance();
+
+		$current_schedule = $schedules->get_schedule( $active_tab );
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
-		?>
-			<a href="?page=hmbkp_schedule_<?php echo $schedule->get_id(); ?>_options" class="nav-tab <?php echo ( $current_schedule === $schedule->get_id() ) ? 'nav-tab-active' : ''; ?>"><?php printf( esc_html__( '%s', 'hmbkp' ), $schedule->get_name() ); ?></a>
-		<?php }
+
+			$tab_url = add_query_arg( array(
+					'settings-updated' => false,
+					'tab' => $schedule->get_id()
+				) );
+
+			// Tab is active if value of $_GET['tab'] is equal to $schedule->get_id()
+			$active = $active_tab === $schedule->get_id() ? ' nav-tab-active' : '';
+
+			echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $schedule->get_name() ) . '" class="nav-tab' . $active . '">';
+			echo esc_html( $schedule->get_name() );
+			echo '</a>';
+      }
 		?>
 
+			<a href="" class="nav-tab"><?php esc_html_e( 'Add schedule', 'hmbkp' ); ?></a>
 		</h2>
+
+		<div id="tab_container">
+		<?php require_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
 
 		<form method="post" action="options.php">
 			<?php
-			settings_fields( $current_schedule . '_section' );
-			do_settings_sections( 'hmbkp_schedule_' . $current_schedule . '_options' );
+			settings_fields( $current_schedule->get_id() . '_section' );
+			do_settings_sections( 'hmbkp_schedule_' . $current_schedule->get_id() . '_options' );
 			submit_button();
 			?>
 		</form>
 
 		<?php hmbkp_display_backups_table( $current_schedule ); ?>
-		
+		</div>
 	</div>
 
 <?php
 }
 
+/**
+ * Renders a title for each setting tab
+ */
 function hmbkp_plugin_schedules_description_display() {
 
 	$current_schedule = hmbkp_get_current_schedule_id();
@@ -183,18 +233,32 @@ function hmbkp_sanitize_schedule_options( $valid ) {
  */
 function hmbkp_get_current_schedule_id() {
 
-	if ( isset( $_GET['page'] ) ) {
-		$parts = explode( '_', $_GET['page'] );
-		return $parts[2];
+	$schedules = HMBKP_Schedules::get_instance();
+
+	$active_tab = 'default-1';
+
+	if ( ! empty( $_GET['tab'] ) ) {
+
+		$tab = sanitize_text_field( $_GET['tab'] );
+
+		$current_schedule = $schedules->get_schedule( $tab );
+
+		if ( $current_schedule )
+			$active_tab = $tab;
+
+	} else {
+
+		foreach ( $schedules->get_schedules() as $schedule )
+			$ids[] = $schedule->get_id();
+
+		$active_tab = reset( $ids );
+
 	}
 
-	return 'default-1';
+	return $active_tab;
 }
 
-function hmbkp_display_backups_table( $schedule_id ) {
-
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $schedule_id ) );
-	?>
+function hmbkp_display_backups_table( $schedule ) { ?>
 
 	<h3 class="title"><?php _e( 'Backups', 'hmbkp' ); ?></h3>
 
