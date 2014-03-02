@@ -76,7 +76,7 @@ if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
 // Load the admin menu
 //require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
-//require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
+require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
 require_once( HMBKP_PLUGIN_PATH . '/admin/schedules-settings.php' );
 
 // Load hm-backup
@@ -147,9 +147,9 @@ function hmbkp_load_scripts() {
 
 	$screen = get_current_screen();
 
-	if ( strpos( $screen->id, HMBKP_ADMIN_PAGE ) !== false ) {
+	if ( HMBKP_ADMIN_PAGE === $screen->id ) {
 
-		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
+		wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery' ), sanitize_title( HMBKP_VERSION ) );
 
 		wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
 
