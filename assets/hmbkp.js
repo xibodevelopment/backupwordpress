@@ -8,9 +8,9 @@ jQuery( document ).ready( function( $ ) {
 		$( '.hmbkp-ajax-loading' ).removeClass( 'hmbkp-ajax-loading' );
 	} );
 
-	//$( document ).on( 'click', '.hmbkp-colorbox-close', function() {
-	//    $.colorbox.close(); location.reload();
-	//} );
+	$( document ).on( 'click', '.hmbkp-colorbox-close', function() {
+	    $.colorbox.close(); location.reload();
+	} );
 
 	// Setup the tabs
 	//$( '.hmbkp-tabs' ).tabs();
@@ -291,7 +291,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
 
-		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
+		var scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
 		ajaxRequest = $.post(
 			ajaxurl,
