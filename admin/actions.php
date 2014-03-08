@@ -411,6 +411,7 @@ function hmbkp_edit_schedule_submit() {
 
 				if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
 
+					// This is wrong as hours can be 0
 					$hmbkp_schedule_recurrence['hours'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
 
 					$options = array(
@@ -425,6 +426,7 @@ function hmbkp_edit_schedule_submit() {
 
 				if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
 
+					// TODO this is wrong as minutes can be 0
 					$hmbkp_schedule_recurrence['minutes'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
 
 					$options = array(
@@ -468,7 +470,8 @@ function hmbkp_edit_schedule_submit() {
 
 		} else {
 
-			$schedule->set_schedule_start_time( $hmbkp_schedule_recurrence );
+			$schedule->set_schedule_start_time( hmbkp_determine_start_time( $hmbkp_schedule_recurrence ) );
+			$schedule->set_reoccurrence( $hmbkp_schedule_recurrence['type'] );
 
 			$schedule->set_type( $schedule_type );
 
@@ -484,6 +487,8 @@ function hmbkp_edit_schedule_submit() {
 		}
 
 	}
+
+	die();
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );

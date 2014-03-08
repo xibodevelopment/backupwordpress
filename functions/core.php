@@ -547,3 +547,113 @@ function hmbkp_get_cron_schedules() {
 
 	return $schedules;
 }
+
+/**
+ * @param string $type the type of the schedule
+ * @param array $times {
+ *     An array of time arguments. Optional.
+ *
+ *     @type int $minutes          The minute to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ *                                 any valid `date( 'i' )` output.
+ *     @type int $hours            The hour to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ *                                 any valid `date( 'G' )` output.
+ *     @type string $day_of_week   The day of the week to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ *                                 any valid `date( 'l' )` output.
+ *     @type int $day_of_month     The day of the month to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ *                                 any valid `date( 'j' )` output.
+ *     @type int $now              The current time. Defaults to `time()`. Accepts any valid timestamp.
+ *
+ * }
+ * @return int $timestamp Returns the resulting timestamp on success and Int 0 on failure
+ */
+function hmbkp_determine_start_time( $type, $times = array() ) {
+
+	// Default to in 10 minutes
+	if ( ! empty( $times['now'] ) ) {
+		$default_timestamp = $times['now'] + 600;
+
+	} else {
+		$default_timestamp = time() + 600;
+	}
+
+	$default_times = array(
+		'minutes'      => date( 'i', $default_timestamp ),
+		'hours'        => date( 'G', $default_timestamp ),
+		'day_of_week'  => date( 'l', $default_timestamp ),
+		'day_of_month' => date( 'j', $default_timestamp ),
+		'now'          => time()
+	);
+
+	$args = wp_parse_args( $times, $default_times );
+
+	$schedule_start = '';
+
+	// The current date
+	$date_now = date( 'Y-m-d', $args['now'] );
+	$month_now = date( 'F', $args['now'] );
+	$year_now = date( 'Y', $args['now'] );
+
+	$intervals = HMBKP_Scheduled_Backup::get_cron_schedules();
+
+	// Allow the hours and minutes to be overwritten by a constant
+	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {
+		$hm = HMBKP_SCHEDULE_TIME;
+	}
+
+	// The hour and minute that the schedule should start on
+	else {
+		$hm = $args['hours'] . ':' . $args['minutes'] . ':00';
+	}
+
+	switch ( $type ) {
+
+		case 'hmbkp_hourly' :
+		case 'hmbkp_daily' :
+		case 'hmbkp_twicedaily':
+
+			// Today at the specified time
+			$schedule_start = $date_now . ' ' . $hm;
+
+			// @todo what about if the time has already passed?
+
+			break;
+
+		case 'hmbkp_weekly' :
+		case 'hmbkp_fortnightly' :
+
+			// The next day of the week at the specified time
+			$schedule_start = 'next ' . $args['day_of_week'] . ' ' . $hm;
+
+			break;
+
+		case 'hmbkp_monthly' :
+
+			// The day of the month at the specified time
+			$schedule_start = $args['day_of_month'] . ' ' . $month_now . ' ' . $year_now . ' ' . $hm;
+
+			// @todo what about if the day has already passed?
+
+			break;
+
+		default :
+			break;
+
+	}
+
+	if ( $timestamp = strtotime( $schedule_start ) ) {
+
+		// Convert to UTC
+		$timestamp -= get_option( 'gmt_offset' ) * 3600;
+
+		// if the scheduled time already passed then keep adding the interval until we get to a future date
+		while ( $timestamp <= $args['now'] ) {
+			$timestamp += $intervals[ $type ]['interval'];
+		}
+
+		return $timestamp;
+
+	}
+
+	return 0;
+
+}

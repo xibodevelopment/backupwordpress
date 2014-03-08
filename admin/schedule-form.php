@@ -42,9 +42,10 @@
 
 			</select>
 
-			</div>
+		</div>
 
-		<?php $recurrence_settings = $schedule->get_recurrence_settings(); ?>
+		<?php if ( ! $start_time = $schedule->get_schedule_start_time() )
+			$start_time = time(); ?>
 
 		<div id="start-day" class="recurring-setting">
 
@@ -64,7 +65,7 @@
 
 				foreach ( $weekdays as $key => $day ) : ?>
 
-					<option value="<?php echo esc_attr( $key ) ?>" <?php selected( ( isset( $recurrence_settings['day_of_week'] ) ) ? $recurrence_settings['day_of_week'] : '', $key ); ?>><?php echo esc_html( $day ); ?></option>
+					<option value="<?php echo esc_attr( $key ) ?>" <?php selected( strtolower( date( 'l', $start_time ) ), $key ); ?>><?php echo esc_html( $day ); ?></option>
 
 				<?php endforeach; ?>
 
@@ -76,7 +77,7 @@
 
 			<label for="hmbkp_schedule_start_day_of_month"><?php _e( 'Start Day of Month', 'hmbkp' ); ?></label>
 
-			<input type="number" min="0" max="31" step="1" value="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( ( isset( $recurrence_settings['day_of_month'] ) ) ? $recurrence_settings['day_of_month'] : '1' ); ?>">
+			<input type="number" min="0" max="31" step="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( date( 'j', $start_time ) ); ?>">
 
 		</div>
 
@@ -86,11 +87,11 @@
 
 			<span class="field-group">
 
-				<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( ( isset( $recurrence_settings['hours'] ) ) ? $recurrence_settings['hours'] : '23' ); ?>">
+				<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( date( 'G', $start_time ) ); ?>">
 
 				<?php _e( 'Hours', 'hmbkp' ); ?></label>
 
-				<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( ( isset( $recurrence_settings['minutes'] ) ) ? $recurrence_settings['minutes'] : '00' ); ?>">
+				<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( (float) date( 'i', $start_time ) ); ?>">
 
 				<?php _e( 'Minutes', 'hmbkp' ); ?></label>
 
