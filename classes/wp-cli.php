@@ -9,7 +9,34 @@
  */
 class BackUpCommand extends WP_CLI_Command {
 
-	public function __construct( $args, $assoc_args ) {
+	/**
+	 * Generate some posts.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--files_only]
+	 * : Backup files only, default to off
+	 *
+	 * [--database_only]
+	 * : Backup database only, defaults to off
+	 *
+	 * [--path]
+	 * : dir that the backup should be save in, defaults to wp-content/backups/
+	 *
+	 * [--root]
+	 * : dir that should be backed up, defaults to site root.
+	 *
+	 * [--zip_command_path]
+	 * : path to your zip binary, standard locations are automatically used
+	 *
+	 * [--mysqldump_command_path]
+	 * : path to your mysqldump binary, standard locations are automatically used
+	 *
+	 * ## Usage
+	 *
+	 *     wp backupwordpress backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [--zip_command_path=<path>] [--mysqldump_command_path=<path>]
+	 */
+	public function backup( $args, $assoc_args ) {
 
 		// Make sure it's possible to do a backup
 		if ( HM_Backup::is_safe_mode_active() )
@@ -72,22 +99,5 @@ class BackUpCommand extends WP_CLI_Command {
 
 	}
 
-	static function help() {
-
-		WP_CLI::line( <<<EOB
-usage: wp backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [--zip_command_path=<path>] [--mysqldump_command_path=<path>]
-
-	 --files_only                   Backup files only, default to off
-	 --database_only                Backup database only, defaults to off
-	 --path                         dir that the backup should be save in, defaults to wp-content/backups/
-	 --root                         dir that should be backed up, defaults to site root.
-	 --zip_command_path             path to your zip binary, standard locations are automatically used
-	 --mysqldump_command_path       path to your mysqldump binary, standard locations are automatically used
-
-EOB
-		);
-
-	}
-
 }
-WP_CLI::add_command( 'backup', 'BackUpCommand' );
+WP_CLI::add_command( 'backupwordpress', 'BackUpCommand' );
