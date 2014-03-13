@@ -222,7 +222,7 @@ function hmbkp_ajax_calculate_backup_size() {
 
 	$recalculate_filesize = true;
 
-	include_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' );
+	include_once( HMBKP_PLUGIN_PATH . 'admin/schedule.php' );
 
 	die;
 
@@ -283,7 +283,7 @@ function hmbkp_edit_schedule_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
 
 	die;
 
@@ -300,7 +300,7 @@ function hmbkp_edit_schedule_excludes_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -315,7 +315,7 @@ function hmbkp_add_schedule_load() {
 	$schedule        = new HMBKP_Scheduled_Backup( date( 'U' ) );
 	$is_new_schedule = true;
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
 
 	die;
 
@@ -421,7 +421,7 @@ function hmbkp_add_exclude_rule() {
 
 	$schedule->save();
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -447,7 +447,7 @@ function hmbkp_delete_exclude_rule() {
 
 	$schedule->save();
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
