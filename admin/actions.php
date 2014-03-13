@@ -562,3 +562,26 @@ function hmbkp_load_enable_support () {
 
 }
 add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
+
+function hmbkp_request_restore_backup() {
+
+	$dump_file_path = sanitize_text_field( base64_decode( $_GET['hmbkp_restore_backup'] ) );
+
+	if ( empty( $_GET['hmbkp_restore_backup'] ) || ! check_admin_referer( 'hmbkp-restore_backup' ) || ! file_exists( $dump_file_path ) )
+		return;
+
+	require_once HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-db-restore.php';
+	require_once HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-files-restore.php';
+
+	$hmbkp_db_restore = new HMBKP_DB_Restore( $dump_file_path );
+
+	//$restoration_status = $hmbkp_db_restore->restore_database();
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
+	$hmbkp_files_restore = new HMBKP_Files_Restore( $schedule->get_root(), $dump_file_path );
+
+	$hmbkp_files_restore->restore_files();
+
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_restore_backup' );
