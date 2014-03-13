@@ -53,8 +53,6 @@ class HMBKP_DB_Restore {
 
 		$contents = file_get_contents( $this->dump_file_path );
 
-		preg_match_all( "/INSERT INTO `[^_]*_(.*)` VALUES /", $contents, $matches );
-
 		$contents = preg_replace( $patterns, $replacements, $contents );
 
 		file_put_contents( $this->dump_file_path, $contents );
