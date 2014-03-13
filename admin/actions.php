@@ -565,9 +565,12 @@ add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
 
 function hmbkp_request_restore_backup() {
 
+	if ( empty( $_GET['hmbkp_restore_backup'] ) || ! check_admin_referer( 'hmbkp-restore_backup' ) )
+		return;
+
 	$backup_archive = sanitize_text_field( base64_decode( $_GET['hmbkp_restore_backup'] ) );
 
-	if ( empty( $_GET['hmbkp_restore_backup'] ) || ! check_admin_referer( 'hmbkp-restore_backup' ) || ! file_exists( $backup_archive ) )
+	if ( ! file_exists( $backup_archive ) )
 		return;
 
 	require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-restore.php' );
