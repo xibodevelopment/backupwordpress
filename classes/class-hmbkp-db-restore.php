@@ -2,50 +2,32 @@
 
 class HMBKP_DB_Restore {
 
-	protected $new_prefix = '';
-
 	protected $dump_file_path = '';
-
-	protected $dump_file_archive = '';
 
 	protected $error;
 
-	public function __construct( $dump_file_archive ) {
+	public function __construct( $dump_file_path ) {
 
-		$this->dump_file_archive = $dump_file_archive;
-
-		$parts = pathinfo( $this->dump_file_archive );
-
-		$this->dump_file_path = trailingslashit( $parts['dirname'] ) . $parts['filename'] . '.sql';
+		$this->dump_file_path = $dump_file_path;
 
 	}
 
-
 	public function restore_database() {
 
-		// Extract the DB dump from the zip archive
-		$extracted = $this->extract_dump_file();
+		// Rename table prefix
+		$this->update_table_prefix();
 
-		if ( ! is_wp_error( $extracted ) ) {
+		// Run import
+		$this->perform_import();
 
-			// Rename table prefix
-			$this->update_table_prefix();
-
-			// Run import
-			$this->perform_import();
-
-			// Clean up
-			$this->delete_dump_file();
-
-		} else {
-			return $extracted->get_error_message();
-		}
+		// Clean up
+		$this->delete_dump_file();
 
 	}
 
 	public function update_table_prefix() {
 
-		$this->new_prefix = 'bwp' . time() . '_';
+		$new_prefix = 'bwp' . time() . '_';
 
 		$patterns = array(
 			"/CREATE TABLE `[^_]*_(.*)` \(/",
@@ -59,29 +41,23 @@ class HMBKP_DB_Restore {
 		);
 
 		$replacements = array(
-			'CREATE TABLE ' . $this->new_prefix . '$1 (',
-			'DROP TABLE IF EXISTS `' . $this->new_prefix . '$1`;',
-			'-- Table structure for table `' . $this->new_prefix . '$1`',
-			'-- Dumping data for table `' . $this->new_prefix . '$1`',
-			'LOCK TABLES `' . $this->new_prefix . '$1` WRITE;',
-			'/*!40000 ALTER TABLE `' . $this->new_prefix . '$1` ENABLE KEYS */;',
-			'/*!40000 ALTER TABLE `' . $this->new_prefix . '$1` DISABLE KEYS */;',
-			'INSERT INTO `' . $this->new_prefix . '$1` VALUES '
+			'CREATE TABLE ' . $new_prefix . '$1 (',
+			'DROP TABLE IF EXISTS `' . $new_prefix . '$1`;',
+			'-- Table structure for table `' . $new_prefix . '$1`',
+			'-- Dumping data for table `' . $new_prefix . '$1`',
+			'LOCK TABLES `' . $new_prefix . '$1` WRITE;',
+			'/*!40000 ALTER TABLE `' . $new_prefix . '$1` ENABLE KEYS */;',
+			'/*!40000 ALTER TABLE `' . $new_prefix . '$1` DISABLE KEYS */;',
+			'INSERT INTO `' . $new_prefix . '$1` VALUES '
 		);
 
 		$contents = file_get_contents( $this->dump_file_path );
 
+		preg_match_all( "/INSERT INTO `[^_]*_(.*)` VALUES /", $contents, $matches );
+
 		$contents = preg_replace( $patterns, $replacements, $contents );
 
 		file_put_contents( $this->dump_file_path, $contents );
-
-	}
-
-	public function extract_dump_file() {
-
-		WP_Filesystem();
-
-		return unzip_file( $this->dump_file_archive, pathinfo( $this->dump_file_archive, PATHINFO_DIRNAME ) );
 
 	}
 
