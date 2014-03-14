@@ -4,19 +4,19 @@
 
     <fieldset class="hmbkp-edit-schedule-excludes-form">
 
-        <legend><?php _e( 'Manage Excludes', 'hmbkp' ); ?></legend>
+        <legend><?php _e( 'Manage Excludes', 'backupwordpress' ); ?></legend>
 
         <div class="hmbkp_add_exclude_rule">
 
         	<label for="hmbkp-new-exclude-rule">
 
-                <?php _e( 'New Exclude Rule[s]', 'hmbkp' ); ?>
+                <?php _e( 'New Exclude Rule[s]', 'backupwordpress' ); ?>
 
                 <input id="hmbkp-new-exclude-rule" type="text" class="code" placeholder="" />
 
-                <button type="button" class="button-secondary hmbkp_preview_exclude_rule"><?php _e( 'Preview', 'hmbkp' ); ?></button>
+                <button type="button" class="button-secondary hmbkp_preview_exclude_rule"><?php _e( 'Preview', 'backupwordpress' ); ?></button>
 
-                <span class="howto"><?php printf( __( 'Enter new exclude rules as a comma separated list, e.g. %s', 'hmbkp' ), '<code>.git/, *.mp3, wp-content/uploads/</code>' ); ?></span>
+                <span class="howto"><?php printf( __( 'Enter new exclude rules as a comma separated list, e.g. %s', 'backupwordpress' ), '<code>.git/, *.mp3, wp-content/uploads/</code>' ); ?></span>
 
             </label>
 
@@ -26,7 +26,7 @@
 
         	<thead>
         		<tr>
-        			<th><?php _e( 'Exclude Rules', 'hmbkp' ); ?></th>
+        			<th><?php _e( 'Exclude Rules', 'backupwordpress' ); ?></th>
         		</tr>
         	</thead>
 
@@ -41,15 +41,15 @@
 
     	<?php if ( ( $schedule->get_path() === untrailingslashit( $exclude ) ) || ( in_array( $exclude, $schedule->default_excludes() ) ) ) : ?>
 
-    					<span class="reason"><?php _e( 'default', 'hmbkp' ); ?></span>
+    					<span class="reason"><?php _e( 'default', 'backupwordpress' ); ?></span>
 
     	<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && strpos( HMBKP_EXCLUDE, $exclude ) !== false ) : ?>
 
-    					<span class="reason"><?php _e( 'defined', 'hmbkp' ); ?></span>
+    					<span class="reason"><?php _e( 'defined', 'backupwordpress' ); ?></span>
 
     	<?php else : ?>
 
-    					<a href="#" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+    					<a href="#" class="delete-action"><?php _e( 'Remove', 'backupwordpress' ); ?></a>
 
     	<?php endif; ?>
 
@@ -68,15 +68,15 @@
 
 	<?php if ( $schedule->get_excluded_file_count() ) : ?>
 
-        		<li><a href="#hmbkp_excluded_files"><?php _e( 'Excluded', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_excluded_file_count() ); ?>)</li>
+        		<li><a href="#hmbkp_excluded_files"><?php _e( 'Excluded', 'backupwordpress' ); ?></a>(<?php esc_html_e( $schedule->get_excluded_file_count() ); ?>)</li>
 
     <?php endif; ?>
 
-        		<li><a href="#hmbkp_included_files"><?php _e( 'Included', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_included_file_count() ); ?>)</li>
+        		<li><a href="#hmbkp_included_files"><?php _e( 'Included', 'backupwordpress' ); ?></a>(<?php esc_html_e( $schedule->get_included_file_count() ); ?>)</li>
 
     <?php if ( $schedule->get_unreadable_file_count() ) : ?>
 
-                <li><a href="#hmbkp_unreadable_files"><?php _e( 'Unreadable', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_unreadable_file_count() ); ?>)</li>
+                <li><a href="#hmbkp_unreadable_files"><?php _e( 'Unreadable', 'backupwordpress' ); ?></a>(<?php esc_html_e( $schedule->get_unreadable_file_count() ); ?>)</li>
 
     <?php endif; ?>
 
@@ -104,19 +104,19 @@
 
                 <?php hmbkp_file_list( $schedule, null, 'get_unreadable_files' ); ?>
 
-                <p class="description"><?php _e( 'Unreadable files can\'t be backed up', 'hmbkp' ); ?></p>
+                <p class="description"><?php _e( 'Unreadable files can\'t be backed up', 'backupwordpress' ); ?></p>
 
             </div>
 
     <?php endif; ?>
 
-        <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . esc_html( $schedule->get_formatted_file_size( false ) ) . '</code>' ); ?></p>
+        <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'backupwordpress' ), '<code>' . esc_html( $schedule->get_formatted_file_size( false ) ) . '</code>' ); ?></p>
 
         </div>
 
         <p class="submit">
 
-            <button type="submit" class="button-primary"><?php _e( 'Close', 'hmbkp' ); ?></button>
+            <button type="submit" class="button-primary"><?php _e( 'Close', 'backupwordpress' ); ?></button>
 
         </p>
 

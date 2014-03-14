@@ -14,7 +14,7 @@ function hmbkp_request_delete_backup() {
 	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['hmbkp_delete_backup'] ) ) );
 
 	if ( is_wp_error( $deleted ) )
-		wp_die( $deleted->get_error_message() );
+		echo $deleted->get_error_message();
 
 	wp_safe_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
 
@@ -29,7 +29,7 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_backup' );
  */
 function hmbkp_request_enable_support() {
 
-	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) )
+	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'backupwordpress' ) )
 		return;
 
 	update_option( 'hmbkp_enable_support', true );
@@ -67,7 +67,7 @@ function hmbkp_ajax_request_do_backup() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
-	// Fixes an issue on servers which only allow a single session per client
+	// Fixes an issue on servers which only allow a single session per client 
 	session_write_close();
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
@@ -250,13 +250,13 @@ function hmbkp_ajax_cron_test() {
 
 	if ( is_wp_error( $response ) ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
 	} elseif ( wp_remote_retrieve_response_code( $response ) != 200 ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
@@ -336,157 +336,68 @@ function hmbkp_edit_schedule_submit() {
 
 	$errors = array();
 
-	// called from an extension
-	if ( isset( $_GET['is_destination_form'] ) ) {
 
-		// Save the service options
-		foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-			$errors = array_merge( $errors, $service->save() );
+	if ( isset( $_GET['hmbkp_schedule_type'] ) ) {
 
-		$schedule->save();
+		$schedule_type = sanitize_text_field( $_GET['hmbkp_schedule_type'] );
 
-		if ( empty( $errors ) )
-			wp_send_json_success();
+		if ( ! trim( $schedule_type ) )
+			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'backupwordpress' );
+
+		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) )
+			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'backupwordpress' );
+
 		else
-			wp_send_json_error( $errors );
-
-	} else {
-
-		$schedule_settings = array();
-
-		if ( isset( $_GET['hmbkp_schedule_recurrence'] ) ) {
-
-			$hmbkp_schedule_recurrence = $_GET['hmbkp_schedule_recurrence'];
-
-			if ( isset( $_GET['hmbkp_schedule_type'] ) ) {
-
-				$schedule_type = sanitize_text_field( $_GET['hmbkp_schedule_type'] );
-
-				if ( ! trim( $schedule_type ) )
-					$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
-
-				elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) )
-					$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
-
-				else
-					$schedule_settings['schedule_type'] = $schedule_type;
-
-			}
-
-			if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_type'] ) ) {
-				$hmbkp_schedule_recurrence_type = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_type'] );
-
-				if ( empty( $hmbkp_schedule_recurrence_type ) )
-					$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
-
-				elseif ( ! in_array( $hmbkp_schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $hmbkp_schedule_recurrence_type !== 'manually' )
-					$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
-
-			}
-
-			if ( 'manually' !== $hmbkp_schedule_recurrence_type ) {
-
-				if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] ) ) {
-
-					$hmbkp_schedule_time['day_of_week'] = sanitize_text_field( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
-
-					if ( ! in_array( $hmbkp_schedule_time['day_of_week'], array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) )
-						$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of week must be an integer between 1 and 7', 'backupwordpress' );
-
-				}
-
-				if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
-
-					$hmbkp_schedule_time['day_of_month'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
-
-					$options = array(
-						'min_range' => 1,
-						'max_range' => 31
-					);
-
-					if ( false === filter_var( $hmbkp_schedule_time['day_of_month'], FILTER_VALIDATE_INT, array( 'options' => $options ) ) )
-						$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'backupwordpress' );
-
-				}
-
-				if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
-
-					$hmbkp_schedule_time['hours'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
-
-					$options = array(
-						'min_range' => 1,
-						'max_range' => 23
-					);
-
-					if ( false === filter_var( $hmbkp_schedule_time['hours'], FILTER_VALIDATE_INT, array( 'options' => $options ) ) )
-						$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 1 and 23', 'backupwordpress' );
-
-				}
-
-				if ( isset( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
-
-					$hmbkp_schedule_time['minutes'] = absint( $_GET['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
-
-					$options = array(
-						'min_range' => 0,
-						'max_range' => 59
-					);
-
-					if ( false === filter_var( $hmbkp_schedule_time['minutes'], FILTER_VALIDATE_INT, array( 'options' => $options ) ) )
-						$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'backupwordpress' );
-
-				}
-
-			}
-		}
-
-		if ( isset( $_GET['hmbkp_schedule_max_backups'] ) ) {
-
-			$schedule_max_backups = sanitize_text_field( $_GET['hmbkp_schedule_max_backups'] );
-
-			if ( empty( $schedule_max_backups ) )
-				$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
-
-			elseif ( ! is_numeric( $schedule_max_backups ) )
-				$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
-
-			elseif ( ! ( $schedule_max_backups >= 1 ) )
-				$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
-
-			else
-				$schedule_settings['schedule_max_backups'] = absint( $schedule_max_backups );
-
-		}
-
-		// Save the service options
-		foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
-			$errors = array_merge( $errors, $service->save() );
-		}
-
-		if ( $errors ) {
-			wp_send_json_error( $errors );
-
-		} else {
-
-			if ( isset( $hmbkp_schedule_time ) )
-				$schedule->set_schedule_start_time( hmbkp_determine_start_time( $hmbkp_schedule_recurrence_type, $hmbkp_schedule_time ) );
-
-			$schedule->set_reoccurrence( $hmbkp_schedule_recurrence_type );
 			$schedule->set_type( $schedule_type );
-			$schedule->set_max_backups( $schedule_settings['schedule_max_backups'] );
-
-			$schedule->save();
-
-			// Remove any old backups in-case max backups was reduced
-			$schedule->delete_old_backups();
-
-			wp_send_json_success();
-
-		}
 
 	}
 
-	die();
+	if ( isset( $_GET['hmbkp_schedule_reoccurrence'] ) ) {
+
+		$schedule_reoccurrence = sanitize_text_field( $_GET['hmbkp_schedule_reoccurrence'] );
+
+		if ( empty( $schedule_reoccurrence ) )
+			$errors['hmbkp_schedule_reoccurrence'] = __( 'Schedule cannot be empty', 'backupwordpress' );
+
+		elseif ( ! in_array( $schedule_reoccurrence, array_keys( $schedule->get_cron_schedules() ) ) && $schedule_reoccurrence !== 'manually' )
+			$errors['hmbkp_schedule_reoccurrence'] = __( 'Invalid schedule', 'backupwordpress' );
+
+		else
+			$schedule->set_reoccurrence( $schedule_reoccurrence );
+
+	}
+
+	if ( isset( $_GET['hmbkp_schedule_max_backups'] ) ) {
+
+		$schedule_max_backups = sanitize_text_field( $_GET['hmbkp_schedule_max_backups'] );
+
+		if ( empty( $schedule_max_backups ) )
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'backupwordpress' );
+
+		elseif ( ! is_numeric( $schedule_max_backups ) )
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'backupwordpress' );
+
+		elseif ( ! ( $schedule_max_backups >= 1 ) )
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'backupwordpress' );
+
+		else
+			$schedule->set_max_backups( (int) $schedule_max_backups );
+
+		// Remove any old backups in-case max backups was reduced
+		$schedule->delete_old_backups();
+
+	}
+
+	// Save the service options
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service )
+		$errors = array_merge( $errors, $service->save() );
+
+	$schedule->save();
+
+	if ( $errors )
+		echo json_encode( $errors );
+
+	die;
 
 }
 add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
@@ -566,17 +477,17 @@ function hmbkp_preview_exclude_rule() {
 
 	if ( $schedule->get_excluded_file_count() ) { ?>
 
-		<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', $schedule->get_excluded_file_count(), 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>', $schedule->get_excluded_file_count() ); ?></p>
+		<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', $schedule->get_excluded_file_count(), 'backupwordpress' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>', $schedule->get_excluded_file_count() ); ?></p>
 
 	<?php } else { ?>
 
-		<p><?php printf( __( '%s didn\'t match any files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>' ); ?></p>
+		<p><?php printf( __( '%s didn\'t match any files.', 'backupwordpress' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>' ); ?></p>
 
 	<?php } ?>
 
 	<p>
-		<button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'hmbkp' ); ?></button>
-		<button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'hmbkp' ); ?></button>
+		<button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'backupwordpress' ); ?></button>
+		<button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'backupwordpress' ); ?></button>
 	</p>
 
 	<?php die;
@@ -597,23 +508,23 @@ function hmbkp_display_error_and_offer_to_email_it() {
 
 	if ( $succeeded ) { ?>
 
-		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'hmbkp' ); ?></h3>
+		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'backupwordpress' ); ?></h3>
 
 	<?php } else { ?>
 
-		<h3><?php _e( 'Your backup failed', 'hmbkp' ); ?></h3>
+		<h3><?php _e( 'Your backup failed', 'backupwordpress' ); ?></h3>
 
 	<?php } ?>
 
-	<p><?php _e( 'Here\'s the response from the server:', 'hmbkp' ); ?></p>
+	<p><?php _e( 'Here\'s the response from the server:', 'backupwordpress' ); ?></p>
 
 	<pre><?php esc_html_e( $error ); ?></pre>
 
-	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'hmbkp' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?>
+	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'backupwordpress' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?>
 		<br /><br /></p>
 
-	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
-	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
+	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'backupwordpress' ); ?></button>
+	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'backupwordpress' ); ?></button>
 
 	<?php die;
 
@@ -641,7 +552,7 @@ add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
  *
  * @return void
  */
-function hmbkp_load_enable_support() {
+function hmbkp_load_enable_support () {
 
 	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
 

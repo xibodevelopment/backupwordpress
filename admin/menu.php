@@ -9,9 +9,10 @@
 function hmbkp_admin_menu() {
 
 	if ( is_multisite() )
-		add_submenu_page( 'settings.php', __( 'Manage Backups','hmbkp' ), __( 'Backups','hmbkp' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
+		add_submenu_page( 'settings.php', __( 'Manage Backups','backupwordpress' ), __( 'Backups','backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
 	else
-		add_management_page( __( 'Manage Backups','hmbkp' ), __( 'Backups','hmbkp' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
+		add_management_page( __( 'Manage Backups','backupwordpress' ), __( 'Backups','backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
+
 }
 add_action( 'network_admin_menu', 'hmbkp_admin_menu' );
 add_action( 'admin_menu', 'hmbkp_admin_menu' );
@@ -36,7 +37,7 @@ function hmbkp_manage_backups() {
 function hmbkp_plugin_action_link( $links, $file ) {
 
 	if ( strpos( $file, HMBKP_PLUGIN_SLUG ) !== false )
-		array_push( $links, '<a href="' . esc_url( HMBKP_ADMIN_URL ) . '">' . __( 'Backups', 'hmbkp' ) . '</a>' );
+		array_push( $links, '<a href="' . esc_url( HMBKP_ADMIN_URL ) . '">' . __( 'Backups', 'backupwordpress' ) . '</a>' );
 
 	return $links;
 
@@ -71,7 +72,7 @@ function hmbkp_contextual_help() {
 
 	// Check if help is for the right version.
 	if ( ! empty( $plugin->version ) && version_compare( HMBKP_VERSION, $plugin->version, '!=' ) )
-		$warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'hmbkp' ) . '</strong> &mdash; ' . __( 'The information below is for version %1$s. View the %2$s file for help specific to version %3$s.', 'hmbkp' ) . '</p></div>', '<code>' . esc_attr( $plugin->version ) . '</code>', '<code>readme.txt</code>', '<code>' . esc_attr( HMBKP_VERSION ) . '</code>' );
+		$warning = sprintf( '<div id="message" class="updated inline"><p><strong>' . __( 'You are not using the latest stable version of BackUpWordPress', 'backupwordpress' ) . '</strong> &mdash; ' . __( 'The information below is for version %1$s. View the %2$s file for help specific to version %3$s.', 'backupwordpress' ) . '</p></div>', '<code>' . esc_attr( $plugin->version ) . '</code>', '<code>readme.txt</code>', '<code>' . esc_attr( HMBKP_VERSION ) . '</code>' );
 
 	ob_start();
 	require_once( HMBKP_PLUGIN_PATH . '/admin/constants.php' );
@@ -79,15 +80,15 @@ function hmbkp_contextual_help() {
 
 
 	if ( $plugin && ! is_wp_error( $plugin ) )
-		get_current_screen()->add_help_tab( array( 'title' => __( 'FAQ', 'hmbkp' ), 'id' => 'hmbkp_faq', 'content' => wp_kses_post( $warning . $plugin->sections['faq'] ) ) );
+		get_current_screen()->add_help_tab( array( 'title' => __( 'FAQ', 'backupwordpress' ), 'id' => 'hmbkp_faq', 'content' => wp_kses_post( $warning . $plugin->sections['faq'] ) ) );
 	
-	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'hmbkp' ), 'id' => 'hmbkp_constants', 'content' => wp_kses_post( $constants ) ) );
+	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'backupwordpress' ), 'id' => 'hmbkp_constants', 'content' => wp_kses_post( $constants ) ) );
 
 	get_current_screen()->set_help_sidebar(
-		'<p><strong>' . __( 'For more information:', 'hmbkp' ) . '</strong></p>' .
+		'<p><strong>' . __( 'For more information:', 'backupwordpress' ) . '</strong></p>' .
 		'<p><a href="https://github.com/humanmade/backupwordpress" target="_blank">GitHub</a></p>' .
-		'<p><a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">' . __( 'Support Forums', 'hmbkp' ) .'</a></p>' .
-		'<p><a href="http://translate.hmn.md/" target="_blank">' . __( 'Help with translation', 'hmbkp' ) .'</a></p>'
+		'<p><a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">' . __( 'Support Forums', 'backupwordpress' ) .'</a></p>' .
+		'<p><a href="http://translate.hmn.md/" target="_blank">' . __( 'Help with translation', 'backupwordpress' ) .'</a></p>'
 	);
 
 }

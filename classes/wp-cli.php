@@ -40,14 +40,14 @@ class BackUpCommand extends WP_CLI_Command {
 
 		// Make sure it's possible to do a backup
 		if ( HM_Backup::is_safe_mode_active() )
-			WP_CLI::error( sprintf( __( 'BackUpWordPress may not work when php is running with %s on', 'hmbkp' ), 'safe_mode' ) );
+			WP_CLI::error( sprintf( __( 'BackUpWordPress may not work when php is running with %s on', 'backupwordpress' ), 'safe_mode' ) );
 
 		add_action( 'hmbkp_mysqldump_started', function() {
-			WP_CLI::line( __( 'Backup: Dumping database...', 'hmbkp' ) );
+			WP_CLI::line( __( 'Backup: Dumping database...', 'backupwordpress' ) );
 		} );
 
 		add_action( 'hmbkp_archive_started', function() {
-			WP_CLI::line( __( 'Backup: Zipping everything up...', 'hmbkp' ) );
+			WP_CLI::line( __( 'Backup: Zipping everything up...', 'backupwordpress' ) );
 		} );
 
 		// Clean up any mess left by a previous backup
@@ -62,12 +62,12 @@ class BackUpCommand extends WP_CLI_Command {
 			$hm_backup->set_root( $assoc_args['root'] );
 
 		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! wp_mkdir_p( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
-			WP_CLI::error( __( 'Invalid backup path', 'hmbkp' ) );
+			WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
 			return false;
 		}
 
 		if ( ! is_dir( $hm_backup->get_root() ) || ! is_readable( $hm_backup->get_root() ) ) {
-			WP_CLI::error( __( 'Invalid root path', 'hmbkp' ) );
+			WP_CLI::error( __( 'Invalid root path', 'backupwordpress' ) );
 			return false;
 		}
 
@@ -92,10 +92,10 @@ class BackUpCommand extends WP_CLI_Command {
 	    //hmbkp_delete_old_backups();
 
     	if ( file_exists( $hm_backup->get_archive_filepath() ) )
-			WP_CLI::success( __( 'Backup Complete: ', 'hmbkp' ) . $hm_backup->get_archive_filepath() );
+			WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $hm_backup->get_archive_filepath() );
 
 		else
-			WP_CLI::error( __( 'Backup Failed', 'hmbkp' ) );
+			WP_CLI::error( __( 'Backup Failed', 'backupwordpress' ) );
 
 	}
 
