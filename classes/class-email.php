@@ -107,19 +107,29 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 		if ( isset( $new_data['email'] ) ) {
 
-			if ( ! empty( $new_data['email'] ) )
-				foreach ( explode( ',', $new_data['email'] ) as $email )
-					if ( ! is_email( $email ) )
-						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
+			if ( ! empty( $new_data['email'] ) ) {
 
-					if ( ! empty( $errors['email'] ) )
+				foreach ( explode( ',', $new_data['email'] ) as $email ) {
+
+					$email = trim( $email );
+
+					if ( ! is_email( $email ) ) {
+						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
+					}
+
+					if ( ! empty( $errors['email'] ) ) {
 						$new_data['email'] = '';
+					}
 
 				}
 
-				return $errors;
-
 			}
+
+			return $errors;
+
+		}
+
+	}
 
 	/**
 	 * Get an array or validated email address's
