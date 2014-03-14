@@ -28,7 +28,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 		<div>
 
-			<label for="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>"><?php _e( 'Email notification', 'backupwordpress' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>"><?php _e( 'Email notification', 'hmbkp' ); ?></label>
 
 			<input type="email" id="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
 
@@ -107,19 +107,29 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 		if ( isset( $new_data['email'] ) ) {
 
-			if ( ! empty( $new_data['email'] ) )
-				foreach ( explode( ',', $new_data['email'] ) as $email )
-					if ( ! is_email( $email ) )
-						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'backupwordpress' ), $email );
+			if ( ! empty( $new_data['email'] ) ) {
 
-					if ( ! empty( $errors['email'] ) )
+				foreach ( explode( ',', $new_data['email'] ) as $email ) {
+
+					$email = trim( $email );
+
+					if ( ! is_email( $email ) ) {
+						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'backupwordpress' ), $email );
+					}
+
+					if ( ! empty( $errors['email'] ) ) {
 						$new_data['email'] = '';
+					}
 
 				}
 
-				return $errors;
-
 			}
+
+			return $errors;
+
+		}
+
+	}
 
 	/**
 	 * Get an array or validated email address's
