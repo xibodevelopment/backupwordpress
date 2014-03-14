@@ -618,23 +618,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	}
 
 	/**
-	 * Get the status of the running backup.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function get_status() {
-
-		if ( ! file_exists( $this->get_schedule_running_path() ) )
-			return '';
-
-		$status = explode( '::', file_get_contents( $this->get_schedule_running_path() ) );
-
-		return end( $status );
-
-	}
-
-	/**
 	 * Get the filename that the running status is stored in.
 	 *
 	 * @access public
@@ -645,9 +628,33 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( ! file_exists( $this->get_schedule_running_path() ) )
 			return '';
 
-		$backup_running_file = explode( '::', file_get_contents( $this->get_schedule_running_path() ) );
+		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
 
-		return reset( $backup_running_file );
+		if ( ! empty( $status->filename ) )
+			return $status->filename;
+
+		return '';
+
+	}
+
+	/**
+	 * Get the status of the running backup.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function get_status() {
+
+		if ( ! file_exists( $this->get_schedule_running_path() ) )
+			return '';
+
+		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
+
+		if ( ! empty( $status->status ) )
+			return $status->status;
+
+		return '';
+
 	}
 
 	/**
@@ -662,9 +669,35 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( ! $handle = fopen( $this->get_schedule_running_path(), 'w' ) )
 			return;
 
-		fwrite( $handle, $this->get_archive_filename() . '::' . $message );
+		$status = json_encode( (object) array(
+			'filename' => $this->get_archive_filename(),
+			'started'  => $this->get_schedule_running_start_time(),
+			'status'   => $message
+		) );
+
+		fwrite( $handle, $status );
 
 		fclose( $handle );
+
+	}
+
+	/**
+	 * Set the time that the current running backup was started
+	 *
+	 * @access public
+	 * @return int $timestamp
+	 */
+	public function get_schedule_running_start_time() {
+
+		if ( ! file_exists( $this->get_schedule_running_path() ) )
+			return 0;
+
+		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
+
+		if ( ! empty( $status->started ) && (int) (string) $status->started === $status->started )
+			return $status->started;
+
+		return time();
 
 	}
 
