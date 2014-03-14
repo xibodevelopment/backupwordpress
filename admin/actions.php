@@ -327,7 +327,7 @@ add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
  *
  * Validate and either return errors or update the schedule
  */
-function hmnkp_edit_schedule_submit() {
+function hmbkp_edit_schedule_submit() {
 
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
 		die;
@@ -400,7 +400,7 @@ function hmnkp_edit_schedule_submit() {
 	die;
 
 }
-add_action( 'wp_ajax_hmnkp_edit_schedule_submit', 'hmnkp_edit_schedule_submit' );
+add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
 
 /**
  * Add an exclude rule
