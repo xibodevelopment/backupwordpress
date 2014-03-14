@@ -12,11 +12,11 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 	$offset       = get_option( 'gmt_offset' ) * 3600;
 
 	if ( is_multisite() ) {
-		$delete_action_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
-		$download_action_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+		$delete_action_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;tab=' . $schedule->get_id() . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+		$download_action_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;tab=' . $schedule->get_id() . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
 	} else {
-		$delete_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
-		$download_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+		$delete_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;tab=' . $schedule->get_id() .  '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
+		$download_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;tab=' . $schedule->get_id() . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
 	}
 	?>
 
@@ -291,8 +291,8 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 	ob_start(); ?>
 
 	<span class="hmbkp-status"><?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'hmbkp' ); ?> <a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), $settings_url ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a></span>
-
-	<div class="hmbkp-schedule-actions row-actions">
+	</p>
+	<div class="hmbkp-schedule-actions">
 
 		<a class="colorbox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
 

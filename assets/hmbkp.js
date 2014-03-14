@@ -13,11 +13,11 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Setup the tabs
-	$( '.hmbkp-tabs' ).tabs();
+	//$( '.hmbkp-tabs' ).tabs();
 
 	// Set the first tab to be active
-	if ( ! $( '.subsubsub a.current' ).size() )
-		$( '.subsubsub li:first a').addClass( 'current' );
+	//if ( ! $( '.subsubsub a.current' ).size() )
+	//	$( '.subsubsub li:first a').addClass( 'current' );
 
 	// Carries the same resize options we want
 	// to use to all other .resize()
@@ -25,7 +25,7 @@ jQuery( document ).ready( function( $ ) {
 		height: '85%'
 	};
 
-	// Initialize colorbox
+	// Initiaize colorbox
 	$( '.colorbox' ).colorbox( {
 		'initialWidth'	: '320px',
 		'initialHeight'	: '100px',
@@ -40,18 +40,16 @@ jQuery( document ).ready( function( $ ) {
 		},
 		'onComplete'	: function() {
 
-			$( '.hmbkp-tabs' ).tabs();
-
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
 		}
 
 	} );
 
-	// Resize the colorbox when switching tabs
+/*	// Resize the colorbox when switching tabs
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
 		$.colorbox.resize(resize_options);
-	} );
+	} );*/
 
 	// Show delete confirm message for delete schedule
 	$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function( e ) {
@@ -104,7 +102,7 @@ jQuery( document ).ready( function( $ ) {
 
 				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
-				$.colorbox.resize(resize_options);
+				//$.colorbox.resize(resize_options);
 
 			}
 		)
@@ -150,7 +148,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize(resize_options);
+				//$.colorbox.resize(resize_options);
 			}
 		);
 
@@ -161,7 +159,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$( this ).addClass( 'hmbkp-ajax-loading' ).text( '' );
 
-		$.colorbox.resize(resize_options);
+		//$.colorbox.resize(resize_options);
 
 		e.preventDefault();
 
@@ -172,14 +170,14 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize(resize_options);
+				//$.colorbox.resize(resize_options);
 			}
 		);
 
 	} );
 
 	// Edit schedule form submit
-	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
+/*	$( document ).on( 'submit', 'form.hmbkp-form', function( e ) {
 
 		var $isDestinationSettingsForm = $( this ).find( 'button[type="submit"]' ).hasClass( "dest-settings-save" );
 
@@ -209,7 +207,7 @@ jQuery( document ).ready( function( $ ) {
 				// Assume success if no data passed back
 				if ( ( ! data || data == 0 ) && ( $isDestinationSettingsForm === false ) ) {
 
-					$.colorbox.close();
+					//$.colorbox.close();
 
 					// Reload the page so we see changes
 					if ( isNewSchedule )
@@ -250,7 +248,7 @@ jQuery( document ).ready( function( $ ) {
 			}
 		);
 
-	} );
+	} );*/
 
 	// Test the cron response using ajax
 	$.post( ajaxurl, { 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_cron_test' },
@@ -291,7 +289,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
 
-		scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
+		var scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
 		ajaxRequest = $.post(
 			ajaxurl,
