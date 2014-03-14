@@ -76,6 +76,8 @@ class HMBKP_Restore {
 
 		$hmbkp_files_restore = new HMBKP_Files_Restore( $restore_from_path );
 
+		set_time_limit( 0 );
+
 		$hmbkp_files_restore->restore_files();
 
 	}
