@@ -9,7 +9,34 @@
  */
 class BackUpCommand extends WP_CLI_Command {
 
-	public function __construct( $args, $assoc_args ) {
+	/**
+	 * Generate some posts.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--files_only]
+	 * : Backup files only, default to off
+	 *
+	 * [--database_only]
+	 * : Backup database only, defaults to off
+	 *
+	 * [--path]
+	 * : dir that the backup should be save in, defaults to wp-content/backups/
+	 *
+	 * [--root]
+	 * : dir that should be backed up, defaults to site root.
+	 *
+	 * [--zip_command_path]
+	 * : path to your zip binary, standard locations are automatically used
+	 *
+	 * [--mysqldump_command_path]
+	 * : path to your mysqldump binary, standard locations are automatically used
+	 *
+	 * ## Usage
+	 *
+	 *     wp backupwordpress backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [--zip_command_path=<path>] [--mysqldump_command_path=<path>]
+	 */
+	public function backup( $args, $assoc_args ) {
 
 		// Make sure it's possible to do a backup
 		if ( HM_Backup::is_safe_mode_active() )
@@ -34,7 +61,7 @@ class BackUpCommand extends WP_CLI_Command {
 		if ( ! empty( $assoc_args['root'] ) )
 			$hm_backup->set_root( $assoc_args['root'] );
 
-		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! wp_is_writable( dirname( $hm_backup->get_path() ) ) || ! mkdir( $hm_backup->get_path() ) ) ) || ! wp_is_writable( $hm_backup->get_path() ) ) {
+		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! wp_mkdir_p( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
 			WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
 			return false;
 		}
@@ -65,29 +92,12 @@ class BackUpCommand extends WP_CLI_Command {
 	    //hmbkp_delete_old_backups();
 
     	if ( file_exists( $hm_backup->get_archive_filepath() ) )
-			WP_CLI::success( __( 'Backup Complete:', 'backupwordpress' ) . ' ' . $hm_backup->get_archive_filepath() );
+			WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $hm_backup->get_archive_filepath() );
 
 		else
 			WP_CLI::error( __( 'Backup Failed', 'backupwordpress' ) );
 
 	}
 
-	static function help() {
-
-		WP_CLI::line( <<<EOB
-usage: wp backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [--zip_command_path=<path>] [--mysqldump_command_path=<path>]
-
-	 --files_only                   Backup files only, default to off
-	 --database_only                Backup database only, defaults to off
-	 --path                         dir that the backup should be save in, defaults to wp-content/backups/
-	 --root                         dir that should be backed up, defaults to site root.
-	 --zip_command_path             path to your zip binary, standard locations are automatically used
-	 --mysqldump_command_path       path to your mysqldump binary, standard locations are automatically used
-
-EOB
-		);
-
-	}
-
 }
-WP_CLI::add_command( 'backup', 'BackUpCommand' );
+WP_CLI::add_command( 'backupwordpress', 'BackUpCommand' );

@@ -5,11 +5,11 @@ Requires at least: 3.7.1
 Tested up to: 3.8.1
 Stable tag: 2.5
 
-Simple automated back ups of your WordPress powered website.
+Simple automated backups of your WordPress powered website.
 
 == Description ==
 
-[BackUpWordPress](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
+[BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
 
 = Features =
 
@@ -17,9 +17,9 @@ Simple automated back ups of your WordPress powered website.
 * Works in low memory, "shared host" environments.
 * Manage multiple schedules.
 * Option to have each backup file emailed to you.
-* Uses `zip` and `mysqldump` for faster back ups if they are available.
+* Uses `zip` and `mysqldump` for faster backups if they are available.
 * Works on Linux & Windows Server.
-* Exclude files and folders from your back ups.
+* Exclude files and folders from your backups.
 * Good support should you need help.
 * Translations for Spanish, German, Chinese, Romanian, Russian, Serbian, Lithuanian, Italian, Czech, Dutch, French, Basque.
 
@@ -49,7 +49,7 @@ Backups are stored on your server in `/wp-content/backups`, you can change the d
 
 **What if I want I want to back up my site to another destination?**
 
-BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: [http://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin)
+BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: [https://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin)
 
 **How do I restore my site from a backup?**
 
