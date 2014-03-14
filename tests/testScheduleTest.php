@@ -24,7 +24,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 		$this->schedule = new HMBKP_Scheduled_Backup( 'unit-test' );
 		$this->time = time();
-		$this->reoccurences = HMBKP_Scheduled_Backup::get_cron_schedules();
+		$this->recurrences = HMBKP_Scheduled_Backup::get_cron_schedules();
 
 	}
 
@@ -39,7 +39,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 		unset( $this->schedule );
 		unset( $this->time );
-		unset( $this->reoccurences );
+		unset( $this->recurrences );
 
 	}
 
@@ -50,7 +50,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testDefaultSchedule() {
 
-		// The default reoccurence should be manual
+		// The default recurrence should be manual
 		$this->assertEquals( 'manually', $this->schedule->get_reoccurrence() );
 
 		// There shouldn't be a next occurence
@@ -81,9 +81,9 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function testSetReOccurences() {
+	public function testSetrecurrences() {
 
-		foreach ( $this->reoccurences as $reoccurrence => $settings ) {
+		foreach ( $this->recurrences as $reoccurrence => $settings ) {
 
 			$this->schedule->set_reoccurrence( $reoccurrence );
 			$this->assertEquals( $reoccurrence, $this->schedule->get_reoccurrence() );
@@ -136,7 +136,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testSetFutureSchedule() {
 
-		foreach ( $this->reoccurences as $reoccurrence => $settings ) {
+		foreach ( $this->recurrences as $reoccurrence => $settings ) {
 
 			$this->schedule->set_reoccurrence( 'hmbkp_hourly' );
 			$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );

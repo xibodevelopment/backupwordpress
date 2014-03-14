@@ -124,9 +124,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_name() {
 
-		$reoccurence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
+		$recurrence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
 
-		return ucwords( $this->get_type() ) . ' ' . $reoccurence;
+		return ucwords( $this->get_type() ) . ' ' . $recurrence;
 
 	}
 
@@ -475,7 +475,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && $reoccurrence !== 'manually' )
 			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
 
-		// If the reoccurence is already set to the same thing then there's no need to continue
+		// If the recurrence is already set to the same thing then there's no need to continue
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence && $this->is_cron_scheduled() )
 			return;
 
