@@ -14,7 +14,7 @@ function hmbkp_request_delete_backup() {
 	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['hmbkp_delete_backup'] ) ) );
 
 	if ( is_wp_error( $deleted ) )
-		echo $deleted->get_error_message();
+		wp_die( $deleted->get_error_message() );
 
 	wp_safe_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
 
