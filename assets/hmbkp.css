@@ -54,8 +54,8 @@ tfoot p { margin: 0; font-weight: normal; }#hmbkp-constants dl { overflow: hidde
 .hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; }
 .hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 
-.hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; }
-.hmbkp-ajax-loading:before {width: 16px;height: 16px; margin-right: 10px; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 16px 16px; vertical-align: middle; display: inline-block; }
+.hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; position: relative; }
+.hmbkp-ajax-loading::before { content: ""; width: 16px; height: 16px; background-image: url('spinner-2x.gif'); background-size: 16px 16px; background-repeat: no-repeat; background-position: 0 0; position: absolute; left: -30px; top: 5px; }
 
 button { height: 14px; }
 
