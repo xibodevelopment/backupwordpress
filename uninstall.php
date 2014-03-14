@@ -1,5 +1,7 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
 	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 

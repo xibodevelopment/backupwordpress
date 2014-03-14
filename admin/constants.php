@@ -1,3 +1,4 @@
+<?php defined( 'WPINC' ) or die; ?>
 <div id="hmbkp-constants">
 
 	<p><?php printf( __( 'You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted.', 'hmbkp' ), '<code>define</code>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<code>wp-config.php</code>', '<a href="http://codex.wordpress.org/Editing_wp-config.php">' . __( 'The Codex can help', 'hmbkp' ) . '</a>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>' ); ?></p>

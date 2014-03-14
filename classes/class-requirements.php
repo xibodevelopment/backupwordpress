@@ -1,5 +1,7 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 /**
  * A singleton to handle the registering, unregistering
  * and storage of individual requirements

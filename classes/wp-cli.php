@@ -1,5 +1,7 @@
 <?php
 
+defined( 'WPINC' ) or die;
+
 /**
  * Implement backup command
  *

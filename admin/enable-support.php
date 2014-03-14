@@ -1,4 +1,7 @@
-<?php require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php'; ?>
+<?php
+defined( 'WPINC' ) or die;
+
+require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php'; ?>
 
 <h2><?php _e( 'Enable BackUpWordPress Support', 'hmbkp' ); ?></h2>
 
