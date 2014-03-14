@@ -1,4 +1,7 @@
-<?php foreach( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+<?php
+defined( 'WPINC' ) or die;
+
+foreach( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
 
 	<h3><?php echo ucwords( $group ); ?></h3>
 

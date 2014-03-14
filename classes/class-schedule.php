@@ -1,4 +1,5 @@
 <?php
+defined( 'WPINC' ) or die;
 
 /**
  * Extend HM Backup with scheduling and backup file management

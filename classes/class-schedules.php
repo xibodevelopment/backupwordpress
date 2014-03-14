@@ -1,4 +1,5 @@
 <?php
+defined( 'WPINC' ) or die;
 
 /**
  * A simple class for loading schedules

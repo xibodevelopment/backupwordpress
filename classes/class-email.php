@@ -1,4 +1,5 @@
 <?php
+defined( 'WPINC' ) or die;
 
 /**
  * Email notifications for backups
