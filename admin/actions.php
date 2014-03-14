@@ -468,7 +468,9 @@ function hmbkp_edit_schedule_submit() {
 
 		} else {
 
-			$schedule->set_schedule_start_time( hmbkp_determine_start_time( $hmbkp_schedule_recurrence_type, $hmbkp_schedule_time ) );
+			if ( isset( $hmbkp_schedule_time ) )
+				$schedule->set_schedule_start_time( hmbkp_determine_start_time( $hmbkp_schedule_recurrence_type, $hmbkp_schedule_time ) );
+
 			$schedule->set_reoccurrence( $hmbkp_schedule_recurrence_type );
 			$schedule->set_type( $schedule_type );
 			$schedule->set_max_backups( $schedule_settings['schedule_max_backups'] );
