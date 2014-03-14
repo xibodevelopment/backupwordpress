@@ -32,16 +32,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	private $options = array();
 
 	/**
-	 * The schedule start time
-	 *
-	 * (default value: current_time( 'timestamp' ))
-	 *
-	 * @var mixed
-	 * @access private
-	 */
-	private $schedule_start_time = 0;
-
-	/**
 	 * Setup the schedule object
 	 * Loads the options from the database and populates properties
 	 *
@@ -85,18 +75,20 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' && $this->skip_zip_archive = true )
 			$this->set_zip_command_path( false );
 
+		if ( defined( 'HMBKP_SCHEDULE_START_TIME' ) && strtotime( 'HMBKP_SCHEDULE_START_TIME' ) )
+			$this->set_schedule_start_time( strtotime( 'HMBKP_SCHEDULE_START_TIME' ) );
+
 		// Set the path - TODO remove external function dependancy
 		$this->set_path( hmbkp_path() );
-
-		$hmbkp_schedules = $this->get_cron_schedules();
 
 		// Set the archive filename to site name + schedule slug + date
 		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 		$this->set_database_dump_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.sql' );
 
 		// Setup the schedule if it isn't set
-		if ( ( ! $this->get_next_occurrence() && in_array( $this->get_reoccurrence(), array_keys( $hmbkp_schedules ) ) ) || ( date( get_option( 'time_format' ), strtotime( HMBKP_SCHEDULE_TIME ) - ( get_option( 'gmt_offset' ) * 3600 ) ) !== date( get_option( 'time_format' ), $this->get_next_occurrence() ) ) )
+		if ( ( ! $this->is_cron_scheduled() && $this->get_reoccurrence() !== 'manually' ) ) {
 			$this->schedule();
+		}
 
 	}
 
@@ -132,9 +124,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_name() {
 
-		$reoccurence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
+		$recurrence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
 
-		return ucwords( $this->get_type() ) . ' ' . $reoccurence;
+		return ucwords( $this->get_type() ) . ' ' . $recurrence;
 
 	}
 
@@ -234,7 +226,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function set_max_backups( $max ) {
 
 		if ( empty( $max ) || ! is_int( $max ) )
-			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid integer', 'hmbkp' ) ), __METHOD__ );
+			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid integer', 'hmbkp' ), __METHOD__ ) );
 
 		$this->options['max_backups'] = $max;
 
@@ -426,37 +418,31 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
-		if ( empty( $this->schedule_start_time ) ) {
+		if ( ! empty( $this->options['schedule_start_time'] ) )
+			return $this->options['schedule_start_time'];
 
-			if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME )
-				$date = strtotime( HMBKP_SCHEDULE_TIME );
+		$this->set_schedule_start_time( time() );
 
-			else
-				$date = strtotime( '11pm' );
-
-			// Convert to UTC
-			$date -= get_option( 'gmt_offset' ) * 3600;
-
-			// if the scheduled time already passed today then start at the next interval instead
-			if ( $date <= strtotime( 'now' ) )
-				$date += $this->get_interval();
-
-			$this->set_schedule_start_time( $date );
-		}
-
-		return $this->schedule_start_time;
+		return time();
 
 	}
 
 	/**
 	 * Set the schedule start time.
 	 *
-	 * @access public
-	 * @param int $timestamp in UTC
-	 * @return void
+	 * @param array $args
 	 */
-	public function set_schedule_start_time( $timestamp ) {
-		$this->schedule_start_time = $timestamp;
+	public function set_schedule_start_time( $time ) {
+
+		// Don't allow setting the start time in the past
+		if ( (int) $time <= time() ) {
+			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid future timestamp', 'hmbkp' ), __METHOD__ ) );
+		}
+
+		$this->options['schedule_start_time'] = $time;
+
+		$this->schedule();
+
 	}
 
 	/**
@@ -467,8 +453,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_reoccurrence() {
 
 		// Default to no reoccurrence
-		if ( empty( $this->options['reoccurrence'] ) )
+		if ( empty( $this->options['reoccurrence'] ) ) {
 			$this->set_reoccurrence( 'manually' );
+		}
 
 		return $this->options['reoccurrence'];
 
@@ -486,20 +473,24 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Check it's valid
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && $reoccurrence !== 'manually' )
-			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
+			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ), __METHOD__ ) );
 
-		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence )
+		// If the recurrence is already set to the same thing then there's no need to continue
+		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence && $this->is_cron_scheduled() )
 			return;
 
 		$this->options['reoccurrence'] = $reoccurrence;
 
-		if ( $reoccurrence === 'manually' )
+		if ( $reoccurrence === 'manually' ) {
 			$this->unschedule();
+		}
 
-		else
+		else {
 			$this->schedule();
+		}
 
 		return true;
+
 	}
 
 	/**
@@ -524,7 +515,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @return array
 	 */
-	public function get_cron_schedules() {
+	public static function get_cron_schedules() {
 
 		$schedules = wp_get_schedules();
 
@@ -556,6 +547,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	}
 
+	public function is_cron_scheduled() {
+		return (bool) $this->get_next_occurrence();
+	}
+
 
 	/**
 	 * Get the path to the backup running file that stores the running backup status
@@ -577,7 +572,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Clear any existing hooks
 		$this->unschedule();
 
-		wp_schedule_event( $this->get_schedule_start_time(), $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+		$schedule_timestamp = $this->get_schedule_start_time();
+
+		wp_schedule_event( $schedule_timestamp, $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
 
 	}
 
@@ -806,19 +803,20 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Check that it's a valid filepath
 		if ( empty( $filepath ) || ! is_string( $filepath ) )
-			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ) ), __METHOD__ );
+			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ), __METHOD__ ) );
 
 		// Make sure it exists
 		if ( ! file_exists( $filepath ) )
-			return new WP_Error( 'hmbkp_file_error', sprintf( __( '%s dpesn\'t exist', 'hmbkp' ) ), $filepath );
+			return new WP_Error( 'hmbkp_file_error', sprintf( __( '%s doesn\'t exist', 'hmbkp' ), $filepath ) );
 
 		// Make sure it was created by this schedule
 		if ( strpos( $filepath, $this->get_id() ) === false )
-			return new WP_Error( 'hmbkp_backup_error', sprintf( __( 'That backup wasn\'t created by this schedule', 'hmbkp' ) ) );
+			return new WP_Error( 'hmbkp_backup_error', __( 'That backup wasn\'t created by this schedule', 'hmbkp' ) );
 
 		unlink( $filepath );
 
 		return true;
+
 	}
 
 	/**

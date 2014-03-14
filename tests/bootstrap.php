@@ -1,5 +1,8 @@
 <?php
 
+if ( ! getenv( 'WP_TESTS_DIR') )
+	putenv( 'WP_TESTS_DIR=/srv/www/wp-tests' );
+
 require_once getenv( 'WP_TESTS_DIR' ) . '/includes/functions.php';
 
 function _manually_load_plugin() {
