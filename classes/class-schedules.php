@@ -29,6 +29,10 @@ class HMBKP_Schedules {
 	 * @access public
 	 */
 	private function __construct() {
+		$this->refresh_schedules();
+	}
+
+	public function refresh_schedules() {
 
 		global $wpdb;
 

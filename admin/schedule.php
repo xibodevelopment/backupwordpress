@@ -15,8 +15,7 @@ $next_backup = 'title="' . esc_attr( sprintf( __( 'The next backup will be on %1
 switch ( $schedule->get_reoccurrence() ) :
 
 	case 'hmbkp_hourly' :
-
-		$reoccurrence = date_i18n( 'i', $schedule->get_next_occurrence( false ) ) === '00' ? '<span ' . $next_backup . '>' . __( 'hourly on the hour', 'hmbkp' ) . '</span>' : sprintf( __( 'hourly at %s minutes past the hour', 'hmbkp' ), '<span ' . $next_backup . '>' . str_replace( '0', '', date_i18n( 'i', $schedule->get_next_occurrence( false ) ) ) ) . '</span>';
+		$reoccurrence = date_i18n( 'i', $schedule->get_next_occurrence( false ) ) === '00' ? '<span ' . $next_backup . '>' . __( 'hourly on the hour', 'hmbkp' ) . '</span>' : sprintf( __( 'hourly at %s minutes past the hour', 'hmbkp' ), '<span ' . $next_backup . '>' . intval( date_i18n( 'i', $schedule->get_next_occurrence( false ) ) ) ) . '</span>';
 
 	break;
 
