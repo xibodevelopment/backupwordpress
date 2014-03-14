@@ -634,7 +634,11 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] )
 				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) )  . ' ' . $args['day_of_month'] . ' ' . date( 'Y', strtotime( '+ 1 year', $args['now'] ) ) . ' ' . $hm;
 
+			break;
 		default :
+
+			return 0;
+
 			break;
 
 	}
