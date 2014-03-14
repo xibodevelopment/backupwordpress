@@ -1,21 +1,39 @@
 <?php
 
+/**
+ * @package BackUpWordPress
+ */
 namespace HMBKP;
 
+/**
+ * Overide the global time() function in local scope so we can mock time
+ *
+ * @uses testDetermineStartTimeTestCase::$now
+ * @return int $timestamp;
+ */
 function time() {
     return testDetermineStartTimeTestCase::$now ?: \time();
 }
 
 /**
+ * Unit tests for the hmbkp_determine_start_time function
  *
+ * @see hmbkp_determine_start_time()
  * @extends WP_UnitTestCase
  */
 class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 
 	/**
-     * @var int $now Timestamp that will be returned by time()
+     * @var int $now Timestamp that will be returned by HMBKP\time()
+     * @see HMBKP\time()
+     * @static
+     * @access public
      */
     public static $now;
+
+    public function setUp() {
+    	$this->schedule_intervals = \HMBKP_Scheduled_Backup::get_cron_schedules();
+    }
 
 	/**
      * Reset custom time after test
@@ -29,23 +47,34 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function testHourlyDefaultArgs() {
+	public function testDefaultArgs() {
 
-		// Test with current time
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly' );
+		foreach ( $this->schedule_intervals as $interval_name => $schedule_interval ) {
 
-		// Should be the beginning of the current minute + 10 minutes
-		$this->assertEquals( time() + 600 - date( 's', time() ), $timestamp );
+			// Test with current time
+			$timestamp = hmbkp_determine_start_time( $interval_name );
 
-		// 13:00
-		self::$now = strtotime( '13:00' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:10' ), $timestamp );
+			// Should be the beginning of the current minute + 10 minutes
+			$this->assertEquals( time() + 600 - date( 's', time() ), $timestamp, $interval_name );
 
-		// 23:59
-		self::$now = strtotime( '23:59' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '00:09 + 1 day' ), $timestamp ); // Tomorrow at 10 past midnight
+			// 12:00
+			self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
+			$timestamp = hmbkp_determine_start_time( $interval_name, array( 'now' => time() ) );
+			$this->assertEquals( strtotime( '2014-03-05T12:10:00+00:00' ), $timestamp, $interval_name );
+
+			// 23:59
+			self::$now = strtotime( '2014-03-05T23:59:00+00:00' );
+			$timestamp = hmbkp_determine_start_time( $interval_name, array( 'now' => time() ) );
+			$this->assertEquals( strtotime( '2014-03-06T00:09:00+00:00' ), $timestamp ); // The next day at 9 minutes past midnight
+
+			// 23:59 on the Dec 31
+			self::$now = strtotime( '2013-12-31T23:59:00+00:00' );
+			$timestamp = hmbkp_determine_start_time( $interval_name, array( 'now' => time() ) );
+			$this->assertEquals( strtotime( '2014-01-01T00:09:00+00:00' ), $timestamp ); // 1st of Jan of the next year at 9 minutes past midnight
+
+			self::$now = null;
+
+		}
 
 	}
 
@@ -54,21 +83,21 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function testHourlyFutureStart() {
+	public function testFutureStart() {
 
-		self::$now = strtotime( '13:00' );
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
 
-		// 13:01
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'hours' => 13, 'minutes' => 1, 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:01' ), $timestamp );
+		foreach ( array( 'hmbkp_hourly', 'hmbkp_twicedaily', 'hmbkp_fortnightly' ) as $interval_name ) {
 
-		// 14:00
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'hours' => 14, 'minutes' => 0, 'now' => time() ) );
-		$this->assertEquals( strtotime( '14:00' ), $timestamp );
+			// 13:01
+			$timestamp = hmbkp_determine_start_time( $interval_name, array( 'hours' => 12, 'minutes' => 1, 'now' => time() ) );
+			$this->assertEquals( strtotime( '2014-03-05T12:01:00+00:00' ), $timestamp );
 
-		// 23:59
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'hours' => 23, 'minutes' => 59, 'now' => time() ) );
-		$this->assertEquals( strtotime( '23:59' ), $timestamp );
+			// 23:59
+			$timestamp = hmbkp_determine_start_time( $interval_name, array( 'hours' => 23, 'minutes' => 59, 'now' => time() ) );
+			$this->assertEquals( strtotime( '2014-03-05T23:59:00+00:00' ), $timestamp );
+
+		}
 
 	}
 
@@ -79,64 +108,19 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 	 */
 	public function testHourlyPastStart() {
 
-		self::$now = strtotime( '13:00' );
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
+
+		// 12:00
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'hours' => 12, 'minutes' => 0, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-05T13:00:00+00:00' ), $timestamp ); // An hour after current time
+
+		// 11:59
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'hours' => 11, 'minutes' => 59, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-05T12:59:00+00:00' ), $timestamp ); // 59 minutes past the next hour
 
 		// 01:00
 		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'hours' => 1, 'minutes' => 0, 'now' => time() ) );
-		$this->assertEquals( strtotime( '14:00' ), $timestamp ); // An hour after current time
-
-		// 12:59
-		self::$now = strtotime( '12:59' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_hourly', array( 'hours' => 12, 'minutes' => 59, 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:59' ), $timestamp );
-
-	}
-
-	/**
-	 * Test that the default time args are respected for twice daily schedule
-	 *
-	 * @access public
-	 */
-	public function testTwiceDailyDefaultArgs() {
-
-		// Test with current time
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily' );
-
-		// Should be the beginning of the current minute + 10 minutes
-		$this->assertEquals( time() + 600 - date( 's', time() ), $timestamp );
-
-		// 13:00
-		self::$now = strtotime( '13:00' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:10' ), $timestamp );
-
-		// 23:59
-		self::$now = strtotime( '23:59' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '00:09 + 1 day' ), $timestamp ); // Tomorrow at 10 past midnight
-
-	}
-
-	/**
-	 * Test that setting the twice daily schedule to various future times works as expected
-	 *
-	 * @access public
-	 */
-	public function testTwiceDailyFutureStart() {
-
-		self::$now = strtotime( '13:00' );
-
-		// 13:01
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'hours' => 13, 'minutes' => 1, 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:01' ), $timestamp );
-
-		// 14:00
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'hours' => 14, 'minutes' => 0, 'now' => time() ) );
-		$this->assertEquals( strtotime( '14:00' ), $timestamp );
-
-		// 23:59
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'hours' => 23, 'minutes' => 59, 'now' => time() ) );
-		$this->assertEquals( strtotime( '23:59' ), $timestamp );
+		$this->assertEquals( strtotime( '2014-03-05T13:00:00+00:00' ), $timestamp ); // An hour after the current time
 
 	}
 
@@ -147,70 +131,22 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 	 */
 	public function testTwiceDailyPastStart() {
 
-		self::$now = strtotime( '12:00' );
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
 
 		// 01:00
 		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'hours' => 1, 'minutes' => 0, 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:00' ), $timestamp ); // 12 hours after the start time
+		$this->assertEquals( strtotime( '2014-03-05T13:00:00+00:00' ), $timestamp ); // 12 hours after the start time
 
-		self::$now = strtotime( '13:00' );
+		self::$now = strtotime( '2014-03-05T13:00:00+00:00' );
 
 		// 01:00
 		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'hours' => 1, 'minutes' => 0, 'now' => time() ) );
-		$this->assertEquals( strtotime( '01:00 + 1 day' ), $timestamp ); // Tomorrow at 1am as we've already missed both schedules today
+		$this->assertEquals( strtotime( '2014-03-06T01:00:00+00:00' ), $timestamp ); // Tomorrow at 1am as we've already missed both schedules today
 
 		// 12:59
-		self::$now = strtotime( '12:59' );
+		self::$now = strtotime( '2014-03-05T12:59:00+00:00' );
 		$timestamp = hmbkp_determine_start_time( 'hmbkp_twicedaily', array( 'hours' => 12, 'minutes' => 59, 'now' => time() ) );
-		$this->assertEquals( strtotime( '00:59 + 1 day' ), $timestamp ); // Tomorrow at 59 minutes past midnight
-
-	}
-
-	/**
-	 * Test that the default time args are respected for daily schedule
-	 *
-	 * @access public
-	 */
-	public function testDailyDefaultArgs() {
-
-		// Test with current time
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily' );
-
-		// Should be the beginning of the current minute + 10 minutes
-		$this->assertEquals( time() + 600 - date( 's', time() ), $timestamp );
-
-		// 13:00
-		self::$now = strtotime( '13:00' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:10' ), $timestamp );
-
-		// 23:59
-		self::$now = strtotime( '23:59' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '00:09 + 1 day' ), $timestamp ); // Tomorrow at 10 past midnight
-
-	}
-
-	/**
-	 * Test that setting the daily schedule to various future times works as expected
-	 *
-	 * @access public
-	 */
-	public function testDailyFutureStart() {
-
-		self::$now = strtotime( '13:00' );
-
-		// 13:01
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => 13, 'minutes' => 1, 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:01' ), $timestamp );
-
-		// 14:00
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => 14, 'minutes' => 0, 'now' => time() ) );
-		$this->assertEquals( strtotime( '14:00' ), $timestamp );
-
-		// 23:59
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => 23, 'minutes' => 59, 'now' => time() ) );
-		$this->assertEquals( strtotime( '23:59' ), $timestamp );
+		$this->assertEquals( strtotime( '2014-03-06T00:59:00+00:00' ), $timestamp ); // Tomorrow at 59 minutes past midnight
 
 	}
 
@@ -221,56 +157,16 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 	 */
 	public function testDailyPastStart() {
 
-		self::$now = strtotime( '12:00' );
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
 
 		// 01:00
 		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => 1, 'minutes' => 0, 'now' => time() ) );
-		$this->assertEquals( strtotime( '01:00 + 1 day' ), $timestamp ); // 24 hours after the start time
+		$this->assertEquals( strtotime( '2014-03-06T01:00:00+00:00' ), $timestamp ); // 24 hours after the start time
 
 		// 12:59
-		self::$now = strtotime( '12:59' );
+		self::$now = strtotime( '2014-03-05T12:59:00+00:00' );
 		$timestamp = hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => 12, 'minutes' => 59, 'now' => time() ) );
-		$this->assertEquals( strtotime( '12:59 + 1 day' ), $timestamp );
-
-	}
-
-	/**
-	 * Test that the default time args are respected for weekly schedule
-	 *
-	 * @access public
-	 */
-	public function testWeeklyDefaultArgs() {
-
-		$this->markTestIncomplete();
-
-		// @todo not currently working could be bug, could be something wrong with test
-
-		// Test with current time
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_weekly' );
-
-		// Should be the beginning of the current minute + 10 minutes
-		$this->assertEquals( time() + 600 - date( 's', time() ), $timestamp );
-
-		// 13:00
-		self::$now = strtotime( '13:00' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_weekly', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '13:10' ), $timestamp );
-
-		// 23:59
-		self::$now = strtotime( '23:59' );
-		$timestamp = hmbkp_determine_start_time( 'hmbkp_weekly', array( 'now' => time() ) );
-		$this->assertEquals( strtotime( '00:09 + 1 day' ), $timestamp ); // Tomorrow at 10 past midnight
-
-	}
-
-	/**
-	 * Test that setting the daily schedule to various future times works as expected
-	 *
-	 * @access public
-	 */
-	public function testWeeklyFutureStart() {
-
-		$this->markTestIncomplete();
+		$this->assertEquals( strtotime( '2014-03-06T12:59:00+00:00' ), $timestamp );
 
 	}
 
@@ -281,29 +177,29 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 	 */
 	public function testWeeklyPastStart() {
 
-		$this->markTestIncomplete();
+		self::$now = strtotime( '2014-03-05T12:59:00+00:00');
+
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'monday', 'hours' => 1, 'minutes' => 0, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-10T01:00:00+00:00', time() ), $timestamp );
+
+		// 11:59
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'wednesday', 'hours' => 11, 'minutes' => 59, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-12T11:59:00+00:00', time() ), $timestamp ); // Next week
 
 	}
 
 	/**
-	 * Test that the default time args are respected for fortnightly schedule
+	 * Test that setting the weekly schedule to various future times works as expected
 	 *
 	 * @access public
 	 */
-	public function testFortnightlyDefaultArgs() {
+	public function testWeeklyFutureStart() {
 
-		$this->markTestIncomplete();
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
 
-	}
-
-	/**
-	 * Test that setting the fortnightly schedule to various future times works as expected
-	 *
-	 * @access public
-	 */
-	public function testFortnightlyFutureStart() {
-
-		$this->markTestIncomplete();
+		// 23:59 on Friday
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'friday', 'hours' => 23, 'minutes' => 59, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-07T23:59:00+00:00' ), $timestamp );
 
 	}
 
@@ -314,40 +210,52 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 	 */
 	public function testFortnightlyPastStart() {
 
-		$this->markTestIncomplete();
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
+
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_fortnightly', array( 'day_of_week' => 'monday', 'hours' => 1, 'minutes' => 0, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-10T01:00:00+00:00' ), $timestamp );
+
+		// 11:59
+		// @todo feels like this should actually be wednesday the 12th not the 19th
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_fortnightly', array( 'day_of_week' => 'wednesday', 'hours' => 11, 'minutes' => 59, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-19T11:59:00+00:00' ), $timestamp ); // Next week
 
 	}
 
 	/**
-	 * Test that the default time args are respected for monthly schedule
-	 *
-	 * @access public
-	 */
-	public function testMonthlyDefaultArgs() {
-
-		$this->markTestIncomplete();
-
-	}
-
-	/**
-	 * Test that setting the fortnightly monthly to various future times works as expected
-	 *
-	 * @access public
-	 */
-	public function testMonthlyFutureStart() {
-
-		$this->markTestIncomplete();
-
-	}
-
-	/**
-	 * Test that setting the fortnightly monthly to various past times works as expected
+	 * Test that setting the monthly schedule to various past times works as expected
 	 *
 	 * @access public
 	 */
 	public function testMonthlyPastStart() {
 
-		$this->markTestIncomplete();
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
+
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_monthly', array( 'day_of_month' => '1', 'hours' => 1, 'minutes' => 0, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-04-01T01:00:00+00:00' ), $timestamp );
+
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_monthly', array( 'day_of_week' => '5', 'hours' => 11, 'minutes' => 59, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-04-05T11:59:00+00:00' ), $timestamp ); // Next week
+
+	}
+
+	/**
+	 * Test that setting the monthly schedule to various future times works as expected
+	 *
+	 * @access public
+	 */
+	public function testMonthlyFutureStart() {
+
+		self::$now = strtotime( '2014-03-05T12:00:00+00:00' );
+
+		// 23:59 on the 25th
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_monthly', array( 'day_of_month' => '25', 'hours' => 23, 'minutes' => 59, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-03-25T23:59:00+00:00' ), $timestamp );
+
+		// 23:59 on the Dec 31
+		self::$now = strtotime( '2013-12-31T23:59:00+00:00' );
+		$timestamp = hmbkp_determine_start_time( 'hmbkp_monthly', array( 'day_of_month' => '31', 'hours' => 23, 'minutes' => 59, 'now' => time() ) );
+		$this->assertEquals( strtotime( '2014-01-31T23:59:00+00:00' ), $timestamp );
 
 	}
 

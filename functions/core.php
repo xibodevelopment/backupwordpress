@@ -211,7 +211,8 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$database_daily = new HMBKP_Scheduled_Backup( 'default-1' );
 	$database_daily->set_type( 'database' );
-	$database_daily->set_schedule_start_time( array( 'type' => 'hmbkp_daily' ) );
+	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
+	$database_daily->set_reoccurrence( 'hmbkp_daily' );
 	$database_daily->set_max_backups( 14 );
 	$database_daily->save();
 
@@ -221,7 +222,8 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$complete_weekly = new HMBKP_Scheduled_Backup( 'default-2' );
 	$complete_weekly->set_type( 'complete' );
-	$complete_weekly->set_schedule_start_time( array( 'type' => 'hmbkp_weekly' ) );
+	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
+	$complete_weekly->set_reoccurrence( 'hmbkp_weekly' );
 	$complete_weekly->set_max_backups( 12 );
 	$complete_weekly->save();
 
@@ -588,11 +590,6 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 
 	$schedule_start = '';
 
-	// The current date
-	$date_now = date( 'Y-m-d', $args['now'] );
-	$month_now = date( 'F', $args['now'] );
-	$year_now = date( 'Y', $args['now'] );
-
 	$intervals = HMBKP_Scheduled_Backup::get_cron_schedules();
 
 	// Allow the hours and minutes to be overwritten by a constant
@@ -611,49 +608,45 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 		case 'hmbkp_daily' :
 		case 'hmbkp_twicedaily':
 
-			// Today at the specified time
-			$schedule_start = $date_now . ' ' . $hm;
-
-			// @todo what about if the time has already passed?
-
+			// The next occurance of the specified time
+			$schedule_start = $hm;
 			break;
 
 		case 'hmbkp_weekly' :
 		case 'hmbkp_fortnightly' :
 
 			// The next day of the week at the specified time
-			$schedule_start = 'next ' . $args['day_of_week'] . ' ' . $hm;
-
+			$schedule_start = $args['day_of_week'] . ' ' . $hm;
 			break;
 
 		case 'hmbkp_monthly' :
 
-			// The day of the month at the specified time
-			$schedule_start = $args['day_of_month'] . ' ' . $month_now . ' ' . $year_now . ' ' . $hm;
+			// The occurance of the time on the specified day of the month
+			$schedule_start = date( 'F', $args['now'] ) . ' ' . $args['day_of_month'] . ' ' . $hm;
 
-			// @todo what about if the day has already passed?
+			// If we've already gone past that day this month then we'll need to start next month
+			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] )
+				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) )  . ' ' . $args['day_of_month'] . ' ' . $hm;
 
-			break;
+			// If that's still in the past then we'll need to jump to next year
+			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] )
+				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) )  . ' ' . $args['day_of_month'] . ' ' . date( 'Y', strtotime( '+ 1 year', $args['now'] ) ) . ' ' . $hm;
 
 		default :
 			break;
 
 	}
 
-	if ( $timestamp = strtotime( $schedule_start ) ) {
+	$timestamp = strtotime( $schedule_start, $args['now'] );
 
-		// Convert to UTC
-		$timestamp -= get_option( 'gmt_offset' ) * 3600;
+	// Convert to UTC
+	$timestamp -= get_option( 'gmt_offset' ) * 3600;
 
-		// if the scheduled time already passed then keep adding the interval until we get to a future date
-		while ( $timestamp <= $args['now'] ) {
-			$timestamp += $intervals[ $type ]['interval'];
-		}
-
-		return $timestamp;
-
+	// If the scheduled time already passed then keep adding the interval until we get to a future date
+	while ( $timestamp <= $args['now'] ) {
+		$timestamp += $intervals[ $type ]['interval'];
 	}
 
-	return 0;
+	return $timestamp;
 
 }

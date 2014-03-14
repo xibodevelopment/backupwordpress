@@ -85,9 +85,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 		$this->set_database_dump_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.sql' );
 
-		// Setup the schedule if it isn't set or it's set in the past
-		if ( ( ! $this->is_cron_scheduled() && $this->get_reoccurrence() !== 'manually' ) || ( $this->get_schedule_start_time() - ( get_option( 'gmt_offset' ) * 3600 ) !== $this->get_next_occurrence() ) )
+		// Setup the schedule if it isn't set
+		if ( ( ! $this->is_cron_scheduled() && $this->get_reoccurrence() !== 'manually' ) ) {
 			$this->schedule();
+		}
 
 	}
 
@@ -815,6 +816,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		unlink( $filepath );
 
 		return true;
+
 	}
 
 	/**
