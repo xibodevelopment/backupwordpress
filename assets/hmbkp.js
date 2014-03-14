@@ -5,7 +5,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Remove the loading class when ajax requests complete
 	$( document ).ajaxComplete( function() {
-		$( '.hmbkp-ajax-loading' ).removeClass( 'hmbkp-ajax-loading' );
+		$( '.hmbkp-ajax-loading' ).removeClass( 'hmbkp-ajax-loading' ).removeAttr( 'disabled' );
 	} );
 
 	$( document ).on( 'click', '.hmbkp-colorbox-close', function() {
@@ -32,7 +32,7 @@ jQuery( document ).ready( function( $ ) {
 		'transition'	: 'elastic',
 		'scrolling'		: true,
 		'innerWidth'	: "320px",
-		'maxHeight'		: resize_options.height, //85% Takes into account the WP Admin bar.
+		'maxHeight'		: resize_options.height, // 85% Takes into account the WP Admin bar.
 		'escKey'		: false,
 		'overlayClose'	: false,
 		'onLoad'		: function() {
@@ -50,7 +50,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Resize the colorbox when switching tabs
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
-		$.colorbox.resize(resize_options);
+		$.colorbox.resize( resize_options );
 	} );
 
 	// Show delete confirm message for delete schedule
@@ -86,7 +86,7 @@ jQuery( document ).ready( function( $ ) {
 			return;
 		}
 
-		$( this ).addClass( 'hmbkp-ajax-loading' );
+		$( this ).addClass( 'hmbkp-ajax-loading' ).attr( 'disabled', 'disabled' );
 
 		$.post(
 			ajaxurl,
@@ -104,7 +104,7 @@ jQuery( document ).ready( function( $ ) {
 
 				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
-				$.colorbox.resize(resize_options);
+				$.colorbox.resize( resize_options );
 
 			}
 		)
@@ -141,7 +141,7 @@ jQuery( document ).ready( function( $ ) {
 	// Add exclude rule
 	$( document ).on( 'click', '.hmbkp_save_exclude_rule', function() {
 
-		$( this ).addClass( 'hmbkp-ajax-loading' );
+		$( this ).addClass( 'hmbkp-ajax-loading' ).attr( 'disabled', 'disabled' );
 
 		$.post(
 			ajaxurl,
@@ -150,7 +150,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize(resize_options);
+				$.colorbox.resize( resize_options );
 			}
 		);
 
@@ -159,9 +159,9 @@ jQuery( document ).ready( function( $ ) {
 	// Remove exclude rule
 	$( document ).on( 'click', '.hmbkp-edit-schedule-excludes-form td a', function( e ) {
 
-		$( this ).addClass( 'hmbkp-ajax-loading' ).text( '' );
+		$( this ).addClass( 'hmbkp-ajax-loading' ).text( '' ).attr( 'disabled', 'disabled' );
 
-		$.colorbox.resize(resize_options);
+		$.colorbox.resize( resize_options );
 
 		e.preventDefault();
 
@@ -172,7 +172,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize(resize_options);
+				$.colorbox.resize( resize_options );
 			}
 		);
 
@@ -194,7 +194,7 @@ jQuery( document ).ready( function( $ ) {
 		if ( ! isNewSchedule && Number( $( 'input[name="hmbkp_schedule_max_backups"]' ).val() ) < Number( $( '.hmbkp_manage_backups_row' ).size() ) && ! confirm( hmbkp.remove_old_backups ) )
 			return false;
 
-		$( this ).find( 'button[type="submit"]' ).addClass( 'hmbkp-ajax-loading' );
+		$( this ).find( 'button[type="submit"]' ).addClass( 'hmbkp-ajax-loading' ).attr( 'disabled', 'disabled' );
 
 		$( '.hmbkp-error span' ).remove();
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
@@ -350,7 +350,7 @@ function catchResponseAndOfferToEmail( data ) {
 				    'escKey'		: false,
 					'onLoad'		: function() {
 						jQuery( '#cboxClose' ).remove();
-						jQuery.colorbox.resize(resize_options);
+						jQuery.colorbox.resize( resize_options );
 					}
 		        } );
 
@@ -363,7 +363,7 @@ function catchResponseAndOfferToEmail( data ) {
 
 		e.preventDefault();
 
-		jQuery( this ).addClass( 'hmbkp-ajax-loading' );
+		jQuery( this ).addClass( 'hmbkp-ajax-loading' ).attr( 'disabled', 'disabled' );
 
 		jQuery.post(
 		    ajaxurl,
