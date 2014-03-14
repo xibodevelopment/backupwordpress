@@ -379,7 +379,7 @@ function hmbkp_edit_schedule_submit() {
 				if ( empty( $hmbkp_schedule_recurrence_type ) )
 					$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
 
-				elseif ( ! in_array( $hmbkp_schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $hmbkp_schedule_recurrence['type'] !== 'manually' )
+				elseif ( ! in_array( $hmbkp_schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $hmbkp_schedule_recurrence_type !== 'manually' )
 					$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
 
 			}
