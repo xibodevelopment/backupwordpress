@@ -107,7 +107,15 @@
 
 			<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
 
-			<p class="description"><?php printf( __( 'Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' ); ?></p>
+			<p class="description">
+
+				<?php printf( __( 'Past this limit older backups will be deleted automatically.', 'hmnkp' ) ); ?>
+
+				<?php if ( $schedule->is_filesize_cached() ) {
+					printf( __( 'This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' );
+				} ?>
+
+			</p>
 
 		</div>
 
