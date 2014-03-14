@@ -807,7 +807,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Make sure it exists
 		if ( ! file_exists( $filepath ) )
-			return new WP_Error( 'hmbkp_file_error', sprintf( __( '%s dpesn\'t exist', 'hmbkp' ), $filepath ) );
+			return new WP_Error( 'hmbkp_file_error', sprintf( __( '%s doesn\'t exist', 'hmbkp' ), $filepath ) );
 
 		// Make sure it was created by this schedule
 		if ( strpos( $filepath, $this->get_id() ) === false )
