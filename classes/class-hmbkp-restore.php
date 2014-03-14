@@ -66,6 +66,8 @@ class HMBKP_Restore {
 
 		$hmbkp_db_restore->restore_database();
 
+		$hmbkp_db_restore->cleanup();
+
 	}
 
 	public function restore_files() {
@@ -79,6 +81,8 @@ class HMBKP_Restore {
 		set_time_limit( 0 );
 
 		$hmbkp_files_restore->restore_files();
+
+		$hmbkp_files_restore->cleanup();
 
 	}
 

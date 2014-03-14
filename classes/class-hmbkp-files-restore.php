@@ -41,7 +41,27 @@ class HMBKP_Files_Restore {
 
 		WP_Filesystem();
 
-		copy_dir( $this->restore_from_path, $this->root_path );
+		copy_dir( $this->restore_from_path, $this->root_path, array() );
+
+	}
+
+	public function cleanup() {
+		$this->obliterate_directory( $this->restore_from_path );
+	}
+
+	public function obliterate_directory( $dir ) {
+
+		$iterator = new RecursiveDirectoryIterator( $dir );
+
+		foreach ( new RecursiveIteratorIterator( $iterator, RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD ) as $f ) {
+
+			if ( $f->isDir() ) {
+				rmdir( $f->getPathname());
+			} else {
+				unlink( $f->getPathname() );
+			}
+
+		}
 
 	}
 

@@ -20,9 +20,6 @@ class HMBKP_DB_Restore {
 		// Run import
 		$this->perform_import();
 
-		// Clean up
-		$this->delete_dump_file();
-
 	}
 
 	public function update_table_prefix() {
@@ -100,6 +97,10 @@ class HMBKP_DB_Restore {
 		// Store any returned data in an error
 		$std_err = shell_exec( $cmd );
 
+	}
+
+	public function cleanup() {
+		$this->delete_dump_file();
 	}
 
 	public function delete_dump_file() {
