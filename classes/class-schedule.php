@@ -473,7 +473,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Check it's valid
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && $reoccurrence !== 'manually' )
-			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ) ), __METHOD__ );
+			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ), __METHOD__ ) );
 
 		// If the recurrence is already set to the same thing then there's no need to continue
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence && $this->is_cron_scheduled() )
@@ -811,7 +811,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Make sure it was created by this schedule
 		if ( strpos( $filepath, $this->get_id() ) === false )
-			return new WP_Error( 'hmbkp_backup_error', sprintf( __( 'That backup wasn\'t created by this schedule', 'hmbkp' ) ) );
+			return new WP_Error( 'hmbkp_backup_error', __( 'That backup wasn\'t created by this schedule', 'hmbkp' ) );
 
 		unlink( $filepath );
 
