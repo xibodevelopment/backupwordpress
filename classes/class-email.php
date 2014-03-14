@@ -26,15 +26,15 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	 */
 	public function field() { ?>
 
-	<label>
+		<div>
 
-		<?php _e( 'Email notification', 'hmbkp' ); ?>
+			<label for="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>"><?php _e( 'Email notification', 'hmbkp' ); ?></label>
 
-		<input type="email" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
+			<input type="email" id="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
 
-		<p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
+       <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
 
-	</label>
+		</div>
 
 	<?php }
 
@@ -107,19 +107,29 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 		if ( isset( $new_data['email'] ) ) {
 
-			if ( ! empty( $new_data['email'] ) )
-				foreach ( explode( ',', $new_data['email'] ) as $email )
-					if ( ! is_email( $email ) )
-						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
+			if ( ! empty( $new_data['email'] ) ) {
 
-					if ( ! empty( $errors['email'] ) )
+				foreach ( explode( ',', $new_data['email'] ) as $email ) {
+
+					$email = trim( $email );
+
+					if ( ! is_email( $email ) ) {
+						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
+					}
+
+					if ( ! empty( $errors['email'] ) ) {
 						$new_data['email'] = '';
+					}
 
 				}
 
-				return $errors;
-
 			}
+
+			return $errors;
+
+		}
+
+	}
 
 	/**
 	 * Get an array or validated email address's

@@ -62,9 +62,6 @@ if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
 
-if ( ! defined( 'HMBKP_SCHEDULE_TIME' ) )
-	define( 'HMBKP_SCHEDULE_TIME', '11pm' );
-
 if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
 	if ( is_multisite() )

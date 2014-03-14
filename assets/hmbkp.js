@@ -30,7 +30,7 @@ jQuery( document ).ready( function( $ ) {
 		'initialWidth'	: '320px',
 		'initialHeight'	: '100px',
 		'transition'	: 'elastic',
-		'scrolling'		: true,
+		'scrolling'		: false,
 		'innerWidth'	: "320px",
 		'maxHeight'		: resize_options.height, // 85% Takes into account the WP Admin bar.
 		'escKey'		: false,
@@ -44,6 +44,18 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
+
+
+			$( '.recurring-setting' ).hide();
+
+			hmbkpToggleScheduleFields( $('select#hmbkp_schedule_recurrence_type').val() );
+
+			$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function( ){
+				hmbkpToggleScheduleFields( $( this ).val() );
+			});
+
+			$.colorbox.resize();
+
 		}
 
 	} );
@@ -136,6 +148,8 @@ jQuery( document ).ready( function( $ ) {
 
 		 $( '.hmbkp-edit-schedule-excludes-form' ).removeClass( 'hmbkp-exclude-preview-open' );
 
+		 $.colorbox.resize();
+
 	} );
 
 	// Add exclude rule
@@ -206,8 +220,7 @@ jQuery( document ).ready( function( $ ) {
 			{ 'action'	: 'hmnkp_edit_schedule_submit' },
 			function( data ) {
 
-				// Assume success if no data passed back
-				if ( ( ! data || data == 0 ) && ( $isDestinationSettingsForm === false ) ) {
+				if ( ( data.success === true ) && ( $isDestinationSettingsForm === false ) ) {
 
 					$.colorbox.close();
 
@@ -218,30 +231,35 @@ jQuery( document ).ready( function( $ ) {
 					else
 						location.reload();
 
-				} else if( ! data || data == 0 ) {
+				} else if( data.success === true ) {
 					// nothing for now
 				} else {
 
 					// Get the errors json string
-					var errors = JSON.parse( data );
+					var errors = data.data;
 
 					// Loop through the errors
 					$.each( errors, function( key, value ) {
 
+						var selector = key.replace(/(:|\.|\[|\])/g,'\\$1');
+
 						// Focus the first field that errored
 						if ( typeof( hmbkp_focused ) == 'undefined' ) {
 
-							$( '[name="' + key + '"]' ).focus();
+							$( '#' + selector ).focus();
 
 							hmbkp_focused = true;
 
 						}
 
 						// Add an error class to all fields with errors
-						$( '[name="' + key + '"]' ).closest( 'label' ).addClass( 'hmbkp-error' );
+						$( 'label[for=' + selector + ']' ).addClass( 'hmbkp-error' );
+
+						$( '#' + selector ).next( 'span' ).remove();
 
 						// Add the error message
-						$( '[name="' + key + '"]' ).after( '<span>' + value + '</span>' );
+						$( '#' + selector ).after( '<span class="hmbkp-error">' + value + '</span>' );
+
 
 					} );
 
@@ -298,12 +316,12 @@ jQuery( document ).ready( function( $ ) {
 			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
 		).done( function( data ) {
 
-			catchResponseAndOfferToEmail( data );
+			hmbkpCatchResponseAndOfferToEmail( data );
 
 		// Redirect back on error
 		} ).fail( function( jqXHR, textStatus ) {
 
-			catchResponseAndOfferToEmail( jqXHR.responseText );
+					hmbkpCatchResponseAndOfferToEmail( jqXHR.responseText );
 
 		} );
 
@@ -317,7 +335,55 @@ jQuery( document ).ready( function( $ ) {
 
 } );
 
-function catchResponseAndOfferToEmail( data ) {
+function hmbkpToggleScheduleFields( recurrence  ){
+
+	recurrence = typeof recurrence !== 'undefined' ? recurrence : 'manually';
+
+	var settingFields = jQuery( '.recurring-setting'),
+			scheduleSettingFields = jQuery( '#schedule-start'),
+			twiceDailyNote = jQuery( 'p.twice-js' );
+
+	switch( recurrence ) {
+
+		case 'manually':
+			settingFields.hide();
+			break;
+
+		case 'hmbkp_hourly' : // fall through
+		case 'hmbkp_daily' :
+			settingFields.hide();
+			scheduleSettingFields.show();
+			twiceDailyNote.hide();
+			break;
+
+		case 'hmbkp_twicedaily' :
+			settingFields.hide();
+			scheduleSettingFields.show();
+			twiceDailyNote.show();
+			break;
+
+		case 'hmbkp_weekly' : // fall through
+		case 'hmbkp_fortnightly' :
+			settingFields.hide();
+			jQuery( '#start-day' ).show();
+			scheduleSettingFields.show();
+			twiceDailyNote.hide();
+			break;
+
+		case 'hmbkp_monthly' :
+			settingFields.hide();
+			scheduleSettingFields.show();
+			jQuery( '#start-date' ).show();
+			twiceDailyNote.hide();
+			break;
+
+	}
+
+	jQuery.colorbox.resize();
+
+}
+
+function hmbkpCatchResponseAndOfferToEmail( data ) {
 
 	// Carries the same resize options we want
 	// to use to all other .resize()
@@ -344,7 +410,7 @@ function catchResponseAndOfferToEmail( data ) {
 
 				jQuery.colorbox( {
 					'innerWidth'	: "320px",
-					'maxHeight'		: "85%",
+					'maxHeight'		: "100%",
 			        'html'			: data,
 			        'overlayClose'	: false,
 				    'escKey'		: false,
