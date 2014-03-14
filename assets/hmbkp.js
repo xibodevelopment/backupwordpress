@@ -197,8 +197,8 @@ jQuery( document ).ready( function( $ ) {
 
 		var $isDestinationSettingsForm = $( this ).find( 'button[type="submit"]' ).hasClass( "dest-settings-save" );
 
-		isNewSchedule = $( this ).closest( 'form' ).attr( 'data-schedule-action' ) == 'add' ? true : false;
-		scheduleId    = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
+		var isNewSchedule = $( this ).closest( 'form' ).attr( 'data-schedule-action' ) == 'add' ? true : false;
+		var scheduleId    = $( this ).closest( 'form' ).find( '[name="hmbkp_schedule_id"]' ).val();
 
 		// Only continue if we have a schedule id
 		if ( typeof( scheduleId ) == 'undefined' )
@@ -217,7 +217,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$.get(
 			ajaxurl + '?' + $( this ).serialize(),
-			{ 'action'	: 'hmnkp_edit_schedule_submit' },
+			{ 'action'	: 'hmbkp_edit_schedule_submit' },
 			function( data ) {
 
 				if ( ( data.success === true ) && ( $isDestinationSettingsForm === false ) ) {
