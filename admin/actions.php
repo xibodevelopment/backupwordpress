@@ -339,7 +339,6 @@ function hmbkp_edit_schedule_submit() {
 	// called from an extension
 	if ( isset( $_GET['is_destination_form'] ) ) {
 
-
 		// Save the service options
 		foreach ( HMBKP_Services::get_services( $schedule ) as $service )
 			$errors = array_merge( $errors, $service->save() );
