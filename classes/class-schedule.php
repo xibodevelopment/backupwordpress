@@ -555,10 +555,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Get the path to the backup running file that stores the running backup status
 	 *
-	 * @access private
+	 * @access public
 	 * @return string
 	 */
-	private function get_schedule_running_path() {
+	public function get_schedule_running_path() {
 		return $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
 	}
 

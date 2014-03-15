@@ -158,6 +158,9 @@ function hmbkp_request_cancel_backup() {
 	if ( $schedule->get_running_backup_filename() && file_exists( trailingslashit( hmbkp_path() ) . $schedule->get_running_backup_filename() ) )
 		unlink( trailingslashit( hmbkp_path() ) . $schedule->get_running_backup_filename() );
 
+	if ( $schedule->get_schedule_running_path() && file_exists( $schedule->get_schedule_running_path() ) )
+		unlink( $schedule->get_schedule_running_path() );
+
 	hmbkp_cleanup();
 
 	wp_safe_redirect( remove_query_arg( array( 'action' ) ), 303 );
