@@ -14,16 +14,17 @@ tfoot p { margin: 0; font-weight: normal; }#hmbkp-constants dl { overflow: hidde
 .ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav .ui-state-active a { font-weight: bold; color: #000; }
 .hmbkp_schedule { clear: both; overflow: hidden; }
 
-
 #cboxLoadedContent { margin-bottom: 0; }
 
+.hmbkp-form { overflow: hidden; }
 .hmbkp-form fieldset { float: left; }
 .js .hmbkp-form fieldset + fieldset { display: none; margin-right: -100%; }
+form.hmbkp-form div.recurring-setting { display: none; }
 
-.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; border-bottom: 1px dotted #CCC; margin-bottom: 20px; width: 320px; position: relative; }
+form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; border-bottom: 1px dotted #CCC; margin-bottom: 20px; width: 320px; position: relative; }
 
 .hmbkp-form legend { padding: 0 0 20px; font-size: 1.17em; font-weight: bold; }
-.hmbkp-form div > select, .hmbkp-form div > input, .hmbkp-form div > span.field-group { float: right; }
+.hmbkp-form div > select, .hmbkp-form div > input, .hmbkp-form div > span.field-group, .button-right { float: right; }
 .hmbkp-form label.hidden { display: none; }
 .hmbkp-form div > input[type="text"], .hmbkp-form div > select, .hmbkp-form div > input[type="password"] { min-width: 200px; }
 .hmbkp-form div > input[type="checkbox"] { margin-top: 6px; }

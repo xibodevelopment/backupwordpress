@@ -19,20 +19,14 @@ jQuery( document ).ready( function( $ ) {
 	if ( ! $( '.subsubsub a.current' ).size() )
 		$( '.subsubsub li:first a').addClass( 'current' );
 
-	// Carries the same resize options we want
-	// to use to all other .resize()
-	var resize_options = {
-		height: '85%'
-	};
-
 	// Initialize colorbox
 	$( '.colorbox' ).colorbox( {
 		'initialWidth'	: '320px',
 		'initialHeight'	: '100px',
 		'transition'	: 'elastic',
 		'scrolling'		: false,
-		'innerWidth'	: "320px",
-		'maxHeight'		: resize_options.height, // 85% Takes into account the WP Admin bar.
+		'innerWidth'	: '320px',
+		'maxHeight'		: '85%', // 85% Takes into account the WP Admin bar.
 		'escKey'		: false,
 		'overlayClose'	: false,
 		'onLoad'		: function() {
@@ -42,17 +36,18 @@ jQuery( document ).ready( function( $ ) {
 
 			$( '.hmbkp-tabs' ).tabs();
 
-			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() )
+			if ( $( ".hmbkp-form p.submit:contains('" + hmbkp.update + "')" ).size() ) {
 				$( '<button type="button" class="button-secondary hmbkp-colorbox-close">' + hmbkp.cancel + '</button>' ).appendTo( '.hmbkp-form p.submit' );
+			}
 
 
 			$( '.recurring-setting' ).hide();
 
 			hmbkpToggleScheduleFields( $('select#hmbkp_schedule_recurrence_type').val() );
 
-			$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function( ){
+			$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function() {
 				hmbkpToggleScheduleFields( $( this ).val() );
-			});
+			} );
 
 			$.colorbox.resize();
 
@@ -62,7 +57,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Resize the colorbox when switching tabs
 	$( document).on( 'click', '.ui-tabs-anchor', function( e ) {
-		$.colorbox.resize( resize_options );
+		$.colorbox.resize();
 	} );
 
 	// Show delete confirm message for delete schedule
@@ -116,7 +111,7 @@ jQuery( document ).ready( function( $ ) {
 
 				$( '.hmbkp-edit-schedule-excludes-form' ).addClass( 'hmbkp-exclude-preview-open' );
 
-				$.colorbox.resize( resize_options );
+				$.colorbox.resize();
 
 			}
 		)
@@ -164,7 +159,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize( resize_options );
+				$.colorbox.resize();
 			}
 		);
 
@@ -186,7 +181,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '.hmbkp-edit-schedule-excludes-form' ).replaceWith( data );
 				$( '.hmbkp-edit-schedule-excludes-form' ).show();
 				$( '.hmbkp-tabs' ).tabs();
-				$.colorbox.resize( resize_options );
+				$.colorbox.resize();
 			}
 		);
 
@@ -303,6 +298,7 @@ jQuery( document ).ready( function( $ ) {
 	if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).size() )
 		hmbkpRedirectOnBackupComplete( $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ), true );
 
+	// Run a backup
 	$( document ).on( 'click', '.hmbkp-run', function( e ) {
 
 		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
@@ -339,9 +335,9 @@ function hmbkpToggleScheduleFields( recurrence  ){
 
 	recurrence = typeof recurrence !== 'undefined' ? recurrence : 'manually';
 
-	var settingFields = jQuery( '.recurring-setting'),
-			scheduleSettingFields = jQuery( '#schedule-start'),
-			twiceDailyNote = jQuery( 'p.twice-js' );
+	var settingFields         = jQuery( '.recurring-setting');
+	var scheduleSettingFields = jQuery( '#schedule-start');
+	var twiceDailyNote        = jQuery( 'p.twice-js' );
 
 	switch( recurrence ) {
 
@@ -385,12 +381,6 @@ function hmbkpToggleScheduleFields( recurrence  ){
 
 function hmbkpCatchResponseAndOfferToEmail( data ) {
 
-	// Carries the same resize options we want
-	// to use to all other .resize()
-	var resize_options = {
-		height: '85%'
-	};
-
 	// Backup Succeeded
 	if ( ! data || data == 0 )
 		location.reload( true );
@@ -416,7 +406,7 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 				    'escKey'		: false,
 					'onLoad'		: function() {
 						jQuery( '#cboxClose' ).remove();
-						jQuery.colorbox.resize( resize_options );
+						jQuery.colorbox.resize();
 					}
 		        } );
 
