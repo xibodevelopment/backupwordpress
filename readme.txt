@@ -2,8 +2,8 @@
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.7.1
-Tested up to: 3.8.1
-Stable tag: 2.5
+Tested up to: 3.9
+Stable tag: 2.6
 
 Simple automated backups of your WordPress powered website.
 
@@ -106,6 +106,31 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.6
+
+* It's now possible to choose the time and day that your schedule will run on.
+* Introduces several new unit tests around schedule timings.
+* Fixes a bug that could cause the hourly schedule to run constantly.
+* Improved the layout of the Constants help panel.
+* If the backup root directory is unreadable then the plugin will no longer function.
+* Update the backups table match the standard WordPress table styles.
+* Improved styling for the settings dialogue.
+* Improved styling for the Server Info help tab.
+* /s/back ups/backups.
+* Remove Deprecated call to `screen_icon`.
+* Updated French translation.
+* Update the `WP CLI` command to use the new method for registering command.
+* Reload the schedules when re-setting up the default schedules so they show up straight away.
+* s/dpesnt't/doesn't.
+* Only show the estimated total schedule size when editing an existing schedule.
+* Stop stripping 0 from the minutes on hourly backups so that backups at 10 (& 20, etc.) past the hour correctly show.
+* Disable buttons whilst ajax requests are running.
+* Move spinners outside the buttons as they didn't look very good inside.
+* Improve the detection of the home path on multisite installs which have WordPress in a subdirectory.
+* Track the time that the running backup is started and display how long a backup has been running for.
+* Fix an issue that meant it wasn't possible to run multiple manual backups at the same time.
+* Many other minor improvements.
 
 #### 2.5
 
