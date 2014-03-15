@@ -105,7 +105,7 @@
 
 			<label for="hmbkp_schedule_max_backups"><?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?></label>
 
-			<input type="number" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
+			<input type="number" id="hmbkp_schedule_max_backups" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
 
 			<p class="description">
 
