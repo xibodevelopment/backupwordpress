@@ -707,6 +707,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	protected function do_action( $action ) {
 
+		// Pass the actions to all the services
+		foreach ( HMBKP_Services::get_services( $this ) as $service ) {
+			$service->action( $action );
+		}
+
+		// Fire the parent function as well
+		parent::do_action( $action );
+
 		switch ( $action ) :
 
 			case 'hmbkp_mysqldump_started' :
@@ -775,14 +783,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				break;
 
 		endswitch;
-
-		// Pass the actions to all the services
-		foreach ( HMBKP_Services::get_services( $this ) as $service ) {
-			$service->action( $action );
-		}
-
-		// Fire the parent function as well
-		parent::do_action( $action );
 
 	}
 
