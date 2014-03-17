@@ -205,7 +205,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$( this ).find( 'button[type="submit"]' ).addClass( 'hmbkp-ajax-loading' ).attr( 'disabled', 'disabled' );
 
-		$( '.hmbkp-error span' ).remove();
+		$( '.hmbkp-schedule-settings .settings-error' ).remove();
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
 
 		e.preventDefault();
@@ -253,7 +253,7 @@ jQuery( document ).ready( function( $ ) {
 						$( '#' + selector ).next( 'span' ).remove();
 
 						// Add the error message
-						$( '#' + selector ).after( '<span class="hmbkp-error">' + value + '</span>' );
+						$( '#' + selector ).before( '<div class="error settings-error"><p><strong>' + value + '</strong></p></div>' );
 
 
 					} );

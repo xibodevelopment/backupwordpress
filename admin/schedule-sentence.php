@@ -112,13 +112,14 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 <div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
-	<?php
-	if ( ! empty( $services ) )
+	<?php if ( ! empty( $services ) )
 		printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s Send a copy of each backup to %6$s.', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg, implode( ', ', array_filter( $services ) ) );
 	else
 		printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg );
 	?>
 
 	<?php hmbkp_schedule_actions( $schedule ); ?>
+
+	<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule-settings.php' ); ?>
 
 </div>

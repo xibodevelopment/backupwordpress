@@ -5,20 +5,19 @@
 
 		<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
 
-		<a id="intercom" class="add-new-h2" href="mailto:support@hmn.md"><?php _e( 'Support', 'hmbkp' ); ?></a>
+			<a id="intercom" class="add-new-h2" href="mailto:support@hmn.md"><?php _e( 'Support', 'hmbkp' ); ?></a>
 
 		<?php } else { ?>
 
-		<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>"><?php _e( 'Enable Support', 'hmbkp' ); ?></a>
+			<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>"><?php _e( 'Enable Support', 'hmbkp' ); ?></a>
 
 		<?php } ?>
-
 
 	</h2>
 
 <?php if ( hmbkp_possible() ) : ?>
 
-	<?php include_once( HMBKP_PLUGIN_PATH . '/admin/backups.php' ); ?>
+	<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
 
 	<p class="howto"><?php printf( __( 'If you\'re finding BackUpWordPress useful, please %1$s rate it on the plugin directory. %2$s', 'hmbkp' ), '<a href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">', '</a>' ); ?></p>
 

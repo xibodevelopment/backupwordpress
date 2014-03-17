@@ -1,22 +1,18 @@
-#icon-backupwordpress.icon32 { background: url(icon_backupwordpress_32x32.png); }
+tfoot p { margin: 0; font-weight: normal; }
 
-tfoot p { margin: 0; font-weight: normal; }#hmbkp-constants dl { overflow: hidden; margin: 20px 0; }
-
-.completed th, .completed td { background-color: #FFFFE0; }
 .hmbkp_active td:first-child > code:before { content: "\00a0 \2713  "; font-size: 11px; }
 .hmbkp_active { background: #E5F7E8; }
-.contextual-help-tabs-wrap .updated { margin: 15px 0 0; }
 
-.subsubsub { width: 100%; margin: 20px 0px 0px 0px; border-bottom: 1px solid #EEE; }
 .subsubsub li + li::before { content: "| "; vertical-align: text-top; margin: -1px; display: inline-block; }
-.subsubsub .add-new-h2 { top: 0; }
 
 .ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav .ui-state-active a { font-weight: bold; color: #000; }
 .hmbkp_schedule { clear: both; overflow: hidden; }
 
 #cboxLoadedContent { margin-bottom: 0; }
 
-.hmbkp-form { overflow: hidden; }
+/*.hmbkp-form { overflow: hidden; }
+
+
 .hmbkp-form fieldset { float: left; }
 .js .hmbkp-form fieldset + fieldset { display: none; margin-right: -100%; }
 form.hmbkp-form div.recurring-setting { display: none; }
@@ -37,10 +33,12 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 
 .hmbkp-form ul { width: 320px; overflow: hidden; }
 .hmbkp-form ul.hmbkp_file_list { background-color: #FFF; max-height: 200px; overflow-y: scroll; display: block; border-radius: 4px; box-sizing: border-box; clear: both; box-shadow: inset 0px 0px 2px #CCC; font-size: 11px; }
+*/
+
 .hmbkp_file_list li { margin: 0; padding: 5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px; }
 .hmbkp_file_list li + li { border-top: 1px dotted #CCC; }
 
-.hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 30px 0 10px; clear: both; margin-left: 10px; }
+.hmbkp-schedule-sentence { margin: 0; font-size: 16px; font-weight: lighter; margin: 20px 0; clear: both; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 47px; display: block; float: left; }
 .hmbkp-schedule-sentence.hmbkp-error:before { content: "\2718"; }
 .hmbkp-schedule-sentence.hmbkp-running:before { width: 16px;height: 47px; margin-right: 10px; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 16px 16px;display: inline-block; }
@@ -49,6 +47,9 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 .hmbkp-schedule-sentence.hmbkp-running .hmbkp-schedule-actions { display: none; }
 .hmbkp-schedule-sentence [title] { border-bottom: 1px dotted #CCC; cursor: help; }
 .hmbkp-schedule-sentence .hmbkp-status[title] { border-bottom: none; }
+.hmbkp-schedule-sentence .submit { margin: 0; padding: 0; }
+
+.hmbkp-schedule-settings { border-top: 1px solid #e5e5e5; margin-top: 20px;}
 
 .subsubsub li.hmbkp-running a:not(.current):before { width: 16px; height: 16px; margin: 0 8px 0 3px; content: ""; background: transparent url('spinner-2x.gif') no-repeat left center; background-size: 16px 16px; display: inline-block; margin-bottom: -3px; }
 
@@ -56,12 +57,12 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 .hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 
 .hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; position: relative; }
-.hmbkp-ajax-loading::before { content: ""; width: 16px; height: 16px; background-image: url('spinner-2x.gif'); background-size: 16px 16px; background-repeat: no-repeat; background-position: 0 0; position: absolute; left: -30px; top: 5px; }
+.hmbkp-ajax-loading::after { content: ""; width: 16px; height: 16px; background-image: url('spinner-2x.gif'); background-size: 16px 16px; background-repeat: no-repeat; background-position: 0 0; position: absolute; right: -30px; top: 5px; }
 
-button { height: 14px; }
-
-.delete-action { color: #BC0B0B; }
+.delete-action { color: #a00; }
 .delete-action:hover .delete-action:focus { color: red; }
+
+table.widefat tbody tr:nth-child(odd) { background-color: #f9f9f9 }
 
 .hmbkp_add_exclude_rule .howto { line-height: 1.4em; margin-top: 10px; }
 label[for="hmbkp-new-exclude-rule"] { overflow: hidden; }
@@ -69,33 +70,16 @@ label[for="hmbkp-new-exclude-rule"] { overflow: hidden; }
 div.hmbkp_add_exclude_rule { display: block; line-height: 25px; width: 320px; overflow: hidden; }
 div.hmbkp_add_exclude_rule input { min-width: 240px; float: left; line-height: 16px; margin-right: 4px; }
 .hmbkp_save_exclude_rule, .hmbkp_cancel_save_exclude_rule { float: left; }
-
 .hmbkp-exclude-preview-open table, .hmbkp-exclude-preview-open .hmbkp-tabs, .hmbkp-exclude-preview-open p.submit { display: none; }
 .hmbkp-exclude-preview-open .hmbkp_add_exclude_rule { margin: 0; }
 .hmbkp-tabs > div { display: none; }
 .ui-tabs-panel { clear: both; }
 .ui-tabs-panel form { padding-top: 10px; }
-
-table.widefat tbody tr:nth-child(odd) { background-color: #f9f9f9 }
 .hmbkp-edit-schedule-excludes-form td a, .hmbkp-edit-schedule-excludes-form td span.reason { float: right; }
 .hmbkp-edit-schedule-excludes-form td span.code { float: left; width: 255px; }
 .hmbkp-edit-schedule-excludes-form td span.reason { color: #CCC; }
-input[type="datetime-local"] { border-radius: 3px; border-width: 1px; border-style: solid; box-sizing: border-box; border-color: #DFDFDF; background-color: white; }
+
 .server-info { overflow: auto; max-height: 320px; }
 .server-info pre { max-height: 100px; overflow-x:hidden; }
+
 pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; word-wrap: normal !important; }
-
-
-@media only screen and ( max-width : 321px ) {
-
-	div.hmbkp_add_exclude_rule input { width: 100% !important; }
-
-	.hmbkp_preview_exclude_rule { float: left !important; width: 100% !important; height: 40px !important;  }
-
-	.hmbkp-form .button-primary  { float: right !important; width: 100% !important; height: 40px !important; }
-
-	.hmbkp-form .hmbkp-edit-schedule-form .button-primary  {  width: 49% !important; }
-
-	.hmbkp-form .hmbkp-colorbox-close { float: left !important; width: 49% !important; height: 40px !important; }
-
-} /* end media query */
