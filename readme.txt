@@ -143,6 +143,8 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Stop passing `$_SERVER` with support requests as it can contain things like `.htaccess` passwords on some server configurations.
 * Improve the display of the server info in the enable support popup.
 * New screenshots
+* Use `wp_safe_redirect` for internal redirects.
+* Use `wp_is_writable` instead of `is_writable`.
 
 
 #### 2.4.2
