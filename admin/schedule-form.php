@@ -1,5 +1,3 @@
-<h3>Settings</h3>
-
 <form method="post" class="hmbkp-form" novalidate data-schedule-action="<?php if ( isset( $is_new_schedule ) ) { ?>add<?php } else { ?>edit<?php } ?>">
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
@@ -162,6 +160,8 @@
 	</table>
 
 	<p class="submit">
+		<button type="button" class="button-secondary" href="<?php echo esc_url( remove_query_arg( array( 'hmbkp_panel', 'action' ) ) ); ?>">Close</button>
+
 		<button type="submit" class="button-primary"><?php _e( 'Save Changes', 'hmbkp' ); ?></button>
 	</p>
 

@@ -35,6 +35,8 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 .hmbkp-form ul.hmbkp_file_list { background-color: #FFF; max-height: 200px; overflow-y: scroll; display: block; border-radius: 4px; box-sizing: border-box; clear: both; box-shadow: inset 0px 0px 2px #CCC; font-size: 11px; }
 */
 
+.nav-tab.right { float: right; }
+
 .hmbkp_file_list li { margin: 0; padding: 5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px; }
 .hmbkp_file_list li + li { border-top: 1px dotted #CCC; }
 
@@ -49,7 +51,7 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 .hmbkp-schedule-sentence .hmbkp-status[title] { border-bottom: none; }
 .hmbkp-schedule-sentence .submit { margin: 0; padding: 0; }
 
-.hmbkp-schedule-settings { border-top: 1px solid #e5e5e5; margin-top: 20px;}
+.hmbkp-schedule-settings { border-top: 1px solid #e5e5e5; margin: 20px -20px -20px; background-color: #f5f5f5; padding: 0 20px 20px; }
 
 .subsubsub li.hmbkp-running a:not(.current):before { width: 16px; height: 16px; margin: 0 8px 0 3px; content: ""; background: transparent url('spinner-2x.gif') no-repeat left center; background-size: 16px 16px; display: inline-block; margin-bottom: -3px; }
 
