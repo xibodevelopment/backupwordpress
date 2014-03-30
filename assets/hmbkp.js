@@ -170,7 +170,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$( this ).addClass( 'hmbkp-ajax-loading' ).text( '' ).attr( 'disabled', 'disabled' );
 
-		$.colorbox.resize( resize_options );
+		$.colorbox.resize();
 
 		e.preventDefault();
 
