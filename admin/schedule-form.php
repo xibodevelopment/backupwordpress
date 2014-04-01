@@ -45,7 +45,10 @@
 		</div>
 
 		<?php if ( ! $start_time = $schedule->get_schedule_start_time() )
-			$start_time = time(); ?>
+			$start_time = time();
+
+		$start_time += get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+		?>
 
 		<div id="start-day" class="recurring-setting">
 
