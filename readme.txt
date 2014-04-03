@@ -29,7 +29,7 @@ The BackUpWordPress plugin is hosted on GitHub, if you want to help out with dev
 
 = Translations =
 
-We'd also love help translating the plugin into more languages, if you can help then please contact support@hmn.md or visit http://translate.hmn.md/.
+We'd also love help translating the plugin into more languages, if you can help then please contact 7f1l4qyq@incoming.intercom.io or visit http://translate.hmn.md/.
 
 == Installation ==
 
@@ -97,7 +97,7 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
+You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email 7f1l4qyq@incoming.intercom.io for further help/support.
 
 == Screenshots ==
 

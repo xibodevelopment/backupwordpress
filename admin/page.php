@@ -5,7 +5,7 @@
 
 		<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
 
-		<a id="intercom" class="add-new-h2" href="mailto:support@hmn.md"><?php _e( 'Support', 'hmbkp' ); ?></a>
+		<a id="intercom" class="add-new-h2" href="mailto:7f1l4qyq@incoming.intercom.io"><?php _e( 'Support', 'hmbkp' ); ?></a>
 
 		<?php } else { ?>
 
