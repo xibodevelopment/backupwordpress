@@ -927,12 +927,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		$blacklisted = array(
-			'updraft'      => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'updraft' ),
-			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backups' ),
-			'duplicator'   => trailingslashit( ABSPATH ) . trailingslashit( 'wp-snapshots' ),
-			'backupbuddy'  => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backupbuddy_backups' ),
-			'wpdbmanager'  => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
-			'supercache'   => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' )
+			'updraft'          => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'updraft' ),
+			'wponlinebckp'     => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backups' ),
+			'duplicator'       => trailingslashit( ABSPATH ) . trailingslashit( 'wp-snapshots' ),
+			'backupbuddy'      => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backupbuddy_backups' ),
+			'wpdbmanager'      => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
+			'supercache'       => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' ),
+			'pb_backupbuddy'   => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'pb_backupbuddy' ),
+			'backwpup-temp'    => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backwpup-2d77ac-temp' ),
+			'backwpup-logs'    => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backwpup-2d77ac-logs' ),
+			'backwpup-backups' => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backwpup-2d77ac-backups' ),
 		);
 
 		foreach ( $blacklisted as $key => $path ) {
