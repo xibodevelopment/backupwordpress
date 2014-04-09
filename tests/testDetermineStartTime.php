@@ -7,7 +7,7 @@
  * @return int $timestamp;
  */
 function mock_time() {
-    return testDetermineStartTimeTestCase::$now ?: \time();
+    return testDetermineStartTimeTestCase::$now ? testDetermineStartTimeTestCase::$now : \time();
 }
 
 /**
