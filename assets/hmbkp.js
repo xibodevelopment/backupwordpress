@@ -295,9 +295,6 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	}
 
-	if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).size() )
-		hmbkpRedirectOnBackupComplete( $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ), true );
-
 	// Run a backup
 	$( document ).on( 'click', '.hmbkp-run', function( e ) {
 
@@ -317,17 +314,27 @@ jQuery( document ).ready( function( $ ) {
 		// Redirect back on error
 		} ).fail( function( jqXHR, textStatus ) {
 
-					hmbkpCatchResponseAndOfferToEmail( jqXHR.responseText );
+			hmbkpCatchResponseAndOfferToEmail( jqXHR.responseText );
 
 		} );
-
-		setTimeout( function() {
-			hmbkpRedirectOnBackupComplete( scheduleId, false )
-		}, 1000 );
 
 		e.preventDefault();
 
 	} );
+	
+	// Send the schedule id with the heartbeat
+	$( document ).on( 'heartbeat-send', function( e, data ) {
+   		data['hmbkp_is_in_progress'] = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) ;
+   	});
+	
+	// Update schedule status on heartbeat tick
+	$( document ).on( 'heartbeat-tick', function( e, data ) {
+		if ( ! data['hmbkp_schedule_status'] )
+        	return;
+		
+		$( '.hmbkp-status' ).remove();
+		$( '.hmbkp-schedule-actions' ).replaceWith( data['hmbkp_schedule_status'] );
+	});
 
 } );
 
