@@ -280,7 +280,7 @@ function hmbkp_human_get_type( $type, HMBKP_Scheduled_Backup $schedule = null ) 
  * @param HMBKP_Scheduled_Backup $schedule
  * @return void
  */
-function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
+function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule, $return = false ) {
 
 	if ( is_multisite() )
 		$settings_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
@@ -305,6 +305,8 @@ function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) {
 
 		<?php // capture output
 		$output = ob_get_clean();
+		if( $return )
+			return $output;
 		echo apply_filters( 'hmbkp_schedule_actions_menu', $output, $schedule ); ?>
 
 		<a class="hmbkp-run" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>  |
