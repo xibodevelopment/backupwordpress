@@ -1,8 +1,8 @@
 <?php $schedules = HMBKP_Schedules::get_instance()->get_schedules();
 
-if ( ! empty( $_GET['hmbkp_schedule_id'] ) )
+if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
 	$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
-else {
+} else {
 	$current_schedule = reset( $schedules );
 } ?>
 
@@ -23,8 +23,9 @@ else {
 </h2>
 
 <?php // Don't continue if we don't have a schedule
-if ( ! $schedule )
-	return; ?>
+if ( ! $schedule = $current_schedule ) {
+	return;
+} ?>
 
 <div data-hmbkp-schedule-id="<?php echo esc_attr( $schedule->get_id() ); ?>" class="hmbkp_schedule">
 

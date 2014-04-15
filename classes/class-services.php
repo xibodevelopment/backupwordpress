@@ -112,7 +112,7 @@ abstract class HMBKP_Service {
 
 		$old_data = $this->schedule->get_service_options( $classname );
 
-		$new_data = isset( $_GET[$classname] ) ? $_GET[$classname] : array();
+		$new_data = isset( $_POST[$classname] ) ? $_POST[$classname] : array();
 
 		$errors = $this->update( $new_data, $old_data );
 

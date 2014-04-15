@@ -363,9 +363,15 @@ function hmbkp_translated_schedule_title( $slug, $title ) {
 function hmbkp_get_settings_url() {
 
 	if ( is_multisite() ) {
-		return network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
+		$url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
 	}
 
-	return admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
+	$url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
+
+	if ( ! empty( $_REQUEST['hmbkp_schedule_id'] ) ) {
+		$url = add_query_arg( 'hmbkp_schedule_id', $_REQUEST['hmbkp_schedule_id'], $url );
+	}
+
+	return $url;
 
 }

@@ -799,9 +799,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		if ( $handle = @opendir( $this->get_path() ) ) {
 
-			while ( false !== ( $file = readdir( $handle ) ) )
-				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() != $file )
+			while ( false !== ( $file = readdir( $handle ) ) ) {
+
+				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() !== $file ) {
 					$files[@filemtime( trailingslashit( $this->get_path() ) . $file )] = trailingslashit( $this->get_path() ) . $file;
+				}
+
+			}
 
 			closedir( $handle );
 

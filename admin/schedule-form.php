@@ -1,6 +1,21 @@
+<?php global $hmbkp_form_errors;
+
+if ( ! empty( $hmbkp_form_errors ) ) { ?>
+
+	<div class="error settings-error">
+
+	<?php foreach ( $hmbkp_form_errors as $error ) { ?>
+		<p><strong><?php echo esc_html( $error ); ?></strong></p></div>
+	<?php } ?>
+
+<?php } ?>
+
 <form method="post" class="hmbkp-form" novalidate data-schedule-action="<?php if ( isset( $is_new_schedule ) ) { ?>add<?php } else { ?>edit<?php } ?>">
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
+	<input type="hidden" name="action" value="hmbkp_edit_schedule" />
+
+	<?php wp_nonce_field( 'hmbkp-edit_schedule' ); ?>
 
 	<table class="form-table">
 
@@ -14,7 +29,7 @@
 
 				<td>
 
-					<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
+					<select name="hmbkp_schedule_type" id="hmbkp-schedule-type">
 
 						<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
 
@@ -40,7 +55,7 @@
 
 						<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-				  <?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+				<?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
 						<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
 
@@ -48,7 +63,7 @@
 
 						</option>
 
-				  <?php endforeach; ?>
+				<?php endforeach; ?>
 
 					</select>
 
@@ -56,8 +71,9 @@
 
 			</tr>
 
-			<?php if ( ! $start_time = $schedule->get_schedule_start_time() )
-				$start_time = time(); ?>
+			<?php if ( ! $start_time = $schedule->get_schedule_start_time() ) {
+				$start_time = time();
+			} ?>
 
 			<tr id="start-day" class="recurring-setting">
 
@@ -70,13 +86,13 @@
 					<select id="hmbkp_schedule_start_day_of_week" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_week]">
 
 						<?php $weekdays = array(
-							'monday' => __( 'Monday', 'hmbkp' ),
-							'tuesday' => __( 'Tuesday', 'hmbkp' ),
+							'monday'    => __( 'Monday',    'hmbkp' ),
+							'tuesday'   => __( 'Tuesday',   'hmbkp' ),
 							'wednesday' => __( 'Wednesday', 'hmbkp' ),
-							'thursday' => __( 'Thursday', 'hmbkp' ),
-							'friday' => __( 'Friday', 'hmbkp' ),
-							'saturday' => __( 'Saturday', 'hmbkp' ),
-							'sunday' => __( 'Sunday', 'hmbkp' )
+							'thursday'  => __( 'Thursday',  'hmbkp' ),
+							'friday'    => __( 'Friday',    'hmbkp' ),
+							'saturday'  => __( 'Saturday',  'hmbkp' ),
+							'sunday'    => __( 'Sunday',    'hmbkp' )
 						);
 
 						foreach ( $weekdays as $key => $day ) : ?>
@@ -122,7 +138,7 @@
 
 					</span>
 
-					<p class="twice-js description"><?php _e( 'The second backup will run 12 hours after the first', 'hmbkp' ); ?></p>
+					<p class="twice-js description<?php if ( $schedule->get_reoccurrence() !== 'hmbkp_fortnightly' ) { ?> hidden<?php } ?>"><?php _e( 'The second backup will run 12 hours after the first', 'hmbkp' ); ?></p>
 
 				</td>
 
@@ -152,8 +168,9 @@
 
 			</tr>
 
-			<?php foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-				$service->field(); ?>
+			<?php foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+				$service->field();
+			} ?>
 
 		</tbody>
 
@@ -161,7 +178,6 @@
 
 	<p class="submit">
 		<button type="button" class="button-secondary" href="<?php echo esc_url( remove_query_arg( array( 'hmbkp_panel', 'action' ) ) ); ?>">Close</button>
-
 		<button type="submit" class="button-primary"><?php _e( 'Save Changes', 'hmbkp' ); ?></button>
 	</p>
 
