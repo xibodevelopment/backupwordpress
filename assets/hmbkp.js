@@ -327,13 +327,19 @@ jQuery( document ).ready( function( $ ) {
    		data['hmbkp_is_in_progress'] = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) ;
    	});
 	
+	var redirect = false;
+	
 	// Update schedule status on heartbeat tick
 	$( document ).on( 'heartbeat-tick', function( e, data ) {
-		if ( ! data['hmbkp_schedule_status'] )
-        	return;
+		if ( data['hmbkp_schedule_status'] == 0 && redirect == true && ! $( '.hmbkp-error' ).size() ) {
+ 			location.reload( true );
+		}
 		
-		$( '.hmbkp-status' ).remove();
-		$( '.hmbkp-schedule-actions' ).replaceWith( data['hmbkp_schedule_status'] );
+		if( data['hmbkp_schedule_status'] != 0 ) {		
+			redirect = true;
+			$( '.hmbkp-status' ).remove();
+			$( '.hmbkp-schedule-actions' ).replaceWith( data['hmbkp_schedule_status'] );
+		}
 	});
 
 } );
