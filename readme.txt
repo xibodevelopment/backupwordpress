@@ -1,9 +1,9 @@
 === BackUpWordPress ===
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
-Requires at least: 3.7.1
-Tested up to: 3.9
-Stable tag: 2.6
+Requires at least: 3.7.3
+Tested up to: 3.9.1
+Stable tag: 2.6.1
 
 Simple automated backups of your WordPress powered website.
 
@@ -106,6 +106,14 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.6.1
+
+* Bump minimum WP requirement to 3.7.3, the latest security release on the 3.7 branch.
+* Fix an issues that could cause schedule times to fail to account for timezone differences.
+* Add a nonce check to the schedule settings.
+* Fix a possible JS warning when removing an exclude rule.
+* Our unit tests now run in PHP 5.2 again.
 
 #### 2.6
 
