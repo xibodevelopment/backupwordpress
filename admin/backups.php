@@ -14,11 +14,13 @@ if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
 
 	<a class="nav-tab" href="<?php esc_attr_e( esc_url( add_query_arg( array( 'action' => 'hmbkp_add_schedule_load' ), is_multisite() ? network_admin_url( 'admin-ajax.php' ) : admin_url( 'admin-ajax.php' ) ) ) ); ?>"> + <?php _e( 'add schedule', 'hmbkp' ); ?></a>
 
-	<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
+	<!--
+<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
 		<a id="intercom" class="add-new-h2" href="mailto:support@hmn.md"><?php _e( 'Support', 'hmbkp' ); ?></a>
 	<?php } else { ?>
 		<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>"><?php _e( 'Enable Support', 'hmbkp' ); ?></a>
 	<?php } ?>
+-->
 
 </h2>
 

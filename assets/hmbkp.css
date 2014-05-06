@@ -72,9 +72,20 @@ label[for="hmbkp-new-exclude-rule"] { overflow: hidden; }
 div.hmbkp_add_exclude_rule { display: block; line-height: 25px; width: 320px; overflow: hidden; }
 div.hmbkp_add_exclude_rule input { min-width: 240px; float: left; line-height: 16px; margin-right: 4px; }
 .hmbkp_save_exclude_rule, .hmbkp_cancel_save_exclude_rule { float: left; }
-.hmbkp-exclude-preview-open table, .hmbkp-exclude-preview-open .hmbkp-tabs, .hmbkp-exclude-preview-open p.submit { display: none; }
-.hmbkp-exclude-preview-open .hmbkp_add_exclude_rule { margin: 0; }
-.hmbkp-tabs > div { display: none; }
+
+.hmbkp-exclude-preview-open table, 
+.hmbkp-exclude-preview-open .hmbkp-tabs, 
+.hmbkp-exclude-preview-open p.submit { 
+	display: none; 
+}
+
+.hmbkp-exclude-preview-open .hmbkp_add_exclude_rule { 
+	margin: 0; 
+}
+
+.hmbkp-tabs > div { 
+	display: none; 
+}
 .ui-tabs-panel { clear: both; }
 .ui-tabs-panel form { padding-top: 10px; }
 .hmbkp-edit-schedule-excludes-form td a, .hmbkp-edit-schedule-excludes-form td span.reason { float: right; }
@@ -85,3 +96,35 @@ div.hmbkp_add_exclude_rule input { min-width: 240px; float: left; line-height: 1
 .server-info pre { max-height: 100px; overflow-x:hidden; }
 
 pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; word-wrap: normal !important; }
+
+@media screen and (max-width: 639px) {
+
+	.wrap h2 {
+		padding: 10px 0 0 0;
+	}
+	
+	h2 .nav-tab {
+		display: block;
+		padding: 10px;
+		margin: 0;	
+	}
+	
+	.hmbkp-schedule-sentence {
+		margin: 10px 0;
+		padding: 10px;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
