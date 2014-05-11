@@ -225,7 +225,7 @@ function hmbkp_ajax_calculate_backup_size() {
 
 	$recalculate_filesize = true;
 
-	include_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' );
+	include_once( HMBKP_PLUGIN_PATH . 'admin/schedule.php' );
 
 	die;
 
@@ -286,7 +286,7 @@ function hmbkp_edit_schedule_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
 
 	die;
 
@@ -303,7 +303,7 @@ function hmbkp_edit_schedule_excludes_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -318,7 +318,7 @@ function hmbkp_add_schedule_load() {
 	$schedule        = new HMBKP_Scheduled_Backup( date( 'U' ) );
 	$is_new_schedule = true;
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
 
 	die;
 
@@ -515,7 +515,7 @@ function hmbkp_add_exclude_rule() {
 
 	$schedule->save();
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -541,7 +541,7 @@ function hmbkp_delete_exclude_rule() {
 
 	$schedule->save();
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -656,3 +656,24 @@ function hmbkp_load_enable_support() {
 
 }
 add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
+
+function hmbkp_request_restore_backup() {
+
+	if ( empty( $_GET['hmbkp_restore_backup'] ) || ! check_admin_referer( 'hmbkp-restore_backup' ) )
+		return;
+
+	$backup_archive = sanitize_text_field( base64_decode( $_GET['hmbkp_restore_backup'] ) );
+
+	if ( ! file_exists( $backup_archive ) )
+		return;
+
+	require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-restore.php' );
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
+	$restoration = new HMBKP_Restore( $schedule->get_type(), $backup_archive );
+
+	$result = $restoration->do_restoration();
+
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_restore_backup' );
