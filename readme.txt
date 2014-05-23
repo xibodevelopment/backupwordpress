@@ -47,7 +47,7 @@ Backups are stored on your server in `/wp-content/backups`, you can change the d
 
 **Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does means that your backup directory can get quite large.
 
-**What if I want I want to back up my site to another destination?**
+**What if I want to back up my site to another destination?**
 
 BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: [https://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin)
 
