@@ -295,9 +295,6 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	}
 
-	if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).size() )
-		hmbkpRedirectOnBackupComplete( $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ), true );
-
 	// Run a backup
 	$( document ).on( 'click', '.hmbkp-run', function( e ) {
 
@@ -317,17 +314,33 @@ jQuery( document ).ready( function( $ ) {
 		// Redirect back on error
 		} ).fail( function( jqXHR, textStatus ) {
 
-					hmbkpCatchResponseAndOfferToEmail( jqXHR.responseText );
+			hmbkpCatchResponseAndOfferToEmail( jqXHR.responseText );
 
 		} );
-
-		setTimeout( function() {
-			hmbkpRedirectOnBackupComplete( scheduleId, false )
-		}, 1000 );
 
 		e.preventDefault();
 
 	} );
+	
+	// Send the schedule id with the heartbeat
+	$( document ).on( 'heartbeat-send', function( e, data ) {
+   		data['hmbkp_is_in_progress'] = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) ;
+   	});
+	
+	var redirect = false;
+	
+	// Update schedule status on heartbeat tick
+	$( document ).on( 'heartbeat-tick', function( e, data ) {
+		if ( data['hmbkp_schedule_status'] == 0 && redirect == true && ! $( '.hmbkp-error' ).size() ) {
+ 			location.reload( true );
+		}
+		
+		if( data['hmbkp_schedule_status'] != 0 ) {		
+			redirect = true;
+			$( '.hmbkp-status' ).remove();
+			$( '.hmbkp-schedule-actions' ).replaceWith( data['hmbkp_schedule_status'] );
+		}
+	});
 
 } );
 
@@ -431,36 +444,5 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 		)
 
 	} );
-
-}
-
-function hmbkpRedirectOnBackupComplete( schedule_id, redirect ) {
-
-	jQuery.post(
-		ajaxurl,
-		{ 'nonce':hmbkp.nonce, 'action' : 'hmbkp_is_in_progress', 'hmbkp_schedule_id' : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
-		function( data ) {
-
-			if ( data == 0 && redirect === true && ! jQuery( '.hmbkp-error' ).size() ) {
-				location.reload( true );
-
-			} else {
-
-				if ( data != 0 ) {
-
-					redirect = true;
-
-					jQuery( '.hmbkp-status' ).remove();
-					jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
-
-				}
-
-				setTimeout( function() {
-					hmbkpRedirectOnBackupComplete( schedule_id, redirect );
-				}, 5000 );
-
-			}
-		}
-	);
 
 }

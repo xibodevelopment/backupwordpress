@@ -656,3 +656,19 @@ function hmbkp_load_enable_support() {
 
 }
 add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
+
+/**
+ * Receive the heartbeat and return backup status
+ */
+function hmbkp_heartbeat_received( $response, $data ) {	
+	if( !empty( $data['hmbkp_is_in_progress'] ) ) {
+		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
+		if ( ! $schedule->get_status() ) {
+			$response['hmbkp_schedule_status'] = 0;
+		} else {
+			$response['hmbkp_schedule_status'] = hmbkp_schedule_actions( $schedule, true );
+		}
+	}
+  	return $response;
+}
+add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
