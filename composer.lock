@@ -1,0 +1,64 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "d9b823b002a3d1ebe70fd4c6e8ded8b7",
+    "packages": [
+        {
+            "name": "humanmade/hm-backup",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/humanmade/hm-backup.git",
+                "reference": "b97ca661232b1c55b00988854c3e865aecbf0144"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/humanmade/hm-backup/zipball/b97ca661232b1c55b00988854c3e865aecbf0144",
+                "reference": "b97ca661232b1c55b00988854c3e865aecbf0144",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "hm-backup.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Human Made Limited",
+                    "email": "hello@humanmade.co.uk",
+                    "homepage": "http://humanmade.co.uk"
+                }
+            ],
+            "description": "The core backup engine that powers BackUpWordPress & WP Remote",
+            "homepage": "https://github.com/humanmade/hm-backup",
+            "keywords": [
+                "wordpress"
+            ],
+            "time": "2014-06-06 17:22:11"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "humanmade/hm-backup": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

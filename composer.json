@@ -1,0 +1,8 @@
+{
+	"require": {
+		"humanmade/hm-backup": "dev-master"
+	},
+	"config": {
+		"vendor-dir": "src/lib"
+	}
+}
