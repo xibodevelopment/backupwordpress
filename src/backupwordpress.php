@@ -7,6 +7,7 @@ Description: Simple automated backups of your WordPress powered website. Once ac
 Author: Human Made Limited
 Version: 2.6.2
 Author URI: http://hmn.md/
+Text Domain: hmbkp
 */
 
 /*
@@ -77,7 +78,7 @@ require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
 
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )
-	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
+	require_once( HMBKP_PLUGIN_PATH . 'lib/autoload.php' );
 
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . '/classes/class-schedule.php' );
