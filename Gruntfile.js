@@ -22,6 +22,13 @@ module.exports = function( grunt ) {
 					//updateTimestamp: true // Whether the POT-Creation-Date should be updated without other changes.
 				}
 			}
+		},
+		wp_readme_to_markdown: {
+			target: {
+				files: {
+					'readme.md': 'src/readme.txt'
+				}
+			}
 		}
 	});
 };
