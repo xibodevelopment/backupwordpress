@@ -18,7 +18,7 @@ module.exports = function( grunt ) {
 					//potComments: '',      // The copyright at the beginning ofthe POT file.
 					//potFilename: '',      // Name of the POT file.
 					//processPot: null,     // A callback function for manipulating the POT file.
-					type: 'wp-plugin',    // Type of project (wp-plugin or wp-theme).
+					type: 'wp-plugin'    // Type of project (wp-plugin or wp-theme).
 					//updateTimestamp: true // Whether the POT-Creation-Date should be updated without other changes.
 				}
 			}
@@ -27,6 +27,29 @@ module.exports = function( grunt ) {
 			target: {
 				files: {
 					'readme.md': 'src/readme.txt'
+				}
+			}
+		},
+		jshint: {
+			options: grunt.file.readJSON( '.jshintrc' ),
+			grunt: {
+				src: [
+					'Gruntfile.js'
+				]
+			},
+			plugin: {
+				src: [
+					'src/assets/hmbkp.js'
+				]
+			}
+		},
+		uglify: {
+			options: {
+				preserveComments: 'some'
+			},
+			plugin: {
+				files: {
+					'src/assets/hmbkp.min.js': ['src/assets/hmbkp.js']
 				}
 			}
 		}
