@@ -52,6 +52,83 @@ module.exports = function( grunt ) {
 					'src/assets/hmbkp.min.js': ['src/assets/hmbkp.js']
 				}
 			}
+		},
+		shell: {
+			commit: {
+				command: 'git add . --all && git commit -m "Version <%= pkg.version %>"'
+			},
+			tag: {
+				command: 'git tag -a <%= pkg.version %> -m "Version <%= pkg.version %>"'
+			}
+		},
+		copy: {
+			build: {
+				files: [
+					{
+						expand: true,
+						cwd: 'src/',
+						src: [
+							'**/*',
+							'!**/.{svn,git}/**',
+							'!**/.DS_Store/**'
+						],
+						dest: 'dist/temp'
+					}
+				]
+			}
+		},
+		cssmin: {
+			minify: {
+				expand: true,
+				cwd: 'src/assets/',
+				src: ['hmbkp-combined.css'],
+				dest: 'src/assets/',
+				ext: '.min.css'
+			}
+		},
+		replace: {
+			readmeVersion: {
+				src: [
+					'readme.md'
+				],
+				overwrite: true,
+				replacements: [ {
+					from: /^\* \*\*Stable version:\*\* .*$/m,
+					to: '* **Stable version:** <%= pkg.version %>'
+				} ]
+			},
+			faq: {
+				src: [
+					'src/admin/faq.php'
+				],
+				dest: 'readme/faq.txt',
+				replacements: [ {
+					from: /^__\( '(.*)', 'hmbkp' \);$/mg,
+					to: '$1'
+				},
+					{
+						from: '<?php',
+						to: ''
+					}
+				]
+			}
+		},
+		concat: {
+			css: {
+				src: [
+					'src/assets/colorbox/example1/colorbox.css',
+					'src/assets/hmbkp.css'
+				],
+				dest: 'src/assets/hmbkp-combined.css'
+			},
+			readme: {
+				src: [
+					'readme/header.txt',
+					'readme/faq.txt',
+					'readme/footer.txt'
+				],
+				dest: 'src/readme.txt'
+			}
 		}
 	});
 };
