@@ -6,7 +6,7 @@ if ( ! getenv( 'WP_TESTS_DIR') )
 require_once getenv( 'WP_TESTS_DIR' ) . '/includes/functions.php';
 
 function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/backupwordpress.php';
+	require dirname( dirname( __FILE__ ) ) . '/src/backupwordpress.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
