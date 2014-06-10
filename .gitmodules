@@ -1,0 +1,3 @@
+[submodule "hm-backup"]
+	path = hm-backup
+	url = git@github.com:humanmade/hm-backup.git
