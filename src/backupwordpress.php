@@ -79,7 +79,7 @@ require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
 
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )
-	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
+	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
 
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . '/classes/class-schedule.php' );
