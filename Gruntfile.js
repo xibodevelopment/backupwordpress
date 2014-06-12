@@ -173,6 +173,16 @@ module.exports = function (grunt) {
 		},
 		other: {
 			changelog: 'src/changelog.md'
+		},
+		wp_deploy: {
+			deploy: {
+				options: {
+					plugin_slug: 'backupwordpress',
+					svn_user: 'pauldewouters',
+					build_dir: 'src' //relative path to your build directory
+					//assets_dir: 'wp-assets' //relative path to your assets directory (optional).
+				}
+			}
 		}
 	});
 // Top level function to build a new release
@@ -240,6 +250,7 @@ module.exports = function (grunt) {
 	// Package a new release
 	grunt.registerTask( 'package', [
 		'copy:build',
+		'wp_deploy',
 		'compress:build',
 		'clean:build'
 	] );
