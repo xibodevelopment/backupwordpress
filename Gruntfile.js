@@ -1,24 +1,24 @@
 /* jshint node:true */
-module.exports = function( grunt ) {
+module.exports = function (grunt) {
 
 	// Load all Grunt tasks
-	require( 'load-grunt-tasks' )( grunt );
+	require('load-grunt-tasks')(grunt);
 
 	// Project configuration
 	grunt.initConfig({
-		pkg: grunt.file.readJSON( 'package.json' ),
-		makepot: {
+		pkg                  : grunt.file.readJSON('package.json'),
+		makepot              : {
 			target: {
 				options: {
-					cwd: 'src',              // Directory of files to internationalize.
+					cwd       : 'src',              // Directory of files to internationalize.
 					domainPath: '/languages',       // Where to save the POT file.
 					//exclude: [],          // List of files or directories to ignore.
 					//i18nToolsPath: '',    // Path to the i18n tools directory.
-					mainFile: 'backupwordpress.php',         // Main project file.
+					mainFile  : 'backupwordpress.php',         // Main project file.
 					//potComments: '',      // The copyright at the beginning ofthe POT file.
 					//potFilename: '',      // Name of the POT file.
 					//processPot: null,     // A callback function for manipulating the POT file.
-					type: 'wp-plugin'    // Type of project (wp-plugin or wp-theme).
+					type      : 'wp-plugin'    // Type of project (wp-plugin or wp-theme).
 					//updateTimestamp: true // Whether the POT-Creation-Date should be updated without other changes.
 				}
 			}
@@ -30,105 +30,217 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
-		jshint: {
-			options: grunt.file.readJSON( '.jshintrc' ),
-			grunt: {
+		jshint               : {
+			options: grunt.file.readJSON('.jshintrc'),
+			grunt  : {
 				src: [
 					'Gruntfile.js'
 				]
 			},
-			plugin: {
+			plugin : {
 				src: [
 					'src/assets/hmbkp.js'
 				]
 			}
 		},
-		uglify: {
+		uglify               : {
 			options: {
 				preserveComments: 'some'
 			},
-			plugin: {
+			plugin : {
 				files: {
 					'src/assets/hmbkp.min.js': ['src/assets/hmbkp.js']
 				}
 			}
 		},
-		shell: {
+		shell                : {
 			commit: {
 				command: 'git add . --all && git commit -m "Version <%= pkg.version %>"'
 			},
-			tag: {
+			tag   : {
 				command: 'git tag -a <%= pkg.version %> -m "Version <%= pkg.version %>"'
 			}
 		},
-		copy: {
+		copy                 : {
 			build: {
 				files: [
 					{
 						expand: true,
-						cwd: 'src/',
-						src: [
+						cwd   : 'src/',
+						src   : [
 							'**/*',
 							'!**/.{svn,git}/**',
 							'!**/.DS_Store/**'
 						],
-						dest: 'dist/temp'
+						dest  : 'dist/temp'
 					}
 				]
 			}
 		},
-		cssmin: {
+		cssmin               : {
 			minify: {
 				expand: true,
-				cwd: 'src/assets/',
-				src: ['hmbkp-combined.css'],
-				dest: 'src/assets/',
-				ext: '.min.css'
+				cwd   : 'src/assets/',
+				src   : ['hmbkp-combined.css'],
+				dest  : 'src/assets/',
+				ext   : '.min.css'
 			}
 		},
-		replace: {
-			readmeVersion: {
+		replace              : {
+			pluginVersion: {
 				src: [
-					'readme.md'
+					'src/backupwordpress.php'
 				],
 				overwrite: true,
 				replacements: [ {
-					from: /^\* \*\*Stable version:\*\* .*$/m,
-					to: '* **Stable version:** <%= pkg.version %>'
+					from: /^Version: .*$/m,
+					to: ' * Version: <%= pkg.version %>'
 				} ]
 			},
-			faq: {
-				src: [
+			readmeVersion: {
+				src         : [
+					'readme.md'
+				],
+				overwrite   : true,
+				replacements: [
+					{
+						from: /^\* \*\*Stable version:\*\* .*$/m,
+						to  : '* **Stable version:** <%= pkg.version %>'
+					}
+				]
+			},
+			faq          : {
+				src         : [
 					'src/admin/faq.php'
 				],
-				dest: 'readme/faq.txt',
-				replacements: [ {
-					from: /^__\( '(.*)', 'hmbkp' \);$/mg,
-					to: '$1'
-				},
+				dest        : 'readme/faq.txt',
+				replacements: [
+					{
+						from: /^__\( '(.*)', 'hmbkp' \);$/mg,
+						to  : '$1'
+					},
 					{
 						from: '<?php',
-						to: ''
+						to  : ''
 					}
 				]
 			}
 		},
-		concat: {
-			css: {
-				src: [
+		concat               : {
+			css   : {
+				src : [
 					'src/assets/colorbox/example1/colorbox.css',
 					'src/assets/hmbkp.css'
 				],
 				dest: 'src/assets/hmbkp-combined.css'
 			},
 			readme: {
-				src: [
+				src : [
 					'readme/header.txt',
 					'readme/faq.txt',
 					'readme/footer.txt'
 				],
 				dest: 'src/readme.txt'
 			}
+		},
+		compress             : {
+			build: {
+				options: {
+					archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip',
+					mode   : 'zip'
+				},
+				files  : [
+					{
+						expand: true,
+						src   : ['**/*'],
+						dest  : '<%= pkg.name %>',
+						cwd   : 'dist/temp'
+					}
+				]
+			}
+		},
+		clean                : {
+			build: {
+				src: [ 'dist/temp' ]
+			}
+		},
+		bump: {
+			options: {
+				files: [ 'package.json' ],
+				updateConfigs: [ 'pkg' ],
+				commit: false
+			}
+		},
+		other: {
+			changelog: 'src/changelog.md'
 		}
 	});
+// Top level function to build a new release
+	grunt.registerTask( 'release', function( releaseType ) {
+		if ( 'minor' !== releaseType && 'major' !== releaseType && 'patch' !== releaseType ) {
+			grunt.fail.fatal( 'Please specify the release type (e.g., "grunt release:patch")' );
+		} else {
+			// Check to make sure the log exists
+			grunt.task.run( 'log:' + releaseType );
+
+			// Bump the version numbers
+			grunt.task.run( 'bumpto:' + releaseType );
+
+			// Create the .pot file
+			grunt.task.run( 'makepot' );
+
+			// Build the SASS and scripts
+			grunt.task.run( 'default' );
+
+			// Zip it up
+			grunt.task.run( 'package' );
+
+			// Commit and tag version update
+			//grunt.task.run( 'shell:commit' );
+			//grunt.task.run( 'shell:tag' );
+		}
+	} );
+
+	// Default task(s).
+	grunt.registerTask( 'default', [ 'concat', 'uglify' ] );
+
+	// Bump the version to the specified value; e.g., "grunt bumpto:patch"
+	grunt.registerTask( 'bumpto', function( releaseType ) {
+		if ( 'minor' !== releaseType && 'major' !== releaseType && 'patch' !== releaseType ) {
+			grunt.fail.fatal( 'Please specify the bump type (e.g., "grunt bumpto:patch")' );
+		} else {
+			grunt.task.run( 'bump-only:' + releaseType );
+
+			// Update the version numbers
+			grunt.task.run( 'replace' );
+		}
+	} );
+
+	// Prompt for the changelog
+	grunt.registerTask( 'log', function( releaseType ) {
+		var semver = require( 'semver' ),
+			changelog,
+			newVersion = semver.inc( grunt.config.get( 'pkg' ).version, releaseType),
+			regex = new RegExp( '^## ' + newVersion, 'gm' ); // Match the version number (e.g., "# 1.2.3")
+
+		if ( 'minor' !== releaseType && 'major' !== releaseType && 'patch' !== releaseType ) {
+			grunt.log.writeln().fail( 'Please choose a valid version type (minor, major, or patch)' );
+		} else {
+			// Get the new version
+			changelog = grunt.file.read( grunt.config.get( 'other' ).changelog );
+
+			if ( changelog.match( regex ) ) {
+				grunt.log.ok( 'v' + newVersion + ' changelog entry found' );
+			} else {
+				grunt.fail.fatal( 'Please enter a changelog entry for v' + newVersion );
+			}
+		}
+	} );
+
+	// Package a new release
+	grunt.registerTask( 'package', [
+		'copy:build',
+		'compress:build',
+		'clean:build'
+	] );
 };
