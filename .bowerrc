@@ -1,3 +1,6 @@
 {
-	"directory": "src/assets"
+	"directory": "src/assets",
+	"scripts": {
+		"postinstall": "rm -rf js/jquery"
+	}
 }
