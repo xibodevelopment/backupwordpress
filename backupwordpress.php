@@ -95,7 +95,7 @@ require_once( HMBKP_PLUGIN_PATH . 'classes/class-email.php' );
 
 // Load the wp cli command
 if ( defined( 'WP_CLI' ) && WP_CLI )
-	include( HMBKP_PLUGIN_PATH . 'classe/wp-cli.php' );
+	include( HMBKP_PLUGIN_PATH . 'classes/wp-cli.php' );
 
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
