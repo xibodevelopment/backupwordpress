@@ -125,6 +125,10 @@ module.exports = function (grunt) {
 					{
 						from: '<?php',
 						to  : ''
+					},
+					{
+						from: /^(.*)(\\')(.*)$/mg,
+						to:   "$1'$3"
 					}
 				]
 			}
@@ -190,7 +194,7 @@ module.exports = function (grunt) {
 	});
 
 	// Default task(s).
-	grunt.registerTask( 'default', [ 'newer:concat', 'newer:cssmin', 'newer:uglify' ] );
+	grunt.registerTask( 'default', [ 'newer:concat:css', 'newer:cssmin', 'newer:uglify' ] );
 
 	// Bump the version to the specified value; e.g., "grunt bumpto:patch"
 	grunt.registerTask( 'bumpto', function( releaseType ) {
@@ -240,7 +244,10 @@ module.exports = function (grunt) {
 			// Check to make sure the log exists
 			grunt.task.run( 'log:' + releaseType );
 
-			// Bump the version numbers and build readme
+			// Build the readme file
+			grunt.task.run( 'concat:readme' );
+
+			// Bump the version numbers
 			grunt.task.run( 'bumpto:' + releaseType );
 
 			// Create the .pot file
