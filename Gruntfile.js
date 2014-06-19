@@ -54,6 +54,9 @@ module.exports = function (grunt) {
 			}
 		},
 		shell                : {
+			changelog: {
+				command: 'git changelog'
+			},
 			commit: {
 				command: 'git add . --all && git commit -m "Version <%= pkg.version %>"'
 			},
@@ -187,7 +190,7 @@ module.exports = function (grunt) {
 	});
 
 	// Default task(s).
-	grunt.registerTask( 'default', [ 'cssmin', 'concat', 'uglify' ] );
+	grunt.registerTask( 'default', [ 'newer:concat', 'newer:cssmin', 'newer:uglify' ] );
 
 	// Bump the version to the specified value; e.g., "grunt bumpto:patch"
 	grunt.registerTask( 'bumpto', function( releaseType ) {
@@ -203,6 +206,7 @@ module.exports = function (grunt) {
 
 	// Prompt for the changelog
 	grunt.registerTask( 'log', function( releaseType ) {
+		//grunt.task.run( 'shell:changelog' );
 		var semver = require( 'semver' ),
 			changelog,
 			newVersion = semver.inc( grunt.config.get( 'pkg' ).version, releaseType),
@@ -253,8 +257,8 @@ module.exports = function (grunt) {
 			grunt.task.run( 'package' );
 
 			// Commit and tag version update
-			//grunt.task.run( 'shell:commit' );
-			//grunt.task.run( 'shell:tag' );
+			grunt.task.run( 'shell:commit' );
+			grunt.task.run( 'shell:tag' );
 		}
 	} );
 
