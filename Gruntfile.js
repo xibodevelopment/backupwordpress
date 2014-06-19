@@ -127,8 +127,8 @@ module.exports = function (grunt) {
 						to  : ''
 					},
 					{
-						from: /^(.*)(\\')(.*)$/mg,
-						to:   "$1'$3"
+						from: /\\'/g,
+						to:   "'"
 					}
 				]
 			}
@@ -143,9 +143,9 @@ module.exports = function (grunt) {
 			},
 			readme: {
 				src : [
-					'readme/header.txt',
+					'readme/readme-header.txt',
 					'readme/faq.txt',
-					'readme/footer.txt'
+					'readme/readme-footer.txt'
 				],
 				dest: 'src/readme.txt'
 			}
@@ -203,7 +203,7 @@ module.exports = function (grunt) {
 		} else {
 			grunt.task.run( 'bump-only:' + releaseType );
 
-			// Update the version numbers
+			// Update the version numbers and build FAQ portion of readme.txt
 			grunt.task.run( 'replace' );
 		}
 	} );
