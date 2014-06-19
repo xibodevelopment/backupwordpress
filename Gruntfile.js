@@ -185,34 +185,9 @@ module.exports = function (grunt) {
 			}
 		}
 	});
-// Top level function to build a new release
-	grunt.registerTask( 'release', function( releaseType ) {
-		if ( 'minor' !== releaseType && 'major' !== releaseType && 'patch' !== releaseType ) {
-			grunt.fail.fatal( 'Please specify the release type (e.g., "grunt release:patch")' );
-		} else {
-			// Check to make sure the log exists
-			grunt.task.run( 'log:' + releaseType );
-
-			// Bump the version numbers
-			grunt.task.run( 'bumpto:' + releaseType );
-
-			// Create the .pot file
-			grunt.task.run( 'makepot' );
-
-			// Build the SASS and scripts
-			grunt.task.run( 'default' );
-
-			// Zip it up
-			grunt.task.run( 'package' );
-
-			// Commit and tag version update
-			//grunt.task.run( 'shell:commit' );
-			//grunt.task.run( 'shell:tag' );
-		}
-	} );
 
 	// Default task(s).
-	grunt.registerTask( 'default', [ 'concat', 'uglify' ] );
+	grunt.registerTask( 'default', [ 'cssmin', 'concat', 'uglify' ] );
 
 	// Bump the version to the specified value; e.g., "grunt bumpto:patch"
 	grunt.registerTask( 'bumpto', function( releaseType ) {
@@ -250,8 +225,42 @@ module.exports = function (grunt) {
 	// Package a new release
 	grunt.registerTask( 'package', [
 		'copy:build',
-		'wp_deploy',
 		'compress:build',
+		'clean:build'
+	] );
+
+	// Top level function to build a new release
+	grunt.registerTask( 'release', function( releaseType ) {
+		if ( 'minor' !== releaseType && 'major' !== releaseType && 'patch' !== releaseType ) {
+			grunt.fail.fatal( 'Please specify the release type (e.g., "grunt release:patch")' );
+		} else {
+			// Check to make sure the log exists
+			grunt.task.run( 'log:' + releaseType );
+
+			// Bump the version numbers and build readme
+			grunt.task.run( 'bumpto:' + releaseType );
+
+			// Create the .pot file
+			grunt.task.run( 'makepot' );
+
+			// Build the SASS and scripts
+			grunt.task.run( 'default' );
+
+			// Update repo readme from plugin readme
+			grunt.task.run( 'wp_readme_to_markdown' );
+
+			// Zip it up
+			grunt.task.run( 'package' );
+
+			// Commit and tag version update
+			//grunt.task.run( 'shell:commit' );
+			//grunt.task.run( 'shell:tag' );
+		}
+	} );
+
+	grunt.registerTask( 'deploy', [
+		'copy:build',
+		'wp_deploy',
 		'clean:build'
 	] );
 };
