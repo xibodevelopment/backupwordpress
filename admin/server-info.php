@@ -1,4 +1,4 @@
-<?php foreach( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
 
 	<h3><?php echo esc_html( ucwords( $group ) ); ?></h3>
 
@@ -10,26 +10,26 @@
 
 			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
 
-			<tr>
+				<tr>
 
-				<td><?php echo esc_html( $requirement->name() ); ?></td>
+					<td><?php echo esc_html( $requirement->name() ); ?></td>
 
-				<td>
-					<code><?php echo esc_html( $requirement->result() ); ?></code>
-				</td>
+					<td>
+						<code><?php echo esc_html( $requirement->result() ); ?></code>
+					</td>
 
-			</tr>
+				</tr>
 
 			<?php } else { ?>
 
-			<tr>
+				<tr>
 
-				<td colspan="2">
-					<?php echo esc_html( $requirement->name() ); ?>
-					<pre><?php echo esc_html( $requirement->result() ); ?></pre>
-				</td>
+					<td colspan="2">
+						<?php echo esc_html( $requirement->name() ); ?>
+						<pre><?php echo esc_html( $requirement->result() ); ?></pre>
+					</td>
 
-			</tr>
+				</tr>
 
 			<?php } ?>
 
@@ -39,7 +39,9 @@
 
 	</table>
 
-<?php endforeach;
+<?php
+
+endforeach;
 
 foreach ( HMBKP_Services::get_services() as $file => $service )
 	echo wp_kses_post( call_user_func( array( $service, 'intercom_data_html' ) ) );
