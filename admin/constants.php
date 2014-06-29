@@ -1,6 +1,21 @@
 <div id="hmbkp-constants">
 
-	<p><?php printf( __( 'You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted.', 'hmbkp' ), '<code>define</code>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>', '<code>wp-config.php</code>', '<a href="http://codex.wordpress.org/Editing_wp-config.php">' . __( 'The Codex can help', 'hmbkp' ) . '</a>', '<code>' . __( 'Constants', 'hmbkp' ) . '</code>' ); ?></p>
+	<p>
+
+		<?php
+
+		printf(
+			__( 'You can %1$sdefine%2$s any of the following %1$sconstants%2$s in your %1$swp-config.php%2$s to control advanced settings. %3$shttp://codex.wordpress.org/Editing_wp-config.php%4$sThe Codex can help.%5$s Defined %1$sconstants%2$s will be highlighted.', 'hmbkp' ),
+			'<code>',
+			'</code>',
+			'<a href="',
+			'">',
+			'</a>'
+		);
+
+		?>
+
+	</p>
 
 	<table class="widefat">
 
@@ -10,9 +25,18 @@
 
 			<td>
 
-				<?php if ( defined( 'HMBKP_PATH' ) ) { ?>
-					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>' ); ?></p>
-				<?php } ?>
+				<?php if ( defined( 'HMBKP_PATH' ) ) : ?>
+
+					<p>
+
+						<?php
+
+						printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>' );
+						?>
+
+					</p>
+
+				<?php endif; ?>
 
 				<p><?php printf( __( 'The path to folder you would like to store your backup files in, defaults to %s.', 'hmbkp' ), '<code>' . esc_html( hmbkp_path_default() ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p>
 
@@ -27,7 +51,7 @@
 			<td>
 
 				<?php if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) ) { ?>
-					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_MYSQLDUMP_PATH . '</code>' ); ?></p>
+					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . esc_html( HMBKP_MYSQLDUMP_PATH ) . '</code>' ); ?></p>
 				<?php } ?>
 
 				<p><?php printf( __( 'The path to your %1$s executable. Will be used for the %2$s part of the back up if available.', 'hmbkp' ), '<code>mysqldump</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_MYSQLDUMP_PATH', '/opt/local/bin/mysqldump' );</code></p>
