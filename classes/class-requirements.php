@@ -23,7 +23,7 @@ class HMBKP_Requirements {
 	 */
 	public static function get_requirements( $group = false ) {
 
-		$requirements = $group ? self::$requirements[$group] : self::$requirements;
+		$requirements = $group ? self::$requirements[ $group ] : self::$requirements;
 
 		ksort( $requirements );
 
