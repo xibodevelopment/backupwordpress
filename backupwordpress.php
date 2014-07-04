@@ -1,15 +1,13 @@
 <?php
 
-/**
- * Plugin Name: BackUpWordPress
- * Plugin URI: http://bwp.hmn.md/
- * Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
- * Author: Human Made Limited
- * Version: 2.6.3
- * Author URI: http://hmn.md/
- * Text Domain: hmbkp
- * Domain path: /languages
-**/
+/*
+Plugin Name: BackUpWordPress
+Plugin URI: http://bwp.hmn.md/
+Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
+Author: Human Made Limited
+Version: 2.6.2
+Author URI: http://hmn.md/
+*/
 
 /*
 Copyright 2011 - 2014 Human Made Limited  (email : support@hmn.md)
@@ -145,7 +143,7 @@ function hmbkp_load_scripts() {
 
 	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
 
-	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js', array( 'hmbkp-colorbox', 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
+	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox', 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
 
 	wp_localize_script(
 		'hmbkp',
@@ -215,7 +213,7 @@ add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
 function hmbkp_load_styles(){
 
 	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
-	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp-combined.min.css', false, HMBKP_VERSION );
+	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
 
 }
 add_action( 'admin_print_styles-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_styles' );
