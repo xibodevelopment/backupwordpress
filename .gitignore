@@ -1,1 +1,5 @@
 /.svn/
+node_modules
+npm-debug.log
+src/assets/jquery
+dist
