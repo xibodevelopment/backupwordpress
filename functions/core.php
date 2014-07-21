@@ -68,7 +68,7 @@ function hmbkp_update() {
 			'bkpwp_calculation',
 			'bkpwppath',
 			'bkpwp_status_config',
-			'bkpwp_status'
+			'bkpwp_status',
 		);
 
 		foreach ( $legacy_options as $option ) {

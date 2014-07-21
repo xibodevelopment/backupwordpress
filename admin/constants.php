@@ -50,11 +50,29 @@
 
 			<td>
 
-				<?php if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) ) { ?>
-					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . esc_html( HMBKP_MYSQLDUMP_PATH ) . '</code>' ); ?></p>
-				<?php } ?>
+				<?php if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) ) : ?>
 
-				<p><?php printf( __( 'The path to your %1$s executable. Will be used for the %2$s part of the back up if available.', 'hmbkp' ), '<code>mysqldump</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_MYSQLDUMP_PATH', '/opt/local/bin/mysqldump' );</code></p>
+					<p>
+
+						<?php
+
+						printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . esc_html( HMBKP_MYSQLDUMP_PATH ) . '</code>' );
+
+						?>
+
+					</p>
+
+				<?php endif ?>
+
+				<p>
+
+					<?php
+
+					printf( __( 'The path to your %1$smysqldump%2$s executable. Will be used for the %1$sdatabase%2$s part of the back up if available. e.g. %1$sdefine( \'HMBKP_MYSQLDUMP_PATH\', \'/opt/local/bin/mysqldump\' );%2$s', 'hmbkp' ), '<code>','</code>' );
+
+					?>
+
+				</p>
 
 			</td>
 
@@ -66,11 +84,29 @@
 
 			<td>
 
-				<?php if ( defined( 'HMBKP_ZIP_PATH' ) ) { ?>
-					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ZIP_PATH . '</code>' ); ?></p>
-				<?php } ?>
+				<?php if ( defined( 'HMBKP_ZIP_PATH' ) ) : ?>
 
-				<p><?php printf( __( 'The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available.', 'hmbkp' ), '<code>zip</code>', '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ZIP_PATH', '/opt/local/bin/zip' );</code></p>
+					<p>
+
+						<?php
+
+						printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . esc_html( HMBKP_ZIP_PATH ) . '</code>' );
+
+						?>
+
+					</p>
+
+				<?php endif; ?>
+
+				<p>
+
+					<?php
+
+					printf( __( 'The path to your %1$szip%2$s executable. Will be used to zip up your %1$sfiles%2$s and %1$database%2$s if available. e.g. %1$sdefine( \'HMBKP_ZIP_PATH\', \'/opt/local/bin/zip\' );%2$s', 'hmbkp' ), '<code>','</code>' );
+
+					?>
+
+				</p>
 
 			</td>
 
@@ -82,9 +118,16 @@
 
 			<td>
 
-				<?php if ( defined( 'HMBKP_EXCLUDE' ) ) { ?>
-					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_EXCLUDE . '</code>' ); ?></p>
-				<?php } ?>
+				<?php if ( defined( 'HMBKP_EXCLUDE' ) ) : ?>
+
+					<p>
+						<?php
+
+						printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . esc_html( HMBKP_EXCLUDE ) . '</code>' ); ?>
+
+					</p>
+
+				<?php endif; ?>
 
 				<p><?php _e( 'Comma separated list of files or directories to exclude, the backups directory is automatically excluded.', 'hmbkp' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_EXCLUDE', '/wp-content/uploads/, /stats/, .svn/, *.txt' );</code></p>
 

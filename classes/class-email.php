@@ -32,7 +32,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 
 			<input type="email" id="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
 
-       <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
+       <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . esc_html( size_format( hmbkp_get_max_attachment_size() ) ) . '</code>' ); ?></p>
 
 		</div>
 
@@ -57,7 +57,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			<td>
 
 				<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?>
-				<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
+				<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . esc_html( HMBKP_ATTACHMENT_MAX_FILESIZE ) . '</code>' ); ?></p>
 				<?php } ?>
 
 				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
