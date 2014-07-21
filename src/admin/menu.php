@@ -60,9 +60,8 @@ function hmbkp_contextual_help() {
 	include_once( HMBKP_PLUGIN_PATH . 'admin/faq.php' );
 	$faq = ob_get_clean();
 
-
 	get_current_screen()->add_help_tab( array( 'title' => __( 'FAQ', 'hmbkp' ), 'id' => 'hmbkp_faq', 'content' => wp_kses_post( $faq ) ) );
-	
+
 	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'hmbkp' ), 'id' => 'hmbkp_constants', 'content' => wp_kses_post( $constants ) ) );
 
 	get_current_screen()->set_help_sidebar(
