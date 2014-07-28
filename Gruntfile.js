@@ -119,7 +119,7 @@ module.exports = function (grunt) {
 				dest        : 'readme/faq.txt',
 				replacements: [
 					{
-						from: /^__\( '(.*)', 'hmbkp' \);$/mg,
+						from: /.*<p>' \. __\( '(.*)', '\w+' \).*/mg,
 						to  : '$1'
 					},
 					{
@@ -135,7 +135,7 @@ module.exports = function (grunt) {
 						to: '**$1**'
 					},
 					{
-						from: /'(?:<ul>)?<li>' \. .*__\( '(.*)', '.*' \) .* '<\/li>'?.*/,
+						from: /'(?:<ul>)?<li>' \. .*__\( '(.*)', '.*' \) .* '<\/li>(?:<\/ul>)?' \./g,
 						to: '* $1'
 					}
 				]
