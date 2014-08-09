@@ -2,10 +2,10 @@
 
 /*
 Plugin Name: BackUpWordPress
-Plugin URI: http://hmn.md/backupwordpress/
+Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.6
+Version: 2.6.2
 Author URI: http://hmn.md/
 */
 
@@ -56,7 +56,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.1' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.3' );
 
 // Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
@@ -143,7 +143,7 @@ function hmbkp_load_scripts() {
 
 	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
 
-	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
+	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox', 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
 
 	wp_localize_script(
 		'hmbkp',
