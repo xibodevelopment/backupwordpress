@@ -179,6 +179,133 @@ function hmbkp_backup_errors_message() {
 
 }
 
+function hmbkp_recursive_directory_scanner( $directory, $root = '' ) {
+
+	// Set the scanner as running
+	if ( ! $root ) {
+		$root = $directory;
+		update_option( 'hmbkp_exclude_scanner_running', true );
+	}
+
+	$filesize = false;
+	$files = array();
+	$sanitized_directory = substr( sanitize_key( $directory ), -30 );
+	$directory_size = get_transient( 'hmbkp_' . $sanitized_directory . '_filesize' );
+
+	$handle = opendir( $directory );
+
+	while ( $file_handle = readdir( $handle ) ) :
+
+		// Ignore current dir and containing dir
+		if ( $file_handle === '.' || $file_handle === '..' )
+			continue;
+
+		// ignore .git for now
+		if ( $file_handle === '.git' )
+			continue;
+
+		$file = new SplFileInfo( HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
+		$files[] = $file;
+
+		// If we don't have a cached filesize for this directory then let's work it out
+		if ( $directory_size === false ) {
+			$filesize += $file->getSize();
+		}
+
+		if ( $file->isDir() ) {
+
+			// Fire an action to trigger a scan of this sub directory
+			do_action( 'hmbkp_dir_scan', $file->getPathname(), $root );
+		}
+
+	endwhile;
+
+	closedir( $handle );
+
+	// If we have a filesize then let's cache it and also update any cached parent directory filesizes
+	if ( $filesize !== false ) {
+
+		set_transient( 'hmbkp_' . $sanitized_directory . '_filesize', $filesize, WEEK_IN_SECONDS );
+
+		while ( $directory !== $root ) {
+
+			$directory = dirname( $directory );
+			$sanitized_directory = substr( sanitize_key( $directory ), -30 );
+
+			$parent_size = get_transient( 'hmbkp_' . $sanitized_directory . '_filesize' );
+			set_transient( 'hmbkp_' . $sanitized_directory . '_filesize', $parent_size + $filesize, WEEK_IN_SECONDS );
+
+		}
+
+	}
+
+	return $files;
+
+}
+add_action( 'wp_async_hmbkp_dir_scan', 'hmbkp_recursive_directory_scanner', 10, 2 );
+
+class HMBKP_Async_Task extends WP_Async_Task {
+
+	protected $action = 'hmbkp_dir_scan';
+
+	/**
+	 * Prepare data for the asynchronous request
+	 *
+	 * @throws Exception If for any reason the request should not happen
+	 *
+	 * @param array $data An array of data sent to the hook
+	 *
+	 * @return array
+	 */
+	protected function prepare_data( $data ) {
+
+		$directory = $data[0];
+		$root      = $data[1];
+
+		/**
+		 * Internally, the library uses a protected property $_body_data
+		 * to store request data during a request lifetime, since the
+		 * async request doesn't happen until shutdown. We can use data
+		 * already stored there in subsequent runs of the action that
+		 * triggers requests.
+		 */
+		$real_data = array(
+			'directories' => array(),
+		);
+
+		if ( ! empty( $this->_body_data['directories'] ) ) {
+			$real_data['directories'] = $this->_body_data['directories'];
+		}
+
+		// Store post ids in an array inside the body data
+		$real_data['directories'][ $directory ] = $root;
+
+		return $real_data;
+
+	}
+
+	/**
+	 * Run the async task action
+	 */
+	protected function run_action() {
+
+		$directories = $_POST['directories'];
+
+		foreach ( $directories as $directory => $root ) {
+
+			do_action(
+				"wp_async_$this->action",
+				$directory,
+				$root
+			);
+
+		}
+
+	}
+
+}
+
+
 /**
  * Display a html list of files
  *
@@ -238,9 +365,7 @@ function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $f
 
 	</ul>
 
-<?php
-}
-
+<?php }
 
 /**
  * Get the human readable backup type in.

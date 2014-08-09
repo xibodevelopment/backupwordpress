@@ -5,8 +5,10 @@ if ( ! empty( $hmbkp_form_errors ) ) { ?>
 	<div id="hmbkp-warning" class="error settings-error">
 
 	<?php foreach ( $hmbkp_form_errors as $error ) { ?>
-		<p><strong><?php echo esc_html( $error ); ?></strong></p></div>
+		<p><strong><?php echo esc_html( $error ); ?></strong></p>
 	<?php } ?>
+
+	</div>
 
 <?php } ?>
 

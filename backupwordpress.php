@@ -79,6 +79,9 @@ require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 if ( ! class_exists( 'HM_Backup' ) )
 	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
 
+// Load WP Async Task
+require_once( HMBKP_PLUGIN_PATH . 'wp-async-task/wp-async-task.php' );
+
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
@@ -305,3 +308,5 @@ function hmbkp_load_first() {
 
 }
 add_action( 'activated_plugin', 'hmbkp_load_first' );
+
+$async_task = new HMBKP_Async_Task();

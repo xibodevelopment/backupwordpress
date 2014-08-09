@@ -4,3 +4,6 @@
 [submodule "assets/colorbox"]
 	path = assets/colorbox
 	url = git://github.com/jackmoore/colorbox.git
+[submodule "wp-async-task"]
+	path = wp-async-task
+	url = git@github.com:techcrunch/wp-async-task.git
