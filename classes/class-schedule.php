@@ -211,7 +211,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_max_backups() {
 
 		if ( empty( $this->options['max_backups'] ) )
-			$this->set_max_backups( 10 );
+			$this->set_max_backups( 3 );
 
 		return (int) esc_attr( $this->options['max_backups'] );
 
