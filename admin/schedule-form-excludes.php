@@ -58,7 +58,6 @@
 
 			clearstatcache();
 
-			// Allow filesize at any level to be re-calculated
 			$files = hmbkp_recursive_directory_scanner( $directory );
 
 			foreach ( $files as $file ) {
@@ -72,8 +71,6 @@
 				}
 
 			}
-
-			$ordered_files[ (string) get_transient( 'hmbkp_' . substr( sanitize_key( $directory ), -30 ) . '_filesize' ) ] = new SplFileInfo( $directory );
 
 			krsort( $ordered_files );
 
