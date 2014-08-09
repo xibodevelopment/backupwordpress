@@ -54,6 +54,23 @@
 
 			<?php
 
+			/* TODO
+			 *
+			 * - Excluded files should be greyed out
+			 * - Exclude button should add an exclude rule for that exact path
+			 * - Style the file list
+			 * - Clicking a directory link should reload page with that path set as root
+			 * - Ability to re-calculate any directory size
+			 * - Ability to nagivate back up the tree
+			 * - Design treatment for unreadable files
+			 * - JS enhance
+			 * - Show full path in title attribute
+			 * - Visually de-emphasise small files, especially in a long list (ala Daisy Disk)
+			 * - Switch to Backdrop
+			 * - We need to way to track whether a directory tree is currently being analysed
+			 * - Calculate site size should use the same mechanism, that way excludes tree will mostly already be cached
+			 */
+
 			$directory = $schedule->get_root();
 
 			clearstatcache();
@@ -89,23 +106,27 @@
 
 						<li>
 
-							<a href="" class="button-secondary">Exclude</a>
+							<p>
 
-							<?php if ( $file->isFile() ) { ?>
+								<a href="" class="button-secondary">Exclude</a>
 
-								<?php echo esc_html( $file->getBasename() ); ?>
+								<?php if ( $file->isFile() ) { ?>
 
-								<span><?php echo esc_html( size_format( $file->getSize() ) ); ?></span>
+									<?php echo esc_html( $file->getBasename() ); ?>
 
-							<?php } ?>
+									<code><?php echo esc_html( size_format( $file->getSize() ) ); ?></code>
 
-							<?php if ( $file->isDir() ) { ?>
+								<?php } ?>
 
-								<a href=""><?php echo esc_html( $file->getBasename() ); ?></a>
+								<?php if ( $file->isDir() ) { ?>
 
-								<span><?php echo esc_html( size_format( get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' ) ) ); ?></span>
+									<a href=""><?php echo esc_html( $file->getBasename() ); ?></a>
 
-							<?php } ?>
+									<code><?php echo esc_html( size_format( get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' ) ) ); ?></code>
+
+								<?php } ?>
+
+							</p>
 
 						</li>
 

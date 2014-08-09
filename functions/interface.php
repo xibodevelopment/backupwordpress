@@ -200,10 +200,6 @@ function hmbkp_recursive_directory_scanner( $directory, $root = '' ) {
 		if ( $file_handle === '.' || $file_handle === '..' )
 			continue;
 
-		// ignore .git for now
-		if ( $file_handle === '.git' )
-			continue;
-
 		$file = new SplFileInfo( HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
 		$files[] = $file;
 
