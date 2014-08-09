@@ -2,7 +2,7 @@
 
 if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
-	<div class="error settings-error">
+	<div id="hmbkp-warning" class="error settings-error">
 
 	<?php foreach ( $hmbkp_form_errors as $error ) { ?>
 		<p><strong><?php echo esc_html( $error ); ?></strong></p></div>
@@ -29,7 +29,7 @@ if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
 				<td>
 
-					<select name="hmbkp_schedule_type" id="hmbkp-schedule-type">
+					<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
 
 						<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
 
@@ -177,7 +177,7 @@ if ( ! empty( $hmbkp_form_errors ) ) { ?>
 	</table>
 
 	<p class="submit">
-		<button type="button" class="button-secondary" href="<?php echo esc_url( remove_query_arg( array( 'hmbkp_panel', 'action' ) ) ); ?>">Close</button>
+		<a class="button-secondary" href="<?php echo esc_url( hmbkp_get_settings_url() ) ?>">Close</a>
 		<button type="submit" class="button-primary"><?php _e( 'Save Changes', 'hmbkp' ); ?></button>
 	</p>
 

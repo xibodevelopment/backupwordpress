@@ -1,125 +1,61 @@
-<form method="post" class="hmbkp-form">
+<form method="post" class="hmbkp-form hmbkp-edit-schedule-excludes-form" novalidate>
 
-    <input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
+	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
 
-    <fieldset class="hmbkp-edit-schedule-excludes-form">
+	<?php if ( $schedule->get_excludes() ) : ?>
 
-        <legend><?php _e( 'Manage Excludes', 'hmbkp' ); ?></legend>
+		<table class="widefat">
 
-        <div class="hmbkp_add_exclude_rule">
+			<thead>
+				<tr>
+					<th><?php _e( 'Excluded', 'hmbkp' ); ?></th>
+				</tr>
+			</thead>
 
-        	<label for="hmbkp-new-exclude-rule">
+			<tbody>
 
-                <?php _e( 'New Exclude Rule[s]', 'hmbkp' ); ?>
+				<?php foreach ( $schedule->get_excludes() as $key => $exclude ) : ?>
 
-                <input id="hmbkp-new-exclude-rule" type="text" class="code" placeholder="" />
+					<tr>
 
-                <button type="button" class="button-secondary hmbkp_preview_exclude_rule"><?php _e( 'Preview', 'hmbkp' ); ?></button>
+						<td data-hmbkp-exclude-rule="<?php echo esc_attr( $exclude ); ?>">
 
-                <span class="howto"><?php printf( __( 'Enter new exclude rules as a comma separated list, e.g. %s', 'hmbkp' ), '<code>.git/, *.mp3, wp-content/uploads/</code>' ); ?></span>
+						<span class="code"><?php echo esc_attr( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
 
-            </label>
+						<span><?php echo size_format( hmbkp_get_exclude_rule_file_size( $exclude, $schedule ) ); ?></span>
 
-        </div>
+						<?php if ( ( $schedule->get_path() === untrailingslashit( $exclude ) ) || ( in_array( $exclude, $schedule->default_excludes() ) ) ) : ?>
 
-        <table class="widefat">
+							<span class="reason"><?php _e( 'default', 'hmbkp' ); ?></span>
 
-        	<thead>
-        		<tr>
-        			<th><?php _e( 'Exclude Rules', 'hmbkp' ); ?></th>
-        		</tr>
-        	</thead>
+						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && strpos( HMBKP_EXCLUDE, $exclude ) !== false ) : ?>
 
-        	<tbody>
+							<span class="reason"><?php _e( 'defined', 'hmbkp' ); ?></span>
 
-    <?php foreach ( $schedule->get_excludes() as $key => $exclude ) : ?>
+						<?php else : ?>
 
-    			<tr>
-    			    <td data-hmbkp-exclude-rule="<?php echo esc_attr( $exclude ); ?>">
+							<a href="#" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
-    			    	<span class="code"><?php echo esc_attr( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
+						<?php endif; ?>
 
-    	<?php if ( ( $schedule->get_path() === untrailingslashit( $exclude ) ) || ( in_array( $exclude, $schedule->default_excludes() ) ) ) : ?>
+						</td>
 
-    					<span class="reason"><?php _e( 'default', 'hmbkp' ); ?></span>
+					</tr>
 
-    	<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && strpos( HMBKP_EXCLUDE, $exclude ) !== false ) : ?>
+				<?php endforeach; ?>
 
-    					<span class="reason"><?php _e( 'defined', 'hmbkp' ); ?></span>
+			</tbody>
 
-    	<?php else : ?>
+		</table>
 
-    					<a href="#" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+	<?php endif; ?>
 
-    	<?php endif; ?>
+		<div id="hmbkp_included_files">
 
-    				</td>
-    			</tr>
+			<?php hmbkp_file_list( $schedule, null, 'get_included_files' ); ?>
 
-    <?php endforeach; ?>
+		</div>
 
-        	</tbody>
-
-        </table>
-
-        <div class="hmbkp-tabs">
-
-        	<ul class="subsubsub">
-
-	<?php if ( $schedule->get_excluded_file_count() ) : ?>
-
-        		<li><a href="#hmbkp_excluded_files"><?php _e( 'Excluded', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_excluded_file_count() ); ?>)</li>
-
-    <?php endif; ?>
-
-        		<li><a href="#hmbkp_included_files"><?php _e( 'Included', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_included_file_count() ); ?>)</li>
-
-    <?php if ( $schedule->get_unreadable_file_count() ) : ?>
-
-                <li><a href="#hmbkp_unreadable_files"><?php _e( 'Unreadable', 'hmbkp' ); ?></a>(<?php esc_html_e( $schedule->get_unreadable_file_count() ); ?>)</li>
-
-    <?php endif; ?>
-
-        	</ul>
-
-	<?php if ( $schedule->get_excluded_file_count() ) : ?>
-
-        	<div id="hmbkp_excluded_files">
-
-        		<?php hmbkp_file_list( $schedule, null, 'get_excluded_files' ); ?>
-
-        	</div>
-
-    <?php endif; ?>
-
-        	<div id="hmbkp_included_files">
-
-        		<?php hmbkp_file_list( $schedule, null, 'get_included_files' ); ?>
-
-        	</div>
-
-    <?php if ( $schedule->get_unreadable_file_count() ) : ?>
-
-            <div id="hmbkp_unreadable_files">
-
-                <?php hmbkp_file_list( $schedule, null, 'get_unreadable_files' ); ?>
-
-                <p class="description"><?php _e( 'Unreadable files can\'t be backed up', 'hmbkp' ); ?></p>
-
-            </div>
-
-    <?php endif; ?>
-
-        <p><?php printf( __( 'Your site is %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . esc_html( $schedule->get_formatted_file_size( false ) ) . '</code>' ); ?></p>
-
-        </div>
-
-        <p class="submit">
-
-            <button type="submit" class="button-primary"><?php _e( 'Close', 'hmbkp' ); ?></button>
-
-        </p>
-
-    </fieldset>
+		<p><?php printf( __( 'Your site is now %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . esc_html( $schedule->get_formatted_file_size( false ) ) . '</code>' ); ?></p>
 
 </form>

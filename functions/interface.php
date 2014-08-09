@@ -275,7 +275,7 @@ function hmbkp_human_get_type( $type, HMBKP_Scheduled_Backup $schedule = null ) 
  * @param HMBKP_Scheduled_Backup $schedule
  * @return void
  */
-function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule ) { ?>
+function hmbkp_schedule_status( HMBKP_Scheduled_Backup $schedule ) { ?>
 
 	<span class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'hmbkp' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
 		<?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'hmbkp' ); ?>
@@ -368,8 +368,10 @@ function hmbkp_get_settings_url() {
 
 	$url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
 
-	if ( ! empty( $_REQUEST['hmbkp_schedule_id'] ) ) {
-		$url = add_query_arg( 'hmbkp_schedule_id', $_REQUEST['hmbkp_schedule_id'], $url );
+	HMBKP_schedules::get_instance()->refresh_schedules();
+
+	if ( ! empty( $_REQUEST['hmbkp_schedule_id'] ) && HMBKP_schedules::get_instance()->get_schedule( sanitize_text_field( $_REQUEST['hmbkp_schedule_id'] ) ) ) {
+		$url = add_query_arg( 'hmbkp_schedule_id', sanitize_text_field( $_REQUEST['hmbkp_schedule_id'] ), $url );
 	}
 
 	return $url;

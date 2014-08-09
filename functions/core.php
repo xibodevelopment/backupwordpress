@@ -209,22 +209,22 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a database backup daily and store backups
 	 * for the last 2 weeks
 	 */
-	$database_daily = new HMBKP_Scheduled_Backup( 'default-1' );
+	$database_daily = new HMBKP_Scheduled_Backup( (string) time() );
 	$database_daily->set_type( 'database' );
 	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
 	$database_daily->set_reoccurrence( 'hmbkp_daily' );
-	$database_daily->set_max_backups( 14 );
+	$database_daily->set_max_backups( 7 );
 	$database_daily->save();
 
 	/**
 	 * Schedule a complete backup to run weekly and store backups for
 	 * the last 3 months
 	 */
-	$complete_weekly = new HMBKP_Scheduled_Backup( 'default-2' );
+	$complete_weekly = new HMBKP_Scheduled_Backup( (string) ( time() + 1 ) );
 	$complete_weekly->set_type( 'complete' );
 	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
 	$complete_weekly->set_reoccurrence( 'hmbkp_weekly' );
-	$complete_weekly->set_max_backups( 12 );
+	$complete_weekly->set_max_backups( 3 );
 	$complete_weekly->save();
 
 	$schedules->refresh_schedules();

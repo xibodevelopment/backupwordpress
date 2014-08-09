@@ -231,7 +231,7 @@ function hmbkp_ajax_is_backup_in_progress() {
 	if ( ! $schedule->get_status() ) {
 		echo 0;
 	} else {
-		hmbkp_schedule_actions( $schedule );
+		hmbkp_schedule_status( $schedule );
 	}
 
 	die;
