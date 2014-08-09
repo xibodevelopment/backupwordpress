@@ -69,6 +69,7 @@
 			 * - Switch to Backdrop
 			 * - We need to way to track whether a directory tree is currently being analysed
 			 * - Calculate site size should use the same mechanism, that way excludes tree will mostly already be cached
+			 * - Live update the schedule sentence with correct size when a file/folder is excluded
 			 */
 
 			$directory = $schedule->get_root();
