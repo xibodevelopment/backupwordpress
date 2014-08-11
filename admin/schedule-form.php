@@ -1,3 +1,5 @@
+<h3>Settings</h3>
+
 <?php global $hmbkp_form_errors;
 
 if ( ! empty( $hmbkp_form_errors ) ) { ?>
