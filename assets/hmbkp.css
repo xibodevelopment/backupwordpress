@@ -47,6 +47,7 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 .hmbkp-upsell li { float: left; margin: 0 20px 20px 0; }
 .hmbkp-upsell img { display: block; margin: 0 auto; max-width: 120px; min-height: 60px; }
 .hmbkp-upsell .howto { font-weight: normal; display: inline; }
+
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 80px; display: block; float: left; }
 .hmbkp-schedule-sentence.hmbkp-error:before { content: "\2718"; }
 .hmbkp-schedule-sentence.hmbkp-running:before { width: 20px;height: 80px; margin: -1px 10px 0 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
@@ -56,11 +57,9 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 .hmbkp-schedule-sentence [title] { border-bottom: 1px dotted #CCC; cursor: help; }
 .hmbkp-schedule-sentence .hmbkp-status[title] { border-bottom: none; }
 .hmbkp-schedule-sentence .submit { margin: 0; padding: 0; }
+.hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 
 .hmbkp-schedule-settings { border-top: 1px solid #e5e5e5; margin: 20px -20px -20px; background-color: #f5f5f5; padding: 0 20px 20px; }
-
-.hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; }
-.hmbkp-schedule-actions { font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 
 .hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; position: relative; }
 .hmbkp-ajax-loading::after { content: ""; width: 16px; height: 16px; background-image: url('spinner-2x.gif'); background-size: 16px 16px; background-repeat: no-repeat; background-position: 0 0; position: absolute; right: -30px; top: 5px; }
@@ -68,7 +67,13 @@ form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; b
 .delete-action { color: #a00; }
 .delete-action:hover .delete-action:focus { color: red; }
 
-table.widefat tbody tr:nth-child(odd) { background-color: #f9f9f9 }
+.strikethrough { text-decoration: line-through; }
+
+table.widefat tbody tr:nth-child(even) { background-color: #f9f9f9 }
+.hmbkp-directory-list td:first-child, .hmbkp-directory-list th:first-child { width: 20px; padding-right: 0 }
+.hmbkp-directory-list thead tr:last-child { background-color: #f9f9f9; }
+.wp-core-ui table .button-secondary { line-height: 18px; height: 20px; }
+thead td { border-bottom: 1px solid #e1e1e1; }
 
 .hmbkp_add_exclude_rule .howto { line-height: 1.4em; margin-top: 10px; }
 label[for="hmbkp-new-exclude-rule"] { overflow: hidden; }
@@ -92,8 +97,6 @@ div.hmbkp_add_exclude_rule input { min-width: 240px; float: left; line-height: 1
 }
 .ui-tabs-panel { clear: both; }
 .ui-tabs-panel form { padding-top: 10px; }
-.hmbkp-edit-schedule-excludes-form td a, .hmbkp-edit-schedule-excludes-form td span.reason { float: right; }
-.hmbkp-edit-schedule-excludes-form td span.code { float: left; width: 255px; }
 .hmbkp-edit-schedule-excludes-form td span.reason { color: #CCC; }
 
 .server-info { overflow: auto; max-height: 320px; }

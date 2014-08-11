@@ -179,7 +179,11 @@ function hmbkp_backup_errors_message() {
 
 }
 
-function hmbkp_recursive_directory_scanner( $directory, $root = '' ) {
+/*
+ *
+ *
+ */
+function hmbkp_recursive_directory_filesize_scanner( $directory, $root = '' ) {
 
 	// Set the scanner as running
 	if ( ! $root ) {
@@ -212,6 +216,7 @@ function hmbkp_recursive_directory_scanner( $directory, $root = '' ) {
 
 			// Fire an action to trigger a scan of this sub directory
 			do_action( 'hmbkp_dir_scan', $file->getPathname(), $root );
+
 		}
 
 	endwhile;
@@ -238,7 +243,7 @@ function hmbkp_recursive_directory_scanner( $directory, $root = '' ) {
 	return $files;
 
 }
-add_action( 'wp_async_hmbkp_dir_scan', 'hmbkp_recursive_directory_scanner', 10, 2 );
+add_action( 'wp_async_hmbkp_dir_scan', 'hmbkp_recursive_directory_filesize_scanner', 10, 2 );
 
 class HMBKP_Async_Task extends WP_Async_Task {
 

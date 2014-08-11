@@ -4,13 +4,9 @@
 
 	<?php if ( $schedule->get_excludes() ) : ?>
 
-		<table class="widefat">
+		<h3><?php _e( 'Currently Excluded', 'hmbkp' ); ?></h3>
 
-			<thead>
-				<tr>
-					<th><?php _e( 'Currently Excluded', 'hmbkp' ); ?></th>
-				</tr>
-			</thead>
+		<table class="widefat">
 
 			<tbody>
 
@@ -22,7 +18,16 @@
 
 							<span class="code"><?php echo esc_attr( str_ireplace( $schedule->get_root(), '', $exclude ) ); ?></span>
 
+						</td>
+
+
+						<td>
+
 							<span><?php //echo size_format( hmbkp_get_exclude_rule_file_size( $exclude, $schedule ) ); ?></span>
+
+						</td>
+
+						<td>
 
 							<?php if ( ( $schedule->get_path() === untrailingslashit( $exclude ) ) || ( in_array( $exclude, $schedule->default_excludes() ) ) ) : ?>
 
@@ -50,95 +55,265 @@
 
 	<?php endif; ?>
 
-		<div id="hmbkp_included_files">
+	<div class="hmbkp-directory-list">
 
-			<?php
+		<h3>Directory Listing</h3>
 
-			/* TODO
-			 *
-			 * - Excluded files should be greyed out
-			 * - Exclude button should add an exclude rule for that exact path
-			 * - Style the file list
-			 * - Clicking a directory link should reload page with that path set as root
-			 * - Ability to re-calculate any directory size
-			 * - Ability to nagivate back up the tree
-			 * - Design treatment for unreadable files
-			 * - JS enhance
-			 * - Show full path in title attribute
-			 * - Visually de-emphasise small files, especially in a long list (ala Daisy Disk)
-			 * - Switch to Backdrop
-			 * - We need to way to track whether a directory tree is currently being analysed
-			 * - Calculate site size should use the same mechanism, that way excludes tree will mostly already be cached
-			 * - Live update the schedule sentence with correct size when a file/folder is excluded
-			 */
+		<p class="description">Here's a directory listing of all files on your site, you can browse through and exclude files or folders that you don't want included in your backup.</p>
 
-			$directory = $schedule->get_root();
+		<?php
 
-			clearstatcache();
+		/* TODO
+		 *
+		 * - Exclude button should add an exclude rule for that exact path
+		 * - Ability to re-calculate any directory size
+		 * - JS enhance
+		 * - Visually de-emphasise small files, especially in a long list (ala Daisy Disk)
+		 * - Switch to Backdrop
+		 * - We need to way to track whether a directory tree is currently being analysed
+		 * - Calculate site size should use the same mechanism, that way excludes tree will mostly already be cached
+		 * - Live update the schedule sentence with correct size when a file/folder is excluded
+		 * - Re-factor directory scanner to just calculate the size of each directory via JS
+		 * - Translations
+		 */
 
-			$files = hmbkp_recursive_directory_scanner( $directory );
+		// The directory to display
+		$directory = $schedule->get_root();
 
-			foreach ( $files as $file ) {
+		if ( isset( $_GET['hmbkp_directory_browse'] )  ) {
 
-				if ( $file->isFile() ) {
-					$ordered_files[ $file->getSize() ] = $file;
-				}
+			$untrusted_directory = urldecode( $_GET['hmbkp_directory_browse'] );
 
-				if ( $file->isDir() ) {
-					$ordered_files[ get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' ) ] = $file;
-				}
+			// Only allow real sub directories of the site root to be browsed
+			if ( strpos( $untrusted_directory, $schedule->get_root() ) !== false && is_dir( $untrusted_directory ) )
+				$directory = $untrusted_directory;
 
+		}
+
+		$exclude_string = $schedule->exclude_string( 'regex' );
+
+		// Clear the filesystem cache
+		clearstatcache();
+
+		// Kick off a recursive filesize scan
+		$files = hmbkp_recursive_directory_filesize_scanner( $directory );
+
+		foreach ( (array) $files as $file ) {
+
+			if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
+				$size = 0;
 			}
 
-			krsort( $ordered_files );
+			elseif ( $file->isFile() ) {
+				$size = $file->getSize();
+			}
 
-			if ( $ordered_files ) { ?>
+			elseif ( $file->isDir() ) {
+				$size = get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' );
+			}
 
-				<p>
-					<?php echo esc_html( $directory ); ?>
+			$ordered_files[ $size ] = $file;
 
-					<span><?php echo esc_html( size_format( get_transient( 'hmbkp_' . substr( sanitize_key( $directory ), -30 ) . '_filesize' ) ) ); ?></span>
+		}
 
-				</p>
+		// Sort files largest first
+		krsort( $ordered_files );
 
-				<ul>
+		if ( $ordered_files ) { ?>
 
-					<?php foreach ( $ordered_files as $file ) { ?>
+			<table class="widefat">
 
-						<li>
+				<thead>
 
-							<p>
+					<tr>
 
-								<a href="" class="button-secondary">Exclude</a>
+						<th></th>
+						<th scope="col">Name</th>
+						<th scope="col" class="column-format">Size</th>
+						<th scope="col" class="column-format">Permissions</th>
+						<th scope="col" class="column-format">Type</th>
+						<th scope="col" class="column-format">Status</th>
+					<tr>
 
-								<?php if ( $file->isFile() ) { ?>
+					<tr>
 
-									<?php echo esc_html( $file->getBasename() ); ?>
+						<th scope="row">
+							<div class="dashicons dashicons-admin-home"></div>
+						</th>
 
-									<code><?php echo esc_html( size_format( $file->getSize() ) ); ?></code>
+						<th scope="col" colspan="2">
+
+							<?php if ( $schedule->get_root() !== $directory ) { ?>
+
+								<a href="<?php echo add_query_arg( 'hmbkp_directory_browse', urlencode( $schedule->get_root() ) ); ?>"><?php echo esc_html( $schedule->get_root() ); ?></a> <code>/</code>
+
+								<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( $schedule->get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
+
+								foreach ( $parents as $directory_basename ) { ?>
+
+									<a href="<?php echo add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a> <code>/</code>
 
 								<?php } ?>
 
-								<?php if ( $file->isDir() ) { ?>
+								<?php echo esc_html( basename( $directory ) ); ?>
 
-									<a href=""><?php echo esc_html( $file->getBasename() ); ?></a>
+							<?php } else { ?>
 
-									<code><?php echo esc_html( size_format( get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' ) ) ); ?></code>
+								<?php echo esc_html( $schedule->get_root() ); ?>
+
+							<?php } ?>
+
+						</th>
+
+						<td>
+							<?php echo esc_html( substr( sprintf( '%o', fileperms( $schedule->get_root() ) ), -4 ) ); ?>
+						</td>
+
+						<td>
+
+							<?php if ( is_link( $schedule->get_root() ) ) {
+
+								_e( 'Symlink', 'hmbkp' );
+
+							} elseif ( is_dir( $schedule->get_root() ) ) {
+
+								_e( 'Folder', 'hmbkp' );
+
+							} ?>
+
+						</td>
+
+						<td></td>
+
+					</tr>
+
+				</thead>
+
+				<tbody>
+
+					<?php foreach ( $ordered_files as $file ) {
+
+						$is_excluded = $is_unreadable = false;
+
+						// Check if the file is excluded
+						if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) ) {
+							$is_excluded = true;
+						}
+
+						if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
+							$is_unreadable = true;
+						} ?>
+
+						<tr>
+
+							<td>
+
+								<?php if ( $is_unreadable ) { ?>
+
+									<div class="dashicons dashicons-dismiss"></div>
+
+								<?php } elseif ( $file->isFile() ) { ?>
+
+									<div class="dashicons dashicons-media-default"></div>
+
+								<?php } elseif ( $file->isDir() ) { ?>
+
+									<div class="dashicons dashicons-portfolio"></div>
 
 								<?php } ?>
 
-							</p>
+							</td>
 
-						</li>
+							<td>
+
+								<?php if ( $is_unreadable ) { ?>
+
+									<code class="strikethrough" title="<?php echo esc_attr( $file->getRealPath() ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
+
+								<?php } elseif ( $file->isFile() ) { ?>
+
+									<code title="<?php echo esc_attr( $file->getRealPath() ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
+
+								<?php } elseif ( $file->isDir() ) { ?>
+
+									<code title="<?php echo esc_attr( $file->getRealPath() ); ?>"><a href="<?php echo add_query_arg( 'hmbkp_directory_browse', urlencode( $file->getPathname() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></a></code>
+
+								<?php } ?>
+
+							</td>
+
+							<td class="column-format">
+
+								<?php if ( $file->isFile() ) {
+
+									$size = size_format( $file->getSize() );
+
+								} elseif ( $file->isDir() ) {
+
+									$size = size_format( get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' ) );
+
+								}
+
+								if ( ! $size ) {
+									$size = '0 B';
+								} ?>
+
+								<code><?php echo esc_html( $size ); ?></code>
+
+							</td>
+
+							<td>
+								<?php echo esc_html( substr( sprintf( '%o', $file->getPerms() ), -4 ) ); ?>
+							</td>
+
+							<td>
+
+								<?php if ( $file->isLink() ) { ?>
+
+									<span title="<?php echo esc_attr( $file->GetRealPath() ); ?>"><?php _e( 'Symlink', 'hmbkp' ); ?></span>
+
+								<?php } elseif ( $file->isDir() ) {
+
+									_e( 'Folder', 'hmbkp' );
+
+								} else {
+
+									_e( 'File', 'hmbkp' );
+
+								} ?>
+
+							</td>
+
+							<td class="column-format">
+
+								<?php if ( $is_unreadable ) { ?>
+
+									<strong>Unreadable</strong>
+
+								<?php } elseif ( $is_excluded ) { ?>
+
+									<strong>Excluded</strong>
+
+								<?php } else { ?>
+
+									<a href="" class="button-secondary">Exclude &rarr;</a>
+
+								<?php } ?>
+
+							</td>
+
+						</tr>
 
 					<?php } ?>
 
-				</ul>
+				</tbody>
 
-			<?php } ?>
+			</table>
 
-		</div>
+		<?php } ?>
 
-		<p><?php printf( __( 'Your site is now %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . esc_html( $schedule->get_formatted_file_size( false ) ) . '</code>' ); ?></p>
+	</div>
+
+	<p><?php printf( __( 'Your site is now %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . esc_html( $schedule->get_formatted_file_size( false ) ) . '</code>' ); ?></p>
 
 </form>
