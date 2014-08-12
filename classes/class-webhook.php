@@ -113,6 +113,8 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 
 		if ( $action == 'hmbkp_backup_complete' ) {
 
+			$webhook_url = $this->get_field_value( 'webhook_url' );
+
 			$file = $this->schedule->get_archive_filepath();
 
 			$sent = false;
@@ -135,7 +137,26 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 
 				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'hmbkp' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $error_message, 'support@hmn.md' );
 
-				return;
+				$data = array(
+					'type' => 'backup.success',
+					'payload' => array(
+						'id' => "backup-$start",
+						'start' => 0,
+						'end' => 0,
+						'download_url' => $download,
+						'type' => $this->schedule->get_type(),
+						'status' => array(
+							'message' => 'Backup complete',
+							'success' => true
+						)
+					)
+				);
+
+				$webhook_args = array(
+
+					'body' => $data
+
+				);
 
 			}
 
@@ -143,9 +164,30 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 			// If we didn't send then send just the notification
 			if ( ! $sent ) {
 
+				$data = array(
+					'type' => 'backup.error',
+					'payload' => array(
+						'id' => "backup-$start",
+						'start' => 0,
+						'end' => 0,
+						'download_url' => null,
+						'type' => $this->schedule->get_type(),
+						'status' => array(
+							'message' => 'Backup complete',
+							'success' => false
+						)
+					)
+				);
+
+				$webhook_args = array(
+
+					'body' => $data
+
+				);
 
 			}
 
+			wp_remote_post( $webhook_url, $webhook_args );
 		}
 
 	}
