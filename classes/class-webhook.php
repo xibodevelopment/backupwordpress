@@ -20,7 +20,7 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	public $isTabVisible = false;
 
 	/**
-	 * Output the email form field
+	 * Output the form field
 	 *
 	 * @access  public
 	 */
@@ -48,25 +48,7 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 		return '';
 	}
 
-	public static function constant() { ?>
-
-		<tr<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>>
-
-			<td><code>HMBKP_ATTACHMENT_MAX_FILESIZE</code></td>
-
-			<td>
-
-				<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?>
-					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
-				<?php } ?>
-
-				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'hmbkp' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
-
-			</td>
-
-		</tr>
-
-	<?php }
+	public static function constant() {}
 
 	/**
 	 * The sentence fragment that is output as part of the schedule sentence
@@ -75,15 +57,10 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	 */
 	public function display() {
 
-		if ( $emails = $this->get_email_address_array() ) {
+		$webhook_url = $this->get_field_value( 'webhook_url' );
 
-			$email = '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $emails ) ) . '</code>';
+		return sprintf( __( 'Notify this URL %s', 'hmbkp' ), $webhook_url );
 
-			return sprintf( __( 'Send an email notification to %s', 'hmbkp' ), $email );
-
-		}
-
-		return '';
 
 	}
 
@@ -91,11 +68,11 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	 * Used to determine if the service is in use or not
 	 */
 	public function is_service_active() {
-		return (bool) $this->get_email_address_array();
+		return strlen( $this->get_field_value( 'webhook_url' ) ) > 0;
 	}
 
 	/**
-	 * Validate the email and return an error if validation fails
+	 * Validate the URL and return an error if validation fails
 	 *
 	 * @param  array  &$new_data Array of new data, passed by reference
 	 * @param  array  $old_data  The data we are replacing
@@ -105,22 +82,16 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 
 		$errors = array();
 
-		if ( isset( $new_data['email'] ) ) {
+		if ( isset( $new_data['webhook_url'] ) ) {
 
-			if ( ! empty( $new_data['email'] ) ) {
+			if ( ! empty( $new_data['webhook_url'] ) ) {
 
-				foreach ( explode( ',', $new_data['email'] ) as $email ) {
+				if ( false === filter_var( $new_data['webhook_url'], FILTER_VALIDATE_URL ) ) {
+					$errors['webhook_url'] = sprintf( __( '%s isn\'t a valid URL',  'hmbkp' ), $new_data['webhook_url'] );
+				}
 
-					$email = trim( $email );
-
-					if ( ! is_email( $email ) ) {
-						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
-					}
-
-					if ( ! empty( $errors['email'] ) ) {
-						$new_data['email'] = '';
-					}
-
+				if ( ! empty( $errors['webhook_url'] ) ) {
+					$new_data['webhook_url'] = '';
 				}
 
 			}
@@ -132,19 +103,7 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	}
 
 	/**
-	 * Get an array or validated email address's
-	 * @return array An array of validated email address's
-	 */
-	private function get_email_address_array() {
-
-		$emails = array_map( 'trim', explode( ',', $this->get_field_value( 'email' ) ) );
-
-		return array_filter( array_unique( $emails ), 'is_email' );
-
-	}
-
-	/**
-	 * Fire the email notification on the hmbkp_backup_complete
+	 * Fire the webhook notification on the hmbkp_backup_complete
 	 *
 	 * @see  HM_Backup::do_action
 	 * @param  string $action The action received from the backup
@@ -198,4 +157,4 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 }
 
 // Register the service
-HMBKP_Services::register( __FILE__, 'HMBKP_Email_Service' );
+HMBKP_Services::register( __FILE__, 'HMBKP_Webhook_Service' );
