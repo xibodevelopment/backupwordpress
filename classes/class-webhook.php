@@ -17,7 +17,7 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	 * Determines whether to show or hide the service tab in destinations form
 	 * @var boolean
 	 */
-	public $isTabVisible = false;
+	public $is_tab_visible = false;
 
 	/**
 	 * Output the form field
