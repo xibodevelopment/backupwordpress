@@ -111,84 +111,79 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	 */
 	public function action( $action ) {
 
-		if ( $action == 'hmbkp_backup_complete' ) {
+		if ( 'hmbkp_backup_complete' !== $action )
+			return;
 
-			$webhook_url = $this->get_field_value( 'webhook_url' );
+		$webhook_url = $this->get_field_value( 'webhook_url' );
 
-			$file = $this->schedule->get_archive_filepath();
+		$file = $this->schedule->get_archive_filepath();
 
-			$sent = false;
+		$download = add_query_arg( 'hmbkp_download', base64_encode( $file ), HMBKP_ADMIN_URL );
 
-			$download = add_query_arg( 'hmbkp_download', base64_encode( $file ), HMBKP_ADMIN_URL );
-			$domain   = parse_url( home_url(), PHP_URL_HOST ) . parse_url( home_url(), PHP_URL_PATH );
+		$domain   = parse_url( home_url(), PHP_URL_HOST ) . parse_url( home_url(), PHP_URL_PATH );
 
-			// The backup failed, send a message saying as much
-			if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->get_errors(), $this->schedule->get_warnings() ) ) ) {
+		// The backup failed, send a message saying as much
+		if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->get_errors(), $this->schedule->get_warnings() ) ) ) {
 
-				$error_message = '';
+			$error_message = '';
 
-				foreach ( $errors as $error_set )
-					$error_message .= implode( "\n - ", $error_set );
+			foreach ( $errors as $error_set )
+				$error_message .= implode( "\n - ", $error_set );
 
-				if ( $error_message )
-					$error_message = ' - ' . $error_message;
+			if ( $error_message )
+				$error_message = ' - ' . $error_message;
 
-				$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
+			$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
 
-				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'hmbkp' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'hmbkp' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'hmbkp' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'hmbkp' ), home_url(), $error_message, 'support@hmn.md' );
-
-				$data = array(
-					'type' => 'backup.success',
-					'payload' => array(
-						'id' => "backup-$start",
-						'start' => 0,
-						'end' => 0,
-						'download_url' => $download,
-						'type' => $this->schedule->get_type(),
-						'status' => array(
-							'message' => 'Backup complete',
-							'success' => true
-						)
+			$data = array(
+				'type' => 'backup.error',
+				'payload' => array(
+					'id' => 'backup_' . $this->schedule->get_id(),
+					'start' => 0,
+					'end' => 0,
+					'download_url' => null,
+					'type' => $this->schedule->get_type(),
+					'status' => array(
+						'message' => $subject . ' - ' . $error_message,
+						'success' => false
 					)
-				);
+				)
+			);
 
-				$webhook_args = array(
+			$webhook_args = array(
 
-					'body' => $data
+				'body' => $data
 
-				);
+			);
 
-			}
-
-
-			// If we didn't send then send just the notification
-			if ( ! $sent ) {
-
-				$data = array(
-					'type' => 'backup.error',
-					'payload' => array(
-						'id' => "backup-$start",
-						'start' => 0,
-						'end' => 0,
-						'download_url' => null,
-						'type' => $this->schedule->get_type(),
-						'status' => array(
-							'message' => 'Backup complete',
-							'success' => false
-						)
+		} else {
+			$data = array(
+				'type' => 'backup.success',
+				'payload' => array(
+					'id' => 'backup_' . $this->schedule->get_id(),
+					'start' => 0,
+					'end' => 0,
+					'download_url' => $download,
+					'type' => $this->schedule->get_type(),
+					'status' => array(
+						'message' => 'Backup complete',
+						'success' => true
 					)
-				);
-
-				$webhook_args = array(
-
-					'body' => $data
-
-				);
-
-			}
-
-			wp_remote_post( $webhook_url, $webhook_args );
+				)
+			);
 		}
+
+
+		$webhook_args = array(
+
+			'body' => $data
+
+		);
+
+		$ret = wp_remote_post( $webhook_url, $webhook_args );
+
+		if ( is_wp_error( $ret ) )
+			return $ret->get_error_message();
 
 	}
 
