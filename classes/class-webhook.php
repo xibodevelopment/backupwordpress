@@ -183,7 +183,7 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 		$ret = wp_remote_post( $webhook_url, $webhook_args );
 
 		if ( is_wp_error( $ret ) )
-			return $ret->get_error_message();
+			$this->schedule->error( 'Webhook', sprintf( __( 'Error: %s', 'hmbkp' ), $ret->get_error_message() ) );
 
 	}
 
