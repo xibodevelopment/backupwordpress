@@ -78,14 +78,17 @@ module.exports = function (grunt) {
 							'!**/.{svn,git,bowerrc,jshintrc,travis.yml,gitignore}/**',
 							'!**/.DS_Store/**',
 							'!**composer{.json,.lock}**',
-							'!**package.json**',
+							'!**{bower,package}.json**',
 							'!**Gruntfile.js**',
 							'!**README.md**',
 							'!**phpunit**',
 							'!**/node_modules/**',
 							'!**/wp-assets/**',
 							'!**/tests/**',
-							'!**/build/**'
+							'!**/build/**',
+							'!**/bin/**',
+							'!**/readme/**',
+							'!**{readme,CONTRIBUTING}.md**'
 						],
 						dest: 'build'
 					}
