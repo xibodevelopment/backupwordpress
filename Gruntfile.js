@@ -150,6 +150,14 @@ module.exports = function (grunt) {
 					{
 						from: /'(?:<ul>)?<li>' \. .*__\( '(.*)', '.*' \) .* '<\/li>(?:<\/ul>)?' \./g,
 						to: '* $1'
+					},
+					{
+						from: /<\/?code>/g,
+						to: '`'
+					},
+					{
+						from: /<a href="(.*)" title="(.*)" target="_blank">(.*)<\/a>/g,
+						to: '[$3]($1 "$2")'
 					}
 				]
 			}
