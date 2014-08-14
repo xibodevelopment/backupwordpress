@@ -305,6 +305,53 @@ function hmbkp_ajax_cron_test() {
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
 
+function hmbkp_edit_schedule_services_submit() {
+
+	if ( ( empty( $_POST['action'] ) || $_POST['action'] !== 'hmbkp_edit_schedule_service' || empty( $_POST['hmbkp_schedule_id'] ) || ! check_admin_referer( 'hmbkp-edit_schedule_service' ) ) && ! defined( 'DOING_AJAX' ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['hmbkp_schedule_id'] ) && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		die;
+	}
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+
+	$errors = array();
+
+	// Save the service options
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+		$errors = array_merge( $errors, $service->save() );
+	}
+
+	$schedule->save();
+
+	if ( $errors && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		wp_send_json_error( $errors );
+
+		die();
+
+	} elseif ( $errors ) {
+
+		global $hmbkp_form_errors;
+		$hmbkp_form_errors = $errors;
+
+	} else {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			wp_send_json_success();
+		} else {
+			wp_safe_redirect( hmbkp_get_settings_url(), '303' );
+		}
+
+		die();
+
+	}
+
+}
+add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_services_submit' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_edit_schedule_services_submit' );
+
 /**
  * Catch the edit schedule form
  *
@@ -324,198 +371,179 @@ function hmbkp_edit_schedule_submit() {
 
 	$errors = array();
 
-	// Called from an extension
-	// @todo extensions
-	if ( isset( $_POST['is_destination_form'] ) ) {
+	$settings = array();
 
-		// Save the service options
-		foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
-			$errors = array_merge( $errors, $service->save() );
+	if ( isset( $_POST['hmbkp_schedule_type'] ) ) {
+
+		$schedule_type = sanitize_text_field( $_POST['hmbkp_schedule_type'] );
+
+		if ( ! trim( $schedule_type ) ) {
+			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
 		}
 
-		$schedule->save();
-
-		if ( empty( $errors ) ) {
-			wp_send_json_success();
-		} else {
-			wp_send_json_error( $errors );
+		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) ) {
+			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
 		}
 
-	} else {
-
-		$settings = array();
-
-		if ( isset( $_POST['hmbkp_schedule_type'] ) ) {
-
-			$schedule_type = sanitize_text_field( $_POST['hmbkp_schedule_type'] );
-
-			if ( ! trim( $schedule_type ) ) {
-				$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
-			}
-
-			elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) ) {
-				$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
-			}
-
-			else {
-				$settings['type'] = $schedule_type;
-			}
-
+		else {
+			$settings['type'] = $schedule_type;
 		}
-
-		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] ) ) {
-
-			$schedule_recurrence_type = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] );
-
-			if ( empty( $schedule_recurrence_type ) ) {
-				$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
-			}
-
-			elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $schedule_recurrence_type !== 'manually' ) {
-				$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
-			}
-
-			else {
-				$settings['recurrence'] = $schedule_recurrence_type;
-			}
-
-		}
-
-			if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] ) ) {
-
-				$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
-
-				if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
-					$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'hmbkp' );
-				}
-
-				else {
-					$settings['start_time']['day_of_week'] = $day_of_week;
-				}
-
-			}
-
-			if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
-
-				$day_of_month = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
-
-				$options = array(
-					'min_range' => 1,
-					'max_range' => 31
-				);
-
-				if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-					$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'hmbkp' );
-				}
-
-				else {
-					$settings['start_time']['day_of_month'] = $day_of_month;
-				}
-
-			}
-
-			if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
-
-				$hours = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
-
-				$options = array(
-					'min_range' => 0,
-					'max_range' => 23
-				);
-
-				if ( false === filter_var( $hours, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-					$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 0 and 23', 'hmbkp' );
-				}
-
-				else {
-					$settings['start_time']['hours'] = $hours;
-				}
-
-			}
-
-			if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
-
-				$minutes = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
-
-				$options = array(
-					'min_range' => 0,
-					'max_range' => 59
-				);
-
-				if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-					$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'hmbkp' );
-				}
-
-				else {
-					$settings['start_time']['minutes'] = $minutes;
-				}
-
-			}
-
-
-		if ( isset( $_POST['hmbkp_schedule_max_backups'] ) ) {
-
-			$max_backups = sanitize_text_field( $_POST['hmbkp_schedule_max_backups'] );
-
-			if ( empty( $max_backups ) ) {
-				$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
-			}
-
-			elseif ( ! is_numeric( $max_backups ) ) {
-				$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
-			}
-
-			elseif ( ! ( $max_backups >= 1 ) ) {
-				$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
-			}
-
-			else {
-				$settings['max_backups'] = absint( $max_backups );
-			}
-
-		}
-
-		// Save the service options
-		foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
-			$errors = array_merge( $errors, $service->save() );
-		}
-
-		if ( ! empty( $settings['recurrence'] ) && ! empty( $settings['start_time'] ) ) {
-
-			// Calculate the start time depending on the recurrence
-			$start_time = hmbkp_determine_start_time( $settings['recurrence'], $settings['start_time'] );
-
-			if ( $start_time ) {
-				$schedule->set_schedule_start_time( $start_time );
-			}
-
-		}
-
-		if ( ! empty( $settings['recurrence'] ) ) {
-			$schedule->set_reoccurrence( $settings['recurrence'] );
-		}
-
-		if ( ! empty( $settings['type'] ) ) {
-			$schedule->set_type( $settings['type'] );
-		}
-
-		if ( ! empty( $settings['max_backups'] ) ) {
-			$schedule->set_max_backups( $settings['max_backups'] );
-		}
-
-	//	var_dump( $settings );
-	//	exit;
-
-		// Save the new settings
-		$schedule->save();
-
-		// Remove any old backups in-case max backups was reduced
-		$schedule->delete_old_backups();
 
 	}
 
+	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] ) ) {
+
+		$schedule_recurrence_type = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] );
+
+		if ( empty( $schedule_recurrence_type ) ) {
+			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
+		}
+
+		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $schedule_recurrence_type !== 'manually' ) {
+			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
+		}
+
+		else {
+			$settings['recurrence'] = $schedule_recurrence_type;
+		}
+
+	}
+
+		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] ) ) {
+
+			$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
+
+			if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
+				$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'hmbkp' );
+			}
+
+			else {
+				$settings['start_time']['day_of_week'] = $day_of_week;
+			}
+
+		}
+
+		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
+
+			$day_of_month = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
+
+			$options = array(
+				'min_range' => 1,
+				'max_range' => 31
+			);
+
+			if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
+				$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'hmbkp' );
+			}
+
+			else {
+				$settings['start_time']['day_of_month'] = $day_of_month;
+			}
+
+		}
+
+		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
+
+			$hours = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
+
+			$options = array(
+				'min_range' => 0,
+				'max_range' => 23
+			);
+
+			if ( false === filter_var( $hours, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
+				$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 0 and 23', 'hmbkp' );
+			}
+
+			else {
+				$settings['start_time']['hours'] = $hours;
+			}
+
+		}
+
+		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
+
+			$minutes = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
+
+			$options = array(
+				'min_range' => 0,
+				'max_range' => 59
+			);
+
+			if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
+				$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'hmbkp' );
+			}
+
+			else {
+				$settings['start_time']['minutes'] = $minutes;
+			}
+
+		}
+
+
+	if ( isset( $_POST['hmbkp_schedule_max_backups'] ) ) {
+
+		$max_backups = sanitize_text_field( $_POST['hmbkp_schedule_max_backups'] );
+
+		if ( empty( $max_backups ) ) {
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
+		}
+
+		elseif ( ! is_numeric( $max_backups ) ) {
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
+		}
+
+		elseif ( ! ( $max_backups >= 1 ) ) {
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
+		}
+
+		else {
+			$settings['max_backups'] = absint( $max_backups );
+		}
+
+	}
+
+	// Save the service options
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+		$errors = array_merge( $errors, $service->save() );
+	}
+
+	if ( ! empty( $settings['recurrence'] ) && ! empty( $settings['start_time'] ) ) {
+
+		// Calculate the start time depending on the recurrence
+		$start_time = hmbkp_determine_start_time( $settings['recurrence'], $settings['start_time'] );
+
+		if ( $start_time ) {
+			$schedule->set_schedule_start_time( $start_time );
+		}
+
+	}
+
+	if ( ! empty( $settings['recurrence'] ) ) {
+		$schedule->set_reoccurrence( $settings['recurrence'] );
+	}
+
+	if ( ! empty( $settings['type'] ) ) {
+		$schedule->set_type( $settings['type'] );
+	}
+
+	if ( ! empty( $settings['max_backups'] ) ) {
+		$schedule->set_max_backups( $settings['max_backups'] );
+	}
+
+//	var_dump( $settings );
+//	exit;
+
+	// Save the new settings
+	$schedule->save();
+
+	// Remove any old backups in-case max backups was reduced
+	$schedule->delete_old_backups();
+
 	if ( $errors && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		wp_send_json_error( $errors );
+
+		die();
 
 	} elseif ( $errors ) {
 
@@ -706,7 +734,7 @@ add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
 /**
  * Receive the heartbeat and return backup status
  */
-function hmbkp_heartbeat_received( $response, $data ) {	
+function hmbkp_heartbeat_received( $response, $data ) {
 	if( !empty( $data['hmbkp_is_in_progress'] ) ) {
 		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
 		if ( ! $schedule->get_status() ) {

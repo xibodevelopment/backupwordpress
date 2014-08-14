@@ -1,14 +1,14 @@
 <h3>Settings</h3>
 
-<?php global $hmbkp_form_errors;
+<?php global $hmbkp_form_errors; ?>
 
-if ( ! empty( $hmbkp_form_errors ) ) { ?>
+<?php if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
 	<div id="hmbkp-warning" class="error settings-error">
 
-	<?php foreach ( $hmbkp_form_errors as $error ) { ?>
-		<p><strong><?php echo esc_html( $error ); ?></strong></p>
-	<?php } ?>
+		<?php foreach ( $hmbkp_form_errors as $error ) { ?>
+			<p><strong><?php echo esc_html( $error ); ?></strong></p>
+		<?php } ?>
 
 	</div>
 
@@ -59,15 +59,15 @@ if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
 						<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-				<?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+						<?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-						<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
+								<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
 
-							<?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?>
+									<?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?>
 
-						</option>
+								</option>
 
-				<?php endforeach; ?>
+						<?php endforeach; ?>
 
 					</select>
 
