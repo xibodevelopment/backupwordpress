@@ -115,12 +115,12 @@ class HMBKP_Email_Service extends HMBKP_Service {
 						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
 					}
 
-					if ( ! empty( $errors['email'] ) ) {
-						$new_data['email'] = '';
-					}
-
 				}
 
+			}
+
+			if ( ! empty( $errors['email'] ) ) {
+				$new_data['email'] = '';
 			}
 
 			return $errors;
