@@ -251,13 +251,21 @@ function hmbkp_recursive_directory_filesize_scanner( $directory ) {
 
 	$sanitized_directory = substr( sanitize_key( $directory ), -30 );
 
+	// Use the cached directory size if available
+	$directory_size = get_transient( 'hmbkp_' . $sanitized_directory . '_filesize' );
+
+	if ( $directory_size !== false ) {
+
+		delete_option( 'hmbkp_filesize_scan_running_on_' . $sanitized_directory );
+
+		return $directory_size;
+
+	}
+
 	update_option( 'hmbkp_filesize_scan_running_on_' . $sanitized_directory, true );
 
 	$total_filesize = 0;
 	$files = array();
-
-	// If we have the total filesize for this directory in cache then lets get it
-	$directory_size = get_transient( 'hmbkp_' . $sanitized_directory . '_filesize' );
 
 	clearstatcache();
 
