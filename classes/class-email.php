@@ -150,7 +150,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	 */
 	public function action( $action ) {
 
-		if ( $action == 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
+		if ( $action === 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
 
 			$file = $this->schedule->get_archive_filepath();
 
