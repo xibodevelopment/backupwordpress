@@ -74,6 +74,7 @@ table.widefat tbody tr:nth-child(even) { background-color: #f9f9f9 }
 .hmbkp-directory-list thead tr:last-child { background-color: #f9f9f9; }
 .wp-core-ui table .button-secondary { line-height: 18px; height: 20px; }
 thead td { border-bottom: 1px solid #e1e1e1; }
+.column-format .spinner { display: block; float: left; margin: 0; }
 
 .hmbkp_add_exclude_rule .howto { line-height: 1.4em; margin-top: 10px; }
 label[for="hmbkp-new-exclude-rule"] { overflow: hidden; }
@@ -124,7 +125,7 @@ pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px
 }
 
 @media only screen and ( min-device-width : 320px ) and ( max-device-width : 480px ) {
-	
-	#intercom-info { display: none; }	
+
+	#intercom-info { display: none; }
 
 }

@@ -183,18 +183,83 @@ function hmbkp_backup_errors_message() {
  *
  *
  */
-function hmbkp_recursive_directory_filesize_scanner( $directory, $root = '' ) {
+function hmbkp_directory_by_total_filesize( $directory ) {
 
-	// Set the scanner as running
-	if ( ! $root ) {
-		$root = $directory;
-		update_option( 'hmbkp_exclude_scanner_running', true );
+	$files = $files_with_no_size = $empty_files = $files_with_size = $unreadable_files = array();
+
+	clearstatcache();
+
+	$handle = opendir( $directory );
+
+	while ( $file_handle = readdir( $handle ) ) {
+
+		// Ignore current dir and containing dir
+		if ( $file_handle === '.' || $file_handle === '..' )
+			continue;
+
+		$file = new SplFileInfo( HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
+
+		// Unreadable files are moved to the bottom
+		if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
+			$unreadable_files[] = $file;
+			continue;
+		}
+
+		$filesize = hmbkp_total_filesize( $file );
+
+		if ( $filesize ) {
+
+			// If there are two files with exactly the same filesize then let's keep increasing the filesize until we don't have a clash
+			while ( array_key_exists( $filesize, $files_with_size ) ) {
+				$filesize++;
+			}
+
+			$files_with_size[ $filesize ] = $file;
+
+		} elseif ( $filesize === 0 ) {
+
+			$empty_files[] = $file;
+
+		} else {
+
+			$files_with_no_size[] = $file;
+
+		}
+
 	}
 
-	$filesize = false;
-	$files = array();
+	closedir( $handle );
+
+	// Sort files largest first
+	krsort( $files_with_size );
+
+	// Add 0 byte files / directories to the bottom
+	$files = $files_with_size + array_merge( $empty_files, $unreadable_files );
+
+	// Add directories that are still calculating to the top
+	if ( $files_with_no_size ) {
+		foreach ( $files_with_no_size as $file ) {
+			array_unshift( $files, $file );
+		}
+	}
+
+	return $files;
+
+}
+
+function hmbkp_recursive_directory_filesize_scanner( $directory ) {
+
 	$sanitized_directory = substr( sanitize_key( $directory ), -30 );
+
+	update_option( 'hmbkp_filesize_scan_running_on_' . $sanitized_directory, true );
+
+	$total_filesize = 0;
+	$files = array();
+
+	// If we have the total filesize for this directory in cache then lets get it
 	$directory_size = get_transient( 'hmbkp_' . $sanitized_directory . '_filesize' );
+
+	clearstatcache();
 
 	$handle = opendir( $directory );
 
@@ -205,45 +270,67 @@ function hmbkp_recursive_directory_filesize_scanner( $directory, $root = '' ) {
 			continue;
 
 		$file = new SplFileInfo( HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
-		$files[] = $file;
 
-		// If we don't have a cached filesize for this directory then let's work it out
-		if ( $directory_size === false ) {
-			$filesize += $file->getSize();
-		}
+		$total_filesize += $file->getSize();
 
+		// We need to recursively calculate the size of all files in a subdirectory
 		if ( $file->isDir() ) {
-
-			// Fire an action to trigger a scan of this sub directory
-			do_action( 'hmbkp_dir_scan', $file->getPathname(), $root );
-
+			$total_filesize += hmbkp_recursive_directory_filesize_scanner( $file );
 		}
 
 	endwhile;
 
 	closedir( $handle );
 
-	// If we have a filesize then let's cache it and also update any cached parent directory filesizes
-	if ( $filesize !== false ) {
+	// If we have a filesize then let's cache it
+	if ( $total_filesize !== false ) {
+		set_transient( 'hmbkp_' . $sanitized_directory . '_filesize', (string) $total_filesize, WEEK_IN_SECONDS );
+	}
 
-		set_transient( 'hmbkp_' . $sanitized_directory . '_filesize', $filesize, WEEK_IN_SECONDS );
+	delete_option( 'hmbkp_filesize_scan_running_on_' . $sanitized_directory );
 
-		while ( $directory !== $root ) {
+	return $total_filesize;
 
-			$directory = dirname( $directory );
-			$sanitized_directory = substr( sanitize_key( $directory ), -30 );
+}
+add_action( 'wp_async_hmbkp_dir_scan', 'hmbkp_recursive_directory_filesize_scanner', 10, 2 );
 
-			$parent_size = get_transient( 'hmbkp_' . $sanitized_directory . '_filesize' );
-			set_transient( 'hmbkp_' . $sanitized_directory . '_filesize', $parent_size + $filesize, WEEK_IN_SECONDS );
+function hmbkp_total_filesize( SplFileInfo $file ) {
+
+	if ( ! file_exists( $file->getPathname() ) ) {
+		return false;
+	}
+
+	if ( $file->isFile() ) {
+		return $file->getSize();
+	}
+
+	if ( $file->isDir() ) {
+
+		$size = get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' );
+
+		if ( $size !== false ) {
+			return (int) $size;
+
+		} else {
+
+			$sanitized_directory = substr( sanitize_key( $file->getPathname() ), -30 );
+
+			update_option( 'hmbkp_filesize_scan_running_on_' . $sanitized_directory, true );
+
+			// Fire an action to trigger a scan of this sub directory
+			do_action( 'hmbkp_dir_scan', $file->getPathname() );
+
+			return false;
 
 		}
 
 	}
 
-	return $files;
-
 }
-add_action( 'wp_async_hmbkp_dir_scan', 'hmbkp_recursive_directory_filesize_scanner', 10, 2 );
+
+function hmbkp_is_total_filesize_being_calculated( $pathname ) {
+	return (bool) get_option( 'hmbkp_filesize_scan_running_on_' . substr( sanitize_key( $pathname ), -30 ) );
+}
 
 class HMBKP_Async_Task extends WP_Async_Task {
 
@@ -261,7 +348,6 @@ class HMBKP_Async_Task extends WP_Async_Task {
 	protected function prepare_data( $data ) {
 
 		$directory = $data[0];
-		$root      = $data[1];
 
 		/**
 		 * Internally, the library uses a protected property $_body_data
@@ -279,7 +365,7 @@ class HMBKP_Async_Task extends WP_Async_Task {
 		}
 
 		// Store post ids in an array inside the body data
-		$real_data['directories'][ $directory ] = $root;
+		$real_data['directories'][] = $directory;
 
 		return $real_data;
 
@@ -292,12 +378,11 @@ class HMBKP_Async_Task extends WP_Async_Task {
 
 		$directories = $_POST['directories'];
 
-		foreach ( $directories as $directory => $root ) {
+		foreach ( $directories as $directory ) {
 
 			do_action(
 				"wp_async_$this->action",
-				$directory,
-				$root
+				$directory
 			);
 
 		}

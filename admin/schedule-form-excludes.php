@@ -92,34 +92,10 @@
 
 		$exclude_string = $schedule->exclude_string( 'regex' );
 
-		// Clear the filesystem cache
-		clearstatcache();
-
 		// Kick off a recursive filesize scan
-		$files = hmbkp_recursive_directory_filesize_scanner( $directory );
+		$files = hmbkp_directory_by_total_filesize( $directory );
 
-		foreach ( (array) $files as $file ) {
-
-			if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
-				$size = 0;
-			}
-
-			elseif ( $file->isFile() ) {
-				$size = $file->getSize();
-			}
-
-			elseif ( $file->isDir() ) {
-				$size = get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' );
-			}
-
-			$ordered_files[ $size ] = $file;
-
-		}
-
-		// Sort files largest first
-		krsort( $ordered_files );
-
-		if ( $ordered_files ) { ?>
+		if ( $files ) { ?>
 
 			<table class="widefat">
 
@@ -191,7 +167,7 @@
 
 				<tbody>
 
-					<?php foreach ( $ordered_files as $file ) {
+					<?php foreach ( $files as $size => $file ) {
 
 						$is_excluded = $is_unreadable = false;
 
@@ -244,21 +220,30 @@
 
 							<td class="column-format">
 
-								<?php if ( $file->isFile() ) {
+								<?php if ( $file->isDir() && hmbkp_is_total_filesize_being_calculated( $file->getPathname() ) ) { ?>
 
-									$size = size_format( $file->getSize() );
+									<span class="spinner"></span>
 
-								} elseif ( $file->isDir() ) {
+								<?php } else {
 
-									$size = size_format( get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' ) );
+									$size = hmbkp_total_filesize( $file );
 
-								}
+									if ( $size !== false ) {
 
-								if ( ! $size ) {
-									$size = '0 B';
+										$size = size_format( $size );
+
+										if ( ! $size ) {
+											$size = '0 B';
+										} ?>
+
+									<code><?php echo esc_html( $size ); ?></code>
+
+									<?php } else { ?>
+
+										--
+
+									<?php }
 								} ?>
-
-								<code><?php echo esc_html( $size ); ?></code>
 
 							</td>
 
@@ -288,15 +273,15 @@
 
 								<?php if ( $is_unreadable ) { ?>
 
-									<strong>Unreadable</strong>
+									<strong title="<?php _e( 'Unreadable files won\'t be backed up.', 'hmbkp' ); ?>"><?php _e( 'Unreadable', 'hmbkp' ); ?></strong>
 
 								<?php } elseif ( $is_excluded ) { ?>
 
-									<strong>Excluded</strong>
+									<strong><?php _e( 'Excluded', 'hmbkp' ); ?></strong>
 
 								<?php } else { ?>
 
-									<a href="" class="button-secondary">Exclude &rarr;</a>
+									<a href="" class="button-secondary"><?php _e( 'Exclude &rarr;', 'hmbkp' ); ?></a>
 
 								<?php } ?>
 
