@@ -14,12 +14,6 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	public $name = 'Email';
 
 	/**
-	 * Determines whether to show or hide the service tab in destinations form
-	 * @var boolean
-	 */
-	public $isTabVisible = false;
-
-	/**
 	 * Output the email form field
 	 *
 	 * @access  public
