@@ -7,13 +7,13 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p><strong>' . __( 'What if I want to back up my site to another destination?', 'hmbkp' ) . '</strong></p>' .
 
-     '<p>' . __( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: <a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin" target="_blank" title="BackUpWordPress Homepage">https://bwp.hmn.md</a>', 'hmbkp' ) . '</p>' .
+     '<p>' . __( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: <a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin" title="BackUpWordPress Homepage" target="_blank">https://bwp.hmn.md</a>', 'hmbkp' ) . '</p>' .
 
      '<p><strong>' . __( 'How do I restore my site from a backup?', 'hmbkp' ) . '</strong></p>' .
 
      '<p>' . __( 'You need to download the latest backup file either by clicking download on the backups page or via <code>FTP</code>. <code>Unzip</code> the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely <code>phpMyAdmin</code>).', 'hmbkp' ) . '</p>' .
 
-     '<p>' . __( 'See this guide for more details - <a href="https://bwp.hmn.md/support-center/restore-backup/" target="_blank">How to restore from backup</a>.', 'hmbkp' ) . '</p>' .
+     '<p>' . __( 'See this guide for more details - <a href="https://bwp.hmn.md/support-center/restore-backup/" title="Go to support center" target="_blank">How to restore from backup</a>.', 'hmbkp' ) . '</p>' .
 
      '<p><strong>' . __( 'Does BackUpWordPress back up the backups directory?', 'hmbkp' ) . '</strong></p>' .
 
