@@ -122,7 +122,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 	}
 
 	if ( $services ) {
-		$sentence .= sprintf( __( 'Send a copy of each backup to %6$s.', 'hmbkp' ), implode( ', ', array_filter( $services ) ) );
+		$sentence .= sprintf( __( 'Send a copy of each backup to %s.', 'hmbkp' ), implode( ', ', array_filter( $services ) ) );
 	}
 
 	echo $sentence; ?>
