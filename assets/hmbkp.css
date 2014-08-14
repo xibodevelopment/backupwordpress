@@ -99,7 +99,7 @@ div.hmbkp_add_exclude_rule input { min-width: 240px; float: left; line-height: 1
 .ui-tabs-panel form { padding-top: 10px; }
 .hmbkp-edit-schedule-excludes-form td span.reason { color: #CCC; }
 
-.server-info { overflow: auto; max-height: 320px; }
+.server-info { overflow: auto; max-height: 50%; outline: black 1px solid; }
 .server-info pre { max-height: 100px; overflow-x:hidden; }
 
 pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; word-wrap: normal !important; }
@@ -120,5 +120,11 @@ pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px
 		margin: 10px 0;
 		padding: 10px;
 	}
+
+}
+
+@media only screen and ( min-device-width : 320px ) and ( max-device-width : 480px ) {
+	
+	#intercom-info { display: none; }	
 
 }
