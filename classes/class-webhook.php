@@ -14,6 +14,13 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	public $name = 'Webhook';
 
 	/**
+	 * The WPR API key, used to hash the payload.
+	 *
+	 * @var string
+	 */
+	protected $wpr_api_key = '';
+
+	/**
 	 * Determines whether to show or hide the service tab in destinations form
 	 * @var boolean
 	 */
@@ -48,6 +55,9 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 		return '';
 	}
 
+	/**
+	 *
+	 */
 	public static function constant() {}
 
 	/**
@@ -135,10 +145,10 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 
 			$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
 
-			$data = array(
+			$body = array(
 				'type' => 'backup.error',
 				'payload' => array(
-					'id' => 'backup_' . $this->schedule->get_id(),
+					'id' => 'backup_' . pathinfo( $file, PATHINFO_FILENAME ),
 					'start' => 0,
 					'end' => 0,
 					'download_url' => null,
@@ -150,14 +160,9 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 				)
 			);
 
-			$webhook_args = array(
-
-				'body' => $data
-
-			);
-
 		} else {
-			$data = array(
+
+			$body = array(
 				'type' => 'backup.success',
 				'payload' => array(
 					'id' => 'backup_' . $this->schedule->get_id(),
@@ -171,14 +176,16 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 					)
 				)
 			);
+
 		}
 
+		$signature = hash_hmac( 'sha1', $body, $this->wpr_api_key );
 
-		$webhook_args = array(
+		$data = json_encode( $body );
 
-			'body' => $data
+		$webhook_args = array( 'body' => $data );
 
-		);
+		header( 'X-BWP-Signature', $signature );
 
 		$ret = wp_remote_post( $webhook_url, $webhook_args );
 
@@ -187,8 +194,33 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 
 	}
 
+	/**
+	 * Configure the webhook settings for WPR.
+	 */
+	public function configure_wp_remote() {
+
+		if ( ! defined( 'WPRP_PLUGIN_SLUG' ) )
+			return;
+
+		if ( false === ( $this->wpr_api_key = get_option( 'wpr_api_key' ) ) )
+			return;
+
+
+		$this->update( array( 'webhook_url' => 'http://ninjaforms.dev' ) );
+		$this->save();
+
+	}
+
+	/**
+	 * Sends the service information to intercom.
+	 *
+	 * @return array
+	 */
 	public static function intercom_data() { return array(); }
 
+	/**
+	 * Outputs the service information for the help tab.
+	 */
 	public static function intercom_data_html() {}
 
 }
