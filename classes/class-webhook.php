@@ -102,6 +102,8 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 
 				if ( ! empty( $errors['webhook_url'] ) ) {
 					$new_data['webhook_url'] = '';
+				} else {
+					$new_data['webhook_url'] = esc_url_raw( $new_data['webhook_url'] );
 				}
 
 			}
