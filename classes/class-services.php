@@ -26,6 +26,11 @@ abstract class HMBKP_Service {
 	 */
 	protected $schedule;
 
+	public function __construct( $schedule ) {
+
+		$this->set_schedule( $schedule );
+	}
+
 	/**
 	 * Used to determine if the service is in use or not
 	 */
@@ -293,10 +298,7 @@ class HMBKP_Services {
 		/**
 		 * @var HMBKP_Service
 		 */
-		$class = new $classname;
-
-		if ( self::instance()->schedule )
-			$class->set_schedule( self::instance()->schedule );
+		$class = new $classname( self::instance()->schedule );
 
 		return $class;
 
