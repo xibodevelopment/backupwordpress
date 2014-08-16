@@ -213,7 +213,7 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 			return;
 
 
-		$new_data = array( 'webhook_url' => home_url() );
+		$new_data = array( 'webhook_url' => 'http://ninjaforms.dev/bwp-endpoint' );
 
 		$this->schedule->set_service_options( get_class( $this ), $new_data );
 
