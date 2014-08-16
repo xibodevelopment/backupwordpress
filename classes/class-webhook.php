@@ -181,7 +181,7 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 
 		}
 
-		$signature = hash_hmac( 'sha1', $body, $this->wpr_api_key );
+		$signature = hash_hmac( 'sha1', json_encode( $body ), $this->wpr_api_key );
 
 		$data = json_encode( $body );
 
