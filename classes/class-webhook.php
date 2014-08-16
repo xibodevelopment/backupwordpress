@@ -26,6 +26,11 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 	 */
 	public $is_tab_visible = false;
 
+	public function __construct( $schedule ) {
+		parent::__construct( $schedule );
+		$this->configure_wp_remote();
+	}
+
 	/**
 	 * Output the form field
 	 *
@@ -208,8 +213,9 @@ class HMBKP_Webhook_Service extends HMBKP_Service {
 			return;
 
 
-		$this->update( array( 'webhook_url' => 'http://ninjaforms.dev' ) );
-		$this->save();
+		$new_data = array( 'webhook_url' => home_url() );
+
+		$this->schedule->set_service_options( get_class( $this ), $new_data );
 
 	}
 
