@@ -59,7 +59,7 @@
 
 		<div data-hmbkp-schedule-id="<?php echo esc_attr( $schedule->get_id() ); ?>" class="hmbkp_schedule">
 
-			<?php require( HMBKP_PLUGIN_PATH . '/admin/schedule.php' ); ?>
+		<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule.php' ); ?>
 
 			<table class="widefat">
 

@@ -23,7 +23,7 @@ add_action( 'admin_menu', 'hmbkp_admin_menu' );
  * @return null
  */
 function hmbkp_manage_backups() {
-	require_once( HMBKP_PLUGIN_PATH . '/admin/page.php' );
+	require_once( HMBKP_PLUGIN_PATH . 'admin/page.php' );
 }
 
 /**

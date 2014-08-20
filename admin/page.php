@@ -18,7 +18,7 @@
 
 <?php if ( hmbkp_possible() ) : ?>
 
-	<?php include_once( HMBKP_PLUGIN_PATH . '/admin/backups.php' ); ?>
+	<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
 
 	<p class="howto"><?php printf( __( 'If you\'re finding BackUpWordPress useful, please %1$s rate it on the plugin directory. %2$s', 'hmbkp' ), '<a href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">', '</a>' ); ?></p>
 
