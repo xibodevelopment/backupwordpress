@@ -918,12 +918,18 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->find_backup_folders( 'backupwordpress-', $hmn_upload_dir['path'] )
 		);
 
-
 		if ( ! empty( $hmbkp_folders ) ) {
 			foreach ( $hmbkp_folders as $path ) {
 				$excluded[] = $path;
 			}
+		}
 
+		$backupwp_folders = $this->find_backup_folders( 'backwp-up-', $hmn_upload_dir['path'] );
+
+		if ( ! empty( $backupwp_folders ) ) {
+			foreach ( $backupwp_folders as $path ) {
+				$excluded[] = $path;
+			}
 		}
 
 		$blacklisted = array(
@@ -934,9 +940,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			'wpdbmanager'      => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
 			'supercache'       => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' ),
 			'pb_backupbuddy'   => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'pb_backupbuddy' ),
-			'backwpup-temp'    => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backwpup-2d77ac-temp' ),
-			'backwpup-logs'    => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backwpup-2d77ac-logs' ),
-			'backwpup-backups' => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backwpup-2d77ac-backups' ),
 		);
 
 		foreach ( $blacklisted as $key => $path ) {
