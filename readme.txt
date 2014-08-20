@@ -1,9 +1,9 @@
 === BackUpWordPress ===
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
-Requires at least: 3.7.1
-Tested up to: 3.9
-Stable tag: 2.6
+Requires at least: 3.7.3
+Tested up to: 3.9.1
+Stable tag: 2.6.2
 
 Simple automated backups of your WordPress powered website.
 
@@ -47,7 +47,7 @@ Backups are stored on your server in `/wp-content/backups`, you can change the d
 
 **Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does means that your backup directory can get quite large.
 
-**What if I want I want to back up my site to another destination?**
+**What if I want to back up my site to another destination?**
 
 BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: [https://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin)
 
@@ -106,6 +106,18 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 2.6.2
+
+* Reverts a change to how the home path is calculated as it caused issues on installs where wp-config.php was stored outside of web root. Props to @mikelittle for the bug report.
+
+#### 2.6.1
+
+* Bump minimum WP requirement to 3.7.3, the latest security release on the 3.7 branch.
+* Fix an issues that could cause schedule times to fail to account for timezone differences.
+* Add a nonce check to the schedule settings.
+* Fix a possible JS warning when removing an exclude rule.
+* Our unit tests now run in PHP 5.2 again.
 
 #### 2.6
 

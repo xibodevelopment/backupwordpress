@@ -2,10 +2,10 @@
 
 /*
 Plugin Name: BackUpWordPress
-Plugin URI: http://hmn.md/backupwordpress/
+Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.6
+Version: 2.6.2
 Author URI: http://hmn.md/
 */
 
@@ -56,7 +56,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.1' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.3' );
 
 // Max memory limit isn't defined in old versions of WordPress
 if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
@@ -72,30 +72,30 @@ if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 }
 
 // Load the admin menu
-require_once( HMBKP_PLUGIN_PATH . '/admin/menu.php' );
-require_once( HMBKP_PLUGIN_PATH . '/admin/actions.php' );
+require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
+require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )
-	require_once( HMBKP_PLUGIN_PATH . '/hm-backup/hm-backup.php' );
+	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
 
 // Load the schedules
-require_once( HMBKP_PLUGIN_PATH . '/classes/class-schedule.php' );
-require_once( HMBKP_PLUGIN_PATH . '/classes/class-schedules.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
 
 // Load the core functions
-require_once( HMBKP_PLUGIN_PATH . '/functions/core.php' );
-require_once( HMBKP_PLUGIN_PATH . '/functions/interface.php' );
+require_once( HMBKP_PLUGIN_PATH . 'functions/core.php' );
+require_once( HMBKP_PLUGIN_PATH . 'functions/interface.php' );
 
 // Load Services
-require_once( HMBKP_PLUGIN_PATH . '/classes/class-services.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-services.php' );
 
 // Load the email service
-require_once( HMBKP_PLUGIN_PATH . '/classes/class-email.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-email.php' );
 
 // Load the wp cli command
 if ( defined( 'WP_CLI' ) && WP_CLI )
-	include( HMBKP_PLUGIN_PATH . '/classes/wp-cli.php' );
+	include( HMBKP_PLUGIN_PATH . 'classes/wp-cli.php' );
 
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
@@ -143,7 +143,7 @@ function hmbkp_load_scripts() {
 
 	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
 
-	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox' ), sanitize_title( HMBKP_VERSION ) );
+	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox', 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
 
 	wp_localize_script(
 		'hmbkp',
@@ -265,7 +265,7 @@ add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
  */
 function hmbkp_display_server_info_tab() {
 
-	require_once( HMBKP_PLUGIN_PATH . '/classes/class-requirements.php' );
+	require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
 
 	ob_start();
 	require_once( 'admin/server-info.php' );

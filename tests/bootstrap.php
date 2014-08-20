@@ -1,16 +1,26 @@
 <?php
+/**
+ * Bootstrap the plugin unit testing environment.
+ *
+ * @package WordPress
+ * @subpackage BackUpWordPress
+ */
 
-if ( ! getenv( 'WP_TESTS_DIR') )
-	putenv( 'WP_TESTS_DIR=/srv/www/wp-tests' );
+// Activates this plugin in WordPress so it can be tested.
+$GLOBALS['wp_tests_options'] = array(
+	'active_plugins' => array( basename( dirname( dirname( __FILE__ ) ) ) . '/backupwordpress.php' ),
+);
 
-require_once getenv( 'WP_TESTS_DIR' ) . '/includes/functions.php';
+// If the develop repo location is defined (as WP_DEVELOP_DIR), use that
+// location. Otherwise, we'll just assume that this plugin is installed in a
+// WordPress develop SVN checkout.
 
-function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/backupwordpress.php';
+if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
+	require getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit/includes/bootstrap.php';
+} else {
+	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
-require getenv( 'WP_TESTS_DIR' ) . '/includes/bootstrap.php';
 
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 

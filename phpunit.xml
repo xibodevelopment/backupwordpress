@@ -9,7 +9,7 @@
 	<testsuites>
 		<testsuite>
 			<directory prefix="test" suffix=".php">./tests/</directory>
-			<directory prefix="test" suffix=".php">./hm-backup/tests/</directory>
+			<directory prefix="test" suffix=".php">./src/hm-backup/tests/</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

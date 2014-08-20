@@ -225,7 +225,7 @@ function hmbkp_ajax_calculate_backup_size() {
 
 	$recalculate_filesize = true;
 
-	include_once( HMBKP_PLUGIN_PATH . '/admin/schedule.php' );
+	include_once( HMBKP_PLUGIN_PATH . 'admin/schedule.php' );
 
 	die;
 
@@ -286,7 +286,7 @@ function hmbkp_edit_schedule_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
 
 	die;
 
@@ -303,7 +303,7 @@ function hmbkp_edit_schedule_excludes_load() {
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -318,7 +318,7 @@ function hmbkp_add_schedule_load() {
 	$schedule        = new HMBKP_Scheduled_Backup( date( 'U' ) );
 	$is_new_schedule = true;
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
 
 	die;
 
@@ -331,6 +331,8 @@ add_action( 'wp_ajax_hmbkp_add_schedule_load', 'hmbkp_add_schedule_load' );
  * Validate and either return errors or update the schedule
  */
 function hmbkp_edit_schedule_submit() {
+
+	check_ajax_referer( 'hmbkp_schedule_submit_action', 'hmbkp_schedule_submit_nonce' );
 
 	if ( empty( $_GET['hmbkp_schedule_id'] ) )
 		die;
@@ -513,7 +515,7 @@ function hmbkp_add_exclude_rule() {
 
 	$schedule->save();
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -539,7 +541,7 @@ function hmbkp_delete_exclude_rule() {
 
 	$schedule->save();
 
-	require( HMBKP_PLUGIN_PATH . '/admin/schedule-form-excludes.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 
 	die;
 
@@ -654,3 +656,19 @@ function hmbkp_load_enable_support() {
 
 }
 add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
+
+/**
+ * Receive the heartbeat and return backup status
+ */
+function hmbkp_heartbeat_received( $response, $data ) {	
+	if( !empty( $data['hmbkp_is_in_progress'] ) ) {
+		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
+		if ( ! $schedule->get_status() ) {
+			$response['hmbkp_schedule_status'] = 0;
+		} else {
+			$response['hmbkp_schedule_status'] = hmbkp_schedule_actions( $schedule, true );
+		}
+	}
+  	return $response;
+}
+add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
