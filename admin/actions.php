@@ -6,22 +6,29 @@
  */
 function hmbkp_request_delete_backup() {
 
-	if ( empty( $_GET['hmbkp_delete_backup'] ) || ! check_admin_referer( 'hmbkp-delete_backup' ) )
-		return;
+	check_admin_referer( 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' );
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
+	if ( ! current_user_can( 'hmbkp_delete_backups' ) )
+		wp_die( 'Cheeatin huh?' );
 
-	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['hmbkp_delete_backup'] ) ) );
+	$previous = esc_url_raw( urldecode( $_GET['previous_page'] ) );
+
+	if ( isset( $GET['hmbkp_schedule_id'] ) )
+		$previous .= sanitize_text_field( $_GET['hmbkp_schedule_id'] );
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
+	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) );
 
 	if ( is_wp_error( $deleted ) )
 		wp_die( $deleted->get_error_message() );
 
-	wp_safe_redirect( remove_query_arg( array( 'hmbkp_delete_backup', '_wpnonce' ) ), 303 );
+	wp_safe_redirect( $previous, 303 );
 
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_backup' );
+add_action( 'admin_post_hmbkp_request_delete_backup', 'hmbkp_request_delete_backup' );
 
 /**
  * Enable support and then redirect back to the backups page
