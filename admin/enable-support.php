@@ -6,13 +6,13 @@
 
 <div class="server-info">
 
-<?php foreach( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
 
 	<table class="fixed widefat">
 
 		<thead>
 			<tr>
-				<th scope="col" colspan="2"><?php echo ucwords( $group ); ?></th>
+				<th scope="col" colspan="2"><?php echo esc_html( ucwords( $group ) ); ?></th>
 			</tr>
 		</thead>
 

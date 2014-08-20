@@ -9,7 +9,7 @@
 
 		<?php } else { ?>
 
-		<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ); ?>"><?php _e( 'Enable Support', 'hmbkp' ); ?></a>
+		<a id="intercom-info" class="colorbox add-new-h2" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support' ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ) ); ?>"><?php _e( 'Enable Support', 'hmbkp' ); ?></a>
 
 		<?php } ?>
 
