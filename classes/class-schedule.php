@@ -918,21 +918,28 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->find_backup_folders( 'backupwordpress-', $hmn_upload_dir['path'] )
 		);
 
-
 		if ( ! empty( $hmbkp_folders ) ) {
 			foreach ( $hmbkp_folders as $path ) {
 				$excluded[] = $path;
 			}
+		}
 
+		$backupwp_folders = $this->find_backup_folders( 'backwpup-', $hmn_upload_dir['path'] );
+
+		if ( ! empty( $backupwp_folders ) ) {
+			foreach ( $backupwp_folders as $path ) {
+				$excluded[] = $path;
+			}
 		}
 
 		$blacklisted = array(
-			'updraft'      => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'updraft' ),
-			'wponlinebckp' => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backups' ),
-			'duplicator'   => trailingslashit( ABSPATH ) . trailingslashit( 'wp-snapshots' ),
-			'backupbuddy'  => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backupbuddy_backups' ),
-			'wpdbmanager'  => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
-			'supercache'   => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' )
+			'updraft'          => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'updraft' ),
+			'wponlinebckp'     => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backups' ),
+			'duplicator'       => trailingslashit( ABSPATH ) . trailingslashit( 'wp-snapshots' ),
+			'backupbuddy'      => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backupbuddy_backups' ),
+			'pb_backupbuddy'   => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'pb_backupbuddy' ),
+			'wpdbmanager'      => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
+			'supercache'       => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' ),
 		);
 
 		foreach ( $blacklisted as $key => $path ) {
