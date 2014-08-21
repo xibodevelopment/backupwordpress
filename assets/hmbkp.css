@@ -37,11 +37,11 @@ div#hmbkp-warning { margin: 20px 0 0; }
 .strikethrough { text-decoration: line-through; }
 
 table.widefat tbody tr:nth-child(even) { background-color: #f9f9f9 }
-.hmbkp-directory-list td:first-child, .hmbkp-directory-list th:first-child { width: 20px; padding-right: 0 }
-.hmbkp-directory-list thead tr:last-child { background-color: #f9f9f9; }
+.hmbkp-edit-schedule-excludes-form td:first-child, .hmbkp-edit-schedule-excludes-form th:first-child { width: 20px; padding-right: 0 }
+.hmbkp-edit-schedule-excludes-form thead tr:last-child { background-color: #f9f9f9; }
 .wp-core-ui table .button-secondary { line-height: 18px; height: 20px; }
 thead td { border-bottom: 1px solid #e1e1e1; }
-.column-format .spinner { display: block; float: left; margin: 0; }
+.hmbkp-edit-schedule-excludes-form table .spinner { display: block; float: left; margin: 0; }
 
 .column-filesize code { position: relative; }
 .column-filesize .dashicons-update { display: none; overflow: hidden; position: absolute; width: 100%; left: 0; text-align: center; background-color: rgba( 255, 255, 255, .8 ) }

@@ -10,20 +10,48 @@
 
 			<tbody>
 
-				<?php foreach ( $schedule->get_excludes() as $key => $exclude ) : ?>
+				<?php foreach ( $schedule->get_excludes() as $key => $exclude ) :
+
+					$exclude_path = new SplFileInfo( trailingslashit( $schedule->get_root() ) . ltrim( str_ireplace( $schedule->get_root(), '', $exclude ), '/' ) ); ?>
 
 					<tr>
 
-						<td data-hmbkp-exclude-rule="<?php echo esc_attr( $exclude ); ?>">
+						<th scope="row">
 
-							<span class="code"><?php echo esc_html( str_ireplace( $schedule->get_root(), '', $exclude ) ); ?></span>
+							<?php if ( $exclude_path->isFile() ) { ?>
+
+								<div class="dashicons dashicons-media-default"></div>
+
+							<?php } elseif ( $exclude_path->isDir() ) { ?>
+
+								<div class="dashicons dashicons-portfolio"></div>
+
+							<?php } ?>
+
+						</th>
+
+						<td>
+							<code><?php echo esc_html( str_ireplace( $schedule->get_root(), '', $exclude ) ); ?></code>
 
 						</td>
 
 
 						<td>
 
-							<span><?php //echo size_format( hmbkp_get_exclude_rule_file_size( $exclude, $schedule ) ); ?></span>
+							<?php  if ( ! file_exists( $exclude_path ) ) { ?>
+
+							<code>--</code>
+
+						 	<?php } elseif ( $schedule->is_total_filesize_being_calculated( $exclude_path ) ) { ?>
+
+								<span class="spinner"></span>
+
+							<?php } else { ?>
+
+								<code><?php echo size_format( $schedule->total_filesize( $exclude_path ) ); ?></code>
+
+							<?php } ?>
+
 
 						</td>
 
@@ -65,10 +93,7 @@
 
 		/* TODO
 		 *
-		 * - JS enhance
 		 * - Visually de-emphasise small files, especially in a long list (ala Daisy Disk)
-		 * - Switch to Backdrop
-		 * - Calculate site size should use the same mechanism, that way excludes tree will mostly already be cached
 		 * - Translations
 		 */
 
@@ -80,15 +105,16 @@
 			$untrusted_directory = urldecode( $_GET['hmbkp_directory_browse'] );
 
 			// Only allow real sub directories of the site root to be browsed
-			if ( strpos( $untrusted_directory, $schedule->get_root() ) !== false && is_dir( $untrusted_directory ) )
+			if ( strpos( $untrusted_directory, $schedule->get_root() ) !== false && is_dir( $untrusted_directory ) ) {
 				$directory = $untrusted_directory;
+			}
 
 		}
 
 		$exclude_string = $schedule->exclude_string( 'regex' );
 
 		// Kick off a recursive filesize scan
-		$files = hmbkp_directory_by_total_filesize( $directory );
+		$files = $schedule->list_directory_by_total_filesize( $directory );
 
 		if ( $files ) { ?>
 
@@ -111,7 +137,7 @@
 							<div class="dashicons dashicons-admin-home"></div>
 						</th>
 
-						<th scope="col" colspan="2">
+						<th scope="col">
 
 							<?php if ( $schedule->get_root() !== $directory ) { ?>
 
@@ -134,6 +160,39 @@
 							<?php } ?>
 
 						</th>
+
+						<td class="column-filesize">
+
+							<?php if ( $schedule->is_total_filesize_being_calculated( $schedule->get_root() ) ) { ?>
+
+								<span class="spinner"></span>
+
+							<?php } else {
+
+								$root = new SplFileInfo( $schedule->get_root() );
+
+								$size = $schedule->total_filesize( $root );
+
+								if ( $size !== false ) {
+
+									$size = size_format( $size );
+
+									if ( ! $size ) {
+										$size = '0 B';
+									} ?>
+
+									<code>
+
+										<?php echo esc_html( $size ); ?>
+
+										<a class="dashicons dashicons-update" href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( $schedule->get_root() ) ), 'hmbkp-recalculate_directory_filesize' ); ?>"><span>Refresh</span></a>
+
+									</code>
+
+
+								<?php } ?>
+
+							<?php } ?>
 
 						<td>
 							<?php echo esc_html( substr( sprintf( '%o', fileperms( $schedule->get_root() ) ), -4 ) ); ?>
@@ -215,13 +274,13 @@
 
 							<td class="column-format column-filesize">
 
-								<?php if ( $file->isDir() && hmbkp_is_total_filesize_being_calculated( $file->getPathname() ) ) { ?>
+								<?php if ( $file->isDir() && $schedule->is_total_filesize_being_calculated( $file->getPathname() ) ) { ?>
 
 									<span class="spinner"></span>
 
 								<?php } else {
 
-									$size = hmbkp_total_filesize( $file );
+									$size = $schedule->total_filesize( $file );
 
 									if ( $size !== false ) {
 
@@ -246,7 +305,7 @@
 
 									<?php } else { ?>
 
-										--
+										<code>--</code>
 
 									<?php }
 								} ?>
