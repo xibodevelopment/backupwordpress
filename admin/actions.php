@@ -8,7 +8,7 @@ function hmbkp_request_delete_backup() {
 
 	check_admin_referer( 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' );
 
-	if ( ! current_user_can( 'hmbkp_delete_backups' ) )
+	if ( ! current_user_can( 'manage_options' ) )
 		wp_die( 'Cheeatin huh?' );
 
 	$previous = esc_url_raw( urldecode( $_GET['previous_page'] ) );

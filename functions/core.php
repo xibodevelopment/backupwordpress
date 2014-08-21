@@ -5,24 +5,6 @@
  */
 function hmbkp_activate() {
 
-	$role = get_role( 'administrator' );
-
-	if ( ! empty( $role ) ) {
-		$role->add_cap( 'hmbkp_run_backups' );
-		$role->add_cap( 'hmbkp_delete_backups' );
-		$role->add_cap( 'hmbkp_download_backups' );
-	}
-
-	add_role(
-		'hmbkp_backups_admin',
-		'Backups Administrator',
-		array(
-			'hmbkp_run_backups',
-			'hmbkp_delete_backups',
-			'hmbkp_download_backups',
-		)
-	);
-
 	// loads the translation files
 	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_LANG_DIR );
 
