@@ -121,12 +121,13 @@ function hmbkp_request_do_backup() {
 		echo $error_message;
 	}
 
-	if ( trim( $error_message ) && ! defined( 'DOING_AJAX' ) ) {
+	if ( trim( $error_message ) && defined( 'DOING_AJAX' ) ) {
 		wp_die( $error_message );
 	}
 
-	if ( ! defined( 'DOING_AJAX' ) )
+	if ( ! defined( 'DOING_AJAX' ) ) {
 		wp_safe_redirect( hmbkp_get_settings_url(), '303' );
+	}
 
 	die;
 
@@ -525,13 +526,12 @@ function hmbkp_recalculate_directory_filesize( $pathname = null ) {
 
 	if ( ! $pathname ) {
 		$directory = sanitize_text_field( $_GET['hmbkp_recalculate_directory_filesize'] );
-
 	} else {
 		$directory = $pathname;
-
 	}
 
 	// Delete the cached directory size
+	// TODO should use $schedule->get_transient_key
 	delete_transient( 'hmbkp_' . substr( sanitize_key( $directory ), -30 ) . '_filesize' );
 
 	$handle = opendir( $directory );
@@ -554,8 +554,7 @@ function hmbkp_recalculate_directory_filesize( $pathname = null ) {
 
 	closedir( $handle );
 
-
-	$parent_directory =dirname( $directory );
+	$parent_directory = dirname( $directory );
 
 	// Delete the cached filesize of all parents as well
 	while ( $schedule->get_root() !== $parent_directory ) {
