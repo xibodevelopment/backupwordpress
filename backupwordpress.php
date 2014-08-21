@@ -79,8 +79,8 @@ require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 if ( ! class_exists( 'HM_Backup' ) )
 	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
 
-// Load WP Async Task
-require_once( HMBKP_PLUGIN_PATH . 'wp-async-task/wp-async-task.php' );
+// Load Backdrop
+require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
 
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
@@ -144,9 +144,7 @@ add_action( 'admin_init', 'hmbkp_init' );
  */
 function hmbkp_load_scripts() {
 
-	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
-
-	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox', 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
+	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
 
 	wp_localize_script(
 		'hmbkp',
@@ -308,5 +306,3 @@ function hmbkp_load_first() {
 
 }
 add_action( 'activated_plugin', 'hmbkp_load_first' );
-
-$async_task = new HMBKP_Async_Task();

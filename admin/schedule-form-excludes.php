@@ -16,7 +16,7 @@
 
 						<td data-hmbkp-exclude-rule="<?php echo esc_attr( $exclude ); ?>">
 
-							<span class="code"><?php echo esc_attr( str_ireplace( $schedule->get_root(), '', $exclude ) ); ?></span>
+							<span class="code"><?php echo esc_html( str_ireplace( $schedule->get_root(), '', $exclude ) ); ?></span>
 
 						</td>
 
@@ -39,7 +39,7 @@
 
 							<?php else : ?>
 
-								<a href="#" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+								<a href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_remove_exclude', $exclude ), 'hmbkp-remove_exclude_rule' ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
 							<?php endif; ?>
 
@@ -65,15 +65,10 @@
 
 		/* TODO
 		 *
-		 * - Exclude button should add an exclude rule for that exact path
-		 * - Ability to re-calculate any directory size
 		 * - JS enhance
 		 * - Visually de-emphasise small files, especially in a long list (ala Daisy Disk)
 		 * - Switch to Backdrop
-		 * - We need to way to track whether a directory tree is currently being analysed
 		 * - Calculate site size should use the same mechanism, that way excludes tree will mostly already be cached
-		 * - Live update the schedule sentence with correct size when a file/folder is excluded
-		 * - Re-factor directory scanner to just calculate the size of each directory via JS
 		 * - Translations
 		 */
 
@@ -102,7 +97,6 @@
 				<thead>
 
 					<tr>
-
 						<th></th>
 						<th scope="col">Name</th>
 						<th scope="col" class="column-format">Size</th>
@@ -121,7 +115,7 @@
 
 							<?php if ( $schedule->get_root() !== $directory ) { ?>
 
-								<a href="<?php echo add_query_arg( 'hmbkp_directory_browse', urlencode( $schedule->get_root() ) ); ?>"><?php echo esc_html( $schedule->get_root() ); ?></a> <code>/</code>
+								<a href="<?php echo remove_query_arg( 'hmbkp_directory_browse' ); ?>"><?php echo esc_html( $schedule->get_root() ); ?></a> <code>/</code>
 
 								<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( $schedule->get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
 
@@ -176,6 +170,7 @@
 							$is_excluded = true;
 						}
 
+						// Skip unreadable files
 						if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
 							$is_unreadable = true;
 						} ?>
@@ -218,7 +213,7 @@
 
 							</td>
 
-							<td class="column-format">
+							<td class="column-format column-filesize">
 
 								<?php if ( $file->isDir() && hmbkp_is_total_filesize_being_calculated( $file->getPathname() ) ) { ?>
 
@@ -236,7 +231,18 @@
 											$size = '0 B';
 										} ?>
 
-									<code><?php echo esc_html( $size ); ?></code>
+										<code>
+
+											<?php echo esc_html( $size ); ?>
+
+											<?php if ( $file->isDir() ) { ?>
+
+												<a class="dashicons dashicons-update" href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( $file->getPathname() ) ), 'hmbkp-recalculate_directory_filesize' ); ?>"><span>Refresh</span></a>
+
+											<?php }  ?>
+
+										</code>
+
 
 									<?php } else { ?>
 
@@ -281,7 +287,7 @@
 
 								<?php } else { ?>
 
-									<a href="" class="button-secondary"><?php _e( 'Exclude &rarr;', 'hmbkp' ); ?></a>
+									<a href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_exclude_pathname', urlencode( $file->getPathname() ) ), 'hmbkp-add_exclude_rule' ); ?>" class="button-secondary"><?php _e( 'Exclude &rarr;', 'hmbkp' ); ?></a>
 
 								<?php } ?>
 
@@ -298,7 +304,5 @@
 		<?php } ?>
 
 	</div>
-
-	<p><?php printf( __( 'Your site is now %s. Backups will be compressed and so will be smaller.', 'hmbkp' ), '<code>' . esc_html( $schedule->get_formatted_file_size( false ) ) . '</code>' ); ?></p>
 
 </form>

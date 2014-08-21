@@ -922,7 +922,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->find_backup_folders( 'backupwordpress-', $hmn_upload_dir['path'] )
 		);
 
-
 		if ( ! empty( $hmbkp_folders ) ) {
 			foreach ( $hmbkp_folders as $path ) {
 				$excluded[] = $path;

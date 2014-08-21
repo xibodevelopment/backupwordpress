@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Delete the backup and then redirect
- * back to the backups page
+ * Delete the backup and then redirect back to the backups page
  */
 function hmbkp_request_delete_backup() {
 
-	if ( empty( $_GET['hmbkp_delete_backup'] ) || ! check_admin_referer( 'hmbkp-delete_backup' ) ) {
+	if ( ! isset( $_GET['hmbkp_delete_backup'] ) || ! check_admin_referer( 'hmbkp-delete_backup' ) ) {
 		return;
 	}
 
@@ -27,11 +26,10 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_backup' );
 
 /**
  * Enable support and then redirect back to the backups page
- * @return void
  */
 function hmbkp_request_enable_support() {
 
-	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) ) {
+	if ( ! isset( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) ) {
 		return;
 	}
 
@@ -45,12 +43,11 @@ function hmbkp_request_enable_support() {
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_enable_support' );
 
 /**
- * Delete a schedule and all it's backups and then redirect
- * back to the backups page
+ * Delete a schedule and all it's backups and then redirect back to the backups page
  */
 function hmbkp_request_delete_schedule() {
 
-	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' || ! check_admin_referer( 'hmbkp-delete_schedule' ) ) {
+	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' || ! check_admin_referer( 'hmbkp-delete_schedule' ) ) {
 		return;
 	}
 
@@ -65,11 +62,13 @@ function hmbkp_request_delete_schedule() {
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_schedule' );
 
 /**
- * Perform a manual backup via ajax
+ * Perform a manual backup
+ *
+ * Handles ajax requests as well as standard GET requests
  */
 function hmbkp_request_do_backup() {
 
-	if ( ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_run_schedule' || empty( $_GET['hmbkp_schedule_id'] ) ) && ! defined( 'DOING_AJAX' ) ) {
+	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_run_schedule' || empty( $_GET['hmbkp_schedule_id'] )  ) {
 		return;
 	}
 
@@ -80,6 +79,8 @@ function hmbkp_request_do_backup() {
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 	}
+
+	// TODO non ajax needs a nonce
 
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
@@ -134,14 +135,13 @@ add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_do_backup' );
 
 /**
- * Send the download file to the browser and
- * then redirect back to the backups page
+ * Send the download file to the browser and then redirect back to the backups page
  */
 function hmbkp_request_download_backup() {
 
 	global $is_apache;
 
-	if ( empty( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) || ! file_exists( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) {
+	if ( ! isset( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) || ! file_exists( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) {
 		return;
 	}
 
@@ -167,10 +167,11 @@ function hmbkp_request_download_backup() {
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_download_backup' );
 
 /**
- * Cancels a running backup then redirect
- * back to the backups page
+ * Cancels a running backup then redirect back to the backups page
  */
 function hmbkp_request_cancel_backup() {
+
+	// TODO Should really be nonced
 
 	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_cancel' ) {
 		return;
@@ -197,10 +198,11 @@ function hmbkp_request_cancel_backup() {
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_cancel_backup' );
 
 /**
- * Dismiss an error and then redirect
- * back to the backups page
+ * Dismiss an error and then redirect back to the backups page
  */
 function hmbkp_dismiss_error() {
+
+	// TODO Should really be nonced
 
 	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_dismiss_error' ) {
 		return;
@@ -214,6 +216,459 @@ function hmbkp_dismiss_error() {
 
 }
 add_action( 'admin_init', 'hmbkp_dismiss_error' );
+
+/**
+ * Catch the schedule service settings form submission
+ *
+ * Validate and either return errors or update the schedule
+ */
+function hmbkp_edit_schedule_services_submit() {
+
+	global $hmbkp_form_errors;
+
+	if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'hmbkp_edit_schedule_service' || empty( $_POST['hmbkp_schedule_id'] ) || ! check_admin_referer( 'hmbkp-edit_schedule_service' ) ) {
+		return;
+	}
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+
+	$errors = array();
+
+	// Save the service options
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+		$errors = array_merge( $errors, $service->save() );
+	}
+
+	$schedule->save();
+
+	if ( $errors ) {
+
+		$hmbkp_form_errors = $errors;
+
+	} else {
+
+		wp_safe_redirect( hmbkp_get_settings_url(), '303' );
+		die;
+
+	}
+
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_edit_schedule_services_submit' );
+
+/**
+ * Catch the schedule settings form submission
+ *
+ * Validate and either return errors or update the schedule
+ */
+function hmbkp_edit_schedule_submit() {
+
+	global $hmbkp_form_errors;
+
+	if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'hmbkp_edit_schedule' || empty( $_POST['hmbkp_schedule_id'] ) || ! check_admin_referer( 'hmbkp-edit_schedule' ) ) {
+		return;
+	}
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+
+	$errors = array();
+
+	$settings = array();
+
+	if ( isset( $_POST['hmbkp_schedule_type'] ) ) {
+
+		$schedule_type = sanitize_text_field( $_POST['hmbkp_schedule_type'] );
+
+		if ( ! trim( $schedule_type ) ) {
+			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
+		}
+
+		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) ) {
+			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
+		}
+
+		else {
+			$settings['type'] = $schedule_type;
+		}
+
+	}
+
+	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] ) ) {
+
+		$schedule_recurrence_type = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] );
+
+		if ( empty( $schedule_recurrence_type ) ) {
+			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
+		}
+
+		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $schedule_recurrence_type !== 'manually' ) {
+			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
+		}
+
+		else {
+			$settings['recurrence'] = $schedule_recurrence_type;
+		}
+
+	}
+
+	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] ) ) {
+
+		$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
+
+		if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
+			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'hmbkp' );
+		}
+
+		else {
+			$settings['start_time']['day_of_week'] = $day_of_week;
+		}
+
+	}
+
+	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
+
+		$day_of_month = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
+
+		$options = array(
+			'min_range' => 1,
+			'max_range' => 31
+		);
+
+		if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
+			$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'hmbkp' );
+		}
+
+		else {
+			$settings['start_time']['day_of_month'] = $day_of_month;
+		}
+
+	}
+
+	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
+
+		$hours = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
+
+		$options = array(
+			'min_range' => 0,
+			'max_range' => 23
+		);
+
+		if ( false === filter_var( $hours, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
+			$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 0 and 23', 'hmbkp' );
+		}
+
+		else {
+			$settings['start_time']['hours'] = $hours;
+		}
+
+	}
+
+	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
+
+		$minutes = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
+
+		$options = array(
+			'min_range' => 0,
+			'max_range' => 59
+		);
+
+		if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
+			$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'hmbkp' );
+		}
+
+		else {
+			$settings['start_time']['minutes'] = $minutes;
+		}
+
+	}
+
+	if ( isset( $_POST['hmbkp_schedule_max_backups'] ) ) {
+
+		$max_backups = sanitize_text_field( $_POST['hmbkp_schedule_max_backups'] );
+
+		if ( empty( $max_backups ) ) {
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
+		}
+
+		elseif ( ! is_numeric( $max_backups ) ) {
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
+		}
+
+		elseif ( ! ( $max_backups >= 1 ) ) {
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
+		}
+
+		else {
+			$settings['max_backups'] = absint( $max_backups );
+		}
+
+	}
+
+	// Save the service options
+	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+		$errors = array_merge( $errors, $service->save() );
+	}
+
+	if ( ! empty( $settings['recurrence'] ) && ! empty( $settings['start_time'] ) ) {
+
+		// Calculate the start time depending on the recurrence
+		$start_time = hmbkp_determine_start_time( $settings['recurrence'], $settings['start_time'] );
+
+		if ( $start_time ) {
+			$schedule->set_schedule_start_time( $start_time );
+		}
+
+	}
+
+	if ( ! empty( $settings['recurrence'] ) ) {
+		$schedule->set_reoccurrence( $settings['recurrence'] );
+	}
+
+	if ( ! empty( $settings['type'] ) ) {
+		$schedule->set_type( $settings['type'] );
+	}
+
+	if ( ! empty( $settings['max_backups'] ) ) {
+		$schedule->set_max_backups( $settings['max_backups'] );
+	}
+
+	// Save the new settings
+	$schedule->save();
+
+	// Remove any old backups in-case max backups was reduced
+	$schedule->delete_old_backups();
+
+	if ( $errors ) {
+
+		$hmbkp_form_errors = $errors;
+
+	} else {
+
+		wp_safe_redirect( hmbkp_get_settings_url(), '303' );
+		die;
+
+	}
+
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_edit_schedule_submit' );
+
+/**
+ * Add an exclude rule
+ *
+ * @access public
+ * @return void
+ */
+function hmbkp_add_exclude_rule() {
+
+	if ( ! isset( $_GET['hmbkp_exclude_pathname'] ) || ! check_admin_referer( 'hmbkp-add_exclude_rule' ) ) {
+		return;
+	}
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
+	$exclude_rule = str_ireplace( $schedule->get_root(), '', sanitize_text_field( $_GET['hmbkp_exclude_pathname'] ) );
+
+	$schedule->set_excludes( $exclude_rule, true );
+
+	$schedule->save();
+
+	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
+
+	if ( isset( $_GET['hmbkp_directory_browse'] ) )
+		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
+
+	wp_safe_redirect( $url, '303' );
+
+	die;
+
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_add_exclude_rule' );
+
+/**
+ * Delete an exclude rule
+ *
+ * @access public
+ * @return void
+ */
+function hmbkp_remove_exclude_rule() {
+
+	if ( ! isset( $_GET['hmbkp_remove_exclude'] ) || ! check_admin_referer( 'hmbkp-remove_exclude_rule' ) ) {
+		return;
+	}
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
+	$excludes = $schedule->get_excludes();
+
+	$schedule->set_excludes( array_diff( $excludes, (array) stripslashes( sanitize_text_field( $_GET['hmbkp_remove_exclude'] ) ) ) );
+
+	$schedule->save();
+
+	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
+
+	if ( isset( $_GET['hmbkp_directory_browse'] ) )
+		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
+
+	wp_safe_redirect( $url, '303' );
+
+	die;
+
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_remove_exclude_rule' );
+
+function hmbkp_recalculate_directory_filesize( $pathname = null ) {
+
+	if ( ! $pathname && ( ! isset( $_GET['hmbkp_recalculate_directory_filesize'] ) || ! check_admin_referer( 'hmbkp-recalculate_directory_filesize' ) ) ) {
+		return;
+	}
+
+	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
+	if ( ! $pathname ) {
+		$directory = sanitize_text_field( $_GET['hmbkp_recalculate_directory_filesize'] );
+
+	} else {
+		$directory = $pathname;
+
+	}
+
+	// Delete the cached directory size
+	delete_transient( 'hmbkp_' . substr( sanitize_key( $directory ), -30 ) . '_filesize' );
+
+	$handle = opendir( $directory );
+
+	while ( $file_handle = readdir( $handle ) ) :
+
+		// Ignore current dir and containing dir
+		if ( $file_handle === '.' || $file_handle === '..' )
+			continue;
+
+		$file = HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle );
+
+		// Delete all sub directories
+		if ( is_dir( $file ) ) {
+			delete_transient( 'hmbkp_' . substr( sanitize_key( $file ), -30 ) . '_filesize' );
+			hmbkp_recalculate_directory_filesize( $file );
+		}
+
+	endwhile;
+
+	closedir( $handle );
+
+
+	$parent_directory =dirname( $directory );
+
+	// Delete the cached filesize of all parents as well
+	while ( $schedule->get_root() !== $parent_directory ) {
+
+		delete_transient( 'hmbkp_' . substr( sanitize_key( $parent_directory ), -30 ) . '_filesize' );
+		$parent_directory = dirname( $parent_directory );
+
+	}
+
+	if ( ! $pathname ) {
+
+		$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
+
+		if ( isset( $_GET['hmbkp_directory_browse'] ) )
+			$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
+
+		wp_safe_redirect( $url, '303' );
+		die;
+
+	}
+
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_recalculate_directory_filesize' );
+
+/**
+ * Receive the heartbeat and return backup status
+ */
+function hmbkp_heartbeat_received( $response, $data ) {
+
+	if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
+
+		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
+
+		if ( ! $schedule->get_status() ) {
+			$response['hmbkp_schedule_status'] = 0;
+		} else {
+			$response['hmbkp_schedule_status'] = hmbkp_schedule_actions( $schedule, true );
+		}
+	}
+  	return $response;
+}
+add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
+
+// TODO needs work
+function hmbkp_display_error_and_offer_to_email_it() {
+
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+
+	if ( empty( $_POST['hmbkp_error'] ) ) {
+		die;
+	}
+
+	$error = wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) );
+
+	$error = str_replace( 'HMBKP_SUCCESS', '', $error, $succeeded );
+
+	if ( $succeeded ) { ?>
+
+		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'hmbkp' ); ?></h3>
+
+	<?php } else { ?>
+
+		<h3><?php _e( 'Your backup failed', 'hmbkp' ); ?></h3>
+
+	<?php } ?>
+
+	<p><?php _e( 'Here\'s the response from the server:', 'hmbkp' ); ?></p>
+
+	<pre><?php esc_html_e( $error ); ?></pre>
+
+	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'hmbkp' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?><br /><br /></p>
+
+	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
+	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
+
+	<?php die;
+
+}
+add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
+
+// TODO needs work
+function hmbkp_send_error_via_email() {
+
+	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+
+	if ( empty( $_POST['hmbkp_error'] ) ) {
+		die;
+	}
+
+	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
+
+	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
+
+	die;
+
+}
+add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
+
+/**
+ * Load the enable support modal contents
+ *
+ * @return void
+ */
+function hmbkp_load_enable_support() {
+
+	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
+
+	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
+
+	die;
+
+}
+add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
 
 /**
  * Display the running status via ajax
@@ -304,445 +759,3 @@ function hmbkp_ajax_cron_test() {
 
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
-
-function hmbkp_edit_schedule_services_submit() {
-
-	if ( ( empty( $_POST['action'] ) || $_POST['action'] !== 'hmbkp_edit_schedule_service' || empty( $_POST['hmbkp_schedule_id'] ) || ! check_admin_referer( 'hmbkp-edit_schedule_service' ) ) && ! defined( 'DOING_AJAX' ) ) {
-		return;
-	}
-
-	if ( empty( $_POST['hmbkp_schedule_id'] ) && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-		die;
-	}
-
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
-
-	$errors = array();
-
-	// Save the service options
-	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
-		$errors = array_merge( $errors, $service->save() );
-	}
-
-	$schedule->save();
-
-	if ( $errors && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-		wp_send_json_error( $errors );
-
-		die();
-
-	} elseif ( $errors ) {
-
-		global $hmbkp_form_errors;
-		$hmbkp_form_errors = $errors;
-
-	} else {
-
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			wp_send_json_success();
-		} else {
-			wp_safe_redirect( hmbkp_get_settings_url(), '303' );
-		}
-
-		die();
-
-	}
-
-}
-add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_services_submit' );
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_edit_schedule_services_submit' );
-
-/**
- * Catch the edit schedule form
- *
- * Validate and either return errors or update the schedule
- */
-function hmbkp_edit_schedule_submit() {
-
-	if ( ( empty( $_POST['action'] ) || $_POST['action'] !== 'hmbkp_edit_schedule' || empty( $_POST['hmbkp_schedule_id'] ) || ! check_admin_referer( 'hmbkp-edit_schedule' ) ) && ! defined( 'DOING_AJAX' ) ) {
-		return;
-	}
-
-	if ( empty( $_POST['hmbkp_schedule_id'] ) && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-		die;
-	}
-
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
-
-	$errors = array();
-
-	$settings = array();
-
-	if ( isset( $_POST['hmbkp_schedule_type'] ) ) {
-
-		$schedule_type = sanitize_text_field( $_POST['hmbkp_schedule_type'] );
-
-		if ( ! trim( $schedule_type ) ) {
-			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
-		}
-
-		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) ) {
-			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
-		}
-
-		else {
-			$settings['type'] = $schedule_type;
-		}
-
-	}
-
-	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] ) ) {
-
-		$schedule_recurrence_type = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] );
-
-		if ( empty( $schedule_recurrence_type ) ) {
-			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
-		}
-
-		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $schedule_recurrence_type !== 'manually' ) {
-			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
-		}
-
-		else {
-			$settings['recurrence'] = $schedule_recurrence_type;
-		}
-
-	}
-
-		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] ) ) {
-
-			$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
-
-			if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
-				$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'hmbkp' );
-			}
-
-			else {
-				$settings['start_time']['day_of_week'] = $day_of_week;
-			}
-
-		}
-
-		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
-
-			$day_of_month = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
-
-			$options = array(
-				'min_range' => 1,
-				'max_range' => 31
-			);
-
-			if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-				$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'hmbkp' );
-			}
-
-			else {
-				$settings['start_time']['day_of_month'] = $day_of_month;
-			}
-
-		}
-
-		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] ) ) {
-
-			$hours = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_hours'] );
-
-			$options = array(
-				'min_range' => 0,
-				'max_range' => 23
-			);
-
-			if ( false === filter_var( $hours, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-				$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 0 and 23', 'hmbkp' );
-			}
-
-			else {
-				$settings['start_time']['hours'] = $hours;
-			}
-
-		}
-
-		if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] ) ) {
-
-			$minutes = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_minutes'] );
-
-			$options = array(
-				'min_range' => 0,
-				'max_range' => 59
-			);
-
-			if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-				$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'hmbkp' );
-			}
-
-			else {
-				$settings['start_time']['minutes'] = $minutes;
-			}
-
-		}
-
-
-	if ( isset( $_POST['hmbkp_schedule_max_backups'] ) ) {
-
-		$max_backups = sanitize_text_field( $_POST['hmbkp_schedule_max_backups'] );
-
-		if ( empty( $max_backups ) ) {
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
-		}
-
-		elseif ( ! is_numeric( $max_backups ) ) {
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
-		}
-
-		elseif ( ! ( $max_backups >= 1 ) ) {
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
-		}
-
-		else {
-			$settings['max_backups'] = absint( $max_backups );
-		}
-
-	}
-
-	// Save the service options
-	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
-		$errors = array_merge( $errors, $service->save() );
-	}
-
-	if ( ! empty( $settings['recurrence'] ) && ! empty( $settings['start_time'] ) ) {
-
-		// Calculate the start time depending on the recurrence
-		$start_time = hmbkp_determine_start_time( $settings['recurrence'], $settings['start_time'] );
-
-		if ( $start_time ) {
-			$schedule->set_schedule_start_time( $start_time );
-		}
-
-	}
-
-	if ( ! empty( $settings['recurrence'] ) ) {
-		$schedule->set_reoccurrence( $settings['recurrence'] );
-	}
-
-	if ( ! empty( $settings['type'] ) ) {
-		$schedule->set_type( $settings['type'] );
-	}
-
-	if ( ! empty( $settings['max_backups'] ) ) {
-		$schedule->set_max_backups( $settings['max_backups'] );
-	}
-
-//	var_dump( $settings );
-//	exit;
-
-	// Save the new settings
-	$schedule->save();
-
-	// Remove any old backups in-case max backups was reduced
-	$schedule->delete_old_backups();
-
-	if ( $errors && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-		wp_send_json_error( $errors );
-
-		die();
-
-	} elseif ( $errors ) {
-
-		global $hmbkp_form_errors;
-		$hmbkp_form_errors = $errors;
-
-	} else {
-
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			wp_send_json_success();
-		} else {
-			wp_safe_redirect( hmbkp_get_settings_url(), '303' );
-		}
-
-		die();
-
-	}
-
-}
-add_action( 'wp_ajax_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_edit_schedule_submit' );
-
-/**
- * Add an exclude rule
- *
- * @access public
- * @return void
- */
-function hmbkp_add_exclude_rule() {
-
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
-
-	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
-		die;
-	}
-
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
-
-	$schedule->set_excludes( sanitize_text_field( $_POST['hmbkp_exclude_rule'] ), true );
-
-	$schedule->save();
-
-	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
-
-	die;
-
-}
-add_action( 'wp_ajax_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
-
-/**
- * Delete an exclude rule
- *
- * @access public
- * @return void
- */
-function hmbkp_delete_exclude_rule() {
-
-	if ( empty( $_GET['hmbkp_schedule_id'] ) ) {
-		die;
-	}
-
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
-
-	$excludes = $schedule->get_excludes();
-
-	$schedule->set_excludes( array_diff( $excludes, (array) stripslashes( sanitize_text_field( $_GET['hmbkp_exclude_rule'] ) ) ) );
-
-	$schedule->save();
-
-	require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
-
-	die;
-
-}
-add_action( 'wp_ajax_hmbkp_delete_exclude_rule', 'hmbkp_delete_exclude_rule' );
-
-/**
- * Ajax action for previewing an exclude rule.
- *
- * @access public
- * @return void
- */
-function hmbkp_preview_exclude_rule() {
-
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
-
-	if ( empty( $_POST['hmbkp_schedule_id'] ) || empty( $_POST['hmbkp_schedule_excludes'] ) ) {
-		die;
-	}
-
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
-
-	$excludes = explode( ',', sanitize_text_field( $_POST['hmbkp_schedule_excludes'] ) );
-
-	hmbkp_file_list( $schedule, $excludes, 'get_excluded_files' );
-
-	$schedule->set_excludes( $excludes );
-
-	if ( $schedule->get_excluded_file_count() ) { ?>
-
-		<p><?php printf( _n( '%s matches 1 file.', '%1$s matches %2$d files.', $schedule->get_excluded_file_count(), 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>', $schedule->get_excluded_file_count() ); ?></p>
-
-	<?php } else { ?>
-
-		<p><?php printf( __( '%s didn\'t match any files.', 'hmbkp' ), '<code>' . implode( '</code>, <code>', array_map( 'esc_html', $excludes ) ) . '</code>' ); ?></p>
-
-	<?php } ?>
-
-	<p>
-		<button type="button" class="button-primary hmbkp_save_exclude_rule"><?php _e( 'Exclude', 'hmbkp' ); ?></button>
-		<button type="button" class="button-secondary hmbkp_cancel_save_exclude_rule"><?php _e( 'Cancel', 'hmbkp' ); ?></button>
-	</p>
-
-	<?php die;
-
-}
-add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
-
-function hmbkp_display_error_and_offer_to_email_it() {
-
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
-
-	if ( empty( $_POST['hmbkp_error'] ) ) {
-		die;
-	}
-
-	$error = wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) );
-
-	$error = str_replace( 'HMBKP_SUCCESS', '', $error, $succeeded );
-
-	if ( $succeeded ) { ?>
-
-		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'hmbkp' ); ?></h3>
-
-	<?php } else { ?>
-
-		<h3><?php _e( 'Your backup failed', 'hmbkp' ); ?></h3>
-
-	<?php } ?>
-
-	<p><?php _e( 'Here\'s the response from the server:', 'hmbkp' ); ?></p>
-
-	<pre><?php esc_html_e( $error ); ?></pre>
-
-	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'hmbkp' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?><br /><br /></p>
-
-	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
-	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
-
-	<?php die;
-
-}
-add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
-
-function hmbkp_send_error_via_email() {
-
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
-
-	if ( empty( $_POST['hmbkp_error'] ) ) {
-		die;
-	}
-
-	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
-
-	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
-
-	die;
-
-}
-add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
-
-/**
- * Load the enable support modal contents
- *
- * @return void
- */
-function hmbkp_load_enable_support() {
-
-	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
-
-	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
-
-	die;
-
-}
-add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
-
-/**
- * Receive the heartbeat and return backup status
- */
-function hmbkp_heartbeat_received( $response, $data ) {
-	if( !empty( $data['hmbkp_is_in_progress'] ) ) {
-		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
-		if ( ! $schedule->get_status() ) {
-			$response['hmbkp_schedule_status'] = 0;
-		} else {
-			$response['hmbkp_schedule_status'] = hmbkp_schedule_actions( $schedule, true );
-		}
-	}
-  	return $response;
-}
-add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );

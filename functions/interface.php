@@ -283,7 +283,7 @@ function hmbkp_recursive_directory_filesize_scanner( $directory ) {
 
 		// We need to recursively calculate the size of all files in a subdirectory
 		if ( $file->isDir() ) {
-			$total_filesize += hmbkp_recursive_directory_filesize_scanner( $file );
+			$total_filesize += hmbkp_recursive_directory_filesize_scanner( $file->getPathname() );
 		}
 
 	endwhile;
@@ -300,7 +300,6 @@ function hmbkp_recursive_directory_filesize_scanner( $directory ) {
 	return $total_filesize;
 
 }
-add_action( 'wp_async_hmbkp_dir_scan', 'hmbkp_recursive_directory_filesize_scanner', 10, 2 );
 
 function hmbkp_total_filesize( SplFileInfo $file ) {
 
@@ -314,19 +313,18 @@ function hmbkp_total_filesize( SplFileInfo $file ) {
 
 	if ( $file->isDir() ) {
 
-		$size = get_transient( 'hmbkp_' . substr( sanitize_key( $file->getPathname() ), -30 ) . '_filesize' );
+		$sanitized_directory = substr( sanitize_key( $file->getPathname() ), -30 );
+
+		$size = get_transient( 'hmbkp_' . $sanitized_directory . '_filesize' );
 
 		if ( $size !== false ) {
 			return (int) $size;
 
 		} else {
 
-			$sanitized_directory = substr( sanitize_key( $file->getPathname() ), -30 );
-
 			update_option( 'hmbkp_filesize_scan_running_on_' . $sanitized_directory, true );
 
-			// Fire an action to trigger a scan of this sub directory
-			do_action( 'hmbkp_dir_scan', $file->getPathname() );
+			$task = new \HM\Backdrop\Task( 'hmbkp_recursive_directory_filesize_scanner', $file->getPathname() );
 
 			return false;
 
@@ -339,127 +337,6 @@ function hmbkp_total_filesize( SplFileInfo $file ) {
 function hmbkp_is_total_filesize_being_calculated( $pathname ) {
 	return (bool) get_option( 'hmbkp_filesize_scan_running_on_' . substr( sanitize_key( $pathname ), -30 ) );
 }
-
-class HMBKP_Async_Task extends WP_Async_Task {
-
-	protected $action = 'hmbkp_dir_scan';
-
-	/**
-	 * Prepare data for the asynchronous request
-	 *
-	 * @throws Exception If for any reason the request should not happen
-	 *
-	 * @param array $data An array of data sent to the hook
-	 *
-	 * @return array
-	 */
-	protected function prepare_data( $data ) {
-
-		$directory = $data[0];
-
-		/**
-		 * Internally, the library uses a protected property $_body_data
-		 * to store request data during a request lifetime, since the
-		 * async request doesn't happen until shutdown. We can use data
-		 * already stored there in subsequent runs of the action that
-		 * triggers requests.
-		 */
-		$real_data = array(
-			'directories' => array(),
-		);
-
-		if ( ! empty( $this->_body_data['directories'] ) ) {
-			$real_data['directories'] = $this->_body_data['directories'];
-		}
-
-		// Store post ids in an array inside the body data
-		$real_data['directories'][] = $directory;
-
-		return $real_data;
-
-	}
-
-	/**
-	 * Run the async task action
-	 */
-	protected function run_action() {
-
-		$directories = $_POST['directories'];
-
-		foreach ( $directories as $directory ) {
-
-			do_action(
-				"wp_async_$this->action",
-				$directory
-			);
-
-		}
-
-	}
-
-}
-
-
-/**
- * Display a html list of files
- *
- * @param HMBKP_Scheduled_Backup $schedule
- * @param mixed                  $excludes    (default: null)
- * @param string                 $file_method (default: 'get_included_files')
- * @return void
- */
-function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $file_method = 'get_included_files' ) {
-
-	if ( ! is_null( $excludes ) )
-		$schedule->set_excludes( $excludes );
-
-	$exclude_string = $schedule->exclude_string( 'regex' ); ?>
-
-	<ul class="hmbkp_file_list code">
-
-		<?php foreach ( $schedule->get_files() as $file ) :
-
-			if ( ! is_null( $excludes ) && strpos( $file, str_ireplace( $schedule->get_root(), '', $schedule->get_path() ) ) !== false )
-				continue;
-
-			// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
-			if ( method_exists( $file, 'isDot' ) && $file->isDot() )
-				continue;
-
-			// Show only unreadable files
-			if ( $file_method === 'get_unreadable_files' && @realpath( $file->getPathname() ) && $file->isReadable() )
-				continue;
-
-			// Skip unreadable files
-			elseif ( $file_method !== 'get_unreadable_files' && ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) )
-				continue;
-
-			// Show only included files
-			if ( $file_method === 'get_included_files' )
-				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
-					continue;
-
-			// Show only excluded files
-			if ( $file_method === 'get_excluded_files' )
-				if ( ! $exclude_string || ! preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
-					continue;
-
-			if ( @realpath( $file->getPathname() ) && ! $file->isReadable() && $file->isDir() ) {
-				?>
-
-				<li title="<?php echo esc_attr( HM_Backup::conform_dir( trailingslashit( $file->getPathName() ) ) ); ?>"><?php echo esc_html( ltrim( trailingslashit( str_ireplace( HM_Backup::conform_dir( trailingslashit( $schedule->get_root() ) ), '', HM_Backup::conform_dir( $file->getPathName() ) ) ), '/' ) ); ?></li>
-
-			<?php } else { ?>
-
-				<li title="<?php echo esc_attr( HM_Backup::conform_dir( $file->getPathName() ) ); ?>"><?php echo esc_html( ltrim( str_ireplace( HM_Backup::conform_dir( trailingslashit( $schedule->get_root() ) ), '', HM_Backup::conform_dir( $file->getPathName() ) ), '/' ) ); ?></li>
-
-			<?php }
-
-		endforeach; ?>
-
-	</ul>
-
-<?php }
 
 /**
  * Get the human readable backup type in.

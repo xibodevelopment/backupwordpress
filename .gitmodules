@@ -7,3 +7,6 @@
 [submodule "wp-async-task"]
 	path = wp-async-task
 	url = git@github.com:techcrunch/wp-async-task.git
+[submodule "backdrop"]
+	path = backdrop
+	url = git@github.com:humanmade/Backdrop.git
