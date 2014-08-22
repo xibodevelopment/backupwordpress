@@ -1069,24 +1069,26 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$excludes = $this->exclude_string( 'regex' );
 
-		$transient_directory_key = $this->get_transient_key( $directory );
+		$transient_filesize_key = $this->get_transient_key( $directory );
+		$transient_running_key = $this->get_transient_key( 'running_' . $directory );
 
 		if ( ! $ignore_excludes ) {
-			$transient_directory_key = $this->get_transient_key( $excludes . $directory );
+			$transient_filesize_key = $this->get_transient_key( $excludes . $directory );
+			$transient_running_key  = $this->get_transient_key( 'running_' . $excludes . $directory );
 		}
 
 		// Use the cached directory size if available
-		$directory_size = get_transient( 'hmbkp_' . $transient_directory_key . '_filesize' );
+		$directory_size = get_transient( $transient_filesize_key );
 
 		if ( $directory_size !== false ) {
 
-			delete_option( 'hmbkp_filesize_scan_running_on_' . $transient_directory_key );
+			delete_option( $transient_running_key );
 
 			return $directory_size;
 
 		}
 
-		update_option( 'hmbkp_filesize_scan_running_on_' . $transient_directory_key, true );
+		update_option( $transient_running_key, true );
 
 		$total_filesize = 0;
 		$files = array();
@@ -1124,10 +1126,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// If we have a filesize then let's cache it
 		if ( $total_filesize !== false ) {
-			set_transient( 'hmbkp_' . $transient_directory_key . '_filesize', (string) $total_filesize, WEEK_IN_SECONDS );
+			set_transient( $transient_filesize_key, (string) $total_filesize, WEEK_IN_SECONDS );
 		}
 
-		delete_option( 'hmbkp_filesize_scan_running_on_' . $transient_directory_key );
+		delete_option( $transient_running_key );
 
 		return $total_filesize;
 
@@ -1154,14 +1156,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		if ( $file->isDir() ) {
 
-			$transient_directory_key = $this->get_transient_key( $file->getPathname() );
+			$transient_filesize_key = $this->get_transient_key( $file->getPathname() );
+			$transient_running_key = $this->get_transient_key( 'running_' . $file->getPathname() );
 
 			if ( ! $ignore_excludes ) {
-				$transient_directory_key = $this->get_transient_key( $excludes . $file->getPathname() );
+				$transient_filesize_key = $this->get_transient_key( $excludes . $file->getPathname() );
+				$transient_running_key  = $this->get_transient_key( 'running_' . $excludes . $file->getPathname() );
 			}
 
 			// If we already have a cached filesize for this directory then let's return it
-			$size = get_transient( 'hmbkp_' . $transient_directory_key . '_filesize' );
+			$size = get_transient( $transient_filesize_key );
 
 			if ( $size !== false ) {
 
@@ -1186,7 +1190,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				}
 
-				update_option( 'hmbkp_filesize_scan_running_on_' . $transient_directory_key, true );
+				update_option( $transient_running_key, true );
 
 				// Schedule a Backdrop task to trigger a recalculation
 				$task = new \HM\Backdrop\Task( array( $this, 'recursive_directory_filesize_scanner' ), $file->getPathname(), $ignore_excludes );
@@ -1206,19 +1210,19 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @param string $file	The file you want to know the size of
 	 * @return int 			The total of the file or directory
 	 */
-	public static function is_total_filesize_being_calculated( $pathname ) {
+	public function is_total_filesize_being_calculated( $pathname ) {
 
 		// Bail early if $pathname isn't a directory
 		if ( ! is_dir( $pathname ) ) {
 			return false;
 		}
 
-		return (bool) get_option( 'hmbkp_filesize_scan_running_on_' . substr( sanitize_key( $pathname ), -30 ) );
+		return (bool) get_option( $this->get_transient_key( 'running_' . (string) $pathname ) );
 
 	}
 
-	private function get_transient_key( $seed ) {
-		return substr( sha1( serialize( $seed ) ), -30 );
+	public function get_transient_key( $seed ) {
+		return 'hmbkp_' . substr( sha1( serialize( $seed ) ), -34 );
 	}
 
 }

@@ -181,8 +181,8 @@
 	</table>
 
 	<p class="submit">
-		<a class="button-secondary" href="<?php echo esc_url( hmbkp_get_settings_url() ) ?>">Close</a>
-		<button type="submit" class="button-primary"><?php _e( 'Save Changes', 'hmbkp' ); ?></button>
+		<button type="submit" class="button-primary"><?php _e( 'Done', 'hmbkp' ); ?></button>
 	</p>
+
 
 </form>

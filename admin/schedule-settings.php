@@ -63,17 +63,16 @@ if ( $schedule->get_type() !== 'database' ) { ?>
 
 			<form method="post" novalidate>
 
-			<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
-			<input type="hidden" name="action" value="hmbkp_edit_schedule_service" />
+				<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
+				<input type="hidden" name="action" value="hmbkp_edit_schedule_service" />
 
-			<?php wp_nonce_field( 'hmbkp-edit_schedule_service' ); ?>
+				<?php wp_nonce_field( 'hmbkp-edit_schedule_service' ); ?>
 
-			<?php $service->form(); ?>
+				<?php $service->form(); ?>
 
-			<p class="submit">
-				<a class="button-secondary" href="<?php echo esc_url( hmbkp_get_settings_url() ) ?>">Close</a>
-				<button type="submit" class="button-primary"><?php _e( 'Save Changes', 'hmbkp' ); ?></button>
-			</p>
+				<p class="submit">
+					<button type="submit" class="button-primary"><?php _e( 'Done', 'hmbkp' ); ?></button>
+				</p>
 
 			</form>
 

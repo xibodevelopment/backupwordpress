@@ -532,7 +532,7 @@ function hmbkp_recalculate_directory_filesize( $pathname = null ) {
 
 	// Delete the cached directory size
 	// TODO should use $schedule->get_transient_key
-	delete_transient( 'hmbkp_' . substr( sanitize_key( $directory ), -30 ) . '_filesize' );
+	delete_transient( $schedule->get_transient_key( $directory ) );
 
 	$handle = opendir( $directory );
 
@@ -546,7 +546,7 @@ function hmbkp_recalculate_directory_filesize( $pathname = null ) {
 
 		// Delete all sub directories
 		if ( is_dir( $file ) ) {
-			delete_transient( 'hmbkp_' . substr( sanitize_key( $file ), -30 ) . '_filesize' );
+			delete_transient(  $schedule->get_transient_key( $file ) );
 			hmbkp_recalculate_directory_filesize( $file );
 		}
 
@@ -559,7 +559,7 @@ function hmbkp_recalculate_directory_filesize( $pathname = null ) {
 	// Delete the cached filesize of all parents as well
 	while ( $schedule->get_root() !== $parent_directory ) {
 
-		delete_transient( 'hmbkp_' . substr( sanitize_key( $parent_directory ), -30 ) . '_filesize' );
+		delete_transient(  $schedule->get_transient_key( $parent_directory ) );
 		$parent_directory = dirname( $parent_directory );
 
 	}

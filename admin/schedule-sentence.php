@@ -1,7 +1,7 @@
 <?php
 
 // Calculated filesize
-$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_file_size() ) . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your site&hellip;', 'hmbkp' ) . '</code>';
+$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_file_size() ) . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your backup&hellip;', 'hmbkp' ) . '</code>';
 
 // Backup Type
 $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
@@ -9,7 +9,7 @@ $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
 // Backup Time
 $day = date_i18n( 'l', $schedule->get_next_occurrence( false ) );
 
-$next_backup = 'title="' . esc_attr( sprintf( __( 'The next backup will be on %1$s at %2$s', 'hmbkp' ), date_i18n( get_option( 'date_format' ), $schedule->get_next_occurrence( false ) ), date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) ) . '"';
+$next_backup = 'title="' . esc_attr( sprintf( __( 'The next backup will be on %1$s at %2$s %3$s', 'hmbkp' ), date_i18n( get_option( 'date_format' ), $schedule->get_next_occurrence( false ) ), date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ), date_i18n( 'T', $schedule->get_next_occurrence( false ) ) ) ) . '"';
 
 // Backup Re-occurrence
 switch ( $schedule->get_reoccurrence() ) :
