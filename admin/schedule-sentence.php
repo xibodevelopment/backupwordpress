@@ -1,7 +1,11 @@
 <?php
 
 // Calculated filesize
-$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_file_size() ) . '</code>' : '<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your backup&hellip;', 'hmbkp' ) . '</code>';
+$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_file_size() ) . '</code>)' : '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your backup&hellip;', 'hmbkp' ) . '</code>)';
+
+if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
+	$filesize = '';
+}
 
 // Backup Type
 $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
@@ -115,7 +119,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 <div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
-	<?php $sentence = sprintf( __( 'Backup my %1$s (%2$s) %3$s, %4$s. ', 'hmbkp' ), '<span>' . $type . '</span>', $filesize, $reoccurrence, $backup_to_keep );
+	<?php $sentence = sprintf( __( 'Backup my %1$s %2$s %3$s, %4$s. ', 'hmbkp' ), '<span>' . $type . '</span>', $filesize, $reoccurrence, $backup_to_keep );
 
 	if ( $email_msg ) {
 		$sentence .= sprintf( __( '%s. ', 'hmbkp' ), $email_msg );

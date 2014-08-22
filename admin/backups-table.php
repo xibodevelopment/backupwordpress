@@ -1,45 +1,42 @@
 <table class="widefat">
 
-		<thead>
+	<thead>
 
-			<tr>
+		<tr>
 
-				<th scope="col"><?php hmbkp_backups_number( $schedule ); ?></th>
-				<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
-				<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
-				<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
+			<th scope="col"><?php hmbkp_backups_number( $schedule ); ?></th>
+			<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
+			<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
+			<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
 
-			</tr>
+		</tr>
 
-		</thead>
+	</thead>
 
-		<tbody>
+	<tbody>
 
-	<?php
-
-		if ( $schedule->get_backups() ) :
+		<?php if ( $schedule->get_backups() ) {
 
 			$schedule->delete_old_backups();
 
-				foreach ( $schedule->get_backups() as $file ) :
+			foreach ( $schedule->get_backups() as $file ) {
 
-					if ( ! file_exists( $file ) )
-						continue;
+				if ( ! file_exists( $file ) ) {
+					continue;
+				}
 
-						hmbkp_get_backup_row( $file, $schedule );
+				hmbkp_get_backup_row( $file, $schedule );
 
-				endforeach;
+			}
 
-		else : ?>
+		} else { ?>
 
-	<tr>
+			<tr>
+				<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'hmbkp' ); ?></td>
+			</tr>
 
-		<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'hmbkp' ); ?></td>
+		<?php } ?>
 
-	</tr>
+	</tbody>
 
-	<?php endif; ?>
-
-		</tbody>
-
-	</table>
+</table>

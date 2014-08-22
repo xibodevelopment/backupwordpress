@@ -16,7 +16,7 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 .hmbkp-upsell .howto { font-weight: normal; display: inline; }
 
 .hmbkp-schedule-sentence { font-size: 16px; font-weight: lighter; margin: 20px 0; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
-.hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 80px; display: block; float: left; }
+.hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 60px; display: block; float: left; }
 .hmbkp-schedule-sentence.hmbkp-error:before { content: "\2718"; }
 .hmbkp-schedule-sentence.hmbkp-running:before { width: 20px; height: 80px; margin: -1px 10px 0 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
 .hmbkp-schedule-sentence .hmbkp-status { display: none; font-size: 12px; color: #666; margin: 2px 0 0 30px; }
@@ -65,6 +65,8 @@ pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px
 		padding: 10px 0 0 0;
 	}
 
+	.hmbkp-schedule-sentence::before { height: 80px; }
+
 	h2 .nav-tab {
 		display: block;
 		padding: 10px;
@@ -77,7 +79,7 @@ pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px
 	}
 	#intercom-info { display: none; }
 	.hmbkp-schedule-settings { padding: 0 10px 10px; }
-	.hmbkp-schedule-settings table { margin: 0 -10px; border-left: none; border-right: none; width: calc(100% + 20px) }
+	.hmbkp-exclude-settings table { margin: 0 -10px; border-left: none; border-right: none; width: calc(100% + 20px) }
 	.hmbkp-exclude-settings tr > *:first-child { display: none; }
 	.hmbkp-schedule-settings tr *:nth-child(4), .hmbkp-schedule-settings tr *:nth-child(5) { display: none; }
 	.hmbkp-schedule-settings thead tr:nth-child(2) { display: none; }

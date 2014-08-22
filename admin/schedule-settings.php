@@ -6,10 +6,10 @@
 
 		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
 
-<?php // Only show excludes if we are backing up files
-if ( $schedule->get_type() !== 'database' ) { ?>
-		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a> |
-<?php } ?>
+		<?php // Only show excludes if we are backing up files
+		if ( $schedule->get_type() !== 'database' ) { ?>
+			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a> |
+		<?php } ?>
 
 		<?php foreach ( HMBKP_Services::get_services( $schedule ) as $service ) :
 
