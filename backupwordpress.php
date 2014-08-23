@@ -155,7 +155,7 @@ add_action( 'admin_init', 'hmbkp_init' );
  */
 function hmbkp_load_scripts() {
 
-	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
+	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js', array( 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
 
 	wp_localize_script(
 		'hmbkp',
@@ -223,7 +223,7 @@ add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
  * Enqueue the plugin styles
  */
 function hmbkp_load_styles(){
-	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
+	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css', false, HMBKP_VERSION );
 }
 add_action( 'admin_print_styles-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_styles' );
 
