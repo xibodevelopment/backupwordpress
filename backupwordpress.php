@@ -155,7 +155,13 @@ add_action( 'admin_init', 'hmbkp_init' );
  */
 function hmbkp_load_scripts() {
 
-	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js', array( 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
+	$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
+
+	if ( WP_DEBUG ) {
+		$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js'
+	}
+
+	wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( HMBKP_VERSION ) );
 
 	wp_localize_script(
 		'hmbkp',
@@ -184,8 +190,9 @@ add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
  */
 function hmbkp_load_intercom_script() {
 
-	if ( ! get_option( 'hmbkp_enable_support' ) )
+	if ( ! get_option( 'hmbkp_enable_support' ) ) {
 		return;
+	}
 
 	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
 
@@ -199,8 +206,9 @@ function hmbkp_load_intercom_script() {
 
 	}
 
-	foreach ( HMBKP_Services::get_services() as $file => $service )
+	foreach ( HMBKP_Services::get_services() as $file => $service ) {
 		array_merge( $info, call_user_func( array( $service, 'intercom_data' ) ) );
+	}
 
 	$current_user = wp_get_current_user();
 
@@ -223,7 +231,15 @@ add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
  * Enqueue the plugin styles
  */
 function hmbkp_load_styles(){
-	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css', false, HMBKP_VERSION );
+
+	$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css';
+
+	if ( WP_DEBUG ) {
+		$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css'
+	}
+
+	wp_enqueue_style( 'hmbkp', $css_file, false, sanitize_key( HMBKP_VERSION ) );
+
 }
 add_action( 'admin_print_styles-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_styles' );
 
@@ -236,8 +252,9 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 	$schedules = HMBKP_Schedules::get_instance();
 	$schedule  = $schedules->get_schedule( $schedule_id );
 
-	if ( ! $schedule )
+	if ( ! $schedule ) {
 		return;
+	}
 
 	$schedule->run();
 
