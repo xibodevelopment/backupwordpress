@@ -46,7 +46,6 @@ thead td { border-bottom: 1px solid #e1e1e1; }
 .hmbkp-exclude-settings table .spinner { display: block; float: left; margin: 0; }
 .hmbkp-schedule-settings .column-format code { white-space: nowrap; }
 
-
 .column-filesize code { position: relative; }
 .column-filesize .dashicons-update { display: none; overflow: hidden; position: absolute; width: 100%; left: 0; text-align: center; background-color: rgba( 255, 255, 255, .8 ) }
 .column-filesize .dashicons-update span { display: none; }

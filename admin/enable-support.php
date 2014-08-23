@@ -59,16 +59,12 @@
 
 <form class="hmbkp-form" method="POST">
 
-	<?php wp_nonce_field( 'hmbkp-enable_support', 'hmbkp' ); ?>
+	<?php wp_nonce_field( 'hmbkp-enable_support' ); ?>
 
 	<input type="hidden" name="hmbkp_enable_support" value="1" />
 
 	<p class="submit">
-
-		<button type="button" class="button-secondary hmbkp-colorbox-close"><?php _e( 'No thanks', 'hmbkp' ); ?></button>
-
-		<button type="submit" class="button-primary"><?php _e( 'Yes I want to enable support', 'hmbkp' ); ?></button>
-
+		<button type="submit" class="button-primary right"><?php _e( 'Yes I want to enable support', 'hmbkp' ); ?></button>
 	</p>
 
 </form>

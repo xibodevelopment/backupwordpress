@@ -29,7 +29,7 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_backup' );
  */
 function hmbkp_request_enable_support() {
 
-	if ( ! isset( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) ) {
+	if ( ! isset( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'hmbkp-enable_support' ) ) {
 		return;
 	}
 
