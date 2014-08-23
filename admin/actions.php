@@ -590,11 +590,16 @@ function hmbkp_heartbeat_received( $response, $data ) {
 
 		if ( ! $schedule->get_status() ) {
 			$response['hmbkp_schedule_status'] = 0;
+
 		} else {
-			$response['hmbkp_schedule_status'] = hmbkp_schedule_actions( $schedule, true );
+			$response['hmbkp_schedule_status'] = hmbkp_schedule_status( $schedule, false );
+
 		}
+
 	}
+
   	return $response;
+
 }
 add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
 
