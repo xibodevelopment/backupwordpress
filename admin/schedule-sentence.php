@@ -72,7 +72,7 @@ switch ( $schedule->get_reoccurrence() ) :
 endswitch;
 
 $server = '<span title="' . esc_attr( hmbkp_path() ) . '">' . __( 'this server', 'hmbkp' ) . '</span>';
-$server = '<code>' . esc_attr( str_replace( $schedule::get_home_path(), '', hmbkp_path() ) ) . '</code>';
+$server = '<code>' . esc_attr( str_replace( $schedule->get_home_path(), '', hmbkp_path() ) ) . '</code>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
