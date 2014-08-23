@@ -159,7 +159,7 @@ function hmbkp_init() {
 	foreach ( $schedules as $schedule ) {
 
 		if ( ! $schedule->is_filesize_cached() ) {
-			$task = new \HM\Backdrop\Task( array( $schedule, 'get_filesize' ) );
+			$task = new HM_Backdrop_TASK( array( $schedule, 'get_filesize' ) );
 			$task->schedule();
 		}
 

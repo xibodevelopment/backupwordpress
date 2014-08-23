@@ -1187,7 +1187,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				while ( $parent_directory !== '/' ) {
 
-					$parent_task = new \HM\Backdrop\Task( array( $this, 'recursive_directory_filesize_scanner' ), $parent_directory, $ignore_excludes );
+					$parent_task = new HM_Backdrop_Task( array( $this, 'recursive_directory_filesize_scanner' ), $parent_directory, $ignore_excludes );
 
 					// If we are already calulating the parent directory in another thread then let's just wait for that to finish
 					if ( $parent_task->is_scheduled() ) {
@@ -1201,7 +1201,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				update_option( $transient_running_key, true );
 
 				// Schedule a Backdrop task to trigger a recalculation
-				$task = new \HM\Backdrop\Task( array( $this, 'recursive_directory_filesize_scanner' ), $file->getPathname(), $ignore_excludes );
+				$task = new HM_Backdrop_Task( array( $this, 'recursive_directory_filesize_scanner' ), $file->getPathname(), $ignore_excludes );
 				$task->schedule();
 
 				return false;
