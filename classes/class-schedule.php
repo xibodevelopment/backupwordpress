@@ -784,6 +784,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		endswitch;
 
+		do_action( 'hmbkp_action_complete', $action, $this );
 	}
 
 	/**
