@@ -11,7 +11,7 @@ function hmbkp_request_delete_backup() {
 	$cap = apply_filters( 'hmbkp_can_delete_cap', 'manage_options' );
 
 	if ( ! current_user_can( $cap ) )
-		wp_die( 'Cheeatin huh?' );
+		wp_die( 'Cheatin&#8217; uh?' );
 
 	$previous = esc_url_raw( urldecode( $_GET['previous_page'] ) );
 
@@ -126,12 +126,19 @@ add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
  */
 function hmbkp_request_download_backup() {
 
-	global $is_apache;
+	check_admin_referer( 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' );
 
-	if ( empty( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) || ! file_exists( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) )
+	$cap = apply_filters( 'hmbkp_can_download_cap', 'manage_options' );
+
+	if ( ! current_user_can( $cap ) )
+		wp_die( 'Cheatin&#8217; uh?' );
+
+	if ( ! file_exists( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) ) )
 		return;
 
-	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ), PATHINFO_BASENAME ) );
+	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ), PATHINFO_BASENAME ) );
+
+	global $is_apache;
 
 	if ( $is_apache ) {
 
@@ -150,7 +157,7 @@ function hmbkp_request_download_backup() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_download_backup' );
+add_action( 'admin_post_hmbkp_request_download_backup', 'hmbkp_request_download_backup' );
 
 /**
  * Cancels a running backup then redirect
