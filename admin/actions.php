@@ -164,8 +164,7 @@ add_action( 'admin_post_hmbkp_request_download_backup', 'hmbkp_request_download_
  */
 function hmbkp_request_cancel_backup() {
 
-	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_cancel' )
-		return;
+	check_admin_referer( 'hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup_nonce' );
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
