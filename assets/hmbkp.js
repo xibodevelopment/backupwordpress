@@ -276,7 +276,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Calculate the estimated backup size
 	if ( $( '.hmbkp-schedule-sentence .calculating' ).size() ) {
-		$.post( ajaxurl, { 'hmbkp_calculate' : hmbkp.hmbkp_calculate, 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
+		$.post( ajaxurl, { 'hmbkp_calculate_nonce' : hmbkp.hmbkp_calculate_nonce, 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 			function( data ) {
 
 				if ( data.indexOf( 'title' ) != -1 )
