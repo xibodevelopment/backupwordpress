@@ -13,11 +13,6 @@ function hmbkp_request_delete_backup() {
 	if ( ! current_user_can( $cap ) )
 		wp_die( 'Cheatin&#8217; uh?' );
 
-	$previous = esc_url_raw( urldecode( $_GET['previous_page'] ) );
-
-	if ( isset( $GET['hmbkp_schedule_id'] ) )
-		$previous .= sanitize_text_field( $_GET['hmbkp_schedule_id'] );
-
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) );
@@ -25,7 +20,7 @@ function hmbkp_request_delete_backup() {
 	if ( is_wp_error( $deleted ) )
 		wp_die( $deleted->get_error_message() );
 
-	wp_safe_redirect( $previous, 303 );
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
