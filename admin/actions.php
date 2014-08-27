@@ -182,7 +182,7 @@ function hmbkp_request_cancel_backup() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_cancel_backup' );
+add_action( 'admin_post_hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup' );
 
 /**
  * Dismiss an error and then redirect
