@@ -230,7 +230,7 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
  */
 function hmbkp_ajax_calculate_backup_size() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_calculate', 'hmbkp_calculate_nonce' );
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
@@ -251,7 +251,7 @@ add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
  */
 function hmbkp_ajax_cron_test() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_cron_test', 'hmbkp_cron_test_nonce' );
 
 	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
 
@@ -605,7 +605,7 @@ add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
 function hmbkp_display_error_and_offer_to_email_it() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_backup_error', 'hmbkp_backup_error_nonce' );
 
 	if ( empty( $_POST['hmbkp_error'] ) )
 		die;
@@ -641,7 +641,7 @@ add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_emai
 
 function hmbkp_send_error_via_email() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_send_error_via_email', 'hmbkp_send_error_via_email_nonce' );
 
 	if ( empty( $_POST['hmbkp_error'] ) )
 		die;
@@ -662,7 +662,7 @@ add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
  */
 function hmbkp_load_enable_support() {
 
-	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
+	check_ajax_referer( 'hmbkp_load_enable_support', 'hmbkp_load_enable_support_nonce' );
 
 	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
 
