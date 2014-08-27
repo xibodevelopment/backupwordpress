@@ -73,7 +73,7 @@ add_action( 'admin_post_hmbkp_request_delete_schedule', 'hmbkp_request_delete_sc
  */
 function hmbkp_ajax_request_do_backup() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' );
 
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
