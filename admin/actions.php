@@ -177,7 +177,7 @@ function hmbkp_request_cancel_backup() {
 
 	hmbkp_cleanup();
 
-	wp_safe_redirect( remove_query_arg( array( 'action' ) ), 303 );
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
