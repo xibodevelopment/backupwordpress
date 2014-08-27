@@ -28,24 +28,6 @@ function hmbkp_request_delete_backup() {
 add_action( 'admin_post_hmbkp_request_delete_backup', 'hmbkp_request_delete_backup' );
 
 /**
- * Enable support and then redirect back to the backups page
- * @return void
- */
-function hmbkp_request_enable_support() {
-
-	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) )
-		return;
-
-	update_option( 'hmbkp_enable_support', true );
-
-	wp_safe_redirect( remove_query_arg( 'null' ) , 303 );
-
-	die;
-
-}
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_enable_support' );
-
-/**
  * Delete a schedule and all it's backups and then redirect
  * back to the backups page
  */
@@ -654,6 +636,23 @@ function hmbkp_send_error_via_email() {
 
 }
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
+
+/**
+ * Enable support and then redirect back to the backups page
+ * @return void
+ */
+function hmbkp_request_enable_support() {
+
+	check_admin_referer( 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' );
+
+	update_option( 'hmbkp_enable_support', true );
+
+	wp_safe_redirect( HMBKP_ADMIN_URL, 303 );
+
+	die;
+
+}
+add_action( 'admin_post_hmbkp_request_enable_support', 'hmbkp_request_enable_support' );
 
 /**
  * Load the enable support modal contents
