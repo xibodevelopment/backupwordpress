@@ -195,7 +195,7 @@ function hmbkp_dismiss_error() {
 
 	hmbkp_cleanup();
 
-	wp_safe_redirect( remove_query_arg( 'action' ), 303 );
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
