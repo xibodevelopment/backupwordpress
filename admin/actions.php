@@ -51,18 +51,22 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_enable_support' );
  */
 function hmbkp_request_delete_schedule() {
 
-	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' || ! check_admin_referer( 'hmbkp-delete_schedule' ) )
-		return;
+	check_admin_referer( 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' );
+
+	$cap = apply_filters( 'hmbkp_can_delete_cap', 'manage_options' );
+
+	if ( ! current_user_can( $cap ) )
+		wp_die( 'Cheatin&#8217; uh?' );
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 	$schedule->cancel( true );
 
-	wp_safe_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action', '_wpnonce' ) ), 303 );
+	wp_safe_redirect( HMBKP_ADMIN_URL, 303 );
 
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_schedule' );
+add_action( 'admin_post_hmbkp_request_delete_schedule', 'hmbkp_request_delete_schedule' );
 
 /**
  * Perform a manual backup via ajax
