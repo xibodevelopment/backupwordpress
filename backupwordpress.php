@@ -93,8 +93,10 @@ require_once( HMBKP_PLUGIN_PATH . '/classes/class-services.php' );
 // Load the email service
 require_once( HMBKP_PLUGIN_PATH . '/classes/class-email.php' );
 
-// Load the webhook service
-require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook.php' );
+// Load the webhook services
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhooks.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-custom.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-wpremote.php' );
 
 // Load the wp cli command
 if ( defined( 'WP_CLI' ) && WP_CLI )

@@ -23,6 +23,10 @@ form.hmbkp-form div.recurring-setting { display: none; }
 
 form.hmbkp-form div { display: block; line-height: 25px; padding-bottom: 20px; border-bottom: 1px dotted #CCC; margin-bottom: 20px; width: 320px; position: relative; }
 
+form.hmbkp-form div>div { border-bottom: none; padding-bottom: 10px; }
+
+form.hmbkp-form div>div>input[type="text"] { min-width: 0; }
+
 .hmbkp-form legend { padding: 0 0 20px; font-size: 1.17em; font-weight: bold; }
 .hmbkp-form div > select, .hmbkp-form div > input, .hmbkp-form div > span.field-group, .button-right { float: right; }
 .hmbkp-form label.hidden { display: none; }
