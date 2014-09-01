@@ -13,7 +13,7 @@ class HMBKP_Webhook_WPRemote_Service extends HMBKP_Webhooks_Service {
 	 */
 	public $name = 'WPRemote Webhook';
 
-	private $wpremote_webhook_url = 'http://wpremote.dev/api/json/backupwordpress/webhook';
+	private $wpremote_webhook_url = 'http://wpremote.com/api/json/backupwordpress/webhook';
 
 	/**
 	 * Not in use
