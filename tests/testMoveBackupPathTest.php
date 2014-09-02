@@ -25,11 +25,9 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		$this->backup = new HM_Backup();
 		$this->backup->set_type( 'database' );
 
-		// Remove the backup directory if it exists
-		hmbkp_rmdirtree( hmbkp_path() );
+		$this->custom_path = HM_backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) . 'test-custom' );
 
-		$this->custom_path = trailingslashit( WP_CONTENT_DIR ) . 'test-custom';
-
+		// Remove the custom path if it already exists
 		hmbkp_rmdirtree( $this->custom_path );
 
 		$this->backup->set_path( hmbkp_path() );
@@ -44,11 +42,15 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
+		if ( file_exists( $this->custom_path ) )
+			chmod( $this->custom_path, 0755 );
+
 		hmbkp_rmdirtree( $this->custom_path );
+		hmbkp_rmdirtree( hmbkp_path() );
+		hmbkp_rmdirtree( hmbkp_path_default() );
 
 		delete_option( 'hmbkp_path' );
-
-		hmbkp_rmdirtree( hmbkp_path() );
+		delete_option( 'hmbkp_default_path' );
 
 		unset( $this->backup );
 
@@ -96,6 +98,7 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		hmbkp_constant_changes();
 
 		$this->assertFileNotExists( $this->backup->get_archive_filepath() );
+
 		$this->assertFileExists( str_replace( $this->backup->get_path(), hmbkp_path(), $this->backup->get_archive_filepath() ) );
 
 	}
@@ -139,11 +142,12 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 
 		chmod( $this->custom_path, 0555 );
 
+		if ( is_writable( $this->custom_path ) )
+			$this->markTestSkipped( 'The custom path was still writable' );
+
 		hmbkp_constant_changes();
 
 		$this->assertEquals( hmbkp_path(), hmbkp_path_default() );
-
-		chmod( $this->custom_path, 0755 );
 
 		$this->assertFileExists( str_replace( $this->backup->get_path(), hmbkp_path_default(), $this->backup->get_archive_filepath() ) );
 

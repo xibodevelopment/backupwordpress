@@ -1,6 +1,3 @@
-# Main Travis CI configuration file for wordpress-plugin tests
-# https://github.com/benbalter/wordpress-plugin-tests
-
 # Tell Travis CI we're using PHP
 language: php
 
@@ -9,21 +6,33 @@ php:
   - 5.2
   - 5.3
   - 5.4
+  - 5.5
 
 # Specify versions of WordPress to test against
 # WP_VERSION = WordPress version number (use "master" for SVN trunk)
 # WP_MULTISITE = whether to test multisite (use either "0" or "1")
 env:
   - WP_VERSION=master WP_MULTISITE=0
-  - WP_VERSION=3.5.1 WP_MULTISITE=0
-  - WP_VERSION=3.4.2 WP_MULTISITE=0
-  - WP_VERSION=3.3.3 WP_MULTISITE=0
-  - WP_VERSION=3.2.1 WP_MULTISITE=0
+  - WP_VERSION=3.8.1 WP_MULTISITE=0
+  - WP_VERSION=3.7.1 WP_MULTISITE=0
   - WP_VERSION=master WP_MULTISITE=1
 
-# Grab the setup script and execute
+notifications:
+  secure: "KSkj1N4CVYf8/ZWhoogK/dTh7pxvqNN3E0VM/VBGnBJVAOWvXCB5RB/nUBYcdG5rNgjvzcIAUr23MIsyzowbYw2uBEmpZeIxkmryKXsby8VyDrHQZppawLRjOpfBk9PsrH4e8/BlNc0acBvGHVBU0giL0lj3WlXNKOKNBdrf2PE="
+  email: false
+
+# Clones WordPress and configures our testing environment.
 before_script:
-    - wget https://raw.github.com/benbalter/wordpress-plugin-tests/setup/setup.sh
-    - source setup.sh
+    - export PLUGIN_SLUG=$(basename $(pwd))
+    - git clone --depth=1 git://develop.git.wordpress.org/ /tmp/wordpress
+    - mkdir "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+    - cp -r . "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG/"
+    - cd /tmp/wordpress
+    - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
+    - cp wp-tests-config-sample.php wp-tests-config.php
+    - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
+    - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
+    - sed -i "s/yourpasswordhere//" wp-tests-config.php
+    - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 
 script: phpunit

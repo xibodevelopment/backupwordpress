@@ -29,8 +29,6 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 		if ( defined( 'HMBKP_PATH' ) )
 			$this->markTestSkipped( 'Skipped because of defines' );
 
-		hmbkp_rmdirtree( hmbkp_path() );
-
 		hmbkp_path();
 
 	}
@@ -44,6 +42,9 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	public function tearDown() {
 
 		hmbkp_rmdirtree( hmbkp_path() );
+
+		delete_option( 'hmbkp_path' );
+		delete_option( 'hmbkp_default_path' );
 
 		unset( $this->backup );
 

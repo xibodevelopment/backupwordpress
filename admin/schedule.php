@@ -15,8 +15,7 @@ $next_backup = 'title="' . esc_attr( sprintf( __( 'The next backup will be on %1
 switch ( $schedule->get_reoccurrence() ) :
 
 	case 'hmbkp_hourly' :
-
-		$reoccurrence = date_i18n( 'i', $schedule->get_next_occurrence( false ) ) === '00' ? '<span ' . $next_backup . '>' . __( 'hourly on the hour', 'hmbkp' ) . '</span>' : sprintf( __( 'hourly at %s minutes past the hour', 'hmbkp' ), '<span ' . $next_backup . '>' . str_replace( '0', '', date_i18n( 'i', $schedule->get_next_occurrence( false ) ) ) ) . '</span>';
+		$reoccurrence = date_i18n( 'i', $schedule->get_next_occurrence( false ) ) === '00' ? '<span ' . $next_backup . '>' . __( 'hourly on the hour', 'hmbkp' ) . '</span>' : sprintf( __( 'hourly at %s minutes past the hour', 'hmbkp' ), '<span ' . $next_backup . '>' . intval( date_i18n( 'i', $schedule->get_next_occurrence( false ) ) ) ) . '</span>';
 
 	break;
 
@@ -64,7 +63,7 @@ switch ( $schedule->get_reoccurrence() ) :
 	break;
 
 	default:
-		wp_die( 'Invalid reoccurence' );
+		$schedule->set_reoccurrence( 'manually' );
 
 endswitch;
 
@@ -91,12 +90,34 @@ switch ( $schedule->get_max_backups() ) :
 
 endswitch;
 
-foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service )
-	$services[] = $service->display(); ?>
+$email_msg = '';
+
+foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service ) {
+
+	if ( 'Email' == $service->name )
+		$email_msg = wp_kses_post( $service->display() );
+
+	elseif ( $service->is_service_active() )
+		$services[] = esc_html( $service->display() );
+
+}
+
+if ( ! empty( $services ) && count( $services ) > 1 ) {
+
+	$services[count( $services ) -2] .= ' & ' . $services[count( $services ) -1];
+
+	array_pop( $services );
+
+} ?>
 
 <div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
-	<?php printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, implode( '. ', array_filter( $services ) ) ); ?>
+	<?php
+	if ( ! empty( $services ) )
+		printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s Send a copy of each backup to %6$s.', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg, implode( ', ', array_filter( $services ) ) );
+	else
+		printf( __( 'Backup my %1$s %2$s %3$s, %4$s. %5$s', 'hmbkp' ), $filesize, '<span>' . $type . '</span>', $reoccurrence, $backup_to_keep, $email_msg );
+	?>
 
 	<?php hmbkp_schedule_actions( $schedule ); ?>
 

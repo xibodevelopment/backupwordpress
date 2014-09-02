@@ -1,0 +1,6 @@
+/.svn/
+node_modules
+npm-debug.log
+assets/jquery
+readme/faq.txt
+build

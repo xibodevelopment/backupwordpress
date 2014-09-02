@@ -1,6 +1,6 @@
 <form method="post" class="hmbkp-form">
 
-    <input type="hidden" name="hmbkp_schedule_id" value="<?php esc_attr_e( $schedule->get_id() ); ?>" />
+    <input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
 
     <fieldset class="hmbkp-edit-schedule-excludes-form">
 
@@ -32,14 +32,14 @@
 
         	<tbody>
 
-    <?php foreach( $schedule->get_excludes() as $key => $exclude ) : ?>
+    <?php foreach ( $schedule->get_excludes() as $key => $exclude ) : ?>
 
     			<tr>
-    			    <td data-hmbkp-exclude-rule="<?php esc_attr_e( $exclude ); ?>">
+    			    <td data-hmbkp-exclude-rule="<?php echo esc_attr( $exclude ); ?>">
 
-    			    	<span class="code"><?php esc_attr_e( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
+    			    	<span class="code"><?php echo esc_attr( str_ireplace( untrailingslashit( $schedule->get_root() ), '', $exclude ) ); ?></span>
 
-    	<?php if ( $schedule->get_path() === untrailingslashit( $exclude ) ) : ?>
+    	<?php if ( ( $schedule->get_path() === untrailingslashit( $exclude ) ) || ( in_array( $exclude, $schedule->default_excludes() ) ) ) : ?>
 
     					<span class="reason"><?php _e( 'default', 'hmbkp' ); ?></span>
 
