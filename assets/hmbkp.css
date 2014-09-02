@@ -9,11 +9,12 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 .nav-tab.hmbkp-running:not(.nav-tab-active):before { width: 20px; height: 20px; margin: 0 10px -4px 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
 
 .hmbkp-upsell { margin-top: 40px; border-top: 1px solid #ccc; }
-.hmbkp-upsell a { display: block; margin-bottom: 0; width: 120px; }
 .hmbkp-upsell ul { overflow: hidden; }
 .hmbkp-upsell li { float: left; margin: 0 20px 20px 0; }
 .hmbkp-upsell img { display: block; margin: 0 auto; max-width: 120px; min-height: 60px; }
+.hmbkp-upsell ul a { display: block; margin-bottom: 0; width: 120px; }
 .hmbkp-upsell .howto { font-weight: normal; display: inline; }
+.hmbkp-upsell .hmbkp_hide { float: right; }
 
 .hmbkp-schedule-sentence { font-size: 16px; font-weight: lighter; margin: 20px 0; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 60px; display: block; float: left; }

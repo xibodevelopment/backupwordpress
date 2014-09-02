@@ -1,7 +1,32 @@
+<?php $display = get_option( 'display_upsell' );
+
+if ( isset( $_GET[ 'display_upsell' ] ) ) {
+	
+	if ( ! $display || $display === 'shown' ) {
+		
+		update_option( 'display_upsell', 'hidden' );
+	};
+	if ( $display === 'hidden' ) {
+
+		update_option( 'display_upsell', 'shown' );
+
+	};
+}; ?>
+
 <div class="hmbkp-upsell">
 
-	<h3>Want to backup to any of our remote destinations and receive priority support? <span class="howto">just &dollar;24 each per site.</span></h3>
+	<h3>
+		Want to backup to any of our remote destinations and receive priority support? 
 
+		<span class="howto">just &dollar;24 each per site.</span>
+
+		<a href="<?php echo add_query_arg( 'display_upsell', '1' ); ?>">
+			<span class="hmbkp_hide add-new-h2">Show/Hide</span>
+		</a>
+
+	</h3>
+
+	<?php if ( ! get_option( 'display_upsell' ) || get_option( 'display_upsell' ) === 'shown' ) { ?>
 	<ul>
 
 		<li class="manage-menus">
@@ -54,6 +79,6 @@
 		</li>
 		-->
 
-	</ul>
-
+	</ul> 
+	<?php }; ?>
 </div>
