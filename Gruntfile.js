@@ -100,7 +100,7 @@ module.exports = function (grunt) {
 			minify: {
 				expand: true,
 				cwd   : 'assets/',
-				src   : ['hmbkp-combined.css'],
+				src   : ['hmbkp.css'],
 				dest  : 'assets/',
 				ext   : '.min.css'
 			}
@@ -166,13 +166,6 @@ module.exports = function (grunt) {
 			}
 		},
 		concat               : {
-			css   : {
-				src : [
-					'assets/colorbox/example1/colorbox.css',
-					'assets/hmbkp.css'
-				],
-				dest: 'assets/hmbkp-combined.css'
-			},
 			readme: {
 				src : [
 					'readme/readme-header.txt',

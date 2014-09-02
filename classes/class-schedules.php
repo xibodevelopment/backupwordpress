@@ -13,14 +13,18 @@ class HMBKP_Schedules {
 	 */
 	private $schedules;
 
+	/**
+	 *
+	 */
 	protected static $instance;
 
-	public static function get_instance(){
+	public static function get_instance() {
 
 		if ( null === self::$instance )
 			self::$instance = new self;
 
 		return self::$instance;
+
 	}
 
 	/**
@@ -77,9 +81,7 @@ class HMBKP_Schedules {
 	 * @return array An array of HMBKP_Scheduled_Backup objects
 	 */
 	private function instantiate( $id ) {
-
 		return new HMBKP_Scheduled_Backup( str_replace( 'hmbkp_schedule_', '', $id ) );
-
 	}
 
 }

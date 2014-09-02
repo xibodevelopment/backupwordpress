@@ -27,47 +27,62 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) )
+if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) ) {
 	define( 'HMBKP_PLUGIN_SLUG', basename( dirname( __FILE__ ) ) );
+}
 
-if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
+if ( ! defined( 'HMBKP_PLUGIN_PATH' ) ) {
 	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+}
 
-if ( ! defined( 'HMBKP_PLUGIN_URL' ) )
+if ( ! defined( 'HMBKP_PLUGIN_URL' ) ) {
 	define( 'HMBKP_PLUGIN_URL', plugin_dir_url(  __FILE__  ) );
+}
 
 define( 'HMBKP_PLUGIN_LANG_DIR', apply_filters( 'hmbkp_filter_lang_dir', HMBKP_PLUGIN_SLUG . '/languages/' ) );
 
 if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
-	if ( is_multisite() )
+
+	if ( is_multisite() ) {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, network_admin_url( 'settings.php' ) ) );
-	else
+
+	} else {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
+	}
+
 }
 
 $key = array( ABSPATH, time() );
 
-foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' ) as $constant )
-	if ( defined( $constant ) )
+foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' ) as $constant ) {
+
+	if ( defined( $constant ) ) {
 		$key[] = constant( $constant );
+	}
+
+}
 
 shuffle( $key );
 
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
-if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) )
+if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
 	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.3' );
+}
 
 // Max memory limit isn't defined in old versions of WordPress
-if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
+if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) ) {
 	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
+}
 
 if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
-	if ( is_multisite() )
+	if ( is_multisite() ) {
 		define( 'HMBKP_ADMIN_PAGE', 'settings_page_' . HMBKP_PLUGIN_SLUG );
-	else
+
+	} else {
 		define( 'HMBKP_ADMIN_PAGE', 'tools_page_' . HMBKP_PLUGIN_SLUG );
+	}
 
 }
 
@@ -78,6 +93,9 @@ require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 // Load hm-backup
 if ( ! class_exists( 'HM_Backup' ) )
 	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
+
+// Load Backdrop
+require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
 
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
@@ -94,8 +112,9 @@ require_once( HMBKP_PLUGIN_PATH . 'classes/class-services.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-email.php' );
 
 // Load the wp cli command
-if ( defined( 'WP_CLI' ) && WP_CLI )
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	include( HMBKP_PLUGIN_PATH . 'classes/wp-cli.php' );
+}
 
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
@@ -109,8 +128,9 @@ if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	deactivate_plugins( __FILE__ );
 
-	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) ) {
 		die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
+	}
 
 }
 
@@ -130,8 +150,20 @@ function hmbkp_init() {
 	define( 'HMBKP_VERSION', $plugin_data['Version'] );
 
 	// Fire the update action
-	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) )
+	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) ) {
 		hmbkp_update();
+	}
+
+	$schedules = HMBKP_Schedules::get_instance()->get_schedules();
+
+	foreach ( $schedules as $schedule ) {
+
+		if ( ! $schedule->is_filesize_cached() ) {
+			$task = new HM_Backdrop_TASK( array( $schedule, 'get_filesize' ) );
+			$task->schedule();
+		}
+
+	}
 
 }
 add_action( 'admin_init', 'hmbkp_init' );
@@ -141,9 +173,13 @@ add_action( 'admin_init', 'hmbkp_init' );
  */
 function hmbkp_load_scripts() {
 
-	wp_enqueue_script( 'hmbkp-colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/jquery.colorbox-min.js', array( 'jquery', 'jquery-ui-tabs' ), sanitize_title( HMBKP_VERSION ) );
+	$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
 
-	wp_enqueue_script( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.js', array( 'hmbkp-colorbox', 'heartbeat' ), sanitize_title( HMBKP_VERSION ) );
+	if ( WP_DEBUG ) {
+		$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
+	}
+
+	wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( HMBKP_VERSION ) );
 
 	wp_localize_script(
 		'hmbkp',
@@ -172,8 +208,9 @@ add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
  */
 function hmbkp_load_intercom_script() {
 
-	if ( ! get_option( 'hmbkp_enable_support' ) )
+	if ( ! get_option( 'hmbkp_enable_support' ) ) {
 		return;
+	}
 
 	require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
 
@@ -187,8 +224,9 @@ function hmbkp_load_intercom_script() {
 
 	}
 
-	foreach ( HMBKP_Services::get_services() as $file => $service )
+	foreach ( HMBKP_Services::get_services() as $file => $service ) {
 		array_merge( $info, call_user_func( array( $service, 'intercom_data' ) ) );
+	}
 
 	$current_user = wp_get_current_user();
 
@@ -212,8 +250,13 @@ add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
  */
 function hmbkp_load_styles(){
 
-	wp_enqueue_style( 'hmbkp_colorbox', HMBKP_PLUGIN_URL . 'assets/colorbox/example1/colorbox.css', false, HMBKP_VERSION );
-	wp_enqueue_style( 'hmbkp', HMBKP_PLUGIN_URL . 'assets/hmbkp.css', false, HMBKP_VERSION );
+	$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css';
+
+	if ( WP_DEBUG ) {
+		$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css';
+	}
+
+	wp_enqueue_style( 'hmbkp', $css_file, false, sanitize_key( HMBKP_VERSION ) );
 
 }
 add_action( 'admin_print_styles-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_styles' );
@@ -227,8 +270,9 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 	$schedules = HMBKP_Schedules::get_instance();
 	$schedule  = $schedules->get_schedule( $schedule_id );
 
-	if ( ! $schedule )
+	if ( ! $schedule ) {
 		return;
+	}
 
 	$schedule->run();
 
