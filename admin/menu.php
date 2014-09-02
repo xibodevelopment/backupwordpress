@@ -63,7 +63,7 @@ function hmbkp_contextual_help() {
 		$plugin = plugins_api( 'plugin_information', array( 'slug' => HMBKP_PLUGIN_SLUG ) );
 
 		// Cache for one day
-		set_transient( 'hmbkp_plugin_data', $plugin, 86400 );
+		set_transient( 'hmbkp_plugin_data', $plugin, 1 * DAY_IN_SECONDS );
 
 	}
 
