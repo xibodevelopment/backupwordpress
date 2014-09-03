@@ -1134,7 +1134,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// If we have a filesize then let's cache it
 		if ( $total_filesize !== false ) {
-			set_transient( $transient_filesize_key, (string) $total_filesize, WEEK_IN_SECONDS );
+			set_transient( $transient_filesize_key, (string) $total_filesize, 1 * WEEK_IN_SECONDS );
 		}
 
 		delete_option( $transient_running_key );
