@@ -74,24 +74,27 @@ endswitch;
 $server = '<span title="' . esc_attr( hmbkp_path() ) . '">' . __( 'this server', 'hmbkp' ) . '</span>';
 $server = '<code>' . esc_attr( str_replace( $schedule->get_home_path(), '', hmbkp_path() ) ) . '</code>';
 
+$disk_free_space = size_format( @disk_free_space( hmbkp_path() ) );
+$disk_total_space = size_format( @disk_total_space( hmbkp_path() ) );
+
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
 
 	case 1 :
 
-		$backup_to_keep = sprintf( __( 'store the most recent backup in %s', 'hmbkp' ), $server );
+		$backup_to_keep = sprintf( __( 'store the most recent backup in %1$s ( Remaining: %2$s of %3$s total )', 'hmbkp' ), $server, $disk_free_space, $disk_total_space );
 
 	break;
 
 	case 0 :
 
-		$backup_to_keep = sprintf( __( 'don\'t store any backups in on this server', 'hmbkp' ), $server );
+		$backup_to_keep = sprintf( __( 'don\'t store any backups in on this server', 'hmbkp' ), hmbkp_path() );
 
 	break;
 
 	default :
 
-		$backup_to_keep = sprintf( __( 'store the last %1$s backups in %2$s', 'hmbkp' ), esc_html( $schedule->get_max_backups() ), $server );
+		$backup_to_keep = sprintf( __( 'store the last %1$s backups in %2$s ( Remaining: %3$s of %4$s )', 'hmbkp' ), esc_html( $schedule->get_max_backups() ), $server, $disk_free_space, $disk_total_space );
 
 endswitch;
 
@@ -119,7 +122,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 <div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
 
-	<?php $sentence = sprintf( __( 'Backup my %1$s %2$s %3$s, %4$s. ', 'hmbkp' ), '<span>' . $type . '</span>', $filesize, $reoccurrence, $backup_to_keep );
+	<?php $sentence = sprintf( _x( 'Backup my %1$s %2$s %3$s, %4$s.', '1: Backup Type 2: Total size of backup 3: Schedule 4: Number of backups to store', 'hmbkp' ), '<span>' . $type . '</span>', $filesize, $reoccurrence, $backup_to_keep );
 
 	if ( $email_msg ) {
 		$sentence .= sprintf( __( '%s. ', 'hmbkp' ), $email_msg );
