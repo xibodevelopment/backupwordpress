@@ -189,6 +189,8 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 				if ( ! data || data == 0 )
 					return;
 
+				location.reload(true);
+
 				// jQuery.colorbox( {
 				// 	'innerWidth'	: "320px",
 				// 	'maxHeight'		: "100%",
