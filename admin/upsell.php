@@ -1,14 +1,14 @@
-<?php $display = get_option( 'display_upsell' );
+<?php $display = get_option( 'hmbkp-upsell' );
 
-if ( isset( $_GET[ 'display_upsell' ] ) ) {
+if ( isset( $_GET[ 'hmbkp-upsell' ] ) ) {
 	
 	if ( ! $display || $display === 'shown' ) {
 		
-		update_option( 'display_upsell', 'hidden' );
+		update_option( 'hmbkp-upsell', 'hidden' );
 	};
 	if ( $display === 'hidden' ) {
 
-		update_option( 'display_upsell', 'shown' );
+		update_option( 'hmbkp-upsell', 'shown' );
 
 	};
 }; ?>
@@ -20,13 +20,13 @@ if ( isset( $_GET[ 'display_upsell' ] ) ) {
 
 		<span class="howto">just &dollar;24 each per site.</span>
 
-		<a href="<?php echo add_query_arg( 'display_upsell', '1' ); ?>">
+		<a href="<?php echo add_query_arg( 'hmbkp-upsell', '1' ); ?>">
 			<span class="hmbkp_hide add-new-h2">Show/Hide</span>
 		</a>
 
 	</h3>
 
-	<?php if ( ! get_option( 'display_upsell' ) || get_option( 'display_upsell' ) === 'shown' ) { ?>
+	<?php if ( ! get_option( 'hmbkp-upsell' ) || get_option( 'hmbkp-upsell' ) === 'shown' ) { ?>
 	<ul>
 
 		<li class="manage-menus">
