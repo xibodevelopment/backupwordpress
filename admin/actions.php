@@ -203,20 +203,18 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_cancel_backup' );
  */
 function hmbkp_dismiss_error() {
 
-	// TODO Should really be nonced
-
-	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_dismiss_error' ) {
-		return;
-	}
+	check_admin_referer( 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' );
 
 	hmbkp_cleanup();
 
-	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
+	HMBKP_Notices::get_instance()->clear_all_notices();
+
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
 }
-add_action( 'admin_init', 'hmbkp_dismiss_error' );
+add_action( 'admin_post_hmbkp_dismiss_error', 'hmbkp_dismiss_error' );
 
 /**
  * Catch the schedule service settings form submission
