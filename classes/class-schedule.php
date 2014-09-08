@@ -390,17 +390,22 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @access public
 	 * @return int timestamp || 0 for manual only schedules
 	 */
-	public function get_schedule_start_time() {
+	public function get_schedule_start_time( $gmt = true ) {
 
 		if ( $this->get_reoccurrence() === 'manually' )
 			return 0;
 
+		if ( ! $gmt )
+			$offset = get_option( 'gmt_offset' ) * 3600;
+		else
+			$offset = 0;
+
 		if ( ! empty( $this->options['schedule_start_time'] ) )
-			return $this->options['schedule_start_time'];
+			return $this->options['schedule_start_time'] + $offset;
 
 		$this->set_schedule_start_time( time() );
 
-		return time();
+		return time() + $offset;
 
 	}
 
