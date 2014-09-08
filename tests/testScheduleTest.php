@@ -15,6 +15,12 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	protected $schedule;
 
+	public static $now;
+
+	public function time() {
+		return testDetermineStartTimeTestCase::$now ? testDetermineStartTimeTestCase::$now : time();
+	}
+
 	/**
 	 * Setup the schedule
 	 *
@@ -23,7 +29,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	public function setUp() {
 
 		$this->schedule = new HMBKP_Scheduled_Backup( 'unit-test' );
-		$this->time = time();
+
 		$this->recurrences = HMBKP_Scheduled_Backup::get_cron_schedules();
 
 	}
@@ -38,7 +44,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 		$this->schedule->cancel();
 
 		unset( $this->schedule );
-		unset( $this->time );
+		unset( self::$now );
 		unset( $this->recurrences );
 
 	}
@@ -71,8 +77,8 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function set_past_start_time() {
 
-		$this->assertTrue( is_wp_error( $this->schedule->set_schedule_start_time( $this->time - 7200 ) ) );
-		$this->assertEquals( $this->schedule->get_schedule_start_time(), time() );
+		$this->assertTrue( is_wp_error( $this->schedule->set_schedule_start_time( $this->time() - 7200 ) ) );
+		$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->time() );
 
 	}
 
@@ -89,10 +95,10 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 			$this->assertEquals( $reoccurrence, $this->schedule->get_reoccurrence() );
 
 			// The default start time should be now
-			$this->assertEquals( time(), $this->schedule->get_schedule_start_time() );
+			$this->assertEquals( $this->time(), $this->schedule->get_schedule_start_time() );
 
 			// Check that the start time is the same as the next occurance
-			$this->assertEquals( time(), $this->schedule->get_next_occurrence() );
+			$this->assertEquals( $this->time(), $this->schedule->get_next_occurrence() );
 
 		}
 
@@ -109,10 +115,10 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 		$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
 
 		// The default start time should be now
-		$this->assertEquals( time(), $this->schedule->get_schedule_start_time());
+		$this->assertEquals( $this->time(), $this->schedule->get_schedule_start_time() );
 
 		// Check that the start time is the same as the next occurance
-		$this->assertEquals( time(), $this->schedule->get_next_occurrence() );
+		$this->assertEquals( $this->time(), $this->schedule->get_next_occurrence() );
 
 		$this->schedule->save();
 
@@ -122,10 +128,10 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 		$this->schedule->__construct( 'unit-test' );
 
 		// The default start time should be now
-		$this->assertEquals( time(), $this->schedule->get_schedule_start_time() );
+		$this->assertEquals( $this->time(), $this->schedule->get_schedule_start_time() );
 
 		// Check that the start time is the same as the next occurance
-		$this->assertEquals( $this->schedule->get_next_occurrence(), time() );
+		$this->assertEquals( $this->schedule->get_next_occurrence(), $this->time() );
 
 	}
 
@@ -141,10 +147,10 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 			$this->schedule->set_reoccurrence( 'hmbkp_hourly' );
 			$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
 
-			$this->assertFalse( is_wp_error( $this->schedule->set_schedule_start_time( $this->time + 7200 ) ) );
+			$this->assertFalse( is_wp_error( $this->schedule->set_schedule_start_time( $this->time() + 7200 ) ) );
 			$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->time + 7200 );
 
-			$this->assertEquals( $this->schedule->get_next_occurrence(), $this->time + 7200 );
+			$this->assertEquals( $this->schedule->get_next_occurrence(), $this->time() + 7200 );
 
 		}
 
@@ -161,10 +167,10 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 		$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
 
 		// The default start time should be now
-		$this->assertEquals( time(), $this->schedule->get_schedule_start_time());
+		$this->assertEquals( $this->time(), $this->schedule->get_schedule_start_time() );
 
 		// Check that the start time is the same as the next occurance
-		$this->assertEquals( time(), $this->schedule->get_next_occurrence() );
+		$this->assertEquals( $this->time(), $this->schedule->get_next_occurrence() );
 
 		$this->schedule->unschedule();
 
@@ -172,6 +178,5 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 		$this->assertEmpty( $this->schedule->get_next_occurrence() );
 
 	}
-
 
 }
