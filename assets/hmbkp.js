@@ -266,9 +266,9 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Test the cron response using ajax
-	$.post( ajaxurl, { 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_cron_test' },
+	$.post( ajaxurl, { 'hmbkp_cron_test_nonce' : hmbkp.hmbkp_cron_test_nonce, 'action' : 'hmbkp_cron_test' },
 		 function( data ) {
-			 if ( data != 1 ) {
+			 if ( data !== '1' ) {
 				 	$( '.wrap > h2' ).after( data );
 			 }
 		 }
@@ -276,7 +276,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Calculate the estimated backup size
 	if ( $( '.hmbkp-schedule-sentence .calculating' ).size() ) {
-		$.post( ajaxurl, { 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
+		$.post( ajaxurl, { 'hmbkp_calculate_nonce' : hmbkp.hmbkp_calculate_nonce, 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
 			function( data ) {
 
 				if ( data.indexOf( 'title' ) != -1 )
@@ -306,7 +306,7 @@ jQuery( document ).ready( function( $ ) {
 
 		ajaxRequest = $.post(
 			ajaxurl,
-			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
+			{ 'hmbkp_run_schedule_nonce': hmbkp.hmbkp_run_schedule_nonce, 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
 		).done( function( data ) {
 
 			hmbkpCatchResponseAndOfferToEmail( data );
@@ -405,7 +405,7 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 
 		jQuery.post(
 			ajaxurl,
-			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_backup_error', 'hmbkp_error' : data },
+			{ 'hmbkp_backup_error_nonce' : hmbkp.hmbkp_backup_error_nonce, 'action' : 'hmbkp_backup_error', 'hmbkp_error' : data },
 			function( data ) {
 
 				if ( ! data || data == 0 )
@@ -436,7 +436,7 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 
 		jQuery.post(
 		    ajaxurl,
-		    { 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_email_error', 'hmbkp_error' : data },
+		    { 'hmbkp_send_error_via_email_nonce' : hmbkp.hmbkp_send_error_via_email_nonce, 'action' : 'hmbkp_email_error', 'hmbkp_error' : data },
 			function( data ) {
 				jQuery.colorbox.close();
 			}

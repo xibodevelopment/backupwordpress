@@ -11,12 +11,7 @@ function hmbkp_request_delete_backup() {
 	$cap = apply_filters( 'hmbkp_can_delete_cap', 'manage_options' );
 
 	if ( ! current_user_can( $cap ) )
-		wp_die( 'Cheeatin huh?' );
-
-	$previous = esc_url_raw( urldecode( $_GET['previous_page'] ) );
-
-	if ( isset( $GET['hmbkp_schedule_id'] ) )
-		$previous .= sanitize_text_field( $_GET['hmbkp_schedule_id'] );
+		wp_die( 'Cheatin&#8217; uh?' );
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
@@ -25,7 +20,7 @@ function hmbkp_request_delete_backup() {
 	if ( is_wp_error( $deleted ) )
 		wp_die( $deleted->get_error_message() );
 
-	wp_safe_redirect( $previous, 303 );
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
@@ -33,48 +28,34 @@ function hmbkp_request_delete_backup() {
 add_action( 'admin_post_hmbkp_request_delete_backup', 'hmbkp_request_delete_backup' );
 
 /**
- * Enable support and then redirect back to the backups page
- * @return void
- */
-function hmbkp_request_enable_support() {
-
-	if ( empty( $_POST['hmbkp_enable_support'] ) || ! check_admin_referer( 'enable-support', 'hmbkp' ) )
-		return;
-
-	update_option( 'hmbkp_enable_support', true );
-
-	wp_safe_redirect( remove_query_arg( 'null' ) , 303 );
-
-	die;
-
-}
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_enable_support' );
-
-/**
  * Delete a schedule and all it's backups and then redirect
  * back to the backups page
  */
 function hmbkp_request_delete_schedule() {
 
-	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_delete_schedule' || ! check_admin_referer( 'hmbkp-delete_schedule' ) )
-		return;
+	check_admin_referer( 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' );
+
+	$cap = apply_filters( 'hmbkp_can_delete_cap', 'manage_options' );
+
+	if ( ! current_user_can( $cap ) )
+		wp_die( 'Cheatin&#8217; uh?' );
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 	$schedule->cancel( true );
 
-	wp_safe_redirect( remove_query_arg( array( 'hmbkp_schedule_id', 'action', '_wpnonce' ) ), 303 );
+	wp_safe_redirect( HMBKP_ADMIN_URL, 303 );
 
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_schedule' );
+add_action( 'admin_post_hmbkp_request_delete_schedule', 'hmbkp_request_delete_schedule' );
 
 /**
  * Perform a manual backup via ajax
  */
 function hmbkp_ajax_request_do_backup() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' );
 
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
@@ -126,12 +107,19 @@ add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_ajax_request_do_backup' );
  */
 function hmbkp_request_download_backup() {
 
-	global $is_apache;
+	check_admin_referer( 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' );
 
-	if ( empty( $_GET['hmbkp_download_backup'] ) || ! check_admin_referer( 'hmbkp-download_backup' ) || ! file_exists( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) )
+	$cap = apply_filters( 'hmbkp_can_download_cap', 'manage_options' );
+
+	if ( ! current_user_can( $cap ) )
+		wp_die( 'Cheatin&#8217; uh?' );
+
+	if ( ! file_exists( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) ) )
 		return;
 
-	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_download_backup'] ) ), PATHINFO_BASENAME ) );
+	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ), PATHINFO_BASENAME ) );
+
+	global $is_apache;
 
 	if ( $is_apache ) {
 
@@ -150,7 +138,7 @@ function hmbkp_request_download_backup() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_download_backup' );
+add_action( 'admin_post_hmbkp_request_download_backup', 'hmbkp_request_download_backup' );
 
 /**
  * Cancels a running backup then redirect
@@ -158,8 +146,7 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_download_backup' );
  */
 function hmbkp_request_cancel_backup() {
 
-	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_cancel' )
-		return;
+	check_admin_referer( 'hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup_nonce' );
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
@@ -172,12 +159,12 @@ function hmbkp_request_cancel_backup() {
 
 	hmbkp_cleanup();
 
-	wp_safe_redirect( remove_query_arg( array( 'action' ) ), 303 );
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_cancel_backup' );
+add_action( 'admin_post_hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup' );
 
 /**
  * Dismiss an error and then redirect
@@ -190,7 +177,7 @@ function hmbkp_dismiss_error() {
 
 	hmbkp_cleanup();
 
-	wp_safe_redirect( remove_query_arg( 'action' ), 303 );
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
@@ -225,7 +212,7 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' )
  */
 function hmbkp_ajax_calculate_backup_size() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_calculate', 'hmbkp_calculate_nonce' );
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) )
 		die;
@@ -246,7 +233,7 @@ add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
  */
 function hmbkp_ajax_cron_test() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_cron_test', 'hmbkp_cron_test_nonce' );
 
 	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
 
@@ -600,7 +587,7 @@ add_action( 'wp_ajax_hmbkp_file_list', 'hmbkp_preview_exclude_rule', 10, 0 );
 
 function hmbkp_display_error_and_offer_to_email_it() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_backup_error', 'hmbkp_backup_error_nonce' );
 
 	if ( empty( $_POST['hmbkp_error'] ) )
 		die;
@@ -636,7 +623,7 @@ add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_emai
 
 function hmbkp_send_error_via_email() {
 
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
+	check_ajax_referer( 'hmbkp_send_error_via_email', 'hmbkp_send_error_via_email_nonce' );
 
 	if ( empty( $_POST['hmbkp_error'] ) )
 		die;
@@ -651,13 +638,30 @@ function hmbkp_send_error_via_email() {
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
 
 /**
+ * Enable support and then redirect back to the backups page
+ * @return void
+ */
+function hmbkp_request_enable_support() {
+
+	check_admin_referer( 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' );
+
+	update_option( 'hmbkp_enable_support', true );
+
+	wp_safe_redirect( HMBKP_ADMIN_URL, 303 );
+
+	die;
+
+}
+add_action( 'admin_post_hmbkp_request_enable_support', 'hmbkp_request_enable_support' );
+
+/**
  * Load the enable support modal contents
  *
  * @return void
  */
 function hmbkp_load_enable_support() {
 
-	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
+	check_ajax_referer( 'hmbkp_load_enable_support', 'hmbkp_load_enable_support_nonce' );
 
 	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
 
@@ -669,15 +673,23 @@ add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
 /**
  * Receive the heartbeat and return backup status
  */
-function hmbkp_heartbeat_received( $response, $data ) {	
-	if( !empty( $data['hmbkp_is_in_progress'] ) ) {
+function hmbkp_heartbeat_received( $response, $data ) {
+
+	if( ! empty( $data['hmbkp_is_in_progress'] ) ) {
+
 		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
+
 		if ( ! $schedule->get_status() ) {
+
 			$response['hmbkp_schedule_status'] = 0;
+
 		} else {
+
 			$response['hmbkp_schedule_status'] = hmbkp_schedule_actions( $schedule, true );
+
 		}
 	}
+
   	return $response;
 }
 add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
