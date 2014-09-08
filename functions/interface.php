@@ -21,7 +21,7 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 	}
 	?>
 
-	<tr class="hmbkp_manage_backups_row<?php if ( file_exists( hmbkp_path() . '/.backup_complete' ) ) : ?> completed<?php unlink( hmbkp_path() . '/.backup_complete' ); endif; ?>">
+	<tr class="hmbkp_manage_backups_row">
 
 		<th scope="row">
 			<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' - ' . get_option( 'time_format' ), @filemtime( $file ) + $offset ) ); ?>
@@ -129,7 +129,7 @@ function hmbkp_admin_notices() {
 
 	if ( ! is_readable( $test_backup->get_root() ) ) :
 
-		function hmbkp_backup_root_unreadable_notice() {
+		function hmbkp_ba§ckup_root_unreadable_notice() {
 			$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
 			echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong>' . sprintf( __( 'Your backup root path %s isn\'t readable.', 'hmbkp' ), '<code>' . $test_backup->get_root() . '</code>' ) . '</p></div>';
 		}
@@ -150,13 +150,8 @@ add_action( 'admin_head', 'hmbkp_admin_notices' );
  */
 function hmbkp_plugin_row( $plugins ) {
 
-	if ( is_multisite() )
-		$settings_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
-	else
-		$settings_url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
-
 	if ( isset( $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php'] ) )
-		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>Tools &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( $settings_url ) . '">Tools &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
+		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>Tools &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( hmbkp_get_settings_url() ) . '">Tools &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
 
 	return $plugins;
 
@@ -184,69 +179,6 @@ function hmbkp_backup_errors_message() {
 	return $message;
 
 }
-
-/**
- * Display a html list of files
- *
- * @param HMBKP_Scheduled_Backup $schedule
- * @param mixed                  $excludes    (default: null)
- * @param string                 $file_method (default: 'get_included_files')
- * @return void
- */
-function hmbkp_file_list( HMBKP_Scheduled_Backup $schedule, $excludes = null, $file_method = 'get_included_files' ) {
-
-	if ( ! is_null( $excludes ) )
-		$schedule->set_excludes( $excludes );
-
-	$exclude_string = $schedule->exclude_string( 'regex' ); ?>
-
-	<ul class="hmbkp_file_list code">
-
-		<?php foreach ( $schedule->get_files() as $file ) :
-
-			if ( ! is_null( $excludes ) && strpos( $file, str_ireplace( $schedule->get_root(), '', $schedule->get_path() ) ) !== false )
-				continue;
-
-			// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
-			if ( method_exists( $file, 'isDot' ) && $file->isDot() )
-				continue;
-
-			// Show only unreadable files
-			if ( $file_method === 'get_unreadable_files' && @realpath( $file->getPathname() ) && $file->isReadable() )
-				continue;
-
-			// Skip unreadable files
-			elseif ( $file_method !== 'get_unreadable_files' && ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) )
-				continue;
-
-			// Show only included files
-			if ( $file_method === 'get_included_files' )
-				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
-					continue;
-
-			// Show only excluded files
-			if ( $file_method === 'get_excluded_files' )
-				if ( ! $exclude_string || ! preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
-					continue;
-
-			if ( @realpath( $file->getPathname() ) && ! $file->isReadable() && $file->isDir() ) {
-				?>
-
-				<li title="<?php echo esc_attr( HM_Backup::conform_dir( trailingslashit( $file->getPathName() ) ) ); ?>"><?php echo esc_html( ltrim( trailingslashit( str_ireplace( HM_Backup::conform_dir( trailingslashit( $schedule->get_root() ) ), '', HM_Backup::conform_dir( $file->getPathName() ) ) ), '/' ) ); ?></li>
-
-			<?php } else { ?>
-
-				<li title="<?php echo esc_attr( HM_Backup::conform_dir( $file->getPathName() ) ); ?>"><?php echo esc_html( ltrim( str_ireplace( HM_Backup::conform_dir( trailingslashit( $schedule->get_root() ) ), '', HM_Backup::conform_dir( $file->getPathName() ) ), '/' ) ); ?></li>
-
-			<?php }
-
-		endforeach; ?>
-
-	</ul>
-
-<?php
-}
-
 
 /**
  * Get the human readable backup type in.
@@ -281,43 +213,24 @@ function hmbkp_human_get_type( $type, HMBKP_Scheduled_Backup $schedule = null ) 
  * @param HMBKP_Scheduled_Backup $schedule
  * @return void
  */
-function hmbkp_schedule_actions( HMBKP_Scheduled_Backup $schedule, $return = false ) {
+function hmbkp_schedule_status( HMBKP_Scheduled_Backup $schedule, $echo = true ) {
 
-	if ( is_multisite() )
-		$settings_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
-	else
-		$settings_url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
-
-	// Start output buffering
 	ob_start(); ?>
 
 	<span class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'hmbkp' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
 		<?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'hmbkp' ); ?>
-		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), $settings_url ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>
+		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>
 	</span>
 
-	<div class="hmbkp-schedule-actions row-actions">
+	<?php $output = ob_get_clean();
 
-		<a class="colorbox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule_load', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
+	if ( ! $echo ) {
+		return $output;
+	}
 
-	<?php if ( $schedule->get_type() !== 'database' ) { ?>
-		<a class="colorbox" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule_excludes_load', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a>  |
-	<?php } ?>
+	echo $output;
 
-		<?php // capture output
-		$output = ob_get_clean();
-		if( $return )
-			return $output;
-		echo apply_filters( 'hmbkp_schedule_actions_menu', $output, $schedule ); ?>
-
-		<a class="hmbkp-run" href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), is_multisite() ? admin_url( 'admin-ajax.php' ) : network_admin_url( 'admin-ajax.php' ) ) ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>  |
-
-		<a class="delete-action" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), $settings_url ), 'hmbkp-delete_schedule' ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
-
-	</div>
-
-<?php }
-
+}
 
 /**
  * Load the backup errors file
@@ -344,5 +257,71 @@ function hmbkp_backup_warnings() {
 		return '';
 
 	return file_get_contents( hmbkp_path() . '/.backup_warnings' );
+
+}
+
+function hmbkp_backups_number( $schedule, $zero = false, $one = false, $more = false ) {
+
+	$number = count( $schedule->get_backups() );
+
+	if ( $number > 1 )
+		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'hmbkp' ) : $more );
+	elseif ( $number == 0 )
+		$output = ( false === $zero ) ? __( 'No Backups Completed', 'hmbkp' ) : $zero;
+	else // must be one
+		$output = ( false === $one ) ? __( '1 Backup Completed', 'hmbkp' ) : $one;
+
+	echo apply_filters( 'hmbkp_backups_number', $output, $number );
+}
+
+function hmbkp_translated_schedule_title( $slug, $title ) {
+
+	$titles = array(
+		'complete-hourly'      => esc_html__( 'Complete Hourly', 'hmbkp' ),
+		'file-hourly'          => esc_html__( 'File Hourly', 'hmbkp' ),
+		'database-hourly'      => esc_html__( 'Database Hourly', 'hmbkp' ),
+		'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'hmbkp' ),
+		'file-twicedaily'      => esc_html__( 'File Twicedaily', 'hmbkp' ),
+		'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'hmbkp' ),
+		'complete-daily'       => esc_html__( 'Complete Daily', 'hmbkp' ),
+		'file-daily'           => esc_html__( 'File Daily', 'hmbkp' ),
+		'database-daily'       => esc_html__( 'Database Daily', 'hmbkp' ),
+		'complete-weekly'      => esc_html__( 'Complete Weekly', 'hmbkp' ),
+		'file-weekly'          => esc_html__( 'File Weekly', 'hmbkp' ),
+		'database-weekly'      => esc_html__( 'Database Weekly', 'hmbkp' ),
+		'complete-fortnightly' => esc_html__( 'Complete Fortnightly', 'hmbkp' ),
+		'file-fortnightly'     => esc_html__( 'File Fortnightly', 'hmbkp' ),
+		'database-fortnightly' => esc_html__( 'Database Fortnightly', 'hmbkp' ),
+		'complete-monthly'     => esc_html__( 'Complete Monthly', 'hmbkp' ),
+		'file-monthly'         => esc_html__( 'File Monthly', 'hmbkp' ),
+		'database-monthly'     => esc_html__( 'Database Monthly', 'hmbkp' ),
+		'complete-manually'    => esc_html__( 'Complete Manually', 'hmbkp' ),
+		'file-manually'        => esc_html__( 'File Manually', 'hmbkp' ),
+		'database-manually'    => esc_html__( 'Database Manually', 'hmbkp' )
+	);
+
+	if ( isset( $titles[ $slug ] ) ) {
+		return $titles[ $slug ];
+	}
+
+	return $title;
+
+}
+
+function hmbkp_get_settings_url() {
+
+	if ( is_multisite() ) {
+		$url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
+	}
+
+	$url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
+
+	HMBKP_schedules::get_instance()->refresh_schedules();
+
+	if ( ! empty( $_REQUEST['hmbkp_schedule_id'] ) && HMBKP_schedules::get_instance()->get_schedule( sanitize_text_field( $_REQUEST['hmbkp_schedule_id'] ) ) ) {
+		$url = add_query_arg( 'hmbkp_schedule_id', sanitize_text_field( $_REQUEST['hmbkp_schedule_id'] ), $url );
+	}
+
+	return $url;
 
 }

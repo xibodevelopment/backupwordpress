@@ -17,6 +17,5 @@
 		"tests"
 	],
 	"dependencies": {
-		"colorbox":">=1.5.9"
 	}
 }

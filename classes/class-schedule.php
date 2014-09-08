@@ -211,7 +211,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function get_max_backups() {
 
 		if ( empty( $this->options['max_backups'] ) )
-			$this->set_max_backups( 10 );
+			$this->set_max_backups( 3 );
 
 		return (int) esc_attr( $this->options['max_backups'] );
 
@@ -339,29 +339,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Don't include files if database only
 		if ( $this->get_type() != 'database' ) {
-
-			// Get rid of any cached filesizes
-			clearstatcache();
-
-			$excludes = $this->exclude_string( 'regex' );
-
-			foreach ( $this->get_files() as $file ) {
-
-				// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
-				if ( method_exists( $file, 'isDot' ) && $file->isDot() )
-					continue;
-
-				if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() )
-					continue;
-
-				// Excludes
-				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
-					continue;
-
-				$filesize += (float) $file->getSize();
-
-			}
-
+			$filesize += $this->recursive_directory_filesize_scanner( $this->get_root(), false );
 		}
 
 		// Cache for a day
@@ -378,7 +356,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return bool|string
 	 */
 	public function get_formatted_file_size( $cached = true ) {
-
 		return size_format( $this->get_filesize( $cached ) );
 	}
 
@@ -799,9 +776,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		if ( $handle = @opendir( $this->get_path() ) ) {
 
-			while ( false !== ( $file = readdir( $handle ) ) )
-				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() != $file )
+			while ( false !== ( $file = readdir( $handle ) ) ) {
+
+				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() !== $file ) {
 					$files[@filemtime( trailingslashit( $this->get_path() ) . $file )] = trailingslashit( $this->get_path() ) . $file;
+				}
+
+			}
 
 			closedir( $handle );
 
@@ -988,6 +969,268 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		return $found_folders;
+	}
+
+	/**
+	 * Return the single depth list of files and subdirectories in $directory ordered by total filesize
+	 *
+	 * Will schedule background threads to recursively calculate the filesize of subdirectories.
+	 * The total filesize of each directory and subdirectory is cached in a transient for 1 week.
+	 *
+	 * @param string $directory	The directory to scan
+	 * @return array returns an array of files ordered by filesize
+	 */
+	public function list_directory_by_total_filesize( $directory ) {
+
+		$files = $files_with_no_size = $empty_files = $files_with_size = $unreadable_files = array();
+
+		// Ensure we are dealing with the latest filesystem information
+		clearstatcache();
+
+		if ( ! is_dir( $directory ) ) {
+			return $files;
+		}
+
+		$handle = opendir( $directory );
+
+		if ( ! $handle ) {
+			return $files;
+		}
+
+		while ( $file_handle = readdir( $handle ) ) {
+
+			// Ignore current dir and containing dir
+			if ( $file_handle === '.' || $file_handle === '..' )
+				continue;
+
+			$file = new SplFileInfo( HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
+
+			// Unreadable files are moved to the bottom
+			if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
+				$unreadable_files[] = $file;
+				continue;
+			}
+
+			// Get the total filesize for each file and directory
+			$filesize = $this->total_filesize( $file );
+
+			if ( $filesize ) {
+
+				// If there is already a file with exactly the same filesize then let's keep increasing the filesize of this one until we don't have a clash
+				while ( array_key_exists( $filesize, $files_with_size ) ) {
+					$filesize++;
+				}
+
+				$files_with_size[ $filesize ] = $file;
+
+			} elseif ( $filesize === 0 ) {
+
+				$empty_files[] = $file;
+
+			} else {
+
+				$files_with_no_size[] = $file;
+
+			}
+
+		}
+
+		closedir( $handle );
+
+		// Sort files largest first
+		krsort( $files_with_size );
+
+		// Add 0 byte files / directories to the bottom
+		$files = $files_with_size + array_merge( $empty_files, $unreadable_files );
+
+		// Add directories that are still calculating to the top
+		if ( $files_with_no_size ) {
+
+			// We have to loop as merging or concatenating the array would re-flow the keys which we don't want because the filesize is stored in the key
+			foreach ( $files_with_no_size as $file ) {
+				array_unshift( $files, $file );
+			}
+		}
+
+		return $files;
+
+	}
+
+	/**
+	 * Recursively scans a directory to calculate the total filesize
+	 *
+	 * @param string $directory		The directory to scan
+	 * @param bool $ignore_excludes	Whether or not to include excluded files in the total filesize calculation
+	 * @return int $total_filesize	The total filesize of all files in all subdirectories
+	 */
+	public function recursive_directory_filesize_scanner( $directory, $ignore_excludes = true ) {
+
+		if ( ! is_dir( $directory) ) {
+			return $total_filesize;
+		}
+
+		$handle = opendir( $directory );
+
+		if ( ! $handle ) {
+			return $total_filesize;
+		}
+
+		$excludes = $this->exclude_string( 'regex' );
+
+		$transient_filesize_key = $this->get_transient_key( $directory );
+		$transient_running_key = $this->get_transient_key( 'running_' . $directory );
+
+		if ( ! $ignore_excludes ) {
+			$transient_filesize_key = $this->get_transient_key( $excludes . $directory );
+			$transient_running_key  = $this->get_transient_key( 'running_' . $excludes . $directory );
+		}
+
+		// Use the cached directory size if available
+		$directory_size = get_transient( $transient_filesize_key );
+
+		if ( $directory_size !== false ) {
+
+			delete_option( $transient_running_key );
+
+			return $directory_size;
+
+		}
+
+		update_option( $transient_running_key, true );
+
+		$total_filesize = 0;
+		$files = array();
+
+		clearstatcache();
+
+		while ( $file_handle = readdir( $handle ) ) {
+
+			// Ignore current dir and containing dir
+			if ( $file_handle === '.' || $file_handle === '..' ) {
+				continue;
+			}
+
+			$file = new SplFileInfo( HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
+
+			// Skip unreadable files
+			if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
+				continue;
+			}
+
+			// Skip excluded files if we have excludes
+			if ( ! $ignore_excludes && $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
+				continue;
+
+			$total_filesize += $file->getSize();
+
+			// We need to recursively calculate the size of all files in a subdirectory
+			if ( $file->isDir() ) {
+				$total_filesize += $this->recursive_directory_filesize_scanner( $file->getPathname(), $ignore_excludes );
+			}
+
+		}
+
+		closedir( $handle );
+
+		// If we have a filesize then let's cache it
+		if ( $total_filesize !== false ) {
+			set_transient( $transient_filesize_key, (string) $total_filesize, WEEK_IN_SECONDS );
+		}
+
+		delete_option( $transient_running_key );
+
+		return $total_filesize;
+
+	}
+
+	/**
+	 * Get the total filesize for a given file or directory
+	 *
+	 * If $file is a file then just return the result of `filesize()`.
+	 * If $file is a directory then schedule a recursive filesize scan.
+	 *
+	 * @param string $file	The file you want to know the size of
+	 * @return int 			The total of the file or directory
+	 */
+	public function total_filesize( SplFileInfo $file, $ignore_excludes = true ) {
+
+		if ( ! file_exists( $file->getPathname() ) || ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
+			return false;
+		}
+
+		if ( $file->isFile() ) {
+			return $file->getSize();
+		}
+
+		if ( $file->isDir() ) {
+
+			$transient_filesize_key = $this->get_transient_key( $file->getPathname() );
+			$transient_running_key = $this->get_transient_key( 'running_' . $file->getPathname() );
+
+			if ( ! $ignore_excludes ) {
+				$transient_filesize_key = $this->get_transient_key( $excludes . $file->getPathname() );
+				$transient_running_key  = $this->get_transient_key( 'running_' . $excludes . $file->getPathname() );
+			}
+
+			// If we already have a cached filesize for this directory then let's return it
+			$size = get_transient( $transient_filesize_key );
+
+			if ( $size !== false ) {
+
+				return (int) $size;
+
+			// If we don't have a cached filesize then we probably need to calculate it
+			} else {
+
+				// Don't bother re-calculating if we are already doing that in a different thread through
+				$parent_directory = $file->getPathname();
+
+				while ( $parent_directory !== '/' ) {
+
+					$parent_task = new HM_Backdrop_Task( array( $this, 'recursive_directory_filesize_scanner' ), $parent_directory, $ignore_excludes );
+
+					// If we are already calulating the parent directory in another thread then let's just wait for that to finish
+					if ( $parent_task->is_scheduled() ) {
+						return false;
+					}
+
+					$parent_directory = dirname( $parent_directory );
+
+				}
+
+				update_option( $transient_running_key, true );
+
+				// Schedule a Backdrop task to trigger a recalculation
+				$task = new HM_Backdrop_Task( array( $this, 'recursive_directory_filesize_scanner' ), $file->getPathname(), $ignore_excludes );
+				$task->schedule();
+
+				return false;
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Check if a given pathname is having it's filesize calculated
+	 *
+	 * @param string $file	The file you want to know the size of
+	 * @return int 			The total of the file or directory
+	 */
+	public function is_total_filesize_being_calculated( $pathname ) {
+
+		// Bail early if $pathname isn't a directory
+		if ( ! is_dir( $pathname ) ) {
+			return false;
+		}
+
+		return (bool) get_option( $this->get_transient_key( 'running_' . (string) $pathname ) );
+
+	}
+
+	public function get_transient_key( $seed ) {
+		return 'hmbkp_' . substr( sha1( serialize( $seed ) ), -34 );
 	}
 
 }

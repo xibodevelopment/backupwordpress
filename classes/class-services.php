@@ -13,12 +13,6 @@ abstract class HMBKP_Service {
 	public $name;
 
 	/**
-	 * Determines whether to show or hide the service tab in destinations form
-	 * @var boolean
-	 */
-	public $is_tab_visible;
-
-	/**
 	 * The instance HMBKP_Backup_Schedule that this service is
 	 * is currently working with
 	 *
@@ -75,6 +69,10 @@ abstract class HMBKP_Service {
 	 */
 	abstract public function action( $action );
 
+	public function get_slug() {
+		return strtolower( sanitize_title_with_dashes( $this->name ) );
+	}
+
 	/**
 	 * Utility for getting a formated html input name attribute
 	 *
@@ -112,7 +110,7 @@ abstract class HMBKP_Service {
 
 		$old_data = $this->schedule->get_service_options( $classname );
 
-		$new_data = isset( $_GET[$classname] ) ? $_GET[$classname] : array();
+		$new_data = isset( $_POST[$classname] ) ? $_POST[$classname] : array();
 
 		$errors = $this->update( $new_data, $old_data );
 
@@ -169,6 +167,22 @@ abstract class HMBKP_Service {
 		}
 
 		return array();
+
+	}
+
+	public function has_form() {
+
+		ob_start();
+
+		$this->form();
+
+		$form = ob_get_clean();
+
+		if ( $form )
+			return true;
+
+		return false;
+
 	}
 
 	/**
