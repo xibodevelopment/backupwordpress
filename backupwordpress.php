@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.6.2
+Version: 3.0-beta
 Author URI: http://hmn.md/
 */
 
@@ -67,7 +67,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.3' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.8.4' );
 }
 
 // Max memory limit isn't defined in old versions of WordPress
