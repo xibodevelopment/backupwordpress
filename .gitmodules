@@ -3,4 +3,4 @@
 	url = https://github.com/humanmade/hm-backup.git
 [submodule "backdrop"]
 	path = backdrop
-	url = git@github.com:humanmade/Backdrop.git
+	url = https://github.com/humanmade/Backdrop.git
