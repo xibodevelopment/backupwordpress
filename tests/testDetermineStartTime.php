@@ -27,7 +27,7 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
     public static $now;
 
     public function setUp() {
-	    self::$now = $this->time();
+
     	$this->schedule_intervals = HMBKP_Scheduled_Backup::get_cron_schedules();
     }
 

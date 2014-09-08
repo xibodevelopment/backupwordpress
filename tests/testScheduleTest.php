@@ -18,7 +18,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	public static $now;
 
 	public function time() {
-		return testDetermineStartTimeTestCase::$now ? testDetermineStartTimeTestCase::$now : time();
+		return time();
 	}
 
 	/**
@@ -44,7 +44,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 		$this->schedule->cancel();
 
 		unset( $this->schedule );
-		unset( self::$now );
+		//unset( self::$now );
 		unset( $this->recurrences );
 
 	}
@@ -148,7 +148,7 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 			$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
 
 			$this->assertFalse( is_wp_error( $this->schedule->set_schedule_start_time( $this->time() + 7200 ) ) );
-			$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->time + 7200 );
+			$this->assertEquals( $this->schedule->get_schedule_start_time(), $this->time() + 7200 );
 
 			$this->assertEquals( $this->schedule->get_next_occurrence(), $this->time() + 7200 );
 
