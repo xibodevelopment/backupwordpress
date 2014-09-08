@@ -322,7 +322,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// If we don't have it in cache then mark it as calculating
-		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', 'calculating', time() + HOUR_IN_SECONDS );
+		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', 'calculating', 1 * HOUR_IN_SECONDS );
 
 		// Don't include database if file only
 		if ( $this->get_type() != 'file' ) {
@@ -365,7 +365,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// Cache for a day
-		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', $filesize, time() + DAY_IN_SECONDS );
+		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', $filesize, 1 * DAY_IN_SECONDS );
 
 		return $filesize;
 
