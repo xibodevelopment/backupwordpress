@@ -186,13 +186,14 @@ function hmbkp_load_scripts() {
 		'hmbkp',
 		array(
 			'page_slug'    => HMBKP_PLUGIN_SLUG,
-			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
-			'update'				=> __( 'Update', 'hmbkp' ),
-			'cancel'				=> __( 'Cancel', 'hmbkp' ),
-			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+			'nonce'         		   => wp_create_nonce( 'hmbkp_nonce' ),
+			'hmbkp_run_schedule_nonce' => wp_create_nonce( 'hmbkp_run_schedule' ),
+			'update'				   => __( 'Update', 'hmbkp' ),
+			'cancel'				   => __( 'Cancel', 'hmbkp' ),
+			'delete_schedule'		   => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'delete_backup'			   => __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_exclude_rule'	   => __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_old_backups'	   => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
 		)
 	);
 
