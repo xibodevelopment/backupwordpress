@@ -68,9 +68,11 @@ function hmbkp_request_do_backup() {
 
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		check_ajax_referer( 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' );
+	} else {
+		check_admin_referer( 'hmbkp-run-schedule', 'hmbkp-run-schedule' );
 	}
 
-	// TODO non ajax needs a nonce
+
 
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
