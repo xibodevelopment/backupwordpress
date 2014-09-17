@@ -22,7 +22,7 @@ function hmbkp_request_delete_backup() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_backup' );
+add_action( 'admin_post_hmbkp_request_delete_backup', 'hmbkp_request_delete_backup' );
 
 /**
  * Enable support and then redirect back to the backups page
@@ -40,7 +40,7 @@ function hmbkp_request_enable_support() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_enable_support' );
+add_action( 'admin_post_hmbkp_request_enable_support', 'hmbkp_request_enable_support' );
 
 /**
  * Delete a schedule and all it's backups and then redirect back to the backups page
@@ -59,7 +59,7 @@ function hmbkp_request_delete_schedule() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_delete_schedule' );
+add_action( 'admin_post_hmbkp_request_delete_schedule', 'hmbkp_request_delete_schedule' );
 
 /**
  * Perform a manual backup
@@ -133,7 +133,7 @@ function hmbkp_request_do_backup() {
 
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_do_backup' );
+add_action( 'admin_post_hmbkp_request_do_backup', 'hmbkp_request_do_backup' );
 
 /**
  * Send the download file to the browser and then redirect back to the backups page
@@ -165,7 +165,7 @@ function hmbkp_request_download_backup() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_download_backup' );
+add_action( 'admin_post_hmbkp_request_download_backup', 'hmbkp_request_download_backup' );
 
 /**
  * Cancels a running backup then redirect back to the backups page
@@ -196,7 +196,7 @@ function hmbkp_request_cancel_backup() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_request_cancel_backup' );
+add_action( 'admin_post_hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup' );
 
 /**
  * Dismiss an error and then redirect back to the backups page
@@ -254,7 +254,7 @@ function hmbkp_edit_schedule_services_submit() {
 	}
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_edit_schedule_services_submit' );
+add_action( 'admin_post_hmbkp_edit_schedule_services_submit', 'hmbkp_edit_schedule_services_submit' );
 
 /**
  * Catch the schedule settings form submission
@@ -450,7 +450,7 @@ function hmbkp_edit_schedule_submit() {
 	}
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_edit_schedule_submit' );
+add_action( 'admin_post_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
 
 /**
  * Add an exclude rule
@@ -482,7 +482,7 @@ function hmbkp_add_exclude_rule() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_add_exclude_rule' );
+add_action( 'admin_post_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
 
 /**
  * Delete an exclude rule
@@ -514,8 +514,12 @@ function hmbkp_remove_exclude_rule() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_remove_exclude_rule' );
+add_action( 'admin_post_hmbkp_remove_exclude_rule', 'hmbkp_remove_exclude_rule' );
 
+/**
+ *
+ * @param null $pathname
+ */
 function hmbkp_recalculate_directory_filesize( $pathname = null ) {
 
 	if ( ! $pathname && ( ! isset( $_GET['hmbkp_recalculate_directory_filesize'] ) || ! check_admin_referer( 'hmbkp-recalculate_directory_filesize' ) ) ) {
@@ -577,7 +581,7 @@ function hmbkp_recalculate_directory_filesize( $pathname = null ) {
 	}
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_recalculate_directory_filesize' );
+add_action( 'admin_post_hmbkp_recalculate_directory_filesize', 'hmbkp_recalculate_directory_filesize' );
 
 /**
  * Receive the heartbeat and return backup status
