@@ -318,3 +318,40 @@ function hmbkp_get_settings_url() {
 	return $url;
 
 }
+
+/**
+ * Add an error message to the array of messages.
+ *
+ * @param $error_message
+ */
+function hmbkp_add_settings_error( $error_message ){
+
+	$hmbkp_settings_errors = get_transient( 'hmbkp_settings_errors' );
+
+	// If it doesnt exist, create.
+	if ( ! $hmbkp_settings_errors ) {
+		set_transient( 'hmbkp_settings_errors', (array)$error_message );
+	} else {
+		set_transient( 'hmbkp_settings_errors', array_unique( array_merge( $hmbkp_settings_errors, (array)$error_message ) ) );
+	}
+
+}
+
+/**
+ * Fetch the form submission errors for display.
+ *
+ * @return mixed
+ */
+function hmbkp_settings_errors() {
+
+	return get_transient( 'hmbkp_settings_errors' );
+}
+
+/**
+ * Clear all error messages.
+ * 
+ * @return bool
+ */
+function hmbkp_clear_settings_errors(){
+	return delete_transient( 'hmbkp_settings_errors' );
+}
