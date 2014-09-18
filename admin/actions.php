@@ -216,13 +216,15 @@ add_action( 'admin_init', 'hmbkp_dismiss_error' );
  */
 function hmbkp_edit_schedule_services_submit() {
 
-	global $hmbkp_form_errors;
+	check_admin_referer( 'hmbkp-edit-schedule-services', 'hmbkp-edit-schedule-services-nonce' );
 
-	if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'hmbkp_edit_schedule_service' || empty( $_POST['hmbkp_schedule_id'] ) || ! check_admin_referer( 'hmbkp-edit_schedule_service' ) ) {
-		return;
+	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
+		die;
 	}
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+
+	hmbkp_clear_settings_errors();
 
 	$errors = array();
 
@@ -235,14 +237,15 @@ function hmbkp_edit_schedule_services_submit() {
 
 	if ( $errors ) {
 
-		$hmbkp_form_errors = $errors;
-
-	} else {
-
-		wp_safe_redirect( hmbkp_get_settings_url(), '303' );
-		die;
+		foreach ( $errors as $error ) {
+			hmbkp_add_settings_error( $error );
+		}
 
 	}
+
+	wp_safe_redirect( wp_get_referer(), '303' );
+	die;
+
 
 }
 add_action( 'admin_post_hmbkp_edit_schedule_services_submit', 'hmbkp_edit_schedule_services_submit' );
@@ -254,15 +257,15 @@ add_action( 'admin_post_hmbkp_edit_schedule_services_submit', 'hmbkp_edit_schedu
  */
 function hmbkp_edit_schedule_submit() {
 
-	check_ajax_referer( 'hmbkp-edit-schedule', 'hmbkp-edit-schedule-nonce' );
-
-	global $hmbkp_form_errors;
+	check_admin_referer( 'hmbkp-edit-schedule', 'hmbkp-edit-schedule-nonce' );
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
 		die;
 	}
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+
+	hmbkp_clear_settings_errors();
 
 	$errors = array();
 
@@ -433,14 +436,14 @@ function hmbkp_edit_schedule_submit() {
 
 	if ( $errors ) {
 
-		$hmbkp_form_errors = $errors;
-
-	} else {
-
-		wp_safe_redirect( hmbkp_get_settings_url(), '303' );
-		die;
+		foreach ( $errors as $error ) {
+			hmbkp_add_settings_error( $error );
+		}
 
 	}
+
+	wp_safe_redirect( wp_get_referer(), '303' );
+	die;
 
 }
 add_action( 'admin_post_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
