@@ -47,9 +47,13 @@
 
 			<h3><?php echo esc_html( $service->name ); ?></h3>
 
-			<?php global $hmbkp_form_errors; ?>
+			<?php
 
-			<?php if ( ! empty( $hmbkp_form_errors ) ) { ?>
+			$hmbkp_form_errors = hmbkp_settings_errors();
+
+			if ( ! empty( $hmbkp_form_errors ) ) :
+
+				?>
 
 				<div id="hmbkp-warning" class="error settings-error">
 
@@ -59,20 +63,18 @@
 
 				</div>
 
-			<?php } ?>
+			<?php endif; ?>
 
-			<form method="post" novalidate>
+			<form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
 
 				<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
-				<input type="hidden" name="action" value="hmbkp_edit_schedule_service" />
+				<input type="hidden" name="action" value="hmbkp_edit_schedule_services_submit" />
 
-				<?php wp_nonce_field( 'hmbkp-edit_schedule_service' ); ?>
+				<?php wp_nonce_field( 'hmbkp-edit-schedule-services', 'hmbkp-edit-schedule-services-nonce' ); ?>
 
 				<?php $service->form(); ?>
 
-				<p class="submit">
-					<button type="submit" class="button-primary"><?php _e( 'Done', 'hmbkp' ); ?></button>
-				</p>
+				<?php submit_button( __( 'Done', 'hmbkp' ) ); ?>
 
 			</form>
 
