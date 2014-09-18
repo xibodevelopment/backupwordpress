@@ -1,6 +1,6 @@
 <h3>Settings</h3>
 
-<?php global $hmbkp_form_errors; ?>
+<?php $hmbkp_form_errors = hmbkp_settings_errors(); ?>
 
 <?php if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
