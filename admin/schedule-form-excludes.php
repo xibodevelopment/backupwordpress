@@ -45,7 +45,7 @@
 
 							<?php else : ?>
 
-								<a href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_remove_exclude', $exclude ), 'hmbkp-remove_exclude_rule' ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+								<a href="<?php echo hmbkp_admin_action_url( 'remove_exclude_rule', array( 'hmbkp_remove_exclude' => $exclude, 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
 							<?php endif; ?>
 
