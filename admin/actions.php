@@ -490,8 +490,10 @@ add_action( 'admin_post_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
  */
 function hmbkp_remove_exclude_rule() {
 
-	if ( ! isset( $_GET['hmbkp_remove_exclude'] ) || ! check_admin_referer( 'hmbkp-remove_exclude_rule' ) ) {
-		return;
+	check_admin_referer( 'hmbkp_remove_exclude_rule', 'hmbkp-remove_exclude_rule_nonce' );
+
+	if ( ! isset( $_GET['hmbkp_remove_exclude'] ) ) {
+		die;
 	}
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
