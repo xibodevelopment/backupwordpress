@@ -61,7 +61,7 @@
 
 	<?php endif; ?>
 
-	<h3><?php _e( 'Directory Listing', 'hmbkp' ); ?></h3>
+	<h3 id="directory-listing"><?php _e( 'Directory Listing', 'hmbkp' ); ?></h3>
 
 	<p><?php _e( 'Here\'s a directory listing of all files on your site, you can browse through and exclude files or folders that you don\'t want included in your backup.', 'hmbkp' ); ?></p>
 
