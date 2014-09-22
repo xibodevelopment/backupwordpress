@@ -470,7 +470,7 @@ function hmbkp_add_exclude_rule() {
 
 	$schedule->save();
 
-	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
+	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes#directory-listing' ), hmbkp_get_settings_url() );
 
 	if ( isset( $_GET['hmbkp_directory_browse'] ) )
 		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
