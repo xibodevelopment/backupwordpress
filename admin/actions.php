@@ -219,7 +219,7 @@ function hmbkp_edit_schedule_services_submit() {
 	check_admin_referer( 'hmbkp-edit-schedule-services', 'hmbkp-edit-schedule-services-nonce' );
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
-		die;
+		wp_die( __( 'The schedule ID was not provided. Aborting.', 'hmbkp' ) );
 	}
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
