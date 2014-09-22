@@ -342,7 +342,7 @@ function hmbkp_add_settings_error( $error_message ){
  *
  * @return mixed
  */
-function hmbkp_settings_errors() {
+function hmbkp_get_settings_errors() {
 
 	return get_transient( 'hmbkp_settings_errors' );
 }
