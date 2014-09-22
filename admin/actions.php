@@ -9,7 +9,7 @@ function hmbkp_request_delete_backup() {
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
-	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) );
+	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) );
 
 	if ( is_wp_error( $deleted ) ) {
 		wp_die( $deleted->get_error_message() );
@@ -134,12 +134,12 @@ function hmbkp_request_download_backup() {
 
 	check_admin_referer( 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' );
 
-	if ( ! file_exists( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) )  ) {
+	if ( ! file_exists( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) )  ) {
 		return;
 	}
 
 
-	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['backup_archive'] ) ), PATHINFO_BASENAME ) );
+	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
 
 	global $is_apache;
 
