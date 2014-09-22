@@ -656,3 +656,18 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 	return $timestamp;
 
 }
+
+/**
+ * Helper function for creating safe action URLs.
+ *
+ * @param string $action Callback function name.
+ * @param array $query_args Additional GET params.
+ *
+ * @return string
+ */
+function hmbkp_admin_action_url( $action, array $query_args = array() ) {
+
+	$query_args = array_merge( $query_args, array( 'action' => 'hmbkp_' . $action ) );
+
+	return esc_url( wp_nonce_url( add_query_arg( $query_args, admin_url( 'admin-post.php' ) ), 'hmbkp_' . $action, 'hmbkp-' . $action . '_nonce' ) );
+}

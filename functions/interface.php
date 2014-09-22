@@ -11,14 +11,6 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 	$encoded_file = urlencode( base64_encode( $file ) );
 	$offset       = get_option( 'gmt_offset' ) * 3600;
 
-	if ( is_multisite() ) {
-		$bookmark = add_query_arg( array( 'hmbkp_schedule_id' => $schedule->get_id() ), network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG ) );
-		$download_action_url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
-	} else {
-		$bookmark = add_query_arg( array( 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG ) );
-		//$delete_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_delete_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
-		$download_action_url =  admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG . '&amp;hmbkp_download_backup=' . $encoded_file . '&amp;hmbkp_schedule_id=' . $schedule->get_id() );
-	}
 	?>
 
 	<tr class="hmbkp_manage_backups_row">
@@ -36,10 +28,11 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 		<td>
 
 			<?php if (  hmbkp_is_path_accessible( hmbkp_path() )  ) : ?>
-			<a href="<?php echo wp_nonce_url( $download_action_url, 'hmbkp-download_backup' ); ?>"><?php _e( 'Download', 'hmbkp' ); ?></a> |
+
+				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php _e( 'Download', 'hmbkp' ); ?></a> |
 			<?php endif; ?>
 
-			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'previous_page' => $bookmark, 'backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_delete_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' ) ); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_delete_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' ) ); ?>" class="delete-action"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
 		</td>
 
@@ -219,7 +212,7 @@ function hmbkp_schedule_status( HMBKP_Scheduled_Backup $schedule, $echo = true )
 
 	<span class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'hmbkp' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
 		<?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'hmbkp' ); ?>
-		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_cancel', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>
+		<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_cancel_backup', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ), 'hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup_nonce' ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>
 	</span>
 
 	<?php $output = ob_get_clean();
@@ -324,4 +317,41 @@ function hmbkp_get_settings_url() {
 
 	return $url;
 
+}
+
+/**
+ * Add an error message to the array of messages.
+ *
+ * @param $error_message
+ */
+function hmbkp_add_settings_error( $error_message ){
+
+	$hmbkp_settings_errors = get_transient( 'hmbkp_settings_errors' );
+
+	// If it doesnt exist, create.
+	if ( ! $hmbkp_settings_errors ) {
+		set_transient( 'hmbkp_settings_errors', (array)$error_message );
+	} else {
+		set_transient( 'hmbkp_settings_errors', array_unique( array_merge( $hmbkp_settings_errors, (array)$error_message ) ) );
+	}
+
+}
+
+/**
+ * Fetch the form submission errors for display.
+ *
+ * @return mixed
+ */
+function hmbkp_get_settings_errors() {
+
+	return get_transient( 'hmbkp_settings_errors' );
+}
+
+/**
+ * Clear all error messages.
+ * 
+ * @return bool
+ */
+function hmbkp_clear_settings_errors(){
+	return delete_transient( 'hmbkp_settings_errors' );
 }

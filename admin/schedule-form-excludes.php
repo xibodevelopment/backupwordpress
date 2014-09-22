@@ -45,7 +45,7 @@
 
 							<?php else : ?>
 
-								<a href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_remove_exclude', $exclude ), 'hmbkp-remove_exclude_rule' ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+								<a href="<?php echo hmbkp_admin_action_url( 'remove_exclude_rule', array( 'hmbkp_remove_exclude' => $exclude, 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
 							<?php endif; ?>
 
@@ -316,7 +316,7 @@
 
 							<?php } else { ?>
 
-								<a href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_exclude_pathname', urlencode( $file->getPathname() ) ), 'hmbkp-add_exclude_rule' ); ?>" class="button-secondary"><?php _e( 'Exclude &rarr;', 'hmbkp' ); ?></a>
+								<a href="<?php echo wp_nonce_url( add_query_arg( array( 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_add_exclude_rule', 'hmbkp_exclude_pathname' => urlencode( $file->getPathname() ) ), admin_url( 'admin-post.php' ) ), 'hmbkp-add-exclude-rule', 'hmbkp-add-exclude-rule-nonce' ); ?>" class="button-secondary"><?php _e( 'Exclude &rarr;', 'hmbkp' ); ?></a>
 
 							<?php } ?>
 

@@ -1,6 +1,6 @@
 <h3>Settings</h3>
 
-<?php global $hmbkp_form_errors; ?>
+<?php $hmbkp_form_errors = hmbkp_get_settings_errors(); ?>
 
 <?php if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
@@ -14,12 +14,12 @@
 
 <?php } ?>
 
-<form method="post" class="hmbkp-form" novalidate data-schedule-action="<?php if ( isset( $is_new_schedule ) ) { ?>add<?php } else { ?>edit<?php } ?>">
+<form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
-	<input type="hidden" name="action" value="hmbkp_edit_schedule" />
+	<input type="hidden" name="action" value="hmbkp_edit_schedule_submit" />
 
-	<?php wp_nonce_field( 'hmbkp-edit_schedule' ); ?>
+	<?php wp_nonce_field( 'hmbkp-edit-schedule', 'hmbkp-edit-schedule-nonce' ); ?>
 
 	<table class="form-table">
 
