@@ -49,7 +49,7 @@
 
 			<?php
 
-			$hmbkp_form_errors = hmbkp_settings_errors();
+			$hmbkp_form_errors = hmbkp_get_settings_errors();
 
 			if ( ! empty( $hmbkp_form_errors ) ) :
 
