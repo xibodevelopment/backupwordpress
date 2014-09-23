@@ -5,6 +5,13 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p>' . __( 'Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.', 'hmbkp' ) . '</p>' .
 
+     '<p><strong>' . __( 'Can I change the folder used to store backup files?', 'hmbkp' ) . '</strong></p>' .
+
+     '<p>' . __(
+     	"You can change the folder used to store backup files by defining a path in your <code>wp-config.php</code> file.<pre>
+define( 'HMBKP_PATH', '/path/to/backup/folder' );</pre>"
+	 ) . '</p>' .
+
      '<p><strong>' . __( 'What if I want to back up my site to another destination?', 'hmbkp' ) . '</strong></p>' .
 
      '<p>' . __( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: <a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin" title="BackUpWordPress Homepage" target="_blank">https://bwp.hmn.md</a>', 'hmbkp' ) . '</p>' .
