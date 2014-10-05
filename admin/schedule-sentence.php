@@ -1,7 +1,9 @@
 <?php
 
 // Calculated filesize
-$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_file_size() ) . '</code>)' : '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your backup&hellip;', 'hmbkp' ) . '</code>)';
+$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_site_size() ) . '</code>)' : '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your backup&hellip;', 'hmbkp' ) . '</code>)';
+
+//
 
 if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
 	$filesize = '';

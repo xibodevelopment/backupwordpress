@@ -141,7 +141,7 @@
 
 							$root = new SplFileInfo( $schedule->get_root() );
 
-							$size = $schedule->total_filesize( $root );
+							$size = $schedule->filesize( $root );
 
 							if ( $size !== false ) {
 
@@ -250,7 +250,7 @@
 
 							<?php } else {
 
-								$size = $schedule->total_filesize( $file );
+								$size = $schedule->filesize( $file );
 
 								if ( $size !== false ) {
 

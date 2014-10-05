@@ -42,8 +42,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function __construct( $id ) {
 
 		// Verify the schedule id
-		if ( ! is_string( $id ) || ! trim( $id ) )
+		if ( ! is_string( $id ) || ! trim( $id ) ) {
 			throw new Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
+		}
 
 		// Setup HM Backup
 		parent::__construct();
@@ -55,28 +56,35 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->options = array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) );
 
 		// Some properties can be overridden with defines
-		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT )
+		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
 			$this->set_root( HMBKP_ROOT );
+		}
 
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ){
 			$this->set_path( HMBKP_PATH );
+		}
 
-		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE )
+		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE ) {
 			parent::set_excludes( HMBKP_EXCLUDE, true );
+		}
 
 		parent::set_excludes( $this->default_excludes(), true );
 
-		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) )
+		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) ) {
 			$this->set_mysqldump_command_path( HMBKP_MYSQLDUMP_PATH );
+		}
 
-		if ( defined( 'HMBKP_ZIP_PATH' ) )
+		if ( defined( 'HMBKP_ZIP_PATH' ) ) {
 			$this->set_zip_command_path( HMBKP_ZIP_PATH );
+		}
 
-		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' && $this->skip_zip_archive = true )
+		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' && $this->skip_zip_archive = true ) {
 			$this->set_zip_command_path( false );
+		}
 
-		if ( defined( 'HMBKP_SCHEDULE_START_TIME' ) && strtotime( 'HMBKP_SCHEDULE_START_TIME' ) )
+		if ( defined( 'HMBKP_SCHEDULE_START_TIME' ) && strtotime( 'HMBKP_SCHEDULE_START_TIME' ) ) {
 			$this->set_schedule_start_time( strtotime( 'HMBKP_SCHEDULE_START_TIME' ) );
+		}
 
 		// Set the path - TODO remove external function dependancy
 		$this->set_path( hmbkp_path() );
@@ -270,82 +278,53 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	}
 
 	/**
-	 * Calculate the size of the backup
+	 * Calculate the size total size of the database + files
 	 *
-	 * Doesn't account for
-	 * compression
+	 * Doesn't account for compression
 	 *
 	 * @access public
-	 * @param bool $cached Whether to return from cache
 	 * @return string
 	 */
-	public function get_filesize( $cached = true ) {
+	public function get_site_size() {
 
-		$filesize = 0;
-
-		if ( $cached ) {
-
-			// Check if we have the filesize in the cache
-			$filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type()  . '_filesize' );
-
-			// If we do and it's not still calculating then return it straight away
-			if ( $filesize && $filesize !== 'calculating' )
-				return $filesize;
-
-			// If the filesize is calculating in another thread then we should wait for it to finish
-			if ( $filesize === 'calculating' ) {
-
-				global $wpdb;
-
-				$counter = 1;
-
-				// Keep checking the cached filesize to see if the other thread is finished
-				while ( 'calculating' === ( $filesize = get_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type()  . '_filesize' ) ) ) {
-
-					// Check once every 10 seconds
-					sleep( 10 );
-
-					// Only run for a maximum of 5 minutes (30*10)
-					if ( $counter === 30 )
-						break;
-
-					$counter ++;
-
-				}
-
-				// If we have the filesize then return it
-				if ( $filesize && $filesize !== 'calculating' )
-					return $filesize;
-
-			}
-
-		}
-
-		// If we don't have it in cache then mark it as calculating
-		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', 'calculating', 1 * HOUR_IN_SECONDS );
+		$size = 0;
 
 		// Don't include database if file only
-		if ( $this->get_type() != 'file' ) {
+		if ( $this->get_type() !== 'file' ) {
 
 			global $wpdb;
 
-			$res = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
+			$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
 
-			foreach ( $res as $r ) {
-				$filesize += (float) $r['Data_length'];
+			foreach ( $tables as $table ) {
+				$size += (float) $table['Data_length'];
 			}
 
 		}
 
 		// Don't include files if database only
-		if ( $this->get_type() != 'database' ) {
-			$filesize += $this->recursive_directory_filesize_scanner( $this->get_root(), false );
+		if ( $this->get_type() !== 'database' ) {
+
+			$directory_sizes = $this->recursive_filesize_scanner();
+
+			$excludes = $this->exclude_string( 'regex' );
+
+			var_dump( $excludes );
+
+			foreach ( $directory_sizes as $path => $size ) {
+
+				// Skip excluded files if we have excludes
+                if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $path ) ) ) ) {
+                	unset( $directory_sizes[ $path ] );
+                }
+			
+			}
+
+			$size += array_sum( $directory_sizes );
+		
 		}
 
-		// Cache for a day
-		set_transient( 'hmbkp_schedule_' . $this->get_id() . '_' . $this->get_type() . '_filesize', $filesize, 1 * DAY_IN_SECONDS );
-
-		return $filesize;
+		return $size;
 
 	}
 
@@ -355,8 +334,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @param bool $cached
 	 * @return bool|string
 	 */
-	public function get_formatted_file_size( $cached = true ) {
-		return size_format( $this->get_filesize( $cached ) );
+	public function get_formatted_site_size() {
+		return size_format( $this->get_site_size() );
 	}
 
 	/**
@@ -375,7 +354,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Clear the cached filesize, forces the filesize to be re-calculated the next
-	 * time get_filesize is called
+	 * time get_site_size is called
 	 *
 	 * @access public
 	 * @return void
@@ -990,9 +969,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$files = $files_with_no_size = $empty_files = $files_with_size = $unreadable_files = array();
 
-		// Ensure we are dealing with the latest filesystem information
-		clearstatcache();
-
 		if ( ! is_dir( $directory ) ) {
 			return $files;
 		}
@@ -1018,7 +994,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			}
 
 			// Get the total filesize for each file and directory
-			$filesize = $this->total_filesize( $file );
+			$filesize = $this->filesize( $file );
 
 			if ( $filesize ) {
 
@@ -1065,87 +1041,55 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Recursively scans a directory to calculate the total filesize
 	 *
-	 * @param string $directory		The directory to scan
-	 * @param bool $ignore_excludes	Whether or not to include excluded files in the total filesize calculation
 	 * @return int $total_filesize	The total filesize of all files in all subdirectories
 	 */
-	public function recursive_directory_filesize_scanner( $directory, $ignore_excludes = true ) {
+	public function recursive_filesize_scanner() {
 
-		if ( ! is_dir( $directory) ) {
-			return $total_filesize;
-		}
+		// TODO
+		// Excludes should be handled at a higher level
+		// Write that array regularly
 
-		$handle = opendir( $directory );
+		// Use the cached array directory sizes if available
+		$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
 
-		if ( ! $handle ) {
-			return $total_filesize;
-		}
+		// If we do have it in cache then let's use it and also clear the lock
+		if ( is_array( $directory_sizes ) ) {
 
-		$excludes = $this->exclude_string( 'regex' );
+			delete_transient( 'hmbkp_directory_filesizes_running' );
 
-		$transient_filesize_key = $this->get_transient_key( $directory );
-		$transient_running_key = $this->get_transient_key( 'running_' . $directory );
-
-		if ( ! $ignore_excludes ) {
-			$transient_filesize_key = $this->get_transient_key( $excludes . $directory );
-			$transient_running_key  = $this->get_transient_key( 'running_' . $excludes . $directory );
-		}
-
-		// Use the cached directory size if available
-		$directory_size = get_transient( $transient_filesize_key );
-
-		if ( $directory_size !== false ) {
-
-			delete_option( $transient_running_key );
-
-			return $directory_size;
+			return $directory_sizes;
 
 		}
 
-		update_option( $transient_running_key, true );
+		// If we have a lock just return an empty array for now
+		if ( $this->is_total_filesize_being_calculated() ) {
+			return array();
+		}
+		
+		// Lock so we don't run multiple at once
+		set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );
 
-		$total_filesize = 0;
-		$files = array();
+		$files = $this->get_files();
+		$directory_sizes[ $this->get_root() ] = 0;
 
-		clearstatcache();
+		foreach ( $files as $file ) {
 
-		while ( $file_handle = readdir( $handle ) ) {
-
-			// Ignore current dir and containing dir
-			if ( $file_handle === '.' || $file_handle === '..' ) {
-				continue;
+			if ( $file->isFile() ) {
+				$directory_sizes[ $file->getPath() ] += $file->getSize();
 			}
 
-			$file = new SplFileInfo( HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
-
-			// Skip unreadable files
-			if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
-				continue;
-			}
-
-			// Skip excluded files if we have excludes
-			if ( ! $ignore_excludes && $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $file->getPathname() ) ) ) )
-				continue;
-
-			$total_filesize += $file->getSize();
-
-			// We need to recursively calculate the size of all files in a subdirectory
-			if ( $file->isDir() ) {
-				$total_filesize += $this->recursive_directory_filesize_scanner( $file->getPathname(), $ignore_excludes );
+			// We need to add directories directly so we can track empty directories
+			if ( $file->isDir() && ! isset( $directory_sizes[ $file->getPathname() ] ) ) {
+				$directory_sizes[ $file->getPathname() ] = 0;
 			}
 
 		}
 
-		closedir( $handle );
+		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, WEEK_IN_SECONDS );
+		
+		delete_transient( 'hmbkp_directory_filesizes_running' );
 
-		// If we have a filesize then let's cache it
-		if ( $total_filesize !== false ) {
-			set_transient( $transient_filesize_key, (string) $total_filesize, WEEK_IN_SECONDS );
-		}
-
-		delete_option( $transient_running_key );
-
-		return $total_filesize;
+		return $directory_sizes;
 
 	}
 
@@ -1158,85 +1102,62 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @param string $file	The file you want to know the size of
 	 * @return int 			The total of the file or directory
 	 */
-	public function total_filesize( SplFileInfo $file, $ignore_excludes = true ) {
+	public function filesize( SplFileInfo $file ) {
 
+		// Skip missing or unreadable files
 		if ( ! file_exists( $file->getPathname() ) || ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
 			return false;
 		}
 
+		// If it's a file then just pass back the filesize
 		if ( $file->isFile() ) {
 			return $file->getSize();
 		}
 
+		// If it's a directory then pull it from the cached filesize array
 		if ( $file->isDir() ) {
 
-			$transient_filesize_key = $this->get_transient_key( $file->getPathname() );
-			$transient_running_key = $this->get_transient_key( 'running_' . $file->getPathname() );
+			// If we already have a cached filesize for this directory then let's return it
+			$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
 
-			if ( ! $ignore_excludes ) {
-				$transient_filesize_key = $this->get_transient_key( $excludes . $file->getPathname() );
-				$transient_running_key  = $this->get_transient_key( 'running_' . $excludes . $file->getPathname() );
+			// If we haven't calculated the site size yet then kick it off in a thread
+			if ( ! $directory_sizes ) {
+			
+				if ( ! $this->is_total_filesize_being_calculated() ) {
+			
+					// Schedule a Backdrop task to trigger a recalculation
+					$task = new HM_Backdrop_Task( array( $this, 'recursive_filesize_scanner' ) );
+					$task->schedule();
+				
+				}		
+				
+				return;
+
 			}
 
-			// If we already have a cached filesize for this directory then let's return it
-			$size = get_transient( $transient_filesize_key );
+			$directory_size = 0;
 
-			if ( $size !== false ) {
+			foreach ( $directory_sizes as $path => $size ) {
 
-				return (int) $size;
-
-			// If we don't have a cached filesize then we probably need to calculate it
-			} else {
-
-				// Don't bother re-calculating if we are already doing that in a different thread through
-				$parent_directory = $file->getPathname();
-
-				while ( $parent_directory !== '/' ) {
-
-					$parent_task = new HM_Backdrop_Task( array( $this, 'recursive_directory_filesize_scanner' ), $parent_directory, $ignore_excludes );
-
-					// If we are already calulating the parent directory in another thread then let's just wait for that to finish
-					if ( $parent_task->is_scheduled() ) {
-						return false;
-					}
-
-					$parent_directory = dirname( $parent_directory );
-
+				if ( strpos( $path, trailingslashit( $file->getPathname() ) ) === false ) {
+					unset( $directory_sizes[ $path ] );
 				}
 
-				update_option( $transient_running_key, true );
-
-				// Schedule a Backdrop task to trigger a recalculation
-				$task = new HM_Backdrop_Task( array( $this, 'recursive_directory_filesize_scanner' ), $file->getPathname(), $ignore_excludes );
-				$task->schedule();
-
-				return false;
-
 			}
+
+			return array_sum( $directory_sizes );
 
 		}
 
 	}
 
 	/**
-	 * Check if a given pathname is having it's filesize calculated
+	 * Whether the total filesize is being calculated
 	 *
-	 * @param string $file	The file you want to know the size of
 	 * @return int 			The total of the file or directory
 	 */
-	public function is_total_filesize_being_calculated( $pathname ) {
-
-		// Bail early if $pathname isn't a directory
-		if ( ! is_dir( $pathname ) ) {
-			return false;
-		}
-
-		return (bool) get_option( $this->get_transient_key( 'running_' . (string) $pathname ) );
-
-	}
-
-	public function get_transient_key( $seed ) {
-		return 'hmbkp_' . substr( sha1( serialize( $seed ) ), -34 );
+	function is_total_filesize_being_calculated() {
+		return get_transient( 'hmbkp_directory_filesizes_running' );
 	}
 
 }

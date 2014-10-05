@@ -569,7 +569,7 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 
 		foreach ( $schedules->get_schedules() as $schedule )
 			if ( $schedule->is_filesize_cached() )
-				$backup_sizes[$schedule->get_id()] = $schedule->get_formatted_file_size();
+				$backup_sizes[$schedule->get_id()] = $schedule->get_formatted_site_size();
 
 		return $backup_sizes;
 

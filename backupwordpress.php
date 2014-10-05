@@ -154,17 +154,6 @@ function hmbkp_init() {
 		hmbkp_update();
 	}
 
-	$schedules = HMBKP_Schedules::get_instance()->get_schedules();
-
-	foreach ( $schedules as $schedule ) {
-
-		if ( ! $schedule->is_filesize_cached() ) {
-			$task = new HM_Backdrop_TASK( array( $schedule, 'get_filesize' ) );
-			$task->schedule();
-		}
-
-	}
-
 }
 add_action( 'admin_init', 'hmbkp_init' );
 
