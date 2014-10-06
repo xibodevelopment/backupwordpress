@@ -23,9 +23,6 @@ function hmbkp_deactivate() {
 	// Clean up the backups directory
 	hmbkp_cleanup();
 
-	// Remove the plugin data cache
-	delete_transient( 'hmbkp_plugin_data' );
-
 	$schedules = HMBKP_Schedules::get_instance();
 
 	// Clear schedule crons
@@ -35,6 +32,9 @@ function hmbkp_deactivate() {
 
 	// Opt them out of support
 	delete_option( 'hmbkp_enable_support' );
+
+	// Remove the directory filesize cache
+	delete_transient( 'hmbkp_directory_filesizes' );
 
 }
 
@@ -153,12 +153,23 @@ function hmbkp_update() {
 
 			$reoccurrence = $schedule->get_reoccurrence();
 
-			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false )
+			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false ) {
 				$schedule->set_reoccurrence( 'hmbkp_' . $schedule->get_reoccurrence() );
+			}
 
 			$schedule->save();
 
 		}
+
+	}
+
+	// Update from 2.x to 3.0
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		// Remove the plugin data cache
+		delete_transient( 'hmbkp_plugin_data' );
+
+		// 
 
 	}
 
@@ -180,18 +191,21 @@ function hmbkp_update() {
 		}
 
 		// Force .htaccess to be re-written
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+		if ( file_exists( hmbkp_path() . '/.htaccess' ) ) {
 			unlink( hmbkp_path() . '/.htaccess' );
+		}
 
 		// Force index.html to be re-written
-		if ( file_exists( hmbkp_path() . '/index.html' ) )
+		if ( file_exists( hmbkp_path() . '/index.html' ) ) {
 			unlink( hmbkp_path() . '/index.html' );
+		}
 
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION )
+	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION ) {
 		update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
+	}
 
 }
 

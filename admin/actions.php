@@ -138,7 +138,6 @@ function hmbkp_request_download_backup() {
 		return;
 	}
 
-
 	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
 
 	global $is_apache;
@@ -472,8 +471,9 @@ function hmbkp_add_exclude_rule() {
 
 	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes#directory-listing' ), hmbkp_get_settings_url() );
 
-	if ( isset( $_GET['hmbkp_directory_browse'] ) )
+	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
 		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
+	}
 
 	wp_safe_redirect( $url, '303' );
 
@@ -506,8 +506,9 @@ function hmbkp_remove_exclude_rule() {
 
 	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
 
-	if ( isset( $_GET['hmbkp_directory_browse'] ) )
+	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
 		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
+	}
 
 	wp_safe_redirect( $url, '303' );
 
@@ -520,65 +521,27 @@ add_action( 'admin_post_hmbkp_remove_exclude_rule', 'hmbkp_remove_exclude_rule' 
  *
  * @param null $pathname
  */
-function hmbkp_recalculate_directory_filesize( $pathname = null ) {
+function hmbkp_recalculate_directory_filesize() {
 
-	if ( ! $pathname && ( ! isset( $_GET['hmbkp_recalculate_directory_filesize'] ) || ! check_admin_referer( 'hmbkp-recalculate_directory_filesize' ) ) ) {
+	if ( ! isset( $_GET['hmbkp_recalculate_directory_filesize'] ) || ! check_admin_referer( 'hmbkp-recalculate_directory_filesize' ) ) {
 		return;
 	}
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	if ( ! $pathname ) {
-		$directory = sanitize_text_field( $_GET['hmbkp_recalculate_directory_filesize'] );
-	} else {
-		$directory = $pathname;
-	}
+	$directory = sanitize_text_field( $_GET['hmbkp_recalculate_directory_filesize'] );
 
 	// Delete the cached directory size
-	// TODO should use $schedule->get_transient_key
-	delete_transient( $schedule->get_transient_key( $directory ) );
+	delete_transient( 'hmbkp_directory_filesizes' );
 
-	$handle = opendir( $directory );
+	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
 
-	while ( $file_handle = readdir( $handle ) ) :
-
-		// Ignore current dir and containing dir
-		if ( $file_handle === '.' || $file_handle === '..' )
-			continue;
-
-		$file = HM_Backup::conform_dir( trailingslashit( $directory ) . $file_handle );
-
-		// Delete all sub directories
-		if ( is_dir( $file ) ) {
-			delete_transient(  $schedule->get_transient_key( $file ) );
-			hmbkp_recalculate_directory_filesize( $file );
-		}
-
-	endwhile;
-
-	closedir( $handle );
-
-	$parent_directory = dirname( $directory );
-
-	// Delete the cached filesize of all parents as well
-	while ( $schedule->get_root() !== $parent_directory ) {
-
-		delete_transient(  $schedule->get_transient_key( $parent_directory ) );
-		$parent_directory = dirname( $parent_directory );
-
+	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
+		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
 	}
 
-	if ( ! $pathname ) {
-
-		$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
-
-		if ( isset( $_GET['hmbkp_directory_browse'] ) )
-			$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
-
-		wp_safe_redirect( $url, '303' );
-		die;
-
-	}
+	wp_safe_redirect( $url, '303' );
+	die;
 
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_recalculate_directory_filesize' );
