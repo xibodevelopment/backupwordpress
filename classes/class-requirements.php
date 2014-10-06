@@ -341,6 +341,40 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 HMBKP_Requirements::register( 'HMBKP_Requirement_Cron_Array', 'Site' );
 
 /**
+ * Class HMBKP_Requirement_Cron_Array
+ */
+class HMBKP_Requirement_Language extends HMBKP_Requirement {
+
+	/**
+	 * @var string
+	 */
+	var $name = 'Language';
+
+	/**
+	 * @return bool|mixed
+	 */
+	protected function test() {
+
+		// Since 4.0
+		$language = get_option( 'WPLANG' );
+
+		if ( $language ) {
+			return $language;
+		}
+
+		if ( defined( 'WPLANG' ) && WPLANG ) {
+			return WPLANG;
+		}
+
+		return 'en_US';
+
+	}
+
+}
+
+HMBKP_Requirements::register( 'HMBKP_Requirement_Language', 'Site' );
+
+/**
  * Class HMBKP_Requirement_Safe_Mode
  */
 class HMBKP_Requirement_Safe_Mode extends HMBKP_Requirement {
