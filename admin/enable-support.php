@@ -58,4 +58,4 @@
 <p class="howto"><?php _e( 'You can disable support in the future by deactivating BackUpWordPress.', 'hmbkp' ); ?></p>
 
 <a href="#" class="button-secondary hmbkp-colorbox-close"><?php _e( 'No thanks', 'hmbkp' ); ?></a>
-<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_enable_support' ), admin_url( 'admin-post.php' ) ), 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' ) ); ?>" class="button-primary"><?php _e( 'Yes I want to enable support', 'hmbkp' ); ?></a>
+<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_enable_support' ), admin_url( 'admin-post.php' ) ), 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' ) ); ?>" class="button-primary right"><?php _e( 'Yes I want to enable support', 'hmbkp' ); ?></a>
