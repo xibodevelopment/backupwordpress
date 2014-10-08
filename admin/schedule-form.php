@@ -162,8 +162,8 @@
 
 						<?php printf( __( 'Past this limit older backups will be deleted automatically.', 'hmbkp' ) ); ?>
 
-						<?php if ( $schedule->is_filesize_cached() ) {
-							printf( __( 'This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_site_size() * $schedule->get_max_backups() ) . '</code>' );
+						<?php if ( $schedule->is_site_size_cached() ) {
+							printf( __( 'This schedule will store a maximum of %s of backups.', 'hmbkp' ), '<code>' . size_format( $schedule->get_site_size() * $schedule->get_max_backups() ) . '</code>' );
 						} ?>
 
 					</p>
