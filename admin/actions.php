@@ -441,7 +441,13 @@ function hmbkp_edit_schedule_submit() {
 
 	}
 
-	wp_safe_redirect( wp_get_referer(), '303' );
+	$redirect = remove_query_arg( array( 'hmbkp_panel', 'action' ), wp_get_referer() );
+
+	if ( $errors ) {
+		$redirect = wp_get_referer();
+	}
+
+	wp_safe_redirect( $redirect, '303' );
 	die;
 
 }
