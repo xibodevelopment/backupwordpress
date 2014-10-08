@@ -240,7 +240,7 @@ add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
  */
 function hmbkp_load_styles(){
 
-	$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css';
+	$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css';
 
 	if ( WP_DEBUG ) {
 		$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css';
