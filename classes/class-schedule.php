@@ -250,15 +250,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		if ( ! is_null( $option ) ) {
 
-			if ( isset( $this->options[$service][$option] ) )
-				return $this->options[$service][$option];
+			if ( isset( $this->options[ $service ][ $option ] ) )
+				return $this->options[ $service ][ $option ];
 
 			return array();
 
 		}
 
-		if ( isset( $this->options[$service] ) )
-			return $this->options[$service];
+		if ( isset( $this->options[ $service ] ) )
+			return $this->options[ $service ];
 
 		return array();
 
@@ -271,7 +271,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_service_options( $service, Array $options ) {
 
-		$this->options[$service] = $options;
+		$this->options[ $service ] = $options;
 
 	}
 
@@ -468,7 +468,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $this->is_site_size_being_calculated() ) {
 			return array();
 		}
-		
+
 		// Lock so we don't run multiple at once
 		set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );
 
@@ -489,7 +489,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
-		
+
 		delete_transient( 'hmbkp_directory_filesizes_running' );
 
 		return $directory_sizes;
@@ -522,15 +522,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			// If we haven't calculated the site size yet then kick it off in a thread
 			if ( ! $directory_sizes = get_transient( 'hmbkp_directory_filesizes' ) ) {
-			
+
 				if ( ! $this->is_site_size_being_calculated() ) {
-			
+
 					// Schedule a Backdrop task to trigger a recalculation
 					$task = new HM_Backdrop_Task( array( $this, 'recursive_filesize_scanner' ) );
 					$task->schedule();
-				
-				}		
-				
+
+				}
+
 				return;
 
 			}

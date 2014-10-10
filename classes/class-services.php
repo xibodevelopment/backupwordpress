@@ -272,7 +272,7 @@ class HMBKP_Services {
 		if ( ! file_exists( $filepath ) )
 			return new WP_Error( 'hmbkp_invalid_path_error', sprintf( __( 'Argument 1 for %s must be a valid filepath', ' hmbkp' ), __METHOD__ ) );
 
-		self::instance()->services[$filepath] = $classname;
+		self::instance()->services[ $filepath ] = $classname;
 
 		return true;
 	}
@@ -284,10 +284,10 @@ class HMBKP_Services {
 	 */
 	public static function unregister( $filepath ) {
 
-		if ( ! isset( self::instance()->services[$filepath] ) )
+		if ( ! isset( self::instance()->services[ $filepath ] ) )
 			return new WP_Error( 'hmbkp_unrecognized_service_error', sprintf( __( 'Argument 1 for %s must be a registered service', ' hmbkp' ), __METHOD__ ) );
 
-		unset( self::instance()->services[$filepath] );
+		unset( self::instance()->services[ $filepath ] );
 
 		return true;
 	}

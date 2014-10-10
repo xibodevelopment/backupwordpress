@@ -245,7 +245,6 @@ function hmbkp_edit_schedule_services_submit() {
 	wp_safe_redirect( wp_get_referer(), '303' );
 	die;
 
-
 }
 add_action( 'admin_post_hmbkp_edit_schedule_services_submit', 'hmbkp_edit_schedule_services_submit' );
 

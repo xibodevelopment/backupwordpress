@@ -23,7 +23,7 @@ class HMBKP_Requirements {
 	 */
 	public static function get_requirements( $group = false ) {
 
-		$requirements = $group ? self::$requirements[$group] : self::$requirements;
+		$requirements = $group ? self::$requirements[ $group ] : self::$requirements;
 
 		ksort( $requirements );
 
@@ -588,7 +588,7 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
 			if ( $schedule->is_site_size_cached() ) {
-				$backup_sizes[$schedule->get_id()] = $schedule->get_formatted_site_size();
+				$backup_sizes[ $schedule->get_id() ] = $schedule->get_formatted_site_size();
 			}
 		}
 

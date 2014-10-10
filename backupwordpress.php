@@ -208,7 +208,7 @@ function hmbkp_load_intercom_script() {
 
 		foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
 
-			$info[$requirement->name()] = $requirement->result();
+			$info[ $requirement->name() ] = $requirement->result();
 
 		}
 
@@ -220,10 +220,10 @@ function hmbkp_load_intercom_script() {
 
 	$current_user = wp_get_current_user();
 
-	$info['user_hash'] = hash_hmac( "sha256", $current_user->user_email, "fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK" );
+	$info['user_hash'] = hash_hmac( 'sha256', $current_user->user_email, 'fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK' );
 	$info['email'] = $current_user->user_email;
 	$info['created_at'] = strtotime( $current_user->user_registered );
-	$info['app_id'] = "7f1l4qyq";
+	$info['app_id'] = '7f1l4qyq';
 	$info['name'] = $current_user->display_name;
 	$info['widget'] = array( 'activator' => '#intercom' ); ?>
 

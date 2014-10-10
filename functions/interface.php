@@ -330,9 +330,9 @@ function hmbkp_add_settings_error( $error_message ){
 
 	// If it doesnt exist, create.
 	if ( ! $hmbkp_settings_errors ) {
-		set_transient( 'hmbkp_settings_errors', (array)$error_message );
+		set_transient( 'hmbkp_settings_errors', (array) $error_message );
 	} else {
-		set_transient( 'hmbkp_settings_errors', array_unique( array_merge( $hmbkp_settings_errors, (array)$error_message ) ) );
+		set_transient( 'hmbkp_settings_errors', array_unique( array_merge( $hmbkp_settings_errors, (array) $error_message ) ) );
 	}
 
 }
