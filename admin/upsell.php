@@ -26,7 +26,7 @@ if ( isset( $_GET['hmbkp_upsell'] ) ) {
 
 	</h3>
 
-	<?php if ( ! get_option( 'hmbkp_upsell' ) || get_option( 'hmbkp_upsell' ) === 'shown' ) { ?>
+	<?php if ( ! get_option( 'hmbkp_upsell' ) ||  'shown' === get_option( 'hmbkp_upsell' ) ) { ?>
 	<ul>
 
 		<li class="manage-menus">
