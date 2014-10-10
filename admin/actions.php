@@ -326,7 +326,7 @@ function hmbkp_edit_schedule_submit() {
 
 		$options = array(
 			'min_range' => 1,
-			'max_range' => 31
+			'max_range' => 31,
 		);
 
 		if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
@@ -364,7 +364,7 @@ function hmbkp_edit_schedule_submit() {
 
 		$options = array(
 			'min_range' => 0,
-			'max_range' => 59
+			'max_range' => 59,
 		);
 
 		if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {

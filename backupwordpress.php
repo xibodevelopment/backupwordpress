@@ -309,7 +309,7 @@ function hmbkp_display_server_info_tab() {
 		array(
 			'title' => __( 'Server Info', 'backupwordpress' ),
 			'id' => 'hmbkp_server',
-			'content' => $info
+			'content' => $info,
 		)
 	);
 
