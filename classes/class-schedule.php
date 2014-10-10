@@ -288,7 +288,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$size = 0;
 
 		// Don't include database if file only
-		if ( $this->get_type() !== 'file' ) {
+		if ( 'file' !== $this->get_type() ) {
 
 			global $wpdb;
 
@@ -300,7 +300,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		}
 
-		// TODO 
+		// @TODO
 		// Doesn't account for excluded files
 		// If a file is excluded then it's parent directory size won't be updated
 		// Could be fixed at the same time as the ability to re-calculate a specific directory size
@@ -312,7 +312,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Relative is only used for defaults and HMBKP_EXCLUDES
 
 		// Don't include files if database only
-		if ( $this->get_type() !== 'database' ) {
+		if ( 'database' !== $this->get_type() ) {
 
 			$directory_sizes = $this->recursive_filesize_scanner();
 
@@ -324,11 +324,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
                 if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $path ) ) ) ) {
                 	unset( $directory_sizes[ $path ] );
                 }
-			
+
 			}
 
 			$size += array_sum( $directory_sizes );
-		
+
 		}
 
 		return $size;
@@ -412,7 +412,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				$files_with_size[ $filesize ] = $file;
 
-			} elseif ( $filesize === 0 ) {
+			} elseif ( 0 === $filesize ) {
 
 				$empty_files[] = $file;
 
@@ -540,7 +540,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			foreach ( $directory_sizes as $path => $size ) {
 
 				// Remove any directories that aren't part of the current tree
-				if ( strpos( $path, trailingslashit( $file->getPathname() ) ) === false ) {
+				if ( false === strpos( $path, trailingslashit( $file->getPathname() ) ) ) {
 					unset( $directory_sizes[ $path ] );
 				}
 
@@ -561,7 +561,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_schedule_start_time( $gmt = true ) {
 
-		if ( $this->get_reoccurrence() === 'manually' )
+		if ( 'manually' === $this->get_reoccurrence() )
 			return 0;
 
 		if ( ! $gmt )

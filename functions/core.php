@@ -283,7 +283,7 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
  */
 function hmbkp_rmdirtree( $dir ) {
 
-	if ( strpos( HM_Backup::get_home_path(), $dir ) !== false )
+	if ( false !== strpos( HM_Backup::get_home_path(), $dir ) )
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'hmbkp' ) ) );
 
 	if ( is_file( $dir ) )
@@ -391,7 +391,7 @@ function hmbkp_path_default() {
 	$upload_dir = wp_upload_dir();
 
 	// If the backups dir can't be created in WP_CONTENT_DIR then fallback to uploads
-	if ( ( ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! wp_is_writable( $path ) ) ) && strpos( $path, $upload_dir['basedir'] ) === false ) {
+	if ( ( ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! wp_is_writable( $path ) ) ) && false === strpos( $path, $upload_dir['basedir'] ) ) {
 
 		hmbkp_path_move( $path, $path = HM_Backup::conform_dir( trailingslashit( $upload_dir['basedir'] ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' ) );
 
@@ -437,7 +437,7 @@ function hmbkp_path_move( $from, $to ) {
 	if ( $handle = opendir( $from ) ) {
 
 		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' )
+			if ( 'zip' === pathinfo( $file, PATHINFO_EXTENSION ) )
 				if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
 					copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
 		}
@@ -447,7 +447,7 @@ function hmbkp_path_move( $from, $to ) {
 	}
 
 	// Only delete the old directory if it's inside WP_CONTENT_DIR
-	if ( strpos( $from, WP_CONTENT_DIR ) !== false )
+	if ( false !==strpos( $from, WP_CONTENT_DIR ) )
 		hmbkp_rmdirtree( $from );
 
 }
@@ -489,7 +489,7 @@ function hmbkp_cleanup() {
 	if ( $handle = opendir( $hmbkp_path ) ) {
 
 		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' && strpos( $file, '-running' ) === false )
+			if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && 'zip' !== pathinfo( $file, PATHINFO_EXTENSION ) && false === strpos( $file, '-running' ) )
 				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
 		}
 

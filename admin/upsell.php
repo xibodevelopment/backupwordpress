@@ -1,12 +1,12 @@
 <?php $display = get_option( 'hmbkp_upsell' );
 
-if ( isset( $_GET[ 'hmbkp_upsell' ] ) ) {
-	
-	if ( ! $display || $display === 'shown' ) {
-		
+if ( isset( $_GET['hmbkp_upsell'] ) ) {
+
+	if ( ! $display || 'shown' === $display ) {
+
 		update_option( 'hmbkp_upsell', 'hidden' );
 	};
-	if ( $display === 'hidden' ) {
+	if ( 'hidden' === $display ) {
 
 		update_option( 'hmbkp_upsell', 'shown' );
 

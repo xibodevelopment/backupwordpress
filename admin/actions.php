@@ -195,7 +195,7 @@ function hmbkp_dismiss_error() {
 
 	// TODO Should really be nonced
 
-	if ( empty( $_GET['action'] ) || $_GET['action'] !== 'hmbkp_dismiss_error' ) {
+	if ( empty( $_GET['action'] ) || 'hmbkp_dismiss_error' !== $_GET['action'] ) {
 		return;
 	}
 
@@ -296,7 +296,7 @@ function hmbkp_edit_schedule_submit() {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
 		}
 
-		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $schedule_recurrence_type !== 'manually' ) {
+		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
 		}
 

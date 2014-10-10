@@ -252,7 +252,7 @@
 
 								$size = $schedule->filesize( $file );
 
-								if ( $size !== false ) {
+								if ( false !== $size ) {
 
 									$size = size_format( $size );
 
