@@ -1,5 +1,3 @@
-<?php ?>
-
 <div class="hmbkp-upsell">
 
 	<span>Backup to</span>&nbsp;

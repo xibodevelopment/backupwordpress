@@ -309,19 +309,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			$excludes = $this->exclude_string( 'regex' );
 
-			var_dump( $excludes );
-
 			foreach ( $directory_sizes as $path => $size ) {
 
 				// Skip excluded files if we have excludes
-                if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $path ) ) ) ) {
-                	unset( $directory_sizes[ $path ] );
-                }
-			
+				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $path ) ) ) ) {
+					unset( $directory_sizes[ $path ] );
+				}
 			}
 
 			$size += array_sum( $directory_sizes );
-		
+
 		}
 
 		return $size;
