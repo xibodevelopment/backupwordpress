@@ -1,8 +1,23 @@
 <?php
 
-if ( ! defined( 'HMBKP_PLUGIN_PATH' ) ) {
-	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+if ( ! current_user_can( 'activate_plugins' ) )
+	return;
+
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )
+	exit;
+
+if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.8.4' );
 }
+
+// Don't activate on old versions of WordPress
+global $wp_version;
+
+if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) )
+	return;
+
+if ( ! defined( 'HMBKP_PLUGIN_PATH' ) )
+	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
