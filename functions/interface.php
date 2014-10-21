@@ -212,7 +212,7 @@ function hmbkp_schedule_status( HMBKP_Scheduled_Backup $schedule, $echo = true )
 
 	<span class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'hmbkp' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
 		<?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'hmbkp' ); ?>
-		<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_cancel_backup', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ), 'hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup_nonce' ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>
+		<a href="<?php echo hmbkp_admin_action_url( 'request_cancel_backup', array( 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>"><?php _e( 'cancel', 'hmbkp' ); ?></a>
 	</span>
 
 	<?php $output = ob_get_clean();
