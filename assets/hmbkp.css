@@ -8,12 +8,17 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 
 .nav-tab.hmbkp-running:not(.nav-tab-active):before { width: 20px; height: 20px; margin: 0 10px -4px 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
 
-.hmbkp-upsell { margin-top: 40px; border-top: 1px solid #ccc; }
-.hmbkp-upsell a { display: block; margin-bottom: 0; width: 120px; }
+.hmbkp-upsell { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ccc; }
+.hmbkp-upsell a { color: #57792b }
+.hmbkp-upsell a:hover { color: #98c063 }
+
+.hmbkp-upsell-sep { color: #bbb;}
 .hmbkp-upsell ul { overflow: hidden; }
 .hmbkp-upsell li { float: left; margin: 0 20px 20px 0; }
 .hmbkp-upsell img { display: block; margin: 0 auto; max-width: 120px; min-height: 60px; }
+.hmbkp-upsell ul a { display: block; margin-bottom: 0; width: 120px; }
 .hmbkp-upsell .howto { font-weight: normal; display: inline; }
+.hmbkp-upsell .hmbkp_hide { float: right; }
 
 .hmbkp-schedule-sentence { font-size: 16px; font-weight: lighter; margin: 20px 0; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 60px; display: block; float: left; }
@@ -33,8 +38,8 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 .hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; position: relative; }
 .hmbkp-ajax-loading::after { content: ""; width: 16px; height: 16px; background-image: url('spinner-2x.gif'); background-size: 16px 16px; background-repeat: no-repeat; background-position: 0 0; position: absolute; right: -30px; top: 5px; }
 
-.delete-action { color: #a00; }
-.delete-action:hover .delete-action:focus { color: red; }
+.delete-action { color: #a00; -webkit-transition: all 300ms ease; -moz-transition: all 300ms ease; -ms-transition: all 300ms ease; -o-transition: all 300ms ease; transition: all 300ms ease; }
+.delete-action:hover .delete-action:focus { color: red; -webkit-transition: all 300ms ease; -moz-transition: all 300ms ease; -ms-transition: all 300ms ease; -o-transition: all 300ms ease; transition: all 300ms ease; }
 
 .strikethrough { text-decoration: line-through; }
 
@@ -55,6 +60,10 @@ thead td { border-bottom: 1px solid #e1e1e1; }
 
 .server-info { overflow: auto; max-height: 50%; outline: black 1px solid; }
 .server-info pre { max-height: 100px; overflow-x:hidden; }
+
+#intercom-info { background: #0074a2; color:#fff;}
+#intercom-info:hover { background: #2ea2cc; color:#fff;}
+#intercom-info span.dashicons-admin-users { position: relative; display:inline-block; vertical-align: middle; top:-2px; }
 
 pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; word-wrap: normal !important; }
 

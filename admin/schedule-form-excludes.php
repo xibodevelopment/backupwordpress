@@ -45,7 +45,7 @@
 
 							<?php else : ?>
 
-								<a href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_remove_exclude', $exclude ), 'hmbkp-remove_exclude_rule' ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+								<a href="<?php echo hmbkp_admin_action_url( 'remove_exclude_rule', array( 'hmbkp_remove_exclude' => $exclude, 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
 
 							<?php endif; ?>
 
@@ -61,7 +61,7 @@
 
 	<?php endif; ?>
 
-	<h3><?php _e( 'Directory Listing', 'hmbkp' ); ?></h3>
+	<h3 id="directory-listing"><?php _e( 'Directory Listing', 'hmbkp' ); ?></h3>
 
 	<p><?php _e( 'Here\'s a directory listing of all files on your site, you can browse through and exclude files or folders that you don\'t want included in your backup.', 'hmbkp' ); ?></p>
 
@@ -133,7 +133,7 @@
 
 					<td class="column-filesize">
 
-						<?php if ( $schedule->is_total_filesize_being_calculated( $schedule->get_root() ) ) { ?>
+						<?php if ( $schedule->is_site_size_being_calculated() ) { ?>
 
 							<span class="spinner"></span>
 
@@ -141,7 +141,7 @@
 
 							$root = new SplFileInfo( $schedule->get_root() );
 
-							$size = $schedule->total_filesize( $root );
+							$size = $schedule->filesize( $root );
 
 							if ( $size !== false ) {
 
@@ -244,13 +244,13 @@
 
 						<td class="column-format column-filesize">
 
-							<?php if ( $file->isDir() && $schedule->is_total_filesize_being_calculated( $file->getPathname() ) ) { ?>
+							<?php if ( $file->isDir() && $schedule->is_site_size_being_calculated() ) { ?>
 
 								<span class="spinner"></span>
 
 							<?php } else {
 
-								$size = $schedule->total_filesize( $file );
+								$size = $schedule->filesize( $file );
 
 								if ( $size !== false ) {
 
@@ -314,9 +314,16 @@
 
 								<strong><?php _e( 'Excluded', 'hmbkp' ); ?></strong>
 
-							<?php } else { ?>
+							<?php } else {
 
-								<a href="<?php echo wp_nonce_url( add_query_arg( 'hmbkp_exclude_pathname', urlencode( $file->getPathname() ) ), 'hmbkp-add_exclude_rule' ); ?>" class="button-secondary"><?php _e( 'Exclude &rarr;', 'hmbkp' ); ?></a>
+								$exclude_path = $file->getPathname();
+
+								// Excluded directories need to be trailingslashed
+								if ( $file->isDir() ) {
+									$exclude_path = trailingslashit( $file->getPathname() );
+								} ?>
+
+								<a href="<?php echo wp_nonce_url( add_query_arg( array( 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_add_exclude_rule', 'hmbkp_exclude_pathname' => urlencode( $exclude_path ) ), admin_url( 'admin-post.php' ) ), 'hmbkp-add-exclude-rule', 'hmbkp-add-exclude-rule-nonce' ); ?>" class="button-secondary"><?php _e( 'Exclude &rarr;', 'hmbkp' ); ?></a>
 
 							<?php } ?>
 

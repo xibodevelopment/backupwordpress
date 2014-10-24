@@ -23,9 +23,6 @@ function hmbkp_deactivate() {
 	// Clean up the backups directory
 	hmbkp_cleanup();
 
-	// Remove the plugin data cache
-	delete_transient( 'hmbkp_plugin_data' );
-
 	$schedules = HMBKP_Schedules::get_instance();
 
 	// Clear schedule crons
@@ -35,6 +32,9 @@ function hmbkp_deactivate() {
 
 	// Opt them out of support
 	delete_option( 'hmbkp_enable_support' );
+
+	// Remove the directory filesize cache
+	delete_transient( 'hmbkp_directory_filesizes' );
 
 }
 
@@ -153,12 +153,23 @@ function hmbkp_update() {
 
 			$reoccurrence = $schedule->get_reoccurrence();
 
-			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false )
+			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false ) {
 				$schedule->set_reoccurrence( 'hmbkp_' . $schedule->get_reoccurrence() );
+			}
 
 			$schedule->save();
 
 		}
+
+	}
+
+	// Update from 2.x to 3.0
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		// Remove the plugin data cache
+		delete_transient( 'hmbkp_plugin_data' );
+
+		// 
 
 	}
 
@@ -180,18 +191,21 @@ function hmbkp_update() {
 		}
 
 		// Force .htaccess to be re-written
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+		if ( file_exists( hmbkp_path() . '/.htaccess' ) ) {
 			unlink( hmbkp_path() . '/.htaccess' );
+		}
 
 		// Force index.html to be re-written
-		if ( file_exists( hmbkp_path() . '/index.html' ) )
+		if ( file_exists( hmbkp_path() . '/index.html' ) ) {
 			unlink( hmbkp_path() . '/index.html' );
+		}
 
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION )
+	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION ) {
 		update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
+	}
 
 }
 
@@ -251,7 +265,7 @@ function hmbkp_cron_schedules( $schedules ) {
 	$schedules['hmbkp_twicedaily']  = array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
 	$schedules['hmbkp_daily']       = array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'hmbkp' ) );
 	$schedules['hmbkp_weekly']      = array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'hmbkp' ) );
-	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Fortnightly', 'hmbkp' ) );
+	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'hmbkp' ) );
 	$schedules['hmbkp_monthly']     = array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'hmbkp' ) );
 
 	return $schedules;
@@ -655,4 +669,19 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 
 	return $timestamp;
 
+}
+
+/**
+ * Helper function for creating safe action URLs.
+ *
+ * @param string $action Callback function name.
+ * @param array $query_args Additional GET params.
+ *
+ * @return string
+ */
+function hmbkp_admin_action_url( $action, array $query_args = array() ) {
+
+	$query_args = array_merge( $query_args, array( 'action' => 'hmbkp_' . $action ) );
+
+	return esc_url( wp_nonce_url( add_query_arg( $query_args, admin_url( 'admin-post.php' ) ), 'hmbkp_' . $action, 'hmbkp-' . $action . '_nonce' ) );
 }

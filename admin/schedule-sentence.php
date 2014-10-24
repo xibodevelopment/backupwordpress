@@ -1,7 +1,13 @@
 <?php
 
 // Calculated filesize
-$filesize = $schedule->is_filesize_cached() || isset( $recalculate_filesize ) ? '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_file_size() ) . '</code>)' : '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your backup&hellip;', 'hmbkp' ) . '</code>)';
+$cached = $schedule->is_site_size_cached();
+
+if ( $schedule->get_type() === 'database' ) {
+	$cached = true;
+}
+
+$filesize = $cached ? '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'hmbkp' ) . '">' . esc_attr( $schedule->get_formatted_site_size() ) . '</code>)' : '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'hmbkp' ) . '">' . __( 'calculating the size of your backup&hellip;', 'hmbkp' ) . '</code>)';
 
 if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
 	$filesize = '';
@@ -49,7 +55,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	case 'hmbkp_fortnightly' :
 
-		$reoccurrence = sprintf( __( 'fortnightly on %1$s at %2$s', 'hmbkp' ), '<span ' . $next_backup . '>' . $day . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
+		$reoccurrence = sprintf( __( 'biweekly on %1$s at %2$s', 'hmbkp' ), '<span ' . $next_backup . '>' . $day . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
 
 	break;
 

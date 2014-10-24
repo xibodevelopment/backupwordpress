@@ -37,9 +37,7 @@ class HMBKP_Requirements {
 	 * @return array
 	 */
 	public static function get_requirement_groups() {
-
 		return array_keys( self::$requirements );
-
 	}
 
 	/**
@@ -51,8 +49,9 @@ class HMBKP_Requirements {
 	 */
 	public static function register( $class, $group = 'misc' ) {
 
-		if ( ! class_exists( $class ) )
+		if ( ! class_exists( $class ) ) {
 			return new WP_Error( 'invalid argument', 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
+		}
 
 		self::$requirements[$group][] = $class;
 
@@ -67,8 +66,9 @@ class HMBKP_Requirements {
 	 */
 	private static function instantiate( $class ) {
 
-		if ( ! class_exists( $class ) )
+		if ( ! class_exists( $class ) ) {
 			return new WP_Error( 'invalid argument', 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
+		}
 
 		$$class = new $class;
 
@@ -108,11 +108,11 @@ abstract class HMBKP_Requirement {
 
 		if ( is_bool( $test ) || empty( $test ) ) {
 
-			if ( $test )
+			if ( $test ) {
 				return 'Yes';
-
-			else
-				return 'No';
+			} 
+			
+			return 'No';
 
 		}
 
@@ -121,9 +121,7 @@ abstract class HMBKP_Requirement {
 	}
 
 	public function raw_result() {
-
 		return $this->test();
-
 	}
 
 }
@@ -143,8 +141,9 @@ class HMBKP_Requirement_Zip_Archive extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		if ( class_exists( 'ZipArchive' ) )
+		if ( class_exists( 'ZipArchive' ) ) {
 			return true;
+		}
 
 		return false;
 
@@ -171,8 +170,9 @@ class HMBKP_Requirement_Directory_Iterator_Follow_Symlinks extends HMBKP_Require
 	 */
 	protected function test() {
 
-		if ( defined( 'RecursiveDirectoryIterator::FOLLOW_SYMLINKS' ) )
+		if ( defined( 'RecursiveDirectoryIterator::FOLLOW_SYMLINKS' ) ) {
 			return true;
+		}
 
 		return false;
 
@@ -251,8 +251,9 @@ class HMBKP_Requirement_PHP_User extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		if ( ! HM_Backup::is_shell_exec_available() )
+		if ( ! HM_Backup::is_shell_exec_available() ) {
 			return '';
+		}
 
 		return shell_exec( 'whoami' );
 
@@ -277,8 +278,9 @@ class HMBKP_Requirement_PHP_Group extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		if ( ! HM_Backup::is_shell_exec_available() )
+		if ( ! HM_Backup::is_shell_exec_available() ) {
 			return '';
+		}
 
 		return shell_exec( 'groups' );
 
@@ -302,9 +304,7 @@ class HMBKP_Requirement_PHP_Version extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return PHP_VERSION;
-
 	}
 
 }
@@ -328,8 +328,9 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 
 		$cron = get_option( 'cron' );
 
-		if ( ! $cron )
+		if ( ! $cron ) {
 			return false;
+		}
 
 		return $cron;
 
@@ -338,6 +339,40 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 }
 
 HMBKP_Requirements::register( 'HMBKP_Requirement_Cron_Array', 'Site' );
+
+/**
+ * Class HMBKP_Requirement_Cron_Array
+ */
+class HMBKP_Requirement_Language extends HMBKP_Requirement {
+
+	/**
+	 * @var string
+	 */
+	var $name = 'Language';
+
+	/**
+	 * @return bool|mixed
+	 */
+	protected function test() {
+
+		// Since 4.0
+		$language = get_option( 'WPLANG' );
+
+		if ( $language ) {
+			return $language;
+		}
+
+		if ( defined( 'WPLANG' ) && WPLANG ) {
+			return WPLANG;
+		}
+
+		return 'en_US';
+
+	}
+
+}
+
+HMBKP_Requirements::register( 'HMBKP_Requirement_Language', 'Site' );
 
 /**
  * Class HMBKP_Requirement_Safe_Mode
@@ -353,9 +388,7 @@ class HMBKP_Requirement_Safe_Mode extends HMBKP_Requirement {
 	 * @return bool
 	 */
 	protected function test() {
-
 		return HM_Backup::is_safe_mode_active();
-
 	}
 
 }
@@ -376,9 +409,7 @@ class HMBKP_Requirement_Shell_Exec extends HMBKP_Requirement {
 	 * @return bool
 	 */
 	protected function test() {
-
 		return HM_Backup::is_shell_exec_available();
-
 	}
 
 }
@@ -399,9 +430,7 @@ class HMBKP_Requirement_PHP_Memory_Limit extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return @ini_get( 'memory_limit' );
-
 	}
 
 }
@@ -422,9 +451,7 @@ class HMBKP_Requirement_Backup_Path extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return hmbkp_path();
-
 	}
 
 }
@@ -445,9 +472,7 @@ class HMBKP_Requirement_Backup_Path_Permissions extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return substr( sprintf( '%o', fileperms( hmbkp_path() ) ), - 4 );
-
 	}
 
 }
@@ -468,9 +493,7 @@ class HMBKP_Requirement_WP_CONTENT_DIR extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return WP_CONTENT_DIR;
-
 	}
 
 }
@@ -491,9 +514,7 @@ class HMBKP_Requirement_WP_CONTENT_DIR_Permissions extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return substr( sprintf( '%o', fileperms( WP_CONTENT_DIR ) ), - 4 );
-
 	}
 
 }
@@ -514,9 +535,7 @@ class HMBKP_Requirement_ABSPATH extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return ABSPATH;
-
 	}
 
 }
@@ -567,9 +586,11 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 
 		$schedules = HMBKP_Schedules::get_instance();
 
-		foreach ( $schedules->get_schedules() as $schedule )
-			if ( $schedule->is_filesize_cached() )
-				$backup_sizes[$schedule->get_id()] = $schedule->get_formatted_file_size();
+		foreach ( $schedules->get_schedules() as $schedule ) {
+			if ( $schedule->is_site_size_cached() ) {
+				$backup_sizes[$schedule->get_id()] = $schedule->get_formatted_site_size();
+			}
+		}
 
 		return $backup_sizes;
 
@@ -593,9 +614,7 @@ class HMBKP_Requirement_WP_Cron_Test extends HMBKP_Requirement {
 	 * @return mixed
 	 */
 	protected function test() {
-
 		return (bool) get_option( 'hmbkp_wp_cron_test_failed' );
-
 	}
 
 }
@@ -616,9 +635,7 @@ class HMBKP_Requirement_PHP_API extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return php_sapi_name();
-
 	}
 
 }
@@ -665,9 +682,7 @@ class HMBKP_Requirement_Server_OS extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return PHP_OS;
-
 	}
 
 }
@@ -688,9 +703,7 @@ class HMBKP_Requirement_PHP_Disable_Functions extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return @ini_get( 'disable_functions' );
-
 	}
 
 }
@@ -711,9 +724,7 @@ class HMBKP_Requirement_PHP_Open_Basedir extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return @ini_get( 'open_basedir' );
-
 	}
 
 }
@@ -736,9 +747,7 @@ class HMBKP_Requirement_Define_HMBKP_PATH extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_PATH' ) ? HMBKP_PATH : '';
-
 	}
 
 }
@@ -759,9 +768,7 @@ class HMBKP_Requirement_Define_HMBKP_ROOT extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_ROOT' ) ? HMBKP_ROOT : '';
-
 	}
 
 }
@@ -782,9 +789,7 @@ class HMBKP_Requirement_Define_HMBKP_MYSQLDUMP_PATH extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_MYSQLDUMP_PATH' ) ? HMBKP_MYSQLDUMP_PATH : '';
-
 	}
 
 }
@@ -805,9 +810,7 @@ class HMBKP_Requirement_Define_HMBKP_ZIP_PATH extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_ZIP_PATH' ) ? HMBKP_ZIP_PATH : '';
-
 	}
 
 }
@@ -828,9 +831,7 @@ class HMBKP_Requirement_Define_HMBKP_CAPABILITY extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_CAPABILITY' ) ? HMBKP_CAPABILITY : '';
-
 	}
 
 }
@@ -851,9 +852,7 @@ class HMBKP_Requirement_Define_HMBKP_EMAIL extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_EMAIL' ) ? HMBKP_EMAIL : '';
-
 	}
 
 }
@@ -874,9 +873,7 @@ class HMBKP_Requirement_Define_HMBKP_ATTACHMENT_MAX_FILESIZE extends HMBKP_Requi
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ? HMBKP_ATTACHMENT_MAX_FILESIZE : '';
-
 	}
 
 }
@@ -897,9 +894,7 @@ class HMBKP_Requirement_Define_HMBKP_EXCLUDE extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-
 		return defined( 'HMBKP_EXCLUDE' ) ? HMBKP_EXCLUDE : '';
-
 	}
 
 }
@@ -911,9 +906,7 @@ class HMBKP_Requirement_Active_Plugins extends HMBKP_Requirement {
 	var $name = 'Active Plugins';
 
 	protected function test(){
-
 		return get_option( 'active_plugins' );
-
 	}
 
 }
@@ -925,9 +918,7 @@ class HMBKP_Requirement_Home_Url extends HMBKP_Requirement {
 	var $name = 'Home URL';
 
 	protected function test(){
-
 		return home_url();
-
 	}
 
 }
@@ -938,10 +929,8 @@ class HMBKP_Requirement_Site_Url extends HMBKP_Requirement {
 
 	var $name = 'Site URL';
 
-	protected function test(){
-
+	protected function test() {
 		return site_url();
-
 	}
 
 }
@@ -962,7 +951,6 @@ class HMBKP_Requirement_Max_Exec extends HMBKP_Requirement {
 	var $name = 'Max execution time';
 
 	protected function test(){
-
 		return @ini_get( 'max_execution_time' );
 	}
 }

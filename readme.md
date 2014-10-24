@@ -1,8 +1,8 @@
 # BackUpWordPress #
 **Contributors:** humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier  
 **Tags:** back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade  
-**Requires at least:** 3.7.3  
-**Tested up to:** 3.9.1  
+**Requires at least:** 3.8.4  
+**Tested up to:** 4.0  
 **Stable tag:** 2.6.2  
 
 Simple automated backups of your WordPress powered website.
@@ -121,6 +121,89 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 
 ## Changelog ##
+
+
+#### 3.0.0-beta / 2014-09-08
+
+ * Update translatable strings POT file
+ * Bump version
+ * Update min WP version and tested up to
+ * accidently used dash instead of underscore
+ * namespaced option and added option to uninstall.php
+ * basic show/hide of premium upsell
+ * Fix incorrect transient expiry
+ * Show the spinner in the tab if a schedule other than the current is running
+ * Snip snip
+ * Bring back the some javascript enhancements
+ * Switch to the PHP 5.2 compatible version of Backdrop
+ * Finish up support
+ * Brace up single line if's and foreach's
+ * Only load minified scripts and styles if WP_DEBUG isn't on
+ * Load the minified css and js files by default
+ * Remove the combined css files as we only have one now. Stop loading colorbox.
+ * Remove colorbox
+ * Improvements
+ * More improvements
+ * Don't die when directly running a backup on page load
+ * Re-factor the backup filesize calculation
+ * make capability filterable
+ * use core capabilities instead of custom
+ * Switch to Backdrop
+ * Fix typo in prefix
+ * Hook function onto admin_post
+ * Update delete link
+ * Bookmark current admin page for redirect
+ * Add custom capabilities and role
+ * Exclude BackUpWP by default
+ * Ignore the build folder
+ * Add more build excludes
+ * minify JS
+ * generate markdown readme
+ * minify css
+ * combine css
+ * regenerate readme
+ * Make links consistent for the grunt task
+ * Convert URLS to markdown
+ * Update lang files
+ * Add colorbox as bower dependency
+ * remove colorbox folder
+ * Remove colorbox submodule
+ * Change how we include FAQ
+ * Add readme partials
+ * Add package.json
+ * Add Gruntfile
+ * Add bower.json
+ * JSHint rules
+ * remove from ignore
+ * Update ignore list
+ * Add bower config
+ * Add FAQ strings
+ * Return the cached directory size early if we have it
+ * Re-factor the file browser scanner
+ * correct sprintf usage
+ * Handle saving service forms
+ * Codeing standards
+ * Move the error check outside of the foreach
+ * Remove uneeded $is_tab_visible
+ * Only show excludes for backups which include files
+ * Show destinations in the list of schedule links
+ * WordPress standard modal for enabling support
+ * Remove extra slash in include path
+ * Add a heading to the settings form
+ * More work on excludes
+ * Another todo
+ * Add some todos
+ * Don't include the parent directory in a browsable list
+ * More work on Excludes
+ * Switch to only storing 3 backups by default
+ * More work on redesign
+ * commented out enable support button till we figure out what to do with it
+ * made tabs responsive below 639px
+ * More work on redesign
+ * Add more default excludes
+ * Correctly highlight the tab for the first schedule
+ * Switch to tabs instead of subsubsub
+ * First bash at a redesign settings UX
 
 #### 2.6.2
 

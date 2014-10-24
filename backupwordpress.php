@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 2.6.2
+Version: 3.0-beta
 Author URI: http://hmn.md/
 */
 
@@ -67,7 +67,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.7.3' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.8.4' );
 }
 
 // Max memory limit isn't defined in old versions of WordPress
@@ -157,17 +157,6 @@ function hmbkp_init() {
 		hmbkp_update();
 	}
 
-	$schedules = HMBKP_Schedules::get_instance()->get_schedules();
-
-	foreach ( $schedules as $schedule ) {
-
-		if ( ! $schedule->is_filesize_cached() ) {
-			$task = new HM_Backdrop_TASK( array( $schedule, 'get_filesize' ) );
-			$task->schedule();
-		}
-
-	}
-
 }
 add_action( 'admin_init', 'hmbkp_init' );
 
@@ -189,13 +178,14 @@ function hmbkp_load_scripts() {
 		'hmbkp',
 		array(
 			'page_slug'    => HMBKP_PLUGIN_SLUG,
-			'nonce'         		=> wp_create_nonce( 'hmbkp_nonce' ),
-			'update'				=> __( 'Update', 'hmbkp' ),
-			'cancel'				=> __( 'Cancel', 'hmbkp' ),
-			'delete_schedule'		=> __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'delete_backup'			=> __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_exclude_rule'	=> __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_old_backups'	=> __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+			'nonce'         		   => wp_create_nonce( 'hmbkp_nonce' ),
+			'hmbkp_run_schedule_nonce' => wp_create_nonce( 'hmbkp_run_schedule' ),
+			'update'				   => __( 'Update', 'hmbkp' ),
+			'cancel'				   => __( 'Cancel', 'hmbkp' ),
+			'delete_schedule'		   => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'delete_backup'			   => __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_exclude_rule'	   => __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_old_backups'	   => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
 		)
 	);
 

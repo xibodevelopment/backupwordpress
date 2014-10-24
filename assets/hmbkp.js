@@ -84,7 +84,7 @@ jQuery( document ).ready( function( $ ) {
 
 		ajaxRequest = $.get(
 			ajaxurl,
-			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
+			{ 'hmbkp_run_schedule_nonce': hmbkp.hmbkp_run_schedule_nonce, 'action' : 'hmbkp_run_schedule', 'hmbkp_schedule_id' : scheduleId }
 		).done( function( data ) {
 
 			hmbkpCatchResponseAndOfferToEmail( data );

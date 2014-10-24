@@ -1,6 +1,6 @@
 <h3>Settings</h3>
 
-<?php global $hmbkp_form_errors; ?>
+<?php $hmbkp_form_errors = hmbkp_get_settings_errors(); ?>
 
 <?php if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
@@ -14,12 +14,12 @@
 
 <?php } ?>
 
-<form method="post" class="hmbkp-form" novalidate data-schedule-action="<?php if ( isset( $is_new_schedule ) ) { ?>add<?php } else { ?>edit<?php } ?>">
+<form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
-	<input type="hidden" name="action" value="hmbkp_edit_schedule" />
+	<input type="hidden" name="action" value="hmbkp_edit_schedule_submit" />
 
-	<?php wp_nonce_field( 'hmbkp-edit_schedule' ); ?>
+	<?php wp_nonce_field( 'hmbkp-edit-schedule', 'hmbkp-edit-schedule-nonce' ); ?>
 
 	<table class="form-table">
 
@@ -75,7 +75,7 @@
 
 			</tr>
 
-			<?php if ( ! $start_time = $schedule->get_schedule_start_time() ) {
+			<?php if ( ! $start_time = $schedule->get_schedule_start_time( false ) ) {
 				$start_time = time();
 			} ?>
 
@@ -101,7 +101,7 @@
 
 						foreach ( $weekdays as $key => $day ) : ?>
 
-							<option value="<?php echo esc_attr( $key ) ?>" <?php selected( strtolower( date( 'l', $start_time ) ), $key ); ?>><?php echo esc_html( $day ); ?></option>
+							<option value="<?php echo esc_attr( $key ) ?>" <?php selected( strtolower( date_i18n( 'l', $start_time ) ), $key ); ?>><?php echo esc_html( $day ); ?></option>
 
 						<?php endforeach; ?>
 
@@ -118,7 +118,7 @@
 				</th>
 
 				<td>
-					<input type="number" min="0" max="31" step="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( date( 'j', $start_time ) ); ?>">
+					<input type="number" min="0" max="31" step="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( date_i18n( 'j', $start_time ) ); ?>">
 				</td>
 
 			</tr>
@@ -126,17 +126,18 @@
 			<tr id="schedule-start" class="recurring-setting">
 
 				<th scope="row">
-					<label for="hmbkp_schedule_start_hours"><?php _e( 'Start time', 'hmbkp' ); ?></label>
+					<label for="hmbkp_schedule_start_hours"><?php _e( 'Start Time', 'hmbkp' ); ?></label>
 				</th>
 
 				<td>
+
 					<span class="field-group">
 
-						<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( date( 'G', $start_time ) ); ?>">
+						<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( date_i18n( 'G', $start_time ) ); ?>">
 
 						<?php _e( 'Hours', 'hmbkp' ); ?></label>
 
-						<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( (float) date( 'i', $start_time ) ); ?>">
+						<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( (float) date_i18n( 'i', $start_time ) ); ?>">
 
 						<?php _e( 'Minutes', 'hmbkp' ); ?></label>
 
@@ -162,8 +163,8 @@
 
 						<?php printf( __( 'Past this limit older backups will be deleted automatically.', 'hmbkp' ) ); ?>
 
-						<?php if ( $schedule->is_filesize_cached() ) {
-							printf( __( 'This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' );
+						<?php if ( $schedule->is_site_size_cached() ) {
+							printf( __( 'This schedule will store a maximum of %s of backups.', 'hmbkp' ), '<code>' . size_format( $schedule->get_site_size() * $schedule->get_max_backups() ) . '</code>' );
 						} ?>
 
 					</p>
