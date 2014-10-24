@@ -22,7 +22,7 @@ class HMBKP_Known_Errors {
 			'insufficient_disk_space' => array(
 				'zip I/O error: Disk quota exceeded',
 				'zip error: Output file write failure',
-				'PCL_ZIP_ERR_MISSING_FILE'
+				'PCL_ZIP_ERR_MISSING_FILE',
 			),
 		),
 	);
@@ -76,14 +76,13 @@ class HMBKP_Known_Errors {
 	public function match( $error_message ) {
 
 		foreach ( $this->possible_errors as $category => $types ) {
-			foreach( $types as $key => $error_type ) {
+			foreach ( $types as $key => $error_type ) {
 				if ( $match = $this->array_find( $error_type, $error_message ) ) {
 					return $this->get_nice_error_message( $key );
 				} else {
 					return sprintf( __( 'Unhandled error: %s', 'hmbkp' ), $error_message );
 				}
 			}
-
 		}
 
 	}
