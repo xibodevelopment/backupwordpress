@@ -54,21 +54,42 @@ function hmbkp_admin_notices() {
 
 	ob_start(); ?>
 
-	<div id="hmbkp-warning" class="error fade">
-		<p>
-			<strong><?php _e( 'BackUpWordPress detected issues with your last backup.', 'hmbkp' ); ?></strong>
-			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_dismiss_error' ), admin_url( 'admin-post.php' ) ), 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' ) ); ?>" style="float: right;" class="button">
-				<?php _e( 'Dismiss', 'hmbkp' ); ?>
-			</a>
-		</p>
-		<?php if ( ! empty( $notices['backup_errors'] ) ) : ?>
-		<ul>
-			<?php foreach ( $notices['backup_errors'] as $notice ) : ?>
-				<li><?php echo $notice; ?></li>
-			<?php endforeach; ?>
-		</ul>
-		<?php endif; ?>
-	</div>
+	<?php if ( ! empty( $notices['backup_errors'] ) ) : ?>
+
+		<div id="hmbkp-warning" class="error fade">
+			<p>
+				<strong><?php _e( 'BackUpWordPress detected issues with your last backup.', 'hmbkp' ); ?></strong>
+				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_dismiss_error' ), admin_url( 'admin-post.php' ) ), 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' ) ); ?>" style="float: right;" class="button">
+					<?php _e( 'Dismiss', 'hmbkp' ); ?>
+				</a>
+			</p>
+
+			<ul>
+				<?php foreach ( $notices['backup_errors'] as $notice ) : ?>
+					<li><?php echo $notice; ?></li>
+				<?php endforeach; ?>
+			</ul>
+
+		</div>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $notices['server_config'] ) ) : ?>
+
+		<div id="hmbkp-warning" class="error fade">
+			<p>
+				<strong><?php _e( 'BackUpWordPress has detected a problem.', 'hmbkp' ); ?></strong>
+				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_dismiss_error' ), admin_url( 'admin-post.php' ) ), 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' ) ); ?>" style="float: right;" class="button">
+					<?php _e( 'Dismiss', 'hmbkp' ); ?>
+				</a>
+			</p>
+				<ul>
+					<?php foreach ( $notices['server_config'] as $notice ) : ?>
+						<li><?php echo $notice; ?></li>
+					<?php endforeach; ?>
+				</ul>
+		</div>
+
+	<?php endif; ?>
 
 	<?php echo ob_get_clean();
 
@@ -120,7 +141,7 @@ function hmbkp_set_server_config_notices() {
 	}
 
 }
-add_action( 'admin_notices', 'hmbkp_set_server_config_notices' );
+add_action( 'admin_init', 'hmbkp_set_server_config_notices' );
 
 /**
  * Hook in an change the plugin description when BackUpWordPress is activated
