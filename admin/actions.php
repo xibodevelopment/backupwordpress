@@ -481,7 +481,7 @@ function hmbkp_add_exclude_rule() {
 		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
 	}
 
-	wp_safe_redirect( $url, '303' );
+	wp_safe_redirect( wp_get_referer(), '303' );
 
 	die;
 
@@ -516,7 +516,7 @@ function hmbkp_remove_exclude_rule() {
 		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
 	}
 
-	wp_safe_redirect( $url, '303' );
+	wp_safe_redirect( wp_get_referer(), '303' );
 
 	die;
 
