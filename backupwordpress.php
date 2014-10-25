@@ -307,7 +307,7 @@ function hmbkp_display_server_info_tab() {
 
 	get_current_screen()->add_help_tab(
 		array(
-			'title' => __( 'Server Info', 'backupwordpress' ),
+			'title' => __( 'Server Info', 'hmbkp' ),
 			'id' => 'hmbkp_server',
 			'content' => $info
 		)
