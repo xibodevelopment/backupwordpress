@@ -11,6 +11,8 @@ module.exports = function (grunt) {
 		makepot              : {
 			target: {
 				options: {
+                    mainFile: 'backupwordpress.php',
+                    potFilename: 'hmbkp.pot',
 					domainPath: '/languages',       // Where to save the POT file.
 					exclude: ['node_modules/.*'],          // List of files or directories to ignore.
 					mainFile  : 'backupwordpress.php',         // Main project file.
