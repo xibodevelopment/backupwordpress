@@ -119,9 +119,9 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 #### 3.0 / 2014-11-14
 
   * Refactor the recursive filesize scanner
-  * correct text domain
-  * Remove unneede statements
-  * reload the excludes filelist in the correct place when someone excludes a file
+  * Correct text domain
+  * Remove unneeded statements
+  * Reload the excludes filelist in the correct place when someone excludes a file
   * Latest backdrop
   * Regenerate minified CSS
   * Regenerate minified JS
