@@ -2,8 +2,8 @@
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.8.4
-Tested up to: 4.0
-Stable tag: 2.6.2
+Tested up to: 4.1
+Stable tag: 3.0
 
 Simple automated backups of your WordPress powered website.
 
@@ -115,6 +115,21 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
 == Changelog ==
+
+#### 3.0 / 2014-11-14
+
+  * Refactor the recursive filesize scanner
+  * Correct text domain
+  * Remove unneeded statements
+  * Reload the excludes filelist in the correct place when someone excludes a file
+  * Latest backdrop
+  * Regenerate minified CSS
+  * Regenerate minified JS
+  * Fix cancel backup action
+  * WordPress Coding Standards
+  * Exit early if incompatible version of WordPress
+  * Update translations
+  * Update changelog
 
 #### 3.0.0-beta / 2014-09-08
 

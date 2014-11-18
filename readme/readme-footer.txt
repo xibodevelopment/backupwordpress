@@ -14,6 +14,21 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 3.0 / 2014-11-14
+
+  * Refactor the recursive filesize scanner
+  * correct text domain
+  * Remove unneede statements
+  * reload the excludes filelist in the correct place when someone excludes a file
+  * Latest backdrop
+  * Regenerate minified CSS
+  * Regenerate minified JS
+  * Fix cancel backup action
+  * WordPress Coding Standards
+  * Exit early if incompatible version of WordPress
+  * Update translations
+  * Update changelog
+
 #### 3.0.0-beta / 2014-09-08
 
   * Load minified CSS
