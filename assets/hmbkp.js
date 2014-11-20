@@ -61,8 +61,9 @@ jQuery( document ).ready( function( $ ) {
 				}
 
 				// Fail silently for now
-				else
+				else {
 					$( '.calculating' ).remove();
+				}
 
 			}
 		).error( function() {
@@ -173,8 +174,9 @@ function hmbkpToggleScheduleFields( recurrence  ){
 function hmbkpCatchResponseAndOfferToEmail( data ) {
 
 	// Backup Succeeded
-	if ( ! data || data == 0 )
+	if ( ! data || data == 0 ) {
 		location.reload( true );
+	}
 
 	// The backup failed, show the error and offer to have it emailed back
 	else {
@@ -188,18 +190,6 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 
 				if ( ! data || data == 0 )
 					return;
-
-				// jQuery.colorbox( {
-				// 	'innerWidth'	: "320px",
-				// 	'maxHeight'		: "100%",
-			 //        'html'			: data,
-			 //        'overlayClose'	: false,
-				//     'escKey'		: false,
-				// 	'onLoad'		: function() {
-				// 		jQuery( '#cboxClose' ).remove();
-				// 		jQuery.colorbox.resize();
-				// 	}
-		  //       } );
 
 			}
 		);
