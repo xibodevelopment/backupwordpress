@@ -120,7 +120,22 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 ![Easily manage exclude rules and see exactly which files are included and excluded from your backup.](http://s.wordpress.org/extend/plugins/backupwordpress/screenshot-3.png)
 
 
+## Upgrade Notice ##
+
+  * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
+
 ## Changelog ##
+
+#### 3.0.1 / 2014-11-20
+
+  * remove uneeded images
+  * latest hm-backup / fixes a serious bug in backups.
+  * Typos in v 3.0 changelog
+  * Specify POT filename in grunt task
+  * Update POT file
+  * Markdown readme
+  * Regenerate readme
+  * Add plugin headers
 
 #### 3.0 / 2014-11-14
 
