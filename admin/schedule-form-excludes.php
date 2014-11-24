@@ -45,7 +45,7 @@
 
 							<?php else : ?>
 
-								<a href="<?php echo hmbkp_admin_action_url( 'remove_exclude_rule', array( 'hmbkp_remove_exclude' => $exclude, 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>" class="delete-action"><?php _e( 'Remove', 'hmbkp' ); ?></a>
+								<a href="<?php echo hmbkp_admin_action_url( 'remove_exclude_rule', array( 'hmbkp_remove_exclude' => $exclude, 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'hmbkp' ); ?></a>
 
 							<?php endif; ?>
 

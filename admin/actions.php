@@ -166,7 +166,7 @@ add_action( 'admin_post_hmbkp_request_download_backup', 'hmbkp_request_download_
  */
 function hmbkp_request_cancel_backup() {
 
-	check_admin_referer( 'hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup_nonce' );
+	check_admin_referer( 'hmbkp_request_cancel_backup', 'hmbkp-request_cancel_backup_nonce' );
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
@@ -474,13 +474,7 @@ function hmbkp_add_exclude_rule() {
 
 	$schedule->save();
 
-	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes#directory-listing' ), hmbkp_get_settings_url() );
-
-	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
-		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
-	}
-
-	wp_safe_redirect( $url, '303' );
+	wp_safe_redirect( wp_get_referer(), '303' );
 
 	die;
 
@@ -509,13 +503,7 @@ function hmbkp_remove_exclude_rule() {
 
 	$schedule->save();
 
-	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
-
-	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
-		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
-	}
-
-	wp_safe_redirect( $url, '303' );
+	wp_safe_redirect( wp_get_referer(), '303' );
 
 	die;
 

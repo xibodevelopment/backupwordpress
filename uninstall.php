@@ -1,5 +1,24 @@
 <?php
 
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+	return;
+}
+
+if ( ! current_user_can( 'activate_plugins' ) ) {
+	return;
+}
+
+if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.8.4' );
+}
+
+// Don't activate on old versions of WordPress
+global $wp_version;
+
+if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+	return;
+}
+
 if ( ! defined( 'HMBKP_PLUGIN_PATH' ) ) {
 	define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 }
@@ -27,6 +46,6 @@ foreach ( array( 'hmbkp_enable_support', 'hmbkp_plugin_version', 'hmbkp_path', '
 }
 
 // Delete all transients
-foreach( array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running' ) as $transient ) {
+foreach ( array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running' ) as $transient ) {
 	delete_transient( $transient );
 }

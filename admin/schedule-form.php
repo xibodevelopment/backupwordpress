@@ -126,10 +126,11 @@
 			<tr id="schedule-start" class="recurring-setting">
 
 				<th scope="row">
-					<label for="hmbkp_schedule_start_hours"><?php _e( 'Start time', 'hmbkp' ); ?></label>
+					<label for="hmbkp_schedule_start_hours"><?php _e( 'Start Time', 'hmbkp' ); ?></label>
 				</th>
 
 				<td>
+
 					<span class="field-group">
 
 						<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( date_i18n( 'G', $start_time ) ); ?>">

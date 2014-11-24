@@ -300,34 +300,12 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		}
 
-		// @TODO
-		// Doesn't account for excluded files
-		// If a file is excluded then it's parent directory size won't be updated
-		// Could be fixed at the same time as the ability to re-calculate a specific directory size
-		// Would need to live recalculate the parent directory size for each file that is matched by an exclude rule.
-		// Could also just minus the filesize of each excluded file from the total filesize.
-
-		// Remove ability to have wildcard excludes
-		// Just keep relative and absolute
-		// Relative is only used for defaults and HMBKP_EXCLUDES
-
 		// Don't include files if database only
 		if ( 'database' !== $this->get_type() ) {
 
-			$directory_sizes = $this->recursive_filesize_scanner();
+			$root = new SplFileInfo( $this->get_root() );
 
-			$excludes = $this->exclude_string( 'regex' );
-
-			foreach ( $directory_sizes as $path => $size ) {
-
-				// Skip excluded files if we have excludes
-                if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $path ) ) ) ) {
-                	unset( $directory_sizes[ $path ] );
-                }
-
-			}
-
-			$size += array_sum( $directory_sizes );
+			$size += $this->filesize( $root, true );
 
 		}
 
@@ -447,6 +425,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 	/**
 	 * Recursively scans a directory to calculate the total filesize
+	 * 
+	 * Locks should be set by the caller with `set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );`
 	 *
 	 * @return array $directory_sizes	An array of directory paths => filesize sum of all files in directory
 	 */
@@ -464,28 +444,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		}
 
-		// If we have a lock just return an empty array for now
-		if ( $this->is_site_size_being_calculated() ) {
-			return array();
-		}
-
-		// Lock so we don't run multiple at once
-		set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );
+		
+		$directory_sizes[ $this->get_root() ] = filesize( $this->get_root() );
+		
 
 		$files = $this->get_files();
-		$directory_sizes[ $this->get_root() ] = 0;
-
+		
 		foreach ( $files as $file ) {
-
-			if ( $file->isFile() ) {
-				$directory_sizes[ $file->getPath() ] += $file->getSize();
-			}
-
-			// We need to add directories directly so we can track empty directories
-			if ( $file->isDir() && ! isset( $directory_sizes[ $file->getPathname() ] ) ) {
-				$directory_sizes[ $file->getPathname() ] = 0;
-			}
-
+			$directory_sizes[ $file->getPathname() ] = $file->getSize();
 		}
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
@@ -502,10 +468,11 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * If $file is a file then just return the result of `filesize()`.
 	 * If $file is a directory then schedule a recursive filesize scan.
 	 *
-	 * @param string SplFileInfo $file	The file you want to know the size of
+	 * @param SplFileInfo $file			The file or directory you want to know the size of
+	 * @param bool $skip_excluded_files	Skip excluded files when calculating a directories total size
 	 * @return int 						The total of the file or directory
 	 */
-	public function filesize( SplFileInfo $file ) {
+	public function filesize( SplFileInfo $file, $skip_excluded_files = false ) {
 
 		// Skip missing or unreadable files
 		if ( ! file_exists( $file->getPathname() ) || ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
@@ -525,6 +492,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				if ( ! $this->is_site_size_being_calculated() ) {
 
+					// Mark the filesize as being calculated
+					set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );
+
 					// Schedule a Backdrop task to trigger a recalculation
 					$task = new HM_Backdrop_Task( array( $this, 'recursive_filesize_scanner' ) );
 					$task->schedule();
@@ -539,9 +509,24 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			foreach ( $directory_sizes as $path => $size ) {
 
-				// Remove any directories that aren't part of the current tree
-				if ( false === strpos( $path, trailingslashit( $file->getPathname() ) ) ) {
+				// Remove any files that aren't part of the current tree
+				if ( strpos( $path, trailingslashit( $file->getPathname() ) ) === false ) {
 					unset( $directory_sizes[ $path ] );
+				}
+
+			}
+
+			if ( $skip_excluded_files ) {
+
+				$excludes = $this->exclude_string( 'regex' );
+
+				foreach ( $directory_sizes as $path => $size ) {
+
+					// Skip excluded files if we have excludes
+					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $path ) ) ) ) {
+						unset( $directory_sizes[ $path ] );
+					}
+			
 				}
 
 			}

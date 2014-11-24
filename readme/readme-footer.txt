@@ -12,7 +12,155 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 2. Choose your schedule, backup type, number of backups to keep and whether to recieve a notification email.
 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
 
+== Upgrade Notice ==
+
+  * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
+
 == Changelog ==
+
+#### 3.0.1 / 2014-11-20
+
+  * remove uneeded images
+  * latest hm-backup / fixes a serious bug in backups.
+  * Typos in v 3.0 changelog
+  * Specify POT filename in grunt task
+  * Update POT file
+  * Markdown readme
+  * Regenerate readme
+  * Add plugin headers
+
+#### 3.0 / 2014-11-14
+
+  * Refactor the recursive filesize scanner
+  * correct text domain
+  * Remove unneede statements
+  * reload the excludes filelist in the correct place when someone excludes a file
+  * Latest backdrop
+  * Regenerate minified CSS
+  * Regenerate minified JS
+  * Fix cancel backup action
+  * WordPress Coding Standards
+  * Exit early if incompatible version of WordPress
+  * Update translations
+  * Update changelog
+
+#### 3.0.0-beta / 2014-09-08
+
+  * Load minified CSS
+  * Formatting
+  * Biweekly wording
+  * Add missing period
+  * use nonce_url instead of manually adding the nonce query param
+  * close the settings form when done
+  * Design changes as per ticket
+  * Start tracking langauge in server info
+  * Right align the primary button in the enable support modal
+  * Re-factor the directory filesize code to use a single array instead of thoussands of transients
+  * Remove the warning that would show if you were using anything other than the latest stable, it's no longer needed now that the FAQ is local
+  * switch to using a single transient to store directory filesize data
+  * Add an anchor link
+  * Add error message
+  * Rename function
+  * Prefix GET params
+  * Update exclude rule action
+  * Adds function for building admin action urls
+  * fix vertical scroll
+  * Adds some functions to manage settings form submission errors
+  * Rename nonce and action
+  * fetch errors to display
+  * Form submission handling for BWP and add-ons settings
+  * Use a new function that persists form submission errors to  a transient
+  * None check
+  * Pass the nonce around in the ajax request
+  * Enable support action links
+  * Check nonces
+  * Modify action URLs to use the admin_post hook
+  * Remove unneeded code
+  * New line at end
+  * Use admin_post hook
+  * Merge pull request #502 from humanmade/stream-integration
+  * Merge pull request #554 from humanmade/fix-display-schedule-time
+  * Display schedule start time in local timezone
+  * Add an action hook that gives access to consumers to the backup progress
+ * Update translatable strings POT file
+ * Bump version
+ * Update min WP version and tested up to
+ * accidently used dash instead of underscore
+ * namespaced option and added option to uninstall.php
+ * basic show/hide of premium upsell
+ * Fix incorrect transient expiry
+ * Show the spinner in the tab if a schedule other than the current is running
+ * Snip snip
+ * Bring back the some javascript enhancements
+ * Switch to the PHP 5.2 compatible version of Backdrop
+ * Finish up support
+ * Brace up single line if's and foreach's
+ * Only load minified scripts and styles if WP_DEBUG isn't on
+ * Load the minified css and js files by default
+ * Remove the combined css files as we only have one now. Stop loading colorbox.
+ * Remove colorbox
+ * Improvements
+ * More improvements
+ * Don't die when directly running a backup on page load
+ * Re-factor the backup filesize calculation
+ * make capability filterable
+ * use core capabilities instead of custom
+ * Switch to Backdrop
+ * Fix typo in prefix
+ * Hook function onto admin_post
+ * Update delete link
+ * Bookmark current admin page for redirect
+ * Add custom capabilities and role
+ * Exclude BackUpWP by default
+ * Ignore the build folder
+ * Add more build excludes
+ * minify JS
+ * generate markdown readme
+ * minify css
+ * combine css
+ * regenerate readme
+ * Make links consistent for the grunt task
+ * Convert URLS to markdown
+ * Update lang files
+ * Add colorbox as bower dependency
+ * remove colorbox folder
+ * Remove colorbox submodule
+ * Change how we include FAQ
+ * Add readme partials
+ * Add package.json
+ * Add Gruntfile
+ * Add bower.json
+ * JSHint rules
+ * remove from ignore
+ * Update ignore list
+ * Add bower config
+ * Add FAQ strings
+ * Return the cached directory size early if we have it
+ * Re-factor the file browser scanner
+ * correct sprintf usage
+ * Handle saving service forms
+ * Codeing standards
+ * Move the error check outside of the foreach
+ * Remove uneeded $is_tab_visible
+ * Only show excludes for backups which include files
+ * Show destinations in the list of schedule links
+ * WordPress standard modal for enabling support
+ * Remove extra slash in include path
+ * Add a heading to the settings form
+ * More work on excludes
+ * Another todo
+ * Add some todos
+ * Don't include the parent directory in a browsable list
+ * More work on Excludes
+ * Switch to only storing 3 backups by default
+ * More work on redesign
+ * commented out enable support button till we figure out what to do with it
+ * made tabs responsive below 639px
+ * More work on redesign
+ * Add more default excludes
+ * Correctly highlight the tab for the first schedule
+ * Switch to tabs instead of subsubsub
+ * First bash at a redesign settings UX
 
 #### 2.6.2
 
