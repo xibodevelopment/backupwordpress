@@ -305,9 +305,9 @@ function hmbkp_get_settings_url() {
 
 	if ( is_multisite() ) {
 		$url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
+	} else {
+		$url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
 	}
-
-	$url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
 
 	HMBKP_schedules::get_instance()->refresh_schedules();
 
