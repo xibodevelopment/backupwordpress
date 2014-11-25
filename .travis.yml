@@ -19,6 +19,8 @@ env:
     - WP_VERSION=3.8.4 WP_MULTISITE=0
     - WP_VERSION=3.8.4 WP_MULTISITE=1
 
+sudo: false
+
 notifications:
   secure: "KSkj1N4CVYf8/ZWhoogK/dTh7pxvqNN3E0VM/VBGnBJVAOWvXCB5RB/nUBYcdG5rNgjvzcIAUr23MIsyzowbYw2uBEmpZeIxkmryKXsby8VyDrHQZppawLRjOpfBk9PsrH4e8/BlNc0acBvGHVBU0giL0lj3WlXNKOKNBdrf2PE="
   email: false
