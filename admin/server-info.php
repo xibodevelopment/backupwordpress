@@ -1,4 +1,4 @@
-<?php foreach( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
 
 	<h3><?php echo ucwords( $group ); ?></h3>
 

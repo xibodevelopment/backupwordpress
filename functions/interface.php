@@ -269,7 +269,7 @@ function hmbkp_backups_number( $schedule, $zero = false, $one = false, $more = f
 
 	if ( $number > 1 )
 		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'hmbkp' ) : $more );
-	elseif ( $number == 0 )
+	elseif ( 0 === $number )
 		$output = ( false === $zero ) ? __( 'No Backups Completed', 'hmbkp' ) : $zero;
 	else // must be one
 		$output = ( false === $one ) ? __( '1 Backup Completed', 'hmbkp' ) : $one;
@@ -340,9 +340,9 @@ function hmbkp_add_settings_error( $error_message ){
 
 	// If it doesnt exist, create.
 	if ( ! $hmbkp_settings_errors ) {
-		set_transient( 'hmbkp_settings_errors', (array)$error_message );
+		set_transient( 'hmbkp_settings_errors', (array) $error_message );
 	} else {
-		set_transient( 'hmbkp_settings_errors', array_unique( array_merge( $hmbkp_settings_errors, (array)$error_message ) ) );
+		set_transient( 'hmbkp_settings_errors', array_unique( array_merge( $hmbkp_settings_errors, (array) $error_message ) ) );
 	}
 
 }

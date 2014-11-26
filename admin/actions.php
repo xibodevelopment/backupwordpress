@@ -243,7 +243,6 @@ function hmbkp_edit_schedule_services_submit() {
 	wp_safe_redirect( wp_get_referer(), '303' );
 	die;
 
-
 }
 add_action( 'admin_post_hmbkp_edit_schedule_services_submit', 'hmbkp_edit_schedule_services_submit' );
 
@@ -294,7 +293,7 @@ function hmbkp_edit_schedule_submit() {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
 		}
 
-		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && $schedule_recurrence_type !== 'manually' ) {
+		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
 		}
 
@@ -324,7 +323,7 @@ function hmbkp_edit_schedule_submit() {
 
 		$options = array(
 			'min_range' => 1,
-			'max_range' => 31
+			'max_range' => 31,
 		);
 
 		if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
@@ -362,7 +361,7 @@ function hmbkp_edit_schedule_submit() {
 
 		$options = array(
 			'min_range' => 0,
-			'max_range' => 59
+			'max_range' => 59,
 		);
 
 		if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {

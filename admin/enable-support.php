@@ -6,7 +6,7 @@
 
 <div class="server-info">
 
-<?php foreach( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
 
 	<table class="fixed widefat">
 

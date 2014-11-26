@@ -3,7 +3,7 @@
 // Calculated filesize
 $cached = $schedule->is_site_size_cached();
 
-if ( $schedule->get_type() === 'database' ) {
+if ( 'database' === $schedule->get_type() ) {
 	$cached = true;
 }
 
