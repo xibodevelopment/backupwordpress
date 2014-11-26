@@ -32,6 +32,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+if ( ! defined( 'HMBKP_REQUIRED_PHP_VERSION' ) ) {
+	define( 'HMBKP_REQUIRED_PHP_VERSION', '5.3.2' );
+}
+
+// Don't activate on anything less than PHP required version
+if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
+	deactivate_plugins( trailingslashit( basename( dirname( __FILE__ ) ) ) . basename( __FILE__ ) );
+	wp_die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_GDV_REQUIRED_PHP_VERSION ), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
+}
+
 if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) ) {
 	define( 'HMBKP_PLUGIN_SLUG', basename( dirname( __FILE__ ) ) );
 }
