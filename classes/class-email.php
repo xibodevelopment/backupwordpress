@@ -14,27 +14,25 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	public $name = 'Email';
 
 	/**
-	 * Determines whether to show or hide the service tab in destinations form
-	 * @var boolean
-	 */
-	public $is_tab_visible = false;
-
-	/**
 	 * Output the email form field
 	 *
 	 * @access  public
 	 */
 	public function field() { ?>
 
-		<div>
+		<tr>
 
-			<label for="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>"><?php _e( 'Email notification', 'hmbkp' ); ?></label>
+			<th scope="row">
+				<label for="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>"><?php _e( 'Email notification', 'hmbkp' ); ?></label>
+			</th>
 
-			<input type="email" id="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" />
+			<td>
+				<input type="email" id="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" placeholder="name@youremail.com" />
 
-       <p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email address\'s with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
+				<p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email addresses with a comma.', 'hmbkp' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
+			</td>
 
-		</div>
+		</tr>
 
 	<?php }
 
@@ -117,12 +115,12 @@ class HMBKP_Email_Service extends HMBKP_Service {
 						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'hmbkp' ), $email );
 					}
 
-					if ( ! empty( $errors['email'] ) ) {
-						$new_data['email'] = '';
-					}
-
 				}
 
+			}
+
+			if ( ! empty( $errors['email'] ) ) {
+				$new_data['email'] = '';
 			}
 
 			return $errors;
@@ -152,7 +150,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	 */
 	public function action( $action ) {
 
-		if ( $action == 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
+		if ( $action === 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
 
 			$file = $this->schedule->get_archive_filepath();
 

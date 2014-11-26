@@ -1,136 +1,189 @@
-<form method="post" class="hmbkp-form" novalidate data-schedule-action="<?php if ( isset( $is_new_schedule ) ) { ?>add<?php } else { ?>edit<?php } ?>">
+<h3>Settings</h3>
+
+<?php $hmbkp_form_errors = hmbkp_get_settings_errors(); ?>
+
+<?php if ( ! empty( $hmbkp_form_errors ) ) { ?>
+
+	<div id="hmbkp-warning" class="error settings-error">
+
+		<?php foreach ( $hmbkp_form_errors as $error ) { ?>
+			<p><strong><?php echo esc_html( $error ); ?></strong></p>
+		<?php } ?>
+
+	</div>
+
+<?php } ?>
+
+<form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
+	<input type="hidden" name="action" value="hmbkp_edit_schedule_submit" />
 
-	<fieldset class="hmbkp-edit-schedule-form">
+	<?php wp_nonce_field( 'hmbkp-edit-schedule', 'hmbkp-edit-schedule-nonce' ); ?>
 
-		<legend><?php _e( 'Schedule Settings', 'hmbkp' ); ?></legend>
+	<table class="form-table">
 
-		<div>
+		<tbody>
 
-			<label for="hmbkp_schedule_type"><?php _e( 'Backup', 'hmbkp' ); ?></label>
+			<tr valign="top">
 
-				<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
+				<th scope="row">
+					<label for="hmbkp_schedule_type"><?php _e( 'Backup', 'hmbkp' ); ?></label>
+				</th>
 
-				<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
+				<td>
 
-				<option<?php selected( $schedule->get_type(), 'file' ); ?> value="file"><?php _e( 'Files only', 'hmbkp' ); ?></option>
+					<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
 
-				<option<?php selected( $schedule->get_type(), 'database' ); ?> value="database"><?php _e( 'Database only', 'hmbkp' ); ?></option>
+						<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'hmbkp' ); ?></option>
 
-			</select>
+						<option<?php selected( $schedule->get_type(), 'file' ); ?> value="file"><?php _e( 'Files only', 'hmbkp' ); ?></option>
 
-		</div>
+						<option<?php selected( $schedule->get_type(), 'database' ); ?> value="database"><?php _e( 'Database only', 'hmbkp' ); ?></option>
 
-		<div>
+					</select>
 
-			<label for="hmbkp_schedule_recurrence_type"><?php _e( 'Schedule', 'hmbkp' ); ?></label>
+				</td>
 
-			<select name="hmbkp_schedule_recurrence[hmbkp_type]" id="hmbkp_schedule_recurrence_type">
+			</tr>
 
-				<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
+			<tr>
 
-		  <?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+				<th scope="row">
+					<label for="hmbkp_schedule_recurrence_type"><?php _e( 'Schedule', 'hmbkp' ); ?></label>
+				</th>
 
-				<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
+				<td>
 
-					<?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?>
+					<select name="hmbkp_schedule_recurrence[hmbkp_type]" id="hmbkp_schedule_recurrence_type">
 
-				</option>
+						<option value="manually"><?php _e( 'Manual Only', 'hmbkp' ); ?></option>
 
-		  <?php endforeach; ?>
+						<?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
-			</select>
+								<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
 
-		</div>
+									<?php esc_html_e( $cron_details['display'], 'hmbkp' ); ?>
 
-		<?php if ( ! $start_time = $schedule->get_schedule_start_time() )
-			$start_time = time();
+								</option>
 
-		$start_time += get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
-		?>
+						<?php endforeach; ?>
 
-		<div id="start-day" class="recurring-setting">
+					</select>
 
-			<label for="hmbkp_schedule_start_day_of_week"><?php _e( 'Start Day', 'hmbkp' ); ?></label>
+				</td>
 
-			<select id="hmbkp_schedule_start_day_of_week" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_week]">
+			</tr>
 
-				<?php $weekdays = array(
-					'monday' => __( 'Monday', 'hmbkp' ),
-					'tuesday' => __( 'Tuesday', 'hmbkp' ),
-					'wednesday' => __( 'Wednesday', 'hmbkp' ),
-					'thursday' => __( 'Thursday', 'hmbkp' ),
-					'friday' => __( 'Friday', 'hmbkp' ),
-					'saturday' => __( 'Saturday', 'hmbkp' ),
-					'sunday' => __( 'Sunday', 'hmbkp' )
-				);
+			<?php if ( ! $start_time = $schedule->get_schedule_start_time( false ) ) {
+				$start_time = time();
+			} ?>
 
-				foreach ( $weekdays as $key => $day ) : ?>
+			<tr id="start-day" class="recurring-setting">
 
-					<option value="<?php echo esc_attr( $key ) ?>" <?php selected( strtolower( date( 'l', $start_time ) ), $key ); ?>><?php echo esc_html( $day ); ?></option>
+				<th scope="row">
+					<label for="hmbkp_schedule_start_day_of_week"><?php _e( 'Start Day', 'hmbkp' ); ?></label>
+				</th>
 
-				<?php endforeach; ?>
+				<td>
 
-			</select>
+					<select id="hmbkp_schedule_start_day_of_week" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_week]">
 
-		</div>
+						<?php $weekdays = array(
+							'monday'    => __( 'Monday',    'hmbkp' ),
+							'tuesday'   => __( 'Tuesday',   'hmbkp' ),
+							'wednesday' => __( 'Wednesday', 'hmbkp' ),
+							'thursday'  => __( 'Thursday',  'hmbkp' ),
+							'friday'    => __( 'Friday',    'hmbkp' ),
+							'saturday'  => __( 'Saturday',  'hmbkp' ),
+							'sunday'    => __( 'Sunday',    'hmbkp' )
+						);
 
-		<div id="start-date" class="recurring-setting">
+						foreach ( $weekdays as $key => $day ) : ?>
 
-			<label for="hmbkp_schedule_start_day_of_month"><?php _e( 'Start Day of Month', 'hmbkp' ); ?></label>
+							<option value="<?php echo esc_attr( $key ) ?>" <?php selected( strtolower( date_i18n( 'l', $start_time ) ), $key ); ?>><?php echo esc_html( $day ); ?></option>
 
-			<input type="number" min="0" max="31" step="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( date( 'j', $start_time ) ); ?>">
+						<?php endforeach; ?>
 
-		</div>
+					</select>
 
-		<div id="schedule-start" class="recurring-setting">
+				</td>
 
-			<label for="hmbkp_schedule_start_hours"><?php _e( 'Start time', 'hmbkp' ); ?></label>
+			</tr>
 
-			<span class="field-group">
+			<tr id="start-date" class="recurring-setting">
 
-				<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( date( 'G', $start_time ) ); ?>">
+				<th scope="row">
+					<label for="hmbkp_schedule_start_day_of_month"><?php _e( 'Start Day of Month', 'hmbkp' ); ?></label>
+				</th>
 
-				<?php _e( 'Hours', 'hmbkp' ); ?></label>
+				<td>
+					<input type="number" min="0" max="31" step="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( date_i18n( 'j', $start_time ) ); ?>">
+				</td>
 
-				<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( (float) date( 'i', $start_time ) ); ?>">
+			</tr>
 
-				<?php _e( 'Minutes', 'hmbkp' ); ?></label>
+			<tr id="schedule-start" class="recurring-setting">
 
-			</span>
+				<th scope="row">
+					<label for="hmbkp_schedule_start_hours"><?php _e( 'Start Time', 'hmbkp' ); ?></label>
+				</th>
 
-			<p class="twice-js description"><?php _e( 'The second backup will run 12 hours after the first', 'hmbkp' ); ?></p>
+				<td>
 
-		</div>
+					<span class="field-group">
 
-		<div>
+						<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( date_i18n( 'G', $start_time ) ); ?>">
 
-			<label for="hmbkp_schedule_max_backups"><?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?></label>
+						<?php _e( 'Hours', 'hmbkp' ); ?></label>
 
-			<input type="number" id="hmbkp_schedule_max_backups" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
+						<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( (float) date_i18n( 'i', $start_time ) ); ?>">
 
-			<p class="description">
+						<?php _e( 'Minutes', 'hmbkp' ); ?></label>
 
-				<?php printf( __( 'Past this limit older backups will be deleted automatically.', 'hmbkp' ) ); ?>
+					</span>
 
-				<?php if ( $schedule->is_filesize_cached() ) {
-					printf( __( 'This schedule will store a maximum of %s of backups', 'hmbkp' ), '<code>' . size_format( $schedule->get_filesize() * $schedule->get_max_backups() ) . '</code>' );
-				} ?>
+					<p class="twice-js description<?php if ( $schedule->get_reoccurrence() !== 'hmbkp_fortnightly' ) { ?> hidden<?php } ?>"><?php _e( 'The second backup will run 12 hours after the first', 'hmbkp' ); ?></p>
 
-			</p>
+				</td>
 
-		</div>
+			</tr>
 
-		<?php foreach ( HMBKP_Services::get_services( $schedule ) as $service )
-			$service->field(); ?>
+			<tr>
 
-		<p class="submit">
-			<?php wp_nonce_field( 'hmbkp_schedule_submit_action', 'hmbkp_schedule_submit_nonce' ); ?>
-			<button type="submit" class="button-primary"><?php _e( 'Update', 'hmbkp' ); ?></button>
+				<th scope="row">
+					<label for="hmbkp_schedule_max_backups"><?php _e( 'Number of backups to store on this server', 'hmbkp' ); ?></label>
+				</th>
 
-		</p>
+				<td>
 
-	</fieldset>
+					<input type="number" id="hmbkp_schedule_max_backups" name="hmbkp_schedule_max_backups" min="1" step="1" value="<?php echo esc_attr( $schedule->get_max_backups() ); ?>" />
+
+					<p class="description">
+
+						<?php printf( __( 'Past this limit older backups will be deleted automatically.', 'hmbkp' ) ); ?>
+
+						<?php if ( $schedule->is_site_size_cached() ) {
+							printf( __( 'This schedule will store a maximum of %s of backups.', 'hmbkp' ), '<code>' . size_format( $schedule->get_site_size() * $schedule->get_max_backups() ) . '</code>' );
+						} ?>
+
+					</p>
+
+				</td>
+
+			</tr>
+
+			<?php foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+				$service->field();
+			} ?>
+
+		</tbody>
+
+	</table>
+
+	<p class="submit">
+		<button type="submit" class="button-primary"><?php _e( 'Done', 'hmbkp' ); ?></button>
+	</p>
+
 
 </form>

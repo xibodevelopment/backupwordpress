@@ -1,17 +1,17 @@
-=== BackUpWordPress ===
-Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
-Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
-Requires at least: 3.8.4
-Tested up to: 4.1
-Stable tag: 3.0.1
+# BackUpWordPress #
+**Contributors:** humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier  
+**Tags:** back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade  
+**Requires at least:** 3.8.4  
+**Tested up to:** 4.1  
+**Stable tag:** 3.0  
 
 Simple automated backups of your WordPress powered website.
 
-== Description ==
+## Description ##
 
 [BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
 
-= Features =
+### Features ###
 
 * Super simple to use, no setup required.
 * Works in low memory, "shared host" environments.
@@ -23,15 +23,15 @@ Simple automated backups of your WordPress powered website.
 * Good support should you need help.
 * Translations for Spanish, German, Chinese, Romanian, Russian, Serbian, Lithuanian, Italian, Czech, Dutch, French, Basque.
 
-= Help develop this plugin =
+### Help develop this plugin ###
 
 The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
 
-= Translations =
+### Translations ###
 
 We'd also love help translating the plugin into more languages, if you can help then please contact support@hmn.md or visit http://translate.hmn.md/.
 
-== Installation ==
+## Installation ##
 
 1. Install BackUpWordPress either via the WordPress.org plugin directory, or by uploading the files to your server.
 2. Activate the plugin.
@@ -39,18 +39,18 @@ We'd also love help translating the plugin into more languages, if you can help 
 
 The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site.
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions ##
 
 
 **Where does BackUpWordPress store the backup files?**
 
 Backups are stored on your server in `/wp-content/backups`, you can change the directory.
 
-Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.
+**Important:** By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.  
 
 **What if I want to back up my site to another destination?**
 
-BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: [https://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin "BackUpWordPress Homepage")
+**BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here:** [https://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin "BackUpWordPress Homepage")  
 
 **How do I restore my site from a backup?**
 
@@ -94,7 +94,7 @@ Report the results to our support team for further help. To do this, either enab
 
 **How to get BackUpWordPress working in Heart Internet**
 
-The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php` (note the space between php5 and the location of the file). The file `wp-cron.php` `chmod` must be set to `711`.
+**The script to be entered into the Heart Internet cPanel is:** `/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php` (note the space between php5 and the location of the file). The file `wp-cron.php` `chmod` must be set to `711`.  
 
 **My backups seem to be failing?**
 
@@ -108,17 +108,23 @@ For development issues, feature requests or anybody wishing to help out with dev
 
 You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
 
-== Screenshots ==
+## Screenshots ##
 
-1. Manage multiple schedules.
-2. Choose your schedule, backup type, number of backups to keep and whether to recieve a notification email.
-3. Easily manage exclude rules and see exactly which files are included and excluded from your backup.
+### 1. Manage multiple schedules. ###
+![Manage multiple schedules.](http://s.wordpress.org/extend/plugins/backupwordpress/screenshot-1.png)
 
-== Upgrade Notice ==
+### 2. Choose your schedule, backup type, number of backups to keep and whether to recieve a notification email. ###
+![Choose your schedule, backup type, number of backups to keep and whether to recieve a notification email.](http://s.wordpress.org/extend/plugins/backupwordpress/screenshot-2.png)
+
+### 3. Easily manage exclude rules and see exactly which files are included and excluded from your backup. ###
+![Easily manage exclude rules and see exactly which files are included and excluded from your backup.](http://s.wordpress.org/extend/plugins/backupwordpress/screenshot-3.png)
+
+
+## Upgrade Notice ##
 
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
-== Changelog ==
+## Changelog ##
 
 #### 3.0.1 / 2014-11-20
 

@@ -23,9 +23,6 @@ function hmbkp_deactivate() {
 	// Clean up the backups directory
 	hmbkp_cleanup();
 
-	// Remove the plugin data cache
-	delete_transient( 'hmbkp_plugin_data' );
-
 	$schedules = HMBKP_Schedules::get_instance();
 
 	// Clear schedule crons
@@ -35,6 +32,9 @@ function hmbkp_deactivate() {
 
 	// Opt them out of support
 	delete_option( 'hmbkp_enable_support' );
+
+	// Remove the directory filesize cache
+	delete_transient( 'hmbkp_directory_filesizes' );
 
 }
 
@@ -153,12 +153,23 @@ function hmbkp_update() {
 
 			$reoccurrence = $schedule->get_reoccurrence();
 
-			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false )
+			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false ) {
 				$schedule->set_reoccurrence( 'hmbkp_' . $schedule->get_reoccurrence() );
+			}
 
 			$schedule->save();
 
 		}
+
+	}
+
+	// Update from 2.x to 3.0
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		// Remove the plugin data cache
+		delete_transient( 'hmbkp_plugin_data' );
+
+		// 
 
 	}
 
@@ -180,18 +191,21 @@ function hmbkp_update() {
 		}
 
 		// Force .htaccess to be re-written
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+		if ( file_exists( hmbkp_path() . '/.htaccess' ) ) {
 			unlink( hmbkp_path() . '/.htaccess' );
+		}
 
 		// Force index.html to be re-written
-		if ( file_exists( hmbkp_path() . '/index.html' ) )
+		if ( file_exists( hmbkp_path() . '/index.html' ) ) {
 			unlink( hmbkp_path() . '/index.html' );
+		}
 
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION )
+	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION ) {
 		update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
+	}
 
 }
 
@@ -209,22 +223,22 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a database backup daily and store backups
 	 * for the last 2 weeks
 	 */
-	$database_daily = new HMBKP_Scheduled_Backup( 'default-1' );
+	$database_daily = new HMBKP_Scheduled_Backup( (string) time() );
 	$database_daily->set_type( 'database' );
 	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
 	$database_daily->set_reoccurrence( 'hmbkp_daily' );
-	$database_daily->set_max_backups( 14 );
+	$database_daily->set_max_backups( 7 );
 	$database_daily->save();
 
 	/**
 	 * Schedule a complete backup to run weekly and store backups for
 	 * the last 3 months
 	 */
-	$complete_weekly = new HMBKP_Scheduled_Backup( 'default-2' );
+	$complete_weekly = new HMBKP_Scheduled_Backup( (string) ( time() + 1 ) );
 	$complete_weekly->set_type( 'complete' );
 	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
 	$complete_weekly->set_reoccurrence( 'hmbkp_weekly' );
-	$complete_weekly->set_max_backups( 12 );
+	$complete_weekly->set_max_backups( 3 );
 	$complete_weekly->save();
 
 	$schedules->refresh_schedules();
@@ -251,7 +265,7 @@ function hmbkp_cron_schedules( $schedules ) {
 	$schedules['hmbkp_twicedaily']  = array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
 	$schedules['hmbkp_daily']       = array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'hmbkp' ) );
 	$schedules['hmbkp_weekly']      = array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'hmbkp' ) );
-	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Fortnightly', 'hmbkp' ) );
+	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'hmbkp' ) );
 	$schedules['hmbkp_monthly']     = array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'hmbkp' ) );
 
 	return $schedules;
@@ -269,7 +283,7 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
  */
 function hmbkp_rmdirtree( $dir ) {
 
-	if ( strpos( HM_Backup::get_home_path(), $dir ) !== false )
+	if ( false !== strpos( HM_Backup::get_home_path(), $dir ) )
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'hmbkp' ) ) );
 
 	if ( is_file( $dir ) )
@@ -377,7 +391,7 @@ function hmbkp_path_default() {
 	$upload_dir = wp_upload_dir();
 
 	// If the backups dir can't be created in WP_CONTENT_DIR then fallback to uploads
-	if ( ( ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! wp_is_writable( $path ) ) ) && strpos( $path, $upload_dir['basedir'] ) === false ) {
+	if ( ( ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! wp_is_writable( $path ) ) ) && false === strpos( $path, $upload_dir['basedir'] ) ) {
 
 		hmbkp_path_move( $path, $path = HM_Backup::conform_dir( trailingslashit( $upload_dir['basedir'] ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' ) );
 
@@ -423,7 +437,7 @@ function hmbkp_path_move( $from, $to ) {
 	if ( $handle = opendir( $from ) ) {
 
 		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' )
+			if ( 'zip' === pathinfo( $file, PATHINFO_EXTENSION ) )
 				if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
 					copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
 		}
@@ -433,7 +447,7 @@ function hmbkp_path_move( $from, $to ) {
 	}
 
 	// Only delete the old directory if it's inside WP_CONTENT_DIR
-	if ( strpos( $from, WP_CONTENT_DIR ) !== false )
+	if ( false !==strpos( $from, WP_CONTENT_DIR ) )
 		hmbkp_rmdirtree( $from );
 
 }
@@ -475,7 +489,7 @@ function hmbkp_cleanup() {
 	if ( $handle = opendir( $hmbkp_path ) ) {
 
 		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && pathinfo( $file, PATHINFO_EXTENSION ) !== 'zip' && strpos( $file, '-running' ) === false )
+			if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && 'zip' !== pathinfo( $file, PATHINFO_EXTENSION ) && false === strpos( $file, '-running' ) )
 				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
 		}
 
@@ -655,4 +669,19 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 
 	return $timestamp;
 
+}
+
+/**
+ * Helper function for creating safe action URLs.
+ *
+ * @param string $action Callback function name.
+ * @param array $query_args Additional GET params.
+ *
+ * @return string
+ */
+function hmbkp_admin_action_url( $action, array $query_args = array() ) {
+
+	$query_args = array_merge( $query_args, array( 'action' => 'hmbkp_' . $action ) );
+
+	return esc_url( wp_nonce_url( add_query_arg( $query_args, admin_url( 'admin-post.php' ) ), 'hmbkp_' . $action, 'hmbkp-' . $action . '_nonce' ) );
 }

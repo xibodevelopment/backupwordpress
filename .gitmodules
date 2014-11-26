@@ -1,6 +1,6 @@
 [submodule "hm-backup"]
 	path = hm-backup
 	url = https://github.com/humanmade/hm-backup.git
-[submodule "assets/colorbox"]
-	path = assets/colorbox
-	url = git://github.com/jackmoore/colorbox.git
+[submodule "backdrop"]
+	path = backdrop
+	url = https://github.com/humanmade/Backdrop.git

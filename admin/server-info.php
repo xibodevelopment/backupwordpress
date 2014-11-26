@@ -1,4 +1,4 @@
-<?php foreach( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
 
 	<h3><?php echo ucwords( $group ); ?></h3>
 
@@ -41,5 +41,6 @@
 
 <?php endforeach;
 
-foreach ( HMBKP_Services::get_services() as $file => $service )
+foreach ( HMBKP_Services::get_services() as $file => $service ) {
 	echo wp_kses_post( call_user_func( array( $service, 'intercom_data_html' ) ) );
+}

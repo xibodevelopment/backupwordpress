@@ -1,0 +1,21 @@
+{
+	"name": "backupwordpress",
+	"version": "2.6.2",
+	"homepage": "https://bwp.hmn.md",
+	"authors": [
+		"Human Made Limited"
+	],
+	"description": "Simple automated backups of your WordPress powered website.",
+	"main": "backupwordpress.php",
+	"license": "GPLv2",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"assets",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+	}
+}
