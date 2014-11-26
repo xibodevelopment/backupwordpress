@@ -11,6 +11,8 @@ Simple automated backups of your WordPress powered website.
 
 [BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
 
+This plugin requires PHP version 5.3.2 or later
+
 = Features =
 
 * Super simple to use, no setup required.
