@@ -3,7 +3,6 @@ language: php
 
 # Versions of PHP to test against
 php:
-  - 5.2
   - 5.3
   - 5.4
   - 5.5
@@ -29,7 +28,7 @@ notifications:
 before_script:
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
     - bin/prepare.sh
-    
+
 script:
     - phpunit
     - $PHPCS_DIR/scripts/phpcs --standard=$WPCS_STANDARD $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php')
