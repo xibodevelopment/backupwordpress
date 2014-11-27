@@ -18,7 +18,7 @@ env:
     - WP_VERSION=3.9 WP_MULTISITE=0
     - WP_VERSION=3.9 WP_MULTISITE=1
     global:
-      PHPCS_DIR=/tmp/phpcs
+      - PHPCS_DIR=/tmp/phpcs
 
 sudo: false
 
