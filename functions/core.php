@@ -20,6 +20,8 @@ function hmbkp_activate() {
  */
 function hmbkp_deactivate() {
 
+	hmbkp_maybe_self_deactivate();
+
 	// Clean up the backups directory
 	hmbkp_cleanup();
 
