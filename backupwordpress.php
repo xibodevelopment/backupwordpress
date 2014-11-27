@@ -36,11 +36,7 @@ if ( ! defined( 'HMBKP_REQUIRED_PHP_VERSION' ) ) {
 	define( 'HMBKP_REQUIRED_PHP_VERSION', '5.3.2' );
 }
 
-// Don't activate on anything less than PHP required version
-if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
-	deactivate_plugins( trailingslashit( basename( dirname( __FILE__ ) ) ) . basename( __FILE__ ) );
-	wp_die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_GDV_REQUIRED_PHP_VERSION ), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
-}
+hmbkp_maybe_self_deactivate();
 
 if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) ) {
 	define( 'HMBKP_PLUGIN_SLUG', basename( dirname( __FILE__ ) ) );
@@ -359,3 +355,31 @@ function hmbkp_load_first() {
 
 }
 add_action( 'activated_plugin', 'hmbkp_load_first' );
+
+add_action( 'plugins_loaded', 'hmbkp_maybe_self_deactivate' );
+
+function hmbkp_maybe_self_deactivate() {
+
+	if ( ! function_exists( 'deactivate_plugins' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	}
+
+	// Don't activate on anything less than PHP required version
+	if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
+		deactivate_plugins( trailingslashit( basename( dirname( __FILE__ ) ) ) . basename( __FILE__ ) );
+
+		if ( 'plugins_loaded' === current_action() ) {
+			add_action( 'admin_notices', 'hmbkp_admin_notices' );
+		} else {
+			wp_die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
+		}
+	}
+
+}
+
+function hmbkp_display_admin_notices() {
+
+	echo '<div class="error"><p>' . __( 'BackUpWordPress requires PHP version 5.3 or later. It is not active.', 'hmbkp' ) . '</p></div>';
+
+}
+
