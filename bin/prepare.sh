@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PLUGIN_DIR=$(pwd)
 PHPCS_DIR=/tmp/phpcs
 PHPCS_GITHUB_SRC=squizlabs/PHP_CodeSniffer
