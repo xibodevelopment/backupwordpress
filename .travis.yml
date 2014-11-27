@@ -20,7 +20,6 @@ env:
     - WP_VERSION=4.0 WP_MULTISITE=1
     - WP_VERSION=3.9 WP_MULTISITE=0
     - WP_VERSION=3.9 WP_MULTISITE=1
-    - WPCS_STANDARD=$(if [ -e bin/phpcs.ruleset.xml ]; then echo bin/phpcs.ruleset.xml; else echo WordPress-Core; fi)
 
 sudo: false
 
@@ -37,4 +36,4 @@ before_script:
 
 script:
     - phpunit
-    - $PHPCS_DIR/scripts/phpcs --standard=$WPCS_STANDARD $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php')
+    - $PHPCS_DIR/scripts/phpcs --standard=$(if [ -e bin/phpcs.ruleset.xml ]; then echo bin/phpcs.ruleset.xml; else echo WordPress-Core; fi) $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php')
