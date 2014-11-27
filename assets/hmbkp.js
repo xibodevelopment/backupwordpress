@@ -190,7 +190,7 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 
 				if ( ! data || data == 0 )
 					return;
-
+                
 			}
 		);
 

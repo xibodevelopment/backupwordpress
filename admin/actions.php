@@ -193,20 +193,18 @@ add_action( 'admin_post_hmbkp_request_cancel_backup', 'hmbkp_request_cancel_back
  */
 function hmbkp_dismiss_error() {
 
-	// TODO Should really be nonced
-
-	if ( empty( $_GET['action'] ) || 'hmbkp_dismiss_error' !== $_GET['action'] ) {
-		return;
-	}
+	check_admin_referer( 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' );
 
 	hmbkp_cleanup();
 
-	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
+	HMBKP_Notices::get_instance()->clear_all_notices();
+
+	wp_safe_redirect( wp_get_referer(), 303 );
 
 	die;
 
 }
-add_action( 'admin_init', 'hmbkp_dismiss_error' );
+add_action( 'admin_post_hmbkp_dismiss_error', 'hmbkp_dismiss_error' );
 
 /**
  * Catch the schedule service settings form submission
@@ -572,30 +570,22 @@ function hmbkp_display_error_and_offer_to_email_it() {
 		die;
 	}
 
-	$error = wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) );
+	$errors = explode( "\n", wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) ) );
 
-	$error = str_replace( 'HMBKP_SUCCESS', '', $error, $succeeded );
+	$known_errors = HMBKP_Known_Errors::get_instance();
 
-	if ( $succeeded ) { ?>
+	foreach ( $known_errors->get_possible_errors( 'backup_errors' ) as $category => $messages ) {
 
-		<h3><?php _e( 'Your backup completed but with the following errors / warnings, it\'s probably ok to ignore these.', 'hmbkp' ); ?></h3>
+		foreach ( $messages as $message ) {
 
-	<?php } else { ?>
+			$better_messages[] = $known_errors->match( $message );
+		}
 
-		<h3><?php _e( 'Your backup failed', 'hmbkp' ); ?></h3>
+	}
 
-	<?php } ?>
+	HMBKP_Notices::get_instance()->set_notices( 'backup_errors', $better_messages );
 
-	<p><?php _e( 'Here\'s the response from the server:', 'hmbkp' ); ?></p>
-
-	<pre><?php esc_html_e( $error ); ?></pre>
-
-	<p class="description"><?php printf( __( 'You can email details of this error to %s so they can look into the issue.', 'hmbkp' ), '<a href="http://hmn.md">Human Made Limited</a>' ); ?><br /><br /></p>
-
-	<button class="button hmbkp-colorbox-close"><?php _e( 'Close', 'hmbkp' ); ?></button>
-	<button class="button-primary hmbkp_send_error_via_email right"><?php _e( 'Email to Support', 'hmbkp' ); ?></button>
-
-	<?php die;
+	wp_send_json_success( wp_get_referer() ); exit;
 
 }
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
