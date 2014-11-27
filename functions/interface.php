@@ -68,7 +68,7 @@ function hmbkp_admin_notices() {
 
 			<ul>
 				<?php foreach ( $notices['backup_errors'] as $notice ) : ?>
-					<li><?php echo $notice; ?></li>
+					<li><?php echo esc_html( $notice ); ?></li>
 				<?php endforeach; ?>
 			</ul>
 
