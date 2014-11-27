@@ -72,8 +72,6 @@ function hmbkp_request_do_backup() {
 		check_admin_referer( 'hmbkp-run-schedule', 'hmbkp-run-schedule' );
 	}
 
-
-
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
 
@@ -106,7 +104,7 @@ function hmbkp_request_do_backup() {
 	}
 
 	if ( $error_message && file_exists( $schedule->get_archive_filepath() ) && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-		$error_message .= 'HMBKP_SUCCESS';
+		$error_message .= ' HMBKP_SUCCESS';
 	}
 
 	if ( trim( $error_message ) && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
@@ -572,20 +570,9 @@ function hmbkp_display_error_and_offer_to_email_it() {
 
 	$errors = explode( "\n", wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) ) );
 
-	$known_errors = HMBKP_Known_Errors::get_instance();
+	HMBKP_Notices::get_instance()->set_notices( 'backup_errors', $errors );
 
-	foreach ( $known_errors->get_possible_errors( 'backup_errors' ) as $category => $messages ) {
-
-		foreach ( $messages as $message ) {
-
-			$better_messages[] = $known_errors->match( $message );
-		}
-
-	}
-
-	HMBKP_Notices::get_instance()->set_notices( 'backup_errors', $better_messages );
-
-	wp_send_json_success( wp_get_referer() ); exit;
+	wp_send_json_success( wp_get_referer() );
 
 }
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
