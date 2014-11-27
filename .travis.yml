@@ -20,7 +20,8 @@ env:
     - WP_VERSION=4.0 WP_MULTISITE=1
     - WP_VERSION=3.9 WP_MULTISITE=0
     - WP_VERSION=3.9 WP_MULTISITE=1
-
+    - WPCS_STANDARD=$(if [ -e phpcs.ruleset.xml ]; then echo phpcs.ruleset.xml; else echo WordPress-Core; fi)
+    
 sudo: false
 
 notifications:
