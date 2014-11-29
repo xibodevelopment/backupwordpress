@@ -42,5 +42,4 @@ script:
     - vendor/bin/phpdoc.php -d ./src -t ./build/docs
 
 after_script:
-
     - ./bin/travis_shell_after_success.sh
