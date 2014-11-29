@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/humanmade/backupwordpress.png?label=ready&title=Ready)](https://waffle.io/humanmade/backupwordpress)
 [![Coverage Status](https://img.shields.io/coveralls/humanmade/backupwordpress.svg)](https://coveralls.io/r/humanmade/backupwordpress?branch=master)
 
 [![Build Status](https://travis-ci.org/humanmade/backupwordpress.svg?branch=master)](https://travis-ci.org/humanmade/backupwordpress)
