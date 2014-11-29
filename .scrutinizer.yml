@@ -14,7 +14,7 @@ tools:
             - '\badd(?:s|ed)?\b'
             - '\bimplement(?:s|ed)?\b'
 
-    external_code_coverage: true
+    php_code_coverage: true
 
     js_hint: true
 
@@ -79,3 +79,12 @@ checks:
     php:
         code_rating: true
         duplication: true
+
+build:
+    tests:
+        override:
+            -
+                command: 'phpunit --coverage-clover=coverage.clover'
+                coverage:
+                    file: 'coverage.clover'
+                    format: 'php-clover'
