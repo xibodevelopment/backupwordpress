@@ -3,7 +3,6 @@ language: php
 
 # Versions of PHP to test against
 php:
-  - 5.2
   - 5.3
   - 5.4
   - 5.5
@@ -24,8 +23,9 @@ env:
 sudo: false
 
 notifications:
-  secure: "KSkj1N4CVYf8/ZWhoogK/dTh7pxvqNN3E0VM/VBGnBJVAOWvXCB5RB/nUBYcdG5rNgjvzcIAUr23MIsyzowbYw2uBEmpZeIxkmryKXsby8VyDrHQZppawLRjOpfBk9PsrH4e8/BlNc0acBvGHVBU0giL0lj3WlXNKOKNBdrf2PE="
-  email: false
+  hipchat:
+      secure: "KSkj1N4CVYf8/ZWhoogK/dTh7pxvqNN3E0VM/VBGnBJVAOWvXCB5RB/nUBYcdG5rNgjvzcIAUr23MIsyzowbYw2uBEmpZeIxkmryKXsby8VyDrHQZppawLRjOpfBk9PsrH4e8/BlNc0acBvGHVBU0giL0lj3WlXNKOKNBdrf2PE="
+      email: false
 
 # Clones WordPress and configures our testing environment.
 before_script:
