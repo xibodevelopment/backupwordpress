@@ -1,3 +1,7 @@
+[![Coverage Status](https://img.shields.io/coveralls/humanmade/backupwordpress.svg)](https://coveralls.io/r/humanmade/backupwordpress?branch=master)
+
+[![Build Status](https://travis-ci.org/humanmade/backupwordpress.svg?branch=master)](https://travis-ci.org/humanmade/backupwordpress)
+
 # BackUpWordPress #
 **Contributors:** humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier  
 **Tags:** back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade  
