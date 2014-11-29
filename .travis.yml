@@ -32,7 +32,8 @@ before_script:
     - mkdir -p build/logs
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
-script: phpunit -c ./ --coverage-text --coverage-clover build/logs/clover.xml
+script: phpunit --coverage-clover=coverage.clover
 
 after_script:
-    - php vendor/bin/coveralls -v
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
