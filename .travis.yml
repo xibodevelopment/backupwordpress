@@ -14,10 +14,12 @@ php:
 env:
     - WP_VERSION=latest WP_MULTISITE=0
     - WP_VERSION=latest WP_MULTISITE=1
-    - WP_VERSION=3.9.1 WP_MULTISITE=0
-    - WP_VERSION=3.9.1 WP_MULTISITE=1
-    - WP_VERSION=3.8.4 WP_MULTISITE=0
-    - WP_VERSION=3.8.4 WP_MULTISITE=1
+    - WP_VERSION=4.0 WP_MULTISITE=0
+    - WP_VERSION=4.0 WP_MULTISITE=1
+    - WP_VERSION=3.9 WP_MULTISITE=0
+    - WP_VERSION=3.9 WP_MULTISITE=1
+    - WP_VERSION=3.8 WP_MULTISITE=0
+    - WP_VERSION=3.8 WP_MULTISITE=1
 
 sudo: false
 
@@ -27,6 +29,10 @@ notifications:
 
 # Clones WordPress and configures our testing environment.
 before_script:
+    - mkdir -p build/logs
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
-script: phpunit
+script: phpunit -c ./ --coverage-text --coverage-clover build/logs/clover.xml
+
+after_script:
+    - php vendor/bin/coveralls -v
