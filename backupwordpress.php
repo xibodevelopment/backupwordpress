@@ -342,8 +342,9 @@ function hmbkp_load_first() {
 }
 add_action( 'activated_plugin', 'hmbkp_load_first' );
 
-add_action( 'plugins_loaded', 'hmbkp_maybe_self_deactivate' );
-
+/**
+ * Determine if the installation meets the PHP version requirements.
+ */
 function hmbkp_maybe_self_deactivate() {
 
 	if ( ! function_exists( 'deactivate_plugins' ) ) {
@@ -352,20 +353,40 @@ function hmbkp_maybe_self_deactivate() {
 
 	// Don't activate on anything less than PHP required version
 	if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
-		deactivate_plugins( trailingslashit( basename( dirname( __FILE__ ) ) ) . basename( __FILE__ ) );
+		deactivate_plugins( plugin_basename( __FILE__ ) );
 
 		if ( 'plugins_loaded' === current_action() ) {
-			add_action( 'admin_notices', 'hmbkp_admin_notices' );
+			add_action( 'admin_notices', 'hmbkp_display_admin_notices' );
 		} else {
-			wp_die( sprintf( __( 'BackUpWordPress requires PHP version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_PHP_VERSION ), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
+			wp_die( hmbkp_get_notice_message(), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
 		}
 	}
 
 }
+add_action( 'plugins_loaded', 'hmbkp_maybe_self_deactivate' );
 
+/**
+ * Displays a message as notice in the admin.
+ */
 function hmbkp_display_admin_notices() {
 
-	echo '<div class="error"><p>' . __( 'BackUpWordPress requires PHP version 5.3 or later. It is not active.', 'hmbkp' ) . '</p></div>';
+	echo '<div class="error"><p>' . hmbkp_get_notice_message() . '</p></div>';
 
 }
 
+/**
+ * Returns a localized user friendly error message.
+ *
+ * @return string
+ */
+function hmbkp_get_notice_message() {
+
+	return sprintf(
+		__( 'BackUpWordPress requires PHP version %1$s or later. It is not active. %2$s%3$s%4$sLearn more%5$s', 'hmbkp' ),
+		HMBKP_REQUIRED_PHP_VERSION,
+		'<a href="',
+		'https://bwp.hmn.md/unsupported-php-version-error/',
+		'">',
+		'</a>'
+	);
+}
