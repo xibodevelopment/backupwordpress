@@ -74,3 +74,8 @@ tools:
     php_sim:
             enabled: true
             min_mass: 50
+
+checks:
+    php:
+        code_rating: true
+        duplication: true
