@@ -1,0 +1,13 @@
+{
+    "name": "humanmade/backupwordpress",
+    "description": "Simple automated backups of your WordPress powered website",
+    "require-dev": {
+        "phpdocumentor/phpdocumentor":"2.*"
+    },
+    "authors": [
+        {
+            "name": "Human Made Limited",
+            "email": "hello@hmn.md"
+        }
+    ]
+}
