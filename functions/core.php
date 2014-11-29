@@ -8,6 +8,19 @@ function hmbkp_activate() {
 	// loads the translation files
 	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_LANG_DIR );
 
+	// Don't activate on old versions of WordPress
+	global $wp_version;
+
+	if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
+
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		deactivate_plugins( __FILE__ );
+
+		if ( isset( $_GET['action'] ) && ( 'activate' === $_GET['action'] || 'error_scrape' === $_GET['action'] ) ) {
+			wp_die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
+		}
+	}
+
 	// Run deactivate on activation in-case it was deactivated manually
 	hmbkp_deactivate();
 
