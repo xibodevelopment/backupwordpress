@@ -38,7 +38,7 @@ before_script:
 
 script:
     - phpunit
-    - vendor/bin/phpdoc.php -d ./src -t ./build/docs
+    - php vendor/bin/phpdoc -d ./src -t ./build/docs
 
 after_script:
     - ./bin/travis_shell_after_success.sh
