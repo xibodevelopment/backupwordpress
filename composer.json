@@ -2,7 +2,7 @@
     "name": "humanmade/backupwordpress",
     "description": "Simple automated backups of your WordPress powered website",
     "require-dev": {
-        "phpdocumentor/phpdocumentor":"2.*"
+        "phpdocumentor/phpdocumentor":"dev-master"
     },
     "authors": [
         {
