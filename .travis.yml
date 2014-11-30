@@ -35,12 +35,10 @@ before_script:
     - composer install -n --prefer-source --dev
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
     - mkdir -p build/docs
-    - echo "$TRAVIS_BUILD_DIR"
-    - echo "$(pwd)"
 
 script:
     - phpunit
-    - php vendor/bin/phpdoc -d "*" -t ./build/docs --ignore vendor/,build/,hm-backup/,backdrop/,assets/,bin/,languages/,node_modules/,tests/,readme/
+    - php vendor/bin/phpdoc -d ./classes -t ./build/docs --ignore vendor/,build/,hm-backup/,backdrop/,assets/,bin/,languages/,node_modules/,tests/,readme/
 
 after_script:
     - ./bin/travis_shell_after_success.sh
