@@ -108,6 +108,8 @@ if ( ! class_exists( 'HM_Backup' ) )
 // Load Backdrop
 require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
 
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-path.php' );
+
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
@@ -124,7 +126,6 @@ require_once( HMBKP_PLUGIN_PATH . 'classes/class-email.php' );
 
 // Load the webhook services
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhooks.php' );
-require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-custom.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-wpremote.php' );
 
 // Load the wp cli command
@@ -135,9 +136,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_deactivate' );
-
-// Handle any advanced option changes
-hmbkp_constant_changes();
 
 /**
  * Plugin setup
