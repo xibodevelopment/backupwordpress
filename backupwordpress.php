@@ -124,7 +124,6 @@ require_once( HMBKP_PLUGIN_PATH . 'classes/class-email.php' );
 
 // Load the webhook services
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhooks.php' );
-require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-custom.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-wpremote.php' );
 
 // Load the wp cli command
