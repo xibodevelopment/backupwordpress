@@ -61,10 +61,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->set_root( HMBKP_ROOT );
 		}
 
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
-			$this->set_path( HMBKP_PATH );
-		}
-
 		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE ) {
 			parent::set_excludes( HMBKP_EXCLUDE, true );
 		}

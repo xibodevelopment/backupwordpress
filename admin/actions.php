@@ -89,7 +89,7 @@ function hmbkp_request_do_backup() {
 
 	ignore_user_abort( true );
 
-	hmbkp_cleanup();
+	HMBKP_Path::get_instance()->cleanup();
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
@@ -142,11 +142,7 @@ function hmbkp_request_download_backup() {
 
 	if ( $is_apache ) {
 
-		// Force the .htaccess to be rebuilt
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
-			unlink( hmbkp_path() . '/.htaccess' );
-
-		hmbkp_path();
+		HMBKP_Path::get_instance()->protect_path( 'reset' );
 
 		$url = add_query_arg( 'key', HMBKP_SECURE_KEY, $url );
 
@@ -177,7 +173,7 @@ function hmbkp_request_cancel_backup() {
 		unlink( $schedule->get_schedule_running_path() );
 	}
 
-	hmbkp_cleanup();
+	HMBKP_Path::get_instance()->cleanup();
 
 	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
 
@@ -197,7 +193,7 @@ function hmbkp_dismiss_error() {
 		return;
 	}
 
-	hmbkp_cleanup();
+	HMBKP_Path::get_instance()->cleanup();
 
 	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
 
