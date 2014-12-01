@@ -3,7 +3,6 @@ language: php
 
 # Versions of PHP to test against
 php:
-  - 5.2
   - 5.3
   - 5.4
   - 5.5
@@ -14,6 +13,8 @@ php:
 env:
     - WP_VERSION=latest WP_MULTISITE=0
     - WP_VERSION=latest WP_MULTISITE=1
+    - WP_VERSION=4.0.1 WP_MULTISITE=0
+    - WP_VERSION=4.0.1 WP_MULTISITE=1
     - WP_VERSION=3.9.1 WP_MULTISITE=0
     - WP_VERSION=3.9.1 WP_MULTISITE=1
     - WP_VERSION=3.8.4 WP_MULTISITE=0

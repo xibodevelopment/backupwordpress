@@ -32,6 +32,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+if ( ! defined( 'HMBKP_REQUIRED_PHP_VERSION' ) ) {
+	define( 'HMBKP_REQUIRED_PHP_VERSION', '5.3.2' );
+}
+
+hmbkp_maybe_self_deactivate();
+
 if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) ) {
 	define( 'HMBKP_PLUGIN_SLUG', basename( dirname( __FILE__ ) ) );
 }
@@ -72,7 +78,7 @@ shuffle( $key );
 define( 'HMBKP_SECURE_KEY', md5( serialize( $key ) ) );
 
 if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
-	define( 'HMBKP_REQUIRED_WP_VERSION', '3.8.4' );
+	define( 'HMBKP_REQUIRED_WP_VERSION', '3.9.3' );
 }
 
 // Max memory limit isn't defined in old versions of WordPress
@@ -129,20 +135,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 // Hook in the activation and deactivation actions
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_deactivate' );
-
-// Don't activate on old versions of WordPress
-global $wp_version;
-
-if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
-
-	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	deactivate_plugins( __FILE__ );
-
-	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) ) {
-		die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ) );
-	}
-
-}
 
 // Handle any advanced option changes
 hmbkp_constant_changes();
@@ -349,3 +341,52 @@ function hmbkp_load_first() {
 
 }
 add_action( 'activated_plugin', 'hmbkp_load_first' );
+
+/**
+ * Determine if the installation meets the PHP version requirements.
+ */
+function hmbkp_maybe_self_deactivate() {
+
+	if ( ! function_exists( 'deactivate_plugins' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	}
+
+	// Don't activate on anything less than PHP required version
+	if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+
+		if ( 'plugins_loaded' === current_action() ) {
+			add_action( 'admin_notices', 'hmbkp_display_admin_notices' );
+		} else {
+			wp_die( hmbkp_get_notice_message(), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
+		}
+	}
+
+}
+add_action( 'plugins_loaded', 'hmbkp_maybe_self_deactivate' );
+
+/**
+ * Displays a message as notice in the admin.
+ */
+function hmbkp_display_admin_notices() {
+
+	echo '<div class="error"><p>' . hmbkp_get_notice_message() . '</p></div>';
+
+}
+
+/**
+ * Returns a localized user friendly error message.
+ *
+ * @return string
+ */
+function hmbkp_get_notice_message() {
+
+	return sprintf(
+		__( 'BackUpWordPress requires PHP version %1$s or later. It is not active. %2$s%3$s%4$sLearn more%5$s', 'hmbkp' ),
+		HMBKP_REQUIRED_PHP_VERSION,
+		'<a href="',
+		'https://bwp.hmn.md/unsupported-php-version-error/',
+		'">',
+		'</a>'
+	);
+}
