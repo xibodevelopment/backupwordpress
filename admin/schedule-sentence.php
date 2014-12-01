@@ -80,15 +80,12 @@ endswitch;
 $server = '<span title="' . esc_attr( hmbkp_path() ) . '">' . __( 'this server', 'hmbkp' ) . '</span>';
 $server = '<code>' . esc_attr( str_replace( $schedule->get_home_path(), '', hmbkp_path() ) ) . '</code>';
 
-$disk_free_space = size_format( @disk_free_space( hmbkp_path() ) );
-$disk_total_space = size_format( @disk_total_space( hmbkp_path() ) );
-
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
 
 	case 1 :
 
-		$backup_to_keep = sprintf( __( 'store the most recent backup in %1$s ( Remaining: %2$s of %3$s total )', 'hmbkp' ), $server, $disk_free_space, $disk_total_space );
+		$backup_to_keep = sprintf( __( 'store the most recent backup in %s', 'hmbkp' ), $server );
 
 	break;
 
@@ -100,7 +97,7 @@ switch ( $schedule->get_max_backups() ) :
 
 	default :
 
-		$backup_to_keep = sprintf( __( 'store the last %1$s backups in %2$s ( Remaining: %3$s of %4$s )', 'hmbkp' ), esc_html( $schedule->get_max_backups() ), $server, $disk_free_space, $disk_total_space );
+		$backup_to_keep = sprintf( __( 'store the last %1$s backups in %2$s', 'hmbkp' ), esc_html( $schedule->get_max_backups() ), $server );
 
 endswitch;
 
