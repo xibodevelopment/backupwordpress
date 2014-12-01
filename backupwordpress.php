@@ -346,7 +346,7 @@ add_action( 'activated_plugin', 'hmbkp_load_first' );
  */
 function hmbkp_maybe_self_deactivate() {
 
-	if ( ! function_exists( 'deactivate_plugins' ) ) {
+	if ( ! function_exists( 'deactivate_plugins' ) || ! function_exists( 'current_action' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	}
 
