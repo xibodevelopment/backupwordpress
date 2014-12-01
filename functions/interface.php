@@ -28,7 +28,6 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 		<td>
 
 			<?php if (  hmbkp_is_path_accessible( hmbkp_path() )  ) : ?>
-
 				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php _e( 'Download', 'hmbkp' ); ?></a> |
 			<?php endif; ?>
 
@@ -49,7 +48,7 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
 function hmbkp_admin_notices() {
 
 	$notices = HMBKP_Notices::get_instance()->get_notices();
-
+	
 	if ( empty( $notices ) ) {
 		return;
 	}
@@ -359,7 +358,7 @@ function hmbkp_get_settings_errors() {
 
 /**
  * Clear all error messages.
- * 
+ *
  * @return bool
  */
 function hmbkp_clear_settings_errors(){
