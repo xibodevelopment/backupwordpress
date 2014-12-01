@@ -1,19 +1,18 @@
 <?php
 
-$_tests_dir = getenv('WP_TESTS_DIR');
-if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
+$_tests_dir = getenv( 'WP_TESTS_DIR' );
 
-require_once $_tests_dir . '/includes/functions.php';
-
-function _manually_load_plugin() {
-	require dirname( __FILE__ ) . '/../backupwordpress.php';
+if ( ! $_tests_dir ) {
+	$_tests_dir = $_tests_dir = '/srv/www/wordpress-develop.dev/tests/phpunit/';
 }
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
-require $_tests_dir . '/includes/bootstrap.php';
+require_once( $_tests_dir . 'includes/functions.php' );
 
+tests_add_filter( 'muplugins_loaded', function() {
+	require_once( dirname( __DIR__ ) . '/backupwordpress.php' );
+} );
 
-
+require( $_tests_dir . 'includes/bootstrap.php' );
 
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
@@ -32,11 +31,13 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 		$files = array();
 
-		foreach( $filepaths as $filepath )
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', $this->conform_dir( (string) $filepath ) );
+		foreach( $filepaths as $filepath ) {
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM_Backup::conform_dir( (string) $filepath ) );
+		}
 
-		foreach( $extracted as $fileInfo )
+		foreach( $extracted as $fileInfo ) {
 			$files[] = untrailingslashit( $fileInfo['filename'] );
+		}
 
 		$this->assertEquals( $filenames, $files );
 
@@ -56,8 +57,9 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 		$files = array();
 
-		foreach( $extracted as $fileInfo )
+		foreach( $extracted as $fileInfo ) {
 			$files[] = $fileInfo['filename'];
+		}
 
 		$this->assertNotEquals( $filenames, $files );
 
@@ -78,14 +80,17 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 		$files = array();
 
-		foreach( $filepaths as $filepath )
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', $this->conform_dir( (string) $filepath ) );
+		foreach( $filepaths as $filepath ) {
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM_Backup::conform_dir( (string) $filepath ) );
+		}
 
-		foreach( $extracted as $fileInfo )
+		foreach( $extracted as $fileInfo ) {
 			$files[] = untrailingslashit( $fileInfo['filename'] );
+		}
 
-		foreach( $filenames as $filename )
+		foreach( $filenames as $filename ) {
 			$this->assertContains( $filename, $files );
+		}
 
 
 	}
@@ -105,11 +110,13 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 		$files = array();
 
-		foreach( $extracted as $fileInfo )
+		foreach( (array) $extracted as $fileInfo ) {
 			$files[] = $fileInfo['filename'];
+		}
 
-		foreach( $filenames as $filename )
+		foreach( $filenames as $filename ) {
 			$this->assertNotContains( $filename, $files );
+		}
 
 
 	}
@@ -144,42 +151,11 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 		$extracted = $archive->extract( PCLZIP_OPT_EXTRACT_AS_STRING );
 
-		if ( isset( $previous_encoding ) )
+		if ( isset( $previous_encoding ) ) {
 			mb_internal_encoding( $previous_encoding );
+		}
 
 		return $extracted;
-
-	}
-
-    /**
-	 * Sanitize a directory path
-	 *
-	 * @access public
-	 * @static
-	 * @param string $dir
-	 * @param bool $rel. (default: false)
-	 * @return string $dir
-	 */
-	private function conform_dir( $dir, $recursive = false ) {
-
-		// Assume empty dir is root
-		// @todo don't assume, error
-		if ( ! $dir )
-			$dir = '/';
-
-		// Replace single forward slash (looks like double slash because we have to escape it)
-		$dir = str_replace( '\\', '/', $dir );
-		$dir = str_replace( '//', '/', $dir );
-
-		// Remove the trailing slash
-		if ( $dir !== '/' )
-			$dir = untrailingslashit( $dir );
-
-		// Carry on until completely normalized
-		if ( ! $recursive && self::conform_dir( $dir, true ) != $dir )
-			return self::conform_dir( $dir );
-
-		return (string) $dir;
 
 	}
 

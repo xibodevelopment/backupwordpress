@@ -110,8 +110,8 @@ abstract class HMBKP_Requirement {
 
 			if ( $test ) {
 				return 'Yes';
-			} 
-			
+			}
+
 			return 'No';
 
 		}

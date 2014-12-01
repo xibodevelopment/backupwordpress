@@ -72,8 +72,6 @@ function hmbkp_request_do_backup() {
 		check_admin_referer( 'hmbkp-run-schedule', 'hmbkp-run-schedule' );
 	}
 
-
-
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
 
