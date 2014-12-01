@@ -3,16 +3,16 @@
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
 if ( ! $_tests_dir ) {
-	$_tests_dir = $_tests_dir = '/srv/www/wordpress-develop.dev/tests/phpunit/';;
+	$_tests_dir = $_tests_dir = '/srv/www/wordpress-develop.dev/tests/phpunit/';
 }
 
-require_once( $_tests_dir . '/includes/functions.php' );
+require_once( $_tests_dir . 'includes/functions.php' );
 
 tests_add_filter( 'muplugins_loaded', function() {
 	require_once( dirname( __DIR__ ) . '/backupwordpress.php' );
 } );
 
-require( $_tests_dir . '/includes/bootstrap.php' );
+require( $_tests_dir . 'includes/bootstrap.php' );
 
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
