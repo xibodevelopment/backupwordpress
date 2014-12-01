@@ -124,7 +124,6 @@ require_once( HMBKP_PLUGIN_PATH . 'classes/class-email.php' );
 
 // Load the webhook services
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhooks.php' );
-require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-custom.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-wpremote.php' );
 
 // Load the wp cli command
@@ -347,7 +346,7 @@ add_action( 'activated_plugin', 'hmbkp_load_first' );
  */
 function hmbkp_maybe_self_deactivate() {
 
-	if ( ! function_exists( 'deactivate_plugins' ) ) {
+	if ( ! function_exists( 'deactivate_plugins' ) || ! function_exists( 'current_action' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	}
 
