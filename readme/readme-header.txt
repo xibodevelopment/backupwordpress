@@ -3,13 +3,15 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.8.4
 Tested up to: 4.1
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 
 Simple automated backups of your WordPress powered website.
 
 == Description ==
 
 [BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
+
+This plugin requires PHP version 5.3.2 or later
 
 = Features =
 

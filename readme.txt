@@ -3,13 +3,15 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.8.4
 Tested up to: 4.1
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 
 Simple automated backups of your WordPress powered website.
 
 == Description ==
 
 [BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
+
+This plugin requires PHP version 5.3.2 or later
 
 = Features =
 
@@ -116,9 +118,62 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.0.2 =
+
+  * Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
+
+= 3.0.1 =
+
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+#### 3.0.2 / 2014-12-02
+
+  * Bump version
+  * Add parenthesis to require_once
+  * Remove disk space info
+  * Attempt to fix build
+  * define WP_TESTS_DIR
+  * Make sure current_action fnction is loaded
+  * Remove extra slashes and semicolons
+  * Remove the custom webhook service
+  * Better default WP_TESTS_DIR
+  * move trailingslash calls out of the loop for performance
+  * Minor code cleanup
+  * Correct path for hm-backup so it's tests are run
+  * add composer.lock
+  * Use scrutinizer code coverage
+  * add waffle.io badge
+  * Use up to date commands for coverage
+  * Add code rating
+  * Don't test 5.2
+  * Update readme.md
+  * excluded_dirs is deprecated
+  * Update scrutinizer config
+  * Add composer config and dev dependencies
+  * Make PHPUnit generate an XML for coveralls
+  * Add scrutinizer config
+  * Ignore vendor dir
+  * Add a link to Help page
+  * Move to activation hook
+  * Bump up required WP version
+  * Escape all the things
+  * Save errors to a notices option
+  * Reload page on errors
+  * Remove script
+  * Remove unneeded class
+  * Check PHP version on plugins loaded
+  * Check PHP version on activate
+  * Update readme
+  * Set required version to 5.3.2
+  * Update tests
+  * Allow for a 30 second delta in asserting schedule time
+  * Use the new build env on Travis
+  * Restrict plugin to be network only
+  * Fix admin URL logic
+  * Formatting
+  * Update readme changelog
 
 #### 3.0.1 / 2014-11-20
 
@@ -180,8 +235,6 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * Remove unneeded code
   * New line at end
   * Use admin_post hook
-  * Merge pull request #502 from humanmade/stream-integration
-  * Merge pull request #554 from humanmade/fix-display-schedule-time
   * Display schedule start time in local timezone
   * Add an action hook that gives access to consumers to the backup progress
  * Update translatable strings POT file

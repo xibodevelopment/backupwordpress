@@ -25,14 +25,18 @@ sudo: false
 
 notifications:
   hipchat:
-      secure: "KSkj1N4CVYf8/ZWhoogK/dTh7pxvqNN3E0VM/VBGnBJVAOWvXCB5RB/nUBYcdG5rNgjvzcIAUr23MIsyzowbYw2uBEmpZeIxkmryKXsby8VyDrHQZppawLRjOpfBk9PsrH4e8/BlNc0acBvGHVBU0giL0lj3WlXNKOKNBdrf2PE="
+    rooms:
+      secure: DdRbiWiLDnyzgRCFUjo+wiWCR6iNLTlipdLRCWufdeHPgpgAvAbo2+7D9Uvh+tjK5smynGTQfmDAnh4q7+Jy6qLOse7k/YBIvgLINEyCQ9EenpJYfz9C7/fAEvvRJpT6LObw68y6T35qsRMyFv0eeNemEuwDcMc0oEXeRLCgegQ=
   email: false
 
 # Clones WordPress and configures our testing environment.
 before_script:
+    - composer selfupdate --quiet
+    - composer install -n --prefer-dist --no-progress
+    - export WP_TESTS_DIR=/tmp/wordpress-tests-lib/
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
     - ./bin/prepare.sh
 
 script:
-    - phpunit
+    - phpunit --coverage-clover=coverage.clover
     - $PHPCS_DIR/scripts/phpcs --standard=$(if [ -e bin/phpcs.ruleset.xml ]; then echo bin/phpcs.ruleset.xml; else echo WordPress-Core; fi) $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php')

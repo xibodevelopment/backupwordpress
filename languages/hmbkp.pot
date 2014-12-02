@@ -1,10 +1,10 @@
 # Copyright (C) 2014 Human Made Limited
-# This file is distributed under the GPL-2.0+.
+# This file is distributed under the same license as the BackUpWordPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: BackUpWordPress 3.0\n"
+"Project-Id-Version: BackUpWordPress 3.0-beta\n"
 "Report-Msgid-Bugs-To: support@humanmade.co.uk\n"
-"POT-Creation-Date: 2014-11-14 11:37:15+00:00\n"
+"POT-Creation-Date: 2014-10-15 19:32:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,39 +61,39 @@ msgstr ""
 msgid "Max backups must be greater than 0"
 msgstr ""
 
-#: admin/actions.php:582
+#: admin/actions.php:594
 msgid ""
 "Your backup completed but with the following errors / warnings, it's "
 "probably ok to ignore these."
 msgstr ""
 
-#: admin/actions.php:586
+#: admin/actions.php:598
 msgid "Your backup failed"
 msgstr ""
 
-#: admin/actions.php:590
+#: admin/actions.php:602
 msgid "Here's the response from the server:"
 msgstr ""
 
-#: admin/actions.php:594
+#: admin/actions.php:606
 msgid "You can email details of this error to %s so they can look into the issue."
 msgstr ""
 
-#: admin/actions.php:596
+#: admin/actions.php:608
 msgid "Close"
 msgstr ""
 
-#: admin/actions.php:597
+#: admin/actions.php:609
 msgid "Email to Support"
 msgstr ""
 
-#: admin/actions.php:705 admin/actions.php:711 functions/interface.php:81
+#: admin/actions.php:717 admin/actions.php:723 functions/interface.php:81
 #: functions/interface.php:92 functions/interface.php:103
 #: functions/interface.php:127
 msgid "BackUpWordPress has detected a problem."
 msgstr ""
 
-#: admin/actions.php:705 admin/actions.php:711
+#: admin/actions.php:717 admin/actions.php:723
 msgid ""
 "%1$s is returning a %2$s response which could mean cron jobs aren't getting "
 "fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. "
@@ -698,45 +698,45 @@ msgstr ""
 msgid "Task is not scheduled to run"
 msgstr ""
 
-#: backupwordpress.php:136
+#: backupwordpress.php:132
 msgid "BackUpWordPress requires WordPress version %s or greater."
 msgstr ""
 
-#: backupwordpress.php:184
+#: backupwordpress.php:180
 msgid "Update"
 msgstr ""
 
-#: backupwordpress.php:185
+#: backupwordpress.php:181
 msgid "Cancel"
 msgstr ""
 
-#: backupwordpress.php:186
+#: backupwordpress.php:182
 msgid ""
 "Are you sure you want to delete this schedule? All of it's backups will "
 "also be deleted."
 msgstr ""
 
-#: backupwordpress.php:186 backupwordpress.php:187 backupwordpress.php:188
-#: backupwordpress.php:189
+#: backupwordpress.php:182 backupwordpress.php:183 backupwordpress.php:184
+#: backupwordpress.php:185
 msgid "'Cancel' to go back, 'OK' to delete."
 msgstr ""
 
-#: backupwordpress.php:187
+#: backupwordpress.php:183
 msgid "Are you sure you want to delete this backup?"
 msgstr ""
 
-#: backupwordpress.php:188
+#: backupwordpress.php:184
 msgid "Are you sure you want to remove this exclude rule?"
 msgstr ""
 
-#: backupwordpress.php:189
+#: backupwordpress.php:185
 msgid ""
 "Reducing the number of backups that are stored on this server will cause "
 "some of your existing backups to be deleted, are you sure that's what you "
 "want?"
 msgstr ""
 
-#: backupwordpress.php:314
+#: backupwordpress.php:310
 msgid "Server Info"
 msgstr ""
 
@@ -819,47 +819,47 @@ msgstr ""
 msgid "Argument 1 for %s must be a valid integer"
 msgstr ""
 
-#: classes/class-schedule.php:573
+#: classes/class-schedule.php:589
 msgid "Argument 1 for %s must be a valid future timestamp"
 msgstr ""
 
-#: classes/class-schedule.php:610
+#: classes/class-schedule.php:626
 msgid "Argument 1 for %s must be a valid cron reoccurrence or \"manually\""
 msgstr ""
 
-#: classes/class-schedule.php:738 functions/interface.php:214
+#: classes/class-schedule.php:754 functions/interface.php:214
 msgid "Starting Backup"
 msgstr ""
 
-#: classes/class-schedule.php:856
+#: classes/class-schedule.php:872
 msgid "Dumping Database %s"
 msgstr ""
 
-#: classes/class-schedule.php:861
+#: classes/class-schedule.php:877
 msgid "Verifying Database Dump %s"
 msgstr ""
 
-#: classes/class-schedule.php:866
+#: classes/class-schedule.php:882
 msgid "Creating zip archive %s"
 msgstr ""
 
-#: classes/class-schedule.php:871
+#: classes/class-schedule.php:887
 msgid "Verifying Zip Archive %s"
 msgstr ""
 
-#: classes/class-schedule.php:876
+#: classes/class-schedule.php:892
 msgid "Finishing Backup"
 msgstr ""
 
-#: classes/class-schedule.php:978
+#: classes/class-schedule.php:994
 msgid "Argument 1 for %s must be a non empty string"
 msgstr ""
 
-#: classes/class-schedule.php:982
+#: classes/class-schedule.php:998
 msgid "%s doesn't exist"
 msgstr ""
 
-#: classes/class-schedule.php:986
+#: classes/class-schedule.php:1002
 msgid "That backup wasn't created by this schedule"
 msgstr ""
 
