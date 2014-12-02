@@ -5,7 +5,7 @@
 #echo "TRAVIS_PHP_VERSION: $TRAVIS_PHP_VERSION"
 #echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
 
-if [ "$TRAVIS_REPO_SLUG" == "humanmade/backupwordpress" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "5.3.2" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "humanmade/backupwordpress" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "5.3" ]; then
 
   echo -e "Publishing PHPDoc...\n"
   ## Copie de la documentation generee dans le $HOME

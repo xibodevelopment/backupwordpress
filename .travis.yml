@@ -5,7 +5,8 @@ php:
 - 5.5
 env:
   global:
-  - secure: gRaJVjznkdJlPA/PCR/dj8Z8ejtLebuSbZay++OOuCE4JLDIJnGMQCNd91W1ljxtqnS2ThCmC1VhbE/AJ1OmQ9U5UVgUX45UCAEaH2VcuvUjM/Khho7rW9wb+Gke+i+dZ1HdW76Xb4w2N/8WlEQsldFTwMrB4K1mOYBCc5Vbl8I=
+  # Encrypted github account info
+  - secure: naIYAQ7IbJcbeeDWOPLRAQwrT5BU6ufF/GC8/cpOgVjV2Za9rfWu7Yus+pYzIw8VBQDVqc2hUtUbLS10o0CDeGH+lyTZ1b4+tyFZbNkXwCPS6Y1CUn9hbe1zfFc0gq0Q0WPpwvsOy2VNrEBg0CFgUPmoZlx/LZl9nj5MbJvAbxw=
   matrix:
   - WP_VERSION=latest WP_MULTISITE=0
   - WP_VERSION=latest WP_MULTISITE=1
@@ -16,6 +17,9 @@ env:
   - WP_VERSION=3.8 WP_MULTISITE=0
   - WP_VERSION=3.8 WP_MULTISITE=1
 sudo: false
+install:
+- git config --global user.email "paul@hmn.md"
+- git config --global user.name "Paul de Wouters"
 notifications:
   email: false
   hipchat:
