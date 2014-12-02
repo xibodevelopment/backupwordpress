@@ -13,22 +13,24 @@ php:
 env:
     - WP_VERSION=latest WP_MULTISITE=0
     - WP_VERSION=latest WP_MULTISITE=1
-    - WP_VERSION=4.0.1 WP_MULTISITE=0
-    - WP_VERSION=4.0.1 WP_MULTISITE=1
-    - WP_VERSION=3.9.1 WP_MULTISITE=0
-    - WP_VERSION=3.9.1 WP_MULTISITE=1
-    - WP_VERSION=3.8.4 WP_MULTISITE=0
-    - WP_VERSION=3.8.4 WP_MULTISITE=1
+    - WP_VERSION=4.0 WP_MULTISITE=0
+    - WP_VERSION=4.0 WP_MULTISITE=1
+    - WP_VERSION=3.9 WP_MULTISITE=0
+    - WP_VERSION=3.9 WP_MULTISITE=1
+    - WP_VERSION=3.8 WP_MULTISITE=0
+    - WP_VERSION=3.8 WP_MULTISITE=1
 
 sudo: false
 
 notifications:
-  secure: "KSkj1N4CVYf8/ZWhoogK/dTh7pxvqNN3E0VM/VBGnBJVAOWvXCB5RB/nUBYcdG5rNgjvzcIAUr23MIsyzowbYw2uBEmpZeIxkmryKXsby8VyDrHQZppawLRjOpfBk9PsrH4e8/BlNc0acBvGHVBU0giL0lj3WlXNKOKNBdrf2PE="
-  email: false
+  hipchat:
+      secure: "KSkj1N4CVYf8/ZWhoogK/dTh7pxvqNN3E0VM/VBGnBJVAOWvXCB5RB/nUBYcdG5rNgjvzcIAUr23MIsyzowbYw2uBEmpZeIxkmryKXsby8VyDrHQZppawLRjOpfBk9PsrH4e8/BlNc0acBvGHVBU0giL0lj3WlXNKOKNBdrf2PE="
+      email: false
 
 # Clones WordPress and configures our testing environment.
 before_script:
     - export WP_TESTS_DIR=/tmp/wordpress-tests-lib/
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
-script: phpunit
+script: phpunit --coverage-clover=coverage.clover
+
