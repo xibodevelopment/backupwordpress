@@ -188,9 +188,11 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
 			{ 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_backup_error', 'hmbkp_error' : data },
 			function( data ) {
 
-				if ( ! data || data == 0 )
-					return;
-
+				if ( ! data || data == 0 ) {
+                    return;
+                } else {
+                    location.reload(true);
+                }
 			}
 		);
 

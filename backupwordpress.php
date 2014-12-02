@@ -97,6 +97,8 @@ if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
 }
 
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-notices.php' );
+
 // Load the admin menu
 require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
