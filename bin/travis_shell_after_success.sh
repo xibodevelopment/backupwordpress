@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#echo "--DEBUG--"
-#echo "TRAVIS_REPO_SLUG: $TRAVIS_REPO_SLUG"
-#echo "TRAVIS_PHP_VERSION: $TRAVIS_PHP_VERSION"
-#echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
+echo "--DEBUG--"
+echo "TRAVIS_REPO_SLUG: $TRAVIS_REPO_SLUG"
+echo "TRAVIS_PHP_VERSION: $TRAVIS_PHP_VERSION"
+echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
 
 if [ "$TRAVIS_REPO_SLUG" == "humanmade/backupwordpress" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "5.3" ]; then
 
