@@ -537,6 +537,27 @@ function hmbkp_recalculate_directory_filesize() {
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_recalculate_directory_filesize' );
 
+function hmbkp_calculate_site_size() {
+
+	if ( isset(  $_GET['hmbkp_schedule_id'] ) ) {
+		$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+	} else {
+		// Refresh the schedules from the database to make sure we have the latest changes
+		HMBKP_Schedules::get_instance()->refresh_schedules();
+
+		$schedules = HMBKP_Schedules::get_instance()->get_schedules();
+
+		if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
+			$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+		} else {
+			$current_schedule = reset( $schedules );
+		}
+	}
+
+	$current_schedule->maybe_start_background_crawler();
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
+
 /**
  * Receive the heartbeat and return backup status
  */
