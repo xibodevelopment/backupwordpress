@@ -520,13 +520,16 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			}
 
 			$directory_size = 0;
+			$current_pathname = trailingslashit( $file->getPathname() );
+			$root = trailingslashit( $this->get_root() );
 
 			foreach ( $directory_sizes as $path => $size ) {
 
 				// Remove any files that aren't part of the current tree
-				if ( false === strpos( $path, trailingslashit( $file->getPathname() ) ) ) {
+				if ( false === strpos( $path, $current_pathname ) ) {
 					unset( $directory_sizes[ $path ] );
 				}
+
 			}
 
 			if ( $skip_excluded_files ) {
@@ -536,9 +539,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 				foreach ( $directory_sizes as $path => $size ) {
 
 					// Skip excluded files if we have excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', HM_Backup::conform_dir( $path ) ) ) ) {
+					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', HM_Backup::conform_dir( $path ) ) ) ) {
 						unset( $directory_sizes[ $path ] );
 					}
+
 				}
 
 			}
