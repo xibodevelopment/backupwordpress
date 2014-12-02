@@ -89,6 +89,8 @@ module.exports = function (grunt) {
 							'!**/tests/**',
 							'!**/build/**',
 							'!**/bin/**',
+							'!**/vendor/**',
+							'!**/build/docs/**',
 							'!**/readme/**',
 							'!**{readme,CONTRIBUTING}.md**'
 						],
