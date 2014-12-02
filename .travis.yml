@@ -27,7 +27,7 @@ notifications:
       secure: DdRbiWiLDnyzgRCFUjo+wiWCR6iNLTlipdLRCWufdeHPgpgAvAbo2+7D9Uvh+tjK5smynGTQfmDAnh4q7+Jy6qLOse7k/YBIvgLINEyCQ9EenpJYfz9C7/fAEvvRJpT6LObw68y6T35qsRMyFv0eeNemEuwDcMc0oEXeRLCgegQ=
 before_script:
 - composer selfupdate --quiet
-- composer install -n --prefer-source --dev
+- composer install -n --prefer-dist --no-progress
 - export WP_TESTS_DIR=/tmp/wordpress-tests-lib/
 - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 - mkdir -p build/docs
