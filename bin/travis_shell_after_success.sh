@@ -13,8 +13,6 @@ if [ "$TRAVIS_REPO_SLUG" == "humanmade/backupwordpress" ] && [ "$TRAVIS_PULL_REQ
 
   cd $HOME
   ## Initialisation et recuperation de la branche gh-pages du depot Git
-  git config --global user.email "travis@travis-ci.org"
-  git config --global user.name "travis-ci"
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/humanmade/backupwordpress gh-pages > /dev/null
 
   cd gh-pages
