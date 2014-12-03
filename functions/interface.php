@@ -103,9 +103,14 @@ function hmbkp_set_server_config_notices() {
 
 	$messages = array();
 
-	$php_user  = exec( 'whoami' );
-	$groups = explode( ' ', exec( 'groups' ) );
-	$php_group = reset( $groups );
+	if ( ! hmbkp_is_function_available( 'exec' ) ) {
+		$php_user  = '<PHP USER>';
+		$php_group = '<PHP GROUP>';
+	} else {
+		$php_user  = exec( 'whoami' );
+		$groups = explode( ' ', exec( 'groups' ) );
+		$php_group = reset( $groups );
+	}
 
 	if ( ! is_dir( hmbkp_path() ) ) {
 
