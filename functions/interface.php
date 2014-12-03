@@ -103,7 +103,7 @@ function hmbkp_set_server_config_notices() {
 
 	$messages = array();
 
-	if ( ! hmbkp_is_function_available( 'exec' ) ) {
+	if ( hmbkp_is_disabled_function( 'exec' ) || ( ! @exec( 'hello backupwordpress' ) ) ) {
 		$php_user  = '<PHP USER>';
 		$php_group = '<PHP GROUP>';
 	} else {
