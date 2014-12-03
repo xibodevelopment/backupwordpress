@@ -384,6 +384,6 @@ function hmbkp_is_disabled_function( $function_name ) {
 		return array_key_exists( $function_name, array_map( 'trim', explode( ',', $disabled_functions ) ) );
 	}
 
-	// No value for disable_functions
+	// No value for disable_functions or ini_get itself is disabled
 	return false;
 }
