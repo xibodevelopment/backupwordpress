@@ -375,14 +375,15 @@ function hmbkp_clear_settings_errors(){
  *
  * @param $function_name
  *
- * @return bool True if ini var is not set or function, false if function is disabled.
+ * @return bool true if function is disabled, false otherwise.
  */
-function hmbkp_is_function_available( $function_name ) {
+function hmbkp_is_disabled_function( $function_name ) {
 
 	// Assignment done on purpose.
 	if ( $disabled_functions = @ini_get( 'disable_functions' ) ) {
-		return ! array_key_exists( $function_name, array_map( 'trim', explode( ',', $disabled_functions ) ) );
+		return array_key_exists( $function_name, array_map( 'trim', explode( ',', $disabled_functions ) ) );
 	}
 
-	return true;
+	// No value for disable_functions
+	return false;
 }
