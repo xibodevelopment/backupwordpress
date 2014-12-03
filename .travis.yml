@@ -4,9 +4,6 @@ php:
 - 5.4
 - 5.5
 env:
-  global:
-  # Encrypted github account info
-  - secure: naIYAQ7IbJcbeeDWOPLRAQwrT5BU6ufF/GC8/cpOgVjV2Za9rfWu7Yus+pYzIw8VBQDVqc2hUtUbLS10o0CDeGH+lyTZ1b4+tyFZbNkXwCPS6Y1CUn9hbe1zfFc0gq0Q0WPpwvsOy2VNrEBg0CFgUPmoZlx/LZl9nj5MbJvAbxw=
   matrix:
   - WP_VERSION=latest WP_MULTISITE=0
   - WP_VERSION=latest WP_MULTISITE=1
@@ -16,6 +13,8 @@ env:
   - WP_VERSION=3.9 WP_MULTISITE=1
   - WP_VERSION=3.8 WP_MULTISITE=0
   - WP_VERSION=3.8 WP_MULTISITE=1
+  global:
+    secure: SMPml9xPNS2AGYZyRzGU83qdH85tBI4VB4mTtRISE1DB64Tjg9WcD1Zrztw2BlynARgHNZD/BzVDVhQvIjzhRWvqPGTGw22RgikaZJV+eCBMaZ4VIP9uSdsgCWRpFkPdJbnVARfS9eWEehaacVOVM0CKRN8G3GQYWLVE5+m1LIw=
 sudo: false
 install:
 - git config --global user.email "paul@hmn.md"
@@ -33,9 +32,8 @@ before_script:
 - mkdir -p build/docs
 script:
 - phpunit --coverage-clover=coverage.clover --exclude-group customConfig
-
-- php --php-ini /srv/www/backupwordpress.dev/content/plugins/backupwordpress/tests/ini/php.ini `which phpunit` --filter test_is_disabled_function_when_function_is_disabled
-
+- php --php-ini /srv/www/backupwordpress.dev/content/plugins/backupwordpress/tests/ini/php.ini
+  `which phpunit` --filter test_is_disabled_function_when_function_is_disabled
 - php vendor/bin/phpdoc -d $TRAVIS_BUILD_DIR -t $TRAVIS_BUILD_DIR/build/docs --ignore
   $TRAVIS_BUILD_DIR/vendor/,$TRAVIS_BUILD_DIR/build/,$TRAVIS_BUILD_DIR/hm-backup/,$TRAVIS_BUILD_DIR/backdrop/,$TRAVIS_BUILD_DIR/assets/,$TRAVIS_BUILD_DIR/bin/,$TRAVIS_BUILD_DIR/languages/,$TRAVIS_BUILD_DIR/node_modules/,$TRAVIS_BUILD_DIR/tests/,$TRAVIS_BUILD_DIR/readme/
 after_script:
