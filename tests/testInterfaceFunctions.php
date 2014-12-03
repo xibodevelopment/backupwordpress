@@ -8,7 +8,7 @@
 class TestInterfaceFunctions extends WP_UnitTestCase {
 
 	/**
-	 * @group: functionavailable
+	 * @group customConfig
 	 */
 	public function test_function_is_available_when_function_is_disabled() {
 
@@ -17,9 +17,6 @@ class TestInterfaceFunctions extends WP_UnitTestCase {
 		$this->assertFalse( hmbkp_is_function_available( $function_to_check ) );
 	}
 
-	/**
-	 * @group: functionavailable
-	 */
 	public function test_function_is_available_when_function_is_enabled() {
 
 		$function_to_check = 'exec';
@@ -29,7 +26,7 @@ class TestInterfaceFunctions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @group: functionavailable
+	 * @group customConfig
 	 * @expectedException PHPUnit_Framework_Error_Warning
 	 */
 	public function test_function_is_available_when_ini_get_is_unavailable() {
