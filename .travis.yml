@@ -32,7 +32,10 @@ before_script:
 - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 - mkdir -p build/docs
 script:
-- phpunit --coverage-clover=coverage.clover
+- phpunit --coverage-clover=coverage.clover --exclude-group customConfig
+
+- php --php-ini /srv/www/backupwordpress.dev/content/plugins/backupwordpress/tests/ini/php.ini `which phpunit` --filter test_function_is_available_when_function_is_disabled
+
 - php vendor/bin/phpdoc -d $TRAVIS_BUILD_DIR -t $TRAVIS_BUILD_DIR/build/docs --ignore
   $TRAVIS_BUILD_DIR/vendor/,$TRAVIS_BUILD_DIR/build/,$TRAVIS_BUILD_DIR/hm-backup/,$TRAVIS_BUILD_DIR/backdrop/,$TRAVIS_BUILD_DIR/assets/,$TRAVIS_BUILD_DIR/bin/,$TRAVIS_BUILD_DIR/languages/,$TRAVIS_BUILD_DIR/node_modules/,$TRAVIS_BUILD_DIR/tests/,$TRAVIS_BUILD_DIR/readme/
 after_script:
