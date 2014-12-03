@@ -364,3 +364,15 @@ function hmbkp_get_settings_errors() {
 function hmbkp_clear_settings_errors(){
 	return delete_transient( 'hmbkp_settings_errors' );
 }
+
+/**
+ * Determines if a function has been disabled in the PHP config.
+ *
+ * @param $function_name
+ *
+ * @return bool
+ */
+function hmbkp_is_function_available( $function_name ) {
+
+	return array_key_exists( $function_name, array_map( 'trim', explode( ',', @ini_get( 'disable_functions' ) ) ) );
+}
