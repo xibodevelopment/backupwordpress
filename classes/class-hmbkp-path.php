@@ -195,7 +195,7 @@ class HMBKP_Path {
 	/**
 	 * @param string $reset
 	 */
-	protected function protect_path( $reset = 'no' ) {
+	public function protect_path( $reset = 'no' ) {
 
 		global $is_apache;
 
