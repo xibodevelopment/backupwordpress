@@ -141,6 +141,8 @@ class HMBKP_Path {
 	 */
 	public function calculate_path() {
 
+		$paths = array();
+
 		// If we have a custom path then try to use it
 		if ( $this->get_custom_path() ) {
 			$paths[] = $this->get_custom_path();
@@ -164,7 +166,9 @@ class HMBKP_Path {
 			}
 		}
 
-		$this->path = $path;
+		if ( isset( $path ) ) {
+			$this->path = $path;
+		}
 
 	}
 
