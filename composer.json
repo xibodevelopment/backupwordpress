@@ -2,7 +2,7 @@
     "name": "humanmade/backupwordpress",
     "description": "Simple automated backups of your WordPress powered website",
     "require-dev": {
-        "satooshi/php-coveralls": "~0.6"
+        "phpdocumentor/phpdocumentor":"dev-master"
     },
     "authors": [
         {

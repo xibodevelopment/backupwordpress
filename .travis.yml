@@ -1,42 +1,42 @@
-# Tell Travis CI we're using PHP
 language: php
-
-# Versions of PHP to test against
 php:
-  - 5.3
-  - 5.4
-  - 5.5
-
-# Specify versions of WordPress to test against
-# WP_VERSION = WordPress version number (use "master" for SVN trunk)
-# WP_MULTISITE = whether to test multisite (use either "0" or "1")
+- 5.3
+- 5.4
+- 5.5
 env:
-    global:
-      - PHPCS_DIR=/tmp/phpcs
-    matrix:
-    - WP_VERSION=latest WP_MULTISITE=0
-    - WP_VERSION=latest WP_MULTISITE=1
-    - WP_VERSION=4.0 WP_MULTISITE=0
-    - WP_VERSION=4.0 WP_MULTISITE=1
-    - WP_VERSION=3.9 WP_MULTISITE=0
-    - WP_VERSION=3.9 WP_MULTISITE=1
-
+  global:
+  - PHPCS_DIR=/tmp/phpcs
+  # Encrypted github account info
+  - secure: naIYAQ7IbJcbeeDWOPLRAQwrT5BU6ufF/GC8/cpOgVjV2Za9rfWu7Yus+pYzIw8VBQDVqc2hUtUbLS10o0CDeGH+lyTZ1b4+tyFZbNkXwCPS6Y1CUn9hbe1zfFc0gq0Q0WPpwvsOy2VNrEBg0CFgUPmoZlx/LZl9nj5MbJvAbxw=
+  matrix:
+  - WP_VERSION=latest WP_MULTISITE=0
+  - WP_VERSION=latest WP_MULTISITE=1
+  - WP_VERSION=4.0 WP_MULTISITE=0
+  - WP_VERSION=4.0 WP_MULTISITE=1
+  - WP_VERSION=3.9 WP_MULTISITE=0
+  - WP_VERSION=3.9 WP_MULTISITE=1
+  - WP_VERSION=3.8 WP_MULTISITE=0
+  - WP_VERSION=3.8 WP_MULTISITE=1
 sudo: false
-
+install:
+- git config --global user.email "paul@hmn.md"
+- git config --global user.name "Paul de Wouters"
 notifications:
+  email: false
   hipchat:
     rooms:
       secure: DdRbiWiLDnyzgRCFUjo+wiWCR6iNLTlipdLRCWufdeHPgpgAvAbo2+7D9Uvh+tjK5smynGTQfmDAnh4q7+Jy6qLOse7k/YBIvgLINEyCQ9EenpJYfz9C7/fAEvvRJpT6LObw68y6T35qsRMyFv0eeNemEuwDcMc0oEXeRLCgegQ=
-  email: false
-
-# Clones WordPress and configures our testing environment.
 before_script:
-    - composer selfupdate --quiet
-    - composer install -n --prefer-dist --no-progress
-    - export WP_TESTS_DIR=/tmp/wordpress-tests-lib/
-    - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-    - ./bin/prepare.sh
-
+- composer selfupdate --quiet
+- composer install -n --prefer-dist --no-progress
+- ./bin/prepare.sh
+- export WP_TESTS_DIR=/tmp/wordpress-tests-lib/
+- bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+- mkdir -p build/docs
 script:
-    - phpunit --coverage-clover=coverage.clover
-    - $PHPCS_DIR/scripts/phpcs --standard=$(if [ -e bin/phpcs.ruleset.xml ]; then echo bin/phpcs.ruleset.xml; else echo WordPress-Core; fi) $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php')
+- $PHPCS_DIR/scripts/phpcs --standard=$(if [ -e bin/phpcs.ruleset.xml ]; then echo bin/phpcs.ruleset.xml; else echo WordPress-Core; fi) $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php')
+- phpunit --coverage-clover=coverage.clover
+- php vendor/bin/phpdoc -d $TRAVIS_BUILD_DIR -t $TRAVIS_BUILD_DIR/build/docs --ignore
+  $TRAVIS_BUILD_DIR/vendor/,$TRAVIS_BUILD_DIR/build/,$TRAVIS_BUILD_DIR/hm-backup/,$TRAVIS_BUILD_DIR/backdrop/,$TRAVIS_BUILD_DIR/assets/,$TRAVIS_BUILD_DIR/bin/,$TRAVIS_BUILD_DIR/languages/,$TRAVIS_BUILD_DIR/node_modules/,$TRAVIS_BUILD_DIR/tests/,$TRAVIS_BUILD_DIR/readme/
+after_script:
+- bash $TRAVIS_BUILD_DIR/bin/travis_shell_after_success.sh
