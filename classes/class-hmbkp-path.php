@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package BackUpWordPress
+ * @subpackage BackUpWordPress/classes
+ */
 
 /**
  * Returns the backup path
@@ -33,8 +37,14 @@ class HMBKP_Path {
 	 */
 	protected $custom_path;
 
+	/**
+	 * @var HMBKP_Path The singleton instance.
+	 */
 	protected static $instance;
 
+	/**
+	 * @return HMBKP_Path
+	 */
 	public static function get_instance() {
 
 		if ( ! self::$instance ) {
@@ -62,6 +72,11 @@ class HMBKP_Path {
 
 	}
 
+	/**
+	 * Determines the path to store backups.
+	 *
+	 * @param $path
+	 */
 	public function set_path( $path ) {
 
 		$this->custom_path = $path;
@@ -102,6 +117,11 @@ class HMBKP_Path {
 
 	}
 
+	/**
+	 * Builds an array containing existing backups folders.
+	 *
+	 * @return array
+	 */
 	public function get_existing_paths() {
 
 		$upload_dir = wp_upload_dir();
@@ -172,6 +192,9 @@ class HMBKP_Path {
 
 	}
 
+	/**
+	 * @param string $reset
+	 */
 	protected function protect_path( $reset = 'no' ) {
 
 		global $is_apache;
@@ -179,7 +202,7 @@ class HMBKP_Path {
 		// Protect against directory browsing by including an index.html file
 		$index = $this->path . '/index.html';
 
-		if ( $reset === 'reset' && file_exists( $index ) ) {
+		if ( ( 'reset' === $reset ) && file_exists( $index ) ) {
 			@unlink( $index );
 		}
 
@@ -189,7 +212,7 @@ class HMBKP_Path {
 
 		$htaccess = $this->path . '/.htaccess';
 
-		if ( $reset === 'reset' && file_exists( $htaccess ) ) {
+		if ( ( 'reset' === $reset ) && file_exists( $htaccess ) ) {
 			@unlink( $htaccess );
 		}
 
@@ -223,7 +246,6 @@ class HMBKP_Path {
 			foreach ( $paths as $old_path ) {
 				$this->move_old_backups( $old_path );
 			}
-
 		}
 
 	}
@@ -261,9 +283,7 @@ class HMBKP_Path {
 						copy( trailingslashit( $from ) . $file, trailingslashit( $this->get_path() ) . $file );
 
 					}
-
 				}
-
 			}
 
 			closedir( $handle );
@@ -296,7 +316,6 @@ class HMBKP_Path {
 					@unlink( $file );
 
 				}
-
 			}
 
 			closedir( $handle );
