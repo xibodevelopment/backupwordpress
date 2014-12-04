@@ -28,9 +28,10 @@ module.exports = function (grunt) {
 		},
 
         checktextdomain: {
-            standard{
-                options:{
-                    text_domain: 'backupwordpress', //Specify allowed domain(s)
+            standard: {
+                options: {
+                    text_domain: 'backupwordpress', //Specify allowed domain(s),
+                    correct_domain: true,
                     keywords: [ //List keyword specifications
                         '__:1,2d',
                         '_e:1,2d',
@@ -49,7 +50,7 @@ module.exports = function (grunt) {
                     ]
                 },
                 files: [{
-                    src: ['**/*.php'], //all php
+                    src: ['**/*.php', '!**/vendor/**', '!**/node_modules/**', '!**/tests/**'], //all php
                     expand: true,
                 }],
             }
