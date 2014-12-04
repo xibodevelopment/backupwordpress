@@ -13,7 +13,8 @@ class HMBKP_Notices {
 	/**
 	 *
 	 */
-	private function __construct() {}
+	private function __construct() {
+	}
 
 	/**
 	 * @return HMBKP_Notices
@@ -23,6 +24,7 @@ class HMBKP_Notices {
 		if ( ! ( self::$_instance instanceof HMBKP_Notices ) ) {
 			self::$_instance = new HMBKP_Notices();
 		}
+
 		return self::$_instance;
 	}
 

@@ -63,13 +63,16 @@ class HMBKP_Schedules {
 	 * Get a schedule by ID
 	 *
 	 * @param $id
+	 *
 	 * @return HMBKP_Scheduled_Backup
 	 */
 	public function get_schedule( $id ) {
 
-		foreach ( $this->schedules as $schedule )
-			if ( $schedule->get_id() == $id )
+		foreach ( $this->schedules as $schedule ) {
+			if ( $schedule->get_id() == $id ) {
 				return $schedule;
+			}
+		}
 
 		return null;
 	}
@@ -78,7 +81,9 @@ class HMBKP_Schedules {
 	 * Instantiate the individual scheduled backup objects
 	 *
 	 * @access private
+	 *
 	 * @param string $id
+	 *
 	 * @return array An array of HMBKP_Scheduled_Backup objects
 	 */
 	private function instantiate( $id ) {

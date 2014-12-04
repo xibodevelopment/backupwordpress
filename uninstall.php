@@ -41,11 +41,25 @@ foreach ( $schedules->get_schedules() as $schedule ) {
 hmbkp_rmdirtree( hmbkp_path() );
 
 // Remove all the options
-foreach ( array( 'hmbkp_enable_support', 'hmbkp_plugin_version', 'hmbkp_path', 'hmbkp_default_path', 'hmbkp_upsell' ) as $option ) {
+foreach (
+	array(
+		'hmbkp_enable_support',
+		'hmbkp_plugin_version',
+		'hmbkp_path',
+		'hmbkp_default_path',
+		'hmbkp_upsell'
+	) as $option
+) {
 	delete_option( $option );
 }
 
 // Delete all transients
-foreach ( array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running' ) as $transient ) {
+foreach (
+	array(
+		'hmbkp_plugin_data',
+		'hmbkp_directory_filesizes',
+		'hmbkp_directory_filesize_running'
+	) as $transient
+) {
 	delete_transient( $transient );
 }

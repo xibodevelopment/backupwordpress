@@ -10,26 +10,26 @@
 
 			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
 
-			<tr>
+				<tr>
 
-				<td><?php echo esc_html( $requirement->name() ); ?></td>
+					<td><?php echo esc_html( $requirement->name() ); ?></td>
 
-				<td>
-					<code><?php echo esc_html( $requirement->result() ); ?></code>
-				</td>
+					<td>
+						<code><?php echo esc_html( $requirement->result() ); ?></code>
+					</td>
 
-			</tr>
+				</tr>
 
 			<?php } else { ?>
 
-			<tr>
+				<tr>
 
-				<td colspan="2">
-					<?php echo esc_html( $requirement->name() ); ?>
-					<pre><?php echo esc_html( $requirement->result() ); ?></pre>
-				</td>
+					<td colspan="2">
+						<?php echo esc_html( $requirement->name() ); ?>
+						<pre><?php echo esc_html( $requirement->result() ); ?></pre>
+					</td>
 
-			</tr>
+				</tr>
 
 			<?php } ?>
 

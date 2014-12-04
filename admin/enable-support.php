@@ -6,56 +6,57 @@
 
 <div class="server-info">
 
-<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+	<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
 
-	<table class="fixed widefat">
+		<table class="fixed widefat">
 
-		<thead>
+			<thead>
 			<tr>
 				<th scope="col" colspan="2"><?php echo ucwords( $group ); ?></th>
 			</tr>
-		</thead>
+			</thead>
 
-		<tbody>
+			<tbody>
 
-		<?php foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) : ?>
+			<?php foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) : ?>
 
-			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
+				<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
 
-			<tr>
+					<tr>
 
-				<td><?php echo esc_html( $requirement->name() ); ?></td>
+						<td><?php echo esc_html( $requirement->name() ); ?></td>
 
-				<td>
-					<code><?php echo esc_html( $requirement->result() ); ?></code>
-				</td>
+						<td>
+							<code><?php echo esc_html( $requirement->result() ); ?></code>
+						</td>
 
-			</tr>
+					</tr>
 
-			<?php } else { ?>
+				<?php } else { ?>
 
-			<tr>
+					<tr>
 
-				<td colspan="2">
-					<?php echo esc_html( $requirement->name() ); ?>
-					<pre><?php echo esc_html( $requirement->result() ); ?></pre>
-				</td>
+						<td colspan="2">
+							<?php echo esc_html( $requirement->name() ); ?>
+							<pre><?php echo esc_html( $requirement->result() ); ?></pre>
+						</td>
 
-			</tr>
+					</tr>
 
-			<?php } ?>
+				<?php } ?>
 
-		<?php endforeach; ?>
+			<?php endforeach; ?>
 
-		</tbody>
+			</tbody>
 
-	</table>
+		</table>
 
-<?php endforeach; ?>
+	<?php endforeach; ?>
 
 </div>
 
 <p class="howto"><?php _e( 'You can disable support in the future by deactivating BackUpWordPress.', 'hmbkp' ); ?></p>
 
 <a href="#" class="button-secondary hmbkp-colorbox-close"><?php _e( 'No thanks', 'hmbkp' ); ?></a>
-<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_enable_support' ), admin_url( 'admin-post.php' ) ), 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' ) ); ?>" class="button-primary right"><?php _e( 'Yes I want to enable support', 'hmbkp' ); ?></a>
+<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_enable_support' ), admin_url( 'admin-post.php' ) ), 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' ) ); ?>"
+   class="button-primary right"><?php _e( 'Yes I want to enable support', 'hmbkp' ); ?></a>

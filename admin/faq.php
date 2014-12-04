@@ -1,7 +1,7 @@
 <?php
 echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', 'hmbkp' ) . '</strong></p>' .
 
-     '<p>' . __( 'Backups are stored on your server in <code>/wp-content/backups</code>, you can change the directory.', 'hmbkp' ). '</p>' .
+     '<p>' . __( 'Backups are stored on your server in <code>/wp-content/backups</code>, you can change the directory.', 'hmbkp' ) . '</p>' .
 
      '<p>' . __( 'Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.', 'hmbkp' ) . '</p>' .
 

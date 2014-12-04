@@ -91,8 +91,26 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$this->set_path( hmbkp_path() );
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
-		$this->set_database_dump_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.sql' );
+		$this->set_archive_filename( implode( '-', array(
+					sanitize_title( str_ireplace( array(
+								'http://',
+								'https://',
+								'www'
+							), '', home_url() ) ),
+					$this->get_id(),
+					$this->get_type(),
+					date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) )
+				) ) . '.zip' );
+		$this->set_database_dump_filename( implode( '-', array(
+					sanitize_title( str_ireplace( array(
+								'http://',
+								'https://',
+								'www'
+							), '', home_url() ) ),
+					$this->get_id(),
+					$this->get_type(),
+					date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) )
+				) ) . '.sql' );
 
 		// Setup the schedule if it isn't set
 		if ( ( ! $this->is_cron_scheduled() && $this->get_reoccurrence() !== 'manually' ) ) {
@@ -401,7 +419,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				// If there is already a file with exactly the same filesize then let's keep increasing the filesize of this one until we don't have a clash
 				while ( array_key_exists( $filesize, $files_with_size ) ) {
-					$filesize++;
+					$filesize ++;
 				}
 
 				$files_with_size[ $filesize ] = $file;
@@ -482,9 +500,10 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * If $file is a file then just return the result of `filesize()`.
 	 * If $file is a directory then schedule a recursive filesize scan.
 	 *
-	 * @param SplFileInfo $file			The file or directory you want to know the size of
-	 * @param bool $skip_excluded_files	Skip excluded files when calculating a directories total size
-	 * @return int 						The total of the file or directory
+	 * @param SplFileInfo $file The file or directory you want to know the size of
+	 * @param bool $skip_excluded_files Skip excluded files when calculating a directories total size
+	 *
+	 * @return int                        The total of the file or directory
 	 */
 	public function filesize( SplFileInfo $file, $skip_excluded_files = false ) {
 
@@ -519,9 +538,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			}
 
-			$directory_size = 0;
+			$directory_size   = 0;
 			$current_pathname = trailingslashit( $file->getPathname() );
-			$root = trailingslashit( $this->get_root() );
+			$root             = trailingslashit( $this->get_root() );
 
 			foreach ( $directory_sizes as $path => $size ) {
 

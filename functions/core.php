@@ -111,13 +111,9 @@ function hmbkp_update() {
 		// Backup type
 		if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) ) {
 			$legacy_schedule->set_type( 'file' );
-		}
-
-		elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) ) {
+		} elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) ) {
 			$legacy_schedule->set_type( 'database' );
-		}
-
-		else {
+		} else {
 			$legacy_schedule->set_type( 'complete' );
 		}
 
@@ -137,9 +133,7 @@ function hmbkp_update() {
 		// Max backups
 		if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) ) {
 			$legacy_schedule->set_max_backups( (int) HMBKP_MAX_BACKUPS );
-		}
-
-		else {
+		} else {
 			$legacy_schedule->set_max_backups( (int) get_option( 'hmbkp_max_backups', 10 ) );
 		}
 
@@ -151,19 +145,31 @@ function hmbkp_update() {
 		// Backup email
 		if ( defined( 'HMBKP_EMAIL' ) && is_email( HMBKP_EMAIL ) ) {
 			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => HMBKP_EMAIL ) );
-		}
-
-		elseif ( is_email( get_option( 'hmbkp_email_address' ) ) ) {
+		} elseif ( is_email( get_option( 'hmbkp_email_address' ) ) ) {
 			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => get_option( 'hmbkp_email_address' ) ) );
 		}
 
 		// Set the archive filename to what it used to be
-		$legacy_schedule->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+		$legacy_schedule->set_archive_filename( implode( '-', array(
+					get_bloginfo( 'name' ),
+					'backup',
+					date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) )
+				) ) . '.zip' );
 
 		$legacy_schedule->save();
 
 		// Remove the legacy options
-		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name ) {
+		foreach (
+			array(
+				'hmbkp_database_only',
+				'hmbkp_files_only',
+				'hmbkp_max_backups',
+				'hmbkp_email_address',
+				'hmbkp_email',
+				'hmbkp_schedule_frequency',
+				'hmbkp_disable_automatic_backup'
+			) as $option_name
+		) {
 			delete_option( $option_name );
 		}
 
@@ -242,8 +248,9 @@ function hmbkp_setup_default_schedules() {
 
 	$schedules = HMBKP_Schedules::get_instance();
 
-	if ( $schedules->get_schedules() )
+	if ( $schedules->get_schedules() ) {
 		return;
+	}
 
 	/**
 	 * Schedule a database backup daily and store backups
@@ -251,7 +258,10 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$database_daily = new HMBKP_Scheduled_Backup( (string) time() );
 	$database_daily->set_type( 'database' );
-	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
+	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_daily', array(
+				'hours'   => '23',
+				'minutes' => '0'
+			) ) );
 	$database_daily->set_reoccurrence( 'hmbkp_daily' );
 	$database_daily->set_max_backups( 7 );
 	$database_daily->save();
@@ -262,7 +272,11 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$complete_weekly = new HMBKP_Scheduled_Backup( (string) ( time() + 1 ) );
 	$complete_weekly->set_type( 'complete' );
-	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
+	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_weekly', array(
+				'day_of_week' => 'sunday',
+				'hours'       => '3',
+				'minutes'     => '0'
+			) ) );
 	$complete_weekly->set_reoccurrence( 'hmbkp_weekly' );
 	$complete_weekly->set_max_backups( 3 );
 	$complete_weekly->save();
@@ -283,16 +297,26 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
  * Return an array of cron schedules
  *
  * @param $schedules
+ *
  * @return array $reccurrences
  */
 function hmbkp_cron_schedules( $schedules ) {
 
 	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'hmbkp' ) );
-	$schedules['hmbkp_twicedaily']  = array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
+	$schedules['hmbkp_twicedaily']  = array(
+		'interval' => 12 * HOUR_IN_SECONDS,
+		'display'  => __( 'Twice Daily', 'hmbkp' )
+	);
 	$schedules['hmbkp_daily']       = array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'hmbkp' ) );
 	$schedules['hmbkp_weekly']      = array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'hmbkp' ) );
-	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'hmbkp' ) );
-	$schedules['hmbkp_monthly']     = array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'hmbkp' ) );
+	$schedules['hmbkp_fortnightly'] = array(
+		'interval' => 2 * WEEK_IN_SECONDS,
+		'display'  => __( 'Once Biweekly', 'hmbkp' )
+	);
+	$schedules['hmbkp_monthly']     = array(
+		'interval' => 30 * DAY_IN_SECONDS,
+		'display'  => __( 'Once Monthly', 'hmbkp' )
+	);
 
 	return $schedules;
 }
@@ -304,29 +328,33 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
  * all the files and sub-directories.
  *
  * @param string $dir
+ *
  * @return bool
  * @return bool|WP_Error
  */
 function hmbkp_rmdirtree( $dir ) {
 
-	if ( false !== strpos( HM_Backup::get_home_path(), $dir ) )
+	if ( false !== strpos( HM_Backup::get_home_path(), $dir ) ) {
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'hmbkp' ) ) );
+	}
 
-	if ( is_file( $dir ) )
+	if ( is_file( $dir ) ) {
 		@unlink( $dir );
+	}
 
-	if ( ! is_dir( $dir ) || ! is_readable( $dir ) )
+	if ( ! is_dir( $dir ) || ! is_readable( $dir ) ) {
 		return false;
+	}
 
 	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 	foreach ( $files as $file ) {
 
-		if ( $file->isDir() )
+		if ( $file->isDir() ) {
 			@rmdir( $file->getPathname() );
-
-		else
+		} else {
 			@unlink( $file->getPathname() );
+		}
 
 	}
 
@@ -349,26 +377,31 @@ function hmbkp_path() {
 	$path = untrailingslashit( get_option( 'hmbkp_path' ) );
 
 	// Allow the backups path to be defined
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
 		$path = untrailingslashit( HMBKP_PATH );
+	}
 
 	// If the dir doesn't exist or isn't writable then use the default path instead instead
-	if ( ( ! $path || ( is_dir( $path ) && ! wp_is_writable( $path ) ) || ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) ) && $path !== hmbkp_path_default() )
+	if ( ( ! $path || ( is_dir( $path ) && ! wp_is_writable( $path ) ) || ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) ) && $path !== hmbkp_path_default() ) {
 		$path = hmbkp_path_default();
+	}
 
 	// Create the backups directory if it doesn't exist
-	if ( ! is_dir( $path ) && is_writable( dirname( $path ) ) )
+	if ( ! is_dir( $path ) && is_writable( dirname( $path ) ) ) {
 		wp_mkdir_p( $path );
+	}
 
 	// If the path has changed then cache it
-	if ( get_option( 'hmbkp_path' ) !== $path )
+	if ( get_option( 'hmbkp_path' ) !== $path ) {
 		update_option( 'hmbkp_path', $path );
+	}
 
 	// Protect against directory browsing by including a index.html file
 	$index = $path . '/index.html';
 
-	if ( ! file_exists( $index ) && wp_is_writable( $path ) )
+	if ( ! file_exists( $index ) && wp_is_writable( $path ) ) {
 		file_put_contents( $index, '' );
+	}
 
 	$htaccess = $path . '/.htaccess';
 
@@ -434,27 +467,32 @@ function hmbkp_path_default() {
  * location
  *
  * @param string $from path to move the backups dir from
- * @param string $to   path to move the backups dir to
+ * @param string $to path to move the backups dir to
+ *
  * @return void
  */
 function hmbkp_path_move( $from, $to ) {
 
-	if ( ! trim( untrailingslashit( trim( $from ) ) ) || ! trim( untrailingslashit( trim( $to ) ) ) )
+	if ( ! trim( untrailingslashit( trim( $from ) ) ) || ! trim( untrailingslashit( trim( $to ) ) ) ) {
 		return;
+	}
 
 	// Create the new directory if it doesn't exist
-	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
+	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) ) {
 		wp_mkdir_p( $to );
+	}
 
 	// Bail if we couldn't
-	if ( ! is_dir( $to ) || ! wp_is_writable( $to ) )
+	if ( ! is_dir( $to ) || ! wp_is_writable( $to ) ) {
 		return false;
+	}
 
 	update_option( 'hmbkp_path', $to );
 
 	// Bail if the old directory doesn't exist
-	if ( ! is_dir( $from ) )
+	if ( ! is_dir( $from ) ) {
 		return false;
+	}
 
 	// Cleanup before we start moving things
 	hmbkp_cleanup();
@@ -463,9 +501,11 @@ function hmbkp_path_move( $from, $to ) {
 	if ( $handle = opendir( $from ) ) {
 
 		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( 'zip' === pathinfo( $file, PATHINFO_EXTENSION ) )
-				if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
+			if ( 'zip' === pathinfo( $file, PATHINFO_EXTENSION ) ) {
+				if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) ) {
 					copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
+				}
+			}
 		}
 
 		closedir( $handle );
@@ -473,8 +513,9 @@ function hmbkp_path_move( $from, $to ) {
 	}
 
 	// Only delete the old directory if it's inside WP_CONTENT_DIR
-	if ( false !==strpos( $from, WP_CONTENT_DIR ) )
+	if ( false !== strpos( $from, WP_CONTENT_DIR ) ) {
 		hmbkp_rmdirtree( $from );
+	}
 
 }
 
@@ -492,8 +533,9 @@ function hmbkp_possible() {
 
 	$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
 
-	if ( ! is_readable( $test_backup->get_root() ) )
+	if ( ! is_readable( $test_backup->get_root() ) ) {
 		return false;
+	}
 
 	return true;
 }
@@ -505,19 +547,27 @@ function hmbkp_possible() {
  */
 function hmbkp_cleanup() {
 
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
 		return;
+	}
 
 	$hmbkp_path = hmbkp_path();
 
-	if ( ! is_dir( $hmbkp_path ) )
+	if ( ! is_dir( $hmbkp_path ) ) {
 		return;
+	}
 
 	if ( $handle = opendir( $hmbkp_path ) ) {
 
 		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && 'zip' !== pathinfo( $file, PATHINFO_EXTENSION ) && false === strpos( $file, '-running' ) )
+			if ( ! in_array( $file, array(
+						'.',
+						'..',
+						'index.html'
+					) ) && 'zip' !== pathinfo( $file, PATHINFO_EXTENSION ) && false === strpos( $file, '-running' )
+			) {
 				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
+			}
 		}
 
 		closedir( $handle );
@@ -534,16 +584,19 @@ function hmbkp_cleanup() {
 function hmbkp_constant_changes() {
 
 	// If a custom backup path has been set or changed
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) {
 		hmbkp_path_move( $from, HMBKP_PATH );
+	}
 
 	// If a custom backup path has been removed
-	if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_path_default() !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
+	if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_path_default() !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) ) {
 		hmbkp_path_move( $from, hmbkp_path_default() );
+	}
 
 	// If the custom path has changed and the new directory isn't writable
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! wp_is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) )
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! wp_is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) ) {
 		hmbkp_path_move( HMBKP_PATH, hmbkp_path_default() );
+	}
 
 }
 
@@ -558,8 +611,9 @@ function hmbkp_get_max_attachment_size() {
 
 	$max_size = '10mb';
 
-	if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) && wp_convert_hr_to_bytes( HMBKP_ATTACHMENT_MAX_FILESIZE ) )
+	if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) && wp_convert_hr_to_bytes( HMBKP_ATTACHMENT_MAX_FILESIZE ) ) {
 		$max_size = HMBKP_ATTACHMENT_MAX_FILESIZE;
+	}
 
 	return wp_convert_hr_to_bytes( $max_size );
 
@@ -586,8 +640,9 @@ function hmbkp_get_cron_schedules() {
 
 	// remove any schedule whose key is not prefixed with 'hmbkp_'
 	foreach ( $schedules as $key => $arr ) {
-		if ( ! preg_match( '/^hmbkp_/', $key ) )
-			unset( $schedules[$key] );
+		if ( ! preg_match( '/^hmbkp_/', $key ) ) {
+			unset( $schedules[ $key ] );
+		}
 	}
 
 	return $schedules;
@@ -598,15 +653,15 @@ function hmbkp_get_cron_schedules() {
  * @param array $times {
  *     An array of time arguments. Optional.
  *
- *     @type int $minutes          The minute to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ * @type int $minutes The minute to start the schedule on. Defaults to current time + 10 minutes. Accepts
  *                                 any valid `date( 'i' )` output.
- *     @type int $hours            The hour to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ * @type int $hours The hour to start the schedule on. Defaults to current time + 10 minutes. Accepts
  *                                 any valid `date( 'G' )` output.
- *     @type string $day_of_week   The day of the week to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ * @type string $day_of_week The day of the week to start the schedule on. Defaults to current time + 10 minutes. Accepts
  *                                 any valid `date( 'l' )` output.
- *     @type int $day_of_month     The day of the month to start the schedule on. Defaults to current time + 10 minutes. Accepts
+ * @type int $day_of_month The day of the month to start the schedule on. Defaults to current time + 10 minutes. Accepts
  *                                 any valid `date( 'j' )` output.
- *     @type int $now              The current time. Defaults to `time()`. Accepts any valid timestamp.
+ * @type int $now The current time. Defaults to `time()`. Accepts any valid timestamp.
  *
  * }
  * @return int $timestamp Returns the resulting timestamp on success and Int 0 on failure
@@ -638,9 +693,7 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 	// Allow the hours and minutes to be overwritten by a constant
 	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {
 		$hm = HMBKP_SCHEDULE_TIME;
-	}
-
-	// The hour and minute that the schedule should start on
+	} // The hour and minute that the schedule should start on
 	else {
 		$hm = $args['hours'] . ':' . $args['minutes'] . ':00';
 	}
@@ -668,12 +721,14 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 			$schedule_start = date( 'F', $args['now'] ) . ' ' . $args['day_of_month'] . ' ' . $hm;
 
 			// If we've already gone past that day this month then we'll need to start next month
-			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] )
-				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) )  . ' ' . $args['day_of_month'] . ' ' . $hm;
+			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] ) {
+				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) ) . ' ' . $args['day_of_month'] . ' ' . $hm;
+			}
 
 			// If that's still in the past then we'll need to jump to next year
-			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] )
-				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) )  . ' ' . $args['day_of_month'] . ' ' . date( 'Y', strtotime( '+ 1 year', $args['now'] ) ) . ' ' . $hm;
+			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] ) {
+				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) ) . ' ' . $args['day_of_month'] . ' ' . date( 'Y', strtotime( '+ 1 year', $args['now'] ) ) . ' ' . $hm;
+			}
 
 			break;
 		default :

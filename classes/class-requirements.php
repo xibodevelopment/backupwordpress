@@ -19,6 +19,7 @@ class HMBKP_Requirements {
 	 * Get the array of registered requirements
 	 *
 	 * @param bool $group
+	 *
 	 * @return array
 	 */
 	public static function get_requirements( $group = false ) {
@@ -45,6 +46,7 @@ class HMBKP_Requirements {
 	 *
 	 * @param        $class
 	 * @param string $group
+	 *
 	 * @return WP_Error
 	 */
 	public static function register( $class, $group = 'misc' ) {
@@ -53,7 +55,7 @@ class HMBKP_Requirements {
 			return new WP_Error( 'invalid argument', 'Argument 1 for ' . __METHOD__ . ' must be a valid class' );
 		}
 
-		self::$requirements[$group][] = $class;
+		self::$requirements[ $group ][] = $class;
 
 	}
 
@@ -61,7 +63,9 @@ class HMBKP_Requirements {
 	 * Instantiate the individual requirement classes
 	 *
 	 * @access private
+	 *
 	 * @param string $class
+	 *
 	 * @return array An array of instantiated classes
 	 */
 	private static function instantiate( $class ) {
@@ -103,8 +107,9 @@ abstract class HMBKP_Requirement {
 
 		$test = $this->test();
 
-		if ( is_string( $test ) && $test )
+		if ( is_string( $test ) && $test ) {
 			return $test;
+		}
 
 		if ( is_bool( $test ) || empty( $test ) ) {
 
@@ -657,8 +662,9 @@ class HMBKP_Requirement_Server_Software extends HMBKP_Requirement {
 	 */
 	protected function test() {
 
-		if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) )
+		if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) ) {
 			return $_SERVER['SERVER_SOFTWARE'];
+		}
 
 		return false;
 
@@ -905,7 +911,7 @@ class HMBKP_Requirement_Active_Plugins extends HMBKP_Requirement {
 
 	var $name = 'Active Plugins';
 
-	protected function test(){
+	protected function test() {
 		return get_option( 'active_plugins' );
 	}
 
@@ -917,7 +923,7 @@ class HMBKP_Requirement_Home_Url extends HMBKP_Requirement {
 
 	var $name = 'Home URL';
 
-	protected function test(){
+	protected function test() {
 		return home_url();
 	}
 
@@ -944,14 +950,16 @@ class HMBKP_Requirement_Plugin_Version extends HMBKP_Requirement {
 		return HMBKP_VERSION;
 	}
 }
+
 HMBKP_Requirements::register( 'HMBKP_Requirement_Plugin_Version', 'constants' );
 
 class HMBKP_Requirement_Max_Exec extends HMBKP_Requirement {
 
 	var $name = 'Max execution time';
 
-	protected function test(){
+	protected function test() {
 		return @ini_get( 'max_execution_time' );
 	}
 }
+
 HMBKP_Requirements::register( 'HMBKP_Requirement_Max_Exec', 'PHP' );

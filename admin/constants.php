@@ -14,7 +14,8 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_PATH . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The path to folder you would like to store your backup files in, defaults to %s.', 'hmbkp' ), '<code>' . esc_html( hmbkp_path_default() ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p>
+				<p><?php printf( __( 'The path to folder you would like to store your backup files in, defaults to %s.', 'hmbkp' ), '<code>' . esc_html( hmbkp_path_default() ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?>
+					<code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p>
 
 			</td>
 
@@ -30,7 +31,8 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_MYSQLDUMP_PATH . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The path to your %1$s executable. Will be used for the %2$s part of the back up if available.', 'hmbkp' ), '<code>mysqldump</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_MYSQLDUMP_PATH', '/opt/local/bin/mysqldump' );</code></p>
+				<p><?php printf( __( 'The path to your %1$s executable. Will be used for the %2$s part of the back up if available.', 'hmbkp' ), '<code>mysqldump</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?>
+					<code>define( 'HMBKP_MYSQLDUMP_PATH', '/opt/local/bin/mysqldump' );</code></p>
 
 			</td>
 
@@ -46,7 +48,8 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ZIP_PATH . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available.', 'hmbkp' ), '<code>zip</code>', '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ZIP_PATH', '/opt/local/bin/zip' );</code></p>
+				<p><?php printf( __( 'The path to your %1$s executable. Will be used to zip up your %2$s and %3$s if available.', 'hmbkp' ), '<code>zip</code>', '<code>' . __( 'files', 'hmbkp' ) . '</code>', '<code>' . __( 'database', 'hmbkp' ) . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?>
+					<code>define( 'HMBKP_ZIP_PATH', '/opt/local/bin/zip' );</code></p>
 
 			</td>
 
@@ -62,7 +65,8 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_EXCLUDE . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php _e( 'Comma separated list of files or directories to exclude, the backups directory is automatically excluded.', 'hmbkp' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_EXCLUDE', '/wp-content/uploads/, /stats/, .svn/, *.txt' );</code></p>
+				<p><?php _e( 'Comma separated list of files or directories to exclude, the backups directory is automatically excluded.', 'hmbkp' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?>
+					<code>define( 'HMBKP_EXCLUDE', '/wp-content/uploads/, /stats/, .svn/, *.txt' );</code></p>
 
 			</td>
 
@@ -78,7 +82,8 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_CAPABILITY . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The capability to use when calling %1$s. Defaults to %2$s.', 'hmbkp' ), '<code>add_menu_page</code>', '<code>manage_options</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_CAPABILITY', 'edit_posts' );</code></p>
+				<p><?php printf( __( 'The capability to use when calling %1$s. Defaults to %2$s.', 'hmbkp' ), '<code>add_menu_page</code>', '<code>manage_options</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?>
+					<code>define( 'HMBKP_CAPABILITY', 'edit_posts' );</code></p>
 
 			</td>
 
@@ -94,7 +99,8 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_ROOT . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'hmbkp' ), '<code>' . HM_Backup::get_home_path() . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p>
+				<p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'hmbkp' ), '<code>' . HM_Backup::get_home_path() . '</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?>
+					<code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p>
 
 			</td>
 
@@ -110,14 +116,16 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'hmbkp' ), '<code>' . HMBKP_SCHEDULE_TIME . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The time that your schedules should run. Defaults to %s.', 'hmbkp' ), '<code>23:00</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?> <code>define( 'HMBKP_SCHEDULE_TIME', '07:30' );</code></p>
+				<p><?php printf( __( 'The time that your schedules should run. Defaults to %s.', 'hmbkp' ), '<code>23:00</code>' ); ?> <?php _e( 'e.g.', 'hmbkp' ); ?>
+					<code>define( 'HMBKP_SCHEDULE_TIME', '07:30' );</code></p>
 
 			</td>
 
 		</tr>
 
-		<?php foreach ( HMBKP_Services::get_services() as $file => $service )
-			echo wp_kses_post( call_user_func( array( $service, 'constant' ) ) ); ?>
+		<?php foreach ( HMBKP_Services::get_services() as $file => $service ) {
+			echo wp_kses_post( call_user_func( array( $service, 'constant' ) ) );
+		} ?>
 
 	</table>
 

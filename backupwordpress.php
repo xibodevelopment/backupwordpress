@@ -47,7 +47,7 @@ if ( ! defined( 'HMBKP_PLUGIN_PATH' ) ) {
 }
 
 if ( ! defined( 'HMBKP_PLUGIN_URL' ) ) {
-	define( 'HMBKP_PLUGIN_URL', plugin_dir_url(  __FILE__  ) );
+	define( 'HMBKP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
 define( 'HMBKP_PLUGIN_LANG_DIR', apply_filters( 'hmbkp_filter_lang_dir', HMBKP_PLUGIN_SLUG . '/languages/' ) );
@@ -65,7 +65,19 @@ if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
 
 $key = array( ABSPATH, time() );
 
-foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' ) as $constant ) {
+foreach (
+	array(
+		'AUTH_KEY',
+		'SECURE_AUTH_KEY',
+		'LOGGED_IN_KEY',
+		'NONCE_KEY',
+		'AUTH_SALT',
+		'SECURE_AUTH_SALT',
+		'LOGGED_IN_SALT',
+		'NONCE_SALT',
+		'SECRET_KEY'
+	) as $constant
+) {
 
 	if ( defined( $constant ) ) {
 		$key[] = constant( $constant );
@@ -104,8 +116,9 @@ require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
 // Load hm-backup
-if ( ! class_exists( 'HM_Backup' ) )
+if ( ! class_exists( 'HM_Backup' ) ) {
 	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
+}
 
 // Load Backdrop
 require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
@@ -158,6 +171,7 @@ function hmbkp_init() {
 	}
 
 }
+
 add_action( 'admin_init', 'hmbkp_init' );
 
 /**
@@ -177,19 +191,20 @@ function hmbkp_load_scripts() {
 		'hmbkp',
 		'hmbkp',
 		array(
-			'page_slug'    => HMBKP_PLUGIN_SLUG,
-			'nonce'         		   => wp_create_nonce( 'hmbkp_nonce' ),
+			'page_slug'                => HMBKP_PLUGIN_SLUG,
+			'nonce'                    => wp_create_nonce( 'hmbkp_nonce' ),
 			'hmbkp_run_schedule_nonce' => wp_create_nonce( 'hmbkp_run_schedule' ),
-			'update'				   => __( 'Update', 'hmbkp' ),
-			'cancel'				   => __( 'Cancel', 'hmbkp' ),
-			'delete_schedule'		   => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'delete_backup'			   => __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_exclude_rule'	   => __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_old_backups'	   => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+			'update'                   => __( 'Update', 'hmbkp' ),
+			'cancel'                   => __( 'Cancel', 'hmbkp' ),
+			'delete_schedule'          => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'delete_backup'            => __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_exclude_rule'      => __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
+			'remove_old_backups'       => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
 		)
 	);
 
 }
+
 add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
 
 /**
@@ -223,25 +238,59 @@ function hmbkp_load_intercom_script() {
 
 	$current_user = wp_get_current_user();
 
-	$info['user_hash'] = hash_hmac( 'sha256', $current_user->user_email, 'fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK' );
-	$info['email'] = $current_user->user_email;
+	$info['user_hash']  = hash_hmac( 'sha256', $current_user->user_email, 'fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK' );
+	$info['email']      = $current_user->user_email;
 	$info['created_at'] = strtotime( $current_user->user_registered );
-	$info['app_id'] = '7f1l4qyq';
-	$info['name'] = $current_user->display_name;
-	$info['widget'] = array( 'activator' => '#intercom' ); ?>
+	$info['app_id']     = '7f1l4qyq';
+	$info['name']       = $current_user->display_name;
+	$info['widget']     = array( 'activator' => '#intercom' ); ?>
 
 	<script id="IntercomSettingsScriptTag">
 		window.intercomSettings = <?php echo json_encode( $info ); ?>;
 	</script>
-	<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()</script>
+	<script>(function () {
+			var w = window;
+			var ic = w.Intercom;
+			if (typeof ic === "function") {
+				ic('reattach_activator');
+				ic('update', intercomSettings);
+			} else {
+				var d = document;
+				var i = function () {
+					i.c(arguments)
+				};
+				i.q = [];
+				i.c = function (args) {
+					i.q.push(args)
+				};
+				w.Intercom = i;
+				function l() {
+					var s = d.createElement('script');
+					s.type = 'text/javascript';
+					s.async = true;
+					s.src = 'https://static.intercomcdn.com/intercom.v1.js';
+					var x = d.getElementsByTagName('script')[0];
+					x.parentNode.insertBefore(s, x);
+				}
 
-<?php }
+				if (w.attachEvent) {
+					w.attachEvent('onload', l);
+				} else {
+					w.addEventListener('load', l, false);
+				}
+			}
+			;
+		})()</script>
+
+<?php
+}
+
 add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_intercom_script' );
 
 /**
  * Enqueue the plugin styles
  */
-function hmbkp_load_styles(){
+function hmbkp_load_styles() {
 
 	$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css';
 
@@ -252,10 +301,12 @@ function hmbkp_load_styles(){
 	wp_enqueue_style( 'hmbkp', $css_file, false, sanitize_key( HMBKP_VERSION ) );
 
 }
+
 add_action( 'admin_print_styles-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_styles' );
 
 /**
  * Function to run when the schedule cron fires
+ *
  * @param $schedule_id
  */
 function hmbkp_schedule_hook_run( $schedule_id ) {
@@ -270,6 +321,7 @@ function hmbkp_schedule_hook_run( $schedule_id ) {
 	$schedule->run();
 
 }
+
 add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
 
 /**
@@ -286,7 +338,7 @@ function hmbkp_plugin_textdomain() {
 	$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
 
 	// Set filter for WordPress languages directory
-	$hmbkp_wp_lang_dir = apply_filters( 'hmbkp_do_filter_wp_lang_dir', trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain )  . $textdomain . '-' . $locale . '.mo' );
+	$hmbkp_wp_lang_dir = apply_filters( 'hmbkp_do_filter_wp_lang_dir', trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain ) . $textdomain . '-' . $locale . '.mo' );
 
 	// Translations: First, look in WordPress' "languages" folder = custom & update-secure!
 	load_textdomain( $textdomain, $hmbkp_wp_lang_dir );
@@ -295,6 +347,7 @@ function hmbkp_plugin_textdomain() {
 	load_plugin_textdomain( $textdomain, false, HMBKP_PLUGIN_LANG_DIR );
 
 }
+
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
 
 /**
@@ -310,13 +363,14 @@ function hmbkp_display_server_info_tab() {
 
 	get_current_screen()->add_help_tab(
 		array(
-			'title' => __( 'Server Info', 'hmbkp' ),
-			'id' => 'hmbkp_server',
+			'title'   => __( 'Server Info', 'hmbkp' ),
+			'id'      => 'hmbkp_server',
 			'content' => $info,
 		)
 	);
 
 }
+
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_display_server_info_tab' );
 
 /**
@@ -341,6 +395,7 @@ function hmbkp_load_first() {
 	}
 
 }
+
 add_action( 'activated_plugin', 'hmbkp_load_first' );
 
 /**
@@ -364,6 +419,7 @@ function hmbkp_maybe_self_deactivate() {
 	}
 
 }
+
 add_action( 'plugins_loaded', 'hmbkp_maybe_self_deactivate' );
 
 /**
