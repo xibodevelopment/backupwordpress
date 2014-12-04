@@ -44,6 +44,6 @@ if ( ! $schedule = $current_schedule ) {
 
 	<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule-sentence.php' ); ?>
 
-	<?php require( HMBKP_PLUGIN_PATH . 'admin/backups-table.php'); ?>
+	<?php require( HMBKP_PLUGIN_PATH . 'admin/backups-table.php' ); ?>
 
 </div>
