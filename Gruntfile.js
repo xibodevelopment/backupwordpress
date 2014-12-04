@@ -12,9 +12,9 @@ module.exports = function (grunt) {
 			target: {
 				options: {
                     mainFile: 'backupwordpress.php',
-                    potFilename: 'hmbkp.pot',
+                    potFilename: 'backupwordpress.pot',
 					domainPath: '/languages',       // Where to save the POT file.
-					exclude: ['node_modules/.*'],          // List of files or directories to ignore.
+					exclude: ['node_modules/.*','vendor/.*', 'backdrop/.*','bin/.*','tests/.*','readme/.*','languages/.*'],
 					mainFile  : 'backupwordpress.php',         // Main project file.
 					type      : 'wp-plugin',    // Type of project (wp-plugin or wp-theme).
 					processPot: function( pot, options ) {
