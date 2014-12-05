@@ -29,7 +29,7 @@ notifications:
 before_script:
 - composer selfupdate --quiet
 - composer install -n --prefer-dist --no-progress
-- ./bin/prepare.sh
+- bash bin/bin/prepare.sh
 - export WP_TESTS_DIR=/tmp/wordpress-tests-lib/
 - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 - mkdir -p build/docs

@@ -4,6 +4,7 @@ PLUGIN_DIR=$(pwd)
 PHPCS_GITHUB_SRC=squizlabs/PHP_CodeSniffer
 PHPCS_GIT_TREE=master
 PHPCS_IGNORE='*/tests/*,*/vendor/*,*/bin/*,*/assets*/*,*/languages/*,*/node_modules/*,*/readme/*'
+echo "PHPCS_IGNORE: $PHPCS_IGNORE"
 WPCS_DIR=/tmp/wpcs
 WPCS_GITHUB_SRC=WordPress-Coding-Standards/WordPress-Coding-Standards
 WPCS_GIT_TREE=master
