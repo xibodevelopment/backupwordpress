@@ -552,7 +552,9 @@ function hmbkp_calculate_site_size() {
 		}
 	}
 
-	$current_schedule->recursive_filesize_scanner();
+	// Start calculating
+	$root = new SplFileInfo( $current_schedule->get_root() );
+	$size = $current_schedule->filesize( $root );
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
 
