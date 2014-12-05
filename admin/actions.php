@@ -552,7 +552,7 @@ function hmbkp_calculate_site_size() {
 		}
 	}
 
-	$current_schedule->maybe_start_background_crawler();
+	$current_schedule->recursive_filesize_scanner();
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
 
@@ -575,7 +575,7 @@ function hmbkp_heartbeat_received( $response, $data ) {
 
 	}
 
-  	return $response;
+	return $response;
 
 }
 add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );

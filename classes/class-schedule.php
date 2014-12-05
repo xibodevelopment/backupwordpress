@@ -501,10 +501,25 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// If it's a directory then pull it from the cached filesize array
 		if ( $file->isDir() ) {
 
-			if ( false === $this->maybe_start_background_crawler() ) {
-				return; // false means $directory_sizes has not been calculated, so bail
+			// If we haven't calculated the site size yet then kick it off in a thread
+			if ( ! $directory_sizes = get_transient( 'hmbkp_directory_filesizes' ) ) {
+
+				if ( ! $this->is_site_size_being_calculated() ) {
+
+					// Mark the filesize as being calculated
+					set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );
+
+					// Schedule a Backdrop task to trigger a recalculation
+					$task = new HM_Backdrop_Task( array( $this, 'recursive_filesize_scanner' ) );
+					$task->schedule();
+
+				}
+
+				return;
+
 			}
 
+			$directory_size = 0;
 			$current_pathname = trailingslashit( $file->getPathname() );
 			$root = trailingslashit( $this->get_root() );
 
@@ -534,30 +549,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			// Directory size is now just a sum of all files across all sub directories
 			return array_sum( $directory_sizes );
-
-		}
-
-	}
-
-	/**
-	 * If we haven't calculated the site size yet then kick it off in a thread
-	 */
-	public function maybe_start_background_crawler() {
-
-		if ( ! $directory_sizes = get_transient( 'hmbkp_directory_filesizes' ) ) {
-
-			if ( ! $this->is_site_size_being_calculated() ) {
-
-				// Mark the filesize as being calculated
-				set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );
-
-				// Schedule a Backdrop task to trigger a recalculation
-				$task = new HM_Backdrop_Task( array( $this, 'recursive_filesize_scanner' ) );
-				$task->schedule();
-
-			}
-
-			return false;
 
 		}
 
