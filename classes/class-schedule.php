@@ -238,7 +238,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	public function set_max_backups( $max ) {
 
 		if ( empty( $max ) || ! is_int( $max ) ) {
-			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid integer', 'hmbkp' ), __METHOD__ ) );
+			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid integer', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		$this->options['max_backups'] = $max;
@@ -461,7 +461,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$files = $this->get_files();
 
 		foreach ( $files as $file ) {
-			$directory_sizes[ $file->getPathname() ] = $file->getSize();
+
+			if ( $file->isReadable() ) {
+				$directory_sizes[ $file->getPathname() ] = $file->getSize();
+			} else {
+				$directory_sizes[ $file->getPathname() ] = 0;
+			}
+
 		}
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
@@ -490,7 +496,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// If it's a file then just pass back the filesize
-		if ( $file->isFile() ) {
+		if ( $file->isFile() && $file->isReadable() ) {
 			return $file->getSize();
 		}
 
@@ -515,7 +521,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			}
 
-			$directory_size = 0;
 			$current_pathname = trailingslashit( $file->getPathname() );
 			$root = trailingslashit( $this->get_root() );
 
@@ -586,7 +591,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Don't allow setting the start time in the past
 		if ( (int) $time <= time() ) {
-			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid future timestamp', 'hmbkp' ), __METHOD__ ) );
+			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid future timestamp', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		$this->options['schedule_start_time'] = $time;
@@ -624,7 +629,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Check it's valid
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && 'manually' !== $reoccurrence ) {
-			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'hmbkp' ), __METHOD__ ) );
+			return new WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		// If the recurrence is already set to the same thing then there's no need to continue
@@ -759,7 +764,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// Mark the backup as started
-		$this->set_status( __( 'Starting Backup', 'hmbkp' ) );
+		$this->set_status( __( 'Starting Backup', 'backupwordpress' ) );
 
 		// Delete old backups now in-case we fatal error during the backup process
 		$this->delete_old_backups();
@@ -889,27 +894,27 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			case 'hmbkp_mysqldump_started' :
 
-				$this->set_status( sprintf( __( 'Dumping Database %s', 'hmbkp' ), '(<code>' . $this->get_mysqldump_method() . '</code>)' ) );
+				$this->set_status( sprintf( __( 'Dumping Database %s', 'backupwordpress' ), '(<code>' . $this->get_mysqldump_method() . '</code>)' ) );
 				break;
 
 			case 'hmbkp_mysqldump_verify_started' :
 
-				$this->set_status( sprintf( __( 'Verifying Database Dump %s', 'hmbkp' ), '(<code>' . $this->get_mysqldump_method() . '</code>)' ) );
+				$this->set_status( sprintf( __( 'Verifying Database Dump %s', 'backupwordpress' ), '(<code>' . $this->get_mysqldump_method() . '</code>)' ) );
 				break;
 
 			case 'hmbkp_archive_started' :
 
-				$this->set_status( sprintf( __( 'Creating zip archive %s', 'hmbkp' ), '(<code>' . $this->get_archive_method() . '</code>)' ) );
+				$this->set_status( sprintf( __( 'Creating zip archive %s', 'backupwordpress' ), '(<code>' . $this->get_archive_method() . '</code>)' ) );
 				break;
 
 			case 'hmbkp_archive_verify_started' :
 
-				$this->set_status( sprintf( __( 'Verifying Zip Archive %s', 'hmbkp' ), '(<code>' . $this->get_archive_method() . '</code>)' ) );
+				$this->set_status( sprintf( __( 'Verifying Zip Archive %s', 'backupwordpress' ), '(<code>' . $this->get_archive_method() . '</code>)' ) );
 				break;
 
 			case 'hmbkp_backup_complete' :
 
-				$this->set_status( __( 'Finishing Backup', 'hmbkp' ) );
+				$this->set_status( __( 'Finishing Backup', 'backupwordpress' ) );
 				break;
 
 			case 'hmbkp_error' :
@@ -1018,17 +1023,17 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		// Check that it's a valid filepath
 		if ( empty( $filepath ) || ! is_string( $filepath ) ) {
-			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'hmbkp' ), __METHOD__ ) );
+			return new WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		// Make sure it exists
 		if ( ! file_exists( $filepath ) ) {
-			return new WP_Error( 'hmbkp_file_error', sprintf( __( '%s doesn\'t exist', 'hmbkp' ), $filepath ) );
+			return new WP_Error( 'hmbkp_file_error', sprintf( __( '%s doesn\'t exist', 'backupwordpress' ), $filepath ) );
 		}
 
 		// Make sure it was created by this schedule
 		if ( strpos( $filepath, $this->get_id() ) === false ) {
-			return new WP_Error( 'hmbkp_backup_error', __( 'That backup wasn\'t created by this schedule', 'hmbkp' ) );
+			return new WP_Error( 'hmbkp_backup_error', __( 'That backup wasn\'t created by this schedule', 'backupwordpress' ) );
 		}
 
 		unlink( $filepath );

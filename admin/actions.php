@@ -210,7 +210,7 @@ function hmbkp_edit_schedule_services_submit() {
 	check_admin_referer( 'hmbkp-edit-schedule-services', 'hmbkp-edit-schedule-services-nonce' );
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
-		wp_die( __( 'The schedule ID was not provided. Aborting.', 'hmbkp' ) );
+		wp_die( __( 'The schedule ID was not provided. Aborting.', 'backupwordpress' ) );
 	}
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
@@ -266,11 +266,11 @@ function hmbkp_edit_schedule_submit() {
 		$schedule_type = sanitize_text_field( $_POST['hmbkp_schedule_type'] );
 
 		if ( ! trim( $schedule_type ) ) {
-			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'backupwordpress' );
 		}
 
 		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) ) {
-			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
+			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'backupwordpress' );
 		}
 
 		else {
@@ -284,11 +284,11 @@ function hmbkp_edit_schedule_submit() {
 		$schedule_recurrence_type = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] );
 
 		if ( empty( $schedule_recurrence_type ) ) {
-			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'backupwordpress' );
 		}
 
 		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
-			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
+			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'backupwordpress' );
 		}
 
 		else {
@@ -302,7 +302,7 @@ function hmbkp_edit_schedule_submit() {
 		$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
 
 		if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
-			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'hmbkp' );
+			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'backupwordpress' );
 		}
 
 		else {
@@ -321,7 +321,7 @@ function hmbkp_edit_schedule_submit() {
 		);
 
 		if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-			$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'hmbkp' );
+			$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'backupwordpress' );
 		}
 
 		else {
@@ -340,7 +340,7 @@ function hmbkp_edit_schedule_submit() {
 		);
 
 		if ( false === filter_var( $hours, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-			$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 0 and 23', 'hmbkp' );
+			$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 0 and 23', 'backupwordpress' );
 		}
 
 		else {
@@ -359,7 +359,7 @@ function hmbkp_edit_schedule_submit() {
 		);
 
 		if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
-			$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'hmbkp' );
+			$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'backupwordpress' );
 		}
 
 		else {
@@ -373,15 +373,15 @@ function hmbkp_edit_schedule_submit() {
 		$max_backups = sanitize_text_field( $_POST['hmbkp_schedule_max_backups'] );
 
 		if ( empty( $max_backups ) ) {
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'backupwordpress' );
 		}
 
 		elseif ( ! is_numeric( $max_backups ) ) {
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'backupwordpress' );
 		}
 
 		elseif ( ! ( $max_backups >= 1 ) ) {
-			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
+			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'backupwordpress' );
 		}
 
 		else {
@@ -531,6 +531,29 @@ function hmbkp_recalculate_directory_filesize() {
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_recalculate_directory_filesize' );
 
+function hmbkp_calculate_site_size() {
+
+	if ( isset(  $_GET['hmbkp_schedule_id'] ) ) {
+		$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+	} else {
+		// Refresh the schedules from the database to make sure we have the latest changes
+		HMBKP_Schedules::get_instance()->refresh_schedules();
+
+		$schedules = HMBKP_Schedules::get_instance()->get_schedules();
+
+		if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
+			$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+		} else {
+			$current_schedule = reset( $schedules );
+		}
+	}
+
+	// Start calculating
+	$root = new SplFileInfo( $current_schedule->get_root() );
+	$size = $current_schedule->filesize( $root );
+}
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
+
 /**
  * Receive the heartbeat and return backup status
  */
@@ -550,7 +573,7 @@ function hmbkp_heartbeat_received( $response, $data ) {
 
 	}
 
-  	return $response;
+	return $response;
 
 }
 add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
@@ -674,13 +697,13 @@ function hmbkp_ajax_cron_test() {
 
 	if ( is_wp_error( $response ) ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
 	} elseif ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'hmbkp' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'hmbkp' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 

@@ -17,7 +17,7 @@ function hmbkp_activate() {
 		deactivate_plugins( __FILE__ );
 
 		if ( isset( $_GET['action'] ) && ( 'activate' === $_GET['action'] || 'error_scrape' === $_GET['action'] ) ) {
-			wp_die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'hmbkp' ), HMBKP_REQUIRED_WP_VERSION ), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
+			wp_die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'backupwordpress' ), HMBKP_REQUIRED_WP_VERSION ), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
 		}
 	}
 
@@ -257,7 +257,7 @@ function hmbkp_setup_default_schedules() {
 	$schedules->refresh_schedules();
 
 	function hmbkp_default_schedules_setup_warning() {
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has setup your default schedules.', 'hmbkp' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules.', 'hmbkp' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has setup your default schedules.', 'backupwordpress' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules.', 'backupwordpress' ) . '</p></div>';
 	}
 
 	add_action( 'admin_notices', 'hmbkp_default_schedules_setup_warning' );
@@ -274,12 +274,12 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
  */
 function hmbkp_cron_schedules( $schedules ) {
 
-	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'hmbkp' ) );
-	$schedules['hmbkp_twicedaily']  = array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'hmbkp' ) );
-	$schedules['hmbkp_daily']       = array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'hmbkp' ) );
-	$schedules['hmbkp_weekly']      = array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'hmbkp' ) );
-	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'hmbkp' ) );
-	$schedules['hmbkp_monthly']     = array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'hmbkp' ) );
+	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'backupwordpress' ) );
+	$schedules['hmbkp_twicedaily']  = array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'backupwordpress' ) );
+	$schedules['hmbkp_daily']       = array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'backupwordpress' ) );
+	$schedules['hmbkp_weekly']      = array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'backupwordpress' ) );
+	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'backupwordpress' ) );
+	$schedules['hmbkp_monthly']     = array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'backupwordpress' ) );
 
 	return $schedules;
 }
@@ -297,7 +297,7 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 function hmbkp_rmdirtree( $dir ) {
 
 	if ( false !== strpos( HM_Backup::get_home_path(), $dir ) )
-		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'hmbkp' ) ) );
+		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'backupwordpress' ) ) );
 
 	if ( is_file( $dir ) )
 		@unlink( $dir );
@@ -321,8 +321,6 @@ function hmbkp_rmdirtree( $dir ) {
 
 	return true;
 }
-
-
 
 /**
  * Check if a backup is possible with regards to file

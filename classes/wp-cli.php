@@ -39,12 +39,12 @@ class BackUpCommand extends WP_CLI_Command {
 	 */
 	public function backup( $args, $assoc_args ) {
 
-		add_action( 'hmbkp_mysqldump_started', function() {
-			WP_CLI::line( __( 'Backup: Dumping database...', 'hmbkp' ) );
+		add_action( 'hmbkp_mysqldump_started', function () {
+			WP_CLI::line( __( 'Backup: Dumping database...', 'backupwordpress' ) );
 		} );
 
-		add_action( 'hmbkp_archive_started', function() {
-			WP_CLI::line( __( 'Backup: Zipping everything up...', 'hmbkp' ) );
+		add_action( 'hmbkp_archive_started', function () {
+			WP_CLI::line( __( 'Backup: Zipping everything up...', 'backupwordpress' ) );
 		} );
 
 		$hm_backup = new HM_Backup();
@@ -62,12 +62,14 @@ class BackUpCommand extends WP_CLI_Command {
 		}
 
 		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! wp_mkdir_p( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
-			WP_CLI::error( __( 'Invalid backup path', 'hmbkp' ) );
+			WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
+
 			return false;
 		}
 
 		if ( ! is_dir( $hm_backup->get_root() ) || ! is_readable( $hm_backup->get_root() ) ) {
-			WP_CLI::error( __( 'Invalid root path', 'hmbkp' ) );
+			WP_CLI::error( __( 'Invalid root path', 'backupwordpress' ) );
+
 			return false;
 		}
 
@@ -93,13 +95,14 @@ class BackUpCommand extends WP_CLI_Command {
 
 		$hm_backup->backup();
 
-    	if ( file_exists( $hm_backup->get_archive_filepath() ) ) {
-			WP_CLI::success( __( 'Backup Complete: ', 'hmbkp' ) . $hm_backup->get_archive_filepath() );
+		if ( file_exists( $hm_backup->get_archive_filepath() ) ) {
+			WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $hm_backup->get_archive_filepath() );
 		} else {
-			WP_CLI::error( __( 'Backup Failed', 'hmbkp' ) );
+			WP_CLI::error( __( 'Backup Failed', 'backupwordpress' ) );
 		}
 
 	}
 
 }
+
 WP_CLI::add_command( 'backupwordpress', 'BackUpCommand' );

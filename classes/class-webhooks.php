@@ -61,7 +61,7 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 			if ( $error_message )
 				$error_message = ' - ' . $error_message;
 
-			$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
+			$subject = sprintf( __( 'Backup of %s Failed', 'backupwordpress' ), $domain );
 
 			$body = array (
 				'type'         => 'backup.error',
@@ -105,7 +105,7 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 		$ret = wp_remote_post( $webhook_url, $webhook_args );
 
 		if ( is_wp_error( $ret ) )
-			$this->schedule->error( 'Webhook', sprintf( __( 'Error: %s', 'hmbkp' ), $ret->get_error_message() ) );
+			$this->schedule->error( 'Webhook', sprintf( __( 'Error: %s', 'backupwordpress' ), $ret->get_error_message() ) );
 
 	}
 }
