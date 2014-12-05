@@ -279,7 +279,7 @@ add_action( 'hmbkp_schedule_hook', 'hmbkp_schedule_hook_run' );
 function hmbkp_plugin_textdomain() {
 
 	// Set unique textdomain string
-	$textdomain = 'hmbkp';
+	$textdomain = 'backupwordpress';
 
 	// The 'plugin_locale' filter is also used by default in load_plugin_textdomain()
 	$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
