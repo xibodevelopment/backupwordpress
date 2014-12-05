@@ -519,7 +519,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 			}
 
-			$directory_size = 0;
 			$current_pathname = trailingslashit( $file->getPathname() );
 			$root = trailingslashit( $this->get_root() );
 
