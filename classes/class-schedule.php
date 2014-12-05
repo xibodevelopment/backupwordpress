@@ -465,7 +465,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		$files = $this->get_files();
 
 		foreach ( $files as $file ) {
-			$directory_sizes[ $file->getPathname() ] = $file->getSize();
+
+			if ( $file->isReadable() ) {
+				$directory_sizes[ $file->getPathname() ] = $file->getSize();
+			} else {
+				$directory_sizes[ $file->getPathname() ] = 0;
+			}
+
 		}
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
@@ -494,7 +500,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// If it's a file then just pass back the filesize
-		if ( $file->isFile() ) {
+		if ( $file->isFile() && $file->isReadable() ) {
 			return $file->getSize();
 		}
 
