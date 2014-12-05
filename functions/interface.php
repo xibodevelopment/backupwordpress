@@ -360,3 +360,12 @@ function hmbkp_get_settings_errors() {
 
 	return get_transient( 'hmbkp_settings_errors' );
 }
+
+/**
+ * Clear all error messages.
+ *
+ * @return bool
+ */
+function hmbkp_clear_settings_errors(){
+	return delete_transient( 'hmbkp_settings_errors' );
+}
