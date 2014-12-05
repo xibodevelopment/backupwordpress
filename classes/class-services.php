@@ -275,7 +275,7 @@ class HMBKP_Services {
 	public static function register( $filepath, $classname ) {
 
 		if ( ! file_exists( $filepath ) )
-			return new WP_Error( 'hmbkp_invalid_path_error', sprintf( __( 'Argument 1 for %s must be a valid filepath', ' hmbkp' ), __METHOD__ ) );
+			return new WP_Error( 'hmbkp_invalid_path_error', sprintf( __( 'Argument 1 for %s must be a valid filepath', 'backupwordpress' ), __METHOD__ ) );
 
 		self::instance()->services[ $filepath ] = $classname;
 
@@ -290,7 +290,7 @@ class HMBKP_Services {
 	public static function unregister( $filepath ) {
 
 		if ( ! isset( self::instance()->services[ $filepath ] ) )
-			return new WP_Error( 'hmbkp_unrecognized_service_error', sprintf( __( 'Argument 1 for %s must be a registered service', ' hmbkp' ), __METHOD__ ) );
+			return new WP_Error( 'hmbkp_unrecognized_service_error', sprintf( __( 'Argument 1 for %s must be a registered service', 'backupwordpress' ), __METHOD__ ) );
 
 		unset( self::instance()->services[ $filepath ] );
 
@@ -307,7 +307,7 @@ class HMBKP_Services {
 	private static function instantiate( $classname ) {
 
 		if ( ! class_exists( $classname ) )
-			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class', 'hmbkp' ) ), __METHOD__ );
+			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class', 'backupwordpress' ) ), __METHOD__ );
 
 		/**
 		 * @var HMBKP_Service

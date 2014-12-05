@@ -5,9 +5,9 @@
 		<tr>
 
 			<th scope="col"><?php hmbkp_backups_number( $schedule ); ?></th>
-			<th scope="col"><?php _e( 'Size', 'hmbkp' ); ?></th>
-			<th scope="col"><?php _e( 'Type', 'hmbkp' ); ?></th>
-			<th scope="col"><?php _e( 'Actions', 'hmbkp' ); ?></th>
+			<th scope="col"><?php _e( 'Size', 'backupwordpress' ); ?></th>
+			<th scope="col"><?php _e( 'Type', 'backupwordpress' ); ?></th>
+			<th scope="col"><?php _e( 'Actions', 'backupwordpress' ); ?></th>
 
 		</tr>
 
@@ -32,7 +32,7 @@
 		} else { ?>
 
 			<tr>
-				<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'hmbkp' ); ?></td>
+				<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'backupwordpress' ); ?></td>
 			</tr>
 
 		<?php } ?>
