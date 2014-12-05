@@ -103,12 +103,12 @@ function hmbkp_set_server_config_notices() {
 
 	$messages = array();
 
-	if ( hmbkp_is_disabled_function( 'exec' ) || ( ! @exec( 'hello backupwordpress' ) ) ) {
+	if ( ! HM_Backup::is_shell_exec_available() ) {
 		$php_user  = '<PHP USER>';
 		$php_group = '<PHP GROUP>';
 	} else {
-		$php_user  = exec( 'whoami' );
-		$groups = explode( ' ', exec( 'groups' ) );
+		$php_user  = shell_exec( 'whoami' );
+		$groups = explode( ' ', shell_exec( 'groups' ) );
 		$php_group = reset( $groups );
 	}
 
@@ -359,31 +359,4 @@ function hmbkp_add_settings_error( $error_message ){
 function hmbkp_get_settings_errors() {
 
 	return get_transient( 'hmbkp_settings_errors' );
-}
-
-/**
- * Clear all error messages.
- *
- * @return bool
- */
-function hmbkp_clear_settings_errors(){
-	return delete_transient( 'hmbkp_settings_errors' );
-}
-
-/**
- * Determines if a function has been disabled in the PHP config.
- *
- * @param $function_name
- *
- * @return bool true if function is disabled, false otherwise.
- */
-function hmbkp_is_disabled_function( $function_name ) {
-
-	// Assignment done on purpose.
-	if ( $disabled_functions = @ini_get( 'disable_functions' ) ) {
-		return array_key_exists( $function_name, array_map( 'trim', explode( ',', $disabled_functions ) ) );
-	}
-
-	// No value for disable_functions or ini_get itself is disabled
-	return false;
 }
