@@ -180,12 +180,12 @@ function hmbkp_load_scripts() {
 			'page_slug'    => HMBKP_PLUGIN_SLUG,
 			'nonce'         		   => wp_create_nonce( 'hmbkp_nonce' ),
 			'hmbkp_run_schedule_nonce' => wp_create_nonce( 'hmbkp_run_schedule' ),
-			'update'				   => __( 'Update', 'hmbkp' ),
-			'cancel'				   => __( 'Cancel', 'hmbkp' ),
-			'delete_schedule'		   => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'delete_backup'			   => __( 'Are you sure you want to delete this backup?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_exclude_rule'	   => __( 'Are you sure you want to remove this exclude rule?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n",
-			'remove_old_backups'	   => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'hmbkp' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'hmbkp' ) . "\n"
+			'update'				   => __( 'Update', 'backupwordpress' ),
+			'cancel'				   => __( 'Cancel', 'backupwordpress' ),
+			'delete_schedule'		   => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+			'delete_backup'			   => __( 'Are you sure you want to delete this backup?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+			'remove_exclude_rule'	   => __( 'Are you sure you want to remove this exclude rule?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+			'remove_old_backups'	   => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n"
 		)
 	);
 
@@ -310,7 +310,7 @@ function hmbkp_display_server_info_tab() {
 
 	get_current_screen()->add_help_tab(
 		array(
-			'title' => __( 'Server Info', 'hmbkp' ),
+			'title' => __( 'Server Info', 'backupwordpress' ),
 			'id' => 'hmbkp_server',
 			'content' => $info,
 		)
@@ -359,7 +359,7 @@ function hmbkp_maybe_self_deactivate() {
 		if ( 'plugins_loaded' === current_action() ) {
 			add_action( 'admin_notices', 'hmbkp_display_admin_notices' );
 		} else {
-			wp_die( hmbkp_get_notice_message(), __( 'BackUpWordPress', 'hmbkp' ), array( 'back_link' => true ) );
+			wp_die( hmbkp_get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
 		}
 	}
 
@@ -383,7 +383,7 @@ function hmbkp_display_admin_notices() {
 function hmbkp_get_notice_message() {
 
 	return sprintf(
-		__( 'BackUpWordPress requires PHP version %1$s or later. It is not active. %2$s%3$s%4$sLearn more%5$s', 'hmbkp' ),
+		__( 'BackUpWordPress requires PHP version %1$s or later. It is not active. %2$s%3$s%4$sLearn more%5$s', 'backupwordpress' ),
 		HMBKP_REQUIRED_PHP_VERSION,
 		'<a href="',
 		'https://bwp.hmn.md/unsupported-php-version-error/',
