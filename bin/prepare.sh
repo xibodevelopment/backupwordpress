@@ -3,7 +3,7 @@
 PLUGIN_DIR=$(pwd)
 PHPCS_GITHUB_SRC=squizlabs/PHP_CodeSniffer
 PHPCS_GIT_TREE=master
-PHPCS_IGNORE='*/tests/*,*/vendor/*,*/bin/*,*/assets*/*,*/languages/*,*/node_modules/*,*/readme/*'
+PHPCS_IGNORE="$TRAVIS_BUILD_DIR/tests,$TRAVIS_BUILD_DIR/vendor,$TRAVIS_BUILD_DIR/bin,$TRAVIS_BUILD_DIR/assets*,$TRAVIS_BUILD_DIR/languages,$TRAVIS_BUILD_DIR/node_modules,$TRAVIS_BUILD_DIR/readme"
 echo "PHPCS_IGNORE: $PHPCS_IGNORE"
 WPCS_DIR=/tmp/wpcs
 WPCS_GITHUB_SRC=WordPress-Coding-Standards/WordPress-Coding-Standards
