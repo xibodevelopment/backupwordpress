@@ -39,14 +39,15 @@ class BackUpCommand extends WP_CLI_Command {
 	public function backup( $args, $assoc_args ) {
 
 		// Make sure it's possible to do a backup
-		if ( HM_Backup::is_safe_mode_active() )
+		if ( HM_Backup::is_safe_mode_active() ) {
 			WP_CLI::error( sprintf( __( 'BackUpWordPress may not work when php is running with %s on', 'hmbkp' ), 'safe_mode' ) );
+		}
 
-		add_action( 'hmbkp_mysqldump_started', function() {
+		add_action( 'hmbkp_mysqldump_started', function () {
 			WP_CLI::line( __( 'Backup: Dumping database...', 'hmbkp' ) );
 		} );
 
-		add_action( 'hmbkp_archive_started', function() {
+		add_action( 'hmbkp_archive_started', function () {
 			WP_CLI::line( __( 'Backup: Zipping everything up...', 'hmbkp' ) );
 		} );
 
@@ -55,49 +56,59 @@ class BackUpCommand extends WP_CLI_Command {
 
 		$hm_backup = new HM_Backup();
 
-		if ( ! empty( $assoc_args['path'] ) )
+		if ( ! empty( $assoc_args['path'] ) ) {
 			$hm_backup->set_path( $assoc_args['path'] );
+		}
 
-		if ( ! empty( $assoc_args['root'] ) )
+		if ( ! empty( $assoc_args['root'] ) ) {
 			$hm_backup->set_root( $assoc_args['root'] );
+		}
 
 		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! wp_mkdir_p( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
 			WP_CLI::error( __( 'Invalid backup path', 'hmbkp' ) );
+
 			return false;
 		}
 
 		if ( ! is_dir( $hm_backup->get_root() ) || ! is_readable( $hm_backup->get_root() ) ) {
 			WP_CLI::error( __( 'Invalid root path', 'hmbkp' ) );
+
 			return false;
 		}
 
-		if ( ! empty( $assoc_args['files_only'] ) )
+		if ( ! empty( $assoc_args['files_only'] ) ) {
 			$hm_backup->set_type( 'file' );
+		}
 
-		if ( ! empty( $assoc_args['database_only'] ) )
+		if ( ! empty( $assoc_args['database_only'] ) ) {
 			$hm_backup->set_type( 'database' );
+		}
 
-		if ( isset( $assoc_args['mysqldump_command_path'] ) )
+		if ( isset( $assoc_args['mysqldump_command_path'] ) ) {
 			$hm_backup->set_mysqldump_command_path( $assoc_args['mysqldump_command_path'] );
+		}
 
-		if ( isset( $assoc_args['zip_command_path'] ) )
+		if ( isset( $assoc_args['zip_command_path'] ) ) {
 			$hm_backup->set_zip_command_path( $assoc_args['zip_command_path'] );
+		}
 
-		if ( ! empty( $assoc_args['excludes'] ) )
+		if ( ! empty( $assoc_args['excludes'] ) ) {
 			$hm_backup->set_excludes( $assoc_args['excludes'] );
+		}
 
 		$hm_backup->backup();
 
 		// Delete any old backup files
-	    //hmbkp_delete_old_backups();
+		//hmbkp_delete_old_backups();
 
-    	if ( file_exists( $hm_backup->get_archive_filepath() ) )
+		if ( file_exists( $hm_backup->get_archive_filepath() ) ) {
 			WP_CLI::success( __( 'Backup Complete: ', 'hmbkp' ) . $hm_backup->get_archive_filepath() );
-
-		else
+		} else {
 			WP_CLI::error( __( 'Backup Failed', 'hmbkp' ) );
+		}
 
 	}
 
 }
+
 WP_CLI::add_command( 'backupwordpress', 'BackUpCommand' );

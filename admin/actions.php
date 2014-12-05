@@ -20,6 +20,7 @@ function hmbkp_request_delete_backup() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_request_delete_backup', 'hmbkp_request_delete_backup' );
 
 /**
@@ -36,6 +37,7 @@ function hmbkp_request_enable_support() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_request_enable_support', 'hmbkp_request_enable_support' );
 
 /**
@@ -53,6 +55,7 @@ function hmbkp_request_delete_schedule() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_request_delete_schedule', 'hmbkp_request_delete_schedule' );
 
 /**
@@ -122,6 +125,7 @@ function hmbkp_request_do_backup() {
 	die;
 
 }
+
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
 add_action( 'admin_post_hmbkp_request_do_backup', 'hmbkp_request_do_backup' );
 
@@ -132,7 +136,7 @@ function hmbkp_request_download_backup() {
 
 	check_admin_referer( 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' );
 
-	if ( ! file_exists( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) )  ) {
+	if ( ! file_exists( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) {
 		return;
 	}
 
@@ -143,8 +147,9 @@ function hmbkp_request_download_backup() {
 	if ( $is_apache ) {
 
 		// Force the .htaccess to be rebuilt
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
+		if ( file_exists( hmbkp_path() . '/.htaccess' ) ) {
 			unlink( hmbkp_path() . '/.htaccess' );
+		}
 
 		hmbkp_path();
 
@@ -157,6 +162,7 @@ function hmbkp_request_download_backup() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_request_download_backup', 'hmbkp_request_download_backup' );
 
 /**
@@ -184,6 +190,7 @@ function hmbkp_request_cancel_backup() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_request_cancel_backup', 'hmbkp_request_cancel_backup' );
 
 /**
@@ -202,6 +209,7 @@ function hmbkp_dismiss_error() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_dismiss_error', 'hmbkp_dismiss_error' );
 
 /**
@@ -242,6 +250,7 @@ function hmbkp_edit_schedule_services_submit() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_edit_schedule_services_submit', 'hmbkp_edit_schedule_services_submit' );
 
 /**
@@ -271,13 +280,9 @@ function hmbkp_edit_schedule_submit() {
 
 		if ( ! trim( $schedule_type ) ) {
 			$errors['hmbkp_schedule_type'] = __( 'Backup type cannot be empty', 'hmbkp' );
-		}
-
-		elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) ) {
+		} elseif ( ! in_array( $schedule_type, array( 'complete', 'file', 'database' ) ) ) {
 			$errors['hmbkp_schedule_type'] = __( 'Invalid backup type', 'hmbkp' );
-		}
-
-		else {
+		} else {
 			$settings['type'] = $schedule_type;
 		}
 
@@ -289,13 +294,9 @@ function hmbkp_edit_schedule_submit() {
 
 		if ( empty( $schedule_recurrence_type ) ) {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'hmbkp' );
-		}
-
-		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
+		} elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'hmbkp' );
-		}
-
-		else {
+		} else {
 			$settings['recurrence'] = $schedule_recurrence_type;
 		}
 
@@ -305,11 +306,18 @@ function hmbkp_edit_schedule_submit() {
 
 		$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
 
-		if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
+		if ( ! in_array( $day_of_week, array(
+				'monday',
+				'tuesday',
+				'wednesday',
+				'thursday',
+				'friday',
+				'saturday',
+				'sunday'
+			) )
+		) {
 			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'hmbkp' );
-		}
-
-		else {
+		} else {
 			$settings['start_time']['day_of_week'] = $day_of_week;
 		}
 
@@ -326,9 +334,7 @@ function hmbkp_edit_schedule_submit() {
 
 		if ( false === filter_var( $day_of_month, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
 			$errors['hmbkp_schedule_start_day_of_month'] = __( 'Day of month must be between 1 and 31', 'hmbkp' );
-		}
-
-		else {
+		} else {
 			$settings['start_time']['day_of_month'] = $day_of_month;
 		}
 
@@ -345,9 +351,7 @@ function hmbkp_edit_schedule_submit() {
 
 		if ( false === filter_var( $hours, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
 			$errors['hmbkp_schedule_start_hours'] = __( 'Hours must be between 0 and 23', 'hmbkp' );
-		}
-
-		else {
+		} else {
 			$settings['start_time']['hours'] = $hours;
 		}
 
@@ -364,9 +368,7 @@ function hmbkp_edit_schedule_submit() {
 
 		if ( false === filter_var( $minutes, FILTER_VALIDATE_INT, array( 'options' => $options ) ) ) {
 			$errors['hmbkp_schedule_start_minutes'] = __( 'Minutes must be between 0 and 59', 'hmbkp' );
-		}
-
-		else {
+		} else {
 			$settings['start_time']['minutes'] = $minutes;
 		}
 
@@ -378,17 +380,11 @@ function hmbkp_edit_schedule_submit() {
 
 		if ( empty( $max_backups ) ) {
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups can\'t be empty', 'hmbkp' );
-		}
-
-		elseif ( ! is_numeric( $max_backups ) ) {
+		} elseif ( ! is_numeric( $max_backups ) ) {
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be a number', 'hmbkp' );
-		}
-
-		elseif ( ! ( $max_backups >= 1 ) ) {
+		} elseif ( ! ( $max_backups >= 1 ) ) {
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'hmbkp' );
-		}
-
-		else {
+		} else {
 			$settings['max_backups'] = absint( $max_backups );
 		}
 
@@ -446,6 +442,7 @@ function hmbkp_edit_schedule_submit() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_edit_schedule_submit', 'hmbkp_edit_schedule_submit' );
 
 /**
@@ -475,6 +472,7 @@ function hmbkp_add_exclude_rule() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_add_exclude_rule', 'hmbkp_add_exclude_rule' );
 
 /**
@@ -504,6 +502,7 @@ function hmbkp_remove_exclude_rule() {
 	die;
 
 }
+
 add_action( 'admin_post_hmbkp_remove_exclude_rule', 'hmbkp_remove_exclude_rule' );
 
 /**
@@ -523,7 +522,10 @@ function hmbkp_recalculate_directory_filesize() {
 	// Delete the cached directory size
 	delete_transient( 'hmbkp_directory_filesizes' );
 
-	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
+	$url = add_query_arg( array(
+			'action' => 'hmbkp_edit_schedule',
+			'hmbkp_panel' => 'hmbkp_edit_schedule_excludes'
+		), hmbkp_get_settings_url() );
 
 	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
 		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
@@ -533,6 +535,7 @@ function hmbkp_recalculate_directory_filesize() {
 	die;
 
 }
+
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_recalculate_directory_filesize' );
 
 /**
@@ -554,9 +557,10 @@ function hmbkp_heartbeat_received( $response, $data ) {
 
 	}
 
-  	return $response;
+	return $response;
 
 }
+
 add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
 
 // TODO needs work
@@ -575,6 +579,7 @@ function hmbkp_display_error_and_offer_to_email_it() {
 	wp_send_json_success( wp_get_referer() );
 
 }
+
 add_action( 'wp_ajax_hmbkp_backup_error', 'hmbkp_display_error_and_offer_to_email_it' );
 
 // TODO needs work
@@ -593,6 +598,7 @@ function hmbkp_send_error_via_email() {
 	die;
 
 }
+
 add_action( 'wp_ajax_hmbkp_email_error', 'hmbkp_send_error_via_email' );
 
 /**
@@ -609,6 +615,7 @@ function hmbkp_load_enable_support() {
 	die;
 
 }
+
 add_action( 'wp_ajax_load_enable_support', 'hmbkp_load_enable_support' );
 
 /**
@@ -633,6 +640,7 @@ function hmbkp_ajax_is_backup_in_progress() {
 	die;
 
 }
+
 add_action( 'wp_ajax_hmbkp_is_in_progress', 'hmbkp_ajax_is_backup_in_progress' );
 
 /**
@@ -655,6 +663,7 @@ function hmbkp_ajax_calculate_backup_size() {
 	die;
 
 }
+
 add_action( 'wp_ajax_hmbkp_calculate', 'hmbkp_ajax_calculate_backup_size' );
 
 /**
@@ -699,4 +708,5 @@ function hmbkp_ajax_cron_test() {
 	die;
 
 }
+
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );

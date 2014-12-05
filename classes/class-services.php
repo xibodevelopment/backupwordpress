@@ -47,13 +47,15 @@ abstract class HMBKP_Service {
 	/**
 	 * Help text that should be output in the Constants help tab
 	 */
-	public static function constant() {}
+	public static function constant() {
+	}
 
 	/**
 	 * Validate and sanitize data before it's saved.
 	 *
 	 * @param  array &$new_data An array or data from $_GET, passed by reference so it can be modified,
-	 * @param  array $old_data  The old data thats going to be overwritten
+	 * @param  array $old_data The old data thats going to be overwritten
+	 *
 	 * @return array $error     Array of validation errors e.g. return array( 'email' => 'not valid' );
 	 */
 	abstract public function update( &$new_data, $old_data );
@@ -82,6 +84,7 @@ abstract class HMBKP_Service {
 	 * Utility for getting a formated html input name attribute
 	 *
 	 * @param  string $name The name of the field
+	 *
 	 * @return string       The formated name
 	 */
 	protected function get_field_name( $name ) {
@@ -92,13 +95,15 @@ abstract class HMBKP_Service {
 	 * Get the value of a field
 	 *
 	 * @param string $name The name of the field
-	 * @param string $esc  The field value
+	 * @param string $esc The field value
+	 *
 	 * @return string
 	 */
 	protected function get_field_value( $name, $esc = 'esc_attr' ) {
 
-		if ( $this->schedule->get_service_options( get_class( $this ), $name ) )
+		if ( $this->schedule->get_service_options( get_class( $this ), $name ) ) {
 			return $esc( $this->schedule->get_service_options( get_class( $this ), $name ) );
+		}
 
 		return '';
 
@@ -115,7 +120,7 @@ abstract class HMBKP_Service {
 
 		$old_data = $this->schedule->get_service_options( $classname );
 
-		$new_data = isset( $_POST[$classname] ) ? $_POST[$classname] : array();
+		$new_data = isset( $_POST[ $classname ] ) ? $_POST[ $classname ] : array();
 
 		$errors = $this->update( $new_data, $old_data );
 
@@ -130,8 +135,9 @@ abstract class HMBKP_Service {
 		}
 
 		// Only overwrite settings if they changed
-		if ( ! empty( $new_data ) )
+		if ( ! empty( $new_data ) ) {
 			$this->schedule->set_service_options( $classname, $new_data );
+		}
 
 		return array();
 
@@ -164,8 +170,9 @@ abstract class HMBKP_Service {
 
 				$options = $schedule->get_service_options( $service );
 
-				if ( ! empty( $options ) )
+				if ( ! empty( $options ) ) {
 					return $options;
+				}
 
 			}
 
@@ -183,8 +190,9 @@ abstract class HMBKP_Service {
 
 		$form = ob_get_clean();
 
-		if ( $form )
+		if ( $form ) {
 			return true;
+		}
 
 		return false;
 
@@ -193,9 +201,11 @@ abstract class HMBKP_Service {
 	/**
 	 * Handles passing service specific data to Intercom
 	 */
-	public static function intercom_data() {}
+	public static function intercom_data() {
+	}
 
-	public static function intercom_data_html() {}
+	public static function intercom_data_html() {
+	}
 
 }
 
@@ -241,8 +251,9 @@ class HMBKP_Services {
 	 */
 	public static function instance() {
 
-		if ( ! isset( self::$instance ) )
+		if ( ! isset( self::$instance ) ) {
 			self::$instance = new HMBKP_Services;
+		}
 
 		return self::$instance;
 
@@ -252,12 +263,14 @@ class HMBKP_Services {
 	 * Get the array of registered services
 	 *
 	 * @param HMBKP_Scheduled_Backup $schedule
+	 *
 	 * @return HMBKP_SERVICE[]
 	 */
 	public static function get_services( HMBKP_Scheduled_Backup $schedule = null ) {
 
-		if ( is_null( $schedule ) )
+		if ( is_null( $schedule ) ) {
 			return self::instance()->services;
+		}
 
 		self::instance()->schedule = $schedule;
 
@@ -270,12 +283,14 @@ class HMBKP_Services {
 	 *
 	 * @param $filepath
 	 * @param $classname
+	 *
 	 * @return bool|WP_Error
 	 */
 	public static function register( $filepath, $classname ) {
 
-		if ( ! file_exists( $filepath ) )
+		if ( ! file_exists( $filepath ) ) {
 			return new WP_Error( 'hmbkp_invalid_path_error', sprintf( __( 'Argument 1 for %s must be a valid filepath', ' hmbkp' ), __METHOD__ ) );
+		}
 
 		self::instance()->services[ $filepath ] = $classname;
 
@@ -284,13 +299,16 @@ class HMBKP_Services {
 
 	/**
 	 * De-register an existing service
+	 *
 	 * @param string $filepath
+	 *
 	 * @return bool|WP_Error
 	 */
 	public static function unregister( $filepath ) {
 
-		if ( ! isset( self::instance()->services[ $filepath ] ) )
+		if ( ! isset( self::instance()->services[ $filepath ] ) ) {
 			return new WP_Error( 'hmbkp_unrecognized_service_error', sprintf( __( 'Argument 1 for %s must be a registered service', ' hmbkp' ), __METHOD__ ) );
+		}
 
 		unset( self::instance()->services[ $filepath ] );
 
@@ -306,8 +324,9 @@ class HMBKP_Services {
 	 */
 	private static function instantiate( $classname ) {
 
-		if ( ! class_exists( $classname ) )
+		if ( ! class_exists( $classname ) ) {
 			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class', 'hmbkp' ) ), __METHOD__ );
+		}
 
 		/**
 		 * @var HMBKP_Service

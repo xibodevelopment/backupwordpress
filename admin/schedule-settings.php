@@ -2,27 +2,47 @@
 
 	<div class="hmbkp-schedule-actions row-actions">
 
-		<a class="hmbkp-run" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ), 'hmbkp-run-schedule' ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>  |
+		<a class="hmbkp-run" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
+						'action'            => 'hmbkp_run_schedule',
+						'hmbkp_schedule_id' => $schedule->get_id()
+					), hmbkp_get_settings_url() ) ), 'hmbkp-run-schedule' ); ?>"><?php _e( 'Run now', 'hmbkp' ); ?></a>
+		|
 
-		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ), 'hmbkp-edit-schedule' ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
+		<a href="<?php echo esc_url( add_query_arg( array(
+					'action'            => 'hmbkp_edit_schedule',
+					'hmbkp_panel'       => 'hmbkp_edit_schedule_settings',
+					'hmbkp_schedule_id' => $schedule->get_id()
+				), hmbkp_get_settings_url() ), 'hmbkp-edit-schedule' ); ?>"><?php _e( 'Settings', 'hmbkp' ); ?></a> |
 
 		<?php
 
 		// Only show excludes if we are backing up files
 		if ( 'database' !== $schedule->get_type() ) : ?>
-			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a> |
+			<a href="<?php echo esc_url( add_query_arg( array(
+						'action'            => 'hmbkp_edit_schedule',
+						'hmbkp_panel'       => 'hmbkp_edit_schedule_excludes',
+						'hmbkp_schedule_id' => $schedule->get_id()
+					), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'Excludes', 'hmbkp' ); ?></a> |
 		<?php endif; ?>
 
 		<?php foreach ( HMBKP_Services::get_services( $schedule ) as $service ) :
 
-			if ( ! $service->has_form() )
-				continue; ?>
+			if ( ! $service->has_form() ) {
+				continue;
+			} ?>
 
-			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings_' . $service->get_slug() , 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php echo esc_html( $service->name ); ?></a> |
+			<a href="<?php echo esc_url( add_query_arg( array(
+						'action'            => 'hmbkp_edit_schedule',
+						'hmbkp_panel'       => 'hmbkp_edit_schedule_settings_' . $service->get_slug(),
+						'hmbkp_schedule_id' => $schedule->get_id()
+					), hmbkp_get_settings_url() ) ); ?>"><?php echo esc_html( $service->name ); ?></a> |
 
 		<?php endforeach; ?>
 
-		<a class="delete-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' ) ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
+		<a class="delete-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
+						'action'            => 'hmbkp_request_delete_schedule',
+						'hmbkp_schedule_id' => $schedule->get_id()
+					), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' ) ); ?>"><?php _e( 'Delete', 'hmbkp' ); ?></a>
 
 	</div>
 
@@ -69,8 +89,8 @@
 
 			<form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
 
-				<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
-				<input type="hidden" name="action" value="hmbkp_edit_schedule_services_submit" />
+				<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>"/>
+				<input type="hidden" name="action" value="hmbkp_edit_schedule_services_submit"/>
 
 				<?php wp_nonce_field( 'hmbkp-edit-schedule-services', 'hmbkp-edit-schedule-services-nonce' ); ?>
 

@@ -21,27 +21,31 @@ class HMBKP_Webhook_WPRemote_Service extends HMBKP_Webhooks_Service {
 	 * @see  field
 	 * @return null
 	 */
-	public function form() {}
+	public function form() {
+	}
 
 	/**
 	 * Not in use
 	 *
 	 * @return null
 	 */
-	public function field() {}
+	public function field() {
+	}
 
 	/**
 	 * Not in use
 	 *
 	 * @return null
 	 */
-	public function display() {}
+	public function display() {
+	}
 
 	/**
 	 * Not in use
 	 * $return null
 	 */
-	public function update( &$new_data, $old_data ) {}
+	public function update( &$new_data, $old_data ) {
+	}
 
 	/**
 	 * Used to determine if the service is in use or not

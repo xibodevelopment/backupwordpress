@@ -37,13 +37,16 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 	 * Fire the webhook notification on the hmbkp_backup_complete
 	 *
 	 * @see  HM_Backup::do_action
+	 *
 	 * @param  string $action The action received from the backup
+	 *
 	 * @return void
 	 */
 	public function action( $action ) {
 
-		if ( 'hmbkp_backup_complete' !== $action || ! $this->is_service_active() )
+		if ( 'hmbkp_backup_complete' !== $action || ! $this->is_service_active() ) {
 			return;
+		}
 
 		$webhook_url = $this->get_url();
 		$file        = $this->schedule->get_archive_filepath();
@@ -55,44 +58,46 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 
 			$error_message = '';
 
-			foreach ( $errors as $error_set )
+			foreach ( $errors as $error_set ) {
 				$error_message .= implode( "\n - ", $error_set );
+			}
 
-			if ( $error_message )
+			if ( $error_message ) {
 				$error_message = ' - ' . $error_message;
+			}
 
 			$subject = sprintf( __( 'Backup of %s Failed', 'hmbkp' ), $domain );
 
-			$body = array (
-				'type'         => 'backup.error',
-				'site_url'     => site_url(),
-				'backup'      => array(
+			$body = array(
+				'type'     => 'backup.error',
+				'site_url' => site_url(),
+				'backup'   => array(
 					'id'           => 'backup_' . pathinfo( $file, PATHINFO_FILENAME ),
 					'start'        => '0',
 					'end'          => '0',
 					'download_url' => '',
 					'type'         => $this->schedule->get_type(),
 					'status'       => array(
-						'message'      => $subject . ' - ' . $error_message,
-						'success'      => '0'
+						'message' => $subject . ' - ' . $error_message,
+						'success' => '0'
 					)
 				)
 			);
 
 		} else {
 
-			$body = array (
-				'type'         => 'backup.success',
-				'site_url'     => site_url(),
-				'backup'      => array(
+			$body = array(
+				'type'     => 'backup.success',
+				'site_url' => site_url(),
+				'backup'   => array(
 					'id'           => 'backup_' . $this->schedule->get_id(),
 					'start'        => '0',
 					'end'          => '0',
 					'download_url' => $download,
 					'type'         => $this->schedule->get_type(),
 					'status'       => array(
-						'message'      => 'Backup complete',
-						'success'      => '1'
+						'message' => 'Backup complete',
+						'success' => '1'
 					)
 				)
 			);
@@ -104,8 +109,9 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 
 		$ret = wp_remote_post( $webhook_url, $webhook_args );
 
-		if ( is_wp_error( $ret ) )
+		if ( is_wp_error( $ret ) ) {
 			$this->schedule->error( 'Webhook', sprintf( __( 'Error: %s', 'hmbkp' ), $ret->get_error_message() ) );
+		}
 
 	}
 }
