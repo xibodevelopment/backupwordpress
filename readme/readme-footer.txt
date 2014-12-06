@@ -24,6 +24,34 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 3.0.3 / 2014-12-06
+
+  * Add French translations
+  * Update textdomain
+  * Fix deleted function
+  * Use HM_Backup function to determine if shell_exec is enabled
+  * Check if file is readable first
+  * Fix how we kick off Task
+  * Remove unused var
+  * Call recursive filescanner on admin page load
+  * Update package.json
+  * Update the POT file task params
+  * Replace hmbkp with backupwordpress as textdomain
+  * Exclude folders
+  * Add Grunt task options
+  * Remove hard line returns
+  * Display placeholder if exec fails
+  * Add 30 second time diff allowance
+  * Use $TRAVIS_BUILD_DIR
+  * we do this in travis.yml
+  * Regenerate github account info
+  * Update command to reflect function rename
+  * Update tests to reflect function name change
+  * Rename function
+  * Filter tests to run
+  * Fix group flags
+  * Calculate site size on page load
+
 #### 3.0.2 / 2014-12-02
 
   * Bump version
