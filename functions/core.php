@@ -211,7 +211,7 @@ function hmbkp_update() {
 
 		hmbkp_deactivate();
 
-		HMBPK_Path::get_instance()->protect_path( 'reset' );
+		HMBKP_Path::get_instance()->protect_path( 'reset' );
 
 	}
 
