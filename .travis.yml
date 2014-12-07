@@ -27,7 +27,6 @@ notifications:
 before_script:
 - composer selfupdate --quiet
 - composer install -n --prefer-dist --no-progress
-- export WP_TESTS_DIR=/tmp/wordpress-tests-lib/
 - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 - mkdir -p $TRAVIS_BUILD_DIR/build/docs
 script:
