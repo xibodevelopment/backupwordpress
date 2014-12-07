@@ -1,18 +1,31 @@
 <?php
 
-$_tests_dir = getenv( 'WP_TESTS_DIR' );
+/**
+ * Bootstrap the plugin unit testing environment.
+ *
+ * @package BackUpWordPress
+ * @subpackage tests
+ */
 
-if ( ! $_tests_dir ) {
-	$_tests_dir = $_tests_dir = '/srv/www/wordpress-develop.dev/tests/phpunit/';
+// Support for:
+// 1. Local SaltyWP
+// 2. `WP_DEVELOP_DIR` environment variable
+// 3. Plugin installed inside of WordPress.org developer checkout
+// 4. Tests checked out to /tmp
+if ( file_exists( '/srv/www/wordpress-develop.dev/tests/phpunit/includes/bootstrap.php' ) ) {
+	$test_root = '/srv/www/wordpress-develop.dev/tests/phpunit';
+} elseif ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
+	$test_root = getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit';
+} else if ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
+	$test_root = '../../../../tests/phpunit';
+} else if ( file_exists( '/tmp/wordpress-tests-lib/includes/bootstrap.php' ) ) {
+	$test_root = '/tmp/wordpress-tests-lib';
 }
 
-require_once( $_tests_dir . 'includes/functions.php' );
+require $test_root . '/includes/functions.php';
 
-tests_add_filter( 'muplugins_loaded', function() {
+function _manually_load_plugin() {
 	require_once( dirname( __DIR__ ) . '/backupwordpress.php' );
-} );
-
-require( $_tests_dir . 'includes/bootstrap.php' );
 
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
