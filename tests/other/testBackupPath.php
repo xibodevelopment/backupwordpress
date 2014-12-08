@@ -37,7 +37,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testdefaultPath() {
 
-		$this->assertEquals( $this->path->get_path(), $this->path->get_default_path() );
+		$this->assertEquals( $this->path->get_default_path(), $this->path->get_path() );
 
 		$this->assertFileExists( $this->path->get_default_path() );
 
