@@ -48,7 +48,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testFallbackPath() {
 
-		$this->path->calculate_path();
+		hmbkp_patH();
 
 		// TODO for some reason this isn't working
 		chmod( $this->path->get_default_path(), 0555 );
