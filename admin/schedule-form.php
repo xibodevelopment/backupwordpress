@@ -1,4 +1,4 @@
-<h3>Settings</h3>
+<h3><?php esc_html_e( 'Settings', 'backupwordpress' ); ?></h3>
 
 <?php $hmbkp_form_errors = hmbkp_get_settings_errors(); ?>
 

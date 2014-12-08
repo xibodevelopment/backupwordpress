@@ -1,6 +1,6 @@
 <div class="hmbkp-upsell">
 
-	<span>Backup to</span>&nbsp;
+	<span><?php esc_html_e( 'Backup to', 'backupwordpress' ); ?></span>&nbsp;
 
 	<span class="hmbkp-upsell-sep">
 		<a target="_blank" href="http://bwp.hmn.md/downloads/backupwordpress-to-dropbox/">Dropbox</a> | 
