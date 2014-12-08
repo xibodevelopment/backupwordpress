@@ -15,6 +15,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 * @access protected
 	 */
 	protected $backup;
+	protected $path;
 
 	/**
 	 * Setup the backup object and create the tmp directory
@@ -30,7 +31,8 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 		if ( defined( 'HMBKP_PATH' ) )
 			$this->markTestSkipped( 'Skipped because of defines' );
 
-		hmbkp_path();
+		$this->path = HMBKP_Path::get_instance();
+		$this->path->get_path();
 
 	}
 
@@ -48,6 +50,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 		delete_option( 'hmbkp_default_path' );
 
 		unset( $this->backup );
+		unset( $this->path );
 
 	}
 
