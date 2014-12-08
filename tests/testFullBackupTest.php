@@ -63,7 +63,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup->backup();
 
-		$this->assertEquals( $this->backup->get_archive_method(), 'zip' );
+		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
@@ -80,6 +80,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a full backup with the ZipArchive
 	 *
+	 * @group pathTest
 	 * @access public
 	 */
 	public function testFullBackupWithZipArchive() {
@@ -88,7 +89,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup->backup();
 
-		$this->assertEquals( $this->backup->get_archive_method(), 'ziparchive' );
+		$this->assertEquals( 'ziparchive', $this->backup->get_archive_method() );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
@@ -114,7 +115,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup->backup();
 
-		$this->assertEquals( $this->backup->get_archive_method(), 'pclzip' );
+		$this->assertEquals( 'pclzip', $this->backup->get_archive_method() );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
