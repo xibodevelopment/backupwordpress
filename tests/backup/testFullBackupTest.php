@@ -46,11 +46,11 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		//hmbkp_rmdirtree( hmbkp_path() );
 
-		delete_option( 'hmbkp_path' );
-		delete_option( 'hmbkp_default_path' );
+		//delete_option( 'hmbkp_path' );
+		//delete_option( 'hmbkp_default_path' );
 
-		unset( $this->backup );
-		unset( $this->path );
+		//unset( $this->backup );
+		//unset( $this->path );
 
 	}
 
