@@ -42,7 +42,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		hmbkp_rmdirtree( hmbkp_path() );
+		//hmbkp_rmdirtree( hmbkp_path() );
 
 		delete_option( 'hmbkp_path' );
 		delete_option( 'hmbkp_default_path' );
