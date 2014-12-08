@@ -30,7 +30,9 @@ before_script:
 - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 - mkdir -p $TRAVIS_BUILD_DIR/build/docs
 script:
-- phpunit --coverage-clover=coverage.clover
+- phpunit --testsuite backup --coverage-clover=coverage.clover
+- phpunit --testsuite schedule --coverage-clover=coverage.clover
+- phpunit --testsuite other --coverage-clover=coverage.clover
 - php vendor/bin/phpdoc -d $TRAVIS_BUILD_DIR -t $TRAVIS_BUILD_DIR/build/docs --ignore $TRAVIS_BUILD_DIR/vendor/,$TRAVIS_BUILD_DIR/build/,$TRAVIS_BUILD_DIR/hm-backup/,$TRAVIS_BUILD_DIR/backdrop/,$TRAVIS_BUILD_DIR/assets/,$TRAVIS_BUILD_DIR/bin/,$TRAVIS_BUILD_DIR/languages/,$TRAVIS_BUILD_DIR/node_modules/,$TRAVIS_BUILD_DIR/tests/,$TRAVIS_BUILD_DIR/readme/
 after_script:
 - bash $TRAVIS_BUILD_DIR/bin/travis_shell_after_success.sh
