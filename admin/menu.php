@@ -71,7 +71,7 @@ function hmbkp_contextual_help() {
 	require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
 
 	ob_start();
-	require_once( HMBKP_PLUGIN_PATH .'admin/server-info.php' );
+	require_once( HMBKP_PLUGIN_PATH . 'admin/server-info.php' );
 	$info = ob_get_clean();
 
 	get_current_screen()->add_help_tab(
