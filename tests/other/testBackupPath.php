@@ -132,7 +132,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testMergeExistingPath() {
 
-		$backup = new HMBKP_Scheduled_Backup( (string) time() );
+		$backup = new HMBKP_Scheduled_Backup( 'test-merge-existing-path' );
 
 		$path = $this->path->get_path();
 
