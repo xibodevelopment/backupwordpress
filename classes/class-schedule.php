@@ -508,7 +508,9 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		if ( $file->isDir() ) {
 
 			// If we haven't calculated the site size yet then kick it off in a thread
-			if ( ! $directory_sizes = get_transient( 'hmbkp_directory_filesizes' ) ) {
+			$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
+
+			if ( ! is_array( $directory_sizes ) ) {
 
 				if ( ! $this->is_site_size_being_calculated() ) {
 
