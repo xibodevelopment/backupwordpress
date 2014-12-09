@@ -102,4 +102,8 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 			$this->schedule->error( 'Webhook', sprintf( __( 'Error: %s', 'backupwordpress' ), $ret->get_error_message() ) );
 
 	}
+
+	public static function intercom_data() { return array(); }
+
+	public static function intercom_data_html() {}
 }
