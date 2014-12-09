@@ -267,16 +267,16 @@ function hmbkp_backup_warnings() {
 
 }
 
-function hmbkp_backups_number( $schedule, $zero = false, $one = false, $more = false ) {
+function hmbkp_backups_number( $schedule ) {
 
 	$number = count( $schedule->get_backups() );
 
-	if ( $number > 1 )
-		$output = str_replace( '%', number_format_i18n( $number ), ( false === $more ) ? __( '% Backups Completed', 'backupwordpress' ) : $more );
-	elseif ( 0 === $number )
-		$output = ( false === $zero ) ? __( 'No Backups Completed', 'backupwordpress' ) : $zero;
-	else // must be one
-		$output = ( false === $one ) ? __( '1 Backup Completed', 'backupwordpress' ) : $one;
+	if ( 0 === $number ) {
+		$output = sprintf( __( 'No backups completed', 'backupwordpress' ) );
+	} else {
+		$output = sprintf( _nx( 'One backup completed', '%1$s backups completed', $number, 'backups count', 'backupwordpress' ),
+			number_format_i18n( $number ) );
+	}
 
 	echo apply_filters( 'hmbkp_backups_number', $output, $number );
 }
