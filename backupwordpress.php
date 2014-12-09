@@ -165,6 +165,16 @@ add_action( 'admin_init', 'hmbkp_init' );
  */
 function hmbkp_load_scripts() {
 
+	$screen = get_current_screen();
+
+	if ( ! isset( $screen ) ) {
+		return;
+	}
+
+	if ( ! in_array( $screen->id, array( 'tools_page_backupwordpress', 'settings_page_backupwordpress' ) ) ) {
+		return;
+	}
+
 	$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
 
 	if ( WP_DEBUG ) {
@@ -190,7 +200,7 @@ function hmbkp_load_scripts() {
 	);
 
 }
-add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
+add_action( 'admin_enqueue_scripts', 'hmbkp_load_scripts' );
 
 /**
  * Load Intercom and send across user information and server info
