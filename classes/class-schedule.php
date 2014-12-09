@@ -837,19 +837,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_status( $message ) {
 
-		if ( ! $handle = fopen( $this->get_schedule_running_path(), 'w' ) ) {
-			return;
-		}
-
 		$status = json_encode( (object) array(
 			'filename' => $this->get_archive_filename(),
 			'started'  => $this->get_schedule_running_start_time(),
 			'status'   => $message,
 		) );
 
-		fwrite( $handle, $status );
-
-		fclose( $handle );
+		if ( false === @file_put_contents( $this->get_schedule_running_path(), $status ) ) {
+			throw new RuntimeException( sprint( __( 'Error writing to file. (%s)', 'backpwordpress' ), $this->get_schedule_running_path() ) );
+		}
 
 	}
 
