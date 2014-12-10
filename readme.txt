@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.8.4
 Tested up to: 4.1
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 
 Simple automated backups of your WordPress powered website.
 
@@ -118,6 +118,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.0.4 =
+
+  * Fixes a few minor bugs. Immediate update is recommended.
+
 = 3.0.2 =
 
   * Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
@@ -127,6 +131,17 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+#### 3.0.4 / 2014-12-10
+
+  * Simplify the backup count display
+  * Enqueue scripts properly
+  * Change how we check directory_sizes
+  * Add BackUpWordPress test case class
+  * Move class to separate file
+  * Group help tab display functions
+  * Update POT file
+  * Make strings ready for translation
 
 #### 3.0.3 / 2014-12-06
 
