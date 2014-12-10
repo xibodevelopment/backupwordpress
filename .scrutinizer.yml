@@ -81,12 +81,3 @@ checks:
     php:
         code_rating: true
         duplication: true
-
-build:
-    tests:
-        override:
-            -
-                command: 'phpunit --coverage-clover=coverage.clover'
-                coverage:
-                    file: 'coverage.clover'
-                    format: 'php-clover'
