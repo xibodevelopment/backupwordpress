@@ -68,6 +68,20 @@ function hmbkp_contextual_help() {
 
 	get_current_screen()->add_help_tab( array( 'title' => __( 'Constants', 'backupwordpress' ), 'id' => 'hmbkp_constants', 'content' => wp_kses_post( $constants ) ) );
 
+	require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
+
+	ob_start();
+	require_once( HMBKP_PLUGIN_PATH . 'admin/server-info.php' );
+	$info = ob_get_clean();
+
+	get_current_screen()->add_help_tab(
+		array(
+			'title' => __( 'Server Info', 'backupwordpress' ),
+			'id' => 'hmbkp_server',
+			'content' => $info,
+		)
+	);
+
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'backupwordpress' ) . '</strong></p>' .
 		'<p><a href="https://github.com/humanmade/backupwordpress" target="_blank">GitHub</a></p>' .
@@ -76,4 +90,4 @@ function hmbkp_contextual_help() {
 	);
 
 }
-add_filter( 'load-tools_page_' . HMBKP_PLUGIN_SLUG, 'hmbkp_contextual_help' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_contextual_help' );

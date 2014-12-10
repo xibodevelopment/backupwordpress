@@ -308,28 +308,6 @@ function hmbkp_plugin_textdomain() {
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
 
 /**
- * Displays the server info in the Help tab
- */
-function hmbkp_display_server_info_tab() {
-
-	require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
-
-	ob_start();
-	require_once( 'admin/server-info.php' );
-	$info = ob_get_clean();
-
-	get_current_screen()->add_help_tab(
-		array(
-			'title' => __( 'Server Info', 'backupwordpress' ),
-			'id' => 'hmbkp_server',
-			'content' => $info,
-		)
-	);
-
-}
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_display_server_info_tab' );
-
-/**
  * Ensure BackUpWordPress is loaded before addons
  */
 function hmbkp_load_first() {
