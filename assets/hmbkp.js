@@ -16,8 +16,9 @@ jQuery( document ).ready( function( $ ) {
 	// Show delete confirm message for delete schedule
 	$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function( e ) {
 
-		if ( ! confirm( hmbkp.delete_schedule ) )
-			e.preventDefault();
+		if ( ! confirm( hmbkp.delete_schedule ) ) {
+            e.preventDefault();
+        }
 
 	} );
 
@@ -45,34 +46,6 @@ jQuery( document ).ready( function( $ ) {
 			 }
 		 }
 	);
-
-	// Calculate the estimated backup size
-	if ( $( '.hmbkp-schedule-sentence .calculating' ).size() ) {
-
-		$.post( ajaxurl, { 'nonce' : hmbkp.nonce, 'action' : 'hmbkp_calculate', 'hmbkp_schedule_id' : $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) },
-
-			function( data ) {
-
-				form = $( '.hmbkp-schedule-settings' ).clone( true );
-
-				if ( data.indexOf( 'title' ) != -1 ) {
-					$( '.hmbkp-schedule-sentence' ).replaceWith( data );
-					$( '.hmbkp-schedule-sentence' ).append( form );
-				}
-
-				// Fail silently for now
-				else {
-					$( '.calculating' ).remove();
-				}
-
-			}
-		).error( function() {
-
-			// Fail silently for now
-			$( '.calculating' ).remove();
-
-		} );
-	}
 
 	// Run a backup
 	$( document ).on( 'click', '.hmbkp-run', function( e ) {
@@ -103,9 +76,13 @@ jQuery( document ).ready( function( $ ) {
 
 	// Send the schedule id with the heartbeat
 	$( document ).on( 'heartbeat-send', function( e, data ) {
+        data['hmbkp_schedule_id'] = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) ;
 		if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).size() ) {
-			data['hmbkp_is_in_progress'] = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' ) ;
-		}
+			data['hmbkp_is_in_progress'] = true;
+		} else {
+            data['hmbkp_client_request'] = 'site_size';
+        }
+
 	} );
 
 	// Update schedule status on heartbeat tick
@@ -120,6 +97,10 @@ jQuery( document ).ready( function( $ ) {
 		if ( data['hmbkp_schedule_status'] !== 0 ) {
 			$( '.hmbkp-status' ).replaceWith( data['hmbkp_schedule_status'] );
 		}
+
+        if ( data['hmbkp_site_size'] !== undefined ) {
+            $( 'code.calculating' ).text( data['hmbkp_site_size'] );
+        }
 
 	} );
 
