@@ -566,20 +566,30 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
  */
 function hmbkp_heartbeat_received( $response, $data ) {
 
-	if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
+	if ( ! empty( $data['hmbkp_schedule_id'] ) ) {
 
-		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
+		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_schedule_id'] ) ) );
 
-		if ( ! $schedule->get_status() ) {
-			$response['hmbkp_schedule_status'] = 0;
+		if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
 
-		} else {
-			$response['hmbkp_schedule_status'] = hmbkp_schedule_status( $schedule, false );
+			if ( ! $schedule->get_status() ) {
+				$response['hmbkp_schedule_status'] = 0;
+
+			} else {
+				$response['hmbkp_schedule_status'] = hmbkp_schedule_status( $schedule, false );
+
+			}
 
 		}
 
-	}
+		if ( ! empty( $data['hmbkp_client_request'] ) ) {
+			// Pass the site size to be displayed when it's ready.
+			if ( $schedule->is_site_size_cached() ) {
 
+				$response['hmbkp_site_size'] = $schedule->get_formatted_site_size();
+			}
+		}
+	}
 	return $response;
 
 }
