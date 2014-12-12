@@ -1,12 +1,5 @@
 <?php
 
-// Calculated filesize
-$cached = $schedule->is_site_size_cached();
-
-if ( 'database' === $schedule->get_type() ) {
-	$cached = true;
-}
-
 $filesize = hmbkp_get_site_size_text( $schedule );
 
 // Backup Type
