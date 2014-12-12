@@ -12,6 +12,5 @@
 		<a target="_blank" href="http://bwp.hmn.md/downloads/backupwordpress-to-dreamobjects/">DreamObjects</a>
 	</span>
 
-	&nbsp;<span>or buy the <a target="_blank" href="https://bwp.hmn.md/checkout?edd_action=add_to_cart&download_id=36">Developer Bundle</a> now for only &dollar;99 (all Destinations &amp; Unlimited Sites)</span>
-
+<?php printf( __( '&nbsp;%1$sor buy the %2$sDeveloper Bundle</a> now for only &dollar;99 (all Destinations &amp; Unlimited Sites)%3$s', 'backupwordpress' ), '<span>', '<a target="_blank" href="https://bwp.hmn.md/checkout?edd_action=add_to_cart&download_id=36">', '</span>'  ); ?>
 </div>
