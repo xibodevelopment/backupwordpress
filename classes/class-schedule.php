@@ -349,7 +349,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	/**
 	 * Whether the total filesize is being calculated
 	 *
-	 * @return int            The total of the file or directory
+	 * @return bool The total of the file or directory
 	 */
 	function is_site_size_cached() {
 		return false !== get_transient( 'hmbkp_directory_filesizes' );
