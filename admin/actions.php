@@ -705,7 +705,7 @@ function hmbkp_ajax_cron_test() {
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
-	} elseif ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
+	} elseif ( 200 != wp_remote_retrieve_response_code( $response ) ) {
 
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
