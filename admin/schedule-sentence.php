@@ -153,12 +153,12 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
  */
 function hmbkp_get_site_size_text( HMBKP_Scheduled_Backup $schedule ) {
 
-	if ( $schedule->is_site_size_cached() ) {
+	if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
+		return '';
+	} elseif (  ( 'database' === $schedule->get_type() ) || $schedule->is_site_size_cached() ) {
 		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $schedule->get_formatted_site_size() ) );
 	} else {
 		return sprintf('(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your backup&hellip;', 'backupwordpress' ) . '</code>)');
 	}
-
-	return '';
 
 }
