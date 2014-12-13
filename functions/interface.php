@@ -96,6 +96,7 @@ function hmbkp_admin_notices() {
 
 }
 add_action( 'admin_notices', 'hmbkp_admin_notices' );
+add_action( 'network_admin_notices', 'hmbkp_admin_notices' );
 
 function hmbkp_set_server_config_notices() {
 
