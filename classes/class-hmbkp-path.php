@@ -37,21 +37,44 @@ class HMBKP_Path {
 	 */
 	protected $custom_path;
 
-	/**
-	 * @var HMBKP_Path The singleton instance.
-	 */
-	protected static $instance;
+    /**
+     * Protected constructor to prevent creating a new instance of the
+     * *Singleton* via the `new` operator from outside of this class.
+     */
+    protected function __construct() {}
 
-	/**
-	 * @return HMBKP_Path
-	 */
+    /**
+     * Private clone method to prevent cloning of the instance of the
+     * *Singleton* instance.
+     *
+     * @return void
+     */
+    private function __clone() {}
+
+    /**
+     * Private unserialize method to prevent unserializing of the *Singleton*
+     * instance.
+     *
+     * @return void
+     */
+    private function __wakeup() {}
+
+    /**
+     * Returns the *Singleton* instance of this class.
+     *
+     * @staticvar HMBKP_PAth $instance The *Singleton* instances of this class.
+     *
+     * @return HMBKP_Path The *Singleton* instance.
+     */
 	public static function get_instance() {
 
-		if ( ! self::$instance ) {
-			self::$instance = new self;
-		}
+  		static $instance = null;
 
-		return self::$instance;
+        if ( null === $instance ) {
+            $instance = new static();
+        }
+
+        return $instance;
 
 	}
 
@@ -61,7 +84,7 @@ class HMBKP_Path {
 	public function get_path() {
 
 		// Calculate the path if needed
-		if ( empty( $this->path ) ) {
+		if ( empty( $this->path ) || ! wp_is_writable( $this->path ) ) {
 			$this->calculate_path();
 		}
 
@@ -73,7 +96,7 @@ class HMBKP_Path {
 	}
 
 	/**
-	 * Determines the path to store backups.
+	 * Set the path directly, overriding the default
 	 *
 	 * @param $path
 	 */
@@ -242,7 +265,6 @@ class HMBKP_Path {
 		$paths = $this->get_existing_paths();
 
 		if ( ( $paths && $this->get_custom_path() ) || count( $paths ) > 1 ) {
-
 			foreach ( $paths as $old_path ) {
 				$this->move_old_backups( $old_path );
 			}
