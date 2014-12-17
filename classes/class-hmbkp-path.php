@@ -301,10 +301,12 @@ class HMBKP_Path {
 					// Try to move them
 					if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $this->get_path() ) . $file ) ) {
 
+
 						// If we can't move them then try to copy them
 						copy( trailingslashit( $from ) . $file, trailingslashit( $this->get_path() ) . $file );
 
 					}
+
 				}
 			}
 
@@ -313,7 +315,7 @@ class HMBKP_Path {
 		}
 
 		// Delete the old directory if it's inside WP_CONTENT_DIR
-		if ( false !== strpos( $from, WP_CONTENT_DIR ) ) {
+		if ( false !== strpos( $from, WP_CONTENT_DIR ) && $from !== $this->get_path() ) {
 			hmbkp_rmdirtree( $from );
 		}
 

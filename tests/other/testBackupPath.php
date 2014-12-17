@@ -132,22 +132,34 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testMergeExistingPath() {
 
-		$backup = new HMBKP_Scheduled_Backup( 'test-merge-existing-path' );
+		$paths = $this->generate_additional_paths();
 
-		$path = $this->path->get_path();
+		// Do a single database backup in each path
+		foreach ( $paths as $path ) {
 
-		$backup->set_path( $path );
-		$backup->set_type( 'database' );
+			$backup = new HMBKP_Scheduled_Backup( 'test-merge-existing-path' );
 
-		$backup->backup();
+			$path = $this->path->get_path();
+			$backup->set_path( $path );
+			$backup->set_type( 'database' );
 
-		$this->assertFileExists( $backup->get_archive_filepath() );
+			// We want to avoid name clashes
+			$backup->set_archive_filename( microtime() . '.zip' );
 
-		$this->path->set_path( $this->custom_path );
+			$backup->backup();
+
+			$this->assertFileExists( $backup->get_archive_filepath() );
+
+			$backups[] = $backup->get_archive_filename();
+
+		}
 
 		$this->path->merge_existing_paths();
 
-		$this->assertFileExists( str_replace( $path, $this->custom_path, $backup->get_archive_filepath() ) );
+		foreach ( $backups as $backup ) {
+			$this->assertFileExists( $this->path->get_path() . '/' . $backup );
+		}
+
 
 	}
 

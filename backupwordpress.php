@@ -156,6 +156,9 @@ function hmbkp_init() {
 		hmbkp_update();
 	}
 
+	// If we have multiple paths for some reason then clean them up
+	HMBKP_Path::get_instance()->merge_existing_paths();
+
 }
 add_action( 'admin_init', 'hmbkp_init' );
 
