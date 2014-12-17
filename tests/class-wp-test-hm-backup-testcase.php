@@ -119,7 +119,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 		$extracted = $this->pclzip_extract_as_string( $zip_file );
 
-		$this->assertEquals( $file_count, count( array_filter( (array) $extracted ) ) );
+		$this->assertEquals( count( array_filter( (array) $extracted ) ), $file_count );
 
 	}
 

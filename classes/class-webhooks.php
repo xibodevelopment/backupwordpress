@@ -13,12 +13,6 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 	 */
 	public $name = 'Webhook';
 
-	/**
-	 * Determines whether to show or hide the service tab in destinations form
-	 * @var boolean
-	 */
-	public $is_tab_visible = false;
-
 	public function __construct( $schedule ) {
 		parent::__construct( $schedule );
 	}
@@ -108,4 +102,8 @@ abstract class HMBKP_Webhooks_Service extends HMBKP_Service {
 			$this->schedule->error( 'Webhook', sprintf( __( 'Error: %s', 'backupwordpress' ), $ret->get_error_message() ) );
 
 	}
+
+	public static function intercom_data() { return array(); }
+
+	public static function intercom_data_html() {}
 }

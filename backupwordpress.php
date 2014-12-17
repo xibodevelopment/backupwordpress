@@ -5,7 +5,7 @@ Plugin Name: BackUpWordPress
 Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>.
 Author: Human Made Limited
-Version: 3.0.3
+Version: 3.0.4
 Author URI: http://hmn.md/
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -167,6 +167,16 @@ add_action( 'admin_init', 'hmbkp_init' );
  */
 function hmbkp_load_scripts() {
 
+	$screen = get_current_screen();
+
+	if ( ! isset( $screen ) ) {
+		return;
+	}
+
+	if ( ! in_array( $screen->id, array( 'tools_page_backupwordpress', 'settings_page_backupwordpress' ) ) ) {
+		return;
+	}
+
 	$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
 
 	if ( WP_DEBUG ) {
@@ -192,7 +202,7 @@ function hmbkp_load_scripts() {
 	);
 
 }
-add_action( 'admin_print_scripts-' . HMBKP_ADMIN_PAGE, 'hmbkp_load_scripts' );
+add_action( 'admin_enqueue_scripts', 'hmbkp_load_scripts' );
 
 /**
  * Load Intercom and send across user information and server info
@@ -298,28 +308,6 @@ function hmbkp_plugin_textdomain() {
 
 }
 add_action( 'init', 'hmbkp_plugin_textdomain', 1 );
-
-/**
- * Displays the server info in the Help tab
- */
-function hmbkp_display_server_info_tab() {
-
-	require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
-
-	ob_start();
-	require_once( 'admin/server-info.php' );
-	$info = ob_get_clean();
-
-	get_current_screen()->add_help_tab(
-		array(
-			'title' => __( 'Server Info', 'backupwordpress' ),
-			'id' => 'hmbkp_server',
-			'content' => $info,
-		)
-	);
-
-}
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_display_server_info_tab' );
 
 /**
  * Ensure BackUpWordPress is loaded before addons

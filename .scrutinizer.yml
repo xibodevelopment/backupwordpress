@@ -68,7 +68,9 @@ tools:
             reflection_fixes: { enabled: false }
             use_statement_fixes: { enabled: true, remove_unused: true, preserve_multiple: false, preserve_blanklines: false, order_alphabetically: false }
 
-    php_cpd: true
+    # PHP Similarity Analyzer and Copy/paste Detector cannot be used at
+    # the same time right now. Make sure to either remove, or disable one.
+    php_cpd: false
 
     php_pdepend: true
 
