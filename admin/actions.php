@@ -95,6 +95,8 @@ function hmbkp_request_do_backup() {
 
 	$schedule->run();
 
+	HMBKP_Notices::get_instance()->clear_all_notices();
+
 	$errors = array_merge( $schedule->get_errors(), $schedule->get_warnings() );
 
 	$error_message = '';
