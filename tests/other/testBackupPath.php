@@ -10,7 +10,11 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 	public function setUp() {
 
-		$this->path = new HMBKP_Path;
+		// We need to mess with the $is_apache global so let's back it up now
+		global $is_apache;
+		$this->is_apache = $is_apache;
+
+		$this->path = HMBKP_Path::get_instance();
 		$this->custom_path = WP_CONTENT_DIR . '/custom';
 
 		// Cleanup before we kickoff in-case theirs cruft around from previous failures
@@ -20,14 +24,19 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 
-		global $is_apache, $hmbkp_is_apache;
+		// Restore the is_apache global in-case it was messed with in the test
+		global $is_apache;
 
-		$is_apache = $hmbkp_is_apache;
+		if ( isset( $this->is_apache ) ) {
+			$is_apache = $this->is_apache;
+		}
 
+		// Remove all backup paths that exist
 		foreach( $this->path->get_existing_paths() as $path ) {
 			hmbkp_rmdirtree( $path );
 		}
 
+		// Remove our custom path
 		hmbkp_rmdirtree( $this->custom_path );
 
 	}
@@ -48,12 +57,9 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testFallbackPath() {
 
-		hmbkp_patH();
+		$this->assertEquals( $this->path->get_default_path(), $this->path->get_path() );
 
-		// TODO for some reason this isn't working
-		chmod( $this->path->get_default_path(), 0555 );
-
-		if ( is_writable( $this->path->get_default_path() ) ) {
+		if ( wp_is_writable( $this->path->get_default_path() ) ) {
 			$this->markTestSkipped( 'The default path was still writable' );
 		}
 
@@ -169,9 +175,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	public function testIsPathProtected() {
 
 		// Fake that we're on Apache so we can also test .htaccess
-		global $is_apache, $hmbkp_is_apache;
-
-		$hmbkp_is_apache = $is_apache;
+		global $is_apache;
 		$is_apache = true;
 
 		// Test the default backup path

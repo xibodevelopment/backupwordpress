@@ -4,6 +4,7 @@
  * Tests for the complete backup process both with
  * the shell commands and with the PHP fallbacks
  *
+ * @group full-backup
  * @extends WP_UnitTestCase
  */
 class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
@@ -26,13 +27,15 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup = new HM_Backup();
 		$this->backup->set_excludes( '.git/' );
-		$this->backup->set_excludes( 'wordpress-tests-lib/' );
 
-		if ( defined( 'HMBKP_PATH' ) )
+		if ( defined( 'HMBKP_PATH' ) ) {
 			$this->markTestSkipped( 'Skipped because of defines' );
+		}
 
 		$this->path = HMBKP_Path::get_instance();
-		$this->path->get_path();
+
+		// Cleanup before we kickoff in-case theirs cruft around from previous failures
+		$this->tearDown();
 
 	}
 
@@ -44,13 +47,10 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		//hmbkp_rmdirtree( hmbkp_path() );
-
-		//delete_option( 'hmbkp_path' );
-		//delete_option( 'hmbkp_default_path' );
-
-		//unset( $this->backup );
-		//unset( $this->path );
+		// Remove all backup paths that exist
+		foreach( $this->path->get_existing_paths() as $path ) {
+			hmbkp_rmdirtree( $path );
+		}
 
 	}
 
@@ -61,8 +61,9 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testFullBackupWithZip() {
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
 			$this->markTestSkipped( 'Empty zip command path' );
+		}
 
 		$this->backup->backup();
 

@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Overide the global time() function in local scope so we can mock time
- *
- * @uses testDetermineStartTimeTestCase::$now
- * @return int $timestamp;
- */
-//function $this->time() {
-//    return testDetermineStartTimeTestCase::$now ? testDetermineStartTimeTestCase::$now : \time();
-//}
-
-/**
  * Unit tests for the hmbkp_determine_start_time function
  *
  * @see hmbkp_determine_start_time()
@@ -27,7 +17,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
     public static $now;
 
     public function setUp() {
-
     	$this->schedule_intervals = HMBKP_Scheduled_Backup::get_cron_schedules();
     }
 

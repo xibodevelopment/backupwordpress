@@ -132,8 +132,12 @@ class HMBKP_Path {
 	 */
 	public function get_custom_path() {
 
-		if ( isset( $this->custom_path ) ) {
+		if ( $this->custom_path ) {
 			return $this->custom_path;
+		}
+
+		if ( defined( 'HMBKP_PATH' ) && wp_is_writable( HMBKP_PATH ) ) {
+			return HMBKP_PATH;
 		}
 
 		return '';
