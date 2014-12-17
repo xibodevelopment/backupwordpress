@@ -56,7 +56,6 @@ if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
 
 	if ( is_multisite() ) {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, network_admin_url( 'settings.php' ) ) );
-
 	} else {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 	}
@@ -81,16 +80,10 @@ if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
 	define( 'HMBKP_REQUIRED_WP_VERSION', '3.9.3' );
 }
 
-// Max memory limit isn't defined in old versions of WordPress
-if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) ) {
-	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
-}
-
 if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
 	if ( is_multisite() ) {
 		define( 'HMBKP_ADMIN_PAGE', 'settings_page_' . HMBKP_PLUGIN_SLUG );
-
 	} else {
 		define( 'HMBKP_ADMIN_PAGE', 'tools_page_' . HMBKP_PLUGIN_SLUG );
 	}
@@ -104,8 +97,9 @@ require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
 // Load hm-backup
-if ( ! class_exists( 'HM_Backup' ) )
+if ( ! class_exists( 'HM_Backup' ) ) {
 	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
+}
 
 // Load Backdrop
 require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
