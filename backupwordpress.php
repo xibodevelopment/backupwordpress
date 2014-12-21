@@ -91,6 +91,9 @@ class BackUpWordPress_Plugin {
 
 		$this->constant_changes();
 
+		// If we get here, then BWP is loaded
+		do_action( 'backupwordpress_loaded' );
+
 	}
 
 	/**
