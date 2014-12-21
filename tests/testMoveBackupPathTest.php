@@ -15,12 +15,16 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	protected $backup;
 
+	protected $plugin;
+
 	/**
 	 * Setup the backup object and create the tmp directory
 	 *
 	 * @access public
 	 */
 	public function setUp() {
+
+		$this->plugin = BackUpWordPress_Plugin::get_instance();
 
 		$this->backup = new HM_Backup();
 		$this->backup->set_type( 'database' );
@@ -71,7 +75,7 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 
 		update_option( 'hmbkp_path', $this->custom_path );
 
-		hmbkp_constant_changes();
+		$this->plugin->constant_changes();
 
 		$this->assertEquals( hmbkp_path(), hmbkp_path_default() );
 
@@ -95,7 +99,7 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
-		hmbkp_constant_changes();
+		$this->plugin->constant_changes();
 
 		$this->assertFileNotExists( $this->backup->get_archive_filepath() );
 
@@ -118,7 +122,7 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 
 		define( 'HMBKP_PATH', $this->custom_path );
 
-		hmbkp_constant_changes();
+		$this->plugin->constant_changes();
 
 		$this->assertEquals( hmbkp_path(), HMBKP_PATH );
 		$this->assertFileExists( str_replace( $this->backup->get_path(), HMBKP_PATH, $this->backup->get_archive_filepath() ) );
@@ -145,7 +149,7 @@ class testMoveBackUpPathTestCase extends HM_Backup_UnitTestCase {
 		if ( is_writable( $this->custom_path ) )
 			$this->markTestSkipped( 'The custom path was still writable' );
 
-		hmbkp_constant_changes();
+		$this->plugin->constant_changes();
 
 		$this->assertEquals( hmbkp_path(), hmbkp_path_default() );
 
