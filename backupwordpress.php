@@ -420,7 +420,7 @@ class BackUpWordPress_Plugin {
 	/**
 	 * Handles changes in the defined Constants that users can define to control advanced settings
 	 */
-	protected function constant_changes() {
+	public function constant_changes() {
 
 		// If a custom backup path has been set or changed
 		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
