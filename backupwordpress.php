@@ -121,7 +121,7 @@ class BackUpWordPress_Plugin {
 		}
 
 		if ( ! defined( 'HMBKP_PLUGIN_URL' ) ) {
-			define( 'HMBKP_PLUGIN_URL', plugin_dir_url(  __FILE__  ) );
+			define( 'HMBKP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
 
 		if ( ! defined( 'HMBKP_PLUGIN_LANG_DIR' ) ) {
@@ -160,8 +160,9 @@ class BackUpWordPress_Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
 		// Load hm-backup
-		if ( ! class_exists( 'HM_Backup' ) )
+		if ( ! class_exists( 'HM_Backup' ) ) {
 			require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
+		}
 
 		// Load Backdrop
 		require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
@@ -231,15 +232,15 @@ class BackUpWordPress_Plugin {
 			'hmbkp',
 			'hmbkp',
 			array(
-				'page_slug'    => HMBKP_PLUGIN_SLUG,
-				'nonce'         		   => wp_create_nonce( 'hmbkp_nonce' ),
+				'page_slug'                => HMBKP_PLUGIN_SLUG,
+				'nonce'                    => wp_create_nonce( 'hmbkp_nonce' ),
 				'hmbkp_run_schedule_nonce' => wp_create_nonce( 'hmbkp_run_schedule' ),
-				'update'				   => __( 'Update', 'backupwordpress' ),
-				'cancel'				   => __( 'Cancel', 'backupwordpress' ),
-				'delete_schedule'		   => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
-				'delete_backup'			   => __( 'Are you sure you want to delete this backup?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
-				'remove_exclude_rule'	   => __( 'Are you sure you want to remove this exclude rule?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
-				'remove_old_backups'	   => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n"
+				'update'                   => __( 'Update', 'backupwordpress' ),
+				'cancel'                   => __( 'Cancel', 'backupwordpress' ),
+				'delete_schedule'          => __( 'Are you sure you want to delete this schedule? All of it\'s backups will also be deleted.', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+				'delete_backup'            => __( 'Are you sure you want to delete this backup?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+				'remove_exclude_rule'      => __( 'Are you sure you want to remove this exclude rule?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
+				'remove_old_backups'       => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted, are you sure that\'s what you want?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n"
 			)
 		);
 
@@ -259,7 +260,7 @@ class BackUpWordPress_Plugin {
 		$locale = apply_filters( 'plugin_locale', get_locale(), $textdomain );
 
 		// Set filter for WordPress languages directory
-		$hmbkp_wp_lang_dir = apply_filters( 'hmbkp_do_filter_wp_lang_dir', trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain )  . $textdomain . '-' . $locale . '.mo' );
+		$hmbkp_wp_lang_dir = apply_filters( 'hmbkp_do_filter_wp_lang_dir', trailingslashit( WP_LANG_DIR ) . trailingslashit( $textdomain ) . $textdomain . '-' . $locale . '.mo' );
 
 		// Translations: First, look in WordPress' "languages" folder = custom & update-secure!
 		load_textdomain( $textdomain, $hmbkp_wp_lang_dir );
@@ -290,7 +291,19 @@ class BackUpWordPress_Plugin {
 
 		$key = array( ABSPATH, time() );
 
-		foreach ( array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' ) as $constant ) {
+		foreach (
+			array(
+				'AUTH_KEY',
+				'SECURE_AUTH_KEY',
+				'LOGGED_IN_KEY',
+				'NONCE_KEY',
+				'AUTH_SALT',
+				'SECURE_AUTH_SALT',
+				'LOGGED_IN_SALT',
+				'NONCE_SALT',
+				'SECRET_KEY'
+			) as $constant
+		) {
 
 			if ( defined( $constant ) ) {
 				$key[] = constant( $constant );
@@ -348,7 +361,7 @@ class BackUpWordPress_Plugin {
 	/**
 	 * Enqueue the plugin styles.
 	 */
-	function styles(){
+	function styles() {
 
 		$current_screen = get_current_screen();
 
@@ -403,17 +416,49 @@ class BackUpWordPress_Plugin {
 
 		$current_user = wp_get_current_user();
 
-		$info['user_hash'] = hash_hmac( 'sha256', $current_user->user_email, 'fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK' );
-		$info['email'] = $current_user->user_email;
+		$info['user_hash']  = hash_hmac( 'sha256', $current_user->user_email, 'fcUEt7Vi4ym5PXdcr2UNpGdgZTEvxX9NJl8YBTxK' );
+		$info['email']      = $current_user->user_email;
 		$info['created_at'] = strtotime( $current_user->user_registered );
-		$info['app_id'] = '7f1l4qyq';
-		$info['name'] = $current_user->display_name;
-		$info['widget'] = array( 'activator' => '#intercom' ); ?>
+		$info['app_id']     = '7f1l4qyq';
+		$info['name']       = $current_user->display_name;
+		$info['widget']     = array( 'activator' => '#intercom' ); ?>
 
 		<script id="IntercomSettingsScriptTag">
 			window.intercomSettings = <?php echo json_encode( $info ); ?>;
 		</script>
-		<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()</script>
+		<script>(function () {
+				var w = window;
+				var ic = w.Intercom;
+				if (typeof ic === "function") {
+					ic('reattach_activator');
+					ic('update', intercomSettings);
+				} else {
+					var d = document;
+					var i = function () {
+						i.c(arguments)
+					};
+					i.q = [];
+					i.c = function (args) {
+						i.q.push(args)
+					};
+					w.Intercom = i;
+					function l() {
+						var s = d.createElement('script');
+						s.type = 'text/javascript';
+						s.async = true;
+						s.src = 'https://static.intercomcdn.com/intercom.v1.js';
+						var x = d.getElementsByTagName('script')[0];
+						x.parentNode.insertBefore(s, x);
+					}
+
+					if (w.attachEvent) {
+						w.attachEvent('onload', l);
+					} else {
+						w.addEventListener('load', l, false);
+					}
+				}
+				;
+			})()</script>
 
 	<?php }
 
@@ -423,16 +468,19 @@ class BackUpWordPress_Plugin {
 	public function constant_changes() {
 
 		// If a custom backup path has been set or changed
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) )
+		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) {
 			hmbkp_path_move( $from, HMBKP_PATH );
+		}
 
 		// If a custom backup path has been removed
-		if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_path_default() !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) )
+		if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_path_default() !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) ) {
 			hmbkp_path_move( $from, hmbkp_path_default() );
+		}
 
 		// If the custom path has changed and the new directory isn't writable
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! wp_is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) )
+		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! wp_is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) ) {
 			hmbkp_path_move( HMBKP_PATH, hmbkp_path_default() );
+		}
 
 	}
 
