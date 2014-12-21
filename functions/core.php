@@ -147,9 +147,9 @@ function hmbkp_update() {
 	}
 
 	// Every update
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( BackUpWordPress_Plugin::BWP_PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		hmbkp_deactivate();
+		BackUpWordPress_Plugin::deactivate();
 
 		// re-calcuate the backups directory and move to it.
 		if ( ! defined( 'HMBKP_PATH' ) ) {
@@ -176,8 +176,8 @@ function hmbkp_update() {
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION ) {
-		update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
+	if ( get_option( 'hmbkp_plugin_version' ) !== BackUpWordPress_Plugin::BWP_PLUGIN_VERSION ) {
+		update_option( 'hmbkp_plugin_version', BackUpWordPress_Plugin::BWP_PLUGIN_VERSION );
 	}
 
 }
