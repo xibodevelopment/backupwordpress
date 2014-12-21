@@ -31,21 +31,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-defined( 'WPINC' ) or exit;
+defined( 'ABSPATH' ) or exit;
 
-register_activation_hook( __FILE__, array( 'BackUpWordPress_Plugin', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'BackUpWordPress_Plugin', 'deactivate' ) );
+include_once( dirname( __FILE__ ) . '/classes/class-setup.php' );
+
+register_activation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'deactivate' ) );
 
 /**
  * Class BackUpWordPress_Plugin
  */
 class BackUpWordPress_Plugin {
 
-	const BWP_MIN_WP_VERSION = '3.9.3';
-
-	const BWP_MIN_PHP_VERSION = '5.3.2';
-
-	const BACKUP_WORDPRESS_VERSION = '3.0.4';
+	const BWP_PLUGIN_VERSION = '3.0.4';
 
 	/**
 	 * @var BackUpWordPress_Plugin The singleton instance.
@@ -79,21 +77,30 @@ class BackUpWordPress_Plugin {
 	 */
 	public function plugins_loaded() {
 
-		$this->maybe_self_deactivate();
+		if ( false === $this->maybe_self_deactivate() ) {
 
-		$this->constants();
+			$this->constants();
 
-		$this->includes();
+			$this->includes();
 
-		$this->hooks();
+			$this->hooks();
 
-		$this->textdomain();
+			$this->textdomain();
 
-		$this->constant_changes();
+			$this->constant_changes();
 
-		// If we get here, then BWP is loaded
-		do_action( 'backupwordpress_loaded' );
+			// If we get here, then BWP is loaded
+			do_action( 'backupwordpress_loaded' );
 
+		}
+
+	}
+
+	public function maybe_self_deactivate() {
+
+		require_once plugin_dir_path( __FILE__ ) . 'classes/class-setup.php';
+
+		return BackUpWordPress_Setup::maybe_self_deactivate();
 	}
 
 	/**
@@ -214,7 +221,7 @@ class BackUpWordPress_Plugin {
 			$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
 		}
 
-		wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( self::BACKUP_WORDPRESS_VERSION ) );
+		wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( self::BWP_PLUGIN_VERSION ) );
 
 		wp_localize_script(
 			'hmbkp',
@@ -264,58 +271,10 @@ class BackUpWordPress_Plugin {
 	public function upgrade() {
 
 		// Fire the update action
-		if ( self::BACKUP_WORDPRESS_VERSION != get_option( 'hmbkp_plugin_version' ) ) {
+		if ( self::BWP_PLUGIN_VERSION != get_option( 'hmbkp_plugin_version' ) ) {
 			hmbkp_update();
 		}
 
-	}
-
-	/**
-	 * Determine if environment meets all requirements for BWP to run or deactivate.
-	 */
-	public function maybe_self_deactivate() {
-
-		if ( ! function_exists( 'deactivate_plugins' ) || ! function_exists( 'current_action' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		}
-
-		// Don't activate on anything less than PHP required version
-		if ( version_compare( phpversion(), self::BWP_MIN_PHP_VERSION, '<' ) ) {
-			deactivate_plugins( plugin_basename( __FILE__ ) );
-
-			if ( 'plugins_loaded' === current_action() ) {
-				add_action( 'admin_notices', array( $this, 'display_admin_notices' ) );
-			} else {
-				wp_die( $this->get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
-			}
-		}
-
-	}
-
-	/**
-	 * Displays a user friendly message in the WordPress admin.
-	 */
-	public function display_admin_notices() {
-
-		echo '<div class="error"><p>' . $this->get_notice_message() . '</p></div>';
-
-	}
-
-	/**
-	 * Returns a localized user friendly error message.
-	 *
-	 * @return string
-	 */
-	public function get_notice_message() {
-
-		return sprintf(
-			__( 'BackUpWordPress requires PHP version %1$s or later. It is not active. %2$s%3$s%4$sLearn more%5$s', 'backupwordpress' ),
-			self::BWP_MIN_PHP_VERSION,
-			'<a href="',
-			'https://bwp.hmn.md/unsupported-php-version-error/',
-			'">',
-			'</a>'
-		);
 	}
 
 	/**
@@ -399,7 +358,7 @@ class BackUpWordPress_Plugin {
 			$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css';
 		}
 
-		wp_enqueue_style( 'backupwordpress', $css_file, false, sanitize_key( self::BACKUP_WORDPRESS_VERSION ) );
+		wp_enqueue_style( 'backupwordpress', $css_file, false, sanitize_key( self::BWP_PLUGIN_VERSION ) );
 
 	}
 
@@ -470,66 +429,6 @@ class BackUpWordPress_Plugin {
 		// If the custom path has changed and the new directory isn't writable
 		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! wp_is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) )
 			hmbkp_path_move( HMBKP_PATH, hmbkp_path_default() );
-
-	}
-
-	/**
-	 * Setup the plugin defaults on activation
-	 */
-	public static function activate() {
-
-		// loads the translation files
-		load_plugin_textdomain( 'backupwordpress', false, HMBKP_PLUGIN_LANG_DIR );
-
-		// Don't activate on old versions of WordPress
-		global $wp_version;
-
-		if ( version_compare( $wp_version, self::BWP_MIN_WP_VERSION, '<' ) ) {
-
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-			deactivate_plugins( __FILE__ );
-
-			if ( isset( $_GET['action'] ) && ( 'activate' === $_GET['action'] || 'error_scrape' === $_GET['action'] ) ) {
-				wp_die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'backupwordpress' ), self::BWP_MIN_WP_VERSION ), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
-			}
-		}
-
-		// Run deactivate on activation in-case it was deactivated manually
-		self::deactivate();
-
-	}
-
-	/**
-	 * Cleanup on plugin deactivation
-	 *
-	 * Removes options and clears all cron schedules
-	 */
-	public static function deactivate() {
-
-		// Determin if we need to do any cleanup
-		if ( ! class_exists( 'HMBKP_Schedules' ) ) {
-			return;
-		}
-
-		$schedules = HMBKP_Schedules::get_instance();
-
-		if ( empty( $schedules ) ) {
-			return;
-		}
-
-		// Clean up the backups directory
-		hmbkp_cleanup();
-
-		// Clear schedule crons
-		foreach ( $schedules->get_schedules() as $schedule ) {
-			$schedule->unschedule();
-		}
-
-		// Opt them out of support
-		delete_option( 'hmbkp_enable_support' );
-
-		// Remove the directory filesize cache
-		delete_transient( 'hmbkp_directory_filesizes' );
 
 	}
 
