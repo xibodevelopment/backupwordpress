@@ -506,10 +506,19 @@ class BackUpWordPress_Plugin {
 	 */
 	public static function deactivate() {
 
-		// Clean up the backups directory
-		hmbkp_cleanup();
+		// Determin if we need to do any cleanup
+		if ( ! class_exists( 'HMBKP_Schedules' ) ) {
+			return;
+		}
 
 		$schedules = HMBKP_Schedules::get_instance();
+
+		if ( empty( $schedules ) ) {
+			return;
+		}
+
+		// Clean up the backups directory
+		hmbkp_cleanup();
 
 		// Clear schedule crons
 		foreach ( $schedules->get_schedules() as $schedule ) {
