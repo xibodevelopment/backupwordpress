@@ -26,8 +26,11 @@ class BackUpWordPress_Setup {
 			return;
 		}
 
+		if ( ! self::meets_requirements() ) {
+
 			wp_die( self::get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
 
+		}
 
 		// loads the translation files
 		load_plugin_textdomain( 'backupwordpress', false, HMBKP_PLUGIN_LANG_DIR );
@@ -76,26 +79,6 @@ class BackUpWordPress_Setup {
 	}
 
 	/**
-	 * Determine if environment meets all requirements for BWP to run or deactivate.
-	 */
-	public static function maybe_self_deactivate() {
-
-		// Check that this WordPress install can run BackUpWordPress.
-		if ( ! self::meets_requirements() ) {
-
-			add_action( 'admin_init', array( 'BackUpWordPress_Setup', 'self_deactivate' ) );
-
-			add_action( 'admin_notices', array( 'BackUpWordPress_Setup', 'display_admin_notices' ) );
-
-			return true;
-
-		}
-
-		return false;
-
-	}
-
-	/**
 	 * Deactivate BackUpWordPress.
 	 */
 	public static function self_deactivate() {
@@ -139,7 +122,7 @@ class BackUpWordPress_Setup {
 
 	/**
 	 * Checks the current WordPRess version against the required version.
-	 * 
+	 *
 	 * @return mixed
 	 */
 	protected function is_supported_wp_version() {
