@@ -98,9 +98,13 @@ class BackUpWordPress_Plugin {
 
 	public function maybe_self_deactivate() {
 
-		require_once plugin_dir_path( __FILE__ ) . 'classes/class-setup.php';
+		if ( ! BackUpWordPress_Setup::meets_requirements() ) {
 
-		return BackUpWordPress_Setup::maybe_self_deactivate();
+			add_action( 'admin_init', array( 'BackUpWordPress_Setup', 'self_deactivate' ) );
+
+			add_action( 'admin_notices', array( 'BackUpWordPress_Setup', 'display_admin_notices' ) );
+		}
+
 	}
 
 	/**
