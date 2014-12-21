@@ -149,7 +149,7 @@ function hmbkp_update() {
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( BackUpWordPress_Plugin::BWP_PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		BackUpWordPress_Plugin::deactivate();
+		BackUpWordPress_Setup::deactivate();
 
 		// re-calcuate the backups directory and move to it.
 		if ( ! defined( 'HMBKP_PATH' ) ) {
