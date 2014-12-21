@@ -91,7 +91,7 @@ class BackUpWordPress_Setup {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
-		deactivate_plugins( dirname( dirname( __FILE__  ) ) . '/backupwordpress.php' );
+		deactivate_plugins( dirname( __DIR__ ) . '/backupwordpress.php' );
 
 		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
 
@@ -104,9 +104,7 @@ class BackUpWordPress_Setup {
 	 */
 	public static function meets_requirements() {
 
-		if ( ! self::is_supported_php_version() || ! self::is_supported_wp_version() ) {
-			return false;
-		}
+		return ( self::is_supported_php_version() && self::is_supported_wp_version() ) ;
 
 	}
 
@@ -121,15 +119,13 @@ class BackUpWordPress_Setup {
 	}
 
 	/**
-	 * Checks the current WordPRess version against the required version.
+	 * Checks the current WordPress version against the required version.
 	 *
 	 * @return mixed
 	 */
-	protected function is_supported_wp_version() {
+	protected static function is_supported_wp_version() {
 
-		global $wp_version;
-
-		return version_compare( $wp_version, self::BWP_MIN_WP_VERSION, '>=' );
+		return version_compare( get_bloginfo( 'version' ), self::BWP_MIN_WP_VERSION, '>=' );
 	}
 
 	/**
