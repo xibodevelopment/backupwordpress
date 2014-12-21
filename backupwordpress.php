@@ -77,7 +77,7 @@ class BackUpWordPress_Plugin {
 	 */
 	public function plugins_loaded() {
 
-		if ( false === $this->maybe_self_deactivate() ) {
+		if ( false !== $this->maybe_self_deactivate() ) {
 
 			$this->constants();
 
