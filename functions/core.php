@@ -142,7 +142,14 @@ function hmbkp_update() {
 		// Remove the plugin data cache
 		delete_transient( 'hmbkp_plugin_data' );
 
-		// 
+	}
+
+	// Update to 3.1
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		// Remove the plugin data cache
+		delete_option( 'hmbkp_path' );
+		delete_option( 'hmbkp_default_path' );
 
 	}
 
@@ -151,27 +158,7 @@ function hmbkp_update() {
 
 		BackUpWordPress_Setup::deactivate();
 
-		// re-calcuate the backups directory and move to it.
-		if ( ! defined( 'HMBKP_PATH' ) ) {
-
-			$old_path = hmbkp_path();
-
-			delete_option( 'hmbkp_path' );
-			delete_option( 'hmbkp_default_path' );
-
-			hmbkp_path_move( $old_path, hmbkp_path() );
-
-		}
-
-		// Force .htaccess to be re-written
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) ) {
-			unlink( hmbkp_path() . '/.htaccess' );
-		}
-
-		// Force index.html to be re-written
-		if ( file_exists( hmbkp_path() . '/index.html' ) ) {
-			unlink( hmbkp_path() . '/index.html' );
-		}
+		HMBKP_Path::get_instance()->protect_path( 'reset' );
 
 	}
 
@@ -283,149 +270,6 @@ function hmbkp_rmdirtree( $dir ) {
 }
 
 /**
- * Get the path to the backups directory
- *
- * Will try to create it if it doesn't exist
- * and will fallback to default if a custom dir
- * isn't writable.
- */
-function hmbkp_path() {
-
-	global $is_apache;
-
-	$path = untrailingslashit( get_option( 'hmbkp_path' ) );
-
-	// Allow the backups path to be defined
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
-		$path = untrailingslashit( HMBKP_PATH );
-
-	// If the dir doesn't exist or isn't writable then use the default path instead instead
-	if ( ( ! $path || ( is_dir( $path ) && ! wp_is_writable( $path ) ) || ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) ) && $path !== hmbkp_path_default() )
-		$path = hmbkp_path_default();
-
-	// Create the backups directory if it doesn't exist
-	if ( ! is_dir( $path ) && is_writable( dirname( $path ) ) )
-		wp_mkdir_p( $path );
-
-	// If the path has changed then cache it
-	if ( get_option( 'hmbkp_path' ) !== $path )
-		update_option( 'hmbkp_path', $path );
-
-	// Protect against directory browsing by including a index.html file
-	$index = $path . '/index.html';
-
-	if ( ! file_exists( $index ) && wp_is_writable( $path ) )
-		file_put_contents( $index, '' );
-
-	$htaccess = $path . '/.htaccess';
-
-	// Protect the directory with a .htaccess file on Apache servers
-	if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && wp_is_writable( $path ) ) {
-
-		$contents[] = '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'backupwordpress' ), '.htaccess' );
-		$contents[] = '';
-		$contents[] = '<IfModule mod_rewrite.c>';
-		$contents[] = 'RewriteEngine On';
-		$contents[] = 'RewriteCond %{QUERY_STRING} !key=' . HMBKP_SECURE_KEY;
-		$contents[] = 'RewriteRule (.*) - [F]';
-		$contents[] = '</IfModule>';
-		$contents[] = '';
-
-		insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
-
-	}
-
-	return HM_Backup::conform_dir( $path );
-
-}
-
-/**
- * Return the default backup path
- *
- * @return string path
- */
-function hmbkp_path_default() {
-
-	$path = untrailingslashit( get_option( 'hmbkp_default_path' ) );
-
-	$content_dir = HM_Backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) );
-
-	$pos = strpos( $path, $content_dir );
-
-	// no path set or current path doesn't match the database value
-	if ( empty( $path ) || ( false === $pos ) || ( 0 !== $pos ) ) {
-
-		$path = HM_Backup::conform_dir( trailingslashit( WP_CONTENT_DIR ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' );
-
-		update_option( 'hmbkp_default_path', $path );
-
-	}
-
-	$upload_dir = wp_upload_dir();
-
-	// If the backups dir can't be created in WP_CONTENT_DIR then fallback to uploads
-	if ( ( ( ! is_dir( $path ) && ! wp_is_writable( dirname( $path ) ) ) || ( is_dir( $path ) && ! wp_is_writable( $path ) ) ) && false === strpos( $path, $upload_dir['basedir'] ) ) {
-
-		hmbkp_path_move( $path, $path = HM_Backup::conform_dir( trailingslashit( $upload_dir['basedir'] ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups' ) );
-
-		update_option( 'hmbkp_default_path', $path );
-
-	}
-
-	return $path;
-
-}
-
-/**
- * Move the backup directory and all existing backup files to a new
- * location
- *
- * @param string $from path to move the backups dir from
- * @param string $to   path to move the backups dir to
- * @return void
- */
-function hmbkp_path_move( $from, $to ) {
-
-	if ( ! trim( untrailingslashit( trim( $from ) ) ) || ! trim( untrailingslashit( trim( $to ) ) ) )
-		return;
-
-	// Create the new directory if it doesn't exist
-	if ( is_writable( dirname( $to ) ) && ! is_dir( $to ) )
-		wp_mkdir_p( $to );
-
-	// Bail if we couldn't
-	if ( ! is_dir( $to ) || ! wp_is_writable( $to ) )
-		return false;
-
-	update_option( 'hmbkp_path', $to );
-
-	// Bail if the old directory doesn't exist
-	if ( ! is_dir( $from ) )
-		return false;
-
-	// Cleanup before we start moving things
-	hmbkp_cleanup();
-
-	// Move any existing backups
-	if ( $handle = opendir( $from ) ) {
-
-		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( 'zip' === pathinfo( $file, PATHINFO_EXTENSION ) )
-				if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file ) )
-					copy( trailingslashit( $from ) . $file, trailingslashit( $to ) . $file );
-		}
-
-		closedir( $handle );
-
-	}
-
-	// Only delete the old directory if it's inside WP_CONTENT_DIR
-	if ( false !==strpos( $from, WP_CONTENT_DIR ) )
-		hmbkp_rmdirtree( $from );
-
-}
-
-/**
  * Check if a backup is possible with regards to file
  * permissions etc.
  *
@@ -439,38 +283,11 @@ function hmbkp_possible() {
 
 	$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
 
-	if ( ! is_readable( $test_backup->get_root() ) )
+	if ( ! is_readable( $test_backup->get_root() ) ) {
 		return false;
-
-	return true;
-}
-
-/**
- * Remove any non backup.zip files from the backups dir.
- *
- * @return void
- */
-function hmbkp_cleanup() {
-
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH )
-		return;
-
-	$hmbkp_path = hmbkp_path();
-
-	if ( ! is_dir( $hmbkp_path ) )
-		return;
-
-	if ( $handle = opendir( $hmbkp_path ) ) {
-
-		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && 'zip' !== pathinfo( $file, PATHINFO_EXTENSION ) && false === strpos( $file, '-running' ) )
-				hmbkp_rmdirtree( trailingslashit( $hmbkp_path ) . $file );
-		}
-
-		closedir( $handle );
-
 	}
 
+	return true;
 }
 
 /**
