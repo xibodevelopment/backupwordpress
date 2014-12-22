@@ -104,6 +104,8 @@ if ( ! class_exists( 'HM_Backup' ) ) {
 // Load Backdrop
 require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
 
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-path.php' );
+
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
@@ -131,9 +133,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 register_activation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_activate' );
 register_deactivation_hook( HMBKP_PLUGIN_SLUG . '/backupwordpress.php', 'hmbkp_deactivate' );
 
-// Handle any advanced option changes
-hmbkp_constant_changes();
-
 /**
  * Plugin setup
  *
@@ -150,6 +149,9 @@ function hmbkp_init() {
 	if ( HMBKP_VERSION != get_option( 'hmbkp_plugin_version' ) ) {
 		hmbkp_update();
 	}
+
+	// If we have multiple paths for some reason then clean them up
+	HMBKP_Path::get_instance()->merge_existing_paths();
 
 }
 add_action( 'admin_init', 'hmbkp_init' );

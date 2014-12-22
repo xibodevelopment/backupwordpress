@@ -61,10 +61,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			$this->set_root( HMBKP_ROOT );
 		}
 
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
-			$this->set_path( HMBKP_PATH );
-		}
-
 		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE ) {
 			parent::set_excludes( HMBKP_EXCLUDE, true );
 		}
@@ -843,19 +839,15 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_status( $message ) {
 
-		if ( ! $handle = fopen( $this->get_schedule_running_path(), 'w' ) ) {
-			return;
-		}
-
 		$status = json_encode( (object) array(
 			'filename' => $this->get_archive_filename(),
 			'started'  => $this->get_schedule_running_start_time(),
 			'status'   => $message,
 		) );
 
-		fwrite( $handle, $status );
-
-		fclose( $handle );
+		if ( false === @file_put_contents( $this->get_schedule_running_path(), $status ) ) {
+			throw new RuntimeException( sprintf( __( 'Error writing to file. (%s)', 'backpwordpress' ), $this->get_schedule_running_path() ) );
+		}
 
 	}
 
@@ -1107,17 +1099,6 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Leftover backup folders can be either under content dir, or under the uploads dir
 		$hmn_upload_dir = wp_upload_dir();
 
-		$hmbkp_folders = array_merge(
-			$this->find_backup_folders( 'backupwordpress-', WP_CONTENT_DIR ),
-			$this->find_backup_folders( 'backupwordpress-', $hmn_upload_dir['path'] )
-		);
-
-		if ( ! empty( $hmbkp_folders ) ) {
-			foreach ( $hmbkp_folders as $path ) {
-				$excluded[] = $path;
-			}
-		}
-
 		$backupwp_folders = $this->find_backup_folders( 'backwpup-', $hmn_upload_dir['path'] );
 
 		if ( ! empty( $backupwp_folders ) ) {
@@ -1143,6 +1124,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		// version control dirs
+		// @todo stop excluding these once they are skipped entirely
 		$excluded[] = '.svn/';
 		$excluded[] = '.git/';
 
@@ -1151,7 +1133,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 
 	/**
-	 * Returns an array with the BackUpWordPress backup folders in the specified directory
+	 * Returns an array of other backup folders in the specified directory
 	 *
 	 * @param $needle
 	 * @param $haystack
@@ -1162,6 +1144,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 		$found_folders = array();
 
+		// @todo can be simplified
 		$folders_to_search = glob( $haystack . '/*', GLOB_ONLYDIR | GLOB_NOSORT );
 
 		if ( ! empty( $folders_to_search ) ) {
@@ -1170,12 +1153,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 
 				$pos = strpos( $folder, $needle );
 
-				$default_path = get_option( 'hmbkp_default_path' );
-
-				if ( ( false !== $pos ) && ( $folder !== $default_path ) ) {
-
+				if ( false !== $pos ) {
 					$found_folders[] = trailingslashit( $folder );
-
 				}
 
 			}
@@ -1183,6 +1162,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		}
 
 		return $found_folders;
+
 	}
 
 }

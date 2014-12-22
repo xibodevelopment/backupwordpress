@@ -451,7 +451,7 @@ class HMBKP_Requirement_Backup_Path extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-		return hmbkp_path();
+		return HMBKP_Path::get_instance()->get_path();
 	}
 
 }

@@ -4,6 +4,7 @@
  * Tests for the complete backup process both with
  * the shell commands and with the PHP fallbacks
  *
+ * @group full-backup
  * @extends WP_UnitTestCase
  */
 class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
@@ -15,6 +16,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 * @access protected
 	 */
 	protected $backup;
+	protected $path;
 
 	/**
 	 * Setup the backup object and create the tmp directory
@@ -25,12 +27,15 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup = new HM_Backup();
 		$this->backup->set_excludes( '.git/' );
-		$this->backup->set_excludes( 'wordpress-tests-lib/' );
 
-		if ( defined( 'HMBKP_PATH' ) )
+		if ( defined( 'HMBKP_PATH' ) ) {
 			$this->markTestSkipped( 'Skipped because of defines' );
+		}
 
-		hmbkp_path();
+		$this->path = HMBKP_Path::get_instance();
+
+		// Cleanup before we kickoff in-case theirs cruft around from previous failures
+		$this->tearDown();
 
 	}
 
@@ -42,12 +47,10 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		hmbkp_rmdirtree( hmbkp_path() );
-
-		delete_option( 'hmbkp_path' );
-		delete_option( 'hmbkp_default_path' );
-
-		unset( $this->backup );
+		// Remove all backup paths that exist
+		foreach( $this->path->get_existing_paths() as $path ) {
+			hmbkp_rmdirtree( $path );
+		}
 
 	}
 
@@ -58,12 +61,13 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testFullBackupWithZip() {
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
 			$this->markTestSkipped( 'Empty zip command path' );
+		}
 
 		$this->backup->backup();
 
-		$this->assertEquals( $this->backup->get_archive_method(), 'zip' );
+		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
@@ -80,6 +84,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a full backup with the ZipArchive
 	 *
+	 * @group pathTest
 	 * @access public
 	 */
 	public function testFullBackupWithZipArchive() {
@@ -88,7 +93,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup->backup();
 
-		$this->assertEquals( $this->backup->get_archive_method(), 'ziparchive' );
+		$this->assertEquals( 'ziparchive', $this->backup->get_archive_method() );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
@@ -114,7 +119,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup->backup();
 
-		$this->assertEquals( $this->backup->get_archive_method(), 'pclzip' );
+		$this->assertEquals( 'pclzip', $this->backup->get_archive_method() );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 
