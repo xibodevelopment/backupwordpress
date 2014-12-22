@@ -47,6 +47,12 @@ function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
  */
 function hmbkp_admin_notices() {
 
+	$current_screen = get_current_screen();
+
+	if ( ! isset( $current_screen ) || HMBKP_ADMIN_PAGE !== $current_screen->id ) {
+		return;
+	}
+
 	$notices = HMBKP_Notices::get_instance()->get_notices();
 	
 	if ( empty( $notices ) ) {
