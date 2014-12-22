@@ -87,8 +87,6 @@ class BackUpWordPress_Plugin {
 
 			$this->textdomain();
 
-			$this->constant_changes();
-
 			// If we get here, then BWP is loaded
 			do_action( 'backupwordpress_loaded' );
 
@@ -167,6 +165,8 @@ class BackUpWordPress_Plugin {
 		// Load Backdrop
 		require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
 
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-path.php' );
+
 		// Load the schedules
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
@@ -200,6 +200,8 @@ class BackUpWordPress_Plugin {
 		add_action( 'activated_plugin', array( $this, 'load_first' ) );
 
 		add_action( 'admin_init', array( $this, 'upgrade' ) );
+
+		add_action( 'admin_init', array( $this, 'init' ) );
 
 		add_action( 'hmbkp_schedule_hook', array( $this, 'schedule_hook_run' ) );
 
@@ -280,6 +282,15 @@ class BackUpWordPress_Plugin {
 			hmbkp_update();
 		}
 
+	}
+
+	/**
+	 * Runs on every admin page load
+	 */
+	public function init() {
+
+		// If we have multiple paths for some reason then clean them up
+		HMBKP_Path::get_instance()->merge_existing_paths();
 	}
 
 	/**
@@ -461,28 +472,6 @@ class BackUpWordPress_Plugin {
 			})()</script>
 
 	<?php }
-
-	/**
-	 * Handles changes in the defined Constants that users can define to control advanced settings
-	 */
-	public function constant_changes() {
-
-		// If a custom backup path has been set or changed
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && HM_Backup::conform_dir( HMBKP_PATH ) !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) {
-			hmbkp_path_move( $from, HMBKP_PATH );
-		}
-
-		// If a custom backup path has been removed
-		if ( ( ( defined( 'HMBKP_PATH' ) && ! HMBKP_PATH ) || ! defined( 'HMBKP_PATH' ) && hmbkp_path_default() !== ( $from = HM_Backup::conform_dir( get_option( 'hmbkp_path' ) ) ) ) ) {
-			hmbkp_path_move( $from, hmbkp_path_default() );
-		}
-
-		// If the custom path has changed and the new directory isn't writable
-		if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! wp_is_writable( HMBKP_PATH ) && get_option( 'hmbkp_path' ) === HMBKP_PATH && is_dir( HMBKP_PATH ) ) {
-			hmbkp_path_move( HMBKP_PATH, hmbkp_path_default() );
-		}
-
-	}
 
 }
 
