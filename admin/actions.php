@@ -69,7 +69,7 @@ function hmbkp_request_do_backup() {
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		check_ajax_referer( 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' );
 	} else {
-		check_admin_referer( 'hmbkp-run-schedule', 'hmbkp-run-schedule' );
+		check_admin_referer( 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' );
 	}
 
 	// Fixes an issue on servers which only allow a single session per client
@@ -94,6 +94,8 @@ function hmbkp_request_do_backup() {
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
 	$schedule->run();
+
+	HMBKP_Notices::get_instance()->clear_all_notices();
 
 	$errors = array_merge( $schedule->get_errors(), $schedule->get_warnings() );
 
@@ -123,7 +125,7 @@ function hmbkp_request_do_backup() {
 
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
-add_action( 'admin_post_hmbkp_request_do_backup', 'hmbkp_request_do_backup' );
+add_action( 'admin_post_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
 
 /**
  * Send the download file to the browser and then redirect back to the backups page

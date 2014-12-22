@@ -56,7 +56,6 @@ if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
 
 	if ( is_multisite() ) {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, network_admin_url( 'settings.php' ) ) );
-
 	} else {
 		define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, admin_url( 'tools.php' ) ) );
 	}
@@ -81,16 +80,10 @@ if ( ! defined( 'HMBKP_REQUIRED_WP_VERSION' ) ) {
 	define( 'HMBKP_REQUIRED_WP_VERSION', '3.9.3' );
 }
 
-// Max memory limit isn't defined in old versions of WordPress
-if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) ) {
-	define( 'WP_MAX_MEMORY_LIMIT', '256M' );
-}
-
 if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 
 	if ( is_multisite() ) {
 		define( 'HMBKP_ADMIN_PAGE', 'settings_page_' . HMBKP_PLUGIN_SLUG );
-
 	} else {
 		define( 'HMBKP_ADMIN_PAGE', 'tools_page_' . HMBKP_PLUGIN_SLUG );
 	}
@@ -104,8 +97,9 @@ require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
 // Load hm-backup
-if ( ! class_exists( 'HM_Backup' ) )
+if ( ! class_exists( 'HM_Backup' ) ) {
 	require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
+}
 
 // Load Backdrop
 require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
@@ -344,13 +338,15 @@ function hmbkp_maybe_self_deactivate() {
 
 	// Don't activate on anything less than PHP required version
 	if ( version_compare( phpversion(), HMBKP_REQUIRED_PHP_VERSION, '<' ) ) {
+
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 
 		if ( 'plugins_loaded' === current_action() ) {
-			add_action( 'admin_notices', 'hmbkp_display_admin_notices' );
+			add_action( 'admin_notices', 'hmbkp_minimum_php_admin_notice' );
 		} else {
-			wp_die( hmbkp_get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
+			wp_die( hmbkp_minimum_php_admin_notice_message(), 'BackUpWordPress', array( 'back_link' => true ) );
 		}
+
 	}
 
 }
@@ -359,25 +355,20 @@ add_action( 'plugins_loaded', 'hmbkp_maybe_self_deactivate' );
 /**
  * Displays a message as notice in the admin.
  */
-function hmbkp_display_admin_notices() {
-
-	echo '<div class="error"><p>' . hmbkp_get_notice_message() . '</p></div>';
-
-}
+function hmbkp_minimum_php_admin_notice() { ?>
+	<div class="error"><p><?php hmbkp_minimum_php_admin_notice_message(); ?></p></div>
+<?php }
 
 /**
  * Returns a localized user friendly error message.
  *
  * @return string
  */
-function hmbkp_get_notice_message() {
-
+function hmbkp_minimum_php_admin_notice_message() {
 	return sprintf(
-		__( 'BackUpWordPress requires PHP version %1$s or later. It is not active. %2$s%3$s%4$sLearn more%5$s', 'backupwordpress' ),
+		__( 'BackUpWordPress requires PHP version %1$s or later. It is not active. %2$sLearn more%3$s', 'backupwordpress' ),
 		HMBKP_REQUIRED_PHP_VERSION,
-		'<a href="',
-		'https://bwp.hmn.md/unsupported-php-version-error/',
-		'">',
+		'<a href="https://bwp.hmn.md/unsupported-php-version-error/">',
 		'</a>'
 	);
 }
