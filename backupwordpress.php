@@ -213,12 +213,12 @@ class BackUpWordPress_Plugin {
 
 	/**
 	 * Load the Javascript in the admin.
+	 *
+	 * @param $hook The name of the admin page hook.
 	 */
-	public function scripts() {
+	public function scripts( $hook ) {
 
-		$current_screen = get_current_screen();
-
-		if ( ! isset( $current_screen ) || HMBKP_ADMIN_PAGE !== $current_screen->id ) {
+		if ( HMBKP_ADMIN_PAGE !== $hook ) {
 			return;
 		}
 
@@ -371,12 +371,12 @@ class BackUpWordPress_Plugin {
 
 	/**
 	 * Enqueue the plugin styles.
+	 *
+	 * @param $hook
 	 */
-	function styles() {
+	function styles( $hook ) {
 
-		$current_screen = get_current_screen();
-
-		if ( ! isset( $current_screen ) || HMBKP_ADMIN_PAGE !== $current_screen->id ) {
+		if ( HMBKP_ADMIN_PAGE !== $hook ) {
 			return;
 		}
 
@@ -391,17 +391,13 @@ class BackUpWordPress_Plugin {
 	}
 
 	/**
-	 * Load Intercom and send across user information and server info.
+	 * Load Intercom and send across user information and server info. Only loaded if the user has opted in.
 	 *
-	 * Only loaded if the user has opted in.
-	 *
-	 * @return void
+	 * @param $hook
 	 */
-	public function load_intercom_script() {
+	public function load_intercom_script( $hook ) {
 
-		$current_screen = get_current_screen();
-
-		if ( ! isset( $current_screen ) || HMBKP_ADMIN_PAGE !== $current_screen->id ) {
+		if ( HMBKP_ADMIN_PAGE !== $hook ) {
 			return;
 		}
 
