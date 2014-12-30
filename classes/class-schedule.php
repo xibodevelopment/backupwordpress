@@ -839,7 +839,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function set_status( $message ) {
 
-		$status = json_encode( (object) array(
+		$status = wp_json_encode( (object) array(
 			'filename' => $this->get_archive_filename(),
 			'started'  => $this->get_schedule_running_start_time(),
 			'status'   => $message,
@@ -929,7 +929,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 						return;
 					}
 
-					fwrite( $handle, json_encode( $this->get_errors() ) );
+					fwrite( $handle, wp_json_encode( $this->get_errors() ) );
 
 					fclose( $handle );
 
@@ -951,7 +951,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 						return;
 					}
 
-					fwrite( $handle, json_encode( $this->get_warnings() ) );
+					fwrite( $handle, wp_json_encode( $this->get_warnings() ) );
 
 					fclose( $handle );
 
