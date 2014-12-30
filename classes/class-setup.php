@@ -10,12 +10,12 @@ class BackUpWordPress_Setup {
 	/**
 	 * Defines the minimum version of WordPress required by BWP.
 	 */
-	const BWP_MIN_WP_VERSION = '3.9.3';
+	const MIN_WP_VERSION = '3.9.3';
 
 	/**
 	 * Defines the minimum version of PHP required by BWP.
 	 */
-	const BWP_MIN_PHP_VERSION = '5.3.2';
+	const MIN_PHP_VERSION = '5.3.2';
 
 	/**
 	 * Setup the plugin defaults on activation
@@ -34,9 +34,6 @@ class BackUpWordPress_Setup {
 			wp_die( self::get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
 
 		}
-
-		// loads the translation files
-		load_plugin_textdomain( 'backupwordpress', false, HMBKP_PLUGIN_LANG_DIR );
 
 		// Run deactivate on activation in-case it was deactivated manually
 		self::deactivate();
@@ -64,9 +61,6 @@ class BackUpWordPress_Setup {
 		if ( empty( $schedules ) ) {
 			return;
 		}
-
-		// Clean up the backups directory
-		hmbkp_cleanup();
 
 		// Clear schedule crons
 		foreach ( $schedules->get_schedules() as $schedule ) {
@@ -96,7 +90,9 @@ class BackUpWordPress_Setup {
 
 		deactivate_plugins( dirname( __DIR__ ) . '/backupwordpress.php' );
 
-		if ( isset( $_GET['activate'] ) ) unset( $_GET['activate'] );
+		if ( isset( $_GET['activate'] ) ) {
+			unset( $_GET['activate'] );
+		}
 
 	}
 
@@ -107,28 +103,35 @@ class BackUpWordPress_Setup {
 	 */
 	public static function meets_requirements() {
 
-		return ( self::is_supported_php_version() && self::is_supported_wp_version() ) ;
+		if ( false === self::is_supported_php_version() ) {
+			return false;
+		}
 
+		if ( false === self::is_supported_wp_version() ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
 	 * Checks the current PHP version against the required version.
 	 *
-	 * @return mixed
+	 * @return bool 'Operator' parameter specified, returns a boolean.
 	 */
 	protected static function is_supported_php_version() {
 
-		return version_compare( phpversion(), self::BWP_MIN_PHP_VERSION, '>=' );
+		return version_compare( phpversion(), self::MIN_PHP_VERSION, '>=' );
 	}
 
 	/**
 	 * Checks the current WordPress version against the required version.
 	 *
-	 * @return mixed
+	 * @return bool 'Operator' parameter specified, returns a boolean.
 	 */
 	protected static function is_supported_wp_version() {
 
-		return version_compare( get_bloginfo( 'version' ), self::BWP_MIN_WP_VERSION, '>=' );
+		return version_compare( get_bloginfo( 'version' ), self::MIN_WP_VERSION, '>=' );
 	}
 
 	/**
@@ -149,8 +152,8 @@ class BackUpWordPress_Setup {
 
 		return sprintf(
 			__( 'BackUpWordPress requires PHP version %1$s or later and WordPress version %2$s or later to run. It has not been activated. %3$s%4$s%5$sLearn more%6$s', 'backupwordpress' ),
-			self::BWP_MIN_PHP_VERSION,
-			self::BWP_MIN_WP_VERSION,
+			self::MIN_PHP_VERSION,
+			self::MIN_WP_VERSION,
 			'<a href="',
 			'https://bwp.hmn.md/unsupported-php-version-error/',
 			'">',

@@ -31,8 +31,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-defined( 'ABSPATH' ) or exit;
-
 include_once( dirname( __FILE__ ) . '/classes/class-setup.php' );
 
 register_activation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'activate' ) );
@@ -43,7 +41,7 @@ register_deactivation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'deactivat
  */
 class BackUpWordPress_Plugin {
 
-	const BWP_PLUGIN_VERSION = '3.0.4';
+	const PLUGIN_VERSION = '3.0.4';
 
 	/**
 	 * @var BackUpWordPress_Plugin The singleton instance.
@@ -85,7 +83,7 @@ class BackUpWordPress_Plugin {
 
 			$this->hooks();
 
-			$this->textdomain();
+			$this->text_domain();
 
 			// If we get here, then BWP is loaded
 			do_action( 'backupwordpress_loaded' );
@@ -161,8 +159,12 @@ class BackUpWordPress_Plugin {
 			require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
 		}
 
-		// Load Backdrop
-		require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
+		// Load Backdrop if necessary.
+		if ( ! class_exists( 'HM_Backdrop_Task' ) ) {
+			require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
+		}
+
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-path.php' );
 
@@ -227,7 +229,7 @@ class BackUpWordPress_Plugin {
 			$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
 		}
 
-		wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( self::BWP_PLUGIN_VERSION ) );
+		wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( self::PLUGIN_VERSION ) );
 
 		wp_localize_script(
 			'hmbkp',
@@ -252,7 +254,7 @@ class BackUpWordPress_Plugin {
 	 * This setup allows a user to just drop his custom translation files into the WordPress language directory
 	 * Files will need to be in a subdirectory with the name of the textdomain 'backupwordpress'
 	 */
-	function textdomain() {
+	public function text_domain() {
 
 		// Set unique textdomain string
 		$textdomain = 'backupwordpress';
@@ -277,7 +279,7 @@ class BackUpWordPress_Plugin {
 	public function upgrade() {
 
 		// Fire the update action
-		if ( self::BWP_PLUGIN_VERSION != get_option( 'hmbkp_plugin_version' ) ) {
+		if ( self::PLUGIN_VERSION != get_option( 'hmbkp_plugin_version' ) ) {
 			hmbkp_update();
 		}
 
@@ -373,7 +375,7 @@ class BackUpWordPress_Plugin {
 	 *
 	 * @param $hook
 	 */
-	function styles( $hook ) {
+	public function styles( $hook ) {
 
 		if ( HMBKP_ADMIN_PAGE !== $hook ) {
 			return;
@@ -385,7 +387,7 @@ class BackUpWordPress_Plugin {
 			$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css';
 		}
 
-		wp_enqueue_style( 'backupwordpress', $css_file, false, sanitize_key( self::BWP_PLUGIN_VERSION ) );
+		wp_enqueue_style( 'backupwordpress', $css_file, false, sanitize_key( self::PLUGIN_VERSION ) );
 
 	}
 
@@ -403,8 +405,6 @@ class BackUpWordPress_Plugin {
 		if ( ! get_option( 'hmbkp_enable_support' ) ) {
 			return;
 		}
-
-		require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php';
 
 		foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) {
 
