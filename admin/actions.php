@@ -535,24 +535,27 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_recalculate_directory_filesize' )
 
 function hmbkp_calculate_site_size() {
 
-	if ( isset(  $_GET['hmbkp_schedule_id'] ) ) {
+	if ( isset( $_GET['hmbkp_schedule_id'] ) ) {
+
 		$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+
 	} else {
+
 		// Refresh the schedules from the database to make sure we have the latest changes
 		HMBKP_Schedules::get_instance()->refresh_schedules();
 
 		$schedules = HMBKP_Schedules::get_instance()->get_schedules();
 
-		if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
-			$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
-		} else {
-			$current_schedule = reset( $schedules );
-		}
+		$current_schedule = reset( $schedules );
+
 	}
 
-	// Start calculating
-	$root = new SplFileInfo( $current_schedule->get_root() );
-	$size = $current_schedule->filesize( $root );
+	if ( ! $current_schedule->is_site_size_cached() ) {
+		// Start calculating
+		$root = new SplFileInfo( $current_schedule->get_root() );
+		$size = $current_schedule->filesize( $root );
+	}
+
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
 
@@ -561,20 +564,43 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
  */
 function hmbkp_heartbeat_received( $response, $data ) {
 
-	if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
+	$response['heartbeat_interval'] = 'fast';
 
-		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_is_in_progress'] ) ) );
+	if ( ! empty( $data['hmbkp_schedule_id'] ) ) {
 
-		if ( ! $schedule->get_status() ) {
-			$response['hmbkp_schedule_status'] = 0;
+		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_schedule_id'] ) ) );
 
-		} else {
-			$response['hmbkp_schedule_status'] = hmbkp_schedule_status( $schedule, false );
+		if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
+
+			if ( ! $schedule->get_status() ) {
+				$response['hmbkp_schedule_status'] = 0;
+
+				// Slow the heartbeat back down
+				$response['heartbeat_interval'] = 'slow';
+
+			} else {
+				$response['hmbkp_schedule_status'] = hmbkp_schedule_status( $schedule, false );
+			}
 
 		}
 
-	}
+		if ( ! empty( $data['hmbkp_client_request'] ) ) {
 
+			// Pass the site size to be displayed when it's ready.
+			if ( $schedule->is_site_size_cached() ) {
+
+				$response['hmbkp_site_size'] = $schedule->get_formatted_site_size();
+
+				ob_start();
+				require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
+				$response['hmbkp_dir_sizes'] = ob_get_clean();
+
+				// Slow the heartbeat back down
+				$response['heartbeat_interval'] = 'slow';
+			}
+		}
+
+	}
 	return $response;
 
 }

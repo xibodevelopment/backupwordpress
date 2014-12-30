@@ -225,7 +225,7 @@ class BackUpWordPress_Plugin {
 
 		$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
 
-		if ( WP_DEBUG ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
 		}
 

@@ -1,17 +1,6 @@
 <?php
 
-// Calculated filesize
-$cached = $schedule->is_site_size_cached();
-
-if ( 'database' === $schedule->get_type() ) {
-	$cached = true;
-}
-
-$filesize = $cached ? '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">' . esc_attr( $schedule->get_formatted_site_size() ) . '</code>)' : '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your backup&hellip;', 'backupwordpress' ) . '</code>)';
-
-if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
-	$filesize = '';
-}
+$filesize = hmbkp_get_site_size_text( $schedule );
 
 // Backup Type
 $type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
@@ -144,3 +133,25 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 	<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule-settings.php' ); ?>
 
 </div>
+
+<?php
+
+/**
+ * Returns a formatted string containing the calculated total site size or a message
+ * to indicate it is being calculated.
+ *
+ * @param HMBKP_Scheduled_Backup $schedule
+ *
+ * @return string
+ */
+function hmbkp_get_site_size_text( HMBKP_Scheduled_Backup $schedule ) {
+
+	if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
+		return '';
+	} elseif (  ( 'database' === $schedule->get_type() ) || $schedule->is_site_size_cached() ) {
+		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $schedule->get_formatted_site_size() ) );
+	} else {
+		return sprintf('(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your backup&hellip;', 'backupwordpress' ) . '</code>)');
+	}
+
+}
