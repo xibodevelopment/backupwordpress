@@ -154,7 +154,7 @@ function hmbkp_update() {
 	}
 
 	// Every update
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( BackUpWordPress_Plugin::BWP_PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( BackUpWordPress_Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		BackUpWordPress_Setup::deactivate();
 
@@ -163,8 +163,8 @@ function hmbkp_update() {
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== BackUpWordPress_Plugin::BWP_PLUGIN_VERSION ) {
-		update_option( 'hmbkp_plugin_version', BackUpWordPress_Plugin::BWP_PLUGIN_VERSION );
+	if ( get_option( 'hmbkp_plugin_version' ) !== BackUpWordPress_Plugin::PLUGIN_VERSION ) {
+		update_option( 'hmbkp_plugin_version', BackUpWordPress_Plugin::PLUGIN_VERSION );
 	}
 
 }
