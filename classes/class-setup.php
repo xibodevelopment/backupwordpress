@@ -22,6 +22,9 @@ class BackUpWordPress_Setup {
 	 */
 	public static function activate() {
 
+		// loads the translation files for the Error message in the wp_die call.
+		load_plugin_textdomain( 'backupwordpress', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
