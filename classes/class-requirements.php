@@ -941,7 +941,7 @@ class HMBKP_Requirement_Plugin_Version extends HMBKP_Requirement {
 	var $name = 'Plugin Version';
 
 	protected function test() {
-		return HMBKP_VERSION;
+		return BackUpWordPress_Plugin::PLUGIN_VERSION;
 	}
 }
 HMBKP_Requirements::register( 'HMBKP_Requirement_Plugin_Version', 'constants' );

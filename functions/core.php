@@ -1,59 +1,6 @@
 <?php
 
 /**
- * Setup the plugin defaults on activation
- */
-function hmbkp_activate() {
-
-	// loads the translation files
-	load_plugin_textdomain( 'hmbkp', false, HMBKP_PLUGIN_LANG_DIR );
-
-	// Don't activate on old versions of WordPress
-	global $wp_version;
-
-	if ( version_compare( $wp_version, HMBKP_REQUIRED_WP_VERSION, '<' ) ) {
-
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		deactivate_plugins( __FILE__ );
-
-		if ( isset( $_GET['action'] ) && ( 'activate' === $_GET['action'] || 'error_scrape' === $_GET['action'] ) ) {
-			wp_die( sprintf( __( 'BackUpWordPress requires WordPress version %s or greater.', 'backupwordpress' ), HMBKP_REQUIRED_WP_VERSION ), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
-		}
-	}
-
-	// Run deactivate on activation in-case it was deactivated manually
-	hmbkp_deactivate();
-
-}
-
-/**
- * Cleanup on plugin deactivation
- *
- * Removes options and clears all cron schedules
- */
-function hmbkp_deactivate() {
-
-	hmbkp_maybe_self_deactivate();
-
-	// Clean up the backups directory
-	HMBKP_Path::get_instance()->cleanup();
-
-	$schedules = HMBKP_Schedules::get_instance();
-
-	// Clear schedule crons
-	foreach ( $schedules->get_schedules() as $schedule ) {
-		$schedule->unschedule();
-	}
-
-	// Opt them out of support
-	delete_option( 'hmbkp_enable_support' );
-
-	// Remove the directory filesize cache
-	delete_transient( 'hmbkp_directory_filesizes' );
-
-}
-
-/**
  * Handles anything that needs to be
  * done when the plugin is updated
  */
@@ -207,17 +154,17 @@ function hmbkp_update() {
 	}
 
 	// Every update
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HMBKP_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( BackUpWordPress_Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		hmbkp_deactivate();
+		BackUpWordPress_Setup::deactivate();
 
 		HMBKP_Path::get_instance()->protect_path( 'reset' );
 
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== HMBKP_VERSION ) {
-		update_option( 'hmbkp_plugin_version', HMBKP_VERSION );
+	if ( get_option( 'hmbkp_plugin_version' ) !== BackUpWordPress_Plugin::PLUGIN_VERSION ) {
+		update_option( 'hmbkp_plugin_version', BackUpWordPress_Plugin::PLUGIN_VERSION );
 	}
 
 }
@@ -342,8 +289,6 @@ function hmbkp_possible() {
 
 	return true;
 }
-
-
 
 /**
  * Get the max email attachment filesize
