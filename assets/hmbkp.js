@@ -109,6 +109,11 @@ jQuery(document).ready(function ( $ ) {
 
         if ( ( data.hmbkp_site_size !== undefined ) && ( $( 'code.calculating' ).size() ) ) {
             $( 'code.calculating' ).text( data.hmbkp_site_size );
+
+            var excludes = $( '.hmbkp-exclude-settings' );
+            if ( excludes.size() ) {
+                excludes.replaceWith( data.hmbkp_dir_sizes );
+            }
         }
 
     });

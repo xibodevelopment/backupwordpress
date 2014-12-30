@@ -593,6 +593,10 @@ function hmbkp_heartbeat_received( $response, $data ) {
 
 				$response['hmbkp_site_size'] = $schedule->get_formatted_site_size();
 
+				ob_start();
+				require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
+				$response['hmbkp_dir_sizes'] = ob_get_clean();
+
 				// Slow the heartbeat back down
 				$response['heartbeat_interval'] = 'slow';
 			}
