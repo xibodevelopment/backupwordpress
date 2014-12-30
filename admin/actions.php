@@ -69,7 +69,7 @@ function hmbkp_request_do_backup() {
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		check_ajax_referer( 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' );
 	} else {
-		check_admin_referer( 'hmbkp-run-schedule', 'hmbkp-run-schedule' );
+		check_admin_referer( 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' );
 	}
 
 	// Fixes an issue on servers which only allow a single session per client
@@ -89,11 +89,13 @@ function hmbkp_request_do_backup() {
 
 	ignore_user_abort( true );
 
-	hmbkp_cleanup();
+	HMBKP_Path::get_instance()->cleanup();
 
 	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
 	$schedule->run();
+
+	HMBKP_Notices::get_instance()->clear_all_notices();
 
 	$errors = array_merge( $schedule->get_errors(), $schedule->get_warnings() );
 
@@ -123,7 +125,7 @@ function hmbkp_request_do_backup() {
 
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
-add_action( 'admin_post_hmbkp_request_do_backup', 'hmbkp_request_do_backup' );
+add_action( 'admin_post_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
 
 /**
  * Send the download file to the browser and then redirect back to the backups page
@@ -142,11 +144,7 @@ function hmbkp_request_download_backup() {
 
 	if ( $is_apache ) {
 
-		// Force the .htaccess to be rebuilt
-		if ( file_exists( hmbkp_path() . '/.htaccess' ) )
-			unlink( hmbkp_path() . '/.htaccess' );
-
-		hmbkp_path();
+		HMBKP_Path::get_instance()->protect_path( 'reset' );
 
 		$url = add_query_arg( 'key', HMBKP_SECURE_KEY, $url );
 
@@ -177,7 +175,7 @@ function hmbkp_request_cancel_backup() {
 		unlink( $schedule->get_schedule_running_path() );
 	}
 
-	hmbkp_cleanup();
+	HMBKP_Path::get_instance()->cleanup();
 
 	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
 
@@ -193,7 +191,7 @@ function hmbkp_dismiss_error() {
 
 	check_admin_referer( 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' );
 
-	hmbkp_cleanup();
+	HMBKP_Path::get_instance()->cleanup();
 
 	HMBKP_Notices::get_instance()->clear_all_notices();
 
@@ -731,7 +729,7 @@ function hmbkp_ajax_cron_test() {
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
-	} elseif ( wp_remote_retrieve_response_code( $response ) !== 200 ) {
+	} elseif ( 200 != wp_remote_retrieve_response_code( $response ) ) {
 
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 

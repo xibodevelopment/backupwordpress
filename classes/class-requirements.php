@@ -451,7 +451,7 @@ class HMBKP_Requirement_Backup_Path extends HMBKP_Requirement {
 	 * @return string
 	 */
 	protected function test() {
-		return hmbkp_path();
+		return HMBKP_Path::get_instance()->get_path();
 	}
 
 }
@@ -941,7 +941,7 @@ class HMBKP_Requirement_Plugin_Version extends HMBKP_Requirement {
 	var $name = 'Plugin Version';
 
 	protected function test() {
-		return HMBKP_VERSION;
+		return BackUpWordPress_Plugin::PLUGIN_VERSION;
 	}
 }
 HMBKP_Requirements::register( 'HMBKP_Requirement_Plugin_Version', 'constants' );

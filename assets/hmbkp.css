@@ -61,7 +61,7 @@ thead td { border-bottom: 1px solid #e1e1e1; }
 .server-info { overflow: auto; max-height: 50%; outline: black 1px solid; }
 .server-info pre { max-height: 100px; overflow-x:hidden; }
 
-#intercom-info { background: #0074a2; color:#fff; display: inline-block;}
+#intercom-info { background: #0074a2; color:#fff; display: inline-block; margin-bottom: -3px; padding: 3px 8px; }
 #intercom-info:hover { background: #2ea2cc; color:#fff;}
 #intercom-info span.dashicons-admin-users { position: relative; display:inline-block; vertical-align: middle; top:-2px; }
 

@@ -27,7 +27,7 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			</th>
 
 			<td>
-				<input type="email" id="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" placeholder="name@youremail.com" />
+				<input type="text" id="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" value="<?php echo esc_attr( $this->get_field_value( 'email' ) ); ?>" placeholder="name@youremail.com" />
 
 				<p class="description"><?php printf( __( 'Receive a notification email when a backup completes, if the backup is small enough (&lt; %s) then it will be attached to the email. Separate multiple email addresses with a comma.', 'backupwordpress' ), '<code>' . size_format( hmbkp_get_max_attachment_size() ) . '</code>' ); ?></p>
 			</td>

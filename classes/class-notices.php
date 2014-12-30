@@ -10,6 +10,8 @@ class HMBKP_Notices {
 	 */
 	private static $_instance;
 
+	private $notices;
+
 	/**
 	 *
 	 */
@@ -23,24 +25,28 @@ class HMBKP_Notices {
 		if ( ! ( self::$_instance instanceof HMBKP_Notices ) ) {
 			self::$_instance = new HMBKP_Notices();
 		}
+
 		return self::$_instance;
+
 	}
 
 	/**
 	 * @param string $context
 	 * @param array $messages
+	 * @param bool $persistant 		whether to save the notices to the database
 	 *
 	 * @return mixed|void
 	 */
-	public function set_notices( $context, array $messages ) {
+	public function set_notices( $context, array $messages, $persistant = true ) {
 
-		$all_notices = get_option( 'hmbkp_notices' );
+		$this->notices[ $context ] = $messages;
 
-		$all_notices[ $context ] = $messages;
+		if ( $persistant ) {
+			$notices = get_option( 'hmbkp_notices' );
+			$notices[ $context ] = $messages;
+			update_option( 'hmbkp_notices', $notices );
+		}
 
-		update_option( 'hmbkp_notices', $all_notices );
-
-		return get_option( 'hmbkp_notices' );
 	}
 
 	/**
@@ -53,23 +59,34 @@ class HMBKP_Notices {
 	 */
 	public function get_notices( $context = '' ) {
 
-		if ( $all_notices = get_option( 'hmbkp_notices' ) ) {
+		$notices = $this->get_all_notices();
 
-			if ( 0 < trim( strlen( $context ) ) ) {
-				return $all_notices[ $context ];
+		if ( $notices ) {
+
+			if ( $context && isset( $notices[ $context ] ) ) {
+				return $notices[ $context ];
 			}
 
-			return $all_notices;
+			return $notices;
 		}
 
 		return array();
 
 	}
 
+	private function get_all_notices() {
+		return array_merge_recursive( (array) $this->notices, (array) get_option( 'hmbkp_notices' ) );
+	}
+
 	/**
 	 * Delete all notices from the DB.
 	 */
 	public function clear_all_notices() {
-		return delete_option( 'hmbkp_notices' );
+
+		$this->notices = array();
+
+		delete_option( 'hmbkp_notices' );
+
 	}
+
 }
