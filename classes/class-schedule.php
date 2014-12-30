@@ -343,7 +343,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 * @return int            The total of the file or directory
 	 */
 	function is_site_size_being_calculated() {
-		return get_transient( 'hmbkp_directory_filesizes_running' );
+		return false !== get_transient( 'hmbkp_directory_filesizes_running' );
 	}
 
 	/**
