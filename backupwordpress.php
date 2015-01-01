@@ -359,6 +359,10 @@ class BackUpWordPress_Plugin {
 	 */
 	public function schedule_hook_run( $schedule_id ) {
 
+		if ( ! hmbkp_possible() ) {
+			return;
+		}
+
 		$schedules = HMBKP_Schedules::get_instance();
 		$schedule  = $schedules->get_schedule( $schedule_id );
 
