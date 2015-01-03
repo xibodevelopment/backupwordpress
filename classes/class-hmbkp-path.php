@@ -151,9 +151,11 @@ class HMBKP_Path {
 	 */
 	public function get_existing_paths() {
 
-		$upload_dir = wp_upload_dir();
+		if ( false === $default = glob( WP_CONTENT_DIR . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
+			$default = array();
+		}
 
-		$default = glob( WP_CONTENT_DIR . '/backupwordpress-*-backups', GLOB_ONLYDIR );
+		$upload_dir = wp_upload_dir();
 
 		if ( false === $fallback = glob( $upload_dir['basedir'] . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
 			$fallback = array();
