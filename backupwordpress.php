@@ -52,7 +52,6 @@ class BackUpWordPress_Plugin {
 	 * Instantiates a new BackUpWordPress_Plugin object.
 	 */
 	private function __construct() {
-
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 	}
 
@@ -95,9 +94,7 @@ class BackUpWordPress_Plugin {
 	public function maybe_self_deactivate() {
 
 		if ( ! BackUpWordPress_Setup::meets_requirements() ) {
-
 			add_action( 'admin_init', array( 'BackUpWordPress_Setup', 'self_deactivate' ) );
-
 			add_action( 'admin_notices', array( 'BackUpWordPress_Setup', 'display_admin_notices' ) );
 		}
 
@@ -125,17 +122,12 @@ class BackUpWordPress_Plugin {
 		}
 
 		if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
-
 			$page = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
-
 			define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, $page ) );
-
 		}
 
 		if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
-
 			$prefix = is_multisite() ? 'settings_page_' : 'tools_page_';
-
 			define( 'HMBKP_ADMIN_PAGE', $prefix . HMBKP_PLUGIN_SLUG );
 		}
 
@@ -176,7 +168,7 @@ class BackUpWordPress_Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'functions/core.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'functions/interface.php' );
 
-		// Load Services
+		// Load the services
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-services.php' );
 
 		// Load the email service
@@ -225,6 +217,7 @@ class BackUpWordPress_Plugin {
 
 		$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
 
+		// TODO shuold this also support WP_SCRIPT_DEBUG
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
 		}
@@ -302,25 +295,12 @@ class BackUpWordPress_Plugin {
 	protected function generate_key() {
 
 		$key = array( ABSPATH, time() );
+		$constants = array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' );
 
-		foreach (
-			array(
-				'AUTH_KEY',
-				'SECURE_AUTH_KEY',
-				'LOGGED_IN_KEY',
-				'NONCE_KEY',
-				'AUTH_SALT',
-				'SECURE_AUTH_SALT',
-				'LOGGED_IN_SALT',
-				'NONCE_SALT',
-				'SECRET_KEY'
-			) as $constant
-		) {
-
+		foreach ( $constants as $constant ) {
 			if ( defined( $constant ) ) {
 				$key[] = constant( $constant );
 			}
-
 		}
 
 		shuffle( $key );
@@ -411,13 +391,9 @@ class BackUpWordPress_Plugin {
 		}
 
 		foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) {
-
 			foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
-
 				$info[ $requirement->name() ] = $requirement->result();
-
 			}
-
 		}
 
 		foreach ( HMBKP_Services::get_services() as $file => $service ) {
