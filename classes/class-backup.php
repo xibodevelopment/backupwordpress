@@ -1,18 +1,13 @@
 <?php
 
+namespace HM\BackUpWordPress {
+
 /**
  * Generic file and database backup class
  *
  * @version 2.3
  */
-class HM_Backup {
-
-	/**
-	 * The path where the backup file should be saved
-	 *
-	 * @string
-	 */
-	private $path = '';
+class Backup {
 
 	/**
 	 * The backup type, must be either complete, file or database
@@ -261,6 +256,31 @@ class HM_Backup {
 		// Set a custom error handler so we can track errors
 		set_error_handler( array( $this, 'error_handler' ) );
 
+		// Some properties can be overridden with defines
+		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
+			$this->set_root( HMBKP_ROOT );
+		}
+
+		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE ) {
+			$this->set_excludes( HMBKP_EXCLUDE, true );
+		}
+
+		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) ) {
+			$this->set_mysqldump_command_path( HMBKP_MYSQLDUMP_PATH );
+		}
+
+		if ( defined( 'HMBKP_ZIP_PATH' ) ) {
+			$this->set_zip_command_path( HMBKP_ZIP_PATH );
+		}
+
+		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' && $this->skip_zip_archive = true ) {
+			$this->set_zip_command_path( false );
+		}
+
+	}
+
+	private function get_path() {
+		return Path::get_instance()->get_path();
 	}
 
 	/**
@@ -296,11 +316,11 @@ class HM_Backup {
 	public function set_archive_filename( $filename ) {
 
 		if ( empty( $filename ) || ! is_string( $filename ) ) {
-			return new WP_Error( 'invalid_file_name', __( 'archive filename must be a non empty string', 'backupwordpress' ) );
+			return new \WP_Error( 'invalid_file_name', __( 'archive filename must be a non empty string', 'backupwordpress' ) );
 		}
 
 		if ( pathinfo( $filename, PATHINFO_EXTENSION ) !== 'zip' ) {
-			return new WP_Error( 'invalid_file_extension', sprintf( __( 'invalid file extension for archive filename <code>%s</code>', 'backupwordpress' ), $filename ) );
+			return new \WP_Error( 'invalid_file_extension', sprintf( __( 'invalid file extension for archive filename <code>%s</code>', 'backupwordpress' ), $filename ) );
 		}
 
 		$this->archive_filename = strtolower( sanitize_file_name( remove_accents( $filename ) ) );
@@ -340,11 +360,11 @@ class HM_Backup {
 	public function set_database_dump_filename( $filename ) {
 
 		if ( empty( $filename ) || ! is_string( $filename ) ) {
-			return new WP_Error( 'invalid_file_name', __( 'database dump filename must be a non empty string', 'backupwordpress' ) );
+			return new \WP_Error( 'invalid_file_name', __( 'database dump filename must be a non empty string', 'backupwordpress' ) );
 		}
 
 		if ( pathinfo( $filename, PATHINFO_EXTENSION ) !== 'sql' ) {
-			return new WP_Error( 'invalid_file_extension', sprintf( __( 'invalid file extension for database dump filename <code>%s</code>', 'backupwordpress' ), $filename ) );
+			return new \WP_Error( 'invalid_file_extension', sprintf( __( 'invalid file extension for database dump filename <code>%s</code>', 'backupwordpress' ), $filename ) );
 		}
 
 		$this->database_dump_filename = strtolower( sanitize_file_name( remove_accents( $filename ) ) );
@@ -377,41 +397,10 @@ class HM_Backup {
 	public function set_root( $path ) {
 
 		if ( empty( $path ) || ! is_string( $path ) || ! is_dir( $path ) ) {
-			return new WP_Error( 'invalid_directory_path', sprintf( __( 'Invalid root path <code>%s</code> must be a valid directory path', 'backupwordpress' ), $path ) );
+			return new \WP_Error( 'invalid_directory_path', sprintf( __( 'Invalid root path <code>%s</code> must be a valid directory path', 'backupwordpress' ), $path ) );
 		}
 
 		$this->root = self::conform_dir( $path );
-
-	}
-
-	/**
-	 * Get the directory backups are saved to
-	 *
-	 * @return string
-	 */
-	public function get_path() {
-
-		if ( empty( $this->path ) ) {
-			$this->set_path( self::conform_dir( hmbkp_path() ) );
-		}
-
-		return $this->path;
-
-	}
-
-	/**
-	 * Set the directory backups are saved to
-	 *
-	 * @param string $path
-	 * @return null
-	 */
-	public function set_path( $path ) {
-
-		if ( empty( $path ) || ! is_string( $path ) ) {
-			return new WP_Error( 'invalid_backup_path', sprintf( __( 'Invalid backup path <code>%s</code> must be a non empty (string)', 'backupwordpress' ), $path ) );
-		}
-
-		$this->path = self::conform_dir( $path );
 
 	}
 
@@ -433,7 +422,7 @@ class HM_Backup {
 	public function set_existing_archive_filepath( $existing_archive_filepath ) {
 
 		if ( empty( $existing_archive_filepath ) || ! is_string( $existing_archive_filepath ) ) {
-			return new WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non empty (string)', 'backupwordpress' ), $existing_archive_filepath ) );
+			return new \WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non empty (string)', 'backupwordpress' ), $existing_archive_filepath ) );
 		}
 
 		$this->existing_archive_filepath = self::conform_dir( $existing_archive_filepath );
@@ -487,7 +476,7 @@ class HM_Backup {
 	public function set_type( $type ) {
 
 		if ( ! is_string( $type ) || ! in_array( $type, array( 'file', 'database', 'complete' ) ) ) {
-			return new WP_Error( 'invalid_backup_type', sprintf( __( 'Invalid backup type <code>%s</code> must be one of (string) file, database or complete', 'backupwordpress' ), $type ) );
+			return new \WP_Error( 'invalid_backup_type', sprintf( __( 'Invalid backup type <code>%s</code> must be one of (string) file, database or complete', 'backupwordpress' ), $type ) );
 		}
 
 		$this->type = $type;
@@ -634,8 +623,47 @@ class HM_Backup {
 		$this->zip_command_path = $path;
 	}
 
+	/**
+	 * Fire actions for the various backup stages
+	 *
+	 * Callers can register callbacks to be called using `set_action_callback`
+	 * Both the action and the instance on Backup are then passed to the callback function
+	 *
+	 * @see set_action_callback
+	 * @param string $action     The event to fire
+	 */
 	protected function do_action( $action ) {
+
+		// If we have any callbacks then let's fire them
+		if ( ! empty( $this->action_callback ) ) {
+
+			// Order them by priority, lowest priority first
+			ksort( $this->action_callback );
+
+			foreach ( $this->action_callback as $priority ) {
+				foreach ( $priority as $callback ) {
+					call_user_func( $callback, $action, $this );
+				}
+			}
+
+		}
+
+		// Also fire a global WordPress action
 		do_action( $action, $this );
+
+	}
+
+	/**
+	 * Allow the caller to set a callback function that will be invoked whenever
+	 * an action fires
+	 *
+	 * @see do_action
+	 * @see /do_action
+	 * @param callable $callback The function or method to be called
+	 * @param int $priority      The priority of the callback
+	 */
+	public function set_action_callback( $callback, $priority = 10 ) {
+		$this->action_callback[$priority][] = $callback;
 	}
 
 	/**
@@ -850,8 +878,6 @@ class HM_Backup {
 		// Zip up $this->root
 		if ( $this->get_type() !== 'database' ) {
 
-			$start = time();
-
 			// cd to the site root
 			$command = 'cd ' . escapeshellarg( $this->get_root() );
 
@@ -902,9 +928,9 @@ class HM_Backup {
 
 		$this->do_action( 'hmbkp_archive_started' );
 
-		$zip = new ZipArchive();
+		$zip = new \ZipArchive();
 
-		if ( ! class_exists( 'ZipArchive' ) || ! $zip->open( $this->get_archive_filepath(), ZIPARCHIVE::CREATE ) ) {
+		if ( ! class_exists( 'ZipArchive' ) || ! $zip->open( $this->get_archive_filepath(), \ZIPARCHIVE::CREATE ) ) {
 			return;
 		}
 
@@ -945,7 +971,7 @@ class HM_Backup {
 				}
 
 				if ( ++$files_added % 500 === 0 ) {
-					if ( ! $zip->close() || ! $zip->open( $this->get_archive_filepath(), ZIPARCHIVE::CREATE ) ) {
+					if ( ! $zip->close() || ! $zip->open( $this->get_archive_filepath(), \ZIPARCHIVE::CREATE ) ) {
 						return;
 					}
 				}
@@ -987,18 +1013,18 @@ class HM_Backup {
 
 		$this->load_pclzip();
 
-		$archive = new PclZip( $this->get_archive_filepath() );
+		$archive = new \PclZip( $this->get_archive_filepath() );
 
 		// Add the database
 		if ( $this->get_type() !== 'file' && file_exists( $this->get_database_dump_filepath() ) ) {
-			if ( ! $archive->add( $this->get_database_dump_filepath(), PCLZIP_OPT_REMOVE_PATH, $this->get_path() ) ) {
+			if ( ! $archive->add( $this->get_database_dump_filepath(), \PCLZIP_OPT_REMOVE_PATH, $this->get_path() ) ) {
 				$this->warning( $this->get_archive_method(), $archive->errorInfo( true ) );
 			}
 		}
 
 		// Zip up everything
 		if ( $this->get_type() !== 'database' ) {
-			if ( ! $archive->add( $this->get_root(), PCLZIP_OPT_REMOVE_PATH, $this->get_root(), PCLZIP_CB_PRE_ADD, 'hmbkp_pclzip_callback' ) ){
+			if ( ! $archive->add( $this->get_root(), \PCLZIP_OPT_REMOVE_PATH, $this->get_root(), \PCLZIP_CB_PRE_ADD, 'hmbkp_pclzip_callback' ) ) {
 				$this->warning( $this->get_archive_method(), $archive->errorInfo( true ) );
 			}
 		}
@@ -1077,7 +1103,7 @@ class HM_Backup {
 			return $this->files;
 		}
 
-		$this->files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->get_root(), RecursiveDirectoryIterator::SKIP_DOTS + RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+		$this->files = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $this->get_root(), \RecursiveDirectoryIterator::SKIP_DOTS + \RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), \RecursiveIteratorIterator::SELF_FIRST, \RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 		return $this->files;
 
@@ -1688,27 +1714,35 @@ class HM_Backup {
 
 }
 
-/**
- * Add file callback for PclZip, excludes files
- * and sets the database dump to be stored in the root
- * of the zip
- *
- * @param string $event
- * @param array  $file
- * @return bool
- */
-function hmbkp_pclzip_callback( $event, $file ) {
+}
 
-	global $_hmbkp_exclude_string;
+// We need this function to exist in the global namespace
+// TODO obviously this should be fixed at some point
+namespace {
 
-	// Don't try to add unreadable files.
-	if ( ! is_readable( $file['filename'] ) || ! file_exists( $file['filename'] ) )
-		return false;
+	/**
+	 * Add file callback for PclZip, excludes files
+	 * and sets the database dump to be stored in the root
+	 * of the zip
+	 *
+	 * @param string $event
+	 * @param array  $file
+	 * @return bool
+	 */
+	function hmbkp_pclzip_callback( $event, $file ) {
 
-	// Match everything else past the exclude list
-	elseif ( $_hmbkp_exclude_string && preg_match( '(' . $_hmbkp_exclude_string . ')', $file['stored_filename'] ) )
-		return false;
+		global $_hmbkp_exclude_string;
 
-	return true;
+		// Don't try to add unreadable files.
+		if ( ! is_readable( $file['filename'] ) || ! file_exists( $file['filename'] ) )
+			return false;
+
+		// Match everything else past the exclude list
+		elseif ( $_hmbkp_exclude_string && preg_match( '(' . $_hmbkp_exclude_string . ')', $file['stored_filename'] ) )
+			return false;
+
+		return true;
+
+	}
 
 }

@@ -22,26 +22,30 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function setUp() {
 
-		if ( ! function_exists( 'symlink' ) )
+		if ( ! function_exists( 'symlink' ) ) {
 			$this->markTestSkipped( 'symlink function not defined' );
+		}
 
-		$this->backup = new HM_Backup();
+		HM\BackUpWordPress\Path::get_instance()->set_path( dirname( __FILE__ ) . '/tmp' );
+
+		$this->backup = new HM\BackUpWordPress\Backup();
 		$this->backup->set_root( dirname( __FILE__ ) . '/test-data/' );
-		$this->backup->set_path( dirname( __FILE__ ) . '/tmp' );
+
 		$this->backup->set_type( 'file' );
 
-		wp_mkdir_p( $this->backup->get_path() );
+		wp_mkdir_p( hmbkp_path() );
 
 		$this->symlink = dirname( __FILE__ ) . '/test-data/' . basename( __FILE__ );
 
 		file_put_contents( dirname( __FILE__ ) . '/test-data/symlink', '' );
 
 		$symlink_created = @symlink( dirname( __FILE__ ) . '/test-data/symlink', $this->symlink );
-		
+
 		unlink( dirname( __FILE__ ) . '/test-data/symlink' );
-		
-		if ( ! $symlink_created )		
+
+		if ( ! $symlink_created ) {
 			$this->markTestSkipped( 'Couldn\'t create symlink to test with' );
+		}
 
 	}
 
@@ -53,18 +57,17 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		if ( ! function_exists( 'symlink' ) )
+		if ( ! function_exists( 'symlink' ) ) {
 			return;
+		}
 
-		hmbkp_rmdirtree( $this->backup->get_path() );
 		hmbkp_rmdirtree( hmbkp_path() );
-
-		delete_option( 'hmbkp_path' );
-		delete_option( 'hmbkp_default_path' );
 
 		unset( $this->backup );
 
 		@unlink( $this->symlink );
+
+		HM\BackUpWordPress\Path::get_instance()->reset_path();
 
 	}
 
@@ -75,8 +78,9 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testArchiveBrokenSymlinkWithZip() {
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->assertFileNotExists( $this->symlink );
 		$this->assertTrue( is_link( $this->symlink ) );

@@ -6,7 +6,7 @@
 
 <div class="server-info">
 
-<?php foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) : ?>
+<?php foreach ( HM\BackUpWordPress\Requirements::get_requirement_groups() as $group ) : ?>
 
 	<table class="fixed widefat">
 
@@ -18,7 +18,7 @@
 
 		<tbody>
 
-		<?php foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) : ?>
+		<?php foreach ( HM\BackUpWordPress\Requirements::get_requirements( $group ) as $requirement ) : ?>
 
 			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
 

@@ -23,12 +23,12 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function setUp() {
 
-		$this->backup = new HM_Backup();
-		$this->backup->set_root( dirname( __FILE__ ) . '/test-data/' );
-		$this->backup->set_path( dirname( __FILE__ ) . '/tmp' );
+		HM\BackUpWordPress\Path::get_instance()->set_path( dirname( __FILE__ ) . '/tmp' );
 
-		hmbkp_rmdirtree( $this->backup->get_path() );
-		wp_mkdir_p( $this->backup->get_path() );
+		$this->backup = new HM\BackUpWordPress\Backup();
+		$this->backup->set_root( dirname( __FILE__ ) . '/test-data/' );
+
+		wp_mkdir_p( hmbkp_path() );
 
 	}
 
@@ -40,30 +40,28 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		hmbkp_rmdirtree( $this->backup->get_path() );
 		hmbkp_rmdirtree( hmbkp_path() );
 
-		delete_option( 'hmbkp_path' );
-		delete_option( 'hmbkp_default_path' );
-
 		unset( $this->backup );
+
+		HM\BackUpWordPress\Path::get_instance()->reset_path();
 
 	}
 
 	public function testBackUpDirIsExcludedWhenBackUpDirIsNotInRoot() {
 
-		$this->assertNotContains( $this->backup->get_root(), $this->backup->get_path() );
+		$this->assertNotContains( $this->backup->get_root(), hmbkp_path() );
 		$this->assertEmpty( $this->backup->get_excludes() );
 
 	}
 
 	public function testBackUpDirIsExcludedWhenBackUpDirIsInRoot() {
 
-		$this->backup->set_path( dirname( __FILE__ ) . '/test-data/tmp' );
+		HM\BackUpWordPress\Path::get_instance()->set_path( dirname( __FILE__ ) . '/test-data/tmp' );
 
-		$this->assertContains( $this->backup->get_root(), $this->backup->get_path() );
+		$this->assertContains( $this->backup->get_root(), hmbkp_path() );
 		$this->assertNotEmpty( $this->backup->get_excludes() );
-		$this->assertContains( trailingslashit( $this->backup->get_path() ), $this->backup->get_excludes() );
+		$this->assertContains( trailingslashit( hmbkp_path() ), $this->backup->get_excludes() );
 
 	}
 
@@ -72,8 +70,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '/exclude/' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
-		      $this->markTestSkipped( "Empty zip command path" );
+		if ( ! $this->backup->get_zip_command_path() ) {
+			$this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -105,8 +104,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( dirname( __FILE__ ) . '/test-data/exclude/' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -138,8 +138,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( 'exclude/' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -171,8 +172,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( 'exclude' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -204,8 +206,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '/exclude/exclude.exclude' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
         $this->backup->zip();
         $this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -237,8 +240,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( 'exclude/exclude.exclude' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -270,8 +274,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '/exclude/*' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -303,8 +308,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( 'exclude/*' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -336,8 +342,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '*.exclude' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -369,8 +376,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '/exclude/*.exclude' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -402,8 +410,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( 'exclude/*.exclude' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -435,8 +444,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( 'exclude.*' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -468,8 +478,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '/exclude/exclude.*' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -501,8 +512,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( 'exclude/exclude.*' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -534,8 +546,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '*' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 		$this->assertEquals( 'zip', $this->backup->get_archive_method() );
@@ -552,8 +565,9 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->set_excludes( '*' );
 		$this->backup->set_type( 'file' );
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->pcl_zip();
 		$this->assertEquals( 'pclzip', $this->backup->get_archive_method() );

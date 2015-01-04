@@ -23,11 +23,12 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function setUp() {
 
-		$this->backup = new HM_Backup();
-		$this->backup->set_root( dirname( __FILE__ ) . '/test-data' );
-		$this->backup->set_path( dirname( __FILE__ ) . '/tmp' );
+		HM\BackUpWordPress\Path::get_instance()->set_path( dirname( __FILE__ ) . '/tmp' );
 
-		hmbkp_rmdirtree( $this->backup->get_path() );
+		$this->backup = new HM\BackUpWordPress\Backup();
+
+		$this->backup->set_root( dirname( __FILE__ ) . '/test-data' );
+
 		wp_mkdir_p( dirname( __FILE__ ) . '/tmp' );
 
 	}
@@ -40,15 +41,11 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		hmbkp_rmdirtree( $this->backup->get_path() );
 		hmbkp_rmdirtree( hmbkp_path() );
-
-		delete_option( 'hmbkp_path' );
-		delete_option( 'hmbkp_default_path' );
 
 		@unlink( $this->backup->get_root() . '/new.file' );
 
-		unset( $this->backup );
+		HM\BackUpWordPress\Path::get_instance()->reset_path();
 
 	}
 
@@ -99,7 +96,7 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 		$this->assertArchiveContains( $this->backup->get_archive_filepath(), array( 'test-data.txt', $this->backup->get_database_dump_filename() ) );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), 4 );
 
-		if ( ! copy( $this->backup->get_archive_filepath(), $this->backup->get_path() . '/delta.zip' ) ) {
+		if ( ! copy( $this->backup->get_archive_filepath(), hmbkp_path() . '/delta.zip' ) ) {
 		    $this->markTestSkipped( 'Unable to copy backup' );
 		}
 

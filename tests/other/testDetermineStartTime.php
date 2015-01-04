@@ -22,7 +22,7 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 
     public function setUp() {
 
-		$this->plugin = BackUpWordPress_Plugin::get_instance();
+		$this->plugin = HM\BackUpWordPress\Plugin::get_instance();
 
 		$this->schedule_intervals = hmbkp_get_cron_schedules();
 

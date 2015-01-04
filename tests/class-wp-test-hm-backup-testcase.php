@@ -1,4 +1,5 @@
 <?php
+
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 	/**
@@ -17,7 +18,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$files = array();
 
 		foreach( $filepaths as $filepath ) {
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM_Backup::conform_dir( (string) $filepath ) );
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM\BackUpWordPress\Backup::conform_dir( (string) $filepath ) );
 		}
 
 		foreach( $extracted as $fileInfo ) {
@@ -66,7 +67,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$files = array();
 
 		foreach( $filepaths as $filepath ) {
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM_Backup::conform_dir( (string) $filepath ) );
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM\BackUpWordPress\Backup::conform_dir( (string) $filepath ) );
 		}
 
 		foreach( $extracted as $fileInfo ) {

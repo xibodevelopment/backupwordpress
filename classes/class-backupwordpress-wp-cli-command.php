@@ -7,7 +7,7 @@
  * @package wp-cli
  * @subpackage commands/third-party
  */
-class BackUpCommand extends WP_CLI_Command {
+class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 
 	/**
 	 * Perform a Backup.
@@ -42,7 +42,7 @@ class BackUpCommand extends WP_CLI_Command {
 	 *
 	 *     wp backupwordpress backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [--zip_command_path=<path>] [--mysqldump_command_path=<path>]
 	 *
-	 * @todo errors should be bubbled from HM_Backup, HMBKP_Scheduled_Backup and the like instead of being repeated.
+	 * @todo errors should be bubbled from Backup, Scheduled_Backup and the like instead of being repeated.
 	 */
 	public function backup( $args, $assoc_args ) {
 
@@ -54,21 +54,19 @@ class BackUpCommand extends WP_CLI_Command {
 			WP_CLI::line( __( 'Backup: Zipping everything up...', 'backupwordpress' ) );
 		} );
 
-		$hm_backup = new HM_Backup();
+		$hm_backup = new Backup();
 
 		if ( ! empty( $assoc_args['destination'] ) ) {
-			HMBKP_Path::get_instance()->set_path( $assoc_args['destination'] );
+			Path::get_instance()->set_path( $assoc_args['destination'] );
 		}
 
-		$hm_backup->set_path( HMBKP_Path::get_instance()->get_path() );
-
-		HMBKP_Path::get_instance()->cleanup();
+		Path::get_instance()->cleanup();
 
 		if ( ! empty( $assoc_args['root'] ) ) {
 			$hm_backup->set_root( $assoc_args['root'] );
 		}
 
-		if ( ( ! is_dir( $hm_backup->get_path() ) ) ) {
+		if ( ( ! is_dir( hmbkp_path() ) ) ) {
 			WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
 			return false;
 		}

@@ -22,17 +22,19 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function setUp() {
 
-		$this->backup = new HM_Backup();
+		HM\BackUpWordPress\Path::get_instance()->set_path( dirname( __FILE__ ) . '/tmp' );
+
+		$this->backup = new HM\BackUpWordPress\Backup();
 		$this->backup->set_root( dirname( __FILE__ ) . '/test-data/' );
-		$this->backup->set_path( dirname( __FILE__ ) . '/tmp' );
 		$this->backup->set_type( 'file' );
 
-		wp_mkdir_p( $this->backup->get_path() );
+		wp_mkdir_p( hmbkp_path() );
 
 		chmod( $this->backup->get_root() . '/test-data.txt', 0220 );
 
-		if ( is_readable( $this->backup->get_root() . '/test-data.txt' ) )
+		if ( is_readable( $this->backup->get_root() . '/test-data.txt' ) ) {
 			$this->markTestSkipped( "File was readable." );
+		}
 
 	}
 
@@ -44,15 +46,13 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		hmbkp_rmdirtree( $this->backup->get_path() );
 		hmbkp_rmdirtree( hmbkp_path() );
-
-		delete_option( 'hmbkp_path' );
-		delete_option( 'hmbkp_default_path' );
 
 		chmod( $this->backup->get_root() . '/test-data.txt', 0664 );
 
 		unset( $this->backup );
+
+		HM\BackUpWordPress\Path::get_instance()->reset_path();
 
 	}
 
@@ -63,8 +63,9 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testArchiveUnreadableFileWithZip() {
 
-		if ( ! $this->backup->get_zip_command_path() )
+		if ( ! $this->backup->get_zip_command_path() ) {
             $this->markTestSkipped( "Empty zip command path" );
+		}
 
 		$this->backup->zip();
 

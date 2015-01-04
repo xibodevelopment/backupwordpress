@@ -19,7 +19,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEmpty( $this->ini_get_mock() );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -29,7 +29,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 'Off' );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -39,7 +39,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 'off' );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -49,7 +49,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 'oFf' );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -59,7 +59,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), '0' );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -69,7 +69,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 0 );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -79,7 +79,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertFalse( $this->ini_get_mock() );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -89,7 +89,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertNull( $this->ini_get_mock() );
 
-		$this->assertFalse( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertFalse( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -99,7 +99,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 1 );
 
-		$this->assertTrue( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertTrue( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -109,7 +109,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), '1' );
 
-		$this->assertTrue( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertTrue( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -119,7 +119,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 'On' );
 
-		$this->assertTrue( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertTrue( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -129,7 +129,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 'on' );
 
-		$this->assertTrue( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertTrue( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -139,7 +139,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), 'oN' );
 
-		$this->assertTrue( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertTrue( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 
@@ -149,7 +149,7 @@ class testSafeModeTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->ini_get_mock(), true );
 
-		$this->assertTrue( HM_Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
+		$this->assertTrue( HM\BackUpWordPress\Backup::is_safe_mode_active( array( $this, 'ini_get_mock' ) ) );
 
 	}
 

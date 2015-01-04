@@ -22,9 +22,9 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function setUp() {
 
-		$this->schedule = new HMBKP_Scheduled_Backup( 'unit-test' );
+		$this->schedule = new HM\BackUpWordPress\Scheduled_Backup( 'unit-test' );
 
-		$this->recurrences = HMBKP_Scheduled_Backup::get_cron_schedules();
+		$this->recurrences = HM\BackUpWordPress\Scheduled_Backup::get_cron_schedules();
 
 	}
 
