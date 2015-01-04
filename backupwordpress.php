@@ -146,11 +146,6 @@ class BackUpWordPress_Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
-		// Load hm-backup
-		if ( ! class_exists( 'HM_Backup' ) ) {
-			require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
-		}
-
 		// Load Backdrop if necessary.
 		if ( ! class_exists( 'HM_Backdrop_Task' ) ) {
 			require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
@@ -160,7 +155,10 @@ class BackUpWordPress_Plugin {
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-path.php' );
 
-		// Load the schedules
+		// Load the core backup class
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-backup.php' );
+
+		// Load the backup scheduling classes
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
 
