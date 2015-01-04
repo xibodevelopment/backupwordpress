@@ -20,7 +20,7 @@ class BackUpCommand extends WP_CLI_Command {
 	 * [--database_only]
 	 * : Backup database only, defaults to off
 	 *
-	 * [--path]
+	 * [--destination]
 	 * : dir that the backup should be save in, defaults to your existing backups directory
 	 *
 	 * [--root]
@@ -32,10 +32,17 @@ class BackUpCommand extends WP_CLI_Command {
 	 * [--mysqldump_command_path]
 	 * : path to your mysqldump binary, standard locations are automatically used
 	 *
+	 * [--archive_filename]
+	 * : filename for the resulting zip file
+	 *
+	 * [--excludes]
+	 * : list of paths you'd like to exclude
+	 *
 	 * ## Usage
 	 *
 	 *     wp backupwordpress backup [--files_only] [--database_only] [--path<dir>] [--root<dir>] [--zip_command_path=<path>] [--mysqldump_command_path=<path>]
 	 *
+	 * @todo errors should be bubbled from HM_Backup, HMBKP_Scheduled_Backup and the like instead of being repeated.
 	 */
 	public function backup( $args, $assoc_args ) {
 
@@ -49,8 +56,8 @@ class BackUpCommand extends WP_CLI_Command {
 
 		$hm_backup = new HM_Backup();
 
-		if ( ! empty( $assoc_args['path'] ) ) {
-			HMBKP_Path::get_instance()->set_path( $assoc_args['path'] );
+		if ( ! empty( $assoc_args['destination'] ) ) {
+			HMBKP_Path::get_instance()->set_path( $assoc_args['destination'] );
 		}
 
 		$hm_backup->set_path( HMBKP_Path::get_instance()->get_path() );
@@ -61,16 +68,18 @@ class BackUpCommand extends WP_CLI_Command {
 			$hm_backup->set_root( $assoc_args['root'] );
 		}
 
-		if ( ( ! is_dir( $hm_backup->get_path() ) && ( ! is_writable( dirname( $hm_backup->get_path() ) ) || ! wp_mkdir_p( $hm_backup->get_path() ) ) ) || ! is_writable( $hm_backup->get_path() ) ) {
+		if ( ( ! is_dir( $hm_backup->get_path() ) ) ) {
 			WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
-
 			return false;
 		}
 
 		if ( ! is_dir( $hm_backup->get_root() ) || ! is_readable( $hm_backup->get_root() ) ) {
 			WP_CLI::error( __( 'Invalid root path', 'backupwordpress' ) );
-
 			return false;
+		}
+
+		if ( isset( $assoc_args['archive_filename'] ) ) {
+			$hm_backup->set_archive_filename( $assoc_args['archive_filename'] );
 		}
 
 		if ( ! empty( $assoc_args['files_only'] ) ) {

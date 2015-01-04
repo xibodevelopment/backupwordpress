@@ -771,6 +771,13 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		// Delete old backups now in-case we fatal error during the backup process
 		$this->delete_old_backups();
 
+		// If we already have a previous backup then pass it in so it can be re-used
+		list( $existing_backup ) = array_values( (array) $this->get_backups() );
+
+		if ( $existing_backup && file_exists( $existing_backup ) ) {
+			$this->set_existing_archive_filepath( $existing_backup );
+		}
+
 		$this->backup();
 
 		// Delete the backup running file
