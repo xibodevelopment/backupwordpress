@@ -623,7 +623,7 @@ class HMBKP_Average_Backup_Duration extends HMBKP_Requirement {
 		$schedules = HMBKP_Schedules::get_instance();
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
-			$schedule_average_durations[ 'Schedule: ' . $schedule->get_id() ] = 'Duration: ' . $schedule->get_schedule_average_duration();
+			$schedule_average_durations[ sprintf( __( 'Schedule: %s', 'backupwordpress' ), $schedule->get_id() ) ] = sprintf( __( 'Duration: %s', 'backupwordpress' ), $schedule->get_schedule_average_duration() );
 		}
 
 		return array_filter( $schedule_average_durations );
