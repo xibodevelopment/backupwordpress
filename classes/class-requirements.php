@@ -255,7 +255,7 @@ class HMBKP_Requirement_PHP_User extends HMBKP_Requirement {
 			return '';
 		}
 
-		return shell_exec( 'whoami' );
+		return trim( shell_exec( 'whoami' ) );
 
 	}
 
@@ -282,7 +282,7 @@ class HMBKP_Requirement_PHP_Group extends HMBKP_Requirement {
 			return '';
 		}
 
-		return shell_exec( 'groups' );
+		return trim( shell_exec( 'groups' ) );
 
 	}
 
@@ -332,7 +332,7 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 			return false;
 		}
 
-		return $cron;
+		return json_encode( $cron );
 
 	}
 
