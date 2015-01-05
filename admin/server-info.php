@@ -38,7 +38,7 @@
 								<?php else : ?>
 
 									<li>
-										<?php printf( __( '%1$s - %2$s', 'backupwordpress' ), $key, $item ); ?>
+										<?php printf( __( '%1$s - %2$s' ), esc_html( $key ), esc_html( $item ) ); ?>
 									</li>
 
 								<?php endif; ?>
