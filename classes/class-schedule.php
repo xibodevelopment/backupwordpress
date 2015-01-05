@@ -913,6 +913,8 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			case 'hmbkp_backup_complete' :
 
 				$this->set_status( __( 'Finishing Backup', 'backupwordpress' ) );
+				$this->update_average_schedule_run_time( time() );
+
 				break;
 
 			case 'hmbkp_error' :
@@ -962,6 +964,79 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 		endswitch;
 
 		do_action( 'hmbkp_action_complete', $action, $this );
+	}
+
+	/**
+	 * Calculate schedule run time.
+	 *
+	 * @param int Timestamp $end
+	 */
+	protected function update_average_schedule_run_time( $end ) {
+
+		$start = $this->get_schedule_running_start_time();
+
+		if ( $end <= $start ) {
+			// Something went wrong, ignore.
+			return;
+		}
+
+		$diff = (int) abs( $end - $start );
+
+		if ( isset( $this->options['duration_total'] ) && isset( $this->options['backup_run_count'] ) ) {
+
+			$this->options['duration_total'] += $diff;
+			$this->options['backup_run_count'] ++;
+
+		} else {
+
+			$this->options['duration_total'] = $diff;
+			$this->options['backup_run_count'] = 1;
+
+		}
+
+		$this->save();
+	}
+
+	/**
+	 * Calculates the average run time for this schedule.
+	 *
+	 * @return string
+	 */
+	public function get_schedule_average_duration() {
+
+		if ( ! isset( $this->options['backup_run_count'] ) || ! isset( $this->options['backup_run_count'] )  ) {
+			return '0';
+		}
+
+		if ( 0 === (int) $this->options['backup_run_count'] ) {
+			return '0';
+		}
+
+		$average_run_time = (int) $this->options['duration_total'] / (int) $this->options['backup_run_count'];
+
+		if ( $average_run_time < HOUR_IN_SECONDS ) {
+
+			$mins = round( $average_run_time / MINUTE_IN_SECONDS );
+
+			if ( $mins <= 1 ) {
+				$mins = 1;
+			}
+
+			/* translators: min=minute */
+			$duration = sprintf( _n( '%s min', '%s mins', $mins, 'backupwordpress' ), $mins );
+
+		} elseif ( $average_run_time < DAY_IN_SECONDS && $average_run_time >= HOUR_IN_SECONDS ) {
+
+			$hours = round( $average_run_time / HOUR_IN_SECONDS );
+
+			if ( $hours <= 1 ) {
+				$hours = 1;
+			}
+
+			$duration = sprintf( _n( '%s hour', '%s hours', $hours, 'backupwordpress' ), $hours );
+		}
+
+		return $duration;
 	}
 
 	/**
