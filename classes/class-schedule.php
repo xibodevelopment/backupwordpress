@@ -1002,12 +1002,14 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 */
 	public function get_schedule_average_duration() {
 
-		if ( ! isset( $this->options['backup_run_count'] ) || ! isset( $this->options['backup_run_count'] )  ) {
-			return '0';
+		$duration = 'Unknown';
+
+		if ( ! isset( $this->options['duration_total'] ) || ! isset( $this->options['backup_run_count'] )  ) {
+			return $duration;
 		}
 
 		if ( 0 === (int) $this->options['backup_run_count'] ) {
-			return '0';
+			return $duration;
 		}
 
 		$average_run_time = (int) $this->options['duration_total'] / (int) $this->options['backup_run_count'];
