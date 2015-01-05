@@ -71,8 +71,7 @@ class Scheduled_Backup {
 		// Set the archive filename to site name + schedule slug + date
 		$this->backup->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
-		// TODO breaks the delta backup as database dump filename is always different
-		$this->backup->set_database_dump_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.sql' );
+		$this->backup->set_database_dump_filename( implode( '-', array( 'database', sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id() ) ) . '.sql' );
 
 		$this->backup->set_type( $this->get_type() );
 		$this->backup->set_excludes( $this->default_excludes(), true );
