@@ -173,4 +173,96 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
+	public function testAverageBackupDurationCorrectValuesMinutes() {
+
+		$test_values = array(
+			array(
+				'start' => time(),
+				'end' => time() + ( 10 * MINUTE_IN_SECONDS ),
+			),
+			array(
+				'start' => time(),
+				'end' => time() + ( 5 * MINUTE_IN_SECONDS ),
+			),
+		);
+
+		$this->init_schedule_options( $test_values );
+
+		// We round the average so 7.5 becomes 8
+		$this->assertEquals( '8 mins', $this->schedule->get_schedule_average_duration() );
+	}
+
+	public function testAverageBackupDurationCorrectValuesHours() {
+
+		$test_values = array(
+			array(
+				'start' => time(),
+				'end' => time() + ( 10 * HOUR_IN_SECONDS ),
+			),
+			array(
+				'start' => time(),
+				'end' => time() + ( 5 * HOUR_IN_SECONDS ),
+			),
+		);
+
+		$this->init_schedule_options( $test_values );
+
+		// We round the average so 7.5 becomes 8
+		$this->assertEquals( '8 hours', $this->schedule->get_schedule_average_duration() );
+	}
+
+	public function testAverageBackupDurationIncorrectValues() {
+
+		if ( isset( $this->schedule->options['duration_total'] ) ) {
+			$current_avg = $this->schedule->options['duration_total'];
+		} else {
+			$current_avg = 'Unknown';
+		}
+
+		$test_values = array(
+			array(
+				'start' => time(),
+				'end' => time() - ( 10 * MINUTE_IN_SECONDS ),
+			),
+			array(
+				'start' => time(),
+				'end' => time() - ( 5 * MINUTE_IN_SECONDS ),
+			),
+		);
+
+		// Value should not have changed
+		$this->assertEquals( $current_avg, $this->schedule->get_schedule_average_duration() );
+	}
+
+	public function testAverageBackupDurationZeroValues() {
+
+		if ( isset( $this->schedule->options['duration_total'] ) ) {
+			$current_avg = $this->schedule->options['duration_total'];
+		} else {
+			$current_avg = 'Unknown';
+		}
+
+		$test_values = array(
+			array(
+				'start' => 0,
+				'end' => 0,
+			),
+			array(
+				'start' => 0,
+				'end' => 0,
+			),
+		);
+
+		// Value should not have changed
+		$this->assertEquals( $current_avg, $this->schedule->get_schedule_average_duration() );
+	}
+
+	protected function init_schedule_options( $data = array() ) {
+
+		foreach ( $data as $run ) {
+			$this->schedule->update_average_schedule_run_time( $run['start'], $run['end'] );
+		}
+
+	}
+
 }
