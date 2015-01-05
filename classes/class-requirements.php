@@ -601,6 +601,37 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 HMBKP_Requirements::register( 'HMBKP_Requirement_Calculated_Size', 'Site' );
 
 /**
+ * Class HMBKP_Average_Backup_Duration
+ */
+class HMBKP_Average_Backup_Duration extends HMBKP_Requirement {
+
+	protected $name = 'Average backup duration';
+
+	public function __get( $property ) {
+		return $this->{$property};
+	}
+
+	/**
+	 * Retrieves the average backup duration for each schedule.
+	 *
+	 * @return array The average backup duration for all schedules.
+	 */
+	public function test() {
+
+		$schedule_average_durations = array();
+
+		$schedules = HMBKP_Schedules::get_instance();
+
+		foreach ( $schedules->get_schedules() as $schedule ) {
+			$schedule_average_durations[ 'Schedule: ' . $schedule->get_id() ] = 'Duration: ' . $schedule->get_schedule_average_duration();
+		}
+
+		return array_filter( $schedule_average_durations );
+	}
+}
+HMBKP_Requirements::register( 'HMBKP_Average_Backup_Duration', 'Site' );
+
+/**
  * Class HMBKP_Requirement_WP_Cron_Test_Response
  */
 class HMBKP_Requirement_WP_Cron_Test extends HMBKP_Requirement {
