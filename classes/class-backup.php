@@ -143,6 +143,19 @@ class Backup {
 	protected $archive_verified = false;
 
 	/**
+	 * Hacky way to force a fallback to PclZip
+	 *
+	 * @todo re-factor out of this mess
+	 * @var bool
+	 */
+	public $skip_zip_archive = false;
+
+	/**
+	 * @var string
+	 */
+	protected $action_callback = '';
+
+	/**
 	 * Check whether safe mode is active or not
 	 *
 	 * @param string $ini_get_callback
@@ -150,8 +163,11 @@ class Backup {
 	 */
 	public static function is_safe_mode_active( $ini_get_callback = 'ini_get' ) {
 
-		if ( ( $safe_mode = @call_user_func( $ini_get_callback, 'safe_mode' ) ) && strtolower( $safe_mode ) != 'off' )
+		$safe_mode = @call_user_func( $ini_get_callback, 'safe_mode' );
+
+		if ( $safe_mode && strtolower( $safe_mode ) != 'off' ) {
 			return true;
+		}
 
 		return false;
 
@@ -279,6 +295,11 @@ class Backup {
 
 	}
 
+	/**
+	 * Simple class wrapper for Path::get_path()
+	 *
+	 * @return string
+	 */
 	private function get_path() {
 		return Path::get_instance()->get_path();
 	}
@@ -311,7 +332,7 @@ class Backup {
 	 * Set the filename of the archive file
 	 *
 	 * @param string $filename
-	 * @return WP_Error
+	 * @return \WP_Error|null
 	 */
 	public function set_archive_filename( $filename ) {
 
@@ -355,7 +376,7 @@ class Backup {
 	 * Set the filename of the database dump file
 	 *
 	 * @param string $filename
-	 * @return WP_Error
+	 * @return \WP_Error|null
 	 */
 	public function set_database_dump_filename( $filename ) {
 
@@ -392,7 +413,7 @@ class Backup {
 	 * Set the root directory to backup from
 	 *
 	 * @param string $path
-	 * @return WP_Error
+	 * @return \WP_Error|null
 	 */
 	public function set_root( $path ) {
 
@@ -471,7 +492,7 @@ class Backup {
 	 * $type must be one of complete, database or file
 	 *
 	 * @param string $type
-	 * @return WP_Error
+	 * @return \WP_Error|null
 	 */
 	public function set_type( $type ) {
 
@@ -669,7 +690,8 @@ class Backup {
 	/**
 	 * Kick off a backup
 	 *
-	 * @return bool
+	 * @todo should be renamed so it's not same as class
+	 * @return null
 	 */
 	public function backup() {
 
@@ -1095,7 +1117,7 @@ class Backup {
 	/**
 	 * Return an array of all files in the filesystem
 	 *
-	 * @return array
+	 * @return \RecursiveIteratorIterator
 	 */
 	public function get_files() {
 
@@ -1471,6 +1493,8 @@ class Backup {
 		$sql_file .= "# Data contents of table " . $table . " (" . $rows_cnt . " records)\n";
 		$sql_file .= "#\n";
 
+		$field_set = $field_num = array();
+
 		// Checks whether the field is an integer or not
 		for ( $j = 0; $j < $fields_cnt; $j ++ ) {
 
@@ -1491,6 +1515,8 @@ class Backup {
 		$replace     = array( '\0', '\n', '\r', '\Z' );
 		$current_row = 0;
 		$batch_write = 0;
+
+		$values = array();
 
 		while ( $row = mysql_fetch_row( $result ) ) {
 
@@ -1571,7 +1597,7 @@ class Backup {
 	 * Write the SQL file
 	 *
 	 * @param string $sql
-	 * @return bool
+	 * @return null|boolean
 	 */
 	private function write_sql( $sql ) {
 
@@ -1734,12 +1760,14 @@ namespace {
 		global $_hmbkp_exclude_string;
 
 		// Don't try to add unreadable files.
-		if ( ! is_readable( $file['filename'] ) || ! file_exists( $file['filename'] ) )
+		if ( ! is_readable( $file['filename'] ) || ! file_exists( $file['filename'] ) ) {
 			return false;
+		}
 
 		// Match everything else past the exclude list
-		elseif ( $_hmbkp_exclude_string && preg_match( '(' . $_hmbkp_exclude_string . ')', $file['stored_filename'] ) )
+		elseif ( $_hmbkp_exclude_string && preg_match( '(' . $_hmbkp_exclude_string . ')', $file['stored_filename'] ) ) {
 			return false;
+		}
 
 		return true;
 

@@ -22,13 +22,14 @@ abstract class Service {
 	 */
 	protected $schedule;
 
-	public function __construct( $schedule ) {
-
+	public function __construct( Scheduled_Backup $schedule ) {
 		$this->set_schedule( $schedule );
 	}
 
 	/**
 	 * Used to determine if the service is in use or not
+	 *
+	 * @return boolean
 	 */
 	abstract public function is_service_active();
 
@@ -36,6 +37,8 @@ abstract class Service {
 	 * The form to output as part of the schedule settings
 	 *
 	 * If you don't want a whole form return ''; here and use @field instead
+	 *
+	 * @return string    The raw HTML for the form you want to output
 	 */
 	abstract public function form();
 
@@ -43,11 +46,15 @@ abstract class Service {
 	 * The field to output as part of the schedule settings
 	 *
 	 * If you don't want a field return ''; here and use @form instead
+	 *
+	 * @return string    The raw HTML for the field you want to output
 	 */
 	abstract public function field();
 
 	/**
 	 * Help text that should be output in the Constants help tab
+	 *
+	 * @return string    The raw HTML for the Constant help text you want to output
 	 */
 	public static function constant() {}
 
@@ -74,7 +81,7 @@ abstract class Service {
 	 *
 	 * @see  Backup::do_action for a list of the actions
 	 */
-	abstract public function action( $action );
+	abstract public function action( $action, Backup $backup );
 
 	public function get_slug() {
 		return strtolower( sanitize_title_with_dashes( $this->name ) );
@@ -94,12 +101,12 @@ abstract class Service {
 	 * Get the value of a field
 	 *
 	 * @param string $name The name of the field
-	 * @param string $esc  The field value
+	 * @param string $esc  The escaping function that should be used
 	 * @return string
 	 */
 	protected function get_field_value( $name, $esc = 'esc_attr' ) {
 
-		if ( $this->schedule->get_service_options( get_class( $this ), $name ) ) {
+		if ( $name && $this->schedule->get_service_options( get_class( $this ), $name ) ) {
 			return $esc( $this->schedule->get_service_options( get_class( $this ), $name ) );
 		}
 
@@ -153,6 +160,8 @@ abstract class Service {
 	/**
 	 * Gets the settings for a similar destination from the existing schedules
 	 * so that we can copy them into the form to avoid having to type them again
+	 *
+	 * @return array
 	 */
 	protected function fetch_destination_settings() {
 
@@ -180,17 +189,16 @@ abstract class Service {
 
 	}
 
+	/**
+	 * @return boolean
+	 */
 	public function has_form() {
 
 		ob_start();
 
 		$this->form();
 
-		if ( ob_get_clean() ) {
-			return true;
-		}
-
-		return false;
+		return (bool) ob_get_clean();
 
 	}
 

@@ -18,7 +18,6 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Setup the backup object
 	 *
-	 * @access public
 	 */
 	public function setUp() {
 
@@ -44,7 +43,6 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * What if the backup path is in root
 	 *
-	 * @access public
 	 */
 	public function testRootBackupPath() {
 
@@ -68,7 +66,6 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Make sure setting a custom path + archive filename correctly sets the archive filepath
 	 *
-	 * @access public
 	 */
 	public function testCustomBackupPath() {
 
@@ -87,7 +84,6 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Make sure setting a custom path + database dump filename correctly sets the database dump filepath
 	 *
-	 * @access public
 	 */
 	public function testCustomDatabaseDumpPath() {
 

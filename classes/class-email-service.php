@@ -150,11 +150,11 @@ class Email_Service extends Service {
 	 * @param  string $action The action received from the backup
 	 * @return void
 	 */
-	public function action( $action ) {
+	public function action( $action, Backup $backup ) {
 
 		if ( $action === 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
 
-			$file = $this->schedule->get_archive_filepath();
+			$file = $backup->get_archive_filepath();
 
 			$sent = false;
 
@@ -164,7 +164,7 @@ class Email_Service extends Service {
 			$headers  = 'From: BackUpWordPress <' . apply_filters( 'hmbkp_from_email', get_bloginfo( 'admin_email' ) ) . '>' . "\r\n";
 
 			// The backup failed, send a message saying as much
-			if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->backup->get_errors(), $this->schedule->backup->get_warnings() ) ) ) {
+			if ( ! file_exists( $file ) && ( $errors = array_merge( $backup->get_errors(), $backup->get_warnings() ) ) ) {
 
 				$error_message = '';
 

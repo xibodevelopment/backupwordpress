@@ -504,17 +504,13 @@ add_action( 'admin_post_hmbkp_remove_exclude_rule', 'hmbkp_remove_exclude_rule' 
 
 /**
  *
- * @param null $pathname
+ * @param null
  */
 function hmbkp_recalculate_directory_filesize() {
 
 	if ( ! isset( $_GET['hmbkp_recalculate_directory_filesize'] ) || ! check_admin_referer( 'hmbkp-recalculate_directory_filesize' ) ) {
 		return;
 	}
-
-	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
-
-	$directory = sanitize_text_field( $_GET['hmbkp_recalculate_directory_filesize'] );
 
 	// Delete the cached directory size
 	delete_transient( 'hmbkp_directory_filesizes' );
@@ -549,9 +545,8 @@ function hmbkp_calculate_site_size() {
 	}
 
 	if ( ! $current_schedule->is_site_size_cached() ) {
-		// Start calculating
 		$root = new SplFileInfo( $current_schedule->backup->get_root() );
-		$size = $current_schedule->filesize( $root );
+		$current_schedule->filesize( $root );
 	}
 
 }

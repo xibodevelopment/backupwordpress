@@ -41,17 +41,17 @@ register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deacti
 /**
  * Class Plugin
  */
-class Plugin {
+final class Plugin {
 
 	const PLUGIN_VERSION = '3.0.4';
 
 	/**
-	 * @var BackUpWordPress\Plugin The singleton instance.
+	 * @var Plugin The singleton instance.
 	 */
 	private static $instance;
 
 	/**
-	 * Instantiates a new BackUpWordPress\Plugin object.
+	 * Instantiates a new Plugin object.
 	 */
 	private function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
@@ -60,7 +60,7 @@ class Plugin {
 	/**
 	 * Insures we always return the same object.
 	 *
-	 * @return BackUpWordPress\Plugin
+	 * @return Plugin
 	 */
 	public static function get_instance() {
 
@@ -391,6 +391,8 @@ class Plugin {
 		if ( ! get_option( 'hmbkp_enable_support' ) ) {
 			return;
 		}
+
+		$info = array();
 
 		foreach ( Requirements::get_requirement_groups() as $group ) {
 			foreach ( Requirements::get_requirements( $group ) as $requirement ) {

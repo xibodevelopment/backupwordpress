@@ -115,7 +115,7 @@ function hmbkp_update() {
 		}
 
 		// Set the archive filename to what it used to be
-		$legacy_schedule->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+		$legacy_schedule->backup->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
 
 		$legacy_schedule->save();
 
@@ -383,8 +383,6 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 
 	$args = wp_parse_args( $times, $default_times );
 
-	$schedule_start = '';
-
 	$intervals = HM\BackUpWordPress\Scheduled_Backup::get_cron_schedules();
 
 	// Allow the hours and minutes to be overwritten by a constant
@@ -420,19 +418,20 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 			$schedule_start = date( 'F', $args['now'] ) . ' ' . $args['day_of_month'] . ' ' . $hm;
 
 			// If we've already gone past that day this month then we'll need to start next month
-			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] )
+			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] ) {
 				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) )  . ' ' . $args['day_of_month'] . ' ' . $hm;
+			}
 
 			// If that's still in the past then we'll need to jump to next year
-			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] )
+			if ( strtotime( $schedule_start, $args['now'] ) <= $args['now'] ) {
 				$schedule_start = date( 'F', strtotime( '+ 1 month', $args['now'] ) )  . ' ' . $args['day_of_month'] . ' ' . date( 'Y', strtotime( '+ 1 year', $args['now'] ) ) . ' ' . $hm;
+			}
 
 			break;
+
 		default :
 
 			return 0;
-
-			break;
 
 	}
 

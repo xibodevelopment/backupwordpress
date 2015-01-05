@@ -15,10 +15,6 @@ abstract class Webhook_Service extends Service {
 	 */
 	public $name = 'Webhook';
 
-	public function __construct( $schedule ) {
-		parent::__construct( $schedule );
-	}
-
 	/**
 	 * @return string
 	 */
@@ -36,19 +32,19 @@ abstract class Webhook_Service extends Service {
 	 * @param  string $action The action received from the backup
 	 * @return void
 	 */
-	public function action( $action ) {
+	public function action( $action, Backup $backup ) {
 
 		if ( 'hmbkp_backup_complete' !== $action || ! $this->is_service_active() ) {
 			return;
 		}
 
 		$webhook_url = $this->get_url();
-		$file        = $this->schedule->get_archive_filepath();
+		$file        = $backup->get_archive_filepath();
 		$download    = add_query_arg( 'hmbkp_download', base64_encode( $file ), HMBKP_ADMIN_URL );
 		$domain      = parse_url( home_url(), PHP_URL_HOST ) . parse_url( home_url(), PHP_URL_PATH );
 
 		// The backup failed, send a message saying as much
-		if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->backup->get_errors(), $this->schedule->backup->get_warnings() ) ) ) {
+		if ( ! file_exists( $file ) && ( $errors = array_merge( $backup->get_errors(), $backup->get_warnings() ) ) ) {
 
 			$error_message = '';
 
@@ -104,7 +100,7 @@ abstract class Webhook_Service extends Service {
 		$ret = wp_remote_post( $webhook_url, $webhook_args );
 
 		if ( is_wp_error( $ret ) ) {
-			$this->schedule->error( 'Webhook', sprintf( __( 'Error: %s', 'backupwordpress' ), $ret->get_error_message() ) );
+			$backup->error( 'Webhook', sprintf( __( 'Error: %s', 'backupwordpress' ), $ret->get_error_message() ) );
 		}
 
 	}

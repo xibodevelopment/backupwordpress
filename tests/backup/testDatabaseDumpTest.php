@@ -19,7 +19,6 @@ class testDatabaseDumpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Setup the backup object and create the tmp directory
 	 *
-	 * @access public
 	 */
 	public function setUp() {
 
@@ -35,7 +34,6 @@ class testDatabaseDumpTestCase extends HM_Backup_UnitTestCase {
 	 * Cleanup the backup file and tmp directory
 	 * after every test
 	 *
-	 * @access public
 	 */
 	public function tearDown() {
 
@@ -50,7 +48,6 @@ class testDatabaseDumpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a database dump with the zip command
 	 *
-	 * @access public
 	 */
 	public function testDatabaseDumpWithMysqldump() {
 
@@ -67,7 +64,6 @@ class testDatabaseDumpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a database dump with the PHP fallback
 	 *
-	 * @access public
 	 */
 	public function testDatabaseDumpWithFallback() {
 

@@ -90,6 +90,11 @@ class Scheduled_Backup {
 
 	}
 
+	/**
+	 * Simple class wrapper for Path::get_path()
+	 *
+	 * @return string
+	 */
 	private function get_path() {
 		return Path::get_instance()->get_path();
 	}
@@ -97,7 +102,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the id for this schedule
 	 *
-	 * @access public
 	 */
 	public function get_id() {
 		return esc_attr( $this->id );
@@ -106,7 +110,6 @@ class Scheduled_Backup {
 	/**
 	 * Get a slugified version of name
 	 *
-	 * @access public
 	 */
 	public function get_slug() {
 
@@ -122,7 +125,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the name of this backup schedule
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function get_name() {
@@ -136,7 +138,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the type of backup
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function get_type() {
@@ -151,8 +152,6 @@ class Scheduled_Backup {
 
 	/**
 	 * Set the type of backup
-	 *
-	 * @access public
 	 *
 	 * @param string $type
 	 */
@@ -171,7 +170,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the exclude rules
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function get_excludes() {
@@ -186,8 +184,6 @@ class Scheduled_Backup {
 
 	/**
 	 * Set the exclude rules
-	 *
-	 * @access public
 	 *
 	 * @param mixed $excludes A comma separated list or array of exclude rules
 	 * @param bool $append Whether to replace or append to existing rules
@@ -213,7 +209,7 @@ class Scheduled_Backup {
 	/**
 	 * Get the maximum number of backups to keep
 	 *
-	 * @access public
+	 * @return int
 	 */
 	public function get_max_backups() {
 
@@ -230,7 +226,7 @@ class Scheduled_Backup {
 	 *
 	 * @param int $max
 	 *
-	 * @return bool|WP_Error
+	 * @return WP_Error|boolean
 	 */
 	public function set_max_backups( $max ) {
 
@@ -273,8 +269,6 @@ class Scheduled_Backup {
 
 	/**
 	 * Set the service options for this schedule
-	 *
-	 * @access public
 	 */
 	public function set_service_options( $service, Array $options ) {
 		$this->options[ $service ] = $options;
@@ -285,7 +279,6 @@ class Scheduled_Backup {
 	 *
 	 * Doesn't account for compression
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function get_site_size() {
@@ -479,7 +472,7 @@ class Scheduled_Backup {
 	 * If $file is a file then just return the result of `filesize()`.
 	 * If $file is a directory then schedule a recursive filesize scan.
 	 *
-	 * @param SplFileInfo $file			The file or directory you want to know the size of
+	 * @param \SplFileInfo $file			The file or directory you want to know the size of
 	 * @param bool $skip_excluded_files	Skip excluded files when calculating a directories total size
 	 * @return int 						The total of the file or directory
 	 */
@@ -555,7 +548,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the start time for the schedule
 	 *
-	 * @access public
 	 * @return int timestamp || 0 for manual only schedules
 	 */
 	public function get_schedule_start_time( $gmt = true ) {
@@ -600,7 +592,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the schedule reoccurrence
 	 *
-	 * @access public
 	 */
 	public function get_reoccurrence() {
 
@@ -618,7 +609,7 @@ class Scheduled_Backup {
 	 *
 	 * @param string $reoccurrence
 	 *
-	 * @return bool|WP_Error
+	 * @return \WP_Error|null|boolean
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
@@ -650,7 +641,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the interval between backups
 	 *
-	 * @access public
 	 * @return int
 	 */
 	public function get_interval() {
@@ -687,7 +677,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the next occurrence of this scheduled backup
 	 *
-	 * @access public
 	 */
 	public function get_next_occurrence( $gmt = true ) {
 
@@ -714,7 +703,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the path to the backup running file that stores the running backup status
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function get_schedule_running_path() {
@@ -724,7 +712,6 @@ class Scheduled_Backup {
 	/**
 	 * Schedule the backup cron
 	 *
-	 * @access public
 	 */
 	public function schedule() {
 
@@ -741,7 +728,6 @@ class Scheduled_Backup {
 	/**
 	 * Unschedule the backup cron.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function unschedule() {
@@ -751,7 +737,6 @@ class Scheduled_Backup {
 	/**
 	 * Run the backup
 	 *
-	 * @access public
 	 */
 	public function run() {
 
@@ -792,7 +777,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the filename that the running status is stored in.
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function get_running_backup_filename() {
@@ -814,7 +798,6 @@ class Scheduled_Backup {
 	/**
 	 * Get the status of the running backup.
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function get_status() {
@@ -837,11 +820,8 @@ class Scheduled_Backup {
 	/**
 	 * Set the status of the running backup
 	 *
-	 * @access public
-	 *
 	 * @param string $message
-	 *
-	 * @return void
+	 * @return null
 	 */
 	public function set_status( $message ) {
 
@@ -860,7 +840,6 @@ class Scheduled_Backup {
 	/**
 	 * Set the time that the current running backup was started
 	 *
-	 * @access public
 	 * @return int $timestamp
 	 */
 	public function get_schedule_running_start_time() {
@@ -971,7 +950,6 @@ class Scheduled_Backup {
 	 * Get the backups created by this schedule
 	 *
 	 * @todo   look into using recursiveDirectoryIterator and recursiveRegexIterator
-	 * @access public
 	 * @return string[] - file paths of the backups
 	 */
 	public function get_backups() {
@@ -1018,7 +996,7 @@ class Scheduled_Backup {
 	 *
 	 * @param string $filepath
 	 *
-	 * @return bool|WP_Error
+	 * @return \WP_Error|boolean
 	 */
 	public function delete_backup( $filepath ) {
 
@@ -1046,7 +1024,6 @@ class Scheduled_Backup {
 	/**
 	 * Delete all back up files created by this schedule
 	 *
-	 * @access public
 	 */
 	public function delete_backups() {
 
@@ -1057,7 +1034,6 @@ class Scheduled_Backup {
 	/**
 	 * Save the schedules options.
 	 *
-	 * @access public
 	 */
 	public function save() {
 
@@ -1072,12 +1048,11 @@ class Scheduled_Backup {
 	 * Cancel this schedule
 	 *
 	 * Cancels the cron job, removes the schedules options
-	 * and optionally deletes all backups crated by
+	 * and optionally deletes all backups created by
 	 * this schedule.
 	 *
-	 * @access public
 	 */
-	public function cancel() {
+	public function cancel( $delete_backups = false ) {
 
 		// Delete the schedule options
 		delete_option( 'hmbkp_schedule_' . $this->get_id() );
@@ -1086,7 +1061,9 @@ class Scheduled_Backup {
 		$this->unschedule();
 
 		// Delete it's backups
-		$this->delete_backups();
+		if ( $delete_backups ) {
+			$this->delete_backups();
+		}
 
 	}
 

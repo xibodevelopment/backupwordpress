@@ -62,6 +62,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	default :
 
+		$reoccurrence = __( 'manually', 'backupwordpress' );
 		$schedule->set_reoccurrence( 'manually' );
 
 endswitch;
@@ -140,7 +141,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
  * Returns a formatted string containing the calculated total site size or a message
  * to indicate it is being calculated.
  *
- * @param Scheduled_Backup $schedule
+ * @param HM\BackUpWordPress\Scheduled_Backup $schedule
  *
  * @return string
  */

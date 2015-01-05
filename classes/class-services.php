@@ -39,7 +39,6 @@ class Services {
 	/**
 	 * Get the current instance
 	 *
-	 * @access public
 	 * @static
 	 */
 	public static function instance() {

@@ -42,7 +42,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that the default time args are respected for hourly schedule
 	 *
-	 * @access public
 	 */
 	public function testDefaultArgs() {
 
@@ -78,7 +77,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the hourly schedule to various future times works as expected
 	 *
-	 * @access public
 	 */
 	public function testFutureStart() {
 
@@ -101,7 +99,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the hourly schedule to various past times works as expected
 	 *
-	 * @access public
 	 */
 	public function testHourlyPastStart() {
 
@@ -124,7 +121,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the twice daily schedule to various past times works as expected
 	 *
-	 * @access public
 	 */
 	public function testTwiceDailyPastStart() {
 
@@ -150,7 +146,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the daily schedule to various past times works as expected
 	 *
-	 * @access public
 	 */
 	public function testDailyPastStart() {
 
@@ -170,7 +165,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the daily schedule to various past times works as expected
 	 *
-	 * @access public
 	 */
 	public function testWeeklyPastStart() {
 
@@ -188,7 +182,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the weekly schedule to various future times works as expected
 	 *
-	 * @access public
 	 */
 	public function testWeeklyFutureStart() {
 
@@ -203,7 +196,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the fortnightly schedule to various past times works as expected
 	 *
-	 * @access public
 	 */
 	public function testFortnightlyPastStart() {
 
@@ -222,7 +214,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the monthly schedule to various past times works as expected
 	 *
-	 * @access public
 	 */
 	public function testMonthlyPastStart() {
 
@@ -239,7 +230,6 @@ class testDetermineStartTimeTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting the monthly schedule to various future times works as expected
 	 *
-	 * @access public
 	 */
 	public function testMonthlyFutureStart() {
 

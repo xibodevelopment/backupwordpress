@@ -18,7 +18,6 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Setup the backup object and create the tmp directory
 	 *
-	 * @access public
 	 */
 	public function setUp() {
 
@@ -42,7 +41,6 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	 * Cleanup the backup file and tmp directory
 	 * after every test
 	 *
-	 * @access public
 	 */
 	public function tearDown() {
 
@@ -59,7 +57,6 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test an unreadable file with the shell commands
 	 *
-	 * @access public
 	 */
 	public function testArchiveUnreadableFileWithZip() {
 
@@ -83,7 +80,6 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test an unreadable file with the zipArchive commands
 	 *
-	 * @access public
 	 */
 	public function testArchiveUnreadableFileWithZipArchive() {
 
@@ -103,7 +99,6 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test an unreadable file with the PclZip commands
 	 *
-	 * @access public
 	 */
 	public function testArchiveUnreadableFileWithPclZip() {
 

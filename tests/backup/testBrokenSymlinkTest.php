@@ -18,7 +18,6 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Setup the backup object and create the tmp directory
 	 *
-	 * @access public
 	 */
 	public function setUp() {
 
@@ -53,7 +52,6 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	 * Cleanup the backup file and tmp directory
 	 * after every test
 	 *
-	 * @access public
 	 */
 	public function tearDown() {
 
@@ -74,7 +72,6 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a broken symlink with the shell commands
 	 *
-	 * @access public
 	 */
 	public function testArchiveBrokenSymlinkWithZip() {
 
@@ -99,7 +96,6 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a broken symlink with the zipArchive commands
 	 *
-	 * @access public
 	 */
 	public function testArchiveBrokenSymlinkWithZipArchive() {
 
@@ -122,7 +118,6 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a broken symlink with the PclZip commands
 	 *
-	 * @access public
 	 */
 	public function testArchiveBrokenSymlinkWithPclZip() {
 

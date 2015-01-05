@@ -33,7 +33,6 @@ class Schedules {
 	/**
 	 * Load the schedules from wp_options and store in $this->schedules
 	 *
-	 * @access public
 	 */
 	private function __construct() {
 		$this->refresh_schedules();
@@ -54,8 +53,7 @@ class Schedules {
 	/**
 	 * Get an array of schedules
 	 *
-	 * @access public
-	 * @return array
+	 * @return Scheduled_Backup[]
 	 */
 	public function get_schedules() {
 		return $this->schedules;
@@ -83,7 +81,7 @@ class Schedules {
 	 *
 	 * @access private
 	 * @param string $id
-	 * @return array An array of Scheduled_Backup objects
+	 * @return Scheduled_Backup
 	 */
 	private function instantiate( $id ) {
 		return new Scheduled_Backup( str_replace( 'hmbkp_schedule_', '', $id ) );

@@ -19,7 +19,6 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Setup the backup object and create the tmp directory
 	 *
-	 * @access public
 	 */
 	public function setUp() {
 
@@ -36,7 +35,6 @@ class testExcludesTestCase extends HM_Backup_UnitTestCase {
 	 * Cleanup the backup file and tmp directory
 	 * after every test
 	 *
-	 * @access public
 	 */
 	public function tearDown() {
 

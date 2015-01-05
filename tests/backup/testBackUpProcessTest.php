@@ -18,8 +18,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Setup the backup object and create the tmp directory
-	 *
-	 * @access public
 	 */
 	public function setUp() {
 
@@ -36,8 +34,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Cleanup the backup file and tmp directory
 	 * after every test
-	 *
-	 * @access public
 	 */
 	public function tearDown() {
 
@@ -51,8 +47,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Test a full backup with the shell commands
-	 *
-	 * @access public
 	 */
 	public function testFullBackupWithCommands() {
 
@@ -120,8 +114,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Test a full backup with the ZipArchive
-	 *
-	 * @access public
 	 */
 	public function testFullBackupWithZipArchiveMysqldumpFallback() {
 
@@ -146,8 +138,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Test a full backup with the PclZip
-	 *
-	 * @access public
 	 */
 	public function testFullBackupWithPclZipAndMysqldumpFallback() {
 
@@ -172,8 +162,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Test a files only backup with the zip command
-	 *
-	 * @access public
 	 */
 	public function testFileOnlyWithZipCommand() {
 
@@ -197,8 +185,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Test a files only backup with ZipArchive
-	 *
-	 * @access public
 	 */
 	public function testFileOnlyWithZipArchive() {
 
@@ -222,8 +208,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 
 	/**
 	 * Test a files only backup with PclZip
-	 *
-	 * @access public
 	 */
 	public function testFileOnlyWithPclZip() {
 

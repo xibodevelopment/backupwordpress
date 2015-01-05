@@ -21,7 +21,6 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Setup the backup object and create the tmp directory
 	 *
-	 * @access public
 	 */
 	public function setUp() {
 
@@ -43,7 +42,6 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 * Cleanup the backup file and tmp directory
 	 * after every test
 	 *
-	 * @access public
 	 */
 	public function tearDown() {
 
@@ -57,7 +55,6 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a full backup with the shell commands
 	 *
-	 * @access public
 	 */
 	public function testFullBackupWithZip() {
 
@@ -85,7 +82,6 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	 * Test a full backup with the ZipArchive
 	 *
 	 * @group pathTest
-	 * @access public
 	 */
 	public function testFullBackupWithZipArchive() {
 
@@ -110,7 +106,6 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test a full backup with PclZip
 	 *
-	 * @access public
 	 */
 	public function testFullBackupWithPclZip() {
 

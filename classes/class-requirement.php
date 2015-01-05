@@ -9,6 +9,11 @@ namespace HM\BackUpWordPress;
 abstract class Requirement {
 
 	/**
+	 * @var string
+	 */
+	protected $name = '';
+
+	/**
 	 * @return mixed
 	 */
 	abstract protected function test();
@@ -502,7 +507,7 @@ class Requirement_Calculated_Size extends Requirement {
 	var $name = 'Calculated size of site';
 
 	/**
-	 * @return string
+	 * @return array
 	 */
 	protected function test() {
 
