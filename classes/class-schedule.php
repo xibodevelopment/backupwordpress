@@ -971,9 +971,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 	 *
 	 * @param int Timestamp $end
 	 */
-	protected function update_average_schedule_run_time( $end ) {
-
-		$start = $this->get_schedule_running_start_time();
+	public function update_average_schedule_run_time( $start, $end ) {
 
 		if ( $end <= $start ) {
 			// Something went wrong, ignore.
