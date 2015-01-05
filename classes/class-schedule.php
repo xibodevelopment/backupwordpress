@@ -913,7 +913,7 @@ class HMBKP_Scheduled_Backup extends HM_Backup {
 			case 'hmbkp_backup_complete' :
 
 				$this->set_status( __( 'Finishing Backup', 'backupwordpress' ) );
-				$this->update_average_schedule_run_time( time() );
+				$this->update_average_schedule_run_time( $this->get_schedule_running_start_time(), time() );
 
 				break;
 
