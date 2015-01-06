@@ -129,7 +129,8 @@ function hmbkp_set_server_config_notices() {
 
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
 
-		if ( ! file_exists( HMBKP_PATH ) ) {
+		// Suppress open_basedir warning https://bugs.php.net/bug.php?id=53041
+		if ( ! @file_exists( HMBKP_PATH ) ) {
 
 			$messages[] = sprintf( __( 'Your custom path does not exist', 'backupwordpress' ) );
 
@@ -139,11 +140,11 @@ function hmbkp_set_server_config_notices() {
 
 		} else {
 
-			if ( ! is_dir( HMBKP_PATH ) ) {
+			if ( ! @is_dir( HMBKP_PATH ) ) {
 				$messages[] = sprintf( __( 'Your custom backups directory %1$s doesn\'t exist and can\'t be created, your backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
 			}
 
-			if ( is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
+			if ( @is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
 				$messages[] = sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
 
 			}
