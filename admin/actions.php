@@ -711,6 +711,16 @@ function hmbkp_ajax_cron_test() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
+	// Only run the test once per week
+	if ( get_transient( 'hmbkp_wp_cron_test_beacon' ) ) {
+
+		echo 1;
+
+		die;
+
+	}
+
+	// Skip the test if they are using Alternate Cron
 	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
 
 		delete_option( 'hmbkp_wp_cron_test_failed' );
@@ -721,15 +731,20 @@ function hmbkp_ajax_cron_test() {
 
 	}
 
-	$response = wp_remote_head( site_url( 'wp-cron.php' ), array( 'timeout' => 30 ) );
+	$url = site_url( 'wp-cron.php' );
 
-	if ( is_wp_error( $response ) ) {
+	// Attempt to load wp-cron.php 3 times, if we get the same error each time then inform the user.
+	$response1 = wp_remote_head( $url, array( 'timeout' => 30 ) );
+	$response2 = wp_remote_head( $url, array( 'timeout' => 30 ) );
+	$response3 = wp_remote_head( $url, array( 'timeout' => 30 ) );
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $response->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+	if ( is_wp_error( $response1 ) && is_wp_error( $response2 ) && is_wp_error( $response3 ) ) {
+
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $response1->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
-	} elseif ( 200 != wp_remote_retrieve_response_code( $response ) ) {
+	} elseif ( ! in_array( 200, array_map( 'wp_remote_retrieve_response_code', array( $response1, $response2, $response3 ) ) ) ) {
 
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
@@ -740,6 +755,7 @@ function hmbkp_ajax_cron_test() {
 		echo 1;
 
 		delete_option( 'hmbkp_wp_cron_test_failed' );
+		set_transient( 'hmbkp_wp_cron_test_beacon', 1, WEEK_IN_SECONDS );
 
 	}
 
