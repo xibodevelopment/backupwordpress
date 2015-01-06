@@ -101,7 +101,7 @@ add_action( 'admin_notices', 'hmbkp_admin_notices' );
 add_action( 'network_admin_notices', 'hmbkp_admin_notices' );
 
 function hmbkp_set_server_config_notices() {
-clearstatcache();
+
 	$notices = HMBKP_Notices::get_instance();
 
 	$messages = array();
