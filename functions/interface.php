@@ -127,12 +127,28 @@ function hmbkp_set_server_config_notices() {
 		$messages[] = sprintf( __( '%1$s is running in %2$s, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst %3$s is on.', 'backupwordpress' ), '<code>PHP</code>', sprintf( '<a href="%1$s">%2$s</a>', __( 'http://php.net/manual/en/features.safe-mode.php', 'backupwordpress' ), __( 'Safe Mode', 'backupwordpress' ) ), '<code>' . __( 'Safe Mode', 'backupwordpress' ) . '</code>' );
 	}
 
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && ! is_dir( HMBKP_PATH ) ) {
-		$messages[] = sprintf( __( 'Your custom backups directory %1$s doesn\'t exist and can\'t be created, your backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
-	}
+	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
 
-	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH && is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
-		$messages[] = sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
+		// Suppress open_basedir warning https://bugs.php.net/bug.php?id=53041
+		if ( ! @file_exists( HMBKP_PATH ) ) {
+
+			$messages[] = sprintf( __( 'Your custom path does not exist', 'backupwordpress' ) );
+
+		} elseif ( hmbkp_is_restricted_custom_path() ) {
+
+			$messages[] = sprintf( __( 'Your custom path is unreachable due to a restriction set in your PHP configuration (open_basedir)', 'backupwordpress' ) );
+
+		} else {
+
+			if ( ! @is_dir( HMBKP_PATH ) ) {
+				$messages[] = sprintf( __( 'Your custom backups directory %1$s doesn\'t exist and can\'t be created, your backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
+			}
+
+			if ( @is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
+				$messages[] = sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
+
+			}
+		}
 	}
 
 	$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
@@ -368,4 +384,29 @@ function hmbkp_get_settings_errors() {
  */
 function hmbkp_clear_settings_errors(){
 	return delete_transient( 'hmbkp_settings_errors' );
+}
+
+function hmbkp_is_restricted_custom_path() {
+
+	$open_basedir = @ini_get( 'open_basedir' );
+
+	if ( 0 === strlen( $open_basedir ) ) {
+		return false;
+	}
+
+	$open_basedir_paths = array_map( 'trim', explode( ':', $open_basedir ) );
+
+	// Is backups path in the open_basedir allowed paths?
+	if ( in_array( HMBKP_PATH, $open_basedir_paths ) ) {
+		return false;
+	}
+
+	// Is backups path a subdirectory of one of the allowed paths?
+	foreach ( $open_basedir_paths as $path ) {
+		if ( 0 === strpos( HMBKP_PATH, $path ) ) {
+			return false;
+		}
+	}
+
+	return true;
 }
