@@ -208,6 +208,8 @@ class BackUpWordPress_Plugin {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
+		add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, array( $this, 'load_intercom_script' ) );
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'styles' ) );
 
 	}
@@ -313,14 +315,13 @@ class BackUpWordPress_Plugin {
 				'SECURE_AUTH_SALT',
 				'LOGGED_IN_SALT',
 				'NONCE_SALT',
-				'SECRET_KEY'
+				'SECRET_KEY',
 			) as $constant
 		) {
 
 			if ( defined( $constant ) ) {
 				$key[] = constant( $constant );
 			}
-
 		}
 
 		shuffle( $key );
@@ -400,11 +401,7 @@ class BackUpWordPress_Plugin {
 	 *
 	 * @param $hook
 	 */
-	public function load_intercom_script( $hook ) {
-
-		if ( HMBKP_ADMIN_PAGE !== $hook ) {
-			return;
-		}
+	public function load_intercom_script() {
 
 		if ( ! get_option( 'hmbkp_enable_support' ) ) {
 			return;
@@ -417,7 +414,6 @@ class BackUpWordPress_Plugin {
 				$info[ $requirement->name() ] = $requirement->result();
 
 			}
-
 		}
 
 		foreach ( HMBKP_Services::get_services() as $file => $service ) {

@@ -255,7 +255,7 @@ class HMBKP_Requirement_PHP_User extends HMBKP_Requirement {
 			return '';
 		}
 
-		return shell_exec( 'whoami' );
+		return trim( shell_exec( 'whoami' ) );
 
 	}
 
@@ -282,7 +282,7 @@ class HMBKP_Requirement_PHP_Group extends HMBKP_Requirement {
 			return '';
 		}
 
-		return shell_exec( 'groups' );
+		return trim( shell_exec( 'groups' ) );
 
 	}
 
@@ -332,7 +332,7 @@ class HMBKP_Requirement_Cron_Array extends HMBKP_Requirement {
 			return false;
 		}
 
-		return $cron;
+		return json_encode( $cron );
 
 	}
 
@@ -599,6 +599,37 @@ class HMBKP_Requirement_Calculated_Size extends HMBKP_Requirement {
 }
 
 HMBKP_Requirements::register( 'HMBKP_Requirement_Calculated_Size', 'Site' );
+
+/**
+ * Class HMBKP_Average_Backup_Duration
+ */
+class HMBKP_Average_Backup_Duration extends HMBKP_Requirement {
+
+	protected $name = 'Average backup duration';
+
+	public function __get( $property ) {
+		return $this->{$property};
+	}
+
+	/**
+	 * Retrieves the average backup duration for each schedule.
+	 *
+	 * @return array The average backup duration for all schedules.
+	 */
+	public function test() {
+
+		$schedule_average_durations = array();
+
+		$schedules = HMBKP_Schedules::get_instance();
+
+		foreach ( $schedules->get_schedules() as $schedule ) {
+			$schedule_average_durations[ sprintf( __( 'Schedule: %s', 'backupwordpress' ), $schedule->get_id() ) ] = sprintf( __( 'Duration: %s', 'backupwordpress' ), $schedule->get_schedule_average_duration() );
+		}
+
+		return array_filter( $schedule_average_durations );
+	}
+}
+HMBKP_Requirements::register( 'HMBKP_Average_Backup_Duration', 'Site' );
 
 /**
  * Class HMBKP_Requirement_WP_Cron_Test_Response

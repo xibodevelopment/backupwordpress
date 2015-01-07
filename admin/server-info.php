@@ -8,30 +8,58 @@
 
 		<?php foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) : ?>
 
-			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) { ?>
+			<?php if ( ( is_string( $requirement->raw_result() ) && strlen( $requirement->result() ) < 20 ) || is_bool( $requirement->raw_result() ) ) : ?>
 
-			<tr>
+				<tr>
 
-				<td><?php echo esc_html( $requirement->name() ); ?></td>
+					<td><?php echo esc_html( $requirement->name() ); ?></td>
 
-				<td>
-					<code><?php echo esc_html( $requirement->result() ); ?></code>
-				</td>
+					<td>
+						<code><?php echo esc_html( $requirement->result() ); ?></code>
+					</td>
 
-			</tr>
+				</tr>
 
-			<?php } else { ?>
+			<?php elseif ( is_array( $requirement->raw_result() ) ) : ?>
 
-			<tr>
+				<tr>
 
-				<td colspan="2">
-					<?php echo esc_html( $requirement->name() ); ?>
-					<pre><?php echo esc_html( $requirement->result() ); ?></pre>
-				</td>
+					<td><?php echo esc_html( $requirement->name() ); ?></td>
 
-			</tr>
+					<td>
+						<ul>
 
-			<?php } ?>
+							<?php foreach ( $requirement->raw_result() as $key => $item ) : ?>
+
+								<?php if ( is_array( $item ) ) : ?>
+
+									<pre><?php var_export( $item ); ?></pre>
+
+								<?php else : ?>
+
+									<li>
+										<?php printf( __( '%1$s - %2$s' ), esc_html( $key ), esc_html( $item ) ); ?>
+									</li>
+
+								<?php endif; ?>
+							<?php endforeach; ?>
+
+						</ul>
+					</td>
+				</tr>
+
+			<?php else : ?>
+
+				<tr>
+
+					<td colspan="2">
+						<?php echo esc_html( $requirement->name() ); ?>
+						<pre><?php echo esc_html( $requirement->result() ); ?></pre>
+					</td>
+
+				</tr>
+
+			<?php endif; ?>
 
 		<?php endforeach; ?>
 
