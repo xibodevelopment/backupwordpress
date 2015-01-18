@@ -20,7 +20,7 @@ class BackUpCommand extends WP_CLI_Command {
 	 * [--database_only]
 	 * : Backup database only, defaults to off
 	 *
-	 * [--path]
+	 * [--backup_path]
 	 * : dir that the backup should be save in, defaults to your existing backups directory
 	 *
 	 * [--root]
@@ -49,8 +49,8 @@ class BackUpCommand extends WP_CLI_Command {
 
 		$hm_backup = new HM_Backup();
 
-		if ( ! empty( $assoc_args['path'] ) ) {
-			HMBKP_Path::get_instance()->set_path( $assoc_args['path'] );
+		if ( ! empty( $assoc_args['backup_path'] ) ) {
+			HMBKP_Path::get_instance()->set_path( $assoc_args['backup_path'] );
 		}
 
 		$hm_backup->set_path( HMBKP_Path::get_instance()->get_path() );
