@@ -37,6 +37,8 @@ class HMBKP_Path {
 	 */
 	protected $custom_path;
 
+	private static $instance;
+
 	/**
 	 * Protected constructor to prevent creating a new instance of the
 	 * *Singleton* via the `new` operator from outside of this class.
@@ -62,20 +64,17 @@ class HMBKP_Path {
 	/**
 	 * Returns the *Singleton* instance of this class.
 	 *
-	 * @staticvar HMBKP_PAth $instance The *Singleton* instances of this class.
+	 * @staticvar HMBKP_Path $instance The *Singleton* instances of this class.
 	 *
 	 * @return HMBKP_Path The *Singleton* instance.
 	 */
 	public static function get_instance() {
 
-		static $instance = null;
-
-		if ( null === $instance ) {
-			$instance = new static();
+		if ( ! ( self::$instance instanceof HMBKP_Path ) ) {
+			self::$instance = new HMBKP_Path();
 		}
 
-		return $instance;
-
+		return self::$instance;
 	}
 
 	/**
