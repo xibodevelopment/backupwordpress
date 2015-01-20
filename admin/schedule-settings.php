@@ -32,6 +32,8 @@
 	return;
 } ?>
 
+</div><!-- end schedule sentence -->
+
 <div class="hmbkp-schedule-settings">
 
 	<?php if ( $_GET['action'] === 'hmbkp_edit_schedule' && $_GET['hmbkp_panel'] === 'hmbkp_edit_schedule_settings' ) {
