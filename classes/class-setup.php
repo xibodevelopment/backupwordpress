@@ -28,7 +28,7 @@ class BackUpWordPress_Setup {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-		//exit( var_dump( $_GET ) );
+
 		if ( ! self::meets_requirements() ) {
 
 			wp_die( self::get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
