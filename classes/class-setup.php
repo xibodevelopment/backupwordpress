@@ -54,9 +54,10 @@ class BackUpWordPress_Setup {
 		// Delete Cron schedules.
 		global $wpdb;
 
-		$schedules = $wpdb->get_results( "SELECT option_name FROM {$wpdb->prefix}options WHERE option_name LIKE 'hmbkp_schedule_%'" );
+		$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
 
-		foreach ( array_map( function( $item ){ return ltrim( $item->option_name, 'hmbkp_schedule_' ); }, $schedules ) as $item ) {
+
+		foreach ( array_map( function( $item ){ return ltrim( $item, 'hmbkp_schedule_' ); }, $schedules ) as $item ) {
 			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
 		}
 
@@ -75,9 +76,9 @@ class BackUpWordPress_Setup {
 		global $wpdb;
 
 		// Get all schedule options with a SELECT query and delete them.
-		$schedules = $wpdb->get_results( "SELECT option_name FROM {$wpdb->prefix}options WHERE option_name LIKE 'hmbkp_schedule_%'" );
+		$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
 
-		array_map( 'delete_option', array_map( function( $item ){ return $item->option_name; }, $schedules ) );
+		array_map( 'delete_option', $schedules );
 
 		// Remove the backups directory
 		require_once( dirname( __FILE__ ) . '../functions/core.php' );
