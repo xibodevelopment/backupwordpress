@@ -77,7 +77,9 @@ class BackUpWordPress_Setup {
 		array_map( 'delete_option', $schedules );
 
 		// Remove the backups directory
-		require_once( dirname( __FILE__ ) . '../functions/core.php' );
+		require_once( dirname( __FILE__ ) . '/../hm-backup/hm-backup.php' );
+		require_once( dirname( __FILE__ ) . '/class-hmbkp-path.php' );
+		require_once( dirname( __FILE__ ) . '/../functions/core.php' );
 		hmbkp_rmdirtree( hmbkp_path() );
 
 		// Remove all the options
