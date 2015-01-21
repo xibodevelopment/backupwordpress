@@ -31,14 +31,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-namespace HM\BackUpWordPress;
-
 require_once( plugin_dir_path( __FILE__ ) . 'classes/class-setup.php' );
 
-register_activation_hook( __FILE__, array( 'Setup', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'Setup', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'deactivate' ) );
 
-register_uninstall_hook( __FILE__, array( 'Setup', 'uninstall' ) );
+register_uninstall_hook( __FILE__, array( 'BackUpWordPress_Setup', 'uninstall' ) );
 
 /**
  * Class BackUpWordPress_Plugin
