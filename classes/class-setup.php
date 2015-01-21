@@ -65,10 +65,6 @@ class BackUpWordPress_Setup {
 
 	public static function uninstall() {
 
-		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-			return;
-		}
-
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
