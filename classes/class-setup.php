@@ -28,7 +28,7 @@ class BackUpWordPress_Setup {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-
+		//exit( var_dump( $_GET ) );
 		if ( ! self::meets_requirements() ) {
 
 			wp_die( self::get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
@@ -51,27 +51,47 @@ class BackUpWordPress_Setup {
 			return;
 		}
 
-		// Determine if we need to do any cleanup
-		if ( ! class_exists( 'HMBKP_Schedules' ) ) {
+		// Delete Cron schedules.
+		global $wpdb;
+
+		$schedules = $wpdb->get_results( "SELECT option_name FROM {$wpdb->prefix}options WHERE option_name LIKE 'hmbkp_schedule_%'" );
+
+		foreach ( array_map( function( $item ){ return ltrim( $item->option_name, 'hmbkp_schedule_' ); }, $schedules ) as $item ) {
+			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
+		}
+
+	}
+
+	public static function uninstall() {
+
+		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 			return;
 		}
 
-		$schedules = HMBKP_Schedules::get_instance();
-
-		if ( empty( $schedules ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
 
-		// Clear schedule crons
-		foreach ( $schedules->get_schedules() as $schedule ) {
-			$schedule->unschedule();
+		global $wpdb;
+
+		// Get all schedule options with a SELECT query and delete them.
+		$schedules = $wpdb->get_results( "SELECT option_name FROM {$wpdb->prefix}options WHERE option_name LIKE 'hmbkp_schedule_%'" );
+
+		array_map( 'delete_option', array_map( function( $item ){ return $item->option_name; }, $schedules ) );
+
+		// Remove the backups directory
+		require_once( dirname( __FILE__ ) . '../functions/core.php' );
+		hmbkp_rmdirtree( hmbkp_path() );
+
+		// Remove all the options
+		foreach ( array( 'hmbkp_enable_support', 'hmbkp_plugin_version', 'hmbkp_path', 'hmbkp_default_path', 'hmbkp_upsell' ) as $option ) {
+			delete_option( $option );
 		}
 
-		// Opt them out of support
-		delete_option( 'hmbkp_enable_support' );
-
-		// Remove the directory filesize cache
-		delete_transient( 'hmbkp_directory_filesizes' );
+		// Delete all transients
+		foreach ( array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running' ) as $transient ) {
+			delete_transient( $transient );
+		}
 
 	}
 
@@ -139,7 +159,7 @@ class BackUpWordPress_Setup {
 	 */
 	public static function display_admin_notices() {
 
-		echo '<div class="error"><p>' . self::get_notice_message() . '</p></div>';
+		echo '<div class="error"><p>' . esc_html( self::get_notice_message() ) . '</p></div>';
 
 	}
 

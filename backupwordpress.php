@@ -31,10 +31,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-include_once( dirname( __FILE__ ) . '/classes/class-setup.php' );
+namespace HM\BackUpWordPress;
 
-register_activation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'deactivate' ) );
+require_once( plugin_dir_path( __FILE__ ) . 'classes/class-setup.php' );
+
+register_activation_hook( __FILE__, array( 'Setup', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'Setup', 'deactivate' ) );
+
+register_uninstall_hook( __FILE__, array( 'Setup', 'uninstall' ) );
 
 /**
  * Class BackUpWordPress_Plugin
@@ -170,7 +174,7 @@ class BackUpWordPress_Plugin {
 
 		// Load the schedules
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
-		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-schedules.php' );
 
 		// Load the core functions
 		require_once( HMBKP_PLUGIN_PATH . 'functions/core.php' );
