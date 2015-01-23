@@ -36,8 +36,6 @@ require_once( plugin_dir_path( __FILE__ ) . 'classes/class-setup.php' );
 register_activation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'deactivate' ) );
 
-register_uninstall_hook( __FILE__, array( 'BackUpWordPress_Setup', 'uninstall' ) );
-
 /**
  * Class BackUpWordPress_Plugin
  */
