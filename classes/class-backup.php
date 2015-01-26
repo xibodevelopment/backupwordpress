@@ -186,12 +186,12 @@ namespace HM\BackUpWordPress {
 			}
 
 			// Is shell_exec or escapeshellcmd or escapeshellarg disabled?
-			if ( array_intersect( array( 'shell_exec', 'escapeshellarg', 'escapeshellcmd' ), array_map( 'trim', explode( ',', @ini_get( 'disable_functions' ) ) ) ) ) {
+			if ( self::is_function_disabled( 'suhosin.executor.func.blacklist' ) ) {
 				return false;
 			}
 
 			// Functions can also be disabled via suhosin
-			if ( array_intersect( array( 'shell_exec', 'escapeshellarg', 'escapeshellcmd' ), array_map( 'trim', explode( ',', @ini_get( 'suhosin.executor.func.blacklist' ) ) ) ) ) {
+			if ( self::is_function_disabled( 'disable_functions' ) ) {
 				return false;
 			}
 
@@ -201,6 +201,14 @@ namespace HM\BackUpWordPress {
 			}
 
 			return true;
+
+		}
+
+		protected static function is_function_disabled( $ini_setting ) {
+
+			if ( array_intersect( array( 'shell_exec', 'escapeshellarg', 'escapeshellcmd' ), array_map( 'trim', explode( ',', @ini_get( $ini_setting ) ) ) ) ) {
+				return false;
+			}
 
 		}
 
@@ -1657,7 +1665,7 @@ namespace HM\BackUpWordPress {
 		/**
 		 * Migrate errors to warnings
 		 *
-		 * @param string $context. (default: null)
+		 * @param null $context
 		 */
 		private function errors_to_warnings( $context = null ) {
 
