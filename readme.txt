@@ -1,9 +1,9 @@
 === BackUpWordPress ===
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
-Requires at least: 3.8.4
-Tested up to: 4.1
-Stable tag: 3.0.4
+Requires at least: 3.9
+Tested up to: 4.2-alpha
+Stable tag: 3.1.0
 
 Simple automated backups of your WordPress powered website.
 
@@ -131,6 +131,71 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+#### 3.1.0 / 2015-01-13
+
+* Correct $response1 variable
+* (origin/issue-652, issue-652) Suppress warnings from filesystem functions
+* Remove debugging function
+* (origin/issue-475, issue-475) Fix a French string
+* Format the intercom data better
+* Load Intercom in the admin footer
+* Fix some HTML issues
+* Add a function that returns a given option value
+* Return Unknown if no average exists or invalid
+* Add a start parameter to function
+* Pass in the start time as a parameter
+* Make strings translatable
+* Escape values
+* Adds a function to track backup duration and another to display it
+* Adds Average Backup Duration Info
+* Improve display of arrays
+* Fixes open_basedir warnings
+* Replace spaces with tabs for indentation
+* (wp-cron-test-improvements) Improve the reliability of the wp-cron test
+* Pop in the directory sizes
+* Adapt heartbeat pulse
+* Update Javascript
+* Update constant name
+* Load the default translations so that activation error message is in user language
+* Fix a few translatable strings
+* Update French translations
+* Re-uglify Intercom js
+* Use provided callback argument to determine current screen
+* remove deprecated code
+* Only show notices on BWP admin page
+* Fix class name
+* Make function public for now
+* Get an instance of BWP to load functions
+* Fix conditional
+* Show admin notice if fails to meet requirements
+* Remove unneeded function
+* Fix references
+* Refactor main class after addition of the Setup class
+* Introduce a setup class
+* Determine if we need to run a cleanup routine
+* Introduce a custom hook for addons
+* Refactor main plugin file into a singleton class
+* Bring activation and deactivation into main plugin class
+* css changes to fix support button alignment
+* Fixes issue preventing backups from running without JS
+* Remove back compat memory limit define
+* Refactor HMBKP_Notices to support non-persistant notices
+* Minor refactor for PHP minimum requirements notice
+* Clear previous backup notices when running a new backup
+* Fix issues with custom paths
+* Improved singleton pattern
+* Display errors in network admin
+* Change to text input so multiple email address are supported
+* Removes HTML tag from string
+* Account for new schedule
+* Make upsell sentence translatable
+* fix return type
+* Return true if transient exists
+* Check if constant is defined
+* Request the site size via heartbeat send
+* Pass site size through heartbeat
+* Only calculate if necessary
 
 #### 3.0.4 / 2014-12-10
 

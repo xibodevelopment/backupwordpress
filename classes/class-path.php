@@ -29,44 +29,44 @@ class Path {
 	 */
 	protected $custom_path;
 
-    /**
-     * Protected constructor to prevent creating a new instance of the
-     * *Singleton* via the `new` operator from outside of this class.
-     */
-    protected function __construct() {}
+	/**
+	 * Protected constructor to prevent creating a new instance of the
+	 * *Singleton* via the `new` operator from outside of this class.
+	 */
+	protected function __construct() {}
 
-    /**
-     * Private clone method to prevent cloning of the instance of the
-     * *Singleton* instance.
-     *
-     * @return void
-     */
-    private function __clone() {}
+	/**
+	 * Private clone method to prevent cloning of the instance of the
+	 * *Singleton* instance.
+	 *
+	 * @return void
+	 */
+	private function __clone() {}
 
-    /**
-     * Private unserialize method to prevent unserializing of the *Singleton*
-     * instance.
-     *
-     * @return void
-     */
-    private function __wakeup() {}
+	/**
+	 * Private unserialize method to prevent unserializing of the *Singleton*
+	 * instance.
+	 *
+	 * @return void
+	 */
+	private function __wakeup() {}
 
-    /**
-     * Returns the *Singleton* instance of this class.
-     *
-     * @staticvar Path $instance The *Singleton* instances of this class.
-     *
-     * @return Path The *Singleton* instance.
-     */
+	/**
+	 * Returns the *Singleton* instance of this class.
+	 *
+	 * @staticvar Path $instance The *Singleton* instances of this class.
+	 *
+	 * @return Path The *Singleton* instance.
+	 */
 	public static function get_instance() {
 
-  		static $instance = null;
+		static $instance = null;
 
-        if ( null === $instance ) {
-            $instance = new static();
-        }
+		if ( null === $instance ) {
+			$instance = new static();
+		}
 
-        return $instance;
+		return $instance;
 
 	}
 
@@ -147,10 +147,15 @@ class Path {
 	 */
 	public function get_existing_paths() {
 
+		if ( false === $default = glob( WP_CONTENT_DIR . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
+			$default = array();
+		}
+
 		$upload_dir = wp_upload_dir();
 
-		$default = glob( WP_CONTENT_DIR . '/backupwordpress-*-backups' );
-		$fallback = glob( $upload_dir['basedir'] . '/backupwordpress-*-backups' );
+		if ( false === $fallback = glob( $upload_dir['basedir'] . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
+			$fallback = array();
+		}
 
 		$paths = array_merge( $default, $fallback );
 

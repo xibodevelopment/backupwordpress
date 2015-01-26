@@ -3,7 +3,7 @@
 Plugin Name: BackUpWordPress
 Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>. On multisite, you'll find me under the Network Settings menu.
-Version: 3.0.4
+Version: 3.1.1
 Author: Human Made Limited
 Author URI: http://hmn.md/
 License: GPL-2.0+
@@ -43,7 +43,7 @@ register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deacti
  */
 final class Plugin {
 
-	const PLUGIN_VERSION = '3.0.4';
+	const PLUGIN_VERSION = '3.1.1';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -201,6 +201,8 @@ final class Plugin {
 		add_action( 'hmbkp_schedule_hook', array( $this, 'schedule_hook_run' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+
+		add_action( 'admin_footer-' . HMBKP_ADMIN_PAGE, array( $this, 'load_intercom_script' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'styles' ) );
 
@@ -382,11 +384,7 @@ final class Plugin {
 	 *
 	 * @param $hook
 	 */
-	public function load_intercom_script( $hook ) {
-
-		if ( HMBKP_ADMIN_PAGE !== $hook ) {
-			return;
-		}
+	public function load_intercom_script() {
 
 		if ( ! get_option( 'hmbkp_enable_support' ) ) {
 			return;

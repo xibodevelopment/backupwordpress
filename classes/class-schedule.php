@@ -123,6 +123,22 @@ class Scheduled_Backup {
 	}
 
 	/**
+	 * Returns the given option value or WP_Error if it doesn't exist
+	 *
+	 * @param $option_name
+	 *
+	 * @return WP_Error
+	 */
+	public function get_schedule_option( $option_name ) {
+
+		if ( isset( $this->options[ $option_name ] ) ) {
+			return $this->options[ $option_name ];
+		} else {
+			return new WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
+		}
+	}
+
+	/**
 	 * Get the name of this backup schedule
 	 *
 	 * @return string
@@ -896,6 +912,8 @@ class Scheduled_Backup {
 			case 'hmbkp_backup_complete' :
 
 				$this->set_status( __( 'Finishing Backup', 'backupwordpress' ) );
+				$this->update_average_schedule_run_time( $this->get_schedule_running_start_time(), time() );
+
 				break;
 
 			case 'hmbkp_error' :
@@ -944,6 +962,79 @@ class Scheduled_Backup {
 
 		endswitch;
 
+	}
+
+	/**
+	 * Calculate schedule run time.
+	 *
+	 * @param int Timestamp $end
+	 */
+	public function update_average_schedule_run_time( $start, $end ) {
+
+		if ( $end <= $start ) {
+			// Something went wrong, ignore.
+			return;
+		}
+
+		$diff = (int) abs( $end - $start );
+
+		if ( isset( $this->options['duration_total'] ) && isset( $this->options['backup_run_count'] ) ) {
+
+			$this->options['duration_total'] += $diff;
+			$this->options['backup_run_count'] ++;
+
+		} else {
+
+			$this->options['duration_total'] = $diff;
+			$this->options['backup_run_count'] = 1;
+
+		}
+
+		$this->save();
+	}
+
+	/**
+	 * Calculates the average run time for this schedule.
+	 *
+	 * @return string
+	 */
+	public function get_schedule_average_duration() {
+
+		$duration = 'Unknown';
+
+		if ( ! isset( $this->options['duration_total'] ) || ! isset( $this->options['backup_run_count'] )  ) {
+			return $duration;
+		}
+
+		if ( 0 === (int) $this->options['backup_run_count'] ) {
+			return $duration;
+		}
+
+		$average_run_time = (int) $this->options['duration_total'] / (int) $this->options['backup_run_count'];
+
+		if ( $average_run_time < HOUR_IN_SECONDS ) {
+
+			$mins = round( $average_run_time / MINUTE_IN_SECONDS );
+
+			if ( $mins <= 1 ) {
+				$mins = 1;
+			}
+
+			/* translators: min=minute */
+			$duration = sprintf( _n( '%s min', '%s mins', $mins, 'backupwordpress' ), $mins );
+
+		} elseif ( $average_run_time < DAY_IN_SECONDS && $average_run_time >= HOUR_IN_SECONDS ) {
+
+			$hours = round( $average_run_time / HOUR_IN_SECONDS );
+
+			if ( $hours <= 1 ) {
+				$hours = 1;
+			}
+
+			$duration = sprintf( _n( '%s hour', '%s hours', $hours, 'backupwordpress' ), $hours );
+		}
+
+		return $duration;
 	}
 
 	/**

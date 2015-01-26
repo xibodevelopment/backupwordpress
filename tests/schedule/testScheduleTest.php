@@ -165,4 +165,104 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
+	public function testAverageBackupDurationCorrectValuesMinutes() {
+
+		$test_values = array(
+			array(
+				'start' => time(),
+				'end' => time() + ( 10 * MINUTE_IN_SECONDS ),
+			),
+			array(
+				'start' => time(),
+				'end' => time() + ( 5 * MINUTE_IN_SECONDS ),
+			),
+		);
+
+		$this->add_mock_backup_data( $test_values );
+
+		// We round the average so 7.5 becomes 8
+		$this->assertEquals( '8 mins', $this->schedule->get_schedule_average_duration() );
+	}
+
+	public function testAverageBackupDurationCorrectValuesHours() {
+
+		$test_values = array(
+			array(
+				'start' => time(),
+				'end' => time() + ( 10 * HOUR_IN_SECONDS ),
+			),
+			array(
+				'start' => time(),
+				'end' => time() + ( 5 * HOUR_IN_SECONDS ),
+			),
+		);
+
+		$this->add_mock_backup_data( $test_values );
+
+		// We round the average so 7.5 becomes 8
+		$this->assertEquals( '8 hours', $this->schedule->get_schedule_average_duration() );
+	}
+
+	public function testAverageBackupDurationIncorrectValues() {
+
+		// Add an initial fake run
+		$this->add_mock_backup_data( array(
+			'start' => time(),
+			'end' => time() + ( 7 * MINUTE_IN_SECONDS ),
+		) );
+
+		$current_average = $this->schedule->get_schedule_average_duration();
+
+		$test_values = array(
+			array(
+				'start' => time(),
+				'end' => time() - ( 10 * MINUTE_IN_SECONDS ),
+			),
+			array(
+				'start' => time(),
+				'end' => time() - ( 5 * MINUTE_IN_SECONDS ),
+			),
+		);
+
+		$this->add_mock_backup_data( $test_values );
+
+		// Value should not have changed
+		$this->assertEquals( $current_average, $this->schedule->get_schedule_average_duration() );
+	}
+
+	public function testAverageBackupDurationZeroValues() {
+
+		// Add an initial fake run
+		$this->add_mock_backup_data( array(
+			'start' => time(),
+			'end' => time() + ( 7 * MINUTE_IN_SECONDS ),
+		) );
+
+		$current_average = $this->schedule->get_schedule_average_duration();
+
+		$test_values = array(
+			array(
+				'start' => 0,
+				'end' => 0,
+			),
+			array(
+				'start' => 0,
+				'end' => 0,
+			),
+		);
+
+		$this->add_mock_backup_data( $test_values );
+
+		// Value should not have changed
+		$this->assertEquals( $current_average, $this->schedule->get_schedule_average_duration() );
+	}
+
+	protected function add_mock_backup_data( $data = array() ) {
+
+		foreach ( $data as $run ) {
+			$this->schedule->update_average_schedule_run_time( $run['start'], $run['end'] );
+		}
+
+	}
+
 }

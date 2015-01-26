@@ -26,6 +26,7 @@ if ( ! defined( 'HMBKP_PLUGIN_PATH' ) ) {
 // Load the schedules
 require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-services.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-path.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
 require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
 require_once( HMBKP_PLUGIN_PATH . 'functions/core.php' );
