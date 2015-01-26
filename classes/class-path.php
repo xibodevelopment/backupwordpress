@@ -62,8 +62,8 @@ class Path {
 	 */
 	public static function get_instance() {
 
-		if ( ! ( self::$instance instanceof HMBKP_Path ) ) {
-			self::$instance = new HMBKP_Path();
+		if ( ! ( self::$instance instanceof Path ) ) {
+			self::$instance = new Path();
 		}
 
 		return self::$instance;
