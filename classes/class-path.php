@@ -29,6 +29,8 @@ class Path {
 	 */
 	protected $custom_path;
 
+	private static $instance;
+
 	/**
 	 * Protected constructor to prevent creating a new instance of the
 	 * *Singleton* via the `new` operator from outside of this class.
@@ -60,14 +62,11 @@ class Path {
 	 */
 	public static function get_instance() {
 
-		static $instance = null;
-
-		if ( null === $instance ) {
-			$instance = new static();
+		if ( ! ( self::$instance instanceof HMBKP_Path ) ) {
+			self::$instance = new HMBKP_Path();
 		}
 
-		return $instance;
-
+		return self::$instance;
 	}
 
 	/**
