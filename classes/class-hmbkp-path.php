@@ -80,6 +80,8 @@ class HMBKP_Path {
 
 	/**
 	 * Get the path to the directory where backups will be stored
+	 *
+	 * @return string $path 
 	 */
 	public function get_path() {
 
