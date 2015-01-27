@@ -430,7 +430,7 @@ class BackUpWordPress_Plugin {
 		$info['widget']     = array( 'activator' => '#intercom' ); ?>
 
 		<script id="IntercomSettingsScriptTag">
-			window.intercomSettings = <?php echo json_encode( $info ); ?>;
+			window.intercomSettings = <?php echo wp_json_encode( $info ); ?>;
 		</script>
 		<script>!function(){function e(){var a=c.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://static.intercomcdn.com/intercom.v1.js";var b=c.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)}var a=window,b=a.Intercom;if("function"==typeof b)b("reattach_activator"),b("update",intercomSettings);else{var c=document,d=function(){d.c(arguments)};d.q=[],d.c=function(a){d.q.push(a)},a.Intercom=d,a.attachEvent?a.attachEvent("onload",e):a.addEventListener("load",e,!1)}}();</script>
 
