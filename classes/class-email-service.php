@@ -1,11 +1,13 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * Email notifications for backups
  *
- * @extends HMBKP_Service
+ * @extends Service
  */
-class HMBKP_Email_Service extends HMBKP_Service {
+class Email_Service extends Service {
 
 	/**
 	 * Human readable name for this service
@@ -144,15 +146,15 @@ class HMBKP_Email_Service extends HMBKP_Service {
 	/**
 	 * Fire the email notification on the hmbkp_backup_complete
 	 *
-	 * @see  HM_Backup::do_action
+	 * @see  Backup::do_action
 	 * @param  string $action The action received from the backup
 	 * @return void
 	 */
-	public function action( $action ) {
+	public function action( $action, Backup $backup ) {
 
 		if ( $action === 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
 
-			$file = $this->schedule->get_archive_filepath();
+			$file = $backup->get_archive_filepath();
 
 			$sent = false;
 
@@ -162,15 +164,17 @@ class HMBKP_Email_Service extends HMBKP_Service {
 			$headers  = 'From: BackUpWordPress <' . apply_filters( 'hmbkp_from_email', get_bloginfo( 'admin_email' ) ) . '>' . "\r\n";
 
 			// The backup failed, send a message saying as much
-			if ( ! file_exists( $file ) && ( $errors = array_merge( $this->schedule->get_errors(), $this->schedule->get_warnings() ) ) ) {
+			if ( ! file_exists( $file ) && ( $errors = array_merge( $backup->get_errors(), $backup->get_warnings() ) ) ) {
 
 				$error_message = '';
 
-				foreach ( $errors as $error_set )
+				foreach ( $errors as $error_set ) {
 					$error_message .= implode( "\n - ", $error_set );
+				}
 
-				if ( $error_message )
+				if ( $error_message ) {
 					$error_message = ' - ' . $error_message;
+				}
 
 				$subject = sprintf( __( 'Backup of %s Failed', 'backupwordpress' ), $domain );
 
@@ -213,4 +217,4 @@ class HMBKP_Email_Service extends HMBKP_Service {
 }
 
 // Register the service
-HMBKP_Services::register( __FILE__, 'HMBKP_Email_Service' );
+Services::register( __FILE__, 'HM\BackUpWordPress\Email_Service' );

@@ -4,9 +4,9 @@
  * Displays a row in the manage backups table
  *
  * @param string                 $file
- * @param HMBKP_Scheduled_Backup $schedule
+ * @param HM\BackUpWordPress\Scheduled_Backup $schedule
  */
-function hmbkp_get_backup_row( $file, HMBKP_Scheduled_Backup $schedule ) {
+function hmbkp_get_backup_row( $file, HM\BackUpWordPress\Scheduled_Backup $schedule ) {
 
 	$encoded_file = urlencode( base64_encode( $file ) );
 	$offset       = get_option( 'gmt_offset' ) * 3600;
@@ -53,7 +53,7 @@ function hmbkp_admin_notices() {
 		return;
 	}
 
-	$notices = HMBKP_Notices::get_instance()->get_notices();
+	$notices = HM\BackUpWordPress\Notices::get_instance()->get_notices();
 
 	if ( empty( $notices ) ) {
 		return;
@@ -78,6 +78,7 @@ function hmbkp_admin_notices() {
 			</ul>
 
 		</div>
+
 	<?php endif; ?>
 
 	<?php if ( ! empty( $notices['server_config'] ) ) : ?>
@@ -102,11 +103,11 @@ add_action( 'network_admin_notices', 'hmbkp_admin_notices' );
 
 function hmbkp_set_server_config_notices() {
 
-	$notices = HMBKP_Notices::get_instance();
+	$notices = HM\BackUpWordPress\Notices::get_instance();
 
 	$messages = array();
 
-	if ( ! HM_Backup::is_shell_exec_available() ) {
+	if ( ! HM\BackUpWordPress\Backup::is_shell_exec_available() ) {
 		$php_user  = '<PHP USER>';
 		$php_group = '<PHP GROUP>';
 	} else {
@@ -123,7 +124,7 @@ function hmbkp_set_server_config_notices() {
 		$messages[] = sprintf( __( 'Your backups directory isn\'t writable, run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' );
 	}
 
-	if ( HM_Backup::is_safe_mode_active() ) {
+	if ( HM\BackUpWordPress\Backup::is_safe_mode_active() ) {
 		$messages[] = sprintf( __( '%1$s is running in %2$s, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst %3$s is on.', 'backupwordpress' ), '<code>PHP</code>', sprintf( '<a href="%1$s">%2$s</a>', __( 'http://php.net/manual/en/features.safe-mode.php', 'backupwordpress' ), __( 'Safe Mode', 'backupwordpress' ) ), '<code>' . __( 'Safe Mode', 'backupwordpress' ) . '</code>' );
 	}
 
@@ -151,7 +152,7 @@ function hmbkp_set_server_config_notices() {
 		}
 	}
 
-	$test_backup = new HMBKP_Scheduled_Backup( 'test_backup' );
+	$test_backup = new HM\BackUpWordPress\Backup();
 
 	if ( ! is_readable( $test_backup->get_root() ) ) {
 		$messages[] = sprintf( __( 'Your site root path %s isn\'t readable.', 'backupwordpress' ), '<code>' . $test_backup->get_root() . '</code>' );
@@ -208,22 +209,26 @@ function hmbkp_backup_errors_message() {
  *
  * @access public
  * @param string                 $type
- * @param HMBKP_Scheduled_Backup $schedule (default: null)
+ * @param HM\BackUpWordPress\Scheduled_Backup $schedule (default: null)
  * @return string
  */
-function hmbkp_human_get_type( $type, HMBKP_Scheduled_Backup $schedule = null ) {
+function hmbkp_human_get_type( $type, HM\BackUpWordPress\Scheduled_Backup $schedule = null ) {
 
-	if ( strpos( $type, 'complete' ) !== false )
+	if ( strpos( $type, 'complete' ) !== false ) {
 		return __( 'Database and Files', 'backupwordpress' );
+	}
 
-	if ( strpos( $type, 'file' ) !== false )
+	if ( strpos( $type, 'file' ) !== false ) {
 		return __( 'Files', 'backupwordpress' );
+	}
 
-	if ( strpos( $type, 'database' ) !== false )
+	if ( strpos( $type, 'database' ) !== false ) {
 		return __( 'Database', 'backupwordpress' );
+	}
 
-	if ( ! is_null( $schedule ) )
+	if ( ! is_null( $schedule ) ) {
 		return hmbkp_human_get_type( $schedule->get_type() );
+	}
 
 	return __( 'Legacy', 'backupwordpress' );
 
@@ -233,10 +238,10 @@ function hmbkp_human_get_type( $type, HMBKP_Scheduled_Backup $schedule = null ) 
  * Display the row of actions for a schedule
  *
  * @access public
- * @param HMBKP_Scheduled_Backup $schedule
+ * @param HM\BackUpWordPress\Scheduled_Backup $schedule
  * @return void
  */
-function hmbkp_schedule_status( HMBKP_Scheduled_Backup $schedule, $echo = true ) {
+function hmbkp_schedule_status( HM\BackUpWordPress\Scheduled_Backup $schedule, $echo = true ) {
 
 	ob_start(); ?>
 
@@ -262,8 +267,9 @@ function hmbkp_schedule_status( HMBKP_Scheduled_Backup $schedule, $echo = true )
  */
 function hmbkp_backup_errors() {
 
-	if ( ! file_exists( hmbkp_path() . '/.backup_errors' ) )
+	if ( ! file_exists( hmbkp_path() . '/.backup_errors' ) ) {
 		return '';
+	}
 
 	return file_get_contents( hmbkp_path() . '/.backup_errors' );
 
@@ -276,8 +282,9 @@ function hmbkp_backup_errors() {
  */
 function hmbkp_backup_warnings() {
 
-	if ( ! file_exists( hmbkp_path() . '/.backup_warnings' ) )
+	if ( ! file_exists( hmbkp_path() . '/.backup_warnings' ) ) {
 		return '';
+	}
 
 	return file_get_contents( hmbkp_path() . '/.backup_warnings' );
 
@@ -290,8 +297,7 @@ function hmbkp_backups_number( $schedule ) {
 	if ( 0 === $number ) {
 		$output = sprintf( __( 'No backups completed', 'backupwordpress' ) );
 	} else {
-		$output = sprintf( _nx( 'One backup completed', '%1$s backups completed', $number, 'backups count', 'backupwordpress' ),
-			number_format_i18n( $number ) );
+		$output = sprintf( _nx( 'One backup completed', '%1$s backups completed', $number, 'backups count', 'backupwordpress' ), number_format_i18n( $number ) );
 	}
 
 	echo apply_filters( 'hmbkp_backups_number', $output, $number );
@@ -339,9 +345,9 @@ function hmbkp_get_settings_url() {
 		$url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
 	}
 
-	HMBKP_schedules::get_instance()->refresh_schedules();
+	HM\BackUpWordPress\schedules::get_instance()->refresh_schedules();
 
-	if ( ! empty( $_REQUEST['hmbkp_schedule_id'] ) && HMBKP_schedules::get_instance()->get_schedule( sanitize_text_field( $_REQUEST['hmbkp_schedule_id'] ) ) ) {
+	if ( ! empty( $_REQUEST['hmbkp_schedule_id'] ) && HM\BackUpWordPress\schedules::get_instance()->get_schedule( sanitize_text_field( $_REQUEST['hmbkp_schedule_id'] ) ) ) {
 		$url = add_query_arg( 'hmbkp_schedule_id', sanitize_text_field( $_REQUEST['hmbkp_schedule_id'] ), $url );
 	}
 
@@ -373,7 +379,6 @@ function hmbkp_add_settings_error( $error_message ){
  * @return mixed
  */
 function hmbkp_get_settings_errors() {
-
 	return get_transient( 'hmbkp_settings_errors' );
 }
 

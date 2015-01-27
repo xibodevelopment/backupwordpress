@@ -1,11 +1,11 @@
 <?php
 
-defined( 'ABSPATH' ) or exit;
+namespace HM\BackUpWordPress;
 
 /**
  * Class BackUpWordPress_Setup
  */
-class BackUpWordPress_Setup {
+class Setup {
 
 	/**
 	 * Defines the minimum version of WordPress required by BWP.
@@ -52,11 +52,11 @@ class BackUpWordPress_Setup {
 		}
 
 		// Determine if we need to do any cleanup
-		if ( ! class_exists( 'HMBKP_Schedules' ) ) {
+		if ( ! class_exists( 'Schedules' ) ) {
 			return;
 		}
 
-		$schedules = HMBKP_Schedules::get_instance();
+		$schedules = Schedules::get_instance();
 
 		if ( empty( $schedules ) ) {
 			return;
