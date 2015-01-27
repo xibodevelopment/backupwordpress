@@ -91,7 +91,7 @@ class HMBKP_Path {
 		// Ensure the backup directory is protected
 		$this->protect_path();
 
-		return $this->path;
+		return HM_Backup::conform_dir( $this->path );
 
 	}
 
