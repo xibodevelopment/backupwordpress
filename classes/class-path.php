@@ -335,21 +335,24 @@ class Path {
 			return;
 		}
 
-		if ( $handle = opendir( $this->get_path() ) ) {
+		foreach ( new CleanUpIterator( new \DirectoryIterator( $this->path ) ) as $file ) {
 
-			while ( false !== ( $file = readdir( $handle ) ) ) {
-
-				if ( ! in_array( $file, array( '.', '..', 'index.html' ) ) && 'zip' !== pathinfo( $file, PATHINFO_EXTENSION ) && false === strpos( $file, '-running' ) ) {
-
-					@unlink( $file );
-
-				}
+			if ( $file->isDot() || ! $file->isReadable() || ! $file->isFile() ) {
+				continue;
 			}
 
-			closedir( $handle );
+			@unlink( $file->getPathname() );
 
 		}
 
 	}
 
+}
+
+class CleanUpIterator extends \FilterIterator {
+
+	// Don't match index.html,files with zip extension or status logfiles.
+	public function accept() {
+		return ! preg_match( '/(index\.html|.*\.zip|.*-running)/', $this->current() );
+	}
 }
