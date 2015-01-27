@@ -335,7 +335,7 @@ class Path {
 			return;
 		}
 
-		foreach ( new CleanUpIterator( new DirectoryIterator( $this->path ) ) as $file ) {
+		foreach ( new CleanUpIterator( new \DirectoryIterator( $this->path ) ) as $file ) {
 
 			if ( $file->isDot() || ! $file->isReadable() || ! $file->isFile() ) {
 				continue;
@@ -349,7 +349,7 @@ class Path {
 
 }
 
-class CleanUpIterator extends FilterIterator {
+class CleanUpIterator extends \FilterIterator {
 
 	// Don't match index.html,files with zip extension or status logfiles.
 	public function accept() {
