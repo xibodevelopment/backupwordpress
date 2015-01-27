@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Unit tests for the HMBKP_Path class
+ * Unit tests for the Path class
  *
- * @see HMBKP_Path
+ * @see Path
  * @extends HM_Backup_UnitTestCase
  */
 class testBackupPathTestCase extends HM_Backup_UnitTestCase {
@@ -14,7 +14,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 		global $is_apache;
 		$this->is_apache = $is_apache;
 
-		$this->path = HMBKP_Path::get_instance();
+		$this->path = HM\BackUpWordPress\Path::get_instance();
 		$this->custom_path = WP_CONTENT_DIR . '/custom';
 
 		// Cleanup before we kickoff in-case theirs cruft around from previous failures
@@ -143,10 +143,10 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 		// Do a single database backup in each path
 		foreach ( $paths as $path ) {
 
-			$backup = new HMBKP_Scheduled_Backup( 'test-merge-existing-path' );
+			$this->path->set_path( $path );
 
-			$path = $this->path->get_path();
-			$backup->set_path( $path );
+			$backup = new HM\BackUpWordPress\Backup();
+
 			$backup->set_type( 'database' );
 
 			// We want to avoid name clashes

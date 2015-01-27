@@ -18,20 +18,18 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Setup the schedule
 	 *
-	 * @access public
 	 */
 	public function setUp() {
 
-		$this->schedule = new HMBKP_Scheduled_Backup( 'unit-test' );
+		$this->schedule = new HM\BackUpWordPress\Scheduled_Backup( 'unit-test' );
 
-		$this->recurrences = HMBKP_Scheduled_Backup::get_cron_schedules();
+		$this->recurrences = HM\BackUpWordPress\Scheduled_Backup::get_cron_schedules();
 
 	}
 
 	/**
 	 * Teardown the schedule and cleanup
 	 *
-	 * @access public
 	 */
 	public function tearDown() {
 
@@ -46,7 +44,6 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that the default schedule is manual
 	 *
-	 * @access public
 	 */
 	public function testDefaultSchedule() {
 
@@ -67,7 +64,6 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that setting a start time in the past causes a wp_error and default to now instead
 	 *
-	 * @access public
 	 */
 	public function set_past_start_time() {
 
@@ -79,7 +75,6 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that we can set the each schedule without a start time
 	 *
-	 * @access public
 	 */
 	public function testSetrecurrences() {
 
@@ -101,7 +96,6 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that the cron even is re-setup if the cron option in the database is lost
 	 *
-	 * @access public
 	 */
 	public function testReSetupAfterDeleteCron() {
 
@@ -132,7 +126,6 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that we can set the each schedule with a start time
 	 *
-	 * @access public
 	 */
 	public function testSetFutureSchedule() {
 
@@ -153,7 +146,6 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	/**
 	 * Test that we everything is properly removed when we unschedule
 	 *
-	 * @access public
 	 */
 	public function testUnschedule() {
 

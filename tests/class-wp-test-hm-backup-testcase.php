@@ -1,11 +1,11 @@
 <?php
+
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 	/**
 	 * Assert that a zip archive exactly matches the array
 	 * of filenames
 	 *
-	 * @access public
 	 * @param string path to zip file
 	 * @param array of filenames to check for
 	 * @return null
@@ -17,7 +17,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$files = array();
 
 		foreach( $filepaths as $filepath ) {
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM_Backup::conform_dir( (string) $filepath ) );
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM\BackUpWordPress\Backup::conform_dir( (string) $filepath ) );
 		}
 
 		foreach( $extracted as $fileInfo ) {
@@ -31,7 +31,6 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Assert that a zip archive doesn't match the array of filenames
 	 *
-	 * @access public
 	 * @param string path to zip file
 	 * @param array of filenames to check for
 	 * @return null
@@ -54,7 +53,6 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 	 * Assert that a zip archive contains the array
 	 * of filenames
 	 *
-	 * @access public
 	 * @param string path to zip file
 	 * @param array of filenames to check for
 	 * @return null
@@ -66,7 +64,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$files = array();
 
 		foreach( $filepaths as $filepath ) {
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM_Backup::conform_dir( (string) $filepath ) );
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM\BackUpWordPress\Backup::conform_dir( (string) $filepath ) );
 		}
 
 		foreach( $extracted as $fileInfo ) {
@@ -84,7 +82,6 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 	 * Assert that a zip archive doesn't contain any of the files
 	 * in the array of filenames
 	 *
-	 * @access public
 	 * @param string path to zip file
 	 * @param array of filenames to check for
 	 * @return null
@@ -110,7 +107,6 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 	 * Assert that a zip archive contains the
 	 * correct number of files
 	 *
-	 * @access public
 	 * @param string path to zip file
 	 * @param int the number of files the archive should contain
 	 * @return null

@@ -31,40 +31,41 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+namespace HM\BackUpWordPress;
+
 include_once( dirname( __FILE__ ) . '/classes/class-setup.php' );
 
-register_activation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'BackUpWordPress_Setup', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deactivate' ) );
 
 /**
- * Class BackUpWordPress_Plugin
+ * Class Plugin
  */
-class BackUpWordPress_Plugin {
+final class Plugin {
 
 	const PLUGIN_VERSION = '3.1.1';
 
 	/**
-	 * @var BackUpWordPress_Plugin The singleton instance.
+	 * @var Plugin The singleton instance.
 	 */
 	private static $instance;
 
 	/**
-	 * Instantiates a new BackUpWordPress_Plugin object.
+	 * Instantiates a new Plugin object.
 	 */
 	private function __construct() {
-
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 	}
 
 	/**
 	 * Insures we always return the same object.
 	 *
-	 * @return BackUpWordPress_Plugin
+	 * @return Plugin
 	 */
 	public static function get_instance() {
 
-		if ( ! ( self::$instance instanceof BackUpWordPress_Plugin ) ) {
-			self::$instance = new BackUpWordPress_Plugin();
+		if ( ! ( self::$instance instanceof Plugin ) ) {
+			self::$instance = new Plugin();
 		}
 
 		return self::$instance;
@@ -94,11 +95,9 @@ class BackUpWordPress_Plugin {
 
 	public function maybe_self_deactivate() {
 
-		if ( ! BackUpWordPress_Setup::meets_requirements() ) {
-
-			add_action( 'admin_init', array( 'BackUpWordPress_Setup', 'self_deactivate' ) );
-
-			add_action( 'admin_notices', array( 'BackUpWordPress_Setup', 'display_admin_notices' ) );
+		if ( ! Setup::meets_requirements() ) {
+			add_action( 'admin_init', array( 'HM\BackUpWordPress\Setup', 'self_deactivate' ) );
+			add_action( 'admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
 		}
 
 	}
@@ -125,17 +124,12 @@ class BackUpWordPress_Plugin {
 		}
 
 		if ( ! defined( 'HMBKP_ADMIN_URL' ) ) {
-
 			$page = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
-
 			define( 'HMBKP_ADMIN_URL', add_query_arg( 'page', HMBKP_PLUGIN_SLUG, $page ) );
-
 		}
 
 		if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
-
 			$prefix = is_multisite() ? 'settings_page_' : 'tools_page_';
-
 			define( 'HMBKP_ADMIN_PAGE', $prefix . HMBKP_PLUGIN_SLUG );
 		}
 
@@ -154,21 +148,20 @@ class BackUpWordPress_Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
-		// Load hm-backup
-		if ( ! class_exists( 'HM_Backup' ) ) {
-			require_once( HMBKP_PLUGIN_PATH . 'hm-backup/hm-backup.php' );
-		}
-
 		// Load Backdrop if necessary.
 		if ( ! class_exists( 'HM_Backdrop_Task' ) ) {
 			require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
 		}
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirement.php' );
 
-		require_once( HMBKP_PLUGIN_PATH . 'classes/class-hmbkp-path.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-path.php' );
 
-		// Load the schedules
+		// Load the core backup class
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-backup.php' );
+
+		// Load the backup scheduling classes
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
 
@@ -176,19 +169,20 @@ class BackUpWordPress_Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'functions/core.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'functions/interface.php' );
 
-		// Load Services
+		// Load the services
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-services.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-service.php' );
 
 		// Load the email service
-		require_once( HMBKP_PLUGIN_PATH . 'classes/class-email.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-email-service.php' );
 
 		// Load the webhook services
-		require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhooks.php' );
-		require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-wpremote.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-service.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-wpremote-webhook-service.php' );
 
 		// Load the wp cli command
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			include( HMBKP_PLUGIN_PATH . 'classes/wp-cli.php' );
+			include( HMBKP_PLUGIN_PATH . 'classes/wp-backupwordpress-wp-cli-command.php' );
 		}
 
 	}
@@ -227,6 +221,7 @@ class BackUpWordPress_Plugin {
 
 		$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
 
+		// TODO shuold this also support WP_SCRIPT_DEBUG
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
 		}
@@ -293,7 +288,7 @@ class BackUpWordPress_Plugin {
 	public function init() {
 
 		// If we have multiple paths for some reason then clean them up
-		HMBKP_Path::get_instance()->merge_existing_paths();
+		Path::get_instance()->merge_existing_paths();
 	}
 
 	/**
@@ -304,21 +299,9 @@ class BackUpWordPress_Plugin {
 	protected function generate_key() {
 
 		$key = array( ABSPATH, time() );
+		$constants = array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' );
 
-		foreach (
-			array(
-				'AUTH_KEY',
-				'SECURE_AUTH_KEY',
-				'LOGGED_IN_KEY',
-				'NONCE_KEY',
-				'AUTH_SALT',
-				'SECURE_AUTH_SALT',
-				'LOGGED_IN_SALT',
-				'NONCE_SALT',
-				'SECRET_KEY',
-			) as $constant
-		) {
-
+		foreach ( $constants as $constant ) {
 			if ( defined( $constant ) ) {
 				$key[] = constant( $constant );
 			}
@@ -364,7 +347,7 @@ class BackUpWordPress_Plugin {
 			return;
 		}
 
-		$schedules = HMBKP_Schedules::get_instance();
+		$schedules = Schedules::get_instance();
 		$schedule  = $schedules->get_schedule( $schedule_id );
 
 		if ( ! $schedule ) {
@@ -407,16 +390,15 @@ class BackUpWordPress_Plugin {
 			return;
 		}
 
-		foreach ( HMBKP_Requirements::get_requirement_groups() as $group ) {
+		$info = array();
 
-			foreach ( HMBKP_Requirements::get_requirements( $group ) as $requirement ) {
-
+		foreach ( Requirements::get_requirement_groups() as $group ) {
+			foreach ( Requirements::get_requirements( $group ) as $requirement ) {
 				$info[ $requirement->name() ] = $requirement->result();
-
 			}
 		}
 
-		foreach ( HMBKP_Services::get_services() as $file => $service ) {
+		foreach ( Services::get_services() as $file => $service ) {
 			array_merge( $info, call_user_func( array( $service, 'intercom_data' ) ) );
 		}
 
@@ -438,4 +420,4 @@ class BackUpWordPress_Plugin {
 
 }
 
-BackUpWordPress_Plugin::get_instance();
+Plugin::get_instance();

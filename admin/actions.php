@@ -7,7 +7,7 @@ function hmbkp_request_delete_backup() {
 
 	check_admin_referer( 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' );
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
 	$deleted = $schedule->delete_backup( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) );
 
@@ -45,7 +45,7 @@ function hmbkp_request_delete_schedule() {
 
 	check_admin_referer( 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' );
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 	$schedule->cancel( true );
 
 	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
@@ -89,15 +89,15 @@ function hmbkp_request_do_backup() {
 
 	ignore_user_abort( true );
 
-	HMBKP_Path::get_instance()->cleanup();
+	HM\BackUpWordPress\Path::get_instance()->cleanup();
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
 	$schedule->run();
 
-	HMBKP_Notices::get_instance()->clear_all_notices();
+	HM\BackUpWordPress\Notices::get_instance()->clear_all_notices();
 
-	$errors = array_merge( $schedule->get_errors(), $schedule->get_warnings() );
+	$errors = array_merge( $schedule->backup->get_errors(), $schedule->backup->get_warnings() );
 
 	$error_message = '';
 
@@ -105,7 +105,7 @@ function hmbkp_request_do_backup() {
 		$error_message .= implode( "\n\r", $error_set );
 	}
 
-	if ( $error_message && file_exists( $schedule->get_archive_filepath() ) && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+	if ( $error_message && file_exists( $schedule->backup->get_archive_filepath() ) && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 		$error_message .= ' HMBKP_SUCCESS';
 	}
 
@@ -138,13 +138,13 @@ function hmbkp_request_download_backup() {
 		return;
 	}
 
-	$url = str_replace( HM_Backup::conform_dir( HM_Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
+	$url = str_replace( HM\BackUpWordPress\Backup::conform_dir( HM\BackUpWordPress\Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
 
 	global $is_apache;
 
 	if ( $is_apache ) {
 
-		HMBKP_Path::get_instance()->protect_path( 'reset' );
+		HM\BackUpWordPress\Path::get_instance()->protect_path( 'reset' );
 
 		$url = add_query_arg( 'key', HMBKP_SECURE_KEY, $url );
 
@@ -164,7 +164,7 @@ function hmbkp_request_cancel_backup() {
 
 	check_admin_referer( 'hmbkp_request_cancel_backup', 'hmbkp-request_cancel_backup_nonce' );
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 
 	// Delete the running backup
 	if ( $schedule->get_running_backup_filename() && file_exists( trailingslashit( hmbkp_path() ) . $schedule->get_running_backup_filename() ) ) {
@@ -175,7 +175,7 @@ function hmbkp_request_cancel_backup() {
 		unlink( $schedule->get_schedule_running_path() );
 	}
 
-	HMBKP_Path::get_instance()->cleanup();
+	HM\BackUpWordPress\Path::get_instance()->cleanup();
 
 	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
 
@@ -191,9 +191,9 @@ function hmbkp_dismiss_error() {
 
 	check_admin_referer( 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' );
 
-	HMBKP_Path::get_instance()->cleanup();
+	HM\BackUpWordPress\Path::get_instance()->cleanup();
 
-	HMBKP_Notices::get_instance()->clear_all_notices();
+	HM\BackUpWordPress\Notices::get_instance()->clear_all_notices();
 
 	wp_safe_redirect( wp_get_referer(), 303 );
 
@@ -215,25 +215,23 @@ function hmbkp_edit_schedule_services_submit() {
 		wp_die( __( 'The schedule ID was not provided. Aborting.', 'backupwordpress' ) );
 	}
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
 
 	hmbkp_clear_settings_errors();
 
 	$errors = array();
 
 	// Save the service options
-	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+	foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $service ) {
 		$errors = array_merge( $errors, $service->save() );
 	}
 
 	$schedule->save();
 
 	if ( $errors ) {
-
 		foreach ( $errors as $error ) {
 			hmbkp_add_settings_error( $error );
 		}
-
 	}
 
 	wp_safe_redirect( wp_get_referer(), '303' );
@@ -255,7 +253,7 @@ function hmbkp_edit_schedule_submit() {
 		die;
 	}
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
 
 	hmbkp_clear_settings_errors();
 
@@ -393,7 +391,7 @@ function hmbkp_edit_schedule_submit() {
 	}
 
 	// Save the service options
-	foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+	foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $service ) {
 		$errors = array_merge( $errors, $service->save() );
 	}
 
@@ -460,9 +458,9 @@ function hmbkp_add_exclude_rule() {
 		return;
 	}
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	$exclude_rule = str_ireplace( $schedule->get_root(), '', sanitize_text_field( $_GET['hmbkp_exclude_pathname'] ) );
+	$exclude_rule = str_ireplace( $schedule->backup->get_root(), '', sanitize_text_field( $_GET['hmbkp_exclude_pathname'] ) );
 
 	$schedule->set_excludes( $exclude_rule, true );
 
@@ -489,7 +487,7 @@ function hmbkp_remove_exclude_rule() {
 		die;
 	}
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 	$excludes = $schedule->get_excludes();
 
@@ -506,17 +504,13 @@ add_action( 'admin_post_hmbkp_remove_exclude_rule', 'hmbkp_remove_exclude_rule' 
 
 /**
  *
- * @param null $pathname
+ * @param null
  */
 function hmbkp_recalculate_directory_filesize() {
 
 	if ( ! isset( $_GET['hmbkp_recalculate_directory_filesize'] ) || ! check_admin_referer( 'hmbkp-recalculate_directory_filesize' ) ) {
 		return;
 	}
-
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
-
-	$directory = sanitize_text_field( $_GET['hmbkp_recalculate_directory_filesize'] );
 
 	// Delete the cached directory size
 	delete_transient( 'hmbkp_directory_filesizes' );
@@ -537,23 +531,22 @@ function hmbkp_calculate_site_size() {
 
 	if ( isset( $_GET['hmbkp_schedule_id'] ) ) {
 
-		$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+		$current_schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 	} else {
 
 		// Refresh the schedules from the database to make sure we have the latest changes
-		HMBKP_Schedules::get_instance()->refresh_schedules();
+		HM\BackUpWordPress\Schedules::get_instance()->refresh_schedules();
 
-		$schedules = HMBKP_Schedules::get_instance()->get_schedules();
+		$schedules = HM\BackUpWordPress\Schedules::get_instance()->get_schedules();
 
 		$current_schedule = reset( $schedules );
 
 	}
 
 	if ( ! $current_schedule->is_site_size_cached() ) {
-		// Start calculating
-		$root = new SplFileInfo( $current_schedule->get_root() );
-		$size = $current_schedule->filesize( $root );
+		$root = new SplFileInfo( $current_schedule->backup->get_root() );
+		$current_schedule->filesize( $root );
 	}
 
 }
@@ -568,7 +561,7 @@ function hmbkp_heartbeat_received( $response, $data ) {
 
 	if ( ! empty( $data['hmbkp_schedule_id'] ) ) {
 
-		$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_schedule_id'] ) ) );
+		$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_schedule_id'] ) ) );
 
 		if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
 
@@ -617,7 +610,7 @@ function hmbkp_display_error_and_offer_to_email_it() {
 
 	$errors = explode( "\n", wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) ) );
 
-	HMBKP_Notices::get_instance()->set_notices( 'backup_errors', $errors );
+	HM\BackUpWordPress\Notices::get_instance()->set_notices( 'backup_errors', $errors );
 
 	wp_send_json_success( wp_get_referer() );
 
@@ -669,7 +662,7 @@ function hmbkp_ajax_is_backup_in_progress() {
 		die;
 	}
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) ) );
 
 	if ( ! $schedule->get_status() ) {
 		echo 0;
@@ -693,7 +686,7 @@ function hmbkp_ajax_calculate_backup_size() {
 		die;
 	}
 
-	$schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) ) );
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) ) );
 
 	$recalculate_filesize = true;
 

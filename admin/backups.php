@@ -1,12 +1,12 @@
 <?php
 
 // Refresh the schedules from the database to make sure we have the latest changes
-HMBKP_Schedules::get_instance()->refresh_schedules();
+HM\BackUpWordPress\Schedules::get_instance()->refresh_schedules();
 
-$schedules = HMBKP_Schedules::get_instance()->get_schedules();
+$schedules = HM\BackUpWordPress\Schedules::get_instance()->get_schedules();
 
 if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
-	$current_schedule = new HMBKP_Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+	$current_schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 } else {
 	$current_schedule = reset( $schedules );
 } ?>
@@ -19,7 +19,7 @@ if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
 
 	<?php endforeach; ?>
 
-	<a class="nav-tab<?php if ( ! HMBKP_Schedules::get_instance()->get_schedule( $current_schedule->get_id() ) ) { ?> nav-tab-active<?php } ?>" href="<?php echo esc_url( add_query_arg( array( 'hmbkp_add_schedule' => '1', 'action' => 'hmbkp_edit_schedule', 'hmbkp_schedule_id' => time(), 'hmbkp_panel' => 'hmbkp_edit_schedule_settings' ), HMBKP_ADMIN_URL ) ); ?>"> + <?php _e( 'add schedule', 'backupwordpress' ); ?></a>
+	<a class="nav-tab<?php if ( ! HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $current_schedule->get_id() ) ) { ?> nav-tab-active<?php } ?>" href="<?php echo esc_url( add_query_arg( array( 'hmbkp_add_schedule' => '1', 'action' => 'hmbkp_edit_schedule', 'hmbkp_schedule_id' => time(), 'hmbkp_panel' => 'hmbkp_edit_schedule_settings' ), HMBKP_ADMIN_URL ) ); ?>"> + <?php _e( 'add schedule', 'backupwordpress' ); ?></a>
 
 	<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
 

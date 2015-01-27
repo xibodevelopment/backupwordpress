@@ -4,15 +4,7 @@
  * @subpackage BackUpWordPress/classes
  */
 
-/**
- * Returns the backup path
- *
- * @see HMBKP_Path
- * @todo remove the need for this
- */
-function hmbkp_path() {
-	return HMBKP_Path::get_instance()->get_path();
-}
+namespace HM\BackUpWordPress;
 
 /**
  * The Backup Path class
@@ -21,7 +13,7 @@ function hmbkp_path() {
  *
  * @todo 	Should be a singleton?
  */
-class HMBKP_Path {
+class Path {
 
 	/**
 	 * The path to the directory that backup files are stored in
@@ -36,6 +28,8 @@ class HMBKP_Path {
 	 * @var string $this->path
 	 */
 	protected $custom_path;
+
+	private static $instance;
 
 	/**
 	 * Protected constructor to prevent creating a new instance of the
@@ -62,20 +56,17 @@ class HMBKP_Path {
 	/**
 	 * Returns the *Singleton* instance of this class.
 	 *
-	 * @staticvar HMBKP_PAth $instance The *Singleton* instances of this class.
+	 * @staticvar Path $instance The *Singleton* instances of this class.
 	 *
-	 * @return HMBKP_Path The *Singleton* instance.
+	 * @return Path The *Singleton* instance.
 	 */
 	public static function get_instance() {
 
-		static $instance = null;
-
-		if ( null === $instance ) {
-			$instance = new static();
+		if ( ! ( self::$instance instanceof Path ) ) {
+			self::$instance = new Path();
 		}
 
-		return $instance;
-
+		return self::$instance;
 	}
 
 	/**
@@ -92,8 +83,8 @@ class HMBKP_Path {
 
 		// Ensure the backup directory is protected
 		$this->protect_path();
-
-		return HM_Backup::conform_dir( $this->path );
+		
+		return Backup::conform_dir( $this->path );
 
 	}
 
@@ -109,6 +100,10 @@ class HMBKP_Path {
 		// Re-calculate the backup path
 		$this->calculate_path();
 
+	}
+
+	public function reset_path() {
+		$this->set_path( false );
 	}
 
 	/**
