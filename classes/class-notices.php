@@ -1,9 +1,11 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
- * Class HMBKP_Notices
+ * Class Notices
  */
-class HMBKP_Notices {
+class Notices {
 
 	/**
 	 * @var
@@ -18,12 +20,12 @@ class HMBKP_Notices {
 	private function __construct() {}
 
 	/**
-	 * @return HMBKP_Notices
+	 * @return Notices
 	 */
 	public static function get_instance() {
 
-		if ( ! ( self::$_instance instanceof HMBKP_Notices ) ) {
-			self::$_instance = new HMBKP_Notices();
+		if ( ! ( self::$_instance instanceof Notices ) ) {
+			self::$_instance = new Notices();
 		}
 
 		return self::$_instance;

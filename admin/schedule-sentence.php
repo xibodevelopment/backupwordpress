@@ -62,12 +62,13 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	default :
 
+		$reoccurrence = __( 'manually', 'backupwordpress' );
 		$schedule->set_reoccurrence( 'manually' );
 
 endswitch;
 
 $server = '<span title="' . esc_attr( hmbkp_path() ) . '">' . __( 'this server', 'backupwordpress' ) . '</span>';
-$server = '<code>' . esc_attr( str_replace( $schedule->get_home_path(), '', hmbkp_path() ) ) . '</code>';
+$server = '<code>' . esc_attr( str_replace( HM\BackUpWordPress\Backup::get_home_path(), '', hmbkp_path() ) ) . '</code>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
@@ -92,7 +93,7 @@ endswitch;
 
 $email_msg = $services = '';
 
-foreach ( HMBKP_Services::get_services( $schedule ) as $file => $service ) {
+foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $file => $service ) {
 
 	if ( 'Email' === $service->name ) {
 		$email_msg = wp_kses_post( $service->display() );
@@ -126,7 +127,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 	echo $sentence; ?>
 
-	<?php if ( HMBKP_Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) {
+	<?php if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) {
 		hmbkp_schedule_status( $schedule );
 	} ?>
 
@@ -140,11 +141,11 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
  * Returns a formatted string containing the calculated total site size or a message
  * to indicate it is being calculated.
  *
- * @param HMBKP_Scheduled_Backup $schedule
+ * @param HM\BackUpWordPress\Scheduled_Backup $schedule
  *
  * @return string
  */
-function hmbkp_get_site_size_text( HMBKP_Scheduled_Backup $schedule ) {
+function hmbkp_get_site_size_text( HM\BackUpWordPress\Scheduled_Backup $schedule ) {
 
 	if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
 		return '';

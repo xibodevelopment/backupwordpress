@@ -94,7 +94,7 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . HMBKP_ROOT . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'backupwordpress' ), '<code>' . HM_Backup::get_home_path() . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p>
+				<p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'backupwordpress' ), '<code>' . HM\BackUpWordPress\Backup::get_home_path() . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p>
 
 			</td>
 
@@ -116,8 +116,9 @@
 
 		</tr>
 
-		<?php foreach ( HMBKP_Services::get_services() as $file => $service )
-			echo wp_kses_post( call_user_func( array( $service, 'constant' ) ) ); ?>
+		<?php foreach ( HM\BackUpWordPress\Services::get_services() as $file => $service ) {
+			echo wp_kses_post( call_user_func( array( $service, 'constant' ) ) );
+		} ?>
 
 	</table>
 

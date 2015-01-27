@@ -7,9 +7,6 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite name="hmbackup">
-			<directory prefix="test" suffix=".php">./hm-backup/tests/</directory>
-		</testsuite>
 		<testsuite name="backup">
 			<directory prefix="test" suffix=".php">./tests/backup</directory>
 		</testsuite>

@@ -1,9 +1,11 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * A simple class for loading schedules
  */
-class HMBKP_Schedules {
+class Schedules {
 
 	/**
 	 * An array of schedules
@@ -31,7 +33,6 @@ class HMBKP_Schedules {
 	/**
 	 * Load the schedules from wp_options and store in $this->schedules
 	 *
-	 * @access public
 	 */
 	private function __construct() {
 		$this->refresh_schedules();
@@ -44,7 +45,7 @@ class HMBKP_Schedules {
 		// Load all schedule options from the database
 		$schedules = $wpdb->get_col( "SELECT option_name from $wpdb->options WHERE option_name LIKE 'hmbkp\_schedule\_%'" );
 
-		// Instantiate each one as a HMBKP_Scheduled_Backup
+		// Instantiate each one as a Scheduled_Backup
 		$this->schedules = array_map( array( $this, 'instantiate' ), array_filter( (array) $schedules ) );
 
 	}
@@ -52,8 +53,7 @@ class HMBKP_Schedules {
 	/**
 	 * Get an array of schedules
 	 *
-	 * @access public
-	 * @return array
+	 * @return Scheduled_Backup[]
 	 */
 	public function get_schedules() {
 		return $this->schedules;
@@ -63,13 +63,15 @@ class HMBKP_Schedules {
 	 * Get a schedule by ID
 	 *
 	 * @param $id
-	 * @return HMBKP_Scheduled_Backup
+	 * @return Scheduled_Backup
 	 */
 	public function get_schedule( $id ) {
 
-		foreach ( $this->schedules as $schedule )
-			if ( $schedule->get_id() == $id )
+		foreach ( $this->schedules as $schedule ) {
+			if ( $schedule->get_id() == $id ) {
 				return $schedule;
+			}
+		}
 
 		return null;
 	}
@@ -79,10 +81,10 @@ class HMBKP_Schedules {
 	 *
 	 * @access private
 	 * @param string $id
-	 * @return array An array of HMBKP_Scheduled_Backup objects
+	 * @return Scheduled_Backup
 	 */
 	private function instantiate( $id ) {
-		return new HMBKP_Scheduled_Backup( str_replace( 'hmbkp_schedule_', '', $id ) );
+		return new Scheduled_Backup( str_replace( 'hmbkp_schedule_', '', $id ) );
 	}
 
 }
