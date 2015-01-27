@@ -353,6 +353,6 @@ class CleanUpIterator extends FilterIterator {
 
 	// Don't match index.html,files with zip extension or status logfiles.
 	public function accept() {
-		return ! preg_match( '/(index\.html|.*\.zip|.*-running).*/', $this->current() );
+		return ! preg_match( '/(index\.html|.*\.zip|.*-running)/', $this->current() );
 	}
 }
