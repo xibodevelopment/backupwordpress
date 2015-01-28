@@ -22,8 +22,8 @@ class Schedules {
 
 	public static function get_instance() {
 
-		if ( ! ( self::$instance instanceof HMBKP_Schedules ) ) {
-			self::$instance = new HMBKP_Schedules();
+		if ( ! ( self::$instance instanceof Schedules ) ) {
+			self::$instance = new Schedules();
 		}
 
 		return self::$instance;
