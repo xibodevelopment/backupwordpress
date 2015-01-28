@@ -467,9 +467,9 @@ class Scheduled_Backup {
 		foreach ( $files as $file ) {
 
 			if ( $file->isReadable() ) {
-				$directory_sizes[ $file->getPathname() ] = $file->getSize();
+				$directory_sizes[ Backup::conform_dir( $file->getPathname() ) ] = $file->getSize();
 			} else {
-				$directory_sizes[ $file->getPathname() ] = 0;
+				$directory_sizes[ Backup::conform_dir( $file->getPathname() ) ] = 0;
 			}
 
 		}
