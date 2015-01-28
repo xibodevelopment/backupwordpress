@@ -12,13 +12,14 @@
 // 2. `WP_DEVELOP_DIR` environment variable
 // 3. Plugin installed inside of WordPress.org developer checkout
 // 4. Tests checked out to /tmp
+
 if ( file_exists( '/srv/www/wordpress-develop.dev/tests/phpunit/includes/bootstrap.php' ) ) {
 	$test_root = '/srv/www/wordpress-develop.dev/tests/phpunit';
 } elseif ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	$test_root = getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit';
-} else if ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
+} elseif ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
 	$test_root = '../../../../tests/phpunit';
-} else if ( file_exists( '/tmp/wordpress-tests-lib/includes/bootstrap.php' ) ) {
+} elseif ( file_exists( '/tmp/wordpress-tests-lib/includes/bootstrap.php' ) ) {
 	$test_root = '/tmp/wordpress-tests-lib';
 }
 

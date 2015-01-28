@@ -1,11 +1,11 @@
 <?php
 
-defined( 'ABSPATH' ) or exit;
+namespace HM\BackUpWordPress;
 
 /**
  * Class BackUpWordPress_Setup
  */
-class BackUpWordPress_Setup {
+class Setup {
 
 	/**
 	 * Defines the minimum version of WordPress required by BWP.

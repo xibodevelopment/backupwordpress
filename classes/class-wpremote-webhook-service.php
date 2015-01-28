@@ -1,17 +1,19 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * Webhook notifications for backups on WPRemote
  *
- * @extends HMBKP_Service
+ * @extends Service
  */
-class HMBKP_Webhook_WPRemote_Service extends HMBKP_Webhooks_Service {
+class WPRemote_Webhook_Service extends Webhook_Service {
 
 	/**
 	 * Human readable name for this service
 	 * @var string
 	 */
-	public $name = 'WPRemote Webhook';
+	public $name = 'WP Remote Webhook';
 
 	private $wpremote_webhook_url = 'http://wpremote.com/api/json/backupwordpress/webhook';
 
@@ -54,7 +56,6 @@ class HMBKP_Webhook_WPRemote_Service extends HMBKP_Webhooks_Service {
 	 * @return string
 	 */
 	protected function get_url() {
-
 		return ( defined( 'WPRP_PLUGIN_SLUG' ) && get_option( 'wpr_api_key' ) ) ? $this->wpremote_webhook_url : false;
 	}
 
@@ -62,11 +63,10 @@ class HMBKP_Webhook_WPRemote_Service extends HMBKP_Webhooks_Service {
 	 * @return string
 	 */
 	protected function get_secret_key() {
-
 		return get_option( 'wpr_api_key' );
 	}
 
 }
 
 // Register the service
-HMBKP_Services::register( __FILE__, 'HMBKP_Webhook_WPRemote_Service' );
+Services::register( __FILE__, 'HM\BackUpWordPress\WPRemote_Webhook_Service' );

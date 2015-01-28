@@ -173,7 +173,7 @@
 
 			</tr>
 
-			<?php foreach ( HMBKP_Services::get_services( $schedule ) as $service ) {
+			<?php foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $service ) {
 				$service->field();
 			} ?>
 
