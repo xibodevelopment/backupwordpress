@@ -71,6 +71,8 @@ class Path {
 
 	/**
 	 * Get the path to the directory where backups will be stored
+	 *
+	 * @return string $path 
 	 */
 	public function get_path() {
 
@@ -82,7 +84,7 @@ class Path {
 		// Ensure the backup directory is protected
 		$this->protect_path();
 
-		return Backup::conform_dir( $this->path );
+		return $this->path;
 
 	}
 
@@ -146,13 +148,13 @@ class Path {
 	 */
 	public function get_existing_paths() {
 
-		if ( false === $default = glob( WP_CONTENT_DIR . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
+		if ( false === $default = glob( WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
 			$default = array();
 		}
 
 		$upload_dir = wp_upload_dir();
 
-		if ( false === $fallback = glob( $upload_dir['basedir'] . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
+		if ( false === $fallback = glob( $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
 			$fallback = array();
 		}
 
@@ -214,7 +216,7 @@ class Path {
 		}
 
 		if ( isset( $path ) ) {
-			$this->path = $path;
+			$this->path = Backup::conform_dir( $path );
 		}
 
 	}
@@ -227,7 +229,7 @@ class Path {
 		global $is_apache;
 
 		// Protect against directory browsing by including an index.html file
-		$index = $this->path . '/index.html';
+		$index = $this->path . DIRECTORY_SEPARATOR . 'index.html';
 
 		if ( ( 'reset' === $reset ) && file_exists( $index ) ) {
 			@unlink( $index );
@@ -237,7 +239,7 @@ class Path {
 			file_put_contents( $index, '' );
 		}
 
-		$htaccess = $this->path . '/.htaccess';
+		$htaccess = $this->path . DIRECTORY_SEPARATOR . '.htaccess';
 
 		if ( ( 'reset' === $reset ) && file_exists( $htaccess ) ) {
 			@unlink( $htaccess );
