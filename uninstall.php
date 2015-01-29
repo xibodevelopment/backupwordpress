@@ -16,9 +16,9 @@ $schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->opt
 array_map( 'delete_option', $schedules );
 
 // Remove the backups directory
-require_once( dirname( __FILE__ ) . '/class-backup.php' );
-require_once( dirname( __FILE__ ) . '/class-hmbkp-path.php' );
-require_once( dirname( __FILE__ ) . '/../functions/core.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'classes/class-backup.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'classes/class-hmbkp-path.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'functions/core.php' );
 hmbkp_rmdirtree( hmbkp_path() );
 
 // Remove all the options
