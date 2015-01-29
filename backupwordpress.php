@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 namespace HM\BackUpWordPress;
 
-require_once plugin_dir_path( __FILE__ ) . 'classes/class-setup.php';
+require_once( plugin_dir_path( __FILE__ ) . 'classes/class-setup.php' );
 
 register_activation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deactivate' ) );
