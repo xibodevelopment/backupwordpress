@@ -69,7 +69,7 @@ class Scheduled_Backup {
 		$this->backup = new Backup();
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->backup->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+		$this->backup->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), date( 'Y-m-d-H-i-s', time() ) ) ) . '.zip' );
 
 		$this->backup->set_database_dump_filename( implode( '-', array( 'database', sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id() ) ) . '.sql' );
 
