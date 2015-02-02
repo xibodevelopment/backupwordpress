@@ -182,7 +182,7 @@ final class Plugin {
 
 		// Load the wp cli command
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			include( HMBKP_PLUGIN_PATH . 'classes/wp-backupwordpress-wp-cli-command.php' );
+			include( HMBKP_PLUGIN_PATH . 'classes/class-backupwordpress-wp-cli-command.php' );
 		}
 
 	}
