@@ -115,7 +115,7 @@ function hmbkp_update() {
 		}
 
 		// Set the archive filename to what it used to be
-		$legacy_schedule->backup->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+		$legacy_schedule->backup->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), 'backup', date( 'Y-m-d-H-i-s', time() ) ) ) . '.zip' );
 
 		$legacy_schedule->save();
 
