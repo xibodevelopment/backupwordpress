@@ -329,7 +329,7 @@ namespace HM\BackUpWordPress {
 		public function get_archive_filename() {
 
 			if ( empty( $this->archive_filename ) ) {
-				$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), 'backup', date( 'Y-m-d-H-i-s', current_time( 'timestamp' ) ) ) ) . '.zip' );
+				$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), 'backup', current_time( 'Y-m-d-H-i-s' ) ) ) . '.zip' );
 			}
 
 			return $this->archive_filename;
