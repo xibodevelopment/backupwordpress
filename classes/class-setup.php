@@ -51,27 +51,14 @@ class Setup {
 			return;
 		}
 
-		// Determine if we need to do any cleanup
-		if ( ! class_exists( 'Schedules' ) ) {
-			return;
+		// Delete Cron schedules.
+		global $wpdb;
+
+		$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
+
+		foreach ( array_map( function( $item ){ return ltrim( $item, 'hmbkp_schedule_' ); }, $schedules ) as $item ) {
+			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
 		}
-
-		$schedules = Schedules::get_instance();
-
-		if ( empty( $schedules ) ) {
-			return;
-		}
-
-		// Clear schedule crons
-		foreach ( $schedules->get_schedules() as $schedule ) {
-			$schedule->unschedule();
-		}
-
-		// Opt them out of support
-		delete_option( 'hmbkp_enable_support' );
-
-		// Remove the directory filesize cache
-		delete_transient( 'hmbkp_directory_filesizes' );
 
 	}
 
@@ -139,7 +126,7 @@ class Setup {
 	 */
 	public static function display_admin_notices() {
 
-		echo '<div class="error"><p>' . self::get_notice_message() . '</p></div>';
+		echo '<div class="error"><p>' . esc_html( self::get_notice_message() ) . '</p></div>';
 
 	}
 

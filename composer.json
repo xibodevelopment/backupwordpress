@@ -1,13 +1,21 @@
 {
-    "name": "humanmade/backupwordpress",
-    "description": "Simple automated backups of your WordPress powered website",
-    "require-dev": {
-        "phpdocumentor/phpdocumentor":"dev-master"
-    },
-    "authors": [
+    "name"       : "humanmade/backupwordpress",
+    "description": "Simple automated backups of your WordPress powered website.",
+    "keywords"   : [
+        "wordpress",
+        "backup"
+    ],
+    "type"       : "wordpress-plugin",
+    "homepage"   : "https://github.com/humanmade/backupwordpress",
+    "license"    : "GPLv2",
+    "authors"    : [
         {
-            "name": "Human Made Limited",
-            "email": "hello@hmn.md"
+            "name"    : "Human Made Limited",
+            "email"   : "hello@hmn.md",
+            "homepage": "https://bwp.hmn.md/"
         }
-    ]
+    ],
+    "support"    : {
+        "issues": "https://github.com/humanmade/backupwordpress/issues"
+    }
 }

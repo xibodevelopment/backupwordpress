@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 namespace HM\BackUpWordPress;
 
-include_once( dirname( __FILE__ ) . '/classes/class-setup.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'classes/class-setup.php' );
 
 register_activation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deactivate' ) );
@@ -163,7 +163,7 @@ final class Plugin {
 
 		// Load the backup scheduling classes
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
-		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-schedules.php' );
 
 		// Load the core functions
 		require_once( HMBKP_PLUGIN_PATH . 'functions/core.php' );
