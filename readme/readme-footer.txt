@@ -28,6 +28,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+### 3.1.3 / 2015-02-04
+
+* Keep deprecated classes in a deprecated.php file to avoid Fatal Error in addons during upgrade.
+
 ### 3.1.2 / 2015-02-03
 
 * (simplify-bwp-file-timestamp) Simplify the file name timestamp
