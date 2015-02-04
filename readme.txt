@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.2-alpha
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 
 Simple automated backups of your WordPress powered website.
 
@@ -131,6 +131,49 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.1.2 / 2015-02-03
+
+* (simplify-bwp-file-timestamp) Simplify the file name timestamp
+* Fix class file name
+* (fixup-setup-class) Add missing transients to uninstall routine
+* switch Travis notifications to Slack instead of Hipchat
+* Do not delete backups on uninstall
+* wrap in parenthesis
+* Fix include paths after moving uninstall to own file herpderp
+* Update BackUp class include
+* Add all cases to switch
+* Pass scanned files sizes through conform_dir()
+* Fix some classes and requires
+* (origin/issue-684, issue-684) Fix namespaces
+* Remove unnecessary wildcard from regex
+* (crazy-refactor) Remove some duplication
+* Formatting
+* Fix Class name
+* Blank line
+* Uses a DirectoryIterator to delete files
+* Remove tests for now
+* Fix stable tag number
+* Revert to using uninstall.php
+* Add tests for uninstall and deactivate
+* Remove double lie break
+* Remove double line break
+* Remove phpdocumentor
+* We still need to require some scripts...
+* We dont need to check for this constant in the hook callback
+* Use get_col to directly have an array of schedule option names
+* Remove namespacing
+* Remove debugging
+* Make the uninstall, activation and deactivation hooks work
+* (change-singleton-implementation) Change the singleton implementation to not use the static() function
+* path argument interfers with wp-cli path argument.
+* Fix some scrutinizer issues, mostly major ones
+* Consistent default name for database dumps
+* Major 5.3 re-factoring fun
+* Minor code formatting
+* else if should be elseif
+* Update the WP_CLI command to fix some issues
+* Add support for copying and updating an existing backups
 
 #### 3.1.0 / 2015-01-13
 
