@@ -1,4 +1,5 @@
 <?php
+_deprecated_file( basename( __FILE__ ), '3.1.2', null, __( 'These classes are here to prevent upgrade issues', 'backupwordpress' ) );
 class BackUpWordPress_Plugin {
 
 	const PLUGIN_VERSION = '3.1.1';
