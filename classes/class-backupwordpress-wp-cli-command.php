@@ -112,4 +112,4 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 
 }
 
-WP_CLI::add_command( 'backupwordpress', 'BackUpCommand' );
+WP_CLI::add_command( 'backupwordpress', 'BackUpWordPress_WP_CLI_Command' );
