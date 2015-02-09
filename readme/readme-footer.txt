@@ -14,6 +14,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.1.3 =
+
+  * Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
+  
 = 3.0.4 =
 
   * Fixes a few minor bugs. Immediate update is recommended.
