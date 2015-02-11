@@ -217,8 +217,6 @@ function hmbkp_edit_schedule_services_submit() {
 
 	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
 
-	hmbkp_clear_settings_errors();
-
 	$errors = array();
 
 	// Save the service options
@@ -254,8 +252,6 @@ function hmbkp_edit_schedule_submit() {
 	}
 
 	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
-
-	hmbkp_clear_settings_errors();
 
 	$errors = array();
 
