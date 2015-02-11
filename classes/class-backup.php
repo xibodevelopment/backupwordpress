@@ -1370,7 +1370,7 @@ namespace HM\BackUpWordPress {
 				}
 
 				// Wrap directory fragments and files in wildcards for zip
-				if ( 'zip' === $context && ( $fragment || $file ) ) {
+				if ( 'zip' === $context && ( $fragment ) ) {
 					$rule = $wildcard . $rule . $wildcard;
 				}
 
