@@ -67,7 +67,14 @@ if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_
 
 				</div>
 
-			<?php endif; ?>
+			<?php
+
+			endif;
+
+			// We can clear them now we've displayed them
+			hmbkp_clear_settings_errors();
+
+			?>
 
 			<form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
 
