@@ -41,6 +41,12 @@ We'd also love help translating the plugin into more languages, if you can help 
 
 The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site.
 
+## Constants ##
+
+The plugin allows you to override its behavior by defining constants in `wp-config.php`. See the full list of constants by clicking on Help at the top right corner of the plugin's Settings screen. Click on the Constants tab on the left.
+
+Note that some of the constants override manual settings rather than the other way round. So for example, if `HMBKP_SCHEDULE_TIME` is set in `wp-config.php`, that time will be used in schedules rather than the time you enter via the browser.
+
 ## Frequently Asked Questions ##
 
 
