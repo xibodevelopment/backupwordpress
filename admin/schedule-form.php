@@ -12,7 +12,12 @@
 
 	</div>
 
-<?php } ?>
+<?php }
+
+// We can clear them now we've displayed them
+hmbkp_clear_settings_errors();
+
+?>
 
 <form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
 
