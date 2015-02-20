@@ -163,6 +163,60 @@ function hmbkp_update() {
 
 	}
 
+	// update to 3.1.4
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.1.4', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		$old_option_names = array(
+			'HM\BackUpWordPressDropbox\Dropbox_Service'    => 'dropbox',
+			'HMBKP_DX_Backup_Service'                      => 'dropbox',
+			'HM\BackUpWordPressFTP\FTP_Backup_Service'     => 'ftp',
+			'HMBKP_FTP_Backup_Service'                     => 'ftp',
+			'HM\BackUpWordPressGDrive\Google_Drive_BackUp' => 'google-drive',
+			'HMBKP_GDV_Backup_Service'                     => 'google-drive',
+			'HM\BackUpWordPressRackspace\RackSpace_BackUp' => 'rackspace-cloud',
+			'HMBKP_RSC_Backup_Service'                     => 'rackspace-cloud',
+			'HM\BackUpWordPressS3\S3_Backup'               => 's3',
+			'HMBKP_S3_Backup_Service'                      => 's3',
+			'HM\BackUpWordPressWinAzure\WinAzure_Backup'   => 'azure',
+			'HMBKP_WAZ_Backup_Service'                     => 'azure',
+			'HM\BackUpWordPress\Email_Service'             => 'email',
+		);
+
+		global $wpdb;
+
+		// Get all schedule options with a SELECT query and delete them.
+		$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
+
+		if ( 0 < count( $schedules ) ) {
+
+			// Access each schedules settings to see if the addon settings names need to be be updated to the new naming convention which uses the service slug generated from the $name property.
+			foreach ( $schedules as $schedule_id ) {
+
+				// Load the settings for this schedule into an array
+				// so we can loop through the different service settings
+				$schedule_settings = get_option( $schedule_id );
+
+				// Iterate over each schedule setting for this schedule and check its name against our array.
+				foreach ( $schedule_settings as $key => $val ) {
+					// Find the current element key in our control array and get its value. Set a new element in the settings array with the found value as its key. Aka rename the element key
+					if ( array_key_exists( $key, $old_option_names ) ) {
+
+						// move the value to our new key
+						$schedule_settings[ $old_option_names[ $key ] ] = $schedule_settings[ $key ];
+
+						unset( $schedule_settings[ $key ] );
+
+					}
+				}
+
+				// Save back to the DB
+				update_option( $schedule_id, $schedule_settings );
+			}
+		}
+
+
+	}
+
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HM\BackUpWordPress\Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
