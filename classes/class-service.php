@@ -84,7 +84,7 @@ abstract class Service {
 	abstract public function action( $action, Backup $backup );
 
 	public function get_slug() {
-		return strtolower( sanitize_title_with_dashes( $this->name ) );
+		return sanitize_title_with_dashes( $this->name );
 	}
 
 	/**
@@ -94,7 +94,7 @@ abstract class Service {
 	 * @return string       The formated name
 	 */
 	protected function get_field_name( $name ) {
-		return esc_attr( get_class( $this ) . '[' . $name . ']' );
+		return esc_attr( $this->get_slug() . '[' . $name . ']' );
 	}
 
 	/**
@@ -106,8 +106,8 @@ abstract class Service {
 	 */
 	protected function get_field_value( $name, $esc = 'esc_attr' ) {
 
-		if ( $name && $this->schedule->get_service_options( get_class( $this ), $name ) ) {
-			return $esc( $this->schedule->get_service_options( get_class( $this ), $name ) );
+		if ( $name && $this->schedule->get_service_options( $this->get_slug(), $name ) ) {
+			return $esc( $this->schedule->get_service_options( $this->get_slug(), $name ) );
 		}
 
 		return '';
@@ -121,7 +121,7 @@ abstract class Service {
 	 */
 	public function save() {
 
-		$classname = get_class( $this );
+		$classname = $this->get_slug();
 
 		$old_data = $this->schedule->get_service_options( $classname );
 
@@ -132,7 +132,7 @@ abstract class Service {
 		if ( $errors && $errors = array_flip( $errors ) ) {
 
 			foreach ( $errors as $error => &$field ) {
-				$field = get_class( $this ) . '[' . $field . ']';
+				$field = $this->get_slug() . '[' . $field . ']';
 			}
 
 			return array_flip( $errors );
@@ -165,7 +165,7 @@ abstract class Service {
 	 */
 	protected function fetch_destination_settings() {
 
-		$service = get_class( $this );
+		$service = $this->get_slug();
 
 		$schedules_obj = Schedules::get_instance();
 
