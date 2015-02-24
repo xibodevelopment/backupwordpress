@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.2-alpha
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 
 Simple automated backups of your WordPress powered website.
 
@@ -118,10 +118,23 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.1.4 =
+
+* (upgrade-options) Bump version
+* strtolower is redundant
+* Upgrade routine - renames service settings to avoid backslashes.
+* Use the Service name as the setting name
+* Clear settings for schedule settings
+* Fixes bug in displaying settings error notices
+* Update version number
+* Merge pull request #726 from humanmade/fix-fatal-error-missing-class-addons
+* Leave bare minimum to avoid fatal error
+* remove old main plugin class
+
 = 3.1.3 =
 
   * Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
-
+  
 = 3.0.4 =
 
   * Fixes a few minor bugs. Immediate update is recommended.
@@ -136,9 +149,9 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
-### 3.1.3 / 2015-02-06
+### 3.1.3 / 2015-02-04
 
-* Introduces a deprecated.php file to contain any deprecated classes / functions for backwards compat and avoid fatal errors.
+* Keep deprecated classes in a deprecated.php file to avoid Fatal Error in addons during upgrade.
 
 ### 3.1.2 / 2015-02-03
 
