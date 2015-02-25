@@ -97,12 +97,24 @@ final class Plugin {
 
 	}
 
+	/**
+	 * Check plugin requirements.
+	 * 
+	 * @return bool
+	 */
 	public function maybe_self_deactivate() {
 
 		if ( ! Setup::meets_requirements() ) {
+
 			add_action( 'admin_init', array( 'HM\BackUpWordPress\Setup', 'self_deactivate' ) );
+
 			add_action( 'admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
+
+			return false;
+
 		}
+
+		return true;
 
 	}
 
