@@ -80,15 +80,19 @@ final class Plugin {
 	 */
 	public function plugins_loaded() {
 
-		if ( false !== $this->maybe_self_deactivate() ) {
+		if ( true !== $this->maybe_self_deactivate() ) {
 
 			$this->constants();
 
-			$this->includes();
+			// Load the core backup class
+			require_once( HMBKP_PLUGIN_PATH . 'classes/class-backup.php' );
+
+			require_once( HMBKP_PLUGIN_PATH . 'classes/class-path.php' );
+
+			// Load the admin menu
+			require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 
 			$this->hooks();
-
-			$this->text_domain();
 
 			// If we get here, then BWP is loaded
 			do_action( 'backupwordpress_loaded' );
@@ -99,22 +103,22 @@ final class Plugin {
 
 	/**
 	 * Check plugin requirements.
-	 * 
-	 * @return bool
+	 *
+	 * @return bool True is fails requirements. False otherwise.
 	 */
 	public function maybe_self_deactivate() {
 
-		if ( ! Setup::meets_requirements() ) {
+		if ( false === Setup::meets_requirements() ) {
 
 			add_action( 'admin_init', array( 'HM\BackUpWordPress\Setup', 'self_deactivate' ) );
 
 			add_action( 'admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
 
-			return false;
+			return true;
 
 		}
 
-		return true;
+		return false;
 
 	}
 
