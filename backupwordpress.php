@@ -84,15 +84,11 @@ final class Plugin {
 
 			$this->constants();
 
-			// Load the core backup class
-			require_once( HMBKP_PLUGIN_PATH . 'classes/class-backup.php' );
-
-			require_once( HMBKP_PLUGIN_PATH . 'classes/class-path.php' );
-
-			// Load the admin menu
-			require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
+			$this->includes();
 
 			$this->hooks();
+
+			$this->text_domain();
 
 			// If we get here, then BWP is loaded
 			do_action( 'backupwordpress_loaded' );
