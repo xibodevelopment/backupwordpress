@@ -10,7 +10,7 @@ class Setup {
 	/**
 	 * Defines the minimum version of WordPress required by BWP.
 	 */
-	const MIN_WP_VERSION = '3.9.3';
+	const MIN_WP_VERSION = '3.9';
 
 	/**
 	 * Defines the minimum version of PHP required by BWP.

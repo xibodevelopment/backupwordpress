@@ -76,7 +76,7 @@ final class Plugin {
 	 */
 	public function plugins_loaded() {
 
-		if ( false !== $this->maybe_self_deactivate() ) {
+		if ( true !== $this->maybe_self_deactivate() ) {
 
 			$this->constants();
 
@@ -93,12 +93,24 @@ final class Plugin {
 
 	}
 
+	/**
+	 * Check plugin requirements.
+	 *
+	 * @return bool True is fails requirements. False otherwise.
+	 */
 	public function maybe_self_deactivate() {
 
-		if ( ! Setup::meets_requirements() ) {
+		if ( false === Setup::meets_requirements() ) {
+
 			add_action( 'admin_init', array( 'HM\BackUpWordPress\Setup', 'self_deactivate' ) );
+
 			add_action( 'admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
+
+			return true;
+
 		}
+
+		return false;
 
 	}
 

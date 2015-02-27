@@ -7,14 +7,15 @@ env:
   matrix:
   - WP_VERSION=latest WP_MULTISITE=0
   - WP_VERSION=latest WP_MULTISITE=1
+  - WP_VERSION=4.1 WP_MULTISITE=0
+  - WP_VERSION=4.1 WP_MULTISITE=1
   - WP_VERSION=4.0 WP_MULTISITE=0
   - WP_VERSION=4.0 WP_MULTISITE=1
   - WP_VERSION=3.9 WP_MULTISITE=0
   - WP_VERSION=3.9 WP_MULTISITE=1
-  - WP_VERSION=3.8 WP_MULTISITE=0
-  - WP_VERSION=3.8 WP_MULTISITE=1
   global:
-    secure: SMPml9xPNS2AGYZyRzGU83qdH85tBI4VB4mTtRISE1DB64Tjg9WcD1Zrztw2BlynARgHNZD/BzVDVhQvIjzhRWvqPGTGw22RgikaZJV+eCBMaZ4VIP9uSdsgCWRpFkPdJbnVARfS9eWEehaacVOVM0CKRN8G3GQYWLVE5+m1LIw=
+  - PHPCS_DIR=/tmp/phpcs
+  - secure: SMPml9xPNS2AGYZyRzGU83qdH85tBI4VB4mTtRISE1DB64Tjg9WcD1Zrztw2BlynARgHNZD/BzVDVhQvIjzhRWvqPGTGw22RgikaZJV+eCBMaZ4VIP9uSdsgCWRpFkPdJbnVARfS9eWEehaacVOVM0CKRN8G3GQYWLVE5+m1LIw=
 sudo: false
 install:
 - git config --global user.email "paul@hmn.md"
@@ -28,9 +29,10 @@ notifications:
 before_script:
 - composer selfupdate --quiet
 - composer install -n --prefer-dist --no-progress
+- bash bin/prepare.sh
 - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-- mkdir -p $TRAVIS_BUILD_DIR/build/docs
 script:
+- if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then $PHPCS_DIR/scripts/phpcs --standard=WordPress-Extra --ignore=$PHPCS_IGNORE; fi
 - phpunit --testsuite backup --coverage-clover=coverage.clover
 - phpunit --testsuite schedule --coverage-clover=coverage.clover
 - phpunit --testsuite other --coverage-clover=coverage.clover

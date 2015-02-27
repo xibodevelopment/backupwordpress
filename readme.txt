@@ -118,19 +118,6 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
-= 3.1.4 =
-
-* (upgrade-options) Bump version
-* strtolower is redundant
-* Upgrade routine - renames service settings to avoid backslashes.
-* Use the Service name as the setting name
-* Clear settings for schedule settings
-* Fixes bug in displaying settings error notices
-* Update version number
-* Merge pull request #726 from humanmade/fix-fatal-error-missing-class-addons
-* Leave bare minimum to avoid fatal error
-* remove old main plugin class
-
 = 3.1.3 =
 
   * Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
@@ -148,6 +135,19 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.1.4 / 2015-02-24
+
+* (upgrade-options) Bump version
+* strtolower is redundant
+* Upgrade routine - renames service settings to avoid backslashes.
+* Use the Service name as the setting name
+* Clear settings for schedule settings
+* Fixes bug in displaying settings error notices
+* Update version number
+* Merge pull request #726 from humanmade/fix-fatal-error-missing-class-addons
+* Leave bare minimum to avoid fatal error
+* remove old main plugin class
 
 ### 3.1.3 / 2015-02-04
 
