@@ -1181,7 +1181,11 @@ class Scheduled_Backup {
 
 		$backupwp_folders = $this->find_backup_folders( 'backwpup-', $hmn_upload_dir['path'] );
 
-		if ( ! empty( $backupwp_folders ) ) {
+		$generic_backup = $this->find_backup_folders( 'backup-', WP_CONTENT_DIR );
+
+		$found = array_merge( $backupwp_folders, $generic_backup );
+
+		if ( ! empty( $found ) ) {
 			foreach ( $backupwp_folders as $path ) {
 				$excluded[] = $path;
 			}
@@ -1195,6 +1199,8 @@ class Scheduled_Backup {
 			'pb_backupbuddy' => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'pb_backupbuddy' ),
 			'wpdbmanager'    => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
 			'supercache'     => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' ),
+			'envato'         => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'Envato-backups' ),
+			'managewp'         => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'managewp' ),
 		);
 
 		foreach ( $blacklisted as $key => $path ) {
