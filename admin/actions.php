@@ -460,7 +460,7 @@ function hmbkp_add_exclude_rule() {
 
 	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
-	$exclude_rule = str_ireplace( $schedule->backup->get_root(), '', sanitize_text_field( $_GET['hmbkp_exclude_pathname'] ) );
+	$exclude_rule = sanitize_text_field( $_GET['hmbkp_exclude_pathname'] );
 
 	$schedule->set_excludes( $exclude_rule, true );
 
