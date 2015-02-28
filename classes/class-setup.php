@@ -60,6 +60,11 @@ class Setup {
 			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
 		}
 
+		// Delete all transients
+		$transients = array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running', 'timeout_hmbkp_wp_cron_test_beacon', 'hmbkp_wp_cron_test_beacon' );
+
+		array_map( 'delete_transient', $transients );
+
 	}
 
 	/**
