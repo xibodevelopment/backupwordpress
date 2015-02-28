@@ -1,6 +1,7 @@
 <?php
 
 namespace HM\BackUpWordPress;
+
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -70,9 +71,22 @@ class Scheduled_Backup {
 		$this->backup = new Backup();
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->backup->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), current_time( 'Y-m-d-H-i-s' ) ) ) . '.zip' );
+		$this->backup->set_archive_filename( implode( '-', array(
+				sanitize_title( str_ireplace( array(
+					'http://',
+					'https://',
+					'www'
+				), '', home_url() ) ),
+				$this->get_id(),
+				$this->get_type(),
+				current_time( 'Y-m-d-H-i-s' )
+			) ) . '.zip' );
 
-		$this->backup->set_database_dump_filename( implode( '-', array( 'database', sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id() ) ) . '.sql' );
+		$this->backup->set_database_dump_filename( implode( '-', array(
+				'database',
+				sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
+				$this->get_id()
+			) ) . '.sql' );
 
 		$this->backup->set_type( $this->get_type() );
 		$this->backup->set_excludes( $this->backup->default_excludes(), true );
@@ -414,7 +428,7 @@ class Scheduled_Backup {
 
 				// If there is already a file with exactly the same filesize then let's keep increasing the filesize of this one until we don't have a clash
 				while ( array_key_exists( $filesize, $files_with_size ) ) {
-					$filesize++;
+					$filesize ++;
 				}
 
 				$files_with_size[ $filesize ] = $entry;
@@ -495,9 +509,10 @@ class Scheduled_Backup {
 	 * If $file is a file then just return the result of `filesize()`.
 	 * If $file is a directory then schedule a recursive filesize scan.
 	 *
-	 * @param \SplFileInfo $file			The file or directory you want to know the size of
-	 * @param bool $skip_excluded_files	Skip excluded files when calculating a directories total size
-	 * @return int 						The total of the file or directory
+	 * @param \SplFileInfo $file The file or directory you want to know the size of
+	 * @param bool $skip_excluded_files Skip excluded files when calculating a directories total size
+	 *
+	 * @return int                        The total of the file or directory
 	 */
 	public function filesize( \SplFileInfo $file, $skip_excluded_files = false ) {
 
@@ -535,7 +550,7 @@ class Scheduled_Backup {
 			}
 
 			$current_pathname = trailingslashit( $file->getPathname() );
-			$root = trailingslashit( $this->backup->get_root() );
+			$root             = trailingslashit( $this->backup->get_root() );
 
 			foreach ( $directory_sizes as $path => $size ) {
 
@@ -844,6 +859,7 @@ class Scheduled_Backup {
 	 * Set the status of the running backup
 	 *
 	 * @param string $message
+	 *
 	 * @return null
 	 */
 	public function set_status( $message ) {
@@ -1018,7 +1034,7 @@ class Scheduled_Backup {
 
 		$duration = 'Unknown';
 
-		if ( ! isset( $this->options['duration_total'] ) || ! isset( $this->options['backup_run_count'] )  ) {
+		if ( ! isset( $this->options['duration_total'] ) || ! isset( $this->options['backup_run_count'] ) ) {
 			return $duration;
 		}
 

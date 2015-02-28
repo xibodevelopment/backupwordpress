@@ -185,6 +185,7 @@ namespace HM\BackUpWordPress {
 		 * Check whether safe mode is active or not
 		 *
 		 * @param string $ini_get_callback
+		 *
 		 * @return bool
 		 */
 		public static function is_safe_mode_active( $ini_get_callback = 'ini_get' ) {
@@ -232,7 +233,11 @@ namespace HM\BackUpWordPress {
 
 		protected static function is_function_disabled( $ini_setting ) {
 
-			if ( array_intersect( array( 'shell_exec', 'escapeshellarg', 'escapeshellcmd' ), array_map( 'trim', explode( ',', @ini_get( $ini_setting ) ) ) ) ) {
+			if ( array_intersect( array(
+				'shell_exec',
+				'escapeshellarg',
+				'escapeshellcmd'
+			), array_map( 'trim', explode( ',', @ini_get( $ini_setting ) ) ) ) ) {
 				return false;
 			}
 
@@ -266,7 +271,8 @@ namespace HM\BackUpWordPress {
 		 * Sanitize a directory path
 		 *
 		 * @param string $dir
-		 * @param bool   $recursive
+		 * @param bool $recursive
+		 *
 		 * @return string
 		 */
 		public static function conform_dir( $dir, $recursive = false ) {
@@ -355,7 +361,15 @@ namespace HM\BackUpWordPress {
 		public function get_archive_filename() {
 
 			if ( empty( $this->archive_filename ) ) {
-				$this->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), 'backup', current_time( 'Y-m-d-H-i-s' ) ) ) . '.zip' );
+				$this->set_archive_filename( implode( '-', array(
+						sanitize_title( str_ireplace( array(
+							'http://',
+							'https://',
+							'www'
+						), '', home_url() ) ),
+						'backup',
+						current_time( 'Y-m-d-H-i-s' )
+					) ) . '.zip' );
 			}
 
 			return $this->archive_filename;
@@ -366,6 +380,7 @@ namespace HM\BackUpWordPress {
 		 * Set the filename of the archive file
 		 *
 		 * @param string $filename
+		 *
 		 * @return \WP_Error|null
 		 */
 		public function set_archive_filename( $filename ) {
@@ -410,6 +425,7 @@ namespace HM\BackUpWordPress {
 		 * Set the filename of the database dump file
 		 *
 		 * @param string $filename
+		 *
 		 * @return \WP_Error|null
 		 */
 		public function set_database_dump_filename( $filename ) {
@@ -447,6 +463,7 @@ namespace HM\BackUpWordPress {
 		 * Set the root directory to backup from
 		 *
 		 * @param string $path
+		 *
 		 * @return \WP_Error|null
 		 */
 		public function set_root( $path ) {
@@ -472,6 +489,7 @@ namespace HM\BackUpWordPress {
 		 * Set the filepath for the existing archive
 		 *
 		 * @param string $existing_archive_filepath
+		 *
 		 * @return null
 		 */
 		public function set_existing_archive_filepath( $existing_archive_filepath ) {
@@ -526,6 +544,7 @@ namespace HM\BackUpWordPress {
 		 * $type must be one of complete, database or file
 		 *
 		 * @param string $type
+		 *
 		 * @return \WP_Error|null
 		 */
 		public function set_type( $type ) {
@@ -685,7 +704,8 @@ namespace HM\BackUpWordPress {
 		 * Both the action and the instance on Backup are then passed to the callback function
 		 *
 		 * @see set_action_callback
-		 * @param string $action     The event to fire
+		 *
+		 * @param string $action The event to fire
 		 */
 		protected function do_action( $action ) {
 
@@ -714,11 +734,12 @@ namespace HM\BackUpWordPress {
 		 *
 		 * @see do_action
 		 * @see /do_action
+		 *
 		 * @param callable $callback The function or method to be called
-		 * @param int $priority      The priority of the callback
+		 * @param int $priority The priority of the callback
 		 */
 		public function set_action_callback( $callback, $priority = 10 ) {
-			$this->action_callback[$priority][] = $callback;
+			$this->action_callback[ $priority ][] = $callback;
 		}
 
 		/**
@@ -1020,13 +1041,11 @@ namespace HM\BackUpWordPress {
 
 					if ( $file->isDir() ) {
 						$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', self::conform_dir( $file->getPathname() ) ) ) );
-					}
-
-					elseif ( $file->isFile() ) {
+					} elseif ( $file->isFile() ) {
 						$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', self::conform_dir( $file->getPathname() ) ) );
 					}
 
-					if ( ++$files_added % 500 === 0 ) {
+					if ( ++ $files_added % 500 === 0 ) {
 						if ( ! $zip->close() || ! $zip->open( $this->get_archive_filepath(), \ZIPARCHIVE::CREATE ) ) {
 							return;
 						}
@@ -1325,7 +1344,7 @@ namespace HM\BackUpWordPress {
 		 * Set the excludes, expects and array
 		 *
 		 * @param  Array $excludes
-		 * @param Bool   $append
+		 * @param Bool $append
 		 */
 		public function set_excludes( $excludes, $append = false ) {
 
@@ -1347,7 +1366,8 @@ namespace HM\BackUpWordPress {
 		 * Takes the exclude rules and formats them for use with either
 		 * the shell zip command or pclzip
 		 *
-		 * @param string $context. (default: 'zip')
+		 * @param string $context . (default: 'zip')
+		 *
 		 * @return string
 		 */
 		public function exclude_string( $context = 'zip' ) {
@@ -1362,8 +1382,7 @@ namespace HM\BackUpWordPress {
 				$separator = ' -x ';
 
 				// The PclZip fallback library
-			}
-			elseif ( $context === 'regex' ) {
+			} elseif ( $context === 'regex' ) {
 				$wildcard  = '([\s\S]*?)';
 				$separator = '|';
 			}
@@ -1377,14 +1396,10 @@ namespace HM\BackUpWordPress {
 				// Files don't end with /
 				if ( ! in_array( substr( $rule, - 1 ), array( '\\', '/' ) ) ) {
 					$file = true;
-				}
-
-				// If rule starts with a / then treat as absolute path
+				} // If rule starts with a / then treat as absolute path
 				elseif ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {
 					$absolute = true;
-				}
-
-				// Otherwise treat as dir fragment
+				} // Otherwise treat as dir fragment
 				else {
 					$fragment = true;
 				}
@@ -1444,6 +1459,7 @@ namespace HM\BackUpWordPress {
 		 * Add backquotes to tables and db-names in SQL queries. Taken from phpMyAdmin.
 		 *
 		 * @param mixed $a_name
+		 *
 		 * @return array|string
 		 */
 		private function sql_backquote( $a_name ) {
@@ -1457,7 +1473,7 @@ namespace HM\BackUpWordPress {
 					reset( $a_name );
 
 					while ( list( $key, $val ) = each( $a_name ) ) {
-						$result[$key] = '`' . $val . '`';
+						$result[ $key ] = '`' . $val . '`';
 					}
 
 					return $result;
@@ -1526,7 +1542,7 @@ namespace HM\BackUpWordPress {
 			$result = mysql_query( $query, $this->db );
 
 			$fields_cnt = 0;
-			$rows_cnt = 0;
+			$rows_cnt   = 0;
 
 			if ( $result ) {
 				$fields_cnt = mysql_num_fields( $result );
@@ -1545,13 +1561,13 @@ namespace HM\BackUpWordPress {
 			// Checks whether the field is an integer or not
 			for ( $j = 0; $j < $fields_cnt; $j ++ ) {
 
-				$field_set[$j] = $this->sql_backquote( mysql_field_name( $result, $j ) );
-				$type          = mysql_field_type( $result, $j );
+				$field_set[ $j ] = $this->sql_backquote( mysql_field_name( $result, $j ) );
+				$type            = mysql_field_type( $result, $j );
 
 				if ( $type === 'tinyint' || $type === 'smallint' || $type === 'mediumint' || $type === 'int' || $type === 'bigint' ) {
-					$field_num[$j] = true;
+					$field_num[ $j ] = true;
 				} else {
-					$field_num[$j] = false;
+					$field_num[ $j ] = false;
 				}
 
 			}
@@ -1572,17 +1588,16 @@ namespace HM\BackUpWordPress {
 				// build the statement
 				for ( $j = 0; $j < $fields_cnt; $j ++ ) {
 
-					if ( ! isset( $row[$j] ) ) {
+					if ( ! isset( $row[ $j ] ) ) {
 						$values[] = 'NULL';
 
-					}
-					elseif ( $row[$j] === '0' || $row[$j] !== '' ) {
+					} elseif ( $row[ $j ] === '0' || $row[ $j ] !== '' ) {
 
 						// a number
-						if ( $field_num[$j] ) {
-							$values[] = $row[$j];
+						if ( $field_num[ $j ] ) {
+							$values[] = $row[ $j ];
 						} else {
-							$values[] = "'" . str_replace( $search, $replace, $this->sql_addslashes( $row[$j] ) ) . "'";
+							$values[] = "'" . str_replace( $search, $replace, $this->sql_addslashes( $row[ $j ] ) ) . "'";
 						}
 
 					} else {
@@ -1624,7 +1639,8 @@ namespace HM\BackUpWordPress {
 		 * Taken from phpMyAdmin.
 		 *
 		 * @param string $a_string (default: '')
-		 * @param bool   $is_like (default: false)
+		 * @param bool $is_like (default: false)
+		 *
 		 * @return mixed
 		 */
 		private function sql_addslashes( $a_string = '', $is_like = false ) {
@@ -1644,6 +1660,7 @@ namespace HM\BackUpWordPress {
 		 * Write the SQL file
 		 *
 		 * @param string $sql
+		 *
 		 * @return null|boolean
 		 */
 		private function write_sql( $sql ) {
@@ -1676,7 +1693,7 @@ namespace HM\BackUpWordPress {
 		public function get_errors( $context = null ) {
 
 			if ( ! empty( $context ) ) {
-				return isset( $this->errors[$context] ) ? $this->errors[$context] : array();
+				return isset( $this->errors[ $context ] ) ? $this->errors[ $context ] : array();
 			}
 
 			return $this->errors;
@@ -1687,7 +1704,7 @@ namespace HM\BackUpWordPress {
 		 * Add an error to the errors stack
 		 *
 		 * @param string $context
-		 * @param mixed  $error
+		 * @param mixed $error
 		 */
 		public function error( $context, $error ) {
 
@@ -1697,7 +1714,7 @@ namespace HM\BackUpWordPress {
 
 			$this->do_action( 'hmbkp_error' );
 
-			$this->errors[$context][$_key = md5( implode( ':', (array) $error ) )] = $error;
+			$this->errors[ $context ][ $_key = md5( implode( ':', (array) $error ) ) ] = $error;
 
 		}
 
@@ -1721,10 +1738,8 @@ namespace HM\BackUpWordPress {
 			}
 
 			if ( $context ) {
-				unset( $this->errors[$context] );
-			}
-
-			else {
+				unset( $this->errors[ $context ] );
+			} else {
 				$this->errors = array();
 			}
 
@@ -1737,7 +1752,7 @@ namespace HM\BackUpWordPress {
 		public function get_warnings( $context = null ) {
 
 			if ( ! empty( $context ) ) {
-				return isset( $this->warnings[$context] ) ? $this->warnings[$context] : array();
+				return isset( $this->warnings[ $context ] ) ? $this->warnings[ $context ] : array();
 			}
 
 			return $this->warnings;
@@ -1748,7 +1763,7 @@ namespace HM\BackUpWordPress {
 		 * Add an warning to the warnings stack
 		 *
 		 * @param string $context
-		 * @param mixed  $warning
+		 * @param mixed $warning
 		 */
 		private function warning( $context, $warning ) {
 
@@ -1758,7 +1773,7 @@ namespace HM\BackUpWordPress {
 
 			$this->do_action( 'hmbkp_warning' );
 
-			$this->warnings[$context][$_key = md5( implode( ':', (array) $warning ) )] = $warning;
+			$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
 
 		}
 
@@ -1766,6 +1781,7 @@ namespace HM\BackUpWordPress {
 		 * Custom error handler for catching php errors
 		 *
 		 * @param $type
+		 *
 		 * @return bool
 		 */
 		public function error_handler( $type ) {
@@ -1799,7 +1815,8 @@ namespace {
 	 * of the zip
 	 *
 	 * @param string $event
-	 * @param array  $file
+	 * @param array $file
+	 *
 	 * @return bool
 	 */
 	function hmbkp_pclzip_callback( $event, $file ) {
@@ -1809,9 +1826,7 @@ namespace {
 		// Don't try to add unreadable files.
 		if ( ! is_readable( $file['filename'] ) || ! file_exists( $file['filename'] ) ) {
 			return false;
-		}
-
-		// Match everything else past the exclude list
+		} // Match everything else past the exclude list
 		elseif ( $_hmbkp_exclude_string && preg_match( '(' . $_hmbkp_exclude_string . ')', $file['stored_filename'] ) ) {
 			return false;
 		}
