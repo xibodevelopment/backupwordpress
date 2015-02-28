@@ -1,6 +1,7 @@
 <?php
 
 namespace HM\BackUpWordPress {
+	use Symfony\Component\Finder\Finder;
 
 	/**
 	 * Generic file and database backup class
@@ -154,6 +155,31 @@ namespace HM\BackUpWordPress {
 		 * @var string
 		 */
 		protected $action_callback = '';
+
+		protected $default_excludes = array(
+			'.DS_Store',
+			'.idea',
+			'backup-*',
+			'backwpup-*',
+			'updraft',
+			'backups',
+			'wp-snapshots',
+			'backupbuddy_backups',
+			'pb_backupbuddy',
+			'backup-db',
+			'cache',
+			'Envato-backups',
+			'managewp',
+		);
+
+		/**
+		 * Returns a filterable array of excluded directories and files.
+		 *
+		 * @return mixed|void
+		 */
+		public function default_excludes() {
+			return apply_filters( 'hmbkp_default_excludes', $this->default_excludes );
+		}
 
 		/**
 		 * Check whether safe mode is active or not
@@ -1129,13 +1155,26 @@ namespace HM\BackUpWordPress {
 		 */
 		public function get_files() {
 
+			$found = array();
+
 			if ( ! empty( $this->files ) ) {
 				return $this->files;
 			}
 
-			$this->files = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $this->get_root(), \RecursiveDirectoryIterator::SKIP_DOTS + \RecursiveDirectoryIterator::FOLLOW_SYMLINKS ), \RecursiveIteratorIterator::SELF_FIRST, \RecursiveIteratorIterator::CATCH_GET_CHILD );
+			$finder = new Finder();
+			$finder->followLinks();
+			$finder->ignoreDotFiles( true );
+			$finder->ignoreUnreadableDirs();
 
-			return $this->files;
+			foreach ( $this->default_excludes as $exclude ) {
+				$finder->notPath( $exclude );
+			}
+
+			foreach ( $finder->in( $this->get_root() ) as $entry ) {
+				$found[] = $entry->getRealPath();
+			}
+
+			return $found;
 
 		}
 
