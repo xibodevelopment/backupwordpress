@@ -35,7 +35,7 @@
 
 						<td>
 
-							<?php if ( ( hmbkp_path() === untrailingslashit( $exclude ) ) || ( in_array( $exclude, $schedule->default_excludes() ) ) ) : ?>
+							<?php if ( ( hmbkp_path() === untrailingslashit( $exclude ) ) ) : ?>
 
 								<?php _e( 'Default rule', 'backupwordpress' ); ?>
 
