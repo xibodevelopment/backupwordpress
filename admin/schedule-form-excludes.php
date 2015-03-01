@@ -35,11 +35,11 @@
 
 					<td>
 
-						<?php if ( ( hmbkp_path() === untrailingslashit( $exclude ) ) ) : ?>
+						<?php if ( ( in_array( $exclude, $schedule->backup->default_excludes() ) ) || ( hmbkp_path() === untrailingslashit( $exclude ) ) ) : ?>
 
 							<?php _e( 'Default rule', 'backupwordpress' ); ?>
 
-						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && strpos( HMBKP_EXCLUDE, $exclude ) !== false ) : ?>
+						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
 
 							<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
 
@@ -78,7 +78,7 @@
 		$untrusted_directory = urldecode( $_GET['hmbkp_directory_browse'] );
 
 		// Only allow real sub directories of the site root to be browsed
-		if ( strpos( $untrusted_directory, $schedule->backup->get_root() ) !== false && is_dir( $untrusted_directory ) ) {
+		if ( false !== strpos( $untrusted_directory, $schedule->backup->get_root() ) && is_dir( $untrusted_directory ) ) {
 			$directory = $untrusted_directory;
 		}
 
@@ -114,14 +114,14 @@
 
 					<?php if ( $schedule->backup->get_root() !== $directory ) { ?>
 
-						<a href="<?php echo remove_query_arg( 'hmbkp_directory_browse' ); ?>"><?php echo esc_html( $schedule->backup->get_root() ); ?></a>
+						<a href="<?php echo esc_url( remove_query_arg( 'hmbkp_directory_browse' ) ); ?>"><?php echo esc_html( $schedule->backup->get_root() ); ?></a>
 						<code>/</code>
 
 						<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( $schedule->backup->get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
 
 						foreach ( $parents as $directory_basename ) { ?>
 
-							<a href="<?php echo add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
+							<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
 							<code>/</code>
 
 						<?php } ?>
@@ -148,7 +148,7 @@
 
 						$size = $schedule->filesize( $root );
 
-						if ( $size !== false ) {
+						if ( false !== $size ) {
 
 							$size = size_format( $size );
 
