@@ -332,7 +332,7 @@ class Scheduled_Backup {
 
 			$root = new \SplFileInfo( $this->backup->get_root() );
 
-			$size += $this->filesize( $root, true );
+			$size += $this->filesize( $root );
 
 		}
 
