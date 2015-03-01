@@ -1190,10 +1190,10 @@ namespace HM\BackUpWordPress {
 			}
 
 			foreach ( $finder->in( $this->get_root() ) as $entry ) {
-				$found[] = $entry->getRealPath();
+				$this->files[] = $entry;
 			}
 
-			return $found;
+			return $this->files;
 
 		}
 
