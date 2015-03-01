@@ -146,7 +146,7 @@
 
 						$root = new SplFileInfo( $schedule->backup->get_root() );
 
-						$size = $schedule->filesize( $root );
+						$size = $schedule->filesize( $root, true );
 
 						if ( false !== $size ) {
 
