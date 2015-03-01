@@ -315,7 +315,7 @@ class Scheduled_Backup {
 
 		$size = 0;
 
-		// Don't include database if file only
+		// Include database size except for file only schedule.
 		if ( 'file' !== $this->get_type() ) {
 
 			global $wpdb;
@@ -327,7 +327,7 @@ class Scheduled_Backup {
 			}
 		}
 
-		// Don't include files if database only
+		// Include total size of dirs/files except for database only schedule.
 		if ( 'database' !== $this->get_type() ) {
 
 			$root = new \SplFileInfo( $this->backup->get_root() );
@@ -547,6 +547,10 @@ class Scheduled_Backup {
 
 				return;
 
+			}
+
+			if ( $this->backup->get_root() === $file->getPathname() ) {
+				return $directory_sizes[ $file->getPathname() ];
 			}
 
 			$current_pathname = trailingslashit( $file->getPathname() );
