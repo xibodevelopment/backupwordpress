@@ -1182,7 +1182,7 @@ namespace HM\BackUpWordPress {
 
 			$finder = new Finder();
 			$finder->followLinks();
-			$finder->ignoreDotFiles( true );
+			$finder->ignoreDotFiles( false );
 			$finder->ignoreUnreadableDirs();
 
 			foreach ( $this->default_excludes as $exclude ) {

@@ -410,7 +410,7 @@ class Scheduled_Backup {
 		) );
 
 		$finder = new Finder();
-		$finder->ignoreDotFiles( true );
+		$finder->ignoreDotFiles( false );
 		$finder->ignoreUnreadableDirs();
 		$finder->followLinks();
 		$finder->depth( '== 0' );
