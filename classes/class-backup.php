@@ -557,6 +557,8 @@ namespace HM\BackUpWordPress {
 				'/xampp/mysql/bin/mysqldump',
 				'/Program Files/xampp/mysql/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 6.0/bin/mysqldump',
+				'/Program Files/MySQL/MySQL Server 5.7/bin/mysqldump',
+				'/Program Files/MySQL/MySQL Server 5.6/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 5.5/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 5.4/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 5.1/bin/mysqldump',
