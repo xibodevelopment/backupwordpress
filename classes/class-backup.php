@@ -1,6 +1,7 @@
 <?php
 
 namespace HM\BackUpWordPress {
+	use Symfony\Component\Process\Process;
 
 	/**
 	 * Generic file and database backup class
@@ -521,6 +522,10 @@ namespace HM\BackUpWordPress {
 		 * @return string
 		 */
 		public function get_mysqldump_command_path() {
+
+			if ( ! $this->user_can_connect() ) {
+				return '';
+			}
 
 			// Check shell_exec is available
 			if ( ! self::is_shell_exec_available() ) {
@@ -1746,6 +1751,36 @@ namespace HM\BackUpWordPress {
 
 			return false;
 
+		}
+
+		/**
+		 * Determine if user can connect via the CLI
+		 *
+		 * @return \WP_Error
+		 */
+		public function user_can_connect() {
+
+			// mysql --host=localhost --user=myname --password=mypass mydb
+
+			$user = escapeshellarg( DB_USER );
+
+			$pwd = escapeshellarg( DB_PASSWORD );
+
+			$host = escapeshellarg( DB_HOST );
+
+			$db = escapeshellarg( DB_NAME );
+
+			$cmd = "mysql --host={$host} --user={$user} --password={$pwd} {$db}";
+
+			$process = new Process( $cmd );
+			$process->run();
+
+			// executes after the command finishes
+			if ( ! $process->isSuccessful() ) {
+				return new \WP_Error( 'connection-error', $process->getErrorOutput() );
+			} else {
+				return true;
+			}
 		}
 
 	}

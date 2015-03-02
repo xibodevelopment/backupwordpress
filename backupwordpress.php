@@ -154,6 +154,8 @@ final class Plugin {
 	 */
 	protected function includes() {
 
+		require_once( HMBKP_PLUGIN_PATH . 'vendor/autoload.php' );
+
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-notices.php' );
 
 		// Load the admin menu
