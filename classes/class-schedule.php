@@ -393,21 +393,7 @@ class Scheduled_Backup {
 			return $this->files;
 		}
 
-		$default_excludes = apply_filters( 'hmbkp_default_excludes', array(
-			'.DS_Store',
-			'.idea',
-			'backup-*',
-			'backwpup-*',
-			'updraft',
-			'backups',
-			'wp-snapshots',
-			'backupbuddy_backups',
-			'pb_backupbuddy',
-			'backup-db',
-			'cache',
-			'Envato-backups',
-			'managewp',
-		) );
+		$default_excludes = $this->backup->default_excludes();
 
 		$finder = new Finder();
 		$finder->ignoreDotFiles( false );
