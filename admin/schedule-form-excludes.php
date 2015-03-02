@@ -357,9 +357,9 @@
 
 	<?php } ?>
 
-</div>
+	<p class="submit">
+		<a href="<?php echo esc_url( hmbkp_get_settings_url() ) ?>"
+		   class="button-primary"><?php _e( 'Done', 'backupwordpress' ); ?></a>
+	</p>
 
-<p class="submit">
-	<a href="<?php echo esc_url( hmbkp_get_settings_url() ) ?>"
-	   class="button-primary"><?php _e( 'Done', 'backupwordpress' ); ?></a>
-</p>
+</div>
