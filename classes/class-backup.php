@@ -157,8 +157,10 @@ namespace HM\BackUpWordPress {
 		protected $action_callback = '';
 
 		protected $default_excludes = array(
+			'.git/',
+			'.svn/',
 			'.DS_Store',
-			'.idea',
+			'.idea/',
 			'backup-*',
 			'backwpup-*',
 			'updraft',
