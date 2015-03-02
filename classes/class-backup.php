@@ -569,7 +569,7 @@ namespace HM\BackUpWordPress {
 
 			// Find the first one which works
 			foreach ( $mysqldump_locations as $location ) {
-				if ( @is_executable( self::conform_dir( $location ) ) ) {
+				if ( (is_null( shell_exec( 'hash ' . self::conform_dir( $location ) . ' 2>&1' ) ) ) && @is_executable( self::conform_dir( $location ) ) ) {
 					$this->set_mysqldump_command_path( $location );
 					break;  // Found one
 				}
