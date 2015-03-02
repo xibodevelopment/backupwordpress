@@ -467,8 +467,6 @@ class Scheduled_Backup {
 
 		}
 
-		$directory_sizes[ $this->backup->get_root() ] = filesize( $this->backup->get_root() );
-
 		$files = $this->backup->get_files();
 
 		foreach ( $files as $file ) {
@@ -480,6 +478,9 @@ class Scheduled_Backup {
 			}
 
 		}
+
+		// This will be the total size of the included folders MINUS default excludes.
+		$directory_sizes[ $this->backup->get_root() ] = array_sum( $directory_sizes );
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
 
