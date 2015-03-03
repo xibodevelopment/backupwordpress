@@ -6,8 +6,8 @@
 			<?php _e( 'Currently Excluded', 'backupwordpress' ); ?>
 		</h3>
 
-		<p><?php _e( 'We automatically detect and ignore common VCS folders and other backup plugin folders.', 'backupwordpress' ); ?></p>
-		
+		<p><?php _e( 'We automatically detect and ignore common <abbr title="Version Control Systems">VCS</abbr> folders and other backup plugin folders.', 'backupwordpress' ); ?></p>
+
 		<table class="widefat">
 
 			<tbody>
