@@ -2,13 +2,17 @@
 
 	<?php if ( $schedule->get_excludes() ) : ?>
 
-		<h3><?php _e( 'Currently Excluded', 'backupwordpress' ); ?></h3>
+		<h3>
+			<?php _e( 'Currently Excluded', 'backupwordpress' ); ?>
+		</h3>
 
+		<p><?php _e( 'We automatically detect and ignore common VCS folders and other backup plugin folders.', 'backupwordpress' ); ?></p>
+		
 		<table class="widefat">
 
 			<tbody>
 
-			<?php foreach ( $schedule->get_excludes() as $key => $exclude ) :
+			<?php foreach ( array_diff( $schedule->get_excludes(), $schedule->backup->default_excludes() ) as $key => $exclude ) :
 
 				$exclude_path = new SplFileInfo( trailingslashit( $schedule->backup->get_root() ) . ltrim( str_ireplace( $schedule->backup->get_root(), '', $exclude ), '/' ) ); ?>
 
