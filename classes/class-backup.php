@@ -277,12 +277,7 @@ namespace HM\BackUpWordPress {
 		 *
 		 * @return string
 		 */
-		public static function conform_dir( $dir, $recursive = false ) {
-
-			// Assume empty dir is root
-			if ( ! $dir ) {
-				$dir = '/';
-			}
+		public static function conform_dir( $dir = '/', $recursive = false ) {
 
 			// Replace single forward slash (looks like double slash because we have to escape it)
 			$dir = str_replace( '\\', '/', $dir );
