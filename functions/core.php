@@ -217,6 +217,22 @@ function hmbkp_update() {
 
 	}
 
+	// Update to 3.1.5
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.1.5', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		// Delete all transients
+		$transients = array(
+			'hmbkp_plugin_data',
+			'hmbkp_directory_filesizes',
+			'hmbkp_directory_filesizes_running',
+			'timeout_hmbkp_directory_filesizes_running',
+			'timeout_hmbkp_wp_cron_test_beacon',
+			'hmbkp_wp_cron_test_beacon',
+		);
+
+		array_map( 'delete_transient', $transients );
+	}
+
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HM\BackUpWordPress\Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
