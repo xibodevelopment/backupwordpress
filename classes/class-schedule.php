@@ -744,13 +744,21 @@ class Scheduled_Backup {
 	 */
 	public function schedule() {
 
-		// Clear any existing hooks
-		$this->unschedule();
+		// Bail if we are not on the main site of the network.
+		if ( is_multisite() && ! is_main_site() ) {
+			return;
+		}
 
-		$schedule_timestamp = $this->get_schedule_start_time();
+		if ( ! wp_next_scheduled( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) ) && ! defined( 'WP_INSTALLING' ) ) {
+			
+			// Clear any existing hooks
+			$this->unschedule();
 
-		wp_schedule_event( $schedule_timestamp, $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+			$schedule_timestamp = $this->get_schedule_start_time();
 
+			wp_schedule_event( $schedule_timestamp, $this->get_reoccurrence(), 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) );
+
+		}
 	}
 
 
