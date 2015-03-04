@@ -225,9 +225,8 @@ function hmbkp_update() {
 			'hmbkp_plugin_data',
 			'hmbkp_directory_filesizes',
 			'hmbkp_directory_filesizes_running',
-			'timeout_hmbkp_directory_filesizes_running',
-			'timeout_hmbkp_wp_cron_test_beacon',
 			'hmbkp_wp_cron_test_beacon',
+			'hm_backdrop',
 		);
 
 		array_map( 'delete_transient', $transients );
