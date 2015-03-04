@@ -17,5 +17,8 @@
     ],
     "support"    : {
         "issues": "https://github.com/humanmade/backupwordpress/issues"
+    },
+    "require": {
+        "symfony/finder": "~2.6"
     }
 }

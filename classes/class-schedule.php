@@ -2,6 +2,8 @@
 
 namespace HM\BackUpWordPress;
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * The Backup Scheduler
  *
@@ -69,14 +71,26 @@ class Scheduled_Backup {
 		$this->backup = new Backup();
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->backup->set_archive_filename( implode( '-', array( sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id(), $this->get_type(), current_time( 'Y-m-d-H-i-s' ) ) ) . '.zip' );
+		$this->backup->set_archive_filename( implode( '-', array(
+				sanitize_title( str_ireplace( array(
+					'http://',
+					'https://',
+					'www'
+				), '', home_url() ) ),
+				$this->get_id(),
+				$this->get_type(),
+				current_time( 'Y-m-d-H-i-s' )
+			) ) . '.zip' );
 
-		$this->backup->set_database_dump_filename( implode( '-', array( 'database', sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ), $this->get_id() ) ) . '.sql' );
+		$this->backup->set_database_dump_filename( implode( '-', array(
+				'database',
+				sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
+				$this->get_id()
+			) ) . '.sql' );
 
 		$this->backup->set_type( $this->get_type() );
-		$this->backup->set_excludes( $this->default_excludes(), true );
+		$this->backup->set_excludes( $this->backup->default_excludes(), true );
 		$this->backup->set_excludes( $this->get_excludes() );
-
 		$this->backup->set_action_callback( array( $this, 'do_action' ) );
 
 		if ( defined( 'HMBKP_SCHEDULE_START_TIME' ) && strtotime( 'HMBKP_SCHEDULE_START_TIME' ) ) {
@@ -301,7 +315,7 @@ class Scheduled_Backup {
 
 		$size = 0;
 
-		// Don't include database if file only
+		// Include database size except for file only schedule.
 		if ( 'file' !== $this->get_type() ) {
 
 			global $wpdb;
@@ -313,12 +327,12 @@ class Scheduled_Backup {
 			}
 		}
 
-		// Don't include files if database only
+		// Include total size of dirs/files except for database only schedule.
 		if ( 'database' !== $this->get_type() ) {
 
 			$root = new \SplFileInfo( $this->backup->get_root() );
 
-			$size += $this->filesize( $root, true );
+			$size += $this->filesize( $root );
 
 		}
 
@@ -373,55 +387,48 @@ class Scheduled_Backup {
 			return $files;
 		}
 
-		$handle = opendir( $directory );
+		$found = array();
 
-		if ( ! $handle ) {
-			return $files;
+		if ( ! empty( $this->files ) ) {
+			return $this->files;
 		}
 
-		while ( $file_handle = readdir( $handle ) ) {
+		$default_excludes = $this->backup->default_excludes();
 
-			// Ignore current dir and containing dir
-			if ( '.' === $file_handle || '..' === $file_handle ) {
-				continue;
-			}
+		$finder = new Finder();
+		$finder->ignoreDotFiles( false );
+		$finder->ignoreUnreadableDirs();
+		$finder->followLinks();
+		$finder->depth( '== 0' );
 
-			$file = new \SplFileInfo( Backup::conform_dir( trailingslashit( $directory ) . $file_handle ) );
+		foreach ( $default_excludes as $exclude ) {
+			$finder->notPath( $exclude );
+		}
 
-			// Unreadable files are moved to the bottom
-			if ( ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
-				$unreadable_files[] = $file;
-				continue;
-			}
-
+		foreach ( $finder->in( $directory ) as $entry ) {
+			$files[] = $entry;
 			// Get the total filesize for each file and directory
-			$filesize = $this->filesize( $file );
+			$filesize = $this->filesize( $entry );
 
 			if ( $filesize ) {
 
 				// If there is already a file with exactly the same filesize then let's keep increasing the filesize of this one until we don't have a clash
 				while ( array_key_exists( $filesize, $files_with_size ) ) {
-					$filesize++;
+					$filesize ++;
 				}
 
-				$files_with_size[ $filesize ] = $file;
+				$files_with_size[ $filesize ] = $entry;
 
 			} elseif ( 0 === $filesize ) {
 
-				$empty_files[] = $file;
+				$empty_files[] = $entry;
 
 			} else {
 
-				$files_with_no_size[] = $file;
+				$files_with_no_size[] = $entry;
 
 			}
-
 		}
-
-		closedir( $handle );
-
-		// Sort files largest first
-		krsort( $files_with_size );
 
 		// Add 0 byte files / directories to the bottom
 		$files = $files_with_size + array_merge( $empty_files, $unreadable_files );
@@ -430,8 +437,8 @@ class Scheduled_Backup {
 		if ( $files_with_no_size ) {
 
 			// We have to loop as merging or concatenating the array would re-flow the keys which we don't want because the filesize is stored in the key
-			foreach ( $files_with_no_size as $file ) {
-				array_unshift( $files, $file );
+			foreach ( $files_with_no_size as $entry ) {
+				array_unshift( $files, $entry );
 			}
 		}
 
@@ -460,19 +467,20 @@ class Scheduled_Backup {
 
 		}
 
-		$directory_sizes[ $this->backup->get_root() ] = filesize( $this->backup->get_root() );
-
 		$files = $this->backup->get_files();
 
 		foreach ( $files as $file ) {
 
 			if ( $file->isReadable() ) {
-				$directory_sizes[ Backup::conform_dir( $file->getPathname() ) ] = $file->getSize();
+				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = $file->getSize();
 			} else {
-				$directory_sizes[ Backup::conform_dir( $file->getPathname() ) ] = 0;
+				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = 0;
 			}
 
 		}
+
+		// This will be the total size of the included folders MINUS default excludes.
+		$directory_sizes[ $this->backup->get_root() ] = array_sum( $directory_sizes );
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
 
@@ -488,14 +496,15 @@ class Scheduled_Backup {
 	 * If $file is a file then just return the result of `filesize()`.
 	 * If $file is a directory then schedule a recursive filesize scan.
 	 *
-	 * @param \SplFileInfo $file			The file or directory you want to know the size of
-	 * @param bool $skip_excluded_files	Skip excluded files when calculating a directories total size
-	 * @return int 						The total of the file or directory
+	 * @param \SplFileInfo $file The file or directory you want to know the size of
+	 * @param bool $skip_excluded_files Skip excluded files when calculating a directories total size
+	 *
+	 * @return int                        The total of the file or directory
 	 */
 	public function filesize( \SplFileInfo $file, $skip_excluded_files = false ) {
 
 		// Skip missing or unreadable files
-		if ( ! file_exists( $file->getPathname() ) || ! @realpath( $file->getPathname() ) || ! $file->isReadable() ) {
+		if ( ! file_exists( $file->getPathname() ) || ! $file->getRealpath() || ! $file->isReadable() ) {
 			return false;
 		}
 
@@ -527,8 +536,12 @@ class Scheduled_Backup {
 
 			}
 
+			if ( $this->backup->get_root() === $file->getPathname() ) {
+				return $directory_sizes[ $file->getPathname() ];
+			}
+
 			$current_pathname = trailingslashit( $file->getPathname() );
-			$root = trailingslashit( $this->backup->get_root() );
+			$root             = trailingslashit( $this->backup->get_root() );
 
 			foreach ( $directory_sizes as $path => $size ) {
 
@@ -837,6 +850,7 @@ class Scheduled_Backup {
 	 * Set the status of the running backup
 	 *
 	 * @param string $message
+	 *
 	 * @return null
 	 */
 	public function set_status( $message ) {
@@ -1011,7 +1025,7 @@ class Scheduled_Backup {
 
 		$duration = 'Unknown';
 
-		if ( ! isset( $this->options['duration_total'] ) || ! isset( $this->options['backup_run_count'] )  ) {
+		if ( ! isset( $this->options['duration_total'] ) || ! isset( $this->options['backup_run_count'] ) ) {
 			return $duration;
 		}
 
@@ -1167,82 +1181,5 @@ class Scheduled_Backup {
 
 	}
 
-	/**
-	 * Sets the default excluded folders fr a schedule
-	 *
-	 * @return Array
-	 */
-	public function default_excludes() {
-
-		$excluded = array();
-
-		// Leftover backup folders can be either under content dir, or under the uploads dir
-		$hmn_upload_dir = wp_upload_dir();
-
-		$backupwp_folders = $this->find_backup_folders( 'backwpup-', $hmn_upload_dir['path'] );
-
-		if ( ! empty( $backupwp_folders ) ) {
-			foreach ( $backupwp_folders as $path ) {
-				$excluded[] = $path;
-			}
-		}
-
-		$blacklisted = array(
-			'updraft'        => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'updraft' ),
-			'wponlinebckp'   => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backups' ),
-			'duplicator'     => trailingslashit( ABSPATH ) . trailingslashit( 'wp-snapshots' ),
-			'backupbuddy'    => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'backupbuddy_backups' ),
-			'pb_backupbuddy' => trailingslashit( $hmn_upload_dir['path'] ) . trailingslashit( 'pb_backupbuddy' ),
-			'wpdbmanager'    => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'backup-db' ),
-			'supercache'     => trailingslashit( WP_CONTENT_DIR ) . trailingslashit( 'cache' ),
-		);
-
-		foreach ( $blacklisted as $key => $path ) {
-			if ( is_dir( $path ) ) {
-				$excluded[] = $path;
-			}
-		}
-
-		// version control dirs
-		// @todo stop excluding these once they are skipped entirely
-		$excluded[] = '.svn/';
-		$excluded[] = '.git/';
-
-		return apply_filters( 'hmbkp_default_excludes', $excluded );
-	}
-
-
-	/**
-	 * Returns an array of other backup folders in the specified directory
-	 *
-	 * @param $needle
-	 * @param $haystack
-	 *
-	 * @return array
-	 */
-	protected function find_backup_folders( $needle, $haystack ) {
-
-		$found_folders = array();
-
-		// @todo can be simplified
-		$folders_to_search = glob( $haystack . '/*', GLOB_ONLYDIR | GLOB_NOSORT );
-
-		if ( ! empty( $folders_to_search ) ) {
-
-			foreach ( $folders_to_search as $folder ) {
-
-				$pos = strpos( $folder, $needle );
-
-				if ( false !== $pos ) {
-					$found_folders[] = trailingslashit( $folder );
-				}
-
-			}
-
-		}
-
-		return $found_folders;
-
-	}
-
 }
+
