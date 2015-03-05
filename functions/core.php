@@ -234,18 +234,18 @@ function hmbkp_update() {
 		// Clear duplicate schedules on multisite
 		if ( is_multisite() ) {
 
-			global $wpdb;
-
 			// get current blogs from DB
-			$blogs = $wpdb->get_results( "SELECT blog_id FROM {$wpdb->blogs} ORDER BY blog_id" );
+			$blogs = wp_get_sites();
 
 			foreach ( $blogs as $blog ) {
 
-				if ( is_main_site( $blog->blog_id ) ) {
+				switch_to_blog( get_current_blog_id() );
+
+				if ( is_main_site( get_current_blog_id() ) ) {
 					continue;
 				}
 
-				switch_to_blog( $blog->blog_id );
+				global $wpdb;
 
 				// Get the schedule options
 				$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
