@@ -436,6 +436,7 @@ final class Plugin {
 
 }
 
+// Bail if we are not on the main site of the network.
 if ( is_multisite() && ! is_main_site() ) {
 	return;
 }
