@@ -230,6 +230,38 @@ function hmbkp_update() {
 		);
 
 		array_map( 'delete_transient', $transients );
+
+		// Clear duplicate schedules on multisite
+		if ( is_multisite() ) {
+
+			global $wpdb;
+
+			// get current blogs from DB
+			$blogs = $wpdb->get_results( "SELECT blog_id FROM {$wpdb->blogs} ORDER BY blog_id" );
+
+			foreach ( $blogs as $blog ) {
+
+				if ( is_main_site( $blog->blog_id ) ) {
+					continue;
+				}
+
+				switch_to_blog( $blog->blog_id );
+
+				// Get the schedule options
+				$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
+
+				// clear schedules
+				foreach ( array_map( function ( $item ) {
+					return ltrim( $item, 'hmbkp_schedule_' );
+				}, $schedules ) as $item ) {
+					wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
+				}
+
+				// delete options
+				array_map( 'delete_option', $schedules );
+			}
+			restore_current_blog();
+		}
 	}
 
 	// Every update
