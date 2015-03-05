@@ -750,7 +750,7 @@ class Scheduled_Backup {
 		}
 
 		if ( ! wp_next_scheduled( 'hmbkp_schedule_hook', array( 'id' => $this->get_id() ) ) && ! defined( 'WP_INSTALLING' ) ) {
-			
+
 			// Clear any existing hooks
 			$this->unschedule();
 
