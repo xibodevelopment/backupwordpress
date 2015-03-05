@@ -744,11 +744,6 @@ class Scheduled_Backup {
 	 */
 	public function schedule() {
 
-		// Bail if we are not on the main site of the network.
-		if ( is_multisite() && ! is_main_site() ) {
-			return;
-		}
-
 		// Clear any existing hooks
 		$this->unschedule();
 
