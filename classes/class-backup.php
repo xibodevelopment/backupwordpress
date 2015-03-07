@@ -565,7 +565,7 @@ namespace HM\BackUpWordPress {
 		 */
 		public function get_mysqldump_command_path() {
 
-			if ( ! $this->user_can_connect() ) {
+			if ( is_wp_error( $this->user_can_connect() ) ) {
 				return '';
 			}
 
@@ -1831,12 +1831,12 @@ namespace HM\BackUpWordPress {
 			$process = new Process( $cmd );
 			$process->run();
 
-			// executes after the command finishes
-			if ( ! $process->isSuccessful() ) {
-				return new \WP_Error( 'connection-error', $process->getErrorOutput() );
+			if ( $process->isSuccessful()){
+				return $process->getOutput();
 			} else {
-				return true;
+				return new \WP_Error( 'connection-error', $process->getErrorOutput() );
 			}
+
 		}
 
 	}
