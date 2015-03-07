@@ -84,6 +84,8 @@ hmbkp_clear_settings_errors();
 				$start_time = time();
 			} ?>
 
+			<?php $start_date_array = date_parse( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $start_time ) ); ?>
+
 			<tr id="start-day" class="recurring-setting">
 
 				<th scope="row">
@@ -123,7 +125,7 @@ hmbkp_clear_settings_errors();
 				</th>
 
 				<td>
-					<input type="number" min="0" max="31" step="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( date_i18n( 'j', $start_time ) ); ?>">
+					<input type="number" min="0" max="31" step="1" id="hmbkp_schedule_start_day_of_month" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_month]" value="<?php echo esc_attr( $start_date_array['day'] ); ?>">
 				</td>
 
 			</tr>
@@ -138,16 +140,16 @@ hmbkp_clear_settings_errors();
 
 					<span class="field-group">
 
-						<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( date_i18n( 'G', $start_time ) ); ?>">
+						<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( $start_date_array['hour'] ); ?>">
 
 						<?php _e( 'Hours', 'backupwordpress' ); ?></label>
 
-						<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( (float) date_i18n( 'i', $start_time ) ); ?>">
+						<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( $start_date_array['minute'] ); ?>">
 
 						<?php _e( 'Minutes', 'backupwordpress' ); ?></label>
 
 					</span>
-
+<p class="descriprion"><strong><?php esc_html_e( 'Please use 24 hour format for hours', 'backupwordpress' ); ?></strong></p>
 					<p class="twice-js description<?php if ( $schedule->get_reoccurrence() !== 'hmbkp_fortnightly' ) { ?> hidden<?php } ?>"><?php _e( 'The second backup will run 12 hours after the first', 'backupwordpress' ); ?></p>
 
 				</td>
