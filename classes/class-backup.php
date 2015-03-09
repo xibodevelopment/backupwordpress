@@ -843,16 +843,11 @@ namespace HM\BackUpWordPress {
 			$process = new Process( $cmd );
 			$process->run();
 			if ( ! $process->isSuccessful() ) {
-				$this->error( $this->get_mysqldump_method(), $process->getErrorOutput() );
-			}
 
-			// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
-			if ( trim( $stderr ) === 'Warning: Using a password on the command line interface can be insecure.' ) {
-				$stderr = '';
-			}
-
-			if ( $stderr ) {
-				$this->error( $this->get_mysqldump_method(), $stderr );
+				// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
+				if ( false === strpos( $process->getErrorOutput(), 'Using a password on the command line interface can be insecure' ) ) {
+					$this->error( $this->get_mysqldump_method(), $process->getErrorOutput() );
+				}
 			}
 
 			$this->verify_mysqldump();
