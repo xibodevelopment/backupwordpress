@@ -841,7 +841,7 @@ namespace HM\BackUpWordPress {
 
 			// Store any returned data in an error
 			$process = new Process( $cmd );
-
+			$process->run();
 			if ( ! $process->isSuccessful() ) {
 				$this->error( $this->get_mysqldump_method(), $process->getErrorOutput() );
 			}
