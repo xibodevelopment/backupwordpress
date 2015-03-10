@@ -29,7 +29,7 @@ add_action( 'admin_menu', 'hmbkp_admin_menu' );
  * @return null
  */
 function hmbkp_manage_backups() {
-	require_once( HMBKP_PLUGIN_PATH . 'admin/page.php' );
+	require_once( HMBKP_PLUGIN_PATH . '../admin/page.php' );
 }
 
 /**
@@ -67,11 +67,11 @@ function hmbkp_contextual_help() {
 	}
 
 	ob_start();
-	require_once( HMBKP_PLUGIN_PATH . 'admin/constants.php' );
+	require_once( HMBKP_PLUGIN_PATH . '../admin/constants.php' );
 	$constants = ob_get_clean();
 
 	ob_start();
-	include_once( HMBKP_PLUGIN_PATH . 'admin/faq.php' );
+	include_once( HMBKP_PLUGIN_PATH . '../admin/faq.php' );
 	$faq = ob_get_clean();
 
 	get_current_screen()->add_help_tab( array( 'title'   => __( 'FAQ', 'backupwordpress' ),
@@ -84,10 +84,10 @@ function hmbkp_contextual_help() {
 	                                           'content' => wp_kses_post( $constants )
 	) );
 
-	require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
+	require_once( HMBKP_PLUGIN_PATH . 'class-requirements.php' );
 
 	ob_start();
-	require_once( HMBKP_PLUGIN_PATH . 'admin/server-info.php' );
+	require_once( HMBKP_PLUGIN_PATH . '../admin/server-info.php' );
 	$info = ob_get_clean();
 
 	get_current_screen()->add_help_tab(
