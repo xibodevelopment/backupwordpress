@@ -92,7 +92,13 @@ function hmbkp_run_schedule_async( $schedule_id ) {
 
 	$errors = array_merge( $schedule->backup->get_errors(), $schedule->backup->get_warnings() );
 
-	\HM\BackUpWordPress\Notices::get_instance()->set_notices( 'backup_errors', $errors );
+	$notices = array();
+
+	foreach ( $errors as $key => $error ) {
+		$notices[] = implode( ', ', $error );
+	}
+
+	\HM\BackUpWordPress\Notices::get_instance()->set_notices( 'backup_errors', $notices );
 }
 
 /**
