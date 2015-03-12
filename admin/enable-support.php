@@ -1,4 +1,4 @@
-<?php require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php'; ?>
+<?php require_once HMBKP_PLUGIN_PATH . 'class-requirements.php'; ?>
 
 <h2><?php _e( 'Enable BackUpWordPress Support', 'backupwordpress' ); ?></h2>
 
