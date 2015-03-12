@@ -173,8 +173,10 @@ add_action( 'admin_init', 'hmbkp_set_server_config_notices' );
  */
 function hmbkp_plugin_row( $plugins ) {
 
+	$menu = is_multisite() ? 'Settings' : 'Tools';
+
 	if ( isset( $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php'] ) ) {
-		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>Tools &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( hmbkp_get_settings_url() ) . '">Tools &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
+		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>' . $menu . ' &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( hmbkp_get_settings_url() ) . '">' . $menu . ' &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
 	}
 
 	return $plugins;
@@ -339,11 +341,7 @@ function hmbkp_translated_schedule_title( $slug, $title ) {
 
 function hmbkp_get_settings_url() {
 
-	if ( is_multisite() ) {
-		$url = network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG );
-	} else {
-		$url = admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
-	}
+	$url = is_multisite() ? self_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG ) : self_admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
 
 	HM\BackUpWordPress\schedules::get_instance()->refresh_schedules();
 
