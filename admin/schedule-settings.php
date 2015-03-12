@@ -37,11 +37,11 @@ if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_
 <div class="hmbkp-schedule-settings">
 
 	<?php if ( $_GET['action'] === 'hmbkp_edit_schedule' && $_GET['hmbkp_panel'] === 'hmbkp_edit_schedule_settings' ) {
-		require( HMBKP_PLUGIN_PATH . '../admin/schedule-form.php' );
+		require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
 	} ?>
 
 	<?php if ( $_GET['action'] === 'hmbkp_edit_schedule' && $_GET['hmbkp_panel'] === 'hmbkp_edit_schedule_excludes' ) {
-		require( HMBKP_PLUGIN_PATH . '../admin/schedule-form-excludes.php' );
+		require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 	} ?>
 
 	<?php // Show the service form if we are viewing one

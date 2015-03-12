@@ -2,7 +2,7 @@
 
 namespace HM\BackUpWordPress;
 
-require_once( plugin_dir_path( __FILE__ ) . 'class-setup.php' );
+require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
 
 register_activation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deactivate' ) );
@@ -92,10 +92,6 @@ final class Plugin {
 			define( 'HMBKP_PLUGIN_SLUG', dirname( plugin_basename( __FILE__ ) ) );
 		}
 
-		if ( ! defined( 'HMBKP_PLUGIN_PATH' ) ) {
-			define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-		}
-
 		if ( ! defined( 'HMBKP_PLUGIN_URL' ) ) {
 			define( 'HMBKP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
@@ -123,51 +119,51 @@ final class Plugin {
 	 */
 	protected function includes() {
 
-		require_once( HMBKP_PLUGIN_PATH . '../vendor/autoload.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'vendor/autoload.php' );
 
-		require_once( HMBKP_PLUGIN_PATH . 'class-notices.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-notices.php' );
 
 		// Load the admin menu
-		require_once( HMBKP_PLUGIN_PATH . '../admin/menu.php' );
-		require_once( HMBKP_PLUGIN_PATH . '../admin/actions.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 
 		// Load Backdrop if necessary.
 		if ( ! class_exists( 'HM_Backdrop_Task' ) ) {
-			require_once( HMBKP_PLUGIN_PATH . '../backdrop/hm-backdrop.php' );
+			require_once( HMBKP_PLUGIN_PATH . 'backdrop/hm-backdrop.php' );
 		}
 
-		require_once( HMBKP_PLUGIN_PATH . 'class-requirements.php' );
-		require_once( HMBKP_PLUGIN_PATH . 'class-requirement.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirement.php' );
 
-		require_once( HMBKP_PLUGIN_PATH . 'class-path.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-path.php' );
 
 		// Load the core backup class
-		require_once( HMBKP_PLUGIN_PATH . 'class-backup.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-backup.php' );
 
 		// Load the backup scheduling classes
-		require_once( HMBKP_PLUGIN_PATH . 'class-schedule.php' );
-		require_once( plugin_dir_path( __FILE__ ) . 'class-schedules.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedules.php' );
 
 		// Load the core functions
-		require_once( HMBKP_PLUGIN_PATH . '../functions/core.php' );
-		require_once( HMBKP_PLUGIN_PATH . '../functions/interface.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'functions/core.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'functions/interface.php' );
 
 		// Load the services
-		require_once( HMBKP_PLUGIN_PATH . 'class-services.php' );
-		require_once( HMBKP_PLUGIN_PATH . 'class-service.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-services.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-service.php' );
 
 		// Load the email service
-		require_once( HMBKP_PLUGIN_PATH . 'class-email-service.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-email-service.php' );
 
 		// Load the webhook services
-		require_once( HMBKP_PLUGIN_PATH . 'class-webhook-service.php' );
-		require_once( HMBKP_PLUGIN_PATH . 'class-wpremote-webhook-service.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-webhook-service.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-wpremote-webhook-service.php' );
 
-		require_once( HMBKP_PLUGIN_PATH . 'deprecated.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/deprecated.php' );
 
 		// Load the wp cli command
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			include( HMBKP_PLUGIN_PATH . 'class-backupwordpress-wp-cli-command.php' );
+			include( HMBKP_PLUGIN_PATH . 'classes/class-backupwordpress-wp-cli-command.php' );
 		}
 
 	}
