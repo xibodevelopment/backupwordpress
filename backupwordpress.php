@@ -33,7 +33,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 // Only load if >= PHP 5.3
 if ( version_compare( phpversion(), '5.3', '>=' ) ) {
-	require_once( plugin_dir_path( __FILE__ ) . 'classes/class-plugin.php' );
+
+	if ( ! defined( 'HMBKP_PLUGIN_PATH' ) ) {
+		define( 'HMBKP_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+	}
+
+	require_once( HMBKP_PLUGIN_PATH . 'classes/class-plugin.php' );
 } else {
 	wp_die( sprintf( __( 'BackUpWordPress will not work on this site. ( PHP Version %s is unsupported )', 'backupwordpress' ), phpversion() ), __( 'BackUpWordPress Error', 'backupwordpress' ), array( 'back_link' => true ) );
 }

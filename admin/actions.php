@@ -581,7 +581,7 @@ function hmbkp_heartbeat_received( $response, $data ) {
 				$response['hmbkp_site_size'] = $schedule->get_formatted_site_size();
 
 				ob_start();
-				require( HMBKP_PLUGIN_PATH . '../admin/schedule-form-excludes.php' );
+				require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
 				$response['hmbkp_dir_sizes'] = ob_get_clean();
 
 				// Slow the heartbeat back down
@@ -640,7 +640,7 @@ function hmbkp_load_enable_support() {
 
 	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
 
-	require_once HMBKP_PLUGIN_PATH . '../admin/enable-support.php';
+	require_once HMBKP_PLUGIN_PATH . 'admin/enable-support.php';
 
 	die;
 
@@ -686,7 +686,7 @@ function hmbkp_ajax_calculate_backup_size() {
 
 	$recalculate_filesize = true;
 
-	require( HMBKP_PLUGIN_PATH . '../admin/schedule-sentence.php' );
+	require( HMBKP_PLUGIN_PATH . 'admin/schedule-sentence.php' );
 
 	die;
 
