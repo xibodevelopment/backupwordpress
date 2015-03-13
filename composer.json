@@ -19,7 +19,6 @@
         "issues": "https://github.com/humanmade/backupwordpress/issues"
     },
     "require": {
-        "symfony/finder": "~2.6",
-        "symfony/process": "~2.6"
+        "symfony/finder": "~2.6"
     }
 }
