@@ -74,6 +74,9 @@ function hmbkp_request_do_backup() {
 
 	HM\BackUpWordPress\Path::get_instance()->cleanup();
 
+	// Fixes an issue on servers which only allow a single session per client
+	session_write_close();
+	
 	$schedule_id = sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) );
 	$task = new \HM\Backdrop\Task( 'hmbkp_run_schedule_async', $schedule_id );
 	$task->schedule();
