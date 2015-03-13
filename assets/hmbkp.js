@@ -58,23 +58,14 @@ jQuery(document).ready(function ( $ ) {
 
         var scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
-        var ajaxRequest = $.get(
+        $.post(
             ajaxurl,
             {
                 'hmbkp_run_schedule_nonce': hmbkp.hmbkp_run_schedule_nonce,
                 'action': 'hmbkp_run_schedule',
                 'hmbkp_schedule_id': scheduleId
             }
-        ).done( function ( data ) {
-
-                hmbkpCatchResponseAndOfferToEmail( data );
-
-                // Redirect back on error
-            }).fail( function ( jqXHR ) {
-
-                hmbkpCatchResponseAndOfferToEmail( jqXHR.responseText );
-
-            });
+        );
 
         e.preventDefault();
 

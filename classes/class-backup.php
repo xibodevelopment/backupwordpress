@@ -970,17 +970,17 @@ namespace HM\BackUpWordPress {
 		 */
 		public function zip() {
 
-			// If we have an existing archive let's duplicate it so we can just add changed files to save time
-			if ( $this->get_existing_archive_filepath() ) {
-				copy( $this->get_existing_archive_filepath(), $this->get_archive_filepath() );
-			}
-
 			$this->archive_method = 'zip';
 
 			$this->do_action( 'hmbkp_archive_started' );
 
+			// Add the database dump to the archive
+			if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
+				$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
+			}
+
 			// Zip up $this->root
-			if ( $this->get_type() !== 'database' ) {
+			if ( 'database' !== $this->get_type() ) {
 
 				// cd to the site root
 				$command = 'cd ' . escapeshellarg( $this->get_root() );
@@ -1006,11 +1006,6 @@ namespace HM\BackUpWordPress {
 
 				$stderr = shell_exec( $command );
 
-			}
-
-			// Add the database dump to the archive
-			if ( $this->get_type() !== 'file' && file_exists( $this->get_database_dump_filepath() ) ) {
-				$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
 			}
 
 			if ( ! empty( $stderr ) ) {
