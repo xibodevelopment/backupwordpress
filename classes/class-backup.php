@@ -565,10 +565,6 @@ namespace HM\BackUpWordPress {
 		 */
 		public function get_mysqldump_command_path() {
 
-			if ( is_wp_error( $this->user_can_connect() ) ) {
-				return '';
-			}
-
 			// Check shell_exec is available
 			if ( ! self::is_shell_exec_available() ) {
 				return '';
@@ -777,18 +773,27 @@ namespace HM\BackUpWordPress {
 		 */
 		public function dump_database() {
 
-			if ( $this->get_mysqldump_command_path() ) {
-				$this->mysqldump();
-			}
-
-			if ( empty( $this->mysqldump_verified ) ) {
+			// If we cannot run mysqldump via CLI, fallback to PHP
+			if ( is_wp_error( $this->user_can_connect() ) ) {
 				$this->mysqldump_fallback();
+			} else {
+				// Attempt mysqldump command
+				if ( $this->get_mysqldump_command_path() ) {
+					$this->mysqldump();
+				}
+
+				if ( empty( $this->mysqldump_verified ) ) {
+					$this->mysqldump_fallback();
+				}
 			}
 
 			$this->do_action( 'hmbkp_mysqldump_finished' );
 
 		}
 
+		/**
+		 * Export the database to an .sql file via the command line with mysqldump
+		 */
 		public function mysqldump() {
 
 			$this->mysqldump_method = 'mysqldump';
@@ -870,14 +875,15 @@ namespace HM\BackUpWordPress {
 			$cmd .= ' 2>&1';
 
 			// Store any returned data in an error
-			$process = new Process( $cmd );
-			$process->run();
-			if ( ! $process->isSuccessful() ) {
-
-				// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
-				if ( false === strpos( $process->getErrorOutput(), 'Using a password on the command line interface can be insecure' ) ) {
-					$this->error( $this->get_mysqldump_method(), $process->getErrorOutput() );
+			$stderr = shell_exec( $cmd );
+			
+			// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
+			if ( 'Warning: Using a password on the command line interface can be insecure.' === trim( $stderr ) ) {
+				$stderr = '';
 				}
+
+			if ( $stderr ) {
+				$this->error( $this->get_mysqldump_method(), $stderr );
 			}
 
 			$this->verify_mysqldump();
