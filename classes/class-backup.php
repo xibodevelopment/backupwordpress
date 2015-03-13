@@ -1864,6 +1864,11 @@ namespace HM\BackUpWordPress {
 			// Store any returned data in an error
 			$stderr = shell_exec( $cmd );
 
+			// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
+			if ( 'Warning: Using a password on the command line interface can be insecure.' === trim( $stderr ) ) {
+				$stderr = '';
+			}
+
 			if ( $stderr ) {
 				return new \WP_Error( 'connection-error', $stderr );
 			}
