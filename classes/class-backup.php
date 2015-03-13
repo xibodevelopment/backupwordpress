@@ -795,10 +795,35 @@ namespace HM\BackUpWordPress {
 
 			$this->do_action( 'hmbkp_mysqldump_started' );
 
-			$host = explode( ':', DB_HOST );
+			// Guess port or socket connection type
+			$port_or_socket = strstr( DB_HOST, ':' );
 
-			$host = reset( $host );
-			$port = strpos( DB_HOST, ':' ) ? end( explode( ':', DB_HOST ) ) : '';
+			$host = DB_HOST;
+
+			if ( ! empty( $port_or_socket ) ) {
+
+				$host = substr( DB_HOST, 0, strpos( DB_HOST, ':' ) );
+
+				$port_or_socket = substr( $port_or_socket, 1 );
+
+				if ( 0 !== strpos( $port_or_socket, '/' ) ) {
+
+					$port = intval( $port_or_socket );
+
+					$maybe_socket = strstr( $port_or_socket, ':' );
+
+					if ( ! empty( $maybe_socket ) ) {
+
+						$socket = substr( $maybe_socket, 1 );
+
+					}
+
+				} else {
+
+					$socket = $port_or_socket;
+
+				}
+			}
 
 			// Path to the mysqldump executable
 			$cmd = escapeshellarg( $this->get_mysqldump_command_path() );
@@ -807,7 +832,7 @@ namespace HM\BackUpWordPress {
 			$cmd .= ' --no-create-db';
 
 			// Allow lock-tables to be overridden
-			if ( ! defined( 'HMBKP_MYSQLDUMP_SINGLE_TRANSACTION' ) || HMBKP_MYSQLDUMP_SINGLE_TRANSACTION !== false ) {
+			if ( ! defined( 'HMBKP_MYSQLDUMP_SINGLE_TRANSACTION' ) || false !== HMBKP_MYSQLDUMP_SINGLE_TRANSACTION  ) {
 				$cmd .= ' --single-transaction';
 			}
 
@@ -828,6 +853,11 @@ namespace HM\BackUpWordPress {
 			// Set the port if it was set
 			if ( ! empty( $port ) && is_numeric( $port ) ) {
 				$cmd .= ' -P ' . $port;
+			}
+
+			// Set the socket path
+			if ( ! empty( $socket ) && ! is_numeric( $socket ) ) {
+				$cmd .= ' --protocol=socket -S ' . $socket;
 			}
 
 			// The file we're saving too
