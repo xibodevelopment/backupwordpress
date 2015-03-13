@@ -1858,13 +1858,14 @@ namespace HM\BackUpWordPress {
 
 			$cmd = "mysql --host={$host} --user={$user} --password={$pwd} {$db}";
 
-			$process = new Process( $cmd );
-			$process->run();
+			// Pipe STDERR to STDOUT
+			$cmd .= ' 2>&1';
 
-			if ( $process->isSuccessful()){
-				return $process->getOutput();
-			} else {
-				return new \WP_Error( 'connection-error', $process->getErrorOutput() );
+			// Store any returned data in an error
+			$stderr = shell_exec( $cmd );
+
+			if ( $stderr ) {
+				return new \WP_Error( 'connection-error', $stderr );
 			}
 
 		}
