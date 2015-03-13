@@ -599,6 +599,8 @@ namespace HM\BackUpWordPress {
 				'/xampp/mysql/bin/mysqldump',
 				'/Program Files/xampp/mysql/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 6.0/bin/mysqldump',
+				'/Program Files/MySQL/MySQL Server 5.7/bin/mysqldump',
+				'/Program Files/MySQL/MySQL Server 5.6/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 5.5/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 5.4/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 5.1/bin/mysqldump',
@@ -609,7 +611,7 @@ namespace HM\BackUpWordPress {
 
 			// Find the first one which works
 			foreach ( $mysqldump_locations as $location ) {
-				if ( @is_executable( self::conform_dir( $location ) ) ) {
+				if ( (is_null( shell_exec( 'hash ' . self::conform_dir( $location ) . ' 2>&1' ) ) ) && @is_executable( self::conform_dir( $location ) ) ) {
 					$this->set_mysqldump_command_path( $location );
 					break;  // Found one
 				}
@@ -770,18 +772,27 @@ namespace HM\BackUpWordPress {
 		 */
 		public function dump_database() {
 
-			if ( $this->get_mysqldump_command_path() ) {
-				$this->mysqldump();
-			}
-
-			if ( empty( $this->mysqldump_verified ) ) {
+			// If we cannot run mysqldump via CLI, fallback to PHP
+			if ( is_wp_error( $this->user_can_connect() ) ) {
 				$this->mysqldump_fallback();
+			} else {
+				// Attempt mysqldump command
+				if ( $this->get_mysqldump_command_path() ) {
+					$this->mysqldump();
+				}
+
+				if ( empty( $this->mysqldump_verified ) ) {
+					$this->mysqldump_fallback();
+				}
 			}
 
 			$this->do_action( 'hmbkp_mysqldump_finished' );
 
 		}
 
+		/**
+		 * Export the database to an .sql file via the command line with mysqldump
+		 */
 		public function mysqldump() {
 
 			$this->mysqldump_method = 'mysqldump';
@@ -866,9 +877,9 @@ namespace HM\BackUpWordPress {
 			$stderr = shell_exec( $cmd );
 
 			// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
-			if ( trim( $stderr ) === 'Warning: Using a password on the command line interface can be insecure.' ) {
+			if ( 'Warning: Using a password on the command line interface can be insecure.' === trim( $stderr ) ) {
 				$stderr = '';
-			}
+				}
 
 			if ( $stderr ) {
 				$this->error( $this->get_mysqldump_method(), $stderr );
@@ -1820,6 +1831,42 @@ namespace HM\BackUpWordPress {
 			$this->warning( 'php', implode( ', ', array_splice( $args, 0, 3 ) ) );
 
 			return false;
+
+		}
+
+		/**
+		 * Determine if user can connect via the CLI
+		 *
+		 * @return \WP_Error
+		 */
+		public function user_can_connect() {
+
+			// mysql --host=localhost --user=myname --password=mypass mydb
+
+			$user = escapeshellarg( DB_USER );
+
+			$pwd = escapeshellarg( DB_PASSWORD );
+
+			$host = escapeshellarg( DB_HOST );
+
+			$db = escapeshellarg( DB_NAME );
+
+			$cmd = "mysql --host={$host} --user={$user} --password={$pwd} {$db}";
+
+			// Pipe STDERR to STDOUT
+			$cmd .= ' 2>&1';
+
+			// Store any returned data in an error
+			$stderr = shell_exec( $cmd );
+
+			// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
+			if ( 'Warning: Using a password on the command line interface can be insecure.' === trim( $stderr ) ) {
+				$stderr = '';
+			}
+
+			if ( $stderr ) {
+				return new \WP_Error( 'connection-error', $stderr );
+			}
 
 		}
 
