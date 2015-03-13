@@ -230,6 +230,45 @@ function hmbkp_update() {
 		);
 
 		array_map( 'delete_transient', $transients );
+
+		// Clear duplicate schedules on multisite
+		if ( is_multisite() ) {
+
+			// get current blogs from DB
+			$blogs = wp_get_sites();
+
+			foreach ( $blogs as $blog ) {
+
+				switch_to_blog( get_current_blog_id() );
+
+				if ( is_main_site( get_current_blog_id() ) ) {
+					continue;
+				}
+
+				global $wpdb;
+
+				// Get the schedule options
+				$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
+
+				// clear schedules
+				foreach ( array_map( function ( $item ) {
+					return ltrim( $item, 'hmbkp_schedule_' );
+				}, $schedules ) as $item ) {
+					wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
+				}
+
+				// delete options
+				array_map( 'delete_option', $schedules );
+
+				array_map( 'delete_option', array( 'hmbkp_enable_support', 'hmbkp_plugin_version', 'hmbkp_path', 'hmbkp_default_path', 'hmbkp_upsell' ) );
+
+				// Delete all transients
+				array_map( 'delete_transient', array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running', 'timeout_hmbkp_wp_cron_test_beacon', 'hmbkp_wp_cron_test_beacon' ) );
+
+			}
+			
+			restore_current_blog();
+		}
 	}
 
 	// Every update

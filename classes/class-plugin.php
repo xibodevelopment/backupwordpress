@@ -401,4 +401,7 @@ final class Plugin {
 
 }
 
+if ( is_multisite() && ! is_main_site() ) {
+	return;
+}
 Plugin::get_instance();
