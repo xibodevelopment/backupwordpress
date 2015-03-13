@@ -56,11 +56,9 @@ class Setup {
 
 		$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
 
-		foreach (
-			array_map( function ( $item ) {
+		foreach ( array_map( function ( $item ) {
 				return ltrim( $item, 'hmbkp_schedule_' );
-			}, $schedules ) as $item
-		) {
+			}, $schedules ) as $item ) {
 			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
 		}
 
