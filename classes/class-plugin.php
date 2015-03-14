@@ -89,11 +89,11 @@ final class Plugin {
 	public function constants() {
 
 		if ( ! defined( 'HMBKP_PLUGIN_SLUG' ) ) {
-			define( 'HMBKP_PLUGIN_SLUG', dirname( plugin_basename( __FILE__ ) ) );
+			define( 'HMBKP_PLUGIN_SLUG', dirname( HMBKP_BASENAME ) );
 		}
 
 		if ( ! defined( 'HMBKP_PLUGIN_URL' ) ) {
-			define( 'HMBKP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+			define( 'HMBKP_PLUGIN_URL', plugin_dir_url( HMBKP_BASENAME ) );
 		}
 
 		if ( ! defined( 'HMBKP_PLUGIN_LANG_DIR' ) ) {
@@ -200,11 +200,11 @@ final class Plugin {
 			return;
 		}
 
-		$js_file = HMBKP_PLUGIN_URL . '../assets/hmbkp.min.js';
+		$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
 
 		// TODO shuold this also support WP_SCRIPT_DEBUG
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			$js_file = HMBKP_PLUGIN_URL . '../assets/hmbkp.js';
+			$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
 		}
 
 		wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( self::PLUGIN_VERSION ) );
@@ -350,10 +350,10 @@ final class Plugin {
 			return;
 		}
 
-		$css_file = HMBKP_PLUGIN_URL . '../assets/hmbkp.min.css';
+		$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css';
 
 		if ( WP_DEBUG ) {
-			$css_file = HMBKP_PLUGIN_URL . '../assets/hmbkp.css';
+			$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css';
 		}
 
 		wp_enqueue_style( 'backupwordpress', $css_file, false, sanitize_key( self::PLUGIN_VERSION ) );
