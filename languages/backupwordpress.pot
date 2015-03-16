@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: BackUpWordPress 3.1.4\n"
+"Project-Id-Version: BackUpWordPress 3.2.0\n"
 "Report-Msgid-Bugs-To: support@humanmade.co.uk\n"
-"POT-Creation-Date: 2015-02-24 08:44:19+00:00\n"
+"POT-Creation-Date: 2015-03-16 08:25:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,70 +13,70 @@ msgstr ""
 "Language-Team: Human Made Limited\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
-#: admin/actions.php:215
+#: admin/actions.php:192
 msgid "The schedule ID was not provided. Aborting."
 msgstr ""
 
-#: admin/actions.php:265
+#: admin/actions.php:242
 msgid "Backup type cannot be empty"
 msgstr ""
 
-#: admin/actions.php:269
+#: admin/actions.php:246
 msgid "Invalid backup type"
 msgstr ""
 
-#: admin/actions.php:283
+#: admin/actions.php:260
 msgid "Schedule cannot be empty"
 msgstr ""
 
-#: admin/actions.php:287
+#: admin/actions.php:264
 msgid "Invalid schedule"
 msgstr ""
 
-#: admin/actions.php:301
+#: admin/actions.php:278
 msgid "Day of the week must be a valid lowercase day name"
 msgstr ""
 
-#: admin/actions.php:320
+#: admin/actions.php:297
 msgid "Day of month must be between 1 and 31"
 msgstr ""
 
-#: admin/actions.php:339
+#: admin/actions.php:316
 msgid "Hours must be between 0 and 23"
 msgstr ""
 
-#: admin/actions.php:358
+#: admin/actions.php:335
 msgid "Minutes must be between 0 and 59"
 msgstr ""
 
-#: admin/actions.php:372
+#: admin/actions.php:349
 msgid "Max backups can't be empty"
 msgstr ""
 
-#: admin/actions.php:376
+#: admin/actions.php:353
 msgid "Max backups must be a number"
 msgstr ""
 
-#: admin/actions.php:380
+#: admin/actions.php:357
 msgid "Max backups must be greater than 0"
 msgstr ""
 
-#: admin/actions.php:732 admin/actions.php:738
+#: admin/actions.php:709 admin/actions.php:715
 msgid "BackUpWordPress has detected a problem."
 msgstr ""
 
-#: admin/actions.php:732 admin/actions.php:738
+#: admin/actions.php:709 admin/actions.php:715
 msgid ""
 "%1$s is returning a %2$s response which could mean cron jobs aren't getting "
 "fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. "
 "See the %3$s for more details."
 msgstr ""
 
-#: admin/backups-table.php:8 admin/schedule-form-excludes.php:98
+#: admin/backups-table.php:8 admin/schedule-form-excludes.php:105
 msgid "Size"
 msgstr ""
 
-#: admin/backups-table.php:9 admin/schedule-form-excludes.php:100
+#: admin/backups-table.php:9 admin/schedule-form-excludes.php:107
 msgid "Type"
 msgstr ""
 
@@ -106,7 +106,7 @@ msgid ""
 "settings. %4$s. Defined %5$s will be highlighted."
 msgstr ""
 
-#: admin/constants.php:3 admin/menu.php:69
+#: admin/constants.php:3 admin/menu.php:82
 msgid "Constants"
 msgstr ""
 
@@ -364,31 +364,31 @@ msgid ""
 "your Admin Dashboard (recommended), or email support@hmn.md"
 msgstr ""
 
-#: admin/menu.php:12 admin/menu.php:14
+#: admin/menu.php:13 admin/menu.php:17
 msgid "Manage Backups"
 msgstr ""
 
-#: admin/menu.php:12 admin/menu.php:14 admin/menu.php:39
+#: admin/menu.php:13 admin/menu.php:17 admin/menu.php:46
 msgid "Backups"
 msgstr ""
 
-#: admin/menu.php:67
+#: admin/menu.php:77
 msgid "FAQ"
 msgstr ""
 
-#: admin/menu.php:79
+#: admin/menu.php:95
 msgid "Server Info"
 msgstr ""
 
-#: admin/menu.php:86
+#: admin/menu.php:102
 msgid "For more information:"
 msgstr ""
 
-#: admin/menu.php:88
+#: admin/menu.php:104
 msgid "Support Forums"
 msgstr ""
 
-#: admin/menu.php:89
+#: admin/menu.php:105
 msgid "Help with translation"
 msgstr ""
 
@@ -398,82 +398,88 @@ msgid ""
 "directory%2$s."
 msgstr ""
 
-#: admin/schedule-form-excludes.php:5
+#: admin/schedule-form-excludes.php:6
 msgid "Currently Excluded"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:40
-msgid "Default rule"
+#: admin/schedule-form-excludes.php:9
+msgid ""
+"We automatically detect and ignore common <abbr title=\"Version Control "
+"Systems\">VCS</abbr> folders and other backup plugin folders."
 msgstr ""
 
 #: admin/schedule-form-excludes.php:44
-msgid "Defined in wp-config.php"
+msgid "Default rule"
 msgstr ""
 
 #: admin/schedule-form-excludes.php:48
+msgid "Defined in wp-config.php"
+msgstr ""
+
+#: admin/schedule-form-excludes.php:55
 msgid "Stop excluding"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:64
+#: admin/schedule-form-excludes.php:71
 msgid "Directory Listing"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:66
+#: admin/schedule-form-excludes.php:73
 msgid ""
 "Here's a directory listing of all files on your site, you can browse "
 "through and exclude files or folders that you don't want included in your "
 "backup."
 msgstr ""
 
-#: admin/schedule-form-excludes.php:97
+#: admin/schedule-form-excludes.php:104
 msgid "Name"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:99
+#: admin/schedule-form-excludes.php:106
 msgid "Permissions"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:101
+#: admin/schedule-form-excludes.php:108
 msgid "Status"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:158 admin/schedule-form-excludes.php:269
+#: admin/schedule-form-excludes.php:168 admin/schedule-form-excludes.php:284
 msgid "Refresh"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:175 admin/schedule-form-excludes.php:293
+#: admin/schedule-form-excludes.php:185 admin/schedule-form-excludes.php:309
 msgid "Symlink"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:179 admin/schedule-form-excludes.php:297
+#: admin/schedule-form-excludes.php:189 admin/schedule-form-excludes.php:313
 msgid "Folder"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:269
+#: admin/schedule-form-excludes.php:282
 msgid "Recalculate the size of this directory"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:301
+#: admin/schedule-form-excludes.php:317
 msgid "File"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:311
+#: admin/schedule-form-excludes.php:328
 msgid "Unreadable files won't be backed up."
 msgstr ""
 
-#: admin/schedule-form-excludes.php:311
+#: admin/schedule-form-excludes.php:328
 msgid "Unreadable"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:315
+#: admin/schedule-form-excludes.php:332
 msgid "Excluded"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:326
+#: admin/schedule-form-excludes.php:348
 msgid "Exclude &rarr;"
 msgstr ""
 
-#: admin/schedule-form-excludes.php:345 admin/schedule-form.php:190
+#: admin/schedule-form-excludes.php:366 admin/schedule-form.php:192
 #: admin/schedule-settings.php:88
 msgid "Done"
 msgstr ""
@@ -506,67 +512,71 @@ msgstr ""
 msgid "Manual Only"
 msgstr ""
 
-#: admin/schedule-form.php:90
+#: admin/schedule-form.php:92
 msgid "Start Day"
 msgstr ""
 
-#: admin/schedule-form.php:98
+#: admin/schedule-form.php:100
 msgid "Monday"
 msgstr ""
 
-#: admin/schedule-form.php:99
+#: admin/schedule-form.php:101
 msgid "Tuesday"
 msgstr ""
 
-#: admin/schedule-form.php:100
+#: admin/schedule-form.php:102
 msgid "Wednesday"
 msgstr ""
 
-#: admin/schedule-form.php:101
+#: admin/schedule-form.php:103
 msgid "Thursday"
 msgstr ""
 
-#: admin/schedule-form.php:102
+#: admin/schedule-form.php:104
 msgid "Friday"
 msgstr ""
 
-#: admin/schedule-form.php:103
+#: admin/schedule-form.php:105
 msgid "Saturday"
 msgstr ""
 
-#: admin/schedule-form.php:104
+#: admin/schedule-form.php:106
 msgid "Sunday"
 msgstr ""
 
-#: admin/schedule-form.php:122
+#: admin/schedule-form.php:124
 msgid "Start Day of Month"
 msgstr ""
 
-#: admin/schedule-form.php:134
+#: admin/schedule-form.php:136
 msgid "Start Time"
 msgstr ""
 
-#: admin/schedule-form.php:143
+#: admin/schedule-form.php:145
 msgid "Hours"
 msgstr ""
 
-#: admin/schedule-form.php:147
+#: admin/schedule-form.php:149
 msgid "Minutes"
 msgstr ""
 
-#: admin/schedule-form.php:151
+#: admin/schedule-form.php:152
+msgid "Please use 24 hour format for hours"
+msgstr ""
+
+#: admin/schedule-form.php:153
 msgid "The second backup will run 12 hours after the first"
 msgstr ""
 
-#: admin/schedule-form.php:160
+#: admin/schedule-form.php:162
 msgid "Number of backups to store on this server"
 msgstr ""
 
-#: admin/schedule-form.php:169
+#: admin/schedule-form.php:171
 msgid "Past this limit older backups will be deleted automatically."
 msgstr ""
 
-#: admin/schedule-form.php:172
+#: admin/schedule-form.php:174
 msgid "This schedule will store a maximum of %s of backups."
 msgstr ""
 
@@ -630,15 +640,15 @@ msgstr ""
 msgid "Send a copy of each backup to %s."
 msgstr ""
 
-#: admin/schedule-sentence.php:153
+#: admin/schedule-sentence.php:156
 msgid "Backups will be compressed and should be smaller than this."
 msgstr ""
 
-#: admin/schedule-sentence.php:155
+#: admin/schedule-sentence.php:160
 msgid "this shouldn't take long&hellip;"
 msgstr ""
 
-#: admin/schedule-sentence.php:155
+#: admin/schedule-sentence.php:160
 msgid "calculating the size of your backup&hellip;"
 msgstr ""
 
@@ -668,67 +678,43 @@ msgid ""
 "Destinations &amp; Unlimited Sites)%4$s"
 msgstr ""
 
-#: backupwordpress.php:240
-msgid "Update"
-msgstr ""
-
-#: backupwordpress.php:241
-msgid "Cancel"
-msgstr ""
-
-#: backupwordpress.php:242
+#: backupwordpress.php:48
 msgid ""
-"Are you sure you want to delete this schedule? All of it's backups will "
-"also be deleted."
+"BackUpWordPress will not work on this site. ( PHP Version %s is unsupported "
+")"
 msgstr ""
 
-#: backupwordpress.php:242 backupwordpress.php:243 backupwordpress.php:244
-#: backupwordpress.php:245
-msgid "'Cancel' to go back, 'OK' to delete."
+#: backupwordpress.php:48
+msgid "BackUpWordPress Error"
 msgstr ""
 
-#: backupwordpress.php:243
-msgid "Are you sure you want to delete this backup?"
-msgstr ""
-
-#: backupwordpress.php:244
-msgid "Are you sure you want to remove this exclude rule?"
-msgstr ""
-
-#: backupwordpress.php:245
-msgid ""
-"Reducing the number of backups that are stored on this server will cause "
-"some of your existing backups to be deleted, are you sure that's what you "
-"want?"
-msgstr ""
-
-#: classes/class-backup.php:348
+#: classes/class-backup.php:386
 msgid "archive filename must be a non empty string"
 msgstr ""
 
-#: classes/class-backup.php:352
+#: classes/class-backup.php:390
 msgid "invalid file extension for archive filename <code>%s</code>"
 msgstr ""
 
-#: classes/class-backup.php:392
+#: classes/class-backup.php:431
 msgid "database dump filename must be a non empty string"
 msgstr ""
 
-#: classes/class-backup.php:396
+#: classes/class-backup.php:435
 msgid "invalid file extension for database dump filename <code>%s</code>"
 msgstr ""
 
-#: classes/class-backup.php:429
+#: classes/class-backup.php:469
 msgid "Invalid root path <code>%s</code> must be a valid directory path"
 msgstr ""
 
-#: classes/class-backup.php:454
+#: classes/class-backup.php:495
 msgid ""
 "Invalid existing archive filepath <code>%s</code> must be a non empty "
 "(string)"
 msgstr ""
 
-#: classes/class-backup.php:508
+#: classes/class-backup.php:550
 msgid ""
 "Invalid backup type <code>%s</code> must be one of (string) file, database "
 "or complete"
@@ -837,76 +823,110 @@ msgstr ""
 msgid "This %s file ensures that other people cannot download your backup files."
 msgstr ""
 
-#: classes/class-schedule.php:137
+#: classes/class-plugin.php:219
+msgid "Update"
+msgstr ""
+
+#: classes/class-plugin.php:220
+msgid "Cancel"
+msgstr ""
+
+#: classes/class-plugin.php:221
+msgid ""
+"Are you sure you want to delete this schedule? All of it's backups will "
+"also be deleted."
+msgstr ""
+
+#: classes/class-plugin.php:221 classes/class-plugin.php:222
+#: classes/class-plugin.php:223 classes/class-plugin.php:224
+msgid "'Cancel' to go back, 'OK' to delete."
+msgstr ""
+
+#: classes/class-plugin.php:222
+msgid "Are you sure you want to delete this backup?"
+msgstr ""
+
+#: classes/class-plugin.php:223
+msgid "Are you sure you want to remove this exclude rule?"
+msgstr ""
+
+#: classes/class-plugin.php:224
+msgid ""
+"Reducing the number of backups that are stored on this server will cause "
+"some of your existing backups to be deleted, are you sure that's what you "
+"want?"
+msgstr ""
+
+#: classes/class-schedule.php:151
 msgid "Invalid Option Name"
 msgstr ""
 
-#: classes/class-schedule.php:250
+#: classes/class-schedule.php:264
 msgid "Argument 1 for %s must be a valid integer"
 msgstr ""
 
-#: classes/class-schedule.php:599
+#: classes/class-schedule.php:612
 msgid "Argument 1 for %s must be a valid future timestamp"
 msgstr ""
 
-#: classes/class-schedule.php:636
+#: classes/class-schedule.php:649
 msgid "Argument 1 for %s must be a valid cron reoccurrence or \"manually\""
 msgstr ""
 
-#: classes/class-schedule.php:765 functions/interface.php:249
+#: classes/class-schedule.php:778 functions/interface.php:251
 msgid "Starting Backup"
 msgstr ""
 
-#: classes/class-schedule.php:851
+#: classes/class-schedule.php:865
 msgid "Error writing to file. (%s)"
 msgstr ""
 
-#: classes/class-schedule.php:899
+#: classes/class-schedule.php:913
 msgid "Dumping Database %s"
 msgstr ""
 
-#: classes/class-schedule.php:904
+#: classes/class-schedule.php:918
 msgid "Verifying Database Dump %s"
 msgstr ""
 
-#: classes/class-schedule.php:909
+#: classes/class-schedule.php:923
 msgid "Creating zip archive %s"
 msgstr ""
 
-#: classes/class-schedule.php:914
+#: classes/class-schedule.php:928
 msgid "Verifying Zip Archive %s"
 msgstr ""
 
-#: classes/class-schedule.php:919
+#: classes/class-schedule.php:933
 msgid "Finishing Backup"
 msgstr ""
 
-#: classes/class-schedule.php:970
+#: classes/class-schedule.php:984
 msgid "An unexpected error occured"
 msgstr ""
 
-#: classes/class-schedule.php:1033
+#: classes/class-schedule.php:1047
 #. translators: min=minute
 msgid "%s min"
 msgid_plural "%s mins"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/class-schedule.php:1043
+#: classes/class-schedule.php:1057
 msgid "%s hour"
 msgid_plural "%s hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/class-schedule.php:1105
+#: classes/class-schedule.php:1119
 msgid "Argument 1 for %s must be a non empty string"
 msgstr ""
 
-#: classes/class-schedule.php:1110
+#: classes/class-schedule.php:1124
 msgid "%s doesn't exist"
 msgstr ""
 
-#: classes/class-schedule.php:1115
+#: classes/class-schedule.php:1129
 msgid "That backup wasn't created by this schedule"
 msgstr ""
 
@@ -926,7 +946,7 @@ msgstr ""
 msgid "BackUpWordPress"
 msgstr ""
 
-#: classes/class-setup.php:141
+#: classes/class-setup.php:154
 msgid ""
 "BackUpWordPress requires PHP version %1$s or later and WordPress version "
 "%2$s or later to run. It has not been activated. %3$s%4$s%5$sLearn more%6$s"
@@ -936,41 +956,41 @@ msgstr ""
 msgid "Error: %s"
 msgstr ""
 
-#: functions/core.php:272
+#: functions/core.php:326
 msgid "BackUpWordPress has setup your default schedules."
 msgstr ""
 
-#: functions/core.php:272
+#: functions/core.php:326
 msgid ""
 "By default BackUpWordPress performs a daily backup of your database and a "
 "weekly backup of your database &amp; files. You can modify these schedules."
 msgstr ""
 
-#: functions/core.php:287
+#: functions/core.php:341
 msgid "Once Hourly"
 msgstr ""
 
-#: functions/core.php:288
+#: functions/core.php:342
 msgid "Twice Daily"
 msgstr ""
 
-#: functions/core.php:289
+#: functions/core.php:343
 msgid "Once Daily"
 msgstr ""
 
-#: functions/core.php:290
+#: functions/core.php:344
 msgid "Once Weekly"
 msgstr ""
 
-#: functions/core.php:291
+#: functions/core.php:345
 msgid "Once Biweekly"
 msgstr ""
 
-#: functions/core.php:292
+#: functions/core.php:346
 msgid "Once Monthly"
 msgstr ""
 
-#: functions/core.php:310
+#: functions/core.php:364
 msgid "You can only delete directories inside your WordPress installation"
 msgstr ""
 
@@ -1038,115 +1058,115 @@ msgstr ""
 msgid "Your site root path %s isn't readable."
 msgstr ""
 
-#: functions/interface.php:218
+#: functions/interface.php:220
 msgid "Database and Files"
 msgstr ""
 
-#: functions/interface.php:222
+#: functions/interface.php:224
 msgid "Files"
 msgstr ""
 
-#: functions/interface.php:226
+#: functions/interface.php:228
 msgid "Database"
 msgstr ""
 
-#: functions/interface.php:233
+#: functions/interface.php:235
 msgid "Legacy"
 msgstr ""
 
-#: functions/interface.php:248
+#: functions/interface.php:250
 msgid "Started %s ago"
 msgstr ""
 
-#: functions/interface.php:250
+#: functions/interface.php:252
 msgid "cancel"
 msgstr ""
 
-#: functions/interface.php:298
+#: functions/interface.php:300
 msgid "No backups completed"
 msgstr ""
 
-#: functions/interface.php:309
+#: functions/interface.php:311
 msgid "Complete Hourly"
 msgstr ""
 
-#: functions/interface.php:310
+#: functions/interface.php:312
 msgid "File Hourly"
 msgstr ""
 
-#: functions/interface.php:311
+#: functions/interface.php:313
 msgid "Database Hourly"
 msgstr ""
 
-#: functions/interface.php:312
+#: functions/interface.php:314
 msgid "Complete Twicedaily"
 msgstr ""
 
-#: functions/interface.php:313
+#: functions/interface.php:315
 msgid "File Twicedaily"
 msgstr ""
 
-#: functions/interface.php:314
+#: functions/interface.php:316
 msgid "Database Twicedaily"
 msgstr ""
 
-#: functions/interface.php:315
+#: functions/interface.php:317
 msgid "Complete Daily"
 msgstr ""
 
-#: functions/interface.php:316
+#: functions/interface.php:318
 msgid "File Daily"
 msgstr ""
 
-#: functions/interface.php:317
+#: functions/interface.php:319
 msgid "Database Daily"
 msgstr ""
 
-#: functions/interface.php:318
+#: functions/interface.php:320
 msgid "Complete Weekly"
 msgstr ""
 
-#: functions/interface.php:319
+#: functions/interface.php:321
 msgid "File Weekly"
 msgstr ""
 
-#: functions/interface.php:320
+#: functions/interface.php:322
 msgid "Database Weekly"
 msgstr ""
 
-#: functions/interface.php:321
+#: functions/interface.php:323
 msgid "Complete Biweekly"
 msgstr ""
 
-#: functions/interface.php:322
+#: functions/interface.php:324
 msgid "File Biweekly"
 msgstr ""
 
-#: functions/interface.php:323
+#: functions/interface.php:325
 msgid "Database Biweekly"
 msgstr ""
 
-#: functions/interface.php:324
+#: functions/interface.php:326
 msgid "Complete Monthly"
 msgstr ""
 
-#: functions/interface.php:325
+#: functions/interface.php:327
 msgid "File Monthly"
 msgstr ""
 
-#: functions/interface.php:326
+#: functions/interface.php:328
 msgid "Database Monthly"
 msgstr ""
 
-#: functions/interface.php:327
+#: functions/interface.php:329
 msgid "Complete Manually"
 msgstr ""
 
-#: functions/interface.php:328
+#: functions/interface.php:330
 msgid "File Manually"
 msgstr ""
 
-#: functions/interface.php:329
+#: functions/interface.php:331
 msgid "Database Manually"
 msgstr ""
 
@@ -1176,7 +1196,7 @@ msgctxt ""
 msgid "Backup my %1$s %2$s %3$s, %4$s."
 msgstr ""
 
-#: functions/interface.php:300
+#: functions/interface.php:302
 msgctxt "backups count"
 msgid "One backup completed"
 msgid_plural "%1$s backups completed"
