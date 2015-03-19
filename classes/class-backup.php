@@ -169,7 +169,7 @@ namespace HM\BackUpWordPress {
 			'backupbuddy_backups',
 			'pb_backupbuddy',
 			'backup-db',
-			'cache',
+			'cache/',
 			'Envato-backups',
 			'managewp',
 		);
