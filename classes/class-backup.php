@@ -953,17 +953,17 @@ namespace HM\BackUpWordPress {
 		public function archive() {
 
 			// Do we have the path to the zip command
-			if ( $this->get_zip_command_path() ) {
+			if ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'zip' === HMBKP_FORCE_ZIP_METHOD ) ) || $this->get_zip_command_path() ) {
 				$this->zip();
 			}
 
 			// If not or if the shell zip failed then use ZipArchive
-			if ( empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) && empty( $this->skip_zip_archive ) ) {
+			if ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'ziparchive' === HMBKP_FORCE_ZIP_METHOD ) ) || ( empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) && empty( $this->skip_zip_archive ) ) ) {
 				$this->zip_archive();
 			}
 
 			// If ZipArchive is unavailable or one of the above failed
-			if ( empty( $this->archive_verified ) ) {
+			if ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'pclzip' === HMBKP_FORCE_ZIP_METHOD ) ) || empty( $this->archive_verified ) ) {
 				$this->pcl_zip();
 			}
 
@@ -999,9 +999,13 @@ namespace HM\BackUpWordPress {
 				// Run the zip command with the recursive and quiet flags
 				$command .= ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -rq ';
 
-				// If the destination zip file already exists then let's just add changed files to save time
-				if ( file_exists( $this->get_archive_filepath() ) && $this->get_existing_archive_filepath() ) {
-					$command .= ' -FS ';
+				if ( defined( 'HMBKP_ENABLE_SYNC' ) && HMBKP_ENABLE_SYNC ) {
+
+					// If the destination zip file already exists then let's just add changed files to save time
+					if ( file_exists( $this->get_archive_filepath() ) && $this->get_existing_archive_filepath() ) {
+						$command .= ' -FS ';
+					}
+
 				}
 
 				// Save the zip file to the correct path
@@ -1843,15 +1847,65 @@ namespace HM\BackUpWordPress {
 
 			// mysql --host=localhost --user=myname --password=mypass mydb
 
-			$user = escapeshellarg( DB_USER );
+			// Guess port or socket connection type
+			$port_or_socket = strstr( DB_HOST, ':' );
 
-			$pwd = escapeshellarg( DB_PASSWORD );
+			$host = DB_HOST;
 
-			$host = escapeshellarg( DB_HOST );
+			if ( ! empty( $port_or_socket ) ) {
 
-			$db = escapeshellarg( DB_NAME );
+				$host = substr( DB_HOST, 0, strpos( DB_HOST, ':' ) );
 
-			$cmd = "mysql --host={$host} --user={$user} --password={$pwd} {$db}";
+				$port_or_socket = substr( $port_or_socket, 1 );
+
+				if ( 0 !== strpos( $port_or_socket, '/' ) ) {
+
+					$port = intval( $port_or_socket );
+
+					$maybe_socket = strstr( $port_or_socket, ':' );
+
+					if ( ! empty( $maybe_socket ) ) {
+
+						$socket = substr( $maybe_socket, 1 );
+
+					}
+
+				} else {
+
+					$socket = $port_or_socket;
+
+				}
+			}
+
+			// Path to the mysqldump executable
+			$cmd = 'mysql ';
+
+			// Username
+			$cmd .= ' -u ' . escapeshellarg( DB_USER );
+
+			// Don't pass the password if it's blank
+			if ( DB_PASSWORD ) {
+				$cmd .= ' -p' . escapeshellarg( DB_PASSWORD );
+			}
+
+			// Set the host
+			$cmd .= ' -h ' . escapeshellarg( $host );
+
+			// Set the port if it was set
+			if ( ! empty( $port ) && is_numeric( $port ) ) {
+				$cmd .= ' -P ' . $port;
+			}
+
+			// Set the socket path
+			if ( ! empty( $socket ) && ! is_numeric( $socket ) ) {
+				$cmd .= ' --protocol=socket -S ' . $socket;
+			}
+
+			// The database we're dumping
+			$cmd .= ' ' . escapeshellarg( DB_NAME );
+
+			// Quit immediately
+			$cmd .= ' --execute="quit"';
 
 			// Pipe STDERR to STDOUT
 			$cmd .= ' 2>&1';
@@ -1865,9 +1919,8 @@ namespace HM\BackUpWordPress {
 			}
 
 			if ( $stderr ) {
-				return new \WP_Error( 'connection-error', $stderr );
+				return new \WP_Error( 'mysql-cli-connect-error', __( 'Could not connect to mysql', 'backupwordpress' ) );
 			}
-
 		}
 
 	}
