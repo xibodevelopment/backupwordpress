@@ -1480,7 +1480,6 @@ namespace HM\BackUpWordPress {
 					$rule = '^' . $rule;
 				}
 
-
 			}
 
 			// Escape shell args for zip command
