@@ -166,7 +166,6 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 			$this->assertFileExists( $this->path->get_path() . '/' . $backup );
 		}
 
-
 	}
 
 	/**
