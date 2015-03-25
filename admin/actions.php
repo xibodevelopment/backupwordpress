@@ -284,7 +284,7 @@ function hmbkp_edit_schedule_submit() {
 
 	}
 
-	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
+	if ( ( 'hmbkp_monthly' === $schedule_recurrence_type ) && isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
 
 		$day_of_month = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
 
