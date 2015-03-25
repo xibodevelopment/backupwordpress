@@ -14,6 +14,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.2.1 =
+
+* Important bug fixes. Please upgrade to this version to avoid incomplete or broken backups.
+
 = 3.1.3 =
 
   * Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
@@ -31,6 +35,14 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.2.1 / 2015-03-25
+
+* Check if shell_exec is available before running command
+* Only validate day of month if this is the schedule type
+* Make FS optional and fix the DB connect method
+* (issue-770) Exclude the folder, not the wildcard
+* (issue-751) Rename plugin
 
 ### 3.2 / 2015-03-16
 
