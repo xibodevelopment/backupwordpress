@@ -11,8 +11,7 @@ register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deacti
  * Class Plugin
  */
 final class Plugin {
-
-	const PLUGIN_VERSION = '3.2.1';
+	const PLUGIN_VERSION = '3.2.2';
 
 	/**
 	 * @var Plugin The singleton instance.
