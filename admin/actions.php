@@ -85,7 +85,6 @@ function hmbkp_request_do_backup() {
 
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
-//add_action( 'admin_post_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
 
 function hmbkp_run_schedule_async( $schedule_id ) {
 
