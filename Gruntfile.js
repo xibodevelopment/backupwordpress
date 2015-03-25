@@ -138,6 +138,27 @@ module.exports = function (grunt) {
 			}
 		},
 		replace              : {
+			pluginClassVersion: {
+				src: [
+					'classes/class-plugin.php'
+				],
+				overwrite: true,
+				replacements: [ {
+					from: /^(\s)+const PLUGIN_VERSION = '.*';$/m,
+					to: '$1const PLUGIN_VERSION = \'<%= pkg.version %>\';'
+				} ]
+			},
+			stableTag: {
+				src: [
+					'readme/readme-header.txt'
+				],
+				overwrite: true,
+				replacements: [ {
+					from: /^Stable tag: .*$/m,
+					to: 'Stable tag: <%= pkg.version %>'
+				} ]
+			},
+
 			pluginVersion: {
 				src: [
 					'backupwordpress.php'
