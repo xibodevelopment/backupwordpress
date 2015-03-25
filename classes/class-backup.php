@@ -773,7 +773,7 @@ namespace HM\BackUpWordPress {
 		public function dump_database() {
 
 			// If we cannot run mysqldump via CLI, fallback to PHP
-			if ( is_wp_error( $this->user_can_connect() ) ) {
+			if ( ! ( self::is_shell_exec_available() ) || is_wp_error( $this->user_can_connect() ) ) {
 				$this->mysqldump_fallback();
 			} else {
 				// Attempt mysqldump command
