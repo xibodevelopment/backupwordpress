@@ -14,6 +14,7 @@
     "unused": true,
 
     "browser": true,
+    "devel": true,
 
     "globals": {
         "_": false,
