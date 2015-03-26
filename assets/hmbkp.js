@@ -113,7 +113,7 @@ jQuery(document).ready(function ( $ ) {
     $( document ).on( 'click', '.hmbkp-thickbox-close', function ( e ) {
 
         e.preventDefault();
-        tb_remove();
+        window.parent.tb_remove();
 
     } );
 
