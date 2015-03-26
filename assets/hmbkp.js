@@ -9,7 +9,7 @@ jQuery(document).ready(function ( $ ) {
 
         $( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function () {
             hmbkpToggleScheduleFields( $( this ).val() );
-        });
+        } );
 
     }
 
@@ -38,7 +38,7 @@ jQuery(document).ready(function ( $ ) {
             e.preventDefault();
         }
 
-    });
+    } );
 
     // Test the cron response using ajax
     $.post( ajaxurl, {'nonce': hmbkp.nonce, 'action': 'hmbkp_cron_test'},
@@ -69,7 +69,7 @@ jQuery(document).ready(function ( $ ) {
 
         e.preventDefault();
 
-    });
+    } );
 
     // Send the schedule id with the heartbeat
     $( document ).on( 'heartbeat-send', function ( e, data ) {
@@ -107,7 +107,7 @@ jQuery(document).ready(function ( $ ) {
             }
         }
 
-    });
+    } );
 
     // Closing ThickBox Modal Window 
     $( document ).on( 'click', '.hmbkp-thickbox-close', function ( e ) {
@@ -117,7 +117,7 @@ jQuery(document).ready(function ( $ ) {
 
     } );
 
-});
+} );
 
 function hmbkpToggleScheduleFields( recurrence ) {
 
@@ -208,6 +208,6 @@ function hmbkpCatchResponseAndOfferToEmail( data ) {
             }
         );
 
-    });
+    } );
 
 }
