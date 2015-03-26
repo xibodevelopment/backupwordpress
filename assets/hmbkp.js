@@ -133,9 +133,10 @@ function hmbkpToggleScheduleFields( recurrence ) {
             settingFields.hide();
             break;
 
-	    case 'hmbkp_hourly' :
-	        settingFields.hide();
-		    break;
+        case 'hmbkp_hourly' :
+            settingFields.hide();
+            break;
+
         case 'hmbkp_daily' :
             settingFields.hide();
             scheduleSettingFields.show();
