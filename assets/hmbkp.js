@@ -109,6 +109,14 @@ jQuery(document).ready(function ( $ ) {
 
     });
 
+    // Closing ThickBox Modal Window 
+    $( document ).on( 'click', '.hmbkp-colorbox-close', function ( e ) {
+
+        e.preventDefault();
+        tb_remove();
+
+    } );
+
 });
 
 function hmbkpToggleScheduleFields( recurrence ) {
