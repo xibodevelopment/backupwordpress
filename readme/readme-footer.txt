@@ -36,6 +36,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+### 3.2.2 / 2015-03-25
+
+* Fixes error in manual backups, caused by incorrect plugin version number in class, which is used for the JS script version.
+
 ### 3.2.1 / 2015-03-25
 
 * Check if shell_exec is available before running command
