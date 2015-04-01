@@ -1205,11 +1205,13 @@ namespace HM\BackUpWordPress {
 		}
 
 		/**
-		 * Return an array of all files in the filesystem
+		 * Return an array of all files in the filesystem.
 		 *
-		 * @return \RecursiveIteratorIterator
+		 * @param bool $ignore_default_exclude_rules If true then will return all files under root. Otherwise returns all files except those matching default exclude rules.
+		 *
+		 * @return array
 		 */
-		public function get_files() {
+		public function get_files( $ignore_default_exclude_rules = false ) {
 
 			$found = array();
 
@@ -1222,8 +1224,11 @@ namespace HM\BackUpWordPress {
 			$finder->ignoreDotFiles( false );
 			$finder->ignoreUnreadableDirs();
 
-			foreach ( $this->default_excludes() as $exclude ) {
-				$finder->notPath( $exclude );
+			if ( ! $ignore_default_exclude_rules ) {
+				// Skips folders/files that match default exclude patterns
+				foreach ( $this->default_excludes() as $exclude ) {
+					$finder->notPath( $exclude );
+				}
 			}
 
 			foreach ( $finder->in( $this->get_root() ) as $entry ) {
@@ -1249,7 +1254,7 @@ namespace HM\BackUpWordPress {
 
 			$excludes = $this->exclude_string( 'regex' );
 
-			foreach ( $this->get_files() as $file ) {
+			foreach ( $this->get_files( true ) as $file ) {
 
 				// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
 				if ( method_exists( $file, 'isDot' ) && $file->isDot() ) {
@@ -1289,7 +1294,7 @@ namespace HM\BackUpWordPress {
 
 			$excludes = $this->exclude_string( 'regex' );
 
-			foreach ( $this->get_files() as $file ) {
+			foreach ( $this->get_files( true ) as $file ) {
 
 				// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
 				if ( method_exists( $file, 'isDot' ) && $file->isDot() ) {
@@ -1325,7 +1330,7 @@ namespace HM\BackUpWordPress {
 
 			$this->unreadable_files = array();
 
-			foreach ( $this->get_files() as $file ) {
+			foreach ( $this->get_files( true ) as $file ) {
 
 				// Skip dot files, they should only exist on versions of PHP between 5.2.11 -> 5.3
 				if ( method_exists( $file, 'isDot' ) && $file->isDot() ) {
