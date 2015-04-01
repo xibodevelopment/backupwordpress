@@ -36,6 +36,12 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+### 3.2.3 / 2015-04-01
+
+* Fixes issue where files where 'cache' files were excluded by default.
+* Updates brazilian portuguese translations.
+* Fixes the issue with the 'no thanks' button in the Support modal and misc JS improvements. props SiamKreative.
+
 ### 3.2.2 / 2015-03-25
 
 * Fixes error in manual backups, caused by incorrect plugin version number in class, which is used for the JS script version.
