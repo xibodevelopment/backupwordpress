@@ -169,7 +169,6 @@ namespace HM\BackUpWordPress {
 			'backwpup-*',
 			'-backups',
 			'updraft',
-			'backups',
 			'wp-snapshots',
 			'backupbuddy_backups',
 			'pb_backupbuddy',
