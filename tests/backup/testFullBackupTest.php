@@ -25,7 +25,6 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 	public function setUp() {
 
 		$this->backup = new HM\BackUpWordPress\Backup();
-		$this->backup->set_excludes( '.git/' );
 
 		if ( defined( 'HMBKP_PATH' ) ) {
 			$this->markTestSkipped( 'Skipped because of defines' );
