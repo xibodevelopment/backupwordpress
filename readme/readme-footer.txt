@@ -36,6 +36,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+### 3.2.4 / 2015-04-01
+
+* Fixes default exclude pattern that was too greedy.
+
 ### 3.2.3 / 2015-04-01
 
 * Fixes issue where files where 'cache' files were excluded by default.
