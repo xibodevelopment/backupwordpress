@@ -120,7 +120,8 @@ module.exports = function (grunt) {
 							'!**/bin/**',
 							'!**/build/docs/**',
 							'!**/readme/**',
-							'!**{readme,CONTRIBUTING}.md**'
+							'!**{readme,CONTRIBUTING}.md**',
+							'!**/vendor/symfony/finder/Symfony/Component/Finder/Tests/**',
 						],
 						dest: 'build'
 					}
