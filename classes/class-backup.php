@@ -255,6 +255,10 @@ namespace HM\BackUpWordPress {
 		 */
 		public static function get_home_path() {
 
+			if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
+				return self::conform_dir( HMBKP_ROOT );
+			}
+
 			$home_url = home_url();
 			$site_url = site_url();
 
@@ -311,10 +315,6 @@ namespace HM\BackUpWordPress {
 			set_error_handler( array( $this, 'error_handler' ) );
 
 			// Some properties can be overridden with defines
-			if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
-				$this->set_root( HMBKP_ROOT );
-			}
-
 			if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE ) {
 				$this->set_excludes( HMBKP_EXCLUDE, true );
 			}
