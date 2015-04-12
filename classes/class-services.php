@@ -76,7 +76,6 @@ class Services {
 	 * @return bool|WP_Error
 	 */
 	public static function register( $filepath, $classname ) {
-
 		if ( ! file_exists( $filepath ) ) {
 			return new \WP_Error( 'hmbkp_invalid_path_error', sprintf( __( 'Argument 1 for %s must be a valid filepath', 'backupwordpress' ), __METHOD__ ) );
 		}
@@ -112,7 +111,7 @@ class Services {
 	private static function instantiate( $classname ) {
 
 		if ( ! class_exists( $classname ) ) {
-			return new \WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class', 'backupwordpress' ) ), __METHOD__ );
+			return new \WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		/**
