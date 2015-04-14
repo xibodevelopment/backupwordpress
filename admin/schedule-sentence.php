@@ -95,7 +95,9 @@ $email_msg = $services = '';
 
 foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $file => $service ) {
 
-	if ( 'Email' === $service->name ) {
+	if ( is_wp_error( $service ) ) {
+		$email_msg = $service->get_error_message();
+	}  elseif ( 'Email' === $service->name ) {
 		$email_msg = wp_kses_post( $service->display() );
 
 	} elseif ( $service->is_service_active() ) {

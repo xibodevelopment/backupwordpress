@@ -898,6 +898,9 @@ class Scheduled_Backup {
 		// Pass the actions to all the services
 		// Todo should be decoupled into the service class
 		foreach ( Services::get_services( $this ) as $service ) {
+			if ( is_wp_error( $service ) ) {
+				return $service;
+			}
 			$service->action( $action, $backup );
 		}
 
