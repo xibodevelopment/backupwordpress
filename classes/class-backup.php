@@ -173,6 +173,7 @@ namespace HM\BackUpWordPress {
 			'backup-db',
 			'Envato-backups',
 			'managewp',
+			'backupwordpress-*-backups'
 		);
 
 		/**
