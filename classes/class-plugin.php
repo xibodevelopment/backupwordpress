@@ -2,11 +2,6 @@
 
 namespace HM\BackUpWordPress;
 
-require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
-
-register_activation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deactivate' ) );
-
 /**
  * Class Plugin
  */
