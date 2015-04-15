@@ -42,6 +42,11 @@ if ( version_compare( phpversion(), '5.3', '>=' ) ) {
 		define( 'HMBKP_BASENAME', plugin_basename( __FILE__ ) );
 	}
 
+	require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
+
+	register_activation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'activate' ) );
+	register_deactivation_hook( __FILE__, array( 'HM\BackUpWordPress\Setup', 'deactivate' ) );
+
 	require_once( HMBKP_PLUGIN_PATH . 'classes/class-plugin.php' );
 
 } else {
