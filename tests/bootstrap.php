@@ -30,6 +30,10 @@ function _manually_load_plugin() {
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
+if ( ! file_exists( '/srv/www/wordpress-develop.dev/src/wp-content/plugins/backupwordpress' ) ) {
+	symlink( dirname( __DIR__ ) , '/srv/www/wordpress-develop.dev/src/wp-content/plugins/backupwordpress' );
+}
+
 require $test_root . '/includes/bootstrap.php';
 
 require_once dirname( __FILE__ ) . '/class-wp-test-hm-backup-testcase.php';
