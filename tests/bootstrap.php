@@ -37,3 +37,15 @@ if ( ! file_exists( '/srv/www/wordpress-develop.dev/src/wp-content/plugins/backu
 require $test_root . '/includes/bootstrap.php';
 
 require_once dirname( __FILE__ ) . '/class-wp-test-hm-backup-testcase.php';
+
+/**
+ * Dumps the contents of param to the CLI
+ *
+ * @param $to_inspect
+ */
+function hmbkp_var_dump( $to_inspect ) {
+	ob_start();
+	var_dump( $to_inspect );
+	$display = ob_get_clean();
+	fwrite( STDERR, $display );
+}
