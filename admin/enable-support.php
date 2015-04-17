@@ -12,7 +12,7 @@
 
 		<thead>
 			<tr>
-				<th scope="col" colspan="2"><?php echo ucwords( $group ); ?></th>
+				<th scope="col" colspan="2"><?php echo esc_html( ucwords( $group ) ); ?></th>
 			</tr>
 		</thead>
 

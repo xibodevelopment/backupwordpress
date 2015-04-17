@@ -19,7 +19,7 @@ hmbkp_clear_settings_errors();
 
 ?>
 
-<form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
+<form method="post" action="<?php echo esc_url( self_admin_url( 'admin-post.php' ) ); ?>">
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
 	<input type="hidden" name="action" value="hmbkp_edit_schedule_submit" />
@@ -171,7 +171,7 @@ hmbkp_clear_settings_errors();
 						<?php printf( __( 'Past this limit older backups will be deleted automatically.', 'backupwordpress' ) ); ?>
 
 						<?php if ( $schedule->is_site_size_cached() ) {
-							printf( __( 'This schedule will store a maximum of %s of backups.', 'backupwordpress' ), '<code>' . size_format( $schedule->get_site_size() * $schedule->get_max_backups() ) . '</code>' );
+							printf( __( 'This schedule will store a maximum of %s of backups.', 'backupwordpress' ), '<code>' . esc_html( size_format( $schedule->get_site_size() * $schedule->get_max_backups() ) ) . '</code>' );
 						} ?>
 
 					</p>
