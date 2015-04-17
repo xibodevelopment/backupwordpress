@@ -125,7 +125,7 @@
 
 						foreach ( $parents as $directory_basename ) { ?>
 
-							<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
+							<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
 							<code>/</code>
 
 						<?php } ?>
