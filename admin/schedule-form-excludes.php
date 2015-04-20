@@ -125,7 +125,7 @@
 
 						foreach ( $parents as $directory_basename ) { ?>
 
-							<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
+							<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
 							<code>/</code>
 
 						<?php } ?>
@@ -165,7 +165,7 @@
 								<?php echo esc_html( $size ); ?>
 
 								<a class="dashicons dashicons-update"
-								   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  $schedule->backup->get_root() ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+								   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( $schedule->backup->get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
 
 							</code>
 
@@ -249,7 +249,7 @@
 						<?php } elseif ( $file->isDir() ) { ?>
 
 							<code title="<?php echo esc_attr( $file->getRealPath() ); ?>"><a
-									href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', $file->getPathname() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></a></code>
+									href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( $file->getPathname() ) ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></a></code>
 
 						<?php } ?>
 
@@ -281,7 +281,7 @@
 
 										<a title="<?php _e( 'Recalculate the size of this directory', 'backupwordpress' ); ?>"
 										   class="dashicons dashicons-update"
-										   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', $file->getPathname() ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+										   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( $file->getPathname() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
 
 									<?php } ?>
 
@@ -342,7 +342,7 @@
 							<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
 								'hmbkp_schedule_id' => $schedule->get_id(),
 								'action' => 'hmbkp_add_exclude_rule',
-								'hmbkp_exclude_pathname' => $exclude_path
+								'hmbkp_exclude_pathname' => urlencode( $exclude_path )
 							), admin_url( 'admin-post.php' ) ), 'hmbkp-add-exclude-rule', 'hmbkp-add-exclude-rule-nonce' ) ); ?>"
 							   class="button-secondary"><?php _e( 'Exclude &rarr;', 'backupwordpress' ); ?></a>
 
