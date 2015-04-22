@@ -22,12 +22,12 @@ class Setup {
 	 */
 	public static function activate() {
 
-		// loads the translation files for the Error message in the wp_die call.
-		load_plugin_textdomain( 'backupwordpress', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
+
+		// loads the translation files for the Error message in the wp_die call.
+		load_plugin_textdomain( 'backupwordpress', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 		if ( ! self::meets_requirements() ) {
 
@@ -51,16 +51,33 @@ class Setup {
 			return;
 		}
 
+		self::delete_schedules();
+
+		self::delete_transients();
+
+	}
+
+	/**
+	 * Deletes the backup schedule database entries and WP Cron entries.
+	 */
+	public static function delete_schedules() {
+
 		// Delete Cron schedules.
 		global $wpdb;
 
 		$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
 
 		foreach ( array_map( function ( $item ) {
-				return ltrim( $item, 'hmbkp_schedule_' );
-			}, $schedules ) as $item ) {
+			return ltrim( $item, 'hmbkp_schedule_' );
+		}, $schedules ) as $item ) {
 			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
 		}
+	}
+
+	/**
+	 * Deletes the plugin's transients from the database.
+	 */
+	public static function delete_transients() {
 
 		// Delete all transients
 		$transients = array(
@@ -72,7 +89,6 @@ class Setup {
 		);
 
 		array_map( 'delete_transient', $transients );
-
 	}
 
 	/**
