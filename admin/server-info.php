@@ -2,7 +2,7 @@
 
 foreach ( HM\BackUpWordPress\Requirements::get_requirement_groups() as $group ) : ?>
 
-	<h3><?php echo ucwords( $group ); ?></h3>
+	<h3><?php echo esc_html( ucwords( $group ) ); ?></h3>
 
 	<table class="fixed widefat">
 
