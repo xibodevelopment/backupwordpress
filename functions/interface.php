@@ -97,7 +97,7 @@ function hmbkp_admin_notices() {
 
 	<?php $notices = array_filter( $notices );
 
-	if ( ! empty( array_filter( $notices ) ) ) : ?>
+	if ( ! empty( $notices ) )  : ?>
 
 		<?php foreach ( $notices as $notice_type ) : ?>
 			<?php if ( ! ( in_array( $notice_type, array( 'server_config', 'backup_errors' ) ) ) ) : ?>
