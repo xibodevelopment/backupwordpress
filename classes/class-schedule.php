@@ -505,7 +505,7 @@ class Scheduled_Backup {
 
 		// Skip missing or unreadable files
 		if ( ! file_exists( $file->getPathname() ) || ! $file->getRealpath() || ! $file->isReadable() ) {
-			return false;
+			return 0;
 		}
 
 		// If it's a file then just pass back the filesize
@@ -532,7 +532,7 @@ class Scheduled_Backup {
 
 				}
 
-				return;
+				return 0;
 
 			}
 
