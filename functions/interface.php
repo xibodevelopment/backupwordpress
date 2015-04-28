@@ -95,6 +95,22 @@ function hmbkp_admin_notices() {
 
 	<?php endif; ?>
 
+	<?php $notices = array_filter( $notices );
+
+	if ( ! empty( $notices ) )  : ?>
+
+		<?php foreach ( $notices as $notice_type ) : ?>
+			<?php if ( ! ( in_array( $notice_type, array( 'server_config', 'backup_errors' ) ) ) ) : ?>
+				<div id="hmbkp-warning" class="error fade">
+					<?php foreach ( array_unique( $notice_type ) as $msg ) : ?>
+						<p><?php echo wp_kses_data( $msg ); ?></p>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+		<?php endforeach; ?>
+
+	<?php endif; ?>
+
 	<?php echo ob_get_clean();
 
 }
