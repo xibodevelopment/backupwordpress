@@ -14,6 +14,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.2.5 =
+
+* Security fixes related to add_query_arg
+
 = 3.2.1 =
 
 * Important bug fixes. Please upgrade to this version to avoid incomplete or broken backups.
@@ -35,6 +39,26 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+## 3.2.5 / 2015-04-29
+
+* Fixes an issue when evaluating expression with empty
+* Fixes a fatal error on PHP 5.3
+* Displays other notices
+* Updates stable tag
+* Adds some escaping and sanitizing
+* Defines plugins dir for different environments
+* Adds tests for activation and deactivation hooks
+* Adds a debugging function for tests
+* Symlinks plugin into tests dir
+* Splits out deactivation code into separate functions
+* Fixes activation and deactivation hooks not being fired
+* Exclude backups folder from size calculation
+* Fixes a misplaced parenthesis
+* Fixes how error messages are bubbled up
+* get home path should return defined value
+* Removes redundant exclude statement as CVS folders are excluded by default
+* Adds a flag parameter to allow get_files to return all files including default excludes
 
 ### 3.2.4 / 2015-04-01
 
