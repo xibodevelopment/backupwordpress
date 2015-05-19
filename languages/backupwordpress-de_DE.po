@@ -2,81 +2,85 @@
 # This file is distributed under the same license as the 2.x package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2013-10-11 13:43:28+0000\n"
+"PO-Revision-Date: 2015-05-18 22:03+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/0.1\n"
+"X-Generator: Poedit 1.7.6\n"
 "Project-Id-Version: 2.x\n"
+"POT-Creation-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
 
 #: ../backupwordpress.php:119
 msgid "BackUpWordPress requires PHP version %s or greater."
-msgstr ""
+msgstr "BackUpWordPress benötigt die PHP-Version %s oder neuer."
 
 #: ../admin/backups.php:100
 msgid "This is where your backups will appear once you have some."
-msgstr ""
+msgstr "Hier erscheinen deine Backups, sobald sie erstellt wurden."
 
 #: ../admin/backups.php:120
 msgid "% Backups Completed"
-msgstr ""
+msgstr "% Backups durchgeführt"
 
 #: ../admin/backups.php:122
 msgid "No Backups Completed"
-msgstr ""
+msgstr "Keine Backups durchgeführt"
 
 #: ../admin/backups.php:124
 msgid "1 Backup Completed"
-msgstr ""
+msgstr "1 Backup durchgeführt"
 
 #: ../admin/enable-support.php:3
 msgid "Enable BackUpWordPress Support"
-msgstr ""
+msgstr "BackUpWordPress-Support aktivieren"
 
 #: ../admin/enable-support.php:5
 msgid "BackUpWordPress uses %s to provide support. In addition to allowing you to send and receive messages we also send the following server information along with your requests:"
-msgstr ""
+msgstr "BackUpWordPress benutzt %s, um Support bereitzustellen. Neben der Möglichkeit, Nachrichten zu senden und zu empfangen, werden auch folgende Serverinformationen bei der Kommunikation übertragen:"
 
 #: ../admin/enable-support.php:58
 msgid "You can disable support in the future by deactivating BackUpWordPress."
-msgstr ""
+msgstr "Support kann ab sofort deaktiviert werden, indem BackUpWordPress deaktiviert wird."
 
 #: ../admin/enable-support.php:68
 msgid "No thanks"
-msgstr ""
+msgstr "Nein, danke"
 
 #: ../admin/enable-support.php:70
 msgid "Yes I want to enable support"
-msgstr ""
+msgstr "Ja, ich möchte den Support aktivieren"
 
 #: ../admin/page.php:10
 msgid "Support"
-msgstr ""
+msgstr "Support"
 
 #: ../admin/page.php:31
 msgid "If you're finding BackUpWordPress useful, please %1$s rate it on the plugin directory. %2$s"
-msgstr ""
+msgstr "Falls du BackUpWordPress nützlich findest, dann %1$s bewerte es bitte im Plugin-Verzeichnis. %2$s"
 
 #: ../admin/page.php:35
 msgid "Wish you could store your backups in a safer place? Our %1$spremium extensions%2$s enable automatic backups to Dropbox, FTP, Google Drive and more."
-msgstr ""
+msgstr "Du würdest deine Backups gern an einem sichereren Ort speichern? Unsere %1$Premium-Erweiterungen%2$s ermöglichen automatische Backups zu Dropbox, FTP, Google Drive und mehr."
 
 #: ../admin/schedule-form-excludes.php:19
 msgid "Enter new exclude rules as a comma separated list, e.g. %s"
-msgstr ""
+msgstr "Erstelle neue Ausnahmen - du kannst mehrere per Komma separieren, z.B. %s"
 
 #: ../admin/schedule-form.php:45
 msgid "Past this limit older backups will be deleted automatically. This schedule will store a maximum of %s of backups"
-msgstr ""
+msgstr "Ältere Backups werden bei Erreichen dieses Grenzwerts automatisch gelöscht. Dieser Plan wird also maximal %s Backups speichern."
 
 #: ../admin/schedule.php:78
 msgid "store only the last backup on %s"
-msgstr ""
+msgstr "nur das letzte Backup bei %s speichern"
 
 #: ../admin/schedule.php:118
 msgid "Backup my %1$s %2$s %3$s, %4$s. %5$s Send a copy of each backup to %6$s."
-msgstr ""
+msgstr "Backup von %1$s %2$s %3$s, %4$s. %5$s Eine Kopie von jedem Backup an %6$s senden."
 
 #: ../classes/class-schedule.php:239
 msgid "Argument 1 for %s must be a valid integer"
@@ -92,11 +96,11 @@ msgstr ""
 
 #: ../classes/class-schedule.php:815
 msgid "%s dpesn't exist"
-msgstr ""
+msgstr "%s nicht vorhanden"
 
 #: ../classes/class-schedule.php:819
 msgid "That backup wasn't created by this schedule"
-msgstr ""
+msgstr "Dieses Backup wurde nicht anhand dieses Plans erstellt."
 
 #: ../classes/class-services.php:252
 msgid "Argument 1 for %s must be a valid filepath"
@@ -112,11 +116,11 @@ msgstr ""
 
 #: ../functions/core.php:269
 msgid "You can only delete directories inside your WordPress installation"
-msgstr ""
+msgstr "Nur Verzeichnisse innerhalb deiner WordPress-Installation können entfernt werden."
 
 #: ../admin/actions.php:508
 msgid "Your backup completed but with the following errors / warnings, it's probably ok to ignore these."
-msgstr "Dein Backup wurde fertiggestellt, aber es traten folgende Fehler/Warnungen auf. Möglicherweise ist es in Ordnung, diese zu ignorieren."
+msgstr "Dein Backup wurde fertiggestellt, aber es traten folgende Fehler/Warnungen auf. Möglicherweise kannst du diese ignorieren."
 
 #: ../admin/actions.php:512
 msgid "Your backup failed"
@@ -128,27 +132,27 @@ msgstr "Erhalte eine E-Mail, wenn ein Backup fertiggestellt wird. Wenn das Backu
 
 #: ../classes/class-email.php:54
 msgid "The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s."
-msgstr "Die maximale Dateigröße, damit dein Backup an E-Mail-Benachrichtigungen angehängt wird. Standard ist %s."
+msgstr "Die maximale Dateigröße, mit welcher dein Backup an E-Mail-Benachrichtigungen angehängt wird. Standardmäßig %s."
 
 #: ../admin/actions.php:520
 msgid "You can email details of this error to %s so they can look into the issue."
-msgstr "Du kannst Details via E-Mail an %s senden, damit die sich das Problem ansehen können."
+msgstr "Du kannst Fehlerdetails via E-Mail an %s senden, damit diese sich das Problem ansehen können."
 
 #: ../functions/core.php:246
 msgid "Once Hourly"
-msgstr "Ein mal pro Stunde"
+msgstr "Einmal pro Stunde"
 
 #: ../functions/core.php:247
 msgid "Twice Daily"
-msgstr "Zwei mal pro Tag"
+msgstr "Zweimal pro Tag"
 
 #: ../functions/core.php:248
 msgid "Once Daily"
-msgstr "Ein mal pro Tag"
+msgstr "Einmal pro Tag"
 
 #: ../functions/core.php:249
 msgid "Once Weekly"
-msgstr "Ein mal pro Woche"
+msgstr "Einmal pro Woche"
 
 #: ../functions/core.php:250
 msgid "Once Fortnightly"
@@ -156,7 +160,7 @@ msgstr "Alle 14 Tage"
 
 #: ../functions/core.php:251
 msgid "Once Monthly"
-msgstr "Ein mal pro Monat"
+msgstr "Einmal pro Monat"
 
 #: ../admin/actions.php:524
 msgid "Email to Support"
@@ -172,7 +176,7 @@ msgstr "Hier ist die Antwort des Servers:"
 
 #: ../admin/page.php:33
 msgid "If you need help getting things working then check the FAQ by clicking on help in the top right hand corner of this page."
-msgstr "Wenn du Hilfe brauchst, die Dinge zum Laufen zu bekommen, besuche die FAQ, indem du in der rechten oberen Ecke dieser Seite auf Hilfe klickst."
+msgstr "Wenn du Hilfe brauchst, die Dinge zum Laufen zu bekommen, besuche die FAQ-Seite, indem du in der rechten oberen Ecke dieser Seite auf Hilfe klickst."
 
 #: ../classes/class-schedule.php:609 ../functions/interface.php:261
 msgid "Starting Backup"
@@ -265,7 +269,7 @@ msgstr "Wir berechnen die Größe deiner Seite&hellip;"
 
 #: ../admin/schedule.php:12
 msgid "The next backup will be on %1$s at %2$s"
-msgstr "Das nächste Backup wird ausgeführt am %1$s um %2$s."
+msgstr "Das nächste Backup wird am %1$s um %2$s durchgeführt."
 
 #: ../admin/schedule.php:37
 msgid "every 12 hours at %1$s &amp; %2$s"
@@ -373,7 +377,7 @@ msgstr "Backup fehlgeschlagen"
 
 #: ../functions/core.php:229
 msgid "By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules."
-msgstr "Standardmäßig führt BackUpWordPress ein tägliches Backup deiner Datenbank und ein wöchentliches Backup deiner Datenbank &amp; Dateien durch. Du kannst diesen Aufgabenplan selbstverständlich anpassen."
+msgstr "Standardmäßig führt BackUpWordPress ein tägliches Backup deiner Datenbank und ein wöchentliches Backup deiner Datenbank &amp; Dateien durch. Du kannst diesen Aufgabenplan anpassen."
 
 #: ../functions/interface.php:245
 msgid "Legacy"
@@ -389,7 +393,7 @@ msgstr "Das Backup-Verzeichnis kann nicht erstellt werden, weil dein %1$s-Verzei
 
 #: ../functions/core.php:229
 msgid "BackUpWordPress has setup your default schedules."
-msgstr "BackUpWordPress hat deine Standard-Pläne eingerichtet."
+msgstr "BackUpWordPress hat Standard-Pläne für dich eingerichtet."
 
 #: ../classes/class-email.php:154
 msgid "Backup of %s Failed"
@@ -397,7 +401,7 @@ msgstr "Backup von %s fehlgeschlagen"
 
 #: ../classes/class-email.php:69
 msgid "Send an email notification to %s"
-msgstr "Sende E-Mail-Benachrichtigungen an %s"
+msgstr "Sende eine E-Mail-Benachrichtigung an %s"
 
 #: ../classes/class-email.php:100
 msgid "%s isn't a valid email"
@@ -405,7 +409,7 @@ msgstr "%s ist keine gültige E-Mail-Adresse"
 
 #: ../admin/schedule.php:4
 msgid "Backups will be compressed and should be smaller than this."
-msgstr "Die Backups werden komprimiert und sollten kleiner sein."
+msgstr "Die Backups werden komprimiert und sollten kleiner sein als angegeben."
 
 #: ../classes/class-email.php:31
 msgid "Email notification"
@@ -437,7 +441,7 @@ msgstr "Diese Informationen sind für Version %1$s. Sieh dir die %2$s-Datei  fü
 
 #: ../admin/constants.php:23
 msgid "The root directory that is backed up. Defaults to %s."
-msgstr "Das Wurzelverzeichnis, das gesichert wird. Standard: %s"
+msgstr "Das Wurzelverzeichnis, das gesichert wird. Standard: %s."
 
 #: ../admin/constants.php:20
 msgid "The capability to use when calling %1$s. Defaults to %2$s."
@@ -459,10 +463,10 @@ msgstr "Abbrechen"
 msgid "The path to your %1$s executable. Will be used for the %2$s part of the back up if available."
 msgstr "Der Pfad zur ausführbaren %1$s-Datei. Wird für den %2$s-Teil des Backups genutzt, wenn verfügbar."
 
-#: ../admin/constants.php:8 ../admin/constants.php:11 ../admin/constants.php:14
-#: ../admin/constants.php:17 ../admin/constants.php:20
-#: ../admin/constants.php:23 ../admin/constants.php:26
-#: ../classes/class-email.php:54
+#: ../admin/constants.php:8 ../admin/constants.php:11
+#: ../admin/constants.php:14 ../admin/constants.php:17
+#: ../admin/constants.php:20 ../admin/constants.php:23
+#: ../admin/constants.php:26 ../classes/class-email.php:54
 msgid "e.g."
 msgstr "z.B."
 
@@ -472,7 +476,7 @@ msgstr "Du kannst jede der folgenden %2$s in deinem %3$s %1$sn, um erweiterte Ei
 
 #: ../admin/actions.php:250 ../admin/actions.php:256
 msgid "%1$s is returning a %2$s response which could mean cron jobs aren't getting fired properly. BackUpWordPress relies on wp-cron to run scheduled back ups. See the %3$s for more details."
-msgstr "%1$s gibt eine %2$s-Antwort zurück. Das könnte bedeuten, dass deine Cron-Jobs nicht richtig aufgerufen werden. BackUpWordPress benutzt wp-cron, um geplante Backups auszuführen.  Sieh dir das %3$s an für mehr Details."
+msgstr "%1$s gibt eine %2$s-Antwort zurück. Das könnte bedeuten, dass deine Cron-Jobs nicht richtig aufgerufen werden. BackUpWordPress benutzt wp-cron, um geplante Backups auszuführen. Sieh dir das %3$s für mehr Details an."
 
 #: ../functions/interface.php:78
 msgid "http://php.net/manual/en/features.safe-mode.php"
@@ -488,7 +492,7 @@ msgstr "Dein angepasstes Backup-Verzeichnis %1$s existiert nicht und kann nicht 
 
 #: ../functions/interface.php:100
 msgid "Your custom backups directory %1$s isn't writable, new backups will be saved to %2$s instead."
-msgstr "Dein angepasstes Backup-Verzeichnis %1$s ist nicht schreibbar, neue Backups werden stattdessen nach %2$s gespeichert."
+msgstr "Dein angepasstes Backup-Verzeichnis %1$s ist nicht beschreibbar, neue Backups werden stattdessen nach %2$s gespeichert."
 
 #: ../functions/interface.php:261
 msgid "cancel"
@@ -554,7 +558,7 @@ msgstr "%s passt auf keine Dateien."
 
 #: ../admin/backups.php:40
 msgid "add schedule"
-msgstr "Aufgabe hinzufügen"
+msgstr "Plan hinzufügen"
 
 #: ../admin/backups.php:71
 msgid "Size"
@@ -622,7 +626,7 @@ msgstr "Beim Übersetzen helfen"
 
 #: ../admin/page.php:27
 msgid "You need to fix the issues detailed above before BackUpWordPress can start."
-msgstr "Du musst die Probleme, die oben beschrieben werden, beheben, bevor BackUpWordPress starten kann."
+msgstr "Du musst die oben beschriebenen Probleme beheben, bevor BackUpWordPress gestartet werden kann."
 
 #: ../admin/schedule-form-excludes.php:17
 msgid "Preview"
@@ -706,4 +710,4 @@ msgstr "Backup von %s"
 
 #: ../functions/core.php:334
 msgid "This %s file ensures that other people cannot download your backup files."
-msgstr "Diese %s-Datei garantiert, dass andere Leute nicht deine Backup-Dateien herunterladen können."
+msgstr "Diese %s-Datei garantiert, dass andere Leute deine Backup-Dateien nicht herunterladen können."
