@@ -357,7 +357,7 @@ function hmbkp_translated_schedule_title( $slug, $title ) {
 
 function hmbkp_get_settings_url() {
 
-	$url = is_multisite() ? self_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG ) : self_admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
+	$url = is_multisite() ? network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG ) : admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
 
 	HM\BackUpWordPress\schedules::get_instance()->refresh_schedules();
 

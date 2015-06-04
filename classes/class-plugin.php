@@ -101,8 +101,8 @@ final class Plugin {
 
 		if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 			$prefix = is_multisite() ? 'settings_page_' : 'tools_page_';
-			$suffix = is_multisite() ? '-network' : '';
-			define( 'HMBKP_ADMIN_PAGE', $prefix . HMBKP_PLUGIN_SLUG . $suffix );
+
+			define( 'HMBKP_ADMIN_PAGE', $prefix . HMBKP_PLUGIN_SLUG );
 		}
 
 		define( 'HMBKP_SECURE_KEY', $this->generate_key() );
