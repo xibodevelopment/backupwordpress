@@ -685,6 +685,16 @@ function hmbkp_ajax_cron_test() {
 
 	}
 
+	// Skip test if Cron is disabled
+	if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
+
+		delete_option( 'hmbkp_wp_cron_test_failed' );
+
+		echo 1;
+
+		die;
+	}
+
 	// Skip the test if they are using Alternate Cron
 	if ( defined( 'ALTERNATE_WP_CRON' ) ) {
 
@@ -696,22 +706,20 @@ function hmbkp_ajax_cron_test() {
 
 	}
 
-	$url = site_url( 'wp-cron.php' );
+	$spawn = hmbkp_get_cron_spawn();
 
-	// Attempt to load wp-cron.php 3 times, if we get the same error each time then inform the user.
-	$response1 = wp_remote_head( $url, array( 'timeout' => 30 ) );
-	$response2 = wp_remote_head( $url, array( 'timeout' => 30 ) );
-	$response3 = wp_remote_head( $url, array( 'timeout' => 30 ) );
+	$code    = wp_remote_retrieve_response_code( $spawn );
+	$message = wp_remote_retrieve_response_message( $spawn );
 
-	if ( is_wp_error( $response1 ) && is_wp_error( $response2 ) && is_wp_error( $response3 ) ) {
+	if ( is_wp_error( $spawn ) ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $response1->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $spawn->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
-	} elseif ( ! in_array( 200, array_map( 'wp_remote_retrieve_response_code', array( $response1, $response2, $response3 ) ) ) ) {
+	} elseif ( 200 !== $code ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response1 ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response1 ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( $code ) . ' ' . esc_html( $message ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
@@ -728,3 +736,37 @@ function hmbkp_ajax_cron_test() {
 
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'hmbkp_ajax_cron_test' );
+
+/**
+ * Spawn a request to `wp-cron.php` and return the response.
+ *
+ * This function is designed to mimic the functionality in `spawn_cron()` with the addition of returning
+ * the result of the `wp_remote_post()` request.
+ *
+ * @return WP_Error|array The response or WP_Error on failure.
+ */
+function hmbkp_get_cron_spawn() {
+
+	global $wp_version;
+
+	$sslverify     = version_compare( $wp_version, 4.0, '<' );
+	$doing_wp_cron = sprintf( '%.22F', microtime( true ) );
+
+	$cron_request = apply_filters( 'cron_request', array(
+		'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
+		'key'  => $doing_wp_cron,
+		'args' => array(
+			'timeout'   => 3,
+			'blocking'  => true,
+			'sslverify' => apply_filters( 'https_local_ssl_verify', $sslverify )
+		)
+	) );
+
+	# Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
+	$cron_request['args']['blocking'] = true;
+
+	$result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
+
+	return $result;
+
+}
