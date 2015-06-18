@@ -49,7 +49,12 @@ function hmbkp_admin_notices() {
 
 	$current_screen = get_current_screen();
 
-	if ( ! isset( $current_screen ) || HMBKP_ADMIN_PAGE !== $current_screen->id ) {
+	if ( ! isset( $current_screen ) ) {
+		return;
+	}
+
+	$page = is_multisite() ? HMBKP_ADMIN_PAGE . '-network' : HMBKP_ADMIN_PAGE;
+	if ( $current_screen->id !== $page ) {
 		return;
 	}
 
