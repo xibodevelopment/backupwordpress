@@ -54,13 +54,13 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 			WP_CLI::line( __( 'Backup: Zipping everything up...', 'backupwordpress' ) );
 		} );
 
-		$hm_backup = new Backup();
+		$hm_backup = new HM\BackUpWordPress\Backup();
 
 		if ( ! empty( $assoc_args['destination'] ) ) {
 			Path::get_instance()->set_path( $assoc_args['destination'] );
 		}
 
-		Path::get_instance()->cleanup();
+		HM\BackUpWordPress\Path::get_instance()->cleanup();
 
 		if ( ! empty( $assoc_args['root'] ) ) {
 			$hm_backup->set_root( $assoc_args['root'] );
