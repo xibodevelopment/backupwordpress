@@ -1549,7 +1549,7 @@ namespace HM\BackUpWordPress {
 			$sql_file .= "#\n";
 			$sql_file .= "\n";
 			$sql_file .= "DROP TABLE IF EXISTS " . $this->sql_backquote( $table ) . ";\n";
-			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " DISABLE KEYS \n";
+			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " DISABLE KEYS; \n";
 
 			/* Table Structure */
 
@@ -1667,7 +1667,7 @@ namespace HM\BackUpWordPress {
 
 			// Create footer/closing comment in SQL-file
 			$sql_file .= "\n";
-			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " ENABLE KEYS \n";
+			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " ENABLE KEYS; \n";
 			$sql_file .= "#\n";
 			$sql_file .= "# End of data contents of table " . $table . "\n";
 			$sql_file .= "# --------------------------------------------------------\n";
