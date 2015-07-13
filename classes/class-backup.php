@@ -1549,7 +1549,6 @@ namespace HM\BackUpWordPress {
 			$sql_file .= "#\n";
 			$sql_file .= "\n";
 			$sql_file .= "DROP TABLE IF EXISTS " . $this->sql_backquote( $table ) . ";\n";
-			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " DISABLE KEYS; \n";
 
 			/* Table Structure */
 
@@ -1595,6 +1594,7 @@ namespace HM\BackUpWordPress {
 			$sql_file .= "\n";
 			$sql_file .= "\n";
 			$sql_file .= "#\n";
+			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " DISABLE KEYS; \n";
 			$sql_file .= "# Data contents of table " . $table . " (" . $rows_cnt . " records)\n";
 			$sql_file .= "#\n";
 
