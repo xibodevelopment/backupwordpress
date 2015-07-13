@@ -5,7 +5,7 @@ Requires at least: 3.9
 Tested up to: 4.2
 Stable tag: 3.2.6
 
-Simple automated backups of your WordPress powered website.
+Simple automated backups of your WordPress-powered website.
 
 == Description ==
 

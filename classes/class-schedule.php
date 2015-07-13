@@ -58,7 +58,7 @@ class Scheduled_Backup {
 
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) ) {
-			throw new \Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
+			throw new \Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non-empty string' );
 		}
 
 		// Store id for later
@@ -1109,7 +1109,7 @@ class Scheduled_Backup {
 
 		// Check that it's a valid filepath
 		if ( empty( $filepath ) || ! is_string( $filepath ) ) {
-			return new \WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'backupwordpress' ), __METHOD__ ) );
+			return new \WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non-empty string', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		// Make sure it exists

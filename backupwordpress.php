@@ -2,7 +2,7 @@
 /*
 Plugin Name: BackUpWordPress Backup Plugin
 Plugin URI: http://bwp.hmn.md/
-Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>. On multisite, you'll find me under the Network Settings menu.
+Description: Simple automated backups of your WordPress-powered website. Once activated, you'll find me under <strong>Tools &rarr; Backups</strong>. On multisite, you'll find me under the Network Settings menu.
 Version: 3.2.6
 Author: Human Made Limited
 Author URI: http://hmn.md/
@@ -50,5 +50,5 @@ if ( version_compare( phpversion(), '5.3', '>=' ) ) {
 	require_once( HMBKP_PLUGIN_PATH . 'classes/class-plugin.php' );
 
 } else {
-	wp_die( sprintf( __( 'BackUpWordPress will not work on this site. ( PHP Version %s is unsupported )', 'backupwordpress' ), phpversion() ), __( 'BackUpWordPress Error', 'backupwordpress' ), array( 'back_link' => true ) );
+	wp_die( sprintf( __( 'BackUpWordPress will not work on this site: PHP Version %s is unsupported.', 'backupwordpress' ), phpversion() ), __( 'BackUpWordPress Error', 'backupwordpress' ), array( 'back_link' => true ) );
 }

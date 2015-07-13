@@ -274,7 +274,7 @@ function hmbkp_edit_schedule_submit() {
 		$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
 
 		if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
-			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'backupwordpress' );
+			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid, lowercase day name', 'backupwordpress' );
 		}
 
 		else {
