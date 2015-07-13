@@ -84,7 +84,7 @@ function hmbkp_update() {
 		}
 
 		// Backup schedule
-		$legacy_schedule->set_reoccurrence( get_option( 'hmbkp_schedule_frequency', 'hmbkp_daily' ) );
+		$legacy_schedule->set_reoccurrence( get_option( 'hmbkp_schedule_frequency', 'daily' ) );
 
 		// Automatic backups disabled?
 		if ( ( defined( 'HMBKP_DISABLE_AUTOMATIC_BACKUP' ) && HMBKP_DISABLE_AUTOMATIC_BACKUP ) || get_option( 'hmbkp_disable_automatic_backup' ) ) {
@@ -122,26 +122,6 @@ function hmbkp_update() {
 		// Remove the legacy options
 		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name ) {
 			delete_option( $option_name );
-		}
-
-	}
-
-	// Update from 2.2.4
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '2.2.5', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
-
-		$schedules = HM\BackUpWordPress\Schedules::get_instance();
-
-		// Loop through all schedules and re-set the reccurrence to include hmbkp_
-		foreach ( $schedules->get_schedules() as $schedule ) {
-
-			$reoccurrence = $schedule->get_reoccurrence();
-
-			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === false ) {
-				$schedule->set_reoccurrence( 'hmbkp_' . $schedule->get_reoccurrence() );
-			}
-
-			$schedule->save();
-
 		}
 
 	}
@@ -271,6 +251,26 @@ function hmbkp_update() {
 		}
 	}
 
+	// Update from PRIOR_VERSION
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( NEXT_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+
+		$schedules = HM\BackUpWordPress\Schedules::get_instance();
+
+		// Loop through all schedules and re-set the reccurrence to include hmbkp_
+		foreach ( $schedules->get_schedules() as $schedule ) {
+
+			$reoccurrence = $schedule->get_reoccurrence();
+
+			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === 0 ) {
+				$schedule->set_reoccurrence( substr( $reoccurrence, 6 ) );
+			}
+
+			$schedule->save();
+
+		}
+
+	}
+
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HM\BackUpWordPress\Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
@@ -304,8 +304,8 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$database_daily = new HM\BackUpWordPress\Scheduled_Backup( (string) time() );
 	$database_daily->set_type( 'database' );
-	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
-	$database_daily->set_reoccurrence( 'hmbkp_daily' );
+	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
+	$database_daily->set_reoccurrence( 'daily' );
 	$database_daily->set_max_backups( 7 );
 	$database_daily->save();
 
@@ -315,8 +315,8 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$complete_weekly = new HM\BackUpWordPress\Scheduled_Backup( (string) ( time() + 1 ) );
 	$complete_weekly->set_type( 'complete' );
-	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'hmbkp_weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
-	$complete_weekly->set_reoccurrence( 'hmbkp_weekly' );
+	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
+	$complete_weekly->set_reoccurrence( 'weekly' );
 	$complete_weekly->set_max_backups( 3 );
 	$complete_weekly->save();
 
@@ -336,14 +336,18 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
  * @param $schedules
  * @return array $reccurrences
  */
-function hmbkp_cron_schedules( $schedules ) {
+function hmbkp_cron_schedules( $schedules = array() ) {
 
-	$schedules['hmbkp_hourly']      = array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'backupwordpress' ) );
-	$schedules['hmbkp_twicedaily']  = array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'backupwordpress' ) );
-	$schedules['hmbkp_daily']       = array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'backupwordpress' ) );
-	$schedules['hmbkp_weekly']      = array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'backupwordpress' ) );
-	$schedules['hmbkp_fortnightly'] = array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'backupwordpress' ) );
-	$schedules['hmbkp_monthly']     = array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'backupwordpress' ) );
+	$schedules += array(
+		'hourly'      => array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'backupwordpress' ) ),
+		'twicedaily'  => array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'backupwordpress' ) ),
+		'daily'       => array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'backupwordpress' ) ),
+		'weekly'      => array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'backupwordpress' ) ),
+		'fortnightly' => array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'backupwordpress' ) ),
+		'monthly'     => array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'backupwordpress' ) ),
+	);
+
+	apply_filters( 'hmbkp_cron_schedules', $schedules );
 
 	return $schedules;
 }
@@ -441,16 +445,7 @@ function hmbkp_is_path_accessible( $dir ) {
  * @return array
  */
 function hmbkp_get_cron_schedules() {
-
-	$schedules = wp_get_schedules();
-
-	// remove any schedule whose key is not prefixed with 'hmbkp_'
-	foreach ( $schedules as $key => $arr ) {
-		if ( ! preg_match( '/^hmbkp_/', $key ) )
-			unset( $schedules[$key] );
-	}
-
-	return $schedules;
+	return hmbkp_cron_schedules();
 }
 
 /**
@@ -505,22 +500,22 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 
 	switch ( $type ) {
 
-		case 'hmbkp_hourly' :
-		case 'hmbkp_daily' :
-		case 'hmbkp_twicedaily':
+		case 'hourly' :
+		case 'daily' :
+		case 'twicedaily':
 
 			// The next occurance of the specified time
 			$schedule_start = $hm;
 			break;
 
-		case 'hmbkp_weekly' :
-		case 'hmbkp_fortnightly' :
+		case 'weekly' :
+		case 'fortnightly' :
 
 			// The next day of the week at the specified time
 			$schedule_start = $args['day_of_week'] . ' ' . $hm;
 			break;
 
-		case 'hmbkp_monthly' :
+		case 'monthly' :
 
 			// The occurance of the time on the specified day of the month
 			$schedule_start = date( 'F', $args['now'] ) . ' ' . $args['day_of_month'] . ' ' . $hm;
