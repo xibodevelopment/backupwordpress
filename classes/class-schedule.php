@@ -690,17 +690,7 @@ class Scheduled_Backup {
 	 * @return array
 	 */
 	public static function get_cron_schedules() {
-
-		$schedules = wp_get_schedules();
-
-		// remove any schedule whose key is not prefixed with 'hmbkp_'
-		foreach ( $schedules as $key => $arr ) {
-			if ( ! preg_match( '/^hmbkp_/', $key ) ) {
-				unset( $schedules[ $key ] );
-			}
-		}
-
-		return $schedules;
+		return hmbkp_cron_schedules();
 	}
 
 	/**
