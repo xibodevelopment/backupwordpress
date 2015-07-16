@@ -128,23 +128,6 @@ function hmbkp_set_server_config_notices() {
 
 	$messages = array();
 
-	if ( ! HM\BackUpWordPress\Backup::is_shell_exec_available() ) {
-		$php_user  = '<PHP USER>';
-		$php_group = '<PHP GROUP>';
-	} else {
-		$php_user  = shell_exec( 'whoami' );
-		$groups = explode( ' ', shell_exec( 'groups' ) );
-		$php_group = reset( $groups );
-	}
-
-	if ( ! is_dir( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable, run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( hmbkp_path() ) ) . '</code>' );
-	}
-
-	if ( is_dir( hmbkp_path() ) && ! wp_is_writable( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'Your backups directory isn\'t writable, run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' );
-	}
-
 	if ( HM\BackUpWordPress\Backup::is_safe_mode_active() ) {
 		$messages[] = sprintf( __( '%1$s is running in %2$s, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst %3$s is on.', 'backupwordpress' ), '<code>PHP</code>', sprintf( '<a href="%1$s">%2$s</a>', __( 'http://php.net/manual/en/features.safe-mode.php', 'backupwordpress' ), __( 'Safe Mode', 'backupwordpress' ) ), '<code>' . __( 'Safe Mode', 'backupwordpress' ) . '</code>' );
 	}
