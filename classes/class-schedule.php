@@ -159,9 +159,7 @@ class Scheduled_Backup {
 	 */
 	public function get_name() {
 
-		$recurrence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
-
-		return ucwords( $this->get_type() ) . ' ' . $recurrence;
+		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
 
 	}
 
