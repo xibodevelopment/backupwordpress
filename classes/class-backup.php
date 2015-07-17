@@ -2,6 +2,7 @@
 
 namespace HM\BackUpWordPress {
 	use Symfony\Component\Finder\Finder;
+	use Ifsnop\Mysqldump as IMysqldump;
 
 	/**
 	 * Generic file and database backup class
@@ -774,20 +775,20 @@ namespace HM\BackUpWordPress {
 		 */
 		public function dump_database() {
 
-			// If we cannot run mysqldump via CLI, fallback to PHP
-			if ( ! ( self::is_shell_exec_available() ) || is_wp_error( $this->user_can_connect() ) ) {
-				$this->mysqldump_fallback();
-			} else {
-				// Attempt mysqldump command
-				if ( $this->get_mysqldump_command_path() ) {
-					$this->mysqldump();
-				}
-
-				if ( empty( $this->mysqldump_verified ) ) {
-					$this->mysqldump_fallback();
-				}
-			}
-
+//			// If we cannot run mysqldump via CLI, fallback to PHP
+//			if ( ! ( self::is_shell_exec_available() ) || is_wp_error( $this->user_can_connect() ) ) {
+//				$this->mysqldump_fallback();
+//			} else {
+//				// Attempt mysqldump command
+//				if ( $this->get_mysqldump_command_path() ) {
+//					$this->mysqldump();
+//				}
+//
+//				if ( empty( $this->mysqldump_verified ) ) {
+//					$this->mysqldump_fallback();
+//				}
+//			}
+			$this->mysqldump_fallback();
 			$this->do_action( 'hmbkp_mysqldump_finished' );
 
 		}
@@ -903,42 +904,14 @@ namespace HM\BackUpWordPress {
 
 			$this->do_action( 'hmbkp_mysqldump_started' );
 
-			$this->db = @mysql_pconnect( DB_HOST, DB_USER, DB_PASSWORD );
+			try {
+				$dump = new IMysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD );
 
-			if ( ! $this->db ) {
-				$this->db = mysql_connect( DB_HOST, DB_USER, DB_PASSWORD );
-			}
+				$dump->start( $this->get_database_dump_filepath() );
 
-			if ( ! $this->db ) {
-				return;
-			}
+			} catch (\Exception $e) {
 
-			mysql_select_db( DB_NAME, $this->db );
-
-			if ( function_exists( 'mysql_set_charset' ) ) {
-				mysql_set_charset( DB_CHARSET, $this->db );
-			}
-
-			// Begin new backup of MySql
-			$tables = mysql_query( 'SHOW TABLES' );
-
-			$sql_file = "# WordPress : " . get_bloginfo( 'url' ) . " MySQL database backup\n";
-			$sql_file .= "#\n";
-			$sql_file .= "# Generated: " . date( 'l j. F Y H:i T' ) . "\n";
-			$sql_file .= "# Hostname: " . DB_HOST . "\n";
-			$sql_file .= "# Database: " . $this->sql_backquote( DB_NAME ) . "\n";
-			$sql_file .= "# --------------------------------------------------------\n";
-
-			for ( $i = 0; $i < mysql_num_rows( $tables ); $i ++ ) {
-
-				$curr_table = mysql_tablename( $tables, $i );
-
-				// Create the SQL statements
-				$sql_file .= "# --------------------------------------------------------\n";
-				$sql_file .= "# Table: " . $this->sql_backquote( $curr_table ) . "\n";
-				$sql_file .= "# --------------------------------------------------------\n";
-
-				$this->make_sql( $sql_file, $curr_table );
+				return new \WP_Error( 'mysql-fallback-error', sprintf( __( 'mysqldump fallback error %s', 'backupwordpress' ), $e->getMessage() ) );
 
 			}
 
