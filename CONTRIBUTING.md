@@ -11,9 +11,17 @@ Develop on a feature branch and send a pull request to BackUpWordPress' master b
 
 Assign the pull request to Paul de Wouters: [@pdewouters](https://github.com/pdewouters).
 
+You can use Grunt to generate a copy of the plugin to test with your changes:
+npm install
+grunt copy:build
+
 ## Translations ##
 
 Please don't submit pull requests for translations. All translations are managed via http://translate.hmn.md
 Please request access via email at hello@hmn.md, mentioning "glotpress access request" in the subject line.
 
 Thank you for contributing!
+
+## Weekly dev chat ##
+
+Request to be added as a member to our Slack channel: support@hmn.md
