@@ -600,7 +600,7 @@ function hmbkp_send_error_via_email() {
 
 	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
 
-	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
+	wp_mail( 'backupwordpress@hmn.md', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
 
 	die;
 

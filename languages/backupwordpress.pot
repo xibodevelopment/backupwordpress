@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: BackUpWordPress Backup Plugin 3.2.6\n"
-"Report-Msgid-Bugs-To: support@humanmade.co.uk\n"
-"POT-Creation-Date: 2015-06-09 13:00:54+00:00\n"
+"Project-Id-Version: BackUpWordPress 3.2.6\n"
+"Report-Msgid-Bugs-To: backupwordpress@hmn.md\n"
+"POT-Creation-Date: 2015-07-18 14:46:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -334,7 +334,7 @@ msgstr ""
 msgid ""
 "Report the results to our support team for further help. To do this, either "
 "enable suport from your Admin Dashboard (recommended), or email "
-"support@hmn.md"
+"backupwordpress@hmn.md"
 msgstr ""
 
 #: admin/faq.php:52
@@ -361,7 +361,7 @@ msgid ""
 "[of] or your entire uploades folder, running a backup an if that succeeds. "
 "If so, we know it's probably a server issue. If not, report the results to "
 "our support team for further help. To do this, either enable suport from "
-"your Admin Dashboard (recommended), or email support@hmn.md"
+"your Admin Dashboard (recommended), or email backupwordpress@hmn.md"
 msgstr ""
 
 #: admin/menu.php:13 admin/menu.php:17
@@ -877,7 +877,7 @@ msgstr ""
 msgid "Argument 1 for %s must be a valid cron reoccurrence or \"manually\""
 msgstr ""
 
-#: classes/class-schedule.php:778 functions/interface.php:267
+#: classes/class-schedule.php:778 functions/interface.php:272
 msgid "Starting Backup"
 msgstr ""
 
@@ -946,7 +946,7 @@ msgstr ""
 msgid "Argument 1 for %s must be a valid class"
 msgstr ""
 
-#: classes/class-setup.php:34
+#. Plugin Name of the plugin/theme
 msgid "BackUpWordPress"
 msgstr ""
 
@@ -1002,180 +1002,176 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: functions/interface.php:68
+#: functions/interface.php:73
 msgid "BackUpWordPress detected issues with your last backup."
 msgstr ""
 
-#: functions/interface.php:70
+#: functions/interface.php:75
 msgid "Dismiss"
 msgstr ""
 
-#: functions/interface.php:136
+#: functions/interface.php:141
 msgid ""
 "The backups directory can't be created because your %1$s directory isn't "
 "writable, run %2$s or %3$s or create the folder yourself."
 msgstr ""
 
-#: functions/interface.php:140
+#: functions/interface.php:145
 msgid ""
 "Your backups directory isn't writable, run %1$s or %2$s or set the "
 "permissions yourself."
 msgstr ""
 
-#: functions/interface.php:144
+#: functions/interface.php:149
 msgid ""
 "%1$s is running in %2$s, please contact your host and ask them to disable "
 "it. BackUpWordPress may not work correctly whilst %3$s is on."
 msgstr ""
 
-#: functions/interface.php:144
+#: functions/interface.php:149
 msgid "http://php.net/manual/en/features.safe-mode.php"
 msgstr ""
 
-#: functions/interface.php:144
+#: functions/interface.php:149
 msgid "Safe Mode"
 msgstr ""
 
-#: functions/interface.php:152
+#: functions/interface.php:157
 msgid "Your custom path does not exist"
 msgstr ""
 
-#: functions/interface.php:156
+#: functions/interface.php:161
 msgid ""
 "Your custom path is unreachable due to a restriction set in your PHP "
 "configuration (open_basedir)"
 msgstr ""
 
-#: functions/interface.php:161
+#: functions/interface.php:166
 msgid ""
 "Your custom backups directory %1$s doesn't exist and can't be created, your "
 "backups will be saved to %2$s instead."
 msgstr ""
 
-#: functions/interface.php:165
+#: functions/interface.php:170
 msgid ""
 "Your custom backups directory %1$s isn't writable, new backups will be "
 "saved to %2$s instead."
 msgstr ""
 
-#: functions/interface.php:174
+#: functions/interface.php:179
 msgid "Your site root path %s isn't readable."
 msgstr ""
 
-#: functions/interface.php:236
+#: functions/interface.php:241
 msgid "Database and Files"
 msgstr ""
 
-#: functions/interface.php:240
+#: functions/interface.php:245
 msgid "Files"
 msgstr ""
 
-#: functions/interface.php:244
+#: functions/interface.php:249
 msgid "Database"
 msgstr ""
 
-#: functions/interface.php:251
+#: functions/interface.php:256
 msgid "Legacy"
 msgstr ""
 
-#: functions/interface.php:266
+#: functions/interface.php:271
 msgid "Started %s ago"
 msgstr ""
 
-#: functions/interface.php:268
+#: functions/interface.php:273
 msgid "cancel"
 msgstr ""
 
-#: functions/interface.php:316
+#: functions/interface.php:321
 msgid "No backups completed"
 msgstr ""
 
-#: functions/interface.php:327
+#: functions/interface.php:332
 msgid "Complete Hourly"
 msgstr ""
 
-#: functions/interface.php:328
+#: functions/interface.php:333
 msgid "File Hourly"
 msgstr ""
 
-#: functions/interface.php:329
+#: functions/interface.php:334
 msgid "Database Hourly"
 msgstr ""
 
-#: functions/interface.php:330
+#: functions/interface.php:335
 msgid "Complete Twicedaily"
 msgstr ""
 
-#: functions/interface.php:331
+#: functions/interface.php:336
 msgid "File Twicedaily"
 msgstr ""
 
-#: functions/interface.php:332
+#: functions/interface.php:337
 msgid "Database Twicedaily"
 msgstr ""
 
-#: functions/interface.php:333
+#: functions/interface.php:338
 msgid "Complete Daily"
 msgstr ""
 
-#: functions/interface.php:334
+#: functions/interface.php:339
 msgid "File Daily"
 msgstr ""
 
-#: functions/interface.php:335
+#: functions/interface.php:340
 msgid "Database Daily"
 msgstr ""
 
-#: functions/interface.php:336
+#: functions/interface.php:341
 msgid "Complete Weekly"
 msgstr ""
 
-#: functions/interface.php:337
+#: functions/interface.php:342
 msgid "File Weekly"
 msgstr ""
 
-#: functions/interface.php:338
+#: functions/interface.php:343
 msgid "Database Weekly"
 msgstr ""
 
-#: functions/interface.php:339
+#: functions/interface.php:344
 msgid "Complete Biweekly"
 msgstr ""
 
-#: functions/interface.php:340
+#: functions/interface.php:345
 msgid "File Biweekly"
 msgstr ""
 
-#: functions/interface.php:341
+#: functions/interface.php:346
 msgid "Database Biweekly"
 msgstr ""
 
-#: functions/interface.php:342
+#: functions/interface.php:347
 msgid "Complete Monthly"
 msgstr ""
 
-#: functions/interface.php:343
+#: functions/interface.php:348
 msgid "File Monthly"
 msgstr ""
 
-#: functions/interface.php:344
+#: functions/interface.php:349
 msgid "Database Monthly"
 msgstr ""
 
-#: functions/interface.php:345
+#: functions/interface.php:350
 msgid "Complete Manually"
 msgstr ""
 
-#: functions/interface.php:346
+#: functions/interface.php:351
 msgid "File Manually"
 msgstr ""
 
-#: functions/interface.php:347
+#: functions/interface.php:352
 msgid "Database Manually"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "BackUpWordPress Backup Plugin"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
@@ -1204,7 +1200,7 @@ msgctxt ""
 msgid "Backup my %1$s %2$s %3$s, %4$s."
 msgstr ""
 
-#: functions/interface.php:318
+#: functions/interface.php:323
 msgctxt "backups count"
 msgid "One backup completed"
 msgid_plural "%1$s backups completed"
