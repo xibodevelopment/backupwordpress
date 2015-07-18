@@ -14,7 +14,7 @@ Official website (https://bwp.hmn.md)
 ## Issue Tracking
 
 All tickets for the project are being tracked on [GitHub](https://github.com/humanmade/backupwordpress/issues). You can also take a
-look at the [recent updates](https://dev/bwp.hmn.md) for the project.
+look at the [recent updates](https://dev.bwp.hmn.md) for the project.
 
 ## Security
 
