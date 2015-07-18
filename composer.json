@@ -20,6 +20,6 @@
     },
     "require": {
         "symfony/finder": "~2.6",
-        "ifsnop/mysqldump-php": "1.*"
+        "ifsnop/mysqldump-php": "dev-master"
     }
 }
