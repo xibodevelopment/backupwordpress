@@ -706,18 +706,26 @@ function hmbkp_ajax_cron_test() {
 
 	}
 
-	$spawn = hmbkp_get_cron_spawn();
+	$spawn1 = hmbkp_get_cron_spawn();
+	$spawn2 = hmbkp_get_cron_spawn();
+	$spawn3 = hmbkp_get_cron_spawn();
 
-	$code    = wp_remote_retrieve_response_code( $spawn );
-	$message = wp_remote_retrieve_response_message( $spawn );
+	$code1    = wp_remote_retrieve_response_code( $spawn1 );
+	$message1 = wp_remote_retrieve_response_message( $spawn1 );
 
-	if ( is_wp_error( $spawn ) ) {
+	$code2    = wp_remote_retrieve_response_code( $spawn2 );
+	$message2 = wp_remote_retrieve_response_message( $spawn2 );
+
+	$code3    = wp_remote_retrieve_response_code( $spawn3 );
+	$message3 = wp_remote_retrieve_response_message( $spawn3 );
+
+	if ( is_wp_error( $spawn1 ) && is_wp_error( $spawn2 ) && is_wp_error( $spawn3 ) ) {
 
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $spawn->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
-	} elseif ( 200 !== $code ) {
+	} elseif ( ! in_array( 200, array( $code1, $code2, $code3 ) ) ) {
 
 		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( $code ) . ' ' . esc_html( $message ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
 
@@ -756,7 +764,7 @@ function hmbkp_get_cron_spawn() {
 		'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
 		'key'  => $doing_wp_cron,
 		'args' => array(
-			'timeout'   => 3,
+			'timeout'   => 15,
 			'blocking'  => true,
 			'sslverify' => apply_filters( 'https_local_ssl_verify', $sslverify )
 		)
@@ -765,7 +773,7 @@ function hmbkp_get_cron_spawn() {
 	# Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
 	$cron_request['args']['blocking'] = true;
 
-	$result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
+	$result = wp_remote_head( $cron_request['url'], $cron_request['args'] );
 
 	return $result;
 
