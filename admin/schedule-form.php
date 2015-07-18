@@ -19,7 +19,7 @@ hmbkp_clear_settings_errors();
 
 ?>
 
-<form method="post" action="<?php echo esc_url( self_admin_url( 'admin-post.php' ) ); ?>">
+<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 
 	<input type="hidden" name="hmbkp_schedule_id" value="<?php echo esc_attr( $schedule->get_id() ); ?>" />
 	<input type="hidden" name="action" value="hmbkp_edit_schedule_submit" />

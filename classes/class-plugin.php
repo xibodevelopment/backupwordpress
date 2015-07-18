@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
-	const PLUGIN_VERSION = '3.2.5';
+	const PLUGIN_VERSION = '3.2.6';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -67,7 +67,7 @@ final class Plugin {
 
 			add_action( 'admin_init', array( 'HM\BackUpWordPress\Setup', 'self_deactivate' ) );
 
-			add_action( 'admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
+			add_action( 'all_admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
 
 			return true;
 
@@ -101,6 +101,7 @@ final class Plugin {
 
 		if ( ! defined( 'HMBKP_ADMIN_PAGE' ) ) {
 			$prefix = is_multisite() ? 'settings_page_' : 'tools_page_';
+
 			define( 'HMBKP_ADMIN_PAGE', $prefix . HMBKP_PLUGIN_SLUG );
 		}
 
