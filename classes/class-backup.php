@@ -775,20 +775,20 @@ namespace HM\BackUpWordPress {
 		 */
 		public function dump_database() {
 
-//			// If we cannot run mysqldump via CLI, fallback to PHP
-//			if ( ! ( self::is_shell_exec_available() ) || is_wp_error( $this->user_can_connect() ) ) {
-//				$this->mysqldump_fallback();
-//			} else {
-//				// Attempt mysqldump command
-//				if ( $this->get_mysqldump_command_path() ) {
-//					$this->mysqldump();
-//				}
-//
-//				if ( empty( $this->mysqldump_verified ) ) {
-//					$this->mysqldump_fallback();
-//				}
-//			}
-			$this->mysqldump_fallback();
+			// If we cannot run mysqldump via CLI, fallback to PHP
+			if ( ! ( self::is_shell_exec_available() ) || is_wp_error( $this->user_can_connect() ) ) {
+				$this->mysqldump_fallback();
+			} else {
+				// Attempt mysqldump command
+				if ( $this->get_mysqldump_command_path() ) {
+					$this->mysqldump();
+				}
+
+				if ( empty( $this->mysqldump_verified ) ) {
+					$this->mysqldump_fallback();
+				}
+			}
+
 			$this->do_action( 'hmbkp_mysqldump_finished' );
 
 		}
