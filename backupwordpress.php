@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: BackUpWordPress Backup Plugin
+Plugin Name: BackUpWordPress
 Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>. On multisite, you'll find me under the Network Settings menu.
 Version: 3.2.6
