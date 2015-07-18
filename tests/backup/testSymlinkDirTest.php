@@ -106,26 +106,4 @@ class testSymlinkDirTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
-	/**
-	 * Test an unreadable file with the PclZip commands
-	 *
-	 */
-	public function testArchiveSymlinkDirWithPclZip() {
-
-		$this->backup->set_zip_command_path( false );
-
-		$this->assertFileExists( $this->symlink );
-
-		$this->backup->pcl_zip();
-		$this->assertEquals( 'pclzip', $this->backup->get_archive_method() );
-
-		$this->assertFileExists( $this->backup->get_archive_filepath() );
-
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), array( basename( $this->symlink ) ) );
-		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), 5 );
-
-		$this->assertEmpty( $this->backup->get_errors() );
-
-	}
-
 }
