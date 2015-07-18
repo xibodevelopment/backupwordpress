@@ -10,7 +10,7 @@ There are three main ways you can contribute currently:
 
 ## Developing
 
-Develop your changes a feature branch and send a pull request to BackUpWordPress' `master` branch for review.
+Develop your changes in a feature branch and send a pull request to BackUpWordPress' `master` branch for review.
 
 Assign the Pull Request to the Lead Developer: Paul de Wouters, [@pdewouters](https://github.com/pdewouters).
 
@@ -37,10 +37,10 @@ We rely on a few different kinds of tests:
 
 We want BackUpWordPress to be available in as many languages as possible.
 
-All translations are managed via http://translate.hmn.md/ please contribute there rather than by submitting new translation files here. Please request access via email at support@hmn.md, mentioning "glotpress access request" in the subject line.
+All translations are managed via http://translate.hmn.md/ please contribute there rather than by submitting new translation files here. Please request access by emailing backupwordpress@hmn.md.
 
 ## Weekly Dev Chat
 
-We have a weekly dev chat in [Slack](https://backupwordpress.slack.com) and we'd love you to join. We use the chat to run through new issues that have come in, discuss any open Pull Requests and talk through the plans and progress for the next release.
+We have a weekly dev chat in [Slack](https://backupwordpress.slack.com) and we'd love you to join. We use the chat to run through new issues that have come in, discuss any open Pull Requests and talk through the plans and progress for the next release. If you'd like to join in just drop us an email to backupwordpress@hmn.md.
 
 Thank you for contributing!
