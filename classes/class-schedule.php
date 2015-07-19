@@ -58,7 +58,7 @@ class Scheduled_Backup {
 
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) ) {
-			throw new \Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
+			throw new \Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non-empty string' );
 		}
 
 		// Store id for later
@@ -159,9 +159,7 @@ class Scheduled_Backup {
 	 */
 	public function get_name() {
 
-		$recurrence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
-
-		return ucwords( $this->get_type() ) . ' ' . $recurrence;
+		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
 
 	}
 
@@ -690,17 +688,7 @@ class Scheduled_Backup {
 	 * @return array
 	 */
 	public static function get_cron_schedules() {
-
-		$schedules = wp_get_schedules();
-
-		// remove any schedule whose key is not prefixed with 'hmbkp_'
-		foreach ( $schedules as $key => $arr ) {
-			if ( ! preg_match( '/^hmbkp_/', $key ) ) {
-				unset( $schedules[ $key ] );
-			}
-		}
-
-		return $schedules;
+		return hmbkp_cron_schedules();
 	}
 
 	/**
@@ -1119,7 +1107,7 @@ class Scheduled_Backup {
 
 		// Check that it's a valid filepath
 		if ( empty( $filepath ) || ! is_string( $filepath ) ) {
-			return new \WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'backupwordpress' ), __METHOD__ ) );
+			return new \WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non-empty string', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		// Make sure it exists
