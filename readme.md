@@ -31,7 +31,7 @@ The BackUpWordPress plugin is hosted on GitHub, if you want to help out with dev
 
 ### Translations ###
 
-We'd also love help translating the plugin into more languages, if you can help then please contact support@hmn.md or visit http://translate.hmn.md/.
+We'd also love help translating the plugin into more languages, if you can help then please contact backupwordpress@hmn.md or visit http://translate.hmn.md/.
 
 ## Installation ##
 
@@ -92,7 +92,7 @@ There are some things you can test to confirm this is the issue.
 
      * Is your site private (I.E. is it behind some kind of authentication, maintenance plugin, .htaccess) if so wp-cron won't work until you remove it, if you are and you temporarily remove the authentication, do backups start working?
 
-Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@hmn.md
+Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
 
 **How to get BackUpWordPress working in Heart Internet**
 
@@ -100,7 +100,7 @@ Report the results to our support team for further help. To do this, either enab
 
 **My backups seem to be failing?**
 
-If your backups are failing - it's commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@hmn.md
+If your backups are failing - it's commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
 
 **Further Support & Feedback**
 
@@ -108,7 +108,7 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
+You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email backupwordpress@hmn.md for further help/support.
 
 ## Screenshots ##
 
@@ -123,10 +123,6 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 
 ## Upgrade Notice ##
-
-### 3.2.6 ###
-
-* Fixes admin page slug for multisite
 
 ### 3.2.5 ###
 
@@ -154,7 +150,11 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 ## Changelog ##
 
-## 3.2.5 / 2015-04-29
+#### 3.2.6 / 2015-06-09
+
+* Fixes admin page slug for multisite
+
+#### 3.2.5 / 2015-04-29
 
 * Fixes an issue when evaluating expression with empty
 * Fixes a fatal error on PHP 5.3
@@ -174,21 +174,21 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Removes redundant exclude statement as CVS folders are excluded by default
 * Adds a flag parameter to allow get_files to return all files including default excludes
 
-### 3.2.4 / 2015-04-01
+#### 3.2.4 / 2015-04-01
 
 * Fixes default exclude pattern that was too greedy.
 
-### 3.2.3 / 2015-04-01
+#### 3.2.3 / 2015-04-01
 
 * Fixes issue where files where 'cache' files were excluded by default.
 * Updates brazilian portuguese translations.
 * Fixes the issue with the 'no thanks' button in the Support modal and misc JS improvements. props SiamKreative.
 
-### 3.2.2 / 2015-03-25
+#### 3.2.2 / 2015-03-25
 
 * Fixes error in manual backups, caused by incorrect plugin version number in class, which is used for the JS script version.
 
-### 3.2.1 / 2015-03-25
+#### 3.2.1 / 2015-03-25
 
 * Check if shell_exec is available before running command
 * Only validate day of month if this is the schedule type
@@ -196,7 +196,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * (issue-770) Exclude the folder, not the wildcard
 * (issue-751) Rename plugin
 
-### 3.2 / 2015-03-16
+#### 3.2 / 2015-03-16
 
 * (issue-698) skip mySql bug
 * Use shell_exec
@@ -269,7 +269,7 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Fixes recursive exclusion of files
 
 
-### 3.1.4 / 2015-02-24
+#### 3.1.4 / 2015-02-24
 
 * (upgrade-options) Bump version
 * strtolower is redundant
@@ -282,11 +282,11 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 * Leave bare minimum to avoid fatal error
 * remove old main plugin class
 
-### 3.1.3 / 2015-02-04
+#### 3.1.3 / 2015-02-04
 
 * Keep deprecated classes in a deprecated.php file to avoid Fatal Error in addons during upgrade.
 
-### 3.1.2 / 2015-02-03
+#### 3.1.2 / 2015-02-03
 
 * (simplify-bwp-file-timestamp) Simplify the file name timestamp
 * Fix class file name

@@ -31,7 +31,7 @@ The BackUpWordPress plugin is hosted on GitHub, if you want to help out with dev
 
 = Translations =
 
-We'd also love help translating the plugin into more languages, if you can help then please contact support@hmn.md or visit http://translate.hmn.md/.
+We'd also love help translating the plugin into more languages, if you can help then please contact backupwordpress@hmn.md or visit http://translate.hmn.md/.
 
 == Installation ==
 
@@ -92,7 +92,7 @@ There are some things you can test to confirm this is the issue.
 
      * Is your site private (I.E. is it behind some kind of authentication, maintenance plugin, .htaccess) if so wp-cron won't work until you remove it, if you are and you temporarily remove the authentication, do backups start working?
 
-Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@hmn.md
+Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
 
 **How to get BackUpWordPress working in Heart Internet**
 
@@ -100,7 +100,7 @@ The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home
 
 **My backups seem to be failing?**
 
-If your backups are failing - it's commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@hmn.md
+If your backups are failing - it's commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
 
 **Further Support & Feedback**
 
@@ -108,7 +108,7 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
+You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email backupwordpress@hmn.md for further help/support.
 
 == Screenshots ==
 
