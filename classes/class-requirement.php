@@ -499,7 +499,7 @@ class Requirement_Calculated_Size extends Requirement {
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
 			if ( $schedule->is_site_size_cached() ) {
-				$backup_sizes[ $schedule->get_id() ] = $schedule->get_formatted_site_size();
+				$backup_sizes[ $schedule->get_type() ] = $schedule->get_formatted_site_size();
 			}
 		}
 
@@ -508,7 +508,6 @@ class Requirement_Calculated_Size extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Calculated_Size', 'Site' );
 
 /**
