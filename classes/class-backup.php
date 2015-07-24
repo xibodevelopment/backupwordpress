@@ -929,16 +929,20 @@ namespace HM\BackUpWordPress {
 			$sql_file .= "# Database: " . $this->sql_backquote( DB_NAME ) . "\n";
 			$sql_file .= "# --------------------------------------------------------\n";
 
+			$this->write_sql( $sql_file );
+
 			for ( $i = 0; $i < mysql_num_rows( $tables ); $i ++ ) {
 
 				$curr_table = mysql_tablename( $tables, $i );
 
 				// Create the SQL statements
-				$sql_file .= "# --------------------------------------------------------\n";
+				$sql_file = "# --------------------------------------------------------\n";
 				$sql_file .= "# Table: " . $this->sql_backquote( $curr_table ) . "\n";
 				$sql_file .= "# --------------------------------------------------------\n";
 
-				$this->make_sql( $sql_file, $curr_table );
+				$this->write_sql( $sql_file );
+
+				$this->make_sql( $curr_table );
 
 			}
 
@@ -1536,13 +1540,12 @@ namespace HM\BackUpWordPress {
 		 * Alain Wolf, Zurich - Switzerland
 		 * Website: http://restkultur.ch/personal/wolf/scripts/db_backup/
 		 *
-		 * @param string $sql_file
 		 * @param string $table
 		 */
-		private function make_sql( $sql_file, $table ) {
+		private function make_sql( $table ) {
 
 			// Add SQL statement to drop existing table
-			$sql_file .= "\n";
+			$sql_file  = "\n";
 			$sql_file .= "\n";
 			$sql_file .= "#\n";
 			$sql_file .= "# Delete any existing table " . $this->sql_backquote( $table ) . "\n";
@@ -1594,8 +1597,11 @@ namespace HM\BackUpWordPress {
 			$sql_file .= "\n";
 			$sql_file .= "\n";
 			$sql_file .= "#\n";
+			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " DISABLE KEYS;\n";
 			$sql_file .= "# Data contents of table " . $table . " (" . $rows_cnt . " records)\n";
 			$sql_file .= "#\n";
+
+			$this->write_sql($sql_file);
 
 			$field_set = $field_num = array();
 
@@ -1614,17 +1620,18 @@ namespace HM\BackUpWordPress {
 			}
 
 			// Sets the scheme
-			$entries     = 'INSERT INTO ' . $this->sql_backquote( $table ) . ' VALUES (';
-			$search      = array( '\x00', '\x0a', '\x0d', '\x1a' ); //\x08\\x09, not required
+			$sql_insert_into_x_values = "\nINSERT INTO " . $this->sql_backquote( $table ) . ' VALUES ';
+			$search	     = array( '\x00', '\x0a', '\x0d', '\x1a' ); //\x08\\x09, not required
 			$replace     = array( '\0', '\n', '\r', '\Z' );
 			$current_row = 0;
 			$batch_write = 0;
 
-			$values = array();
-
+			// insert into x (a,b,c) values ('d','e','f'), ('g','h','i'), ( .... ), ( .... ) ... 
+			$extended_values = array(); // store extended insert values in here.
 			while ( $row = mysql_fetch_row( $result ) ) {
 
 				$current_row ++;
+				$values = array();
 
 				// build the statement
 				for ( $j = 0; $j < $fields_cnt; $j ++ ) {
@@ -1647,26 +1654,27 @@ namespace HM\BackUpWordPress {
 
 				}
 
-				$sql_file .= " \n" . $entries . implode( ', ', $values ) . ") ;";
+				$extended_values[] = " ( " . implode( ', ', $values ) . ") ";
 
 				// write the rows in batches of 100
-				if ( $batch_write === 100 ) {
-					$batch_write = 0;
-					$this->write_sql( $sql_file );
-					$sql_file = '';
+				if ( $current_row % 100 == 0 ) {
+					$this->write_sql( $sql_insert_into_x_values . implode( ",", $extended_values )  . ";" );
+					$extended_values = array();
 				}
-
-				$batch_write ++;
-
 				unset( $values );
+			}
 
+			// catch any left over (not batched).
+			if ( !empty( $extended_values ) ) {
+				$this->write_sql( $sql_insert_into_x_values . implode( ",", $extended_values ) . ";" );
+				unset( $extended_values );
 			}
 
 			mysql_free_result( $result );
-
 			// Create footer/closing comment in SQL-file
-			$sql_file .= "\n";
+			$sql_file = "\n";
 			$sql_file .= "#\n";
+			$sql_file .= "ALTER TABLE " . $this->sql_backquote( $table ) . " ENABLE KEYS;\n";
 			$sql_file .= "# End of data contents of table " . $table . "\n";
 			$sql_file .= "# --------------------------------------------------------\n";
 			$sql_file .= "\n";
