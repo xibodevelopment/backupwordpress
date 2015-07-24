@@ -884,3 +884,19 @@ class Requirement_Max_Exec extends Requirement {
 	}
 }
 Requirements::register( 'HM\BackUpWordPress\Requirement_Max_Exec', 'PHP' );
+
+class Requirement_PDO extends Requirement {
+
+	var $name = 'PDO';
+
+	protected function test(){
+
+		if ( class_exists( 'PDO' ) && \PDO::getAvailableDrivers() ) {
+			return implode( ', ', \PDO::getAvailableDrivers() );
+		}
+
+		return false;
+
+	}
+}
+Requirements::register( 'HM\BackUpWordPress\Requirement_PDO', 'PHP' );
