@@ -983,6 +983,8 @@ namespace HM\BackUpWordPress {
 		 */
 		public function zip() {
 
+			$warnings = array();
+
 			$this->archive_method = 'zip';
 
 			$this->do_action( 'hmbkp_archive_started' );
@@ -990,6 +992,10 @@ namespace HM\BackUpWordPress {
 			// Add the database dump to the archive
 			if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
 				$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
+
+				if ( ! empty ( $stderr ) ) {
+					$warnings[] .= sprintf( __( 'Database warnings: %s', 'backupwordpress' ), $stderr );
+				}
 			}
 
 			// Zip up $this->root
@@ -1023,10 +1029,15 @@ namespace HM\BackUpWordPress {
 
 				$stderr = shell_exec( $command );
 
+				if ( ! empty ( $stderr ) ) {
+					$warnings[] .= sprintf( __( 'Files warnings: %s', 'backupwordpress' ), $stderr );
+				}
+
 			}
 
-			if ( ! empty( $stderr ) ) {
-				$this->warning( $this->get_archive_method(), $stderr );
+			if ( ! empty( $warnings ) ) {
+				$warning_str = implode( ', ', $warnings );
+				$this->warning( $this->get_archive_method(), $warning_str );
 			}
 
 			$this->verify_archive();
