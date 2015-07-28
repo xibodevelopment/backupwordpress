@@ -40,6 +40,20 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+#### 3.2.7 / 2015-07-27
+
+* Pass schedule type instead of schedule id as context for the calculated sizes, it's more useful
+* Simply output arrays rather than trying to be too clever about it
+* Start tracking PDO availability through Intercom
+* Catch database and files shell_exec warnings
+* Test under PHP 5.6 in Travis
+* Use the new backupwordpress@hmn.md email address everywhere
+* Clarify how people request access to Slack and GlotPress
+* Rewrite our contributing guidelines to be more comprehensive
+* Add instructions to contributing.md
+* Revert plugin name as it doesn't make a diff in search results
+* Always return an integer
+
 #### 3.2.6 / 2015-06-09
 
 * Fixes admin page slug for multisite

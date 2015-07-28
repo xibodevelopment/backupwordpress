@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.2
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 
 Simple automated backups of your WordPress powered website.
 
@@ -143,6 +143,20 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+#### 3.2.7 / 2015-07-27
+
+* Pass schedule type instead of schedule id as context for the calculated sizes, it's more useful
+* Simply output arrays rather than trying to be too clever about it
+* Start tracking PDO availability through Intercom
+* Catch database and files shell_exec warnings
+* Test under PHP 5.6 in Travis
+* Use the new backupwordpress@hmn.md email address everywhere
+* Clarify how people request access to Slack and GlotPress
+* Rewrite our contributing guidelines to be more comprehensive
+* Add instructions to contributing.md
+* Revert plugin name as it doesn't make a diff in search results
+* Always return an integer
 
 #### 3.2.6 / 2015-06-09
 
