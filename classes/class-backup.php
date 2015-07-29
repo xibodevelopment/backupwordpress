@@ -898,11 +898,18 @@ namespace HM\BackUpWordPress {
 			$this->do_action( 'hmbkp_mysqldump_started' );
 
 			try {
-				$dump = new IMysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD );
+				// Get character set from constant if it is declared.
+				if ( defined( DB_CHARSET ) && DB_CHARSET ) {
+					$charset = DB_CHARSET;
+				} else {
+					$charset = 'utf8';
+				}
+				$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', array( 'default-character-set' => $charset ) );
+				$dump = new IMysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql', $dump_settings );
 
 				$dump->start( $this->get_database_dump_filepath() );
 
-			} catch (\Exception $e) {
+			} catch ( \Exception $e ) {
 
 				return new \WP_Error( 'mysql-fallback-error', sprintf( __( 'mysqldump fallback error %s', 'backupwordpress' ), $e->getMessage() ) );
 
