@@ -8,3 +8,4 @@ History.md
 vendor
 .idea
 composer.lock
+.DS_Store
