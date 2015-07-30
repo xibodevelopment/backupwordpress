@@ -328,10 +328,6 @@ class Backup {
 			$this->set_zip_command_path( HMBKP_ZIP_PATH );
 		}
 
-		if ( defined( 'HMBKP_ZIP_PATH' ) && HMBKP_ZIP_PATH === 'PclZip' && $this->skip_zip_archive = true ) {
-			$this->set_zip_command_path( false );
-		}
-
 	}
 
 	/**
