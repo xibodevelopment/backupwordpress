@@ -899,7 +899,7 @@ namespace HM\BackUpWordPress {
 
 			try {
 				// Get character set from constant if it is declared.
-				if ( defined( DB_CHARSET ) && DB_CHARSET ) {
+				if ( defined( 'DB_CHARSET' ) && DB_CHARSET ) {
 					$charset = DB_CHARSET;
 				} else {
 					$charset = 'utf8';
