@@ -945,7 +945,7 @@ class Backup {
 	 *
 	 * Attempts to use the shell zip command, if
 	 * thats not available then it falls back to
-	 * PHP ZipArchive and finally PclZip.
+	 * PHP ZipArchive.
 	 *
 	 */
 	public function archive() {
@@ -954,10 +954,11 @@ class Backup {
 		if ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'zip' === HMBKP_FORCE_ZIP_METHOD ) ) || $this->get_zip_command_path() ) {
 			$this->zip();
 		}
-
 		// If not or if the shell zip failed then use ZipArchive
-		if ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'ziparchive' === HMBKP_FORCE_ZIP_METHOD ) ) || ( empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) && empty( $this->skip_zip_archive ) ) ) {
+		elseif ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'ziparchive' === HMBKP_FORCE_ZIP_METHOD ) ) || ( empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) && empty( $this->skip_zip_archive ) ) ) {
 			$this->zip_archive();
+		} else {
+			$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
 		}
 
 		// Delete the database dump file
