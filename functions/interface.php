@@ -452,6 +452,11 @@ function hmbkp_is_restricted_custom_path() {
 	return true;
 }
 
+/**
+ * Displays the filesystem credentials request form.
+ *
+ * @return bool
+ */
 function hmbkp_print_request_filesystem_credentials_modal() {
 
 	$form_fields = array( 'save' ); // this is a list of the form field contents I want passed along between page views
