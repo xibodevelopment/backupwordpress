@@ -184,9 +184,31 @@ class Path {
 	 *
 	 * Tries all possible locations and uses the first one possible
 	 *
-	 * @return
+	 * @return void
 	 */
 	public function calculate_path() {
+
+		$paths = $this->get_possible_paths();
+
+		// Loop through possible paths, use the first one that exists/can be created and is writable
+		foreach ( $paths as $path ) {
+			if ( wp_mkdir_p( $path ) ) { // Also handles fixing perms / directory already exists
+				break;
+			}
+		}
+
+		if ( isset( $path ) ) {
+			$this->path = $path;
+		}
+
+	}
+
+	/**
+	 * Provides a list of all possible paths for the backups folder.
+	 *
+	 * @return array
+	 */
+	public function get_possible_paths() {
 
 		$paths = array();
 
@@ -206,17 +228,7 @@ class Path {
 		// If that didn't work then fallback to a new directory in uploads
 		$paths[] = $this->get_fallback_path();
 
-		// Loop through possible paths, use the first one that exists/can be created and is writable
-		foreach ( $paths as $path ) {
-			if ( wp_mkdir_p( $path ) ) { // Also handles fixing perms / directory already exists
-				break;
-			}
-		}
-
-		if ( isset( $path ) ) {
-			$this->path = $path;
-		}
-
+		return $paths;
 	}
 
 	/**
