@@ -436,3 +436,43 @@ function hmbkp_is_restricted_custom_path() {
 
 	return true;
 }
+
+function hmbkp_print_request_filesystem_credentials_modal() {
+
+	$form_fields = array( 'save' ); // this is a list of the form field contents I want passed along between page views
+	$method      = ''; // Normally you leave this an empty string and it figures it out by itself, but you can override the filesystem method here
+
+	// okay, let's see about getting credentials
+	$url = add_query_arg( array( '' => '' ), HMBKP_ADMIN_URL );
+	if ( false === ( $creds = request_filesystem_credentials( $url, $method, false, false, $form_fields ) ) ) {
+
+		// if we get here, then we don't have credentials yet,
+		// but have just produced a form for the user to fill in,
+		// so stop processing for now
+
+		return true; // stop the normal page form from displaying
+	}
+
+	// now we have some credentials, try to get the wp_filesystem running
+	if ( ! WP_Filesystem( $creds ) ) {
+		// our credentials were no good, ask the user for them again
+		request_filesystem_credentials( $url, $method, true, false, $form_fields );
+
+		return true;
+	}
+
+	$paths = \HM\BackUpWordPress\Path::get_instance()->get_possible_paths();
+
+	if ( ! empty( $paths ) ) {
+		global $wp_filesystem;
+
+		foreach ( $paths as $path ) {
+			if ( $wp_filesystem->mkdir( $path ) ) {
+				\HM\BackUpWordPress\Path::get_instance()->set_path( $path );
+				break;
+			}
+		}
+	}
+
+	return true;
+}
