@@ -3,7 +3,7 @@
 /**
  * Displays a row in the manage backups table
  *
- * @param string                 $file
+ * @param string $file
  * @param HM\BackUpWordPress\Scheduled_Backup $schedule
  */
 function hmbkp_get_backup_row( $file, HM\BackUpWordPress\Scheduled_Backup $schedule ) {
@@ -27,11 +27,21 @@ function hmbkp_get_backup_row( $file, HM\BackUpWordPress\Scheduled_Backup $sched
 
 		<td>
 
-			<?php if (  hmbkp_is_path_accessible( hmbkp_path() )  ) : ?>
-				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php _e( 'Download', 'backupwordpress' ); ?></a> |
+			<?php if ( hmbkp_is_path_accessible( hmbkp_path() ) ) : ?>
+				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
+					'hmbkp_backup_archive' => $encoded_file,
+					'hmbkp_schedule_id'    => $schedule->get_id(),
+					'action'               => 'hmbkp_request_download_backup'
+				), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>"
+				   class="download-action"><?php _e( 'Download', 'backupwordpress' ); ?></a> |
 			<?php endif; ?>
 
-			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_delete_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' ) ); ?>" class="delete-action"><?php _e( 'Delete', 'backupwordpress' ); ?></a>
+			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
+				'hmbkp_backup_archive' => $encoded_file,
+				'hmbkp_schedule_id'    => $schedule->get_id(),
+				'action'               => 'hmbkp_request_delete_backup'
+			), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' ) ); ?>"
+			   class="delete-action"><?php _e( 'Delete', 'backupwordpress' ); ?></a>
 
 		</td>
 
@@ -192,20 +202,20 @@ add_action( 'admin_init', 'hmbkp_set_server_config_notices' );
  * Hook in an change the plugin description when BackUpWordPress is activated
  *
  * @param array $plugins
+ *
  * @return array $plugins
  */
 function hmbkp_plugin_row( $plugins ) {
 
 	$menu = is_multisite() ? 'Settings' : 'Tools';
 
-	if ( isset( $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php'] ) ) {
-		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>' . $menu . ' &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( hmbkp_get_settings_url() ) . '">' . $menu . ' &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
+	if ( isset( $plugins[ HMBKP_PLUGIN_SLUG . '/backupwordpress.php' ] ) ) {
+		$plugins[ HMBKP_PLUGIN_SLUG . '/backupwordpress.php' ]['Description'] = str_replace( 'Once activated you\'ll find me under <strong>' . $menu . ' &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( hmbkp_get_settings_url() ) . '">' . $menu . ' &rarr; Backups</a></strong>', $plugins[ HMBKP_PLUGIN_SLUG . '/backupwordpress.php' ]['Description'] );
 	}
 
 	return $plugins;
 
 }
-
 add_filter( 'all_plugins', 'hmbkp_plugin_row', 10 );
 
 /**
@@ -233,8 +243,10 @@ function hmbkp_backup_errors_message() {
  * Get the human readable backup type in.
  *
  * @access public
- * @param string                 $type
+ *
+ * @param string $type
  * @param HM\BackUpWordPress\Scheduled_Backup $schedule (default: null)
+ *
  * @return string
  */
 function hmbkp_human_get_type( $type, HM\BackUpWordPress\Scheduled_Backup $schedule = null ) {
@@ -263,14 +275,17 @@ function hmbkp_human_get_type( $type, HM\BackUpWordPress\Scheduled_Backup $sched
  * Display the row of actions for a schedule
  *
  * @access public
+ *
  * @param HM\BackUpWordPress\Scheduled_Backup $schedule
+ *
  * @return void
  */
 function hmbkp_schedule_status( HM\BackUpWordPress\Scheduled_Backup $schedule, $echo = true ) {
 
 	ob_start(); ?>
 
-	<span class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'backupwordpress' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
+	<span
+		class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'backupwordpress' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
 		<?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'backupwordpress' ); ?>
 		<a href="<?php echo hmbkp_admin_action_url( 'request_cancel_backup', array( 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>"><?php _e( 'cancel', 'backupwordpress' ); ?></a>
 	</span>
@@ -381,7 +396,7 @@ function hmbkp_get_settings_url() {
  *
  * @param $error_message
  */
-function hmbkp_add_settings_error( $error_message ){
+function hmbkp_add_settings_error( $error_message ) {
 
 	$hmbkp_settings_errors = get_transient( 'hmbkp_settings_errors' );
 
@@ -408,7 +423,7 @@ function hmbkp_get_settings_errors() {
  *
  * @return bool
  */
-function hmbkp_clear_settings_errors(){
+function hmbkp_clear_settings_errors() {
 	return delete_transient( 'hmbkp_settings_errors' );
 }
 
