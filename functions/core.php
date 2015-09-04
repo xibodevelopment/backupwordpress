@@ -252,7 +252,7 @@ function hmbkp_update() {
 	}
 
 	// Update from PRIOR_VERSION
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( NEXT_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.3', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		$schedules = HM\BackUpWordPress\Schedules::get_instance();
 
