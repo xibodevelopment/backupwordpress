@@ -347,8 +347,6 @@ function hmbkp_cron_schedules( $schedules = array() ) {
 		'monthly'     => array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'backupwordpress' ) ),
 	);
 
-	apply_filters( 'hmbkp_cron_schedules', $schedules );
-
 	return $schedules;
 }
 
