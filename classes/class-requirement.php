@@ -79,7 +79,6 @@ class Requirement_Zip_Archive extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Zip_Archive', 'PHP' );
 
 /**
@@ -108,7 +107,6 @@ class Requirement_Directory_Iterator_Follow_Symlinks extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Directory_Iterator_Follow_Symlinks', 'PHP' );
 
 /**
@@ -135,7 +133,6 @@ class Requirement_Zip_Command_Path extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Zip_Command_Path', 'Server' );
 
 /**
@@ -162,7 +159,6 @@ class Requirement_Mysqldump_Command_Path extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Mysqldump_Command_Path', 'Server' );
 
 /**
@@ -189,7 +185,6 @@ class Requirement_PHP_User extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_User', 'PHP' );
 
 /**
@@ -216,7 +211,6 @@ class Requirement_PHP_Group extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Group', 'PHP' );
 
 /**
@@ -237,7 +231,6 @@ class Requirement_PHP_Version extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Version', 'PHP' );
 
 /**
@@ -266,7 +259,6 @@ class Requirement_Cron_Array extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Cron_Array', 'Site' );
 
 /**
@@ -300,7 +292,6 @@ class Requirement_Language extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Language', 'Site' );
 
 /**
@@ -321,7 +312,6 @@ class Requirement_Safe_Mode extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Safe_Mode', 'PHP' );
 
 /**
@@ -342,7 +332,6 @@ class Requirement_Shell_Exec extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Shell_Exec', 'PHP' );
 
 /**
@@ -363,7 +352,6 @@ class Requirement_PHP_Memory_Limit extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Memory_Limit', 'PHP' );
 
 /**
@@ -384,7 +372,6 @@ class Requirement_Backup_Path extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Backup_Path', 'Site' );
 
 /**
@@ -405,7 +392,6 @@ class Requirement_Backup_Path_Permissions extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Backup_Path_Permissions', 'Site' );
 
 /**
@@ -426,7 +412,6 @@ class Requirement_WP_CONTENT_DIR extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_WP_CONTENT_DIR', 'Site' );
 
 /**
@@ -447,7 +432,6 @@ class Requirement_WP_CONTENT_DIR_Permissions extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_WP_CONTENT_DIR_Permissions', 'Site' );
 
 /**
@@ -468,7 +452,6 @@ class Requirement_ABSPATH extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_ABSPATH', 'Site' );
 
 /**
@@ -493,7 +476,6 @@ class Requirement_Backup_Root_Path extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Backup_Root_Path', 'Site' );
 
 /**
@@ -517,7 +499,7 @@ class Requirement_Calculated_Size extends Requirement {
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
 			if ( $schedule->is_site_size_cached() ) {
-				$backup_sizes[ $schedule->get_id() ] = $schedule->get_formatted_site_size();
+				$backup_sizes[ $schedule->get_type() ] = $schedule->get_formatted_site_size();
 			}
 		}
 
@@ -526,7 +508,6 @@ class Requirement_Calculated_Size extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Calculated_Size', 'Site' );
 
 /**
@@ -547,7 +528,6 @@ class Requirement_WP_Cron_Test extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_WP_Cron_Test', 'Site' );
 
 /**
@@ -568,7 +548,6 @@ class Requirement_PHP_API extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_API', 'PHP' );
 
 /**
@@ -594,7 +573,6 @@ class Requirement_Server_Software extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Server_Software', 'Server' );
 
 /**
@@ -615,7 +593,6 @@ class Requirement_Server_OS extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Server_OS', 'Server' );
 
 /**
@@ -636,7 +613,6 @@ class Requirement_PHP_Disable_Functions extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Disable_Functions', 'PHP' );
 
 /**
@@ -657,7 +633,6 @@ class Requirement_PHP_Open_Basedir extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Open_Basedir', 'PHP' );
 
 /* CONSTANTS */
@@ -680,7 +655,6 @@ class Requirement_Define_HMBKP_PATH extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_PATH', 'constants' );
 
 /**
@@ -701,7 +675,6 @@ class Requirement_Define_HMBKP_ROOT extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_ROOT', 'constants' );
 
 /**
@@ -722,7 +695,6 @@ class Requirement_Define_HMBKP_MYSQLDUMP_PATH extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_MYSQLDUMP_PATH', 'constants' );
 
 /**
@@ -743,7 +715,6 @@ class Requirement_Define_HMBKP_ZIP_PATH extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_ZIP_PATH', 'constants' );
 
 /**
@@ -764,7 +735,6 @@ class Requirement_Define_HMBKP_CAPABILITY extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_CAPABILITY', 'constants' );
 
 /**
@@ -785,7 +755,6 @@ class Requirement_Define_HMBKP_EMAIL extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_EMAIL', 'constants' );
 
 /**
@@ -806,7 +775,6 @@ class Requirement_Define_HMBKP_ATTACHMENT_MAX_FILESIZE extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_ATTACHMENT_MAX_FILESIZE', 'constants' );
 
 /**
@@ -827,7 +795,6 @@ class Requirement_Define_HMBKP_EXCLUDE extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Define_HMBKP_EXCLUDE', 'constants' );
 
 class Requirement_Active_Plugins extends Requirement {
@@ -839,7 +806,6 @@ class Requirement_Active_Plugins extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Active_Plugins', 'Site' );
 
 class Requirement_Home_Url extends Requirement {
@@ -851,7 +817,6 @@ class Requirement_Home_Url extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Home_Url', 'Site' );
 
 class Requirement_Site_Url extends Requirement {
@@ -863,7 +828,6 @@ class Requirement_Site_Url extends Requirement {
 	}
 
 }
-
 Requirements::register( 'HM\BackUpWordPress\Requirement_Site_Url', 'Site' );
 
 class Requirement_Plugin_Version extends Requirement {
@@ -884,3 +848,19 @@ class Requirement_Max_Exec extends Requirement {
 	}
 }
 Requirements::register( 'HM\BackUpWordPress\Requirement_Max_Exec', 'PHP' );
+
+class Requirement_PDO extends Requirement {
+
+	var $name = 'PDO';
+
+	protected function test(){
+
+		if ( class_exists( 'PDO' ) && \PDO::getAvailableDrivers() ) {
+			return implode( ', ', \PDO::getAvailableDrivers() );
+		}
+
+		return false;
+
+	}
+}
+Requirements::register( 'HM\BackUpWordPress\Requirement_PDO', 'PHP' );

@@ -23,7 +23,7 @@ if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
 
 	<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
 
-		<a id="intercom" class="add-new-h2" href="mailto:support@hmn.md"><?php _e( 'Support', 'backupwordpress' ); ?></a>
+		<a id="intercom" class="add-new-h2" href="mailto:backupwordpress@hmn.md"><?php _e( 'Support', 'backupwordpress' ); ?></a>
 
 	<?php } else {
 

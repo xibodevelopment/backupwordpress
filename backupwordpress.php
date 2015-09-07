@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: BackUpWordPress Backup Plugin
+Plugin Name: BackUpWordPress
 Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>. On multisite, you'll find me under the Network Settings menu.
-Version: 3.2.6
+Version: 3.2.7
 Author: Human Made Limited
 Author URI: http://hmn.md/
 License: GPL-2.0+
@@ -14,7 +14,7 @@ Network: true
 */
 
 /*
-Copyright 2011 - 2014 Human Made Limited  (email : support@hmn.md)
+Copyright 2011 - 2014 Human Made Limited  (email : backupwordpress@hmn.md)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

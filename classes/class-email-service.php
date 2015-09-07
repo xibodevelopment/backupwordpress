@@ -178,7 +178,7 @@ class Email_Service extends Service {
 
 				$subject = sprintf( __( 'Backup of %s Failed', 'backupwordpress' ), $domain );
 
-				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'backupwordpress' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'backupwordpress' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'backupwordpress' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'backupwordpress' ), home_url(), $error_message, 'support@hmn.md' );
+				$message = sprintf( __( 'BackUpWordPress was unable to backup your site %1$s.', 'backupwordpress' ) . "\n\n" . __( 'Here are the errors that we\'re encountered:', 'backupwordpress' ) . "\n\n" . '%2$s' . "\n\n" . __( 'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look', 'backupwordpress' ) . "\n\n" . __( "Kind Regards,\nThe Apologetic BackUpWordPress Backup Emailing Robot", 'backupwordpress' ), home_url(), $error_message, 'backupwordpress@hmn.md' );
 
 				wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 

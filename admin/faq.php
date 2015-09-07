@@ -47,7 +47,7 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<li>' . __( 'Is your site private (I.E. is it behind some kind of authentication, maintenance plugin, .htaccess) if so wp-cron won\'t work until you remove it, if you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
 
-     '<p>' . __( 'Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@hmn.md', 'backupwordpress' ) . '</p>' .
+     '<p>' . __( 'Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) . '</p>' .
 
      '<p><strong>' . __( 'How to get BackUpWordPress working in Heart Internet', 'backupwordpress' ) . '</strong></p>' .
 
@@ -55,4 +55,4 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p><strong>' . __( 'My backups seem to be failing?', 'backupwordpress' ) . '</strong></p>' .
 
-     '<p>' . __( 'If your backups are failing - it\'s commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it\'s probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@hmn.md', 'backupwordpress' ) . '</p>';
+     '<p>' . __( 'If your backups are failing - it\'s commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it\'s probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) . '</p>';
