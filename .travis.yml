@@ -3,6 +3,7 @@ php:
 - 5.3
 - 5.4
 - 5.5
+- 5.6
 env:
   matrix:
   - WP_VERSION=latest WP_MULTISITE=0
@@ -25,7 +26,7 @@ notifications:
   slack:
     rooms:
       secure: "OQ+YgE5yv0zewZqeWjmSMW/LINl7QASrsQMJKShmCi+ZomyWh/exQTFSYKheHel6CQa7rS7TvVwws64lU2iV6DBwNYt1A2SNAqvzXIFdor3bPenqW9ErWmMCCO1ZPwTv5BSEWnVJc2ha2ybDd/uhkVfpCUjGlKBr1bR0q6WjMU4="
-      
+
 before_script:
 - composer selfupdate --quiet
 - composer install -n --prefer-dist --no-progress
