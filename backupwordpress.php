@@ -6,7 +6,7 @@ Description: Simple automated backups of your WordPress powered website. Once ac
 Version: 3.2.7
 Author: Human Made Limited
 Author URI: http://hmn.md/
-License: GPL-2.0+
+License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Text Domain: backupwordpress
 Domain Path: /languages
