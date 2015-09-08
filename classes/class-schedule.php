@@ -148,7 +148,7 @@ class Scheduled_Backup {
 		if ( isset( $this->options[ $option_name ] ) ) {
 			return $this->options[ $option_name ];
 		} else {
-			return new WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
+			return new \WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
 		}
 	}
 

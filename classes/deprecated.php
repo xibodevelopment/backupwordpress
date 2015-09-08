@@ -78,7 +78,7 @@ class HMBKP_Services {
 	private static function instantiate( $classname ) {
 
 		if ( ! class_exists( $classname ) )
-			return new WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class', 'backupwordpress' ) ), __METHOD__ );
+			return new \WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid class', 'backupwordpress' ) ), __METHOD__ );
 
 		/**
 		 * @var HMBKP_Service
