@@ -57,7 +57,7 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 		$hm_backup = new HM\BackUpWordPress\Backup();
 
 		if ( ! empty( $assoc_args['destination'] ) ) {
-			Path::get_instance()->set_path( $assoc_args['destination'] );
+			HM\BackUpWordPress\Path::get_instance()->set_path( $assoc_args['destination'] );
 		}
 
 		HM\BackUpWordPress\Path::get_instance()->cleanup();

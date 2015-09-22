@@ -19,7 +19,7 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p>' . __( 'No.', 'backupwordpress' ) . '</p>' .
 
-     '<p><strong>' . __( 'I\'m not receiving my backups by email?', 'backupwordpress' ) . '</strong></p>' .
+     '<p><strong>' . __( 'I\'m not receiving my backups by email', 'backupwordpress' ) . '</strong></p>' .
 
      '<p>' . __( 'Most servers have a filesize limit on email attachments, it\'s generally about 10mb. If your backup file is over that limit it won\'t be sent attached to the email, instead you should receive an email with a link to download the backup, if you aren\'t even receiving that then you likely have a mail issue on your server that you\'ll need to contact your host about.', 'backupwordpress' ) . '</p>' .
 
@@ -37,15 +37,15 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p>' . __( 'There are some things you can test to confirm this is the issue.', 'backupwordpress' ) . '</p>' .
 
-     '<ul><li>' . __( 'Are scheduled posts working? (They use wp-cron as well ). ', 'backupwordpress' ) . '</li>' .
+     '<ul><li>' . __( 'Are scheduled posts working? (They use wp-cron as well.)', 'backupwordpress' ) . '</li>' .
 
-     '<li>' . __( 'Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around).', 'backupwordpress' ) . '</li>' .
+     '<li>' . __( 'Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around.)', 'backupwordpress' ) . '</li>' .
 
      '<li>' . __( 'If you click manual backup does it work?', 'backupwordpress' ) . '</li>' .
 
      '<li>' . __( 'Try adding <code>define( \'ALTERNATE_WP_CRON\', true );</code> to your <code>wp-config.php</code>, do automatic backups work?', 'backupwordpress' ) . '</li>' .
 
-     '<li>' . __( 'Is your site private (I.E. is it behind some kind of authentication, maintenance plugin, .htaccess) if so wp-cron won\'t work until you remove it, if you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
+     '<li>' . __( 'Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so wp-cron won\'t work until you remove it. If you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
 
      '<p>' . __( 'Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) . '</p>' .
 
