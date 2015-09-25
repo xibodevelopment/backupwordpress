@@ -138,11 +138,11 @@ function hmbkp_set_server_config_notices() {
 	}
 
 	if ( ! is_dir( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable, run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( hmbkp_path() ) ) . '</code>' );
+		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable. Run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( hmbkp_path() ) ) . '</code>' );
 	}
 
 	if ( is_dir( hmbkp_path() ) && ! wp_is_writable( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'Your backups directory isn\'t writable, run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' );
+		$messages[] = sprintf( __( 'Your backups directory isn\'t writable. Run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' );
 	}
 
 	if ( HM\BackUpWordPress\Backup::is_safe_mode_active() ) {
@@ -332,18 +332,18 @@ function hmbkp_translated_schedule_title( $slug, $title ) {
 		'complete-hourly'      => esc_html__( 'Complete Hourly', 'backupwordpress' ),
 		'file-hourly'          => esc_html__( 'File Hourly', 'backupwordpress' ),
 		'database-hourly'      => esc_html__( 'Database Hourly', 'backupwordpress' ),
-		'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'backupwordpress' ),
+		'complete-twicedaily'  => esc_html__( 'Complete Twice Daily', 'backupwordpress' ),
 		'file-twicedaily'      => esc_html__( 'File Twicedaily', 'backupwordpress' ),
-		'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'backupwordpress' ),
+		'database-twicedaily'  => esc_html__( 'Database Twice Daily', 'backupwordpress' ),
 		'complete-daily'       => esc_html__( 'Complete Daily', 'backupwordpress' ),
 		'file-daily'           => esc_html__( 'File Daily', 'backupwordpress' ),
 		'database-daily'       => esc_html__( 'Database Daily', 'backupwordpress' ),
 		'complete-weekly'      => esc_html__( 'Complete Weekly', 'backupwordpress' ),
 		'file-weekly'          => esc_html__( 'File Weekly', 'backupwordpress' ),
 		'database-weekly'      => esc_html__( 'Database Weekly', 'backupwordpress' ),
-		'complete-fortnightly' => esc_html__( 'Complete Biweekly', 'backupwordpress' ),
-		'file-fortnightly'     => esc_html__( 'File Biweekly', 'backupwordpress' ),
-		'database-fortnightly' => esc_html__( 'Database Biweekly', 'backupwordpress' ),
+		'complete-fortnightly' => esc_html__( 'Complete Every Two Weeks', 'backupwordpress' ),
+		'file-fortnightly'     => esc_html__( 'File Every Two Weeks', 'backupwordpress' ),
+		'database-fortnightly' => esc_html__( 'Database Every Two Weeks', 'backupwordpress' ),
 		'complete-monthly'     => esc_html__( 'Complete Monthly', 'backupwordpress' ),
 		'file-monthly'         => esc_html__( 'File Monthly', 'backupwordpress' ),
 		'database-monthly'     => esc_html__( 'Database Monthly', 'backupwordpress' ),

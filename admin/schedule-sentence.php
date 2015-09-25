@@ -44,7 +44,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	case 'hmbkp_fortnightly' :
 
-		$reoccurrence = sprintf( __( 'biweekly on %1$s at %2$s', 'backupwordpress' ), '<span ' . $next_backup . '>' . $day . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
+		$reoccurrence = sprintf( __( 'every two weeks on %1$s at %2$s', 'backupwordpress' ), '<span ' . $next_backup . '>' . $day . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
 
 	break;
 

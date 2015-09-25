@@ -50,5 +50,5 @@ if ( version_compare( phpversion(), '5.3', '>=' ) ) {
 	require_once( HMBKP_PLUGIN_PATH . 'classes/class-plugin.php' );
 
 } else {
-	wp_die( sprintf( __( 'BackUpWordPress will not work on this site. ( PHP Version %s is unsupported )', 'backupwordpress' ), phpversion() ), __( 'BackUpWordPress Error', 'backupwordpress' ), array( 'back_link' => true ) );
+	wp_die( sprintf( __( 'BackUpWordPress will not work on this site: PHP Version %s is unsupported.', 'backupwordpress' ), phpversion() ), __( 'BackUpWordPress Error', 'backupwordpress' ), array( 'back_link' => true ) );
 }
