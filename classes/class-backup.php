@@ -385,7 +385,7 @@ namespace HM\BackUpWordPress {
 		public function set_archive_filename( $filename ) {
 
 			if ( empty( $filename ) || ! is_string( $filename ) ) {
-				return new \WP_Error( 'invalid_file_name', __( 'archive filename must be a non empty string', 'backupwordpress' ) );
+				return new \WP_Error( 'invalid_file_name', __( 'archive filename must be a non-empty string', 'backupwordpress' ) );
 			}
 
 			if ( pathinfo( $filename, PATHINFO_EXTENSION ) !== 'zip' ) {
@@ -430,7 +430,7 @@ namespace HM\BackUpWordPress {
 		public function set_database_dump_filename( $filename ) {
 
 			if ( empty( $filename ) || ! is_string( $filename ) ) {
-				return new \WP_Error( 'invalid_file_name', __( 'database dump filename must be a non empty string', 'backupwordpress' ) );
+				return new \WP_Error( 'invalid_file_name', __( 'database dump filename must be a non-empty string', 'backupwordpress' ) );
 			}
 
 			if ( pathinfo( $filename, PATHINFO_EXTENSION ) !== 'sql' ) {
@@ -494,7 +494,7 @@ namespace HM\BackUpWordPress {
 		public function set_existing_archive_filepath( $existing_archive_filepath ) {
 
 			if ( empty( $existing_archive_filepath ) || ! is_string( $existing_archive_filepath ) ) {
-				return new \WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non empty (string)', 'backupwordpress' ), $existing_archive_filepath ) );
+				return new \WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non-empty string', 'backupwordpress' ), $existing_archive_filepath ) );
 			}
 
 			$this->existing_archive_filepath = self::conform_dir( $existing_archive_filepath );
@@ -990,6 +990,10 @@ namespace HM\BackUpWordPress {
 			// Add the database dump to the archive
 			if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
 				$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
+
+				if ( ! empty ( $stderr ) ) {
+					$this->warning( $this->get_archive_method(), $stderr );
+				}
 			}
 
 			// Zip up $this->root
@@ -1023,10 +1027,10 @@ namespace HM\BackUpWordPress {
 
 				$stderr = shell_exec( $command );
 
-			}
+				if ( ! empty ( $stderr ) ) {
+					$this->warning( $this->get_archive_method(), $stderr );
+				}
 
-			if ( ! empty( $stderr ) ) {
-				$this->warning( $this->get_archive_method(), $stderr );
 			}
 
 			$this->verify_archive();

@@ -31,20 +31,7 @@ foreach ( HM\BackUpWordPress\Requirements::get_requirement_groups() as $group ) 
 					<td>
 						<ul>
 
-							<?php foreach ( $requirement->raw_result() as $key => $item ) : ?>
-
-								<?php if ( is_array( $item ) ) : ?>
-
-									<pre><?php var_export( $item ); ?></pre>
-
-								<?php else : ?>
-
-									<li>
-										<?php printf( __( '%1$s - %2$s' ), esc_html( $key ), esc_html( $item ) ); ?>
-									</li>
-
-								<?php endif; ?>
-							<?php endforeach; ?>
+							<pre><?php var_export( $requirement->raw_result() ); ?></pre>
 
 						</ul>
 					</td>

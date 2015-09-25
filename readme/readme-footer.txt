@@ -4,7 +4,7 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email support@hmn.md for further help/support.
+You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email backupwordpress@hmn.md for further help/support.
 
 == Screenshots ==
 
@@ -39,6 +39,20 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+#### 3.2.7 / 2015-07-27
+
+* Pass schedule type instead of schedule id as context for the calculated sizes, it's more useful
+* Simply output arrays rather than trying to be too clever about it
+* Start tracking PDO availability through Intercom
+* Catch database and files shell_exec warnings
+* Test under PHP 5.6 in Travis
+* Use the new backupwordpress@hmn.md email address everywhere
+* Clarify how people request access to Slack and GlotPress
+* Rewrite our contributing guidelines to be more comprehensive
+* Add instructions to contributing.md
+* Revert plugin name as it doesn't make a diff in search results
+* Always return an integer
 
 #### 3.2.6 / 2015-06-09
 

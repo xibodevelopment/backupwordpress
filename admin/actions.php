@@ -274,7 +274,7 @@ function hmbkp_edit_schedule_submit() {
 		$day_of_week = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_week'] );
 
 		if ( ! in_array( $day_of_week, array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) ) ) {
-			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid lowercase day name', 'backupwordpress' );
+			$errors['hmbkp_schedule_start_day_of_week'] = __( 'Day of the week must be a valid, lowercase day name', 'backupwordpress' );
 		}
 
 		else {
@@ -600,7 +600,7 @@ function hmbkp_send_error_via_email() {
 
 	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
 
-	wp_mail( 'support@humanmade.co.uk', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
+	wp_mail( 'backupwordpress@hmn.md', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
 
 	die;
 
