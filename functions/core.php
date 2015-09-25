@@ -246,7 +246,7 @@ function hmbkp_update() {
 				array_map( 'delete_transient', array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running', 'timeout_hmbkp_wp_cron_test_beacon', 'hmbkp_wp_cron_test_beacon' ) );
 
 			}
-			
+
 			restore_current_blog();
 		}
 	}
@@ -343,7 +343,7 @@ function hmbkp_cron_schedules( $schedules = array() ) {
 		'twicedaily'  => array( 'interval' => 12 * HOUR_IN_SECONDS, 'display' => __( 'Twice Daily', 'backupwordpress' ) ),
 		'daily'       => array( 'interval' => DAY_IN_SECONDS, 'display' => __( 'Once Daily', 'backupwordpress' ) ),
 		'weekly'      => array( 'interval' => WEEK_IN_SECONDS, 'display' => __( 'Once Weekly', 'backupwordpress' ) ),
-		'fortnightly' => array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Biweekly', 'backupwordpress' ) ),
+		'fortnightly' => array( 'interval' => 2 * WEEK_IN_SECONDS, 'display' => __( 'Once Every Two Weeks', 'backupwordpress' ) ),
 		'monthly'     => array( 'interval' => 30 * DAY_IN_SECONDS, 'display' => __( 'Once Monthly', 'backupwordpress' ) ),
 	);
 
