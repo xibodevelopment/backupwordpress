@@ -17,7 +17,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$files = array();
 
 		foreach( $filepaths as $filepath ) {
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', wp_normalize_path( (string) $filepath ) );
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM\BackUpWordPress\Backup::conform_dir( (string) $filepath ) );
 		}
 
 		foreach( $extracted as $fileInfo ) {
@@ -64,7 +64,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$files = array();
 
 		foreach( $filepaths as $filepath ) {
-			$filenames[] = str_ireplace( trailingslashit( $root ), '', wp_normalize_path( (string) $filepath ) );
+			$filenames[] = str_ireplace( trailingslashit( $root ), '', HM\BackUpWordPress\Backup::conform_dir( (string) $filepath ) );
 		}
 
 		foreach( $extracted as $fileInfo ) {

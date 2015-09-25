@@ -472,9 +472,9 @@ class Scheduled_Backup {
 		foreach ( $files as $file ) {
 
 			if ( $file->isReadable() ) {
-				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = $file->getSize();
+				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = $file->getSize();
 			} else {
-				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = 0;
+				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = 0;
 			}
 
 		}
@@ -559,7 +559,7 @@ class Scheduled_Backup {
 				foreach ( $directory_sizes as $path => $size ) {
 
 					// Skip excluded files if we have excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', wp_normalize_path( $path ) ) ) ) {
+					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', Backup::conform_dir( $path ) ) ) ) {
 						unset( $directory_sizes[ $path ] );
 					}
 

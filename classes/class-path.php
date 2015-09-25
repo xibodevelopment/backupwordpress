@@ -82,7 +82,7 @@ class Path {
 		// Ensure the backup directory is protected
 		$this->protect_path();
 
-		return wp_normalize_path( $this->path );
+		return Backup::conform_dir( $this->path );
 
 	}
 
