@@ -1,41 +1,52 @@
-#BackUpWordPress
-Simple automated backups of your WordPress powered website.
+<table width="100%">
+	<tr>
+		<td align="left" width="70">
+			<strong><a href="https://bwp.hmn.md/">BackUpWordPress</a></strong><br />
+			Simple automated backups of your WordPress powered website.
+		</td>
+		<td align="right" width="20%">
+			<a href="https://travis-ci.org/humanmade/backupwordpress">
+				<img src="https://travis-ci.org/humanmade/backupwordpress.svg?branch=master" alt="Build status">
+			</a>
+			<a href="https://scrutinizer-ci.com/g/humanmade/backupwordpress/">
+				<img src="https://scrutinizer-ci.com/g/humanmade/backupwordpress/badges/coverage.png?b=master" alt="Coverage via Scrutiniser" />
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			A <strong><a href="https://hmn.md/">Human Made</a></strong> project. Maintained by @pdewouters.
+		</td>
+		<td align="center">
+			<img src="https://hmn.md/content/themes/hmnmd/assets/images/hm-logo.svg" width="100" />
+		</td>
+	</tr>
+</table>
 
-BackUpWordPress is a [Human Made](https://hmn.md) project.
+BackUpWordPress is a well tested, onsite backup plugin for WordPress. It's supports sending backups to cloud services through premium extensions
 
-Official website (https://bwp.hmn.md)
+Stop using outdated practices, and start making sense.
 
-##Contributors
+## Requirements
+BackUpWordPress requires WordPress 3.9 or newer and requires PHP 5.3+ due to the use of namespaced code.
 
-@willmot, @pdewouters, @mattheu, @owaincuvelier, @joehoyle, @richardswain, @elliott-stocks, @SiamKreative, @noeltock, @aubreypwd, @thomasclausen, @FloEdelmann, @tcrsavage, @rmccue, @m-i-k-e, @michaelbell, @radinamatic, @duritong, @danielbachhuber, @waffle-iron, @joshk, @herrherrmann
+## Installation
+Just install like any other plugin
 
-**Contributing:** Contributions are more than welcome. Please see our current [contributing guidelines](https://github.com/humanmade/backupwordpress/blob/master/CONTRIBUTING.md). Thanks!
+## Contributing
+Read our [contributing.md](https://github.com/humanmade/backupwordpress/blob/master/CONTRIBUTING.md) file
 
-## Issue Tracking
-
-All tickets for the project are being tracked on [GitHub](https://github.com/humanmade/backupwordpress/issues). You can also take a
-look at the [recent updates](https://dev.bwp.hmn.md) for the project.
-
-## Security
-
-We take the security of BackUpWordPress extremely seriously. If you think you've found
-a security issue with the plugin (whether information disclosure, privilege
-escalation, or another issue), we'd appreciate responsible disclosure as soon as
-possible.
-
-To report a security issue, you can either email `backupwordpress@hmn.md`, or
-[file an issue on HackerOne](https://hackerone.com/backupwordpress/). We will attempt to give an initial
-response to security issues within 48 hours at most, however keep in mind that
-the team is distributed across various timezones, and delays may occur as we
-discuss internally.
-
-(Please note: For testing, you should install a copy of the project and
-WordPress on your own server. **Do not test on servers you do not own.**)
 
 ## License
+BackUpWordPress is licensed under the GPLv2 or later.
 
-[GPLv2+](http://www.gnu.org/licenses/gpl-2.0.html)
+## Credits
+Created by Human Made for high volume and large-scale sites. BackUpWordPress is used on over 200,000 sites worldwide.
 
-[GitHub]: https://github.com/humanmade/backupwordpress/issues
-[recent updates]: https://dev.bwp.hmn.md
-[hackerone]: https://hackerone.com/backupwordpress/
+Written and maintained by [Tom Willmot](https://github.com/willmot) & [Paul De Wouters](https://github.com/pdwouters). Thanks to all our [contributors](https://github.com/humanmade/backupwordpress/graphs/contributors).
+
+BackUpWordPress was originally developed by [wpdprx](http://profiles.wordpress.org/users/wpdprx/) before being taken over by Human Made.
+
+---
+
+Interested in joining in on the fun? [Join us, and become human!](https://hmn.md/is/hiring/)
