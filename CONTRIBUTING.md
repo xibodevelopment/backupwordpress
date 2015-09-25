@@ -7,6 +7,7 @@ There are three main ways you can contribute currently:
 - Developing
 - Testing
 - Translating
+- Security
 
 ## Developing
 
@@ -25,7 +26,7 @@ We try to follow the [WordPress Core Coding Standards](http://codex.wordpress.or
 
 ## Testing
 
-We're trying to solve a hard problem. BackUpWordPress aims to work reliably across 24% of the internet that WordPress is installed on. It needs to support the multitude of server setups, plugin and theme configurations and types of sites that WordPress itself can handle. In order to reach this goal we need to be continuously testing our changes to ensure they improve the things we intended to improve and avoid breaking things we didn't intend to break.
+We're trying to solve a hard problem. BackUpWordPress aims to work reliably across 24%+ of the internet that WordPress is installed on. It needs to support the multitude of server setups, plugin and theme configurations and types of sites that WordPress itself can handle. In order to reach this goal we need to be continuously testing our changes to ensure they improve the things we intended to improve and avoid breaking things we didn't intend to break.
 
 We rely on a few different kinds of tests:
 
@@ -38,6 +39,14 @@ We rely on a few different kinds of tests:
 We want BackUpWordPress to be available in as many languages as possible.
 
 All translations are managed via http://translate.hmn.md/ please contribute there rather than by submitting new translation files here. Please request access by emailing backupwordpress@hmn.md.
+
+## Security
+
+We take the security of BackUpWordPress extremely seriously. If you think you've found a security issue with the plugin (whether information disclosure, privilege escalation, or another issue), we'd appreciate responsible disclosure as soon as possible.
+
+To report a security issue, you can email backupwordpress@hmn.md. We will attempt to give an initial response to security issues within 48 hours at most, however keep in mind that the team is distributed across various timezones, and delays may occur as we discuss internally.
+
+(Please note: For testing, you should install a copy of the project and WordPress on your own server. Do not test on servers you do not own.)
 
 ## Weekly Dev Chat
 
