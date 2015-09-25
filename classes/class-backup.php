@@ -774,18 +774,14 @@ namespace HM\BackUpWordPress {
 		 */
 		public function dump_database() {
 
-			// If we cannot run mysqldump via CLI, fallback to PHP
-			if ( ! ( self::is_shell_exec_available() ) || is_wp_error( $this->user_can_connect() ) ) {
-				$this->mysqldump_fallback();
-			} else {
-				// Attempt mysqldump command
-				if ( $this->get_mysqldump_command_path() ) {
-					$this->mysqldump();
-				}
+			// Attempt to use native mysqldump
+			if ( self::is_shell_exec_available() && $this->get_mysqldump_command_path() && ! is_wp_error( $this->user_can_connect() ) ) {
+				$this->mysqldump();
+			}
 
-				if ( empty( $this->mysqldump_verified ) ) {
-					$this->mysqldump_fallback();
-				}
+			// If we cannot run mysqldump via CLI, fallback to PHP
+			if ( empty( $this->mysqldump_verified ) ) {
+				$this->mysqldump_fallback();
 			}
 
 			$this->do_action( 'hmbkp_mysqldump_finished' );
@@ -881,7 +877,7 @@ namespace HM\BackUpWordPress {
 			// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
 			if ( 'Warning: Using a password on the command line interface can be insecure.' === trim( $stderr ) ) {
 				$stderr = '';
-				}
+			}
 
 			if ( $stderr ) {
 				$this->error( $this->get_mysqldump_method(), $stderr );

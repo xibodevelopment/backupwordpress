@@ -99,10 +99,8 @@ foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $file => $se
 		$email_msg = $service->get_error_message();
 	}  elseif ( 'Email' === $service->name ) {
 		$email_msg = wp_kses_post( $service->display() );
-
 	} elseif ( $service->is_service_active() ) {
 		$services[] = esc_html( $service->display() );
-
 	}
 
 }
