@@ -3,7 +3,7 @@ jQuery(document).ready(function ( $ ) {
     // Don't ever cache ajax requests
     $.ajaxSetup( {'cache': false} );
 
-    if ( $( 'select#hmbkp_schedule_recurrence_type' ).size() ) {
+    if ( $( 'select#hmbkp_schedule_recurrence_type' ).length ) {
 
         hmbkpToggleScheduleFields( $( 'select#hmbkp_schedule_recurrence_type' ).val() );
 
@@ -76,8 +76,7 @@ jQuery(document).ready(function ( $ ) {
 
         data.hmbkp_schedule_id = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
-        if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).size() ) {
-
+        if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).length ) {
             data.hmbkp_is_in_progress = true;
         } else {
             data.hmbkp_client_request = 'site_size';
@@ -89,7 +88,7 @@ jQuery(document).ready(function ( $ ) {
     $( document ).on( 'heartbeat-tick', function ( e, data ) {
 
         // If the schedule has finished then reload the page
-        if ( data.hmbkp_schedule_status === 0 && ! $( '.hmbkp-error' ).size() ) {
+        if ( data.hmbkp_schedule_status === 0 && ! $( '.hmbkp-error' ).length ) {
             location.reload(true);
         }
 
@@ -98,18 +97,18 @@ jQuery(document).ready(function ( $ ) {
             $( '.hmbkp-status' ).replaceWith( data.hmbkp_schedule_status );
         }
 
-        if ( ( data.hmbkp_site_size !== undefined ) && ( $( 'code.calculating' ).size() ) ) {
+        if ( ( data.hmbkp_site_size !== undefined ) && ( $( 'code.calculating' ).length ) ) {
             $( 'code.calculating' ).text( data.hmbkp_site_size );
 
             var excludes = $( '.hmbkp-exclude-settings' );
-            if ( excludes.size() ) {
+            if ( excludes.length ) {
                 excludes.replaceWith( data.hmbkp_dir_sizes );
             }
         }
 
     } );
 
-    // Closing ThickBox Modal Window 
+    // Closing ThickBox Modal Window
     $( document ).on( 'click', '.hmbkp-thickbox-close', function ( e ) {
 
         e.preventDefault();
@@ -125,7 +124,7 @@ function hmbkpToggleScheduleFields( recurrence ) {
 
     var settingFields = jQuery( '.recurring-setting' );
     var scheduleSettingFields = jQuery( '#schedule-start' );
-    var twiceDailyNote = jQuery( 'p.twice-js' );
+    var twiceDailyNote = jQuery( '.twice-js' );
 
     switch ( recurrence ) {
 
