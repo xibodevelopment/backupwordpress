@@ -357,7 +357,7 @@
 		<?php } else { ?>
 
 			<tr>
-				<td colspan="5"><span class="description">This folder is empty</span></td>
+				<td colspan="5"><span class="description"><?php _e( 'This folder is empty', 'backupwordpress' ); ?></span></td>
 			</tr>
 
 		<?php } ?>
