@@ -205,7 +205,7 @@
 				$is_excluded = $is_unreadable = false;
 
 				// Check if the file is excluded
-				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->backup->get_root() ), '', HM\BackUpWordPress\Backup::conform_dir( $file->getPathname() ) ) ) ) {
+				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->backup->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 					$is_excluded = true;
 				}
 
