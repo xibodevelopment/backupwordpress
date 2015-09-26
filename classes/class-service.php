@@ -84,7 +84,7 @@ abstract class Service {
 	abstract public function action( $action, Backup $backup );
 
 	public function get_slug() {
-		return sanitize_title_with_dashes( $this->name );
+		return sanitize_key( $this->name );
 	}
 
 	/**
