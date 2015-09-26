@@ -356,7 +356,7 @@ class Scheduled_Backup {
 	 *
 	 * @return int            The total of the file or directory
 	 */
-	function is_site_size_being_calculated() {
+	public function is_site_size_being_calculated() {
 		return false !== get_transient( 'hmbkp_directory_filesizes_running' );
 	}
 
@@ -365,7 +365,7 @@ class Scheduled_Backup {
 	 *
 	 * @return bool The total of the file or directory
 	 */
-	function is_site_size_cached() {
+	public function is_site_size_cached() {
 		return false !== get_transient( 'hmbkp_directory_filesizes' );
 	}
 
