@@ -68,7 +68,7 @@
 
 	<?php endif; ?>
 
-	<h3 id="directory-listing"><?php _e( 'Directory Listing', 'backupwordpress' ); ?></h3>
+	<h3 id="directory-listing"><?php _e( 'Your Site', 'backupwordpress' ); ?></h3>
 
 	<p><?php _e( 'Here\'s a directory listing of all files on your site, you can browse through and exclude files or folders that you don\'t want included in your backup.', 'backupwordpress' ); ?></p>
 
