@@ -133,31 +133,31 @@ function hmbkpToggleScheduleFields( recurrence ) {
             settingFields.hide();
             break;
 
-        case 'hmbkp_hourly' :
+        case 'hourly' :
             settingFields.hide();
             break;
 
-        case 'hmbkp_daily' :
+        case 'daily' :
             settingFields.hide();
             scheduleSettingFields.show();
             twiceDailyNote.hide();
             break;
 
-        case 'hmbkp_twicedaily' :
+        case 'twicedaily' :
             settingFields.hide();
             scheduleSettingFields.show();
             twiceDailyNote.show();
             break;
 
-        case 'hmbkp_weekly' : // fall through
-        case 'hmbkp_fortnightly' :
+        case 'weekly' : // fall through
+        case 'fortnightly' :
             settingFields.hide();
             jQuery('#start-day').show();
             scheduleSettingFields.show();
             twiceDailyNote.hide();
             break;
 
-        case 'hmbkp_monthly' :
+        case 'monthly' :
             settingFields.hide();
             scheduleSettingFields.show();
             jQuery('#start-date').show();
