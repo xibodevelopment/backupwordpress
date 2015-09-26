@@ -99,8 +99,8 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testReSetupAfterDeleteCron() {
 
-		$this->schedule->set_reoccurrence( 'hmbkp_hourly' );
-		$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
+		$this->schedule->set_reoccurrence( 'hourly' );
+		$this->assertEquals( 'hourly', $this->schedule->get_reoccurrence() );
 
 		// The default start time should be now
 		$this->assertEquals( time(), $this->schedule->get_schedule_start_time(), '', 30 );
@@ -131,8 +131,8 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 
 		foreach ( $this->recurrences as $reoccurrence => $settings ) {
 
-			$this->schedule->set_reoccurrence( 'hmbkp_hourly' );
-			$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
+			$this->schedule->set_reoccurrence( 'hourly' );
+			$this->assertEquals( 'hourly', $this->schedule->get_reoccurrence() );
 
 			$this->assertFalse( is_wp_error( $this->schedule->set_schedule_start_time( time() + 7200 ) ) );
 			$this->assertEquals( $this->schedule->get_schedule_start_time(), time() + 7200, '', 30 );
@@ -149,8 +149,8 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testUnschedule() {
 
-		$this->schedule->set_reoccurrence( 'hmbkp_hourly' );
-		$this->assertEquals( 'hmbkp_hourly', $this->schedule->get_reoccurrence() );
+		$this->schedule->set_reoccurrence( 'hourly' );
+		$this->assertEquals( 'hourly', $this->schedule->get_reoccurrence() );
 
 		// The default start time should be now
 		$this->assertEquals( time(), $this->schedule->get_schedule_start_time(), '', 30 );

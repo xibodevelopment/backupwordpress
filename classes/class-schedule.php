@@ -159,9 +159,7 @@ class Scheduled_Backup {
 	 */
 	public function get_name() {
 
-		$recurrence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
-
-		return ucwords( $this->get_type() ) . ' ' . $recurrence;
+		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
 
 	}
 
@@ -472,9 +470,9 @@ class Scheduled_Backup {
 		foreach ( $files as $file ) {
 
 			if ( $file->isReadable() ) {
-				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = $file->getSize();
+				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = $file->getSize();
 			} else {
-				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = 0;
+				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = 0;
 			}
 
 		}
@@ -559,7 +557,7 @@ class Scheduled_Backup {
 				foreach ( $directory_sizes as $path => $size ) {
 
 					// Skip excluded files if we have excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', Backup::conform_dir( $path ) ) ) ) {
+					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', wp_normalize_path( $path ) ) ) ) {
 						unset( $directory_sizes[ $path ] );
 					}
 
@@ -690,17 +688,7 @@ class Scheduled_Backup {
 	 * @return array
 	 */
 	public static function get_cron_schedules() {
-
-		$schedules = wp_get_schedules();
-
-		// remove any schedule whose key is not prefixed with 'hmbkp_'
-		foreach ( $schedules as $key => $arr ) {
-			if ( ! preg_match( '/^hmbkp_/', $key ) ) {
-				unset( $schedules[ $key ] );
-			}
-		}
-
-		return $schedules;
+		return hmbkp_cron_schedules();
 	}
 
 	/**

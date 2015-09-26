@@ -76,7 +76,7 @@ function hmbkp_request_do_backup() {
 
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
-	
+
 	$schedule_id = sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) );
 	$task = new \HM\Backdrop\Task( 'hmbkp_run_schedule_async', $schedule_id );
 	$task->schedule();
@@ -114,7 +114,7 @@ function hmbkp_request_download_backup() {
 		return;
 	}
 
-	$url = str_replace( HM\BackUpWordPress\Backup::conform_dir( HM\BackUpWordPress\Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
+	$url = str_replace( wp_normalize_path( HM\BackUpWordPress\Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
 
 	global $is_apache;
 
@@ -259,7 +259,7 @@ function hmbkp_edit_schedule_submit() {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'backupwordpress' );
 		}
 
-		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_get_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
+		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'backupwordpress' );
 		}
 
@@ -283,7 +283,7 @@ function hmbkp_edit_schedule_submit() {
 
 	}
 
-	if ( ( 'hmbkp_monthly' === $schedule_recurrence_type ) && isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
+	if ( ( 'monthly' === $schedule_recurrence_type ) && isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] ) ) {
 
 		$day_of_month = absint( $_POST['hmbkp_schedule_recurrence']['hmbkp_schedule_start_day_of_month'] );
 
