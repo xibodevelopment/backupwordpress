@@ -1,5 +1,7 @@
 <div class="wrap">
 
+	<h2>BackUpWordPress</h2>
+
 	<?php if ( hmbkp_possible() ) : ?>
 
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>

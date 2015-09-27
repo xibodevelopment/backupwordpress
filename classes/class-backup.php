@@ -257,7 +257,7 @@ class Backup {
 	public static function get_home_path() {
 
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
-			return self::conform_dir( HMBKP_ROOT );
+				return wp_normalize_path( HMBKP_ROOT );
 		}
 
 		$home_url = home_url();
@@ -267,38 +267,10 @@ class Backup {
 
 		// If site_url contains home_url and they differ then assume WordPress is installed in a sub directory
 		if ( $home_url !== $site_url && strpos( $site_url, $home_url ) === 0 ) {
-			$home_path = trailingslashit( substr( self::conform_dir( ABSPATH ), 0, strrpos( self::conform_dir( ABSPATH ), str_replace( $home_url, '', $site_url ) ) ) );
+				$home_path = trailingslashit( substr( wp_normalize_path( ABSPATH ), 0, strrpos( wp_normalize_path( ABSPATH ), str_replace( $home_url, '', $site_url ) ) ) );
 		}
 
-		return self::conform_dir( $home_path );
-
-	}
-
-	/**
-	 * Sanitize a directory path
-	 *
-	 * @param string $dir
-	 * @param bool $recursive
-	 *
-	 * @return string
-	 */
-	public static function conform_dir( $dir = '/', $recursive = false ) {
-
-		// Replace single forward slash (looks like double slash because we have to escape it)
-		$dir = str_replace( '\\', '/', $dir );
-		$dir = str_replace( '//', '/', $dir );
-
-		// Remove the trailing slash
-		if ( $dir !== '/' ) {
-			$dir = untrailingslashit( $dir );
-		}
-
-		// Carry on until completely normalized
-		if ( ! $recursive && self::conform_dir( $dir, true ) != $dir ) {
-			return self::conform_dir( $dir );
-		}
-
-		return (string) $dir;
+			return wp_normalize_path( $home_path );
 
 	}
 
@@ -446,7 +418,7 @@ class Backup {
 	public function get_root() {
 
 		if ( empty( $this->root ) ) {
-			$this->set_root( self::conform_dir( self::get_home_path() ) );
+				$this->set_root( wp_normalize_path( self::get_home_path() ) );
 		}
 
 		return $this->root;
@@ -466,7 +438,7 @@ class Backup {
 			return new \WP_Error( 'invalid_directory_path', sprintf( __( 'Invalid root path <code>%s</code> must be a valid directory path', 'backupwordpress' ), $path ) );
 		}
 
-		$this->root = self::conform_dir( $path );
+			$this->root = wp_normalize_path( $path );
 
 	}
 
@@ -492,7 +464,7 @@ class Backup {
 			return new \WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non-empty (string)', 'backupwordpress' ), $existing_archive_filepath ) );
 		}
 
-		$this->existing_archive_filepath = self::conform_dir( $existing_archive_filepath );
+			$this->existing_archive_filepath = wp_normalize_path( $existing_archive_filepath );
 
 	}
 
@@ -608,7 +580,7 @@ class Backup {
 
 		// Find the first one which works
 		foreach ( $mysqldump_locations as $location ) {
-			if ( (is_null( shell_exec( 'hash ' . self::conform_dir( $location ) . ' 2>&1' ) ) ) && @is_executable( self::conform_dir( $location ) ) ) {
+				if ( (is_null( shell_exec( 'hash ' . wp_normalize_path( $location ) . ' 2>&1' ) ) ) && @is_executable( wp_normalize_path( $location ) ) ) {
 				$this->set_mysqldump_command_path( $location );
 				break;  // Found one
 			}
@@ -671,7 +643,7 @@ class Backup {
 
 		// Find the first one which works
 		foreach ( $zip_locations as $location ) {
-			if ( @is_executable( self::conform_dir( $location ) ) ) {
+				if ( @is_executable( wp_normalize_path( $location ) ) ) {
 				$this->set_zip_command_path( $location );
 				break;  // Found one
 			}
@@ -769,15 +741,12 @@ class Backup {
 	 */
 	public function dump_database() {
 
-		// If we cannot run mysqldump via CLI, fallback to PHP
-		if ( ! ( self::is_shell_exec_available() ) || is_wp_error( $this->user_can_connect() ) ) {
-			$this->mysqldump_fallback();
-		} else {
-			// Attempt mysqldump command
-			if ( $this->get_mysqldump_command_path() ) {
+			// Attempt to use native mysqldump
+			if ( self::is_shell_exec_available() && $this->get_mysqldump_command_path() && ! is_wp_error( $this->user_can_connect() ) ) {
 				$this->mysqldump();
 			}
 
+			// If we cannot run mysqldump via CLI, fallback to PHP
 			if ( empty( $this->mysqldump_verified ) ) {
 				$this->mysqldump_fallback();
 			}
@@ -981,7 +950,11 @@ class Backup {
 		// Add the database dump to the archive
 		if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
 			$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
+
+				if ( ! empty ( $stderr ) ) {
+					$this->warning( $this->get_archive_method(), $stderr );
 		}
+			}
 
 		// Zip up $this->root
 		if ( 'database' !== $this->get_type() ) {
@@ -1065,14 +1038,14 @@ class Backup {
 				}
 
 				// Excludes
-				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', self::conform_dir( $file->getPathname() ) ) ) ) {
+					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 					continue;
 				}
 
 				if ( $file->isDir() ) {
-					$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', self::conform_dir( $file->getPathname() ) ) ) );
+						$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
 				} elseif ( $file->isFile() ) {
-					$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', self::conform_dir( $file->getPathname() ) ) );
+						$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
 				}
 
 				if ( ++ $files_added % 500 === 0 ) {
@@ -1218,7 +1191,7 @@ class Backup {
 			}
 
 			// Excludes
-			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', self::conform_dir( $file->getPathname() ) ) ) ) {
+				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				continue;
 			}
 
@@ -1258,7 +1231,7 @@ class Backup {
 			}
 
 			// Excludes
-			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', self::conform_dir( $file->getPathname() ) ) ) ) {
+				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				$this->excluded_files[] = $file;
 			}
 
@@ -1387,7 +1360,7 @@ class Backup {
 			}
 
 			// Strip $this->root and conform
-			$rule = str_ireplace( $this->get_root(), '', untrailingslashit( self::conform_dir( $rule ) ) );
+				$rule = str_ireplace( $this->get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
 
 			// Strip the preceeding slash
 			if ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {
