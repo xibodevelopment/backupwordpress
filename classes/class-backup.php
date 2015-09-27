@@ -741,15 +741,14 @@ class Backup {
 	 */
 	public function dump_database() {
 
-			// Attempt to use native mysqldump
-			if ( self::is_shell_exec_available() && $this->get_mysqldump_command_path() && ! is_wp_error( $this->user_can_connect() ) ) {
-				$this->mysqldump();
-			}
+		// Attempt to use native mysqldump
+		if ( self::is_shell_exec_available() && $this->get_mysqldump_command_path() && ! is_wp_error( $this->user_can_connect() ) ) {
+			$this->mysqldump();
+		}
 
-			// If we cannot run mysqldump via CLI, fallback to PHP
-			if ( empty( $this->mysqldump_verified ) ) {
-				$this->mysqldump_fallback();
-			}
+		// If we cannot run mysqldump via CLI, fallback to PHP
+		if ( empty( $this->mysqldump_verified ) ) {
+			$this->mysqldump_fallback();
 		}
 
 		$this->do_action( 'hmbkp_mysqldump_finished' );
@@ -951,10 +950,10 @@ class Backup {
 		if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
 			$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
 
-				if ( ! empty ( $stderr ) ) {
+			if ( ! empty ( $stderr ) ) {
 					$this->warning( $this->get_archive_method(), $stderr );
-		}
 			}
+		}
 
 		// Zip up $this->root
 		if ( 'database' !== $this->get_type() ) {
