@@ -297,8 +297,12 @@ class Scheduled_Backup {
 
 	/**
 	 * Set the service options for this schedule
+	 *
+	 * @param $service
+	 * @param array $options
 	 */
 	public function set_service_options( $service, Array $options ) {
+
 		$this->options[ $service ] = $options;
 	}
 
