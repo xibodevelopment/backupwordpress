@@ -31,7 +31,7 @@ The BackUpWordPress plugin is hosted on GitHub, if you want to help out with dev
 
 = Translations =
 
-We'd also love help translating the plugin into more languages, if you can help then please contact backupwordpress@hmn.md or visit http://translate.hmn.md/.
+We'd also love help translating the plugin into more languages, if you can help then please visit https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/ to start translating.
 
 == Installation ==
 
@@ -100,7 +100,7 @@ The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home
 
 **My backups seem to be failing?**
 
-If your backups are failing - it's commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
+If your backups are failing, it's commonly caused by lack of available resources on your server. The easiest way to establish this is to exclude some of, or the entirety of your uploads folder, running a backup, and if that succeeds, then you'll know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
 
 **Further Support & Feedback**
 

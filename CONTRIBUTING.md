@@ -38,7 +38,7 @@ We rely on a few different kinds of tests:
 
 We want BackUpWordPress to be available in as many languages as possible.
 
-All translations are managed via http://translate.hmn.md/ please contribute there rather than by submitting new translation files here. Please request access by emailing backupwordpress@hmn.md.
+All translations are managed here: https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev please contribute there rather than by submitting new translation files here. You'll need a WordPress.org account.
 
 ## Security
 
