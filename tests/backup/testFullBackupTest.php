@@ -102,29 +102,4 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
-	/**
-	 * Test a full backup with PclZip
-	 *
-	 */
-	public function testFullBackupWithPclZip() {
-
-		$this->backup->set_zip_command_path( false );
-		$this->backup->skip_zip_archive = true;
-
-		$this->backup->backup();
-
-		$this->assertEquals( 'pclzip', $this->backup->get_archive_method() );
-
-		$this->assertFileExists( $this->backup->get_archive_filepath() );
-
-		$files = $this->backup->get_included_files();
-		$files[] = $this->backup->get_database_dump_filename();
-
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, $this->backup->get_root() );
-		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
-
-		$this->assertEmpty( $this->backup->get_errors() );
-
-	}
-
 }
