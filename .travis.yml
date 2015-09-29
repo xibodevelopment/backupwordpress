@@ -28,7 +28,7 @@ matrix:
     - php: 7.0
   fast_finish: true
   exclude:
-    # don't test 3.5 on hiphop:
+    # don't test 3.9 on hiphop:
     - php: hhvm
       env: WP_VERSION=3.9 WP_MULTISITE=0
     - php: hhvm
