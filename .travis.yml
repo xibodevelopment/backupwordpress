@@ -34,6 +34,11 @@ matrix:
     - php: hhvm
       env: WP_VERSION=3.9 WP_MULTISITE=1
 
+cache:
+  directories:
+  - vendor
+  - $HOME/.composer/cache
+
 before_install:
   # set up WP install
   - export WP_DEVELOP_DIR=/tmp/wordpress/
@@ -48,6 +53,7 @@ before_install:
   - sed -i "s/yourpasswordhere//" wp-tests-config.php
   # set up database
   - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
+  - cd $TRAVIS_BUILD_DIR
 
 install:
   - git config --global user.email "paul@hmn.md"
@@ -56,10 +62,27 @@ notifications:
   email: false
   slack:
     secure: ZyXhKGpR/VtggG3vcCaZ+50HBn4STi2fOvMKrmZaeS44s+j6lhkYt7qT1UeU1o2Vox2WCrdqfZqT370f4OV3izAgf7Ln+vIYxZvCywL2Cyt4YbHVPX0pMwuDuAW6a1zG5oP87CFZh9YYCHQ6HfX9ATKtnqiuMFx/SjOcD1Yb4Lk=
+
+before_script:
+  - cd $TRAVIS_BUILD_DIR
+  - composer self-update
+  - composer install --no-interaction
 script:
-  - phpunit --testsuite backup --coverage-clover=coverage.clover
-  - phpunit --testsuite schedule --coverage-clover=coverage.clover
-  - phpunit --testsuite other --coverage-clover=coverage.clover
+  - cd $TRAVIS_BUILD_DIR
+  - |
+    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "latest" ]] ; then
+        phpunit --testsuite backup --coverage-clover=coverage.clover
+        phpunit --testsuite schedule --coverage-clover=coverage.clover
+        phpunit --testsuite other --coverage-clover=coverage.clover
+    else
+        phpunit --testsuite backup
+        phpunit --testsuite schedule
+        phpunit --testsuite other
+    fi
+
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - |
+    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "latest" ]] ; then
+        wget https://scrutinizer-ci.com/ocular.phar
+        php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    fi
