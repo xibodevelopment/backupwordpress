@@ -10,8 +10,8 @@ php:
 
 env:
   # trunk:
-  - WP_VERSION=latest WP_MULTISITE=0
-  - WP_VERSION=latest WP_MULTISITE=1
+  - WP_VERSION=master WP_MULTISITE=0
+  - WP_VERSION=master WP_MULTISITE=1
   # latest stable:
   - WP_VERSION=4.3 WP_MULTISITE=0
   - WP_VERSION=4.3 WP_MULTISITE=1
@@ -47,6 +47,7 @@ before_install:
   # set up tests config
   - cd $WP_DEVELOP_DIR
   - echo $WP_DEVELOP_DIR
+  - git fetch --tags && git checkout $WP_VERSION
   - cp wp-tests-config-sample.php wp-tests-config.php
   - sed -i "s/youremptytestdbnamehere/wordpress_test/" wp-tests-config.php
   - sed -i "s/yourusernamehere/root/" wp-tests-config.php
