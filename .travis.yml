@@ -1,40 +1,113 @@
 language: php
-php:
-- 5.3
-- 5.4
-- 5.5
-- 5.6
-env:
-  matrix:
-  - WP_VERSION=latest WP_MULTISITE=0
-  - WP_VERSION=latest WP_MULTISITE=1
-  - WP_VERSION=4.1 WP_MULTISITE=0
-  - WP_VERSION=4.1 WP_MULTISITE=1
-  - WP_VERSION=4.0 WP_MULTISITE=0
-  - WP_VERSION=4.0 WP_MULTISITE=1
-  - WP_VERSION=3.9 WP_MULTISITE=0
-  - WP_VERSION=3.9 WP_MULTISITE=1
-  global:
-  - PHPCS_DIR=/tmp/phpcs
-  - secure: SMPml9xPNS2AGYZyRzGU83qdH85tBI4VB4mTtRISE1DB64Tjg9WcD1Zrztw2BlynARgHNZD/BzVDVhQvIjzhRWvqPGTGw22RgikaZJV+eCBMaZ4VIP9uSdsgCWRpFkPdJbnVARfS9eWEehaacVOVM0CKRN8G3GQYWLVE5+m1LIw=
 sudo: false
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+  - 7.0
+
+env:
+  # trunk:
+  - WP_VERSION=master WP_MULTISITE=0
+  - WP_VERSION=master WP_MULTISITE=1
+  # latest stable:
+  - WP_VERSION=4.3.1 WP_MULTISITE=0
+  # previous stable:
+  - WP_VERSION=4.2.5 WP_MULTISITE=0
+  # earliest supported:
+  - WP_VERSION=3.9.9 WP_MULTISITE=0
+
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: 7.0
+  fast_finish: true
+  exclude:
+  # Only test latest version of WP with HHVM and PHP 7
+    - php: hhvm
+      env: WP_VERSION=3.9.9 WP_MULTISITE=0
+    - php: hhvm
+      env: WP_VERSION=3.9.9 WP_MULTISITE=1
+    - php: hhvm
+      env: WP_VERSION=4.1.8 WP_MULTISITE=0
+    - php: hhvm
+      env: WP_VERSION=4.1.8 WP_MULTISITE=1
+    - php: hhvm
+      env: WP_VERSION=4.2.5 WP_MULTISITE=0
+    - php: hhvm
+      env: WP_VERSION=4.2.5 WP_MULTISITE=1
+    - php: hhvm
+      env: WP_VERSION=4.3.1 WP_MULTISITE=0
+    - php: hhvm
+      env: WP_VERSION=4.3.1 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=3.9.9 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=3.9.9 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=4.1.8 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=4.1.8 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=4.2.5 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=4.2.5 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=4.3.1 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=4.3.1 WP_MULTISITE=1
+
+cache:
+  directories:
+  - vendor
+  - $HOME/.composer/cache
+
+before_install:
+  # set up WP install
+  - export WP_DEVELOP_DIR=/tmp/wordpress/
+  - mkdir -p $WP_DEVELOP_DIR
+  - git clone --depth=1 git://develop.git.wordpress.org/ $WP_DEVELOP_DIR
+  # set up tests config
+  - cd $WP_DEVELOP_DIR
+  - echo $WP_DEVELOP_DIR
+  - git fetch --tags && git checkout $WP_VERSION
+  - cp wp-tests-config-sample.php wp-tests-config.php
+  - sed -i "s/youremptytestdbnamehere/wordpress_test/" wp-tests-config.php
+  - sed -i "s/yourusernamehere/root/" wp-tests-config.php
+  - sed -i "s/yourpasswordhere//" wp-tests-config.php
+  # set up database
+  - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
+  - cd $TRAVIS_BUILD_DIR
+
 install:
-- git config --global user.email "paul@hmn.md"
-- git config --global user.name "Paul de Wouters"
+  - git config --global user.email "paul@hmn.md"
+  - git config --global user.name "Paul de Wouters"
 notifications:
   email: false
   slack:
     secure: ZyXhKGpR/VtggG3vcCaZ+50HBn4STi2fOvMKrmZaeS44s+j6lhkYt7qT1UeU1o2Vox2WCrdqfZqT370f4OV3izAgf7Ln+vIYxZvCywL2Cyt4YbHVPX0pMwuDuAW6a1zG5oP87CFZh9YYCHQ6HfX9ATKtnqiuMFx/SjOcD1Yb4Lk=
+
 before_script:
-- composer selfupdate --quiet
-- composer install -n --prefer-dist --no-progress
-- bash bin/prepare.sh
-- bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+  - cd $TRAVIS_BUILD_DIR
+  - composer self-update
+  - composer install --no-interaction
 script:
-- if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then $PHPCS_DIR/scripts/phpcs --standard=WordPress-Extra --ignore=$PHPCS_IGNORE; fi
-- phpunit --testsuite backup --coverage-clover=coverage.clover
-- phpunit --testsuite schedule --coverage-clover=coverage.clover
-- phpunit --testsuite other --coverage-clover=coverage.clover
+  - cd $TRAVIS_BUILD_DIR
+  - |
+    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "latest" ]] ; then
+        phpunit --coverage-clover=coverage.clover
+    else
+        phpunit
+    fi
+
 after_script:
-- wget https://scrutinizer-ci.com/ocular.phar
-- php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - |
+    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "latest" ]] ; then
+        wget https://scrutinizer-ci.com/ocular.phar
+        php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    fi
+
+git:
+  depth: 1
