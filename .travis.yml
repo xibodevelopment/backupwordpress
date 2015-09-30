@@ -13,14 +13,11 @@ env:
   - WP_VERSION=master WP_MULTISITE=0
   - WP_VERSION=master WP_MULTISITE=1
   # latest stable:
-  - WP_VERSION=4.3 WP_MULTISITE=0
-  - WP_VERSION=4.3 WP_MULTISITE=1
+  - WP_VERSION=4.3.1 WP_MULTISITE=0
   # previous stable:
-  - WP_VERSION=4.2 WP_MULTISITE=0
-  - WP_VERSION=4.2 WP_MULTISITE=1
+  - WP_VERSION=4.2.5 WP_MULTISITE=0
   # earliest supported:
-  - WP_VERSION=3.9 WP_MULTISITE=0
-  - WP_VERSION=3.9 WP_MULTISITE=1
+  - WP_VERSION=3.9.9 WP_MULTISITE=0
 
 matrix:
   allow_failures:
@@ -28,11 +25,39 @@ matrix:
     - php: 7.0
   fast_finish: true
   exclude:
-    # don't test 3.9 on hiphop:
+  # Only test latest version of WP with HHVM and PHP 7
     - php: hhvm
-      env: WP_VERSION=3.9 WP_MULTISITE=0
+      env: WP_VERSION=3.9.9 WP_MULTISITE=0
     - php: hhvm
-      env: WP_VERSION=3.9 WP_MULTISITE=1
+      env: WP_VERSION=3.9.9 WP_MULTISITE=1
+    - php: hhvm
+      env: WP_VERSION=4.1.8 WP_MULTISITE=0
+    - php: hhvm
+      env: WP_VERSION=4.1.8 WP_MULTISITE=1
+    - php: hhvm
+      env: WP_VERSION=4.2.5 WP_MULTISITE=0
+    - php: hhvm
+      env: WP_VERSION=4.2.5 WP_MULTISITE=1
+    - php: hhvm
+      env: WP_VERSION=4.3.1 WP_MULTISITE=0
+    - php: hhvm
+      env: WP_VERSION=4.3.1 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=3.9.9 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=3.9.9 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=4.1.8 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=4.1.8 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=4.2.5 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=4.2.5 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=4.3.1 WP_MULTISITE=0
+    - php: 7.0
+      env: WP_VERSION=4.3.1 WP_MULTISITE=1
 
 cache:
   directories:
@@ -72,13 +97,9 @@ script:
   - cd $TRAVIS_BUILD_DIR
   - |
     if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "latest" ]] ; then
-        phpunit --testsuite backup --coverage-clover=coverage.clover
-        phpunit --testsuite schedule --coverage-clover=coverage.clover
-        phpunit --testsuite other --coverage-clover=coverage.clover
+        phpunit --coverage-clover=coverage.clover
     else
-        phpunit --testsuite backup
-        phpunit --testsuite schedule
-        phpunit --testsuite other
+        phpunit
     fi
 
 after_script:
@@ -87,3 +108,6 @@ after_script:
         wget https://scrutinizer-ci.com/ocular.phar
         php ocular.phar code-coverage:upload --format=php-clover coverage.clover
     fi
+
+git:
+  depth: 1
