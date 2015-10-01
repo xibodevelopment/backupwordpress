@@ -1136,8 +1136,6 @@ class Backup {
 	 */
 	public function get_files( $ignore_default_exclude_rules = false ) {
 
-		$found = array();
-
 		if ( ! empty( $this->files ) ) {
 			return $this->files;
 		}
