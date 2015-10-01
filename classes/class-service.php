@@ -80,11 +80,16 @@ abstract class Service {
 	 * This is where the service should do it's thing
 	 *
 	 * @see  Backup::do_action for a list of the actions
+	 *
+	 * @param $action
+	 * @param Backup $backup
+	 *
+	 * @return mixed
 	 */
 	abstract public function action( $action, Backup $backup );
 
 	public function get_slug() {
-		return sanitize_title_with_dashes( $this->name );
+		return sanitize_key( $this->name );
 	}
 
 	/**
@@ -125,8 +130,9 @@ abstract class Service {
 
 		$old_data = $this->schedule->get_service_options( $classname );
 
-		$new_data = isset( $_POST[$classname] ) ? $_POST[$classname] : array();
+		$new_data = isset( $_POST[ $classname ] ) ? $_POST[ $classname ] : array();
 
+		// $new_data is passed by ref, so it is clean after this method call.
 		$errors = $this->update( $new_data, $old_data );
 
 		if ( $errors && $errors = array_flip( $errors ) ) {
