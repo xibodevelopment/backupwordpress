@@ -1,0 +1,21 @@
+build-dev:
+  - makepot
+  - cssmin
+  - uglify
+  - autoprefixer
+  - shell
+  - compress
+
+build:
+  - makepot
+  - cssmin
+  - uglify
+  - autoprefixer
+  - bumpup
+  - replace # Update version numbers, build faq.txt
+  - concat # build readme.txt
+  - shell
+  - compress
+
+localize:
+  - makepot
