@@ -255,6 +255,8 @@ class Path {
 			$contents[] = '</IfModule>';
 			$contents[] = '';
 
+			file_put_contents( $htaccess, '' );
+
 			insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 
 		}
