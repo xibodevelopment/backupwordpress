@@ -1,11 +1,12 @@
 jQuery( document ).ready( function ( $ ) {
-
+	'use strict';
+	var recurrenceType = $( 'select#hmbkp_schedule_recurrence_type' );
 	// Don't ever cache ajax requests
 	$.ajaxSetup( {'cache': false} );
 
-	if ( $( 'select#hmbkp_schedule_recurrence_type' ).length ) {
+	if ( recurrenceType.length ) {
 
-		hmbkpToggleScheduleFields( $( 'select#hmbkp_schedule_recurrence_type' ).val() );
+		hmbkpToggleScheduleFields( recurrenceType.val() );
 
 		$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function () {
 			hmbkpToggleScheduleFields( $( this ).val() );
@@ -93,21 +94,12 @@ jQuery( document ).ready( function ( $ ) {
 		}
 
 		// If the schedule is still running then update the schedule status
-		if ( (
-		     data.hmbkp_schedule_status !== 0
-		     ) && (
-		     data.hmbkp_schedule_status !== undefined
-		     ) ) {
+		if ( ( data.hmbkp_schedule_status !== 0 ) && ( data.hmbkp_schedule_status !== undefined ) ) {
 			$( '.hmbkp-status' ).replaceWith( data.hmbkp_schedule_status );
 		}
 
-		if ( (
-		     data.hmbkp_site_size !== undefined
-		     ) && (
-			     $( 'code.calculating' ).length
-		     ) ) {
+		if ( (data.hmbkp_site_size !== undefined ) && ( $( 'code.calculating' ).length ) ) {
 			$( 'code.calculating' ).text( data.hmbkp_site_size );
-
 			var excludes = $( '.hmbkp-exclude-settings' );
 			if ( excludes.length ) {
 				excludes.replaceWith( data.hmbkp_dir_sizes );
