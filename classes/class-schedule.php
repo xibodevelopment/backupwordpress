@@ -854,7 +854,7 @@ class Scheduled_Backup {
 		) );
 
 		if ( false === @file_put_contents( $this->get_schedule_running_path(), $status ) ) {
-			throw new \RuntimeException( sprintf( __( 'Error writing to file. (%s)', 'backpwordpress' ), $this->get_schedule_running_path() ) );
+			throw new \RuntimeException( sprintf( __( 'Error writing to file. (%s)', 'backupwordpress' ), $this->get_schedule_running_path() ) );
 		}
 
 	}
