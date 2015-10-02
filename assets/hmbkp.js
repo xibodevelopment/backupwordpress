@@ -1,11 +1,12 @@
 jQuery( document ).ready( function ( $ ) {
-
+	'use strict';
+	var recurrenceType = $( 'select#hmbkp_schedule_recurrence_type' );
 	// Don't ever cache ajax requests
 	$.ajaxSetup( {'cache': false} );
 
-	if ( $( 'select#hmbkp_schedule_recurrence_type' ).length ) {
+	if ( recurrenceType.length ) {
 
-		hmbkpToggleScheduleFields( $( 'select#hmbkp_schedule_recurrence_type' ).val() );
+		hmbkpToggleScheduleFields( recurrenceType.val() );
 
 		$( document ).on( 'change', 'select#hmbkp_schedule_recurrence_type', function () {
 			hmbkpToggleScheduleFields( $( this ).val() );
