@@ -2,7 +2,7 @@
 
 	<h2>BackUpWordPress</h2>
 
-	<?php if ( hmbkp_possible() ) : ?>
+	<?php if ( ! get_option( 'hmbkp_request_credentials' ) && hmbkp_possible() ) : ?>
 
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
 

@@ -130,9 +130,9 @@ function hmbkp_admin_notices() {
 
 	<div class="wrap">
 		<?php
-			if ( get_option( 'hmbkp_request_credentials' ) ) {
-				hmbkp_print_request_filesystem_credentials_modal();
-			}
+		if ( get_option( 'hmbkp_request_credentials' ) ) {
+			hmbkp_print_request_filesystem_credentials_modal();
+		}
 		?>
 	</div>
 
@@ -155,6 +155,8 @@ function hmbkp_set_server_config_notices() {
 	if ( is_dir( hmbkp_path() ) && ! wp_is_writable( hmbkp_path() ) ) {
 		$messages[] = sprintf( __( 'Your backups directory isn\'t writable.', 'backupwordpress' ) );
 		update_option( 'hmbkp_request_credentials', true );
+		$msg = __( 'We couldn\'t create your backups directory. You\'ll need to either <a href="https://bwp.hmn.md/support-center/backupwordpress-faqs/#where">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' );
+		\HM\BackUpWordPress\Notices::get_instance()->set_notices( 'server_config', $msg );
   }
 
 	if ( HM\BackUpWordPress\Backup::is_safe_mode_active() ) {
@@ -454,7 +456,7 @@ function hmbkp_is_restricted_custom_path() {
  */
 function hmbkp_print_request_filesystem_credentials_modal() {
 
-	$method      = 'ftp';
+	$method = 'ftp';
 
 	$creds = request_filesystem_credentials( HMBKP_ADMIN_URL, $method, false, false );
 
