@@ -6,6 +6,9 @@ before_commands:
     - "composer install --prefer-source --dev"
 
 tools:
+    php_code_sniffer:
+        config: { standard: WordPress }
+
     php_changetracking:
         enabled: true
         bug_patterns:
@@ -40,7 +43,7 @@ tools:
               - php
         config:
             parameter_reference_check: { enabled: false }
-            checkstyle: { enabled: true, no_trailing_whitespace: true, naming: { enabled: false } }
+            checkstyle: { enabled: false }
             unreachable_code: { enabled: true }
             check_access_control: { enabled: false }
             typo_checks: { enabled: true }
@@ -49,7 +52,7 @@ tools:
             suspicious_code: { enabled: true, non_existent_class_in_instanceof_check: true, non_existent_class_in_catch_clause: true, non_commented_switch_fallthrough: true, non_commented_empty_catch_block: true, precedence_in_condition_assignment: true, overriding_parameter: false, overriding_closure_use: false, parameter_closure_use_conflict: false, parameter_multiple_times: false, assignment_of_null_return: false, overriding_private_members: false, use_statement_alias_conflict: false }
             dead_assignments: { enabled: true }
             verify_php_doc_comments: { enabled: true, parameters: true, return: true, suggest_more_specific_types: true, ask_for_return_if_not_inferrable: true, ask_for_param_type_annotation: true }
-            loops_must_use_braces: { enabled: true }
+            loops_must_use_braces: { enabled: false }
             check_usage_context: { enabled: true, foreach: { value_as_reference: true, traversable: true } }
             simplify_boolean_return: { enabled: true }
             phpunit_checks: { enabled: false }

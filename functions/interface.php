@@ -202,7 +202,6 @@ add_action( 'admin_init', 'hmbkp_set_server_config_notices' );
  * Hook in an change the plugin description when BackUpWordPress is activated
  *
  * @param array $plugins
- *
  * @return array $plugins
  */
 function hmbkp_plugin_row( $plugins ) {
@@ -246,7 +245,6 @@ function hmbkp_backup_errors_message() {
  *
  * @param string $type
  * @param HM\BackUpWordPress\Scheduled_Backup $schedule (default: null)
- *
  * @return string
  */
 function hmbkp_human_get_type( $type, HM\BackUpWordPress\Scheduled_Backup $schedule = null ) {
@@ -275,17 +273,14 @@ function hmbkp_human_get_type( $type, HM\BackUpWordPress\Scheduled_Backup $sched
  * Display the row of actions for a schedule
  *
  * @access public
- *
  * @param HM\BackUpWordPress\Scheduled_Backup $schedule
- *
  * @return void
  */
 function hmbkp_schedule_status( HM\BackUpWordPress\Scheduled_Backup $schedule, $echo = true ) {
 
 	ob_start(); ?>
 
-	<span
-		class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'backupwordpress' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
+	<span class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'backupwordpress' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
 		<?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'backupwordpress' ); ?>
 		<a href="<?php echo hmbkp_admin_action_url( 'request_cancel_backup', array( 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>"><?php _e( 'cancel', 'backupwordpress' ); ?></a>
 	</span>
@@ -349,18 +344,18 @@ function hmbkp_translated_schedule_title( $slug, $title ) {
 		'complete-hourly'      => esc_html__( 'Complete Hourly', 'backupwordpress' ),
 		'file-hourly'          => esc_html__( 'File Hourly', 'backupwordpress' ),
 		'database-hourly'      => esc_html__( 'Database Hourly', 'backupwordpress' ),
-		'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'backupwordpress' ),
+		'complete-twicedaily'  => esc_html__( 'Complete Twice Daily', 'backupwordpress' ),
 		'file-twicedaily'      => esc_html__( 'File Twicedaily', 'backupwordpress' ),
-		'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'backupwordpress' ),
+		'database-twicedaily'  => esc_html__( 'Database Twice Daily', 'backupwordpress' ),
 		'complete-daily'       => esc_html__( 'Complete Daily', 'backupwordpress' ),
 		'file-daily'           => esc_html__( 'File Daily', 'backupwordpress' ),
 		'database-daily'       => esc_html__( 'Database Daily', 'backupwordpress' ),
 		'complete-weekly'      => esc_html__( 'Complete Weekly', 'backupwordpress' ),
 		'file-weekly'          => esc_html__( 'File Weekly', 'backupwordpress' ),
 		'database-weekly'      => esc_html__( 'Database Weekly', 'backupwordpress' ),
-		'complete-fortnightly' => esc_html__( 'Complete Biweekly', 'backupwordpress' ),
-		'file-fortnightly'     => esc_html__( 'File Biweekly', 'backupwordpress' ),
-		'database-fortnightly' => esc_html__( 'Database Biweekly', 'backupwordpress' ),
+		'complete-fortnightly' => esc_html__( 'Complete Every Two Weeks', 'backupwordpress' ),
+		'file-fortnightly'     => esc_html__( 'File Every Two Weeks', 'backupwordpress' ),
+		'database-fortnightly' => esc_html__( 'Database Every Two Weeks', 'backupwordpress' ),
 		'complete-monthly'     => esc_html__( 'Complete Monthly', 'backupwordpress' ),
 		'file-monthly'         => esc_html__( 'File Monthly', 'backupwordpress' ),
 		'database-monthly'     => esc_html__( 'Database Monthly', 'backupwordpress' ),

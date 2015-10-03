@@ -96,23 +96,4 @@ class testUnreadableFileTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
-	/**
-	 * Test an unreadable file with the PclZip commands
-	 *
-	 */
-	public function testArchiveUnreadableFileWithPclZip() {
-
-		$this->backup->set_zip_command_path( false );
-
-		$this->backup->pcl_zip();
-
-		$this->assertEmpty( $this->backup->get_errors() );
-
-		$this->assertFileExists( $this->backup->get_archive_filepath() );
-
-		$this->assertArchiveNotContains( $this->backup->get_archive_filepath(), array( 'test-data.txt' ) );
-		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), 2 );
-
-	}
-
 }

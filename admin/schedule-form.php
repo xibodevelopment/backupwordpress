@@ -149,8 +149,11 @@ hmbkp_clear_settings_errors();
 						<?php _e( 'Minutes', 'backupwordpress' ); ?></label>
 
 					</span>
-<p class="descriprion"><strong><?php esc_html_e( 'Please use 24 hour format for hours', 'backupwordpress' ); ?></strong></p>
-					<p class="twice-js description<?php if ( $schedule->get_reoccurrence() !== 'hmbkp_fortnightly' ) { ?> hidden<?php } ?>"><?php _e( 'The second backup will run 12 hours after the first', 'backupwordpress' ); ?></p>
+					
+					<p class="description">
+						<?php esc_html_e( '24-hour format.', 'backupwordpress' ); ?>
+						<span class="twice-js <?php if ( $schedule->get_reoccurrence() !== 'fortnightly' ) { ?> hidden<?php } ?>"><?php _e( 'The second backup will run 12 hours after the first.', 'backupwordpress' ); ?><span>
+					</p>
 
 				</td>
 

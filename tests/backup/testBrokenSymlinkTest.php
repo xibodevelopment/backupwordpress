@@ -115,28 +115,4 @@ class testBrokenSymlinkTestCase extends HM_Backup_UnitTestCase {
 
 	}
 
-	/**
-	 * Test a broken symlink with the PclZip commands
-	 *
-	 */
-	public function testArchiveBrokenSymlinkWithPclZip() {
-
-		$this->markTestSkipped( "PclZip can't handle broken symlinks" );
-
-		$this->backup->set_zip_command_path(  false );
-
-		$this->assertFileNotExists( $this->symlink );
-		$this->assertTrue( is_link( $this->symlink ) );
-
-		$this->backup->pcl_zip();
-
-		$this->assertFileExists( $this->backup->get_archive_filepath() );
-
-		$this->assertArchiveNotContains( $this->backup->get_archive_filepath(), array( basename( $this->symlink ) ) );
-		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), 3 );
-
-		$this->assertEmpty( $this->backup->get_errors() );
-
-	}
-
 }

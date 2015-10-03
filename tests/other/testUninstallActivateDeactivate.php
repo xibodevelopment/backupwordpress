@@ -9,6 +9,8 @@
 class testUninstallActivateDeactivateTestCase extends HM_Backup_UnitTestCase {
 
 
+	protected $plugin = null;
+
 	public function setUp() {
 		parent::setUp();
 	}
@@ -37,21 +39,18 @@ class testUninstallActivateDeactivateTestCase extends HM_Backup_UnitTestCase {
 
 	public function test_deactivate() {
 
-		$res = activate_plugin( 'backupwordpress/backupwordpress.php' );
-		$this->assertFalse( is_wp_error( $res ) );
-		deactivate_plugins( 'backupwordpress/backupwordpress.php' );
-		$this->assertFalse( is_plugin_active( 'backupwordpress/backupwordpress.php' ) );
-		$this->assertGreaterThanOrEqual( 1, did_action( 'deactivate_backupwordpress/backupwordpress.php' ) );
+		// Just make sure the transients have been deleted, which means plugin wa deactivated.
+		$transients = array( 'hmbkp_plugin_data', 'hmbkp_directory_filesizes', 'hmbkp_directory_filesize_running' );
+
+		foreach ( $transients as $transient ) {
+			$this->assertFalse( get_transient( $transient ) );
+		}
 	}
 
 	public function test_activate() {
 
-		$res = activate_plugin( 'backupwordpress/backupwordpress.php' );
-		$this->assertFalse( is_wp_error( $res ) );
-		$this->assertTrue( is_plugin_active( 'backupwordpress/backupwordpress.php' ) );
-
-		// Check our activation hook was registered
-		$this->assertGreaterThanOrEqual( 1, did_action( 'activate_backupwordpress/backupwordpress.php' ) );
+		$this->plugin = HM\BackUpWordPress\Plugin::get_instance();
+		$this->assertInstanceOf( 'HM\BackUpWordPress\Plugin', $this->plugin );
 
 	}
 }
