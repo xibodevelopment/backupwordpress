@@ -96,7 +96,7 @@ before_script:
 script:
   - cd $TRAVIS_BUILD_DIR
   - |
-    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "latest" ]] ; then
+    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then
         phpunit --coverage-clover=coverage.clover
     else
         phpunit
