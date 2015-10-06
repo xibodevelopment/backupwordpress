@@ -313,7 +313,7 @@ class Scheduled_Backup {
 	 *
 	 * @return string
 	 */
-	public function get_site_size() {
+	public function get_site_size( $skip_excluded_files = false ) {
 
 		$size = 0;
 
@@ -334,7 +334,7 @@ class Scheduled_Backup {
 
 			$root = new \SplFileInfo( $this->backup->get_root() );
 
-			$size += $this->filesize( $root );
+			$size += $this->filesize( $root, $skip_excluded_files );
 
 		}
 
@@ -349,8 +349,8 @@ class Scheduled_Backup {
 	 *
 	 * @return bool|string
 	 */
-	public function get_formatted_site_size() {
-		return size_format( $this->get_site_size() );
+	public function get_formatted_site_size( $skip_excluded_files = false ) {
+		return size_format( $this->get_site_size( $skip_excluded_files ) );
 	}
 
 	/**

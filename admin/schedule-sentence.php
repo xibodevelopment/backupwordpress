@@ -153,7 +153,7 @@ function hmbkp_get_site_size_text( HM\BackUpWordPress\Scheduled_Backup $schedule
 
 	} elseif ( ( 'database' === $schedule->get_type() ) || $schedule->is_site_size_cached() ) {
 
-		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $schedule->get_formatted_site_size() ) );
+		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $schedule->get_formatted_site_size( true ) ) );
 
 	} else {
 
