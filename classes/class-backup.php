@@ -922,11 +922,15 @@ class Backup {
 				case 'zip':
 					if ( $this->get_zip_command_path() ) {
 						$this->zip();
+					} else {
+						$this->warning( $this->get_archive_method(), __( 'Zip command is not available.', 'backupwordpress' ) );
 					}
 					break;
 				case 'ziparchive':
 					if ( class_exists( 'ZipArchive' ) ) {
 						$this->zip_archive();
+					} else {
+						$this->warning( $this->get_archive_method(), __( 'ZipArchive method is not available.', 'backupwordpress' ) );
 					}
 					break;
 				default:
