@@ -144,14 +144,6 @@ class Backup {
 	protected $archive_verified = false;
 
 	/**
-	 * Hacky way to force a fallback to PclZip
-	 *
-	 * @todo re-factor out of this mess
-	 * @var bool
-	 */
-	public $skip_zip_archive = false;
-
-	/**
 	 * @var string
 	 */
 	protected $action_callback = '';
@@ -173,7 +165,7 @@ class Backup {
 		'backup-db',
 		'Envato-backups',
 		'managewp',
-		'backupwordpress-*-backups'
+		'backupwordpress-*-backups',
 	);
 
 	/**
@@ -942,8 +934,9 @@ class Backup {
 			if ( $this->get_zip_command_path() ) {
 				$this->zip();
 			}
-			// If not or if the shell zip failed then use ZipArchive
-			elseif ( empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) && empty( $this->skip_zip_archive ) ) {
+
+			// If the shell zip failed then use ZipArchive
+			if ( $this->get_zip_command_path() || empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) ) {
 				$this->zip_archive();
 			} else {
 				$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
