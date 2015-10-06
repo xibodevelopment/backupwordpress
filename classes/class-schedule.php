@@ -140,15 +140,14 @@ class Scheduled_Backup {
 	 * Returns the given option value or WP_Error if it doesn't exist
 	 *
 	 * @param $option_name
-	 *
-	 * @return WP_Error
+	 * @return \WP_Error
 	 */
 	public function get_schedule_option( $option_name ) {
 
 		if ( isset( $this->options[ $option_name ] ) ) {
 			return $this->options[ $option_name ];
 		} else {
-			return new WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
+			return new \WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
 		}
 	}
 

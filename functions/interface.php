@@ -313,7 +313,7 @@ function hmbkp_backup_warnings() {
 
 }
 
-function hmbkp_backups_number( $schedule ) {
+function hmbkp_backups_number( \HM\BackUpWordPress\Scheduled_Backup $schedule ) {
 
 	$number = count( $schedule->get_backups() );
 
