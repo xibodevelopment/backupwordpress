@@ -1,4 +1,4 @@
-	<?php
+<?php
 
 /**
  * Tests for the complete backup process both with
