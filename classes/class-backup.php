@@ -936,7 +936,7 @@ class Backup {
 			}
 
 			// If the shell zip failed then use ZipArchive
-			if ( $this->get_zip_command_path() || empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) ) {
+			if ( ! $this->get_zip_command_path() || empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) ) {
 				$this->zip_archive();
 			} else {
 				$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
