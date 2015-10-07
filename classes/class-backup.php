@@ -144,14 +144,6 @@ class Backup {
 	protected $archive_verified = false;
 
 	/**
-	 * Hacky way to force a fallback to PclZip
-	 *
-	 * @todo re-factor out of this mess
-	 * @var bool
-	 */
-	public $skip_zip_archive = false;
-
-	/**
 	 * @var string
 	 */
 	protected $action_callback = '';
@@ -173,7 +165,7 @@ class Backup {
 		'backup-db',
 		'Envato-backups',
 		'managewp',
-		'backupwordpress-*-backups'
+		'backupwordpress-*-backups',
 	);
 
 	/**
@@ -917,15 +909,38 @@ class Backup {
 	 */
 	public function archive() {
 
-		// Do we have the path to the zip command
-		if ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'zip' === HMBKP_FORCE_ZIP_METHOD ) ) || $this->get_zip_command_path() ) {
-			$this->zip();
-		}
-		// If not or if the shell zip failed then use ZipArchive
-		elseif ( ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) && ( 'ziparchive' === HMBKP_FORCE_ZIP_METHOD ) ) || ( empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) && empty( $this->skip_zip_archive ) ) ) {
-			$this->zip_archive();
+		if ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) ) {
+			switch ( HMBKP_FORCE_ZIP_METHOD ) {
+				case 'zip':
+					if ( $this->get_zip_command_path() ) {
+						$this->zip();
+					} else {
+						$this->warning( $this->get_archive_method(), __( 'Zip command is not available.', 'backupwordpress' ) );
+					}
+					break;
+				case 'ziparchive':
+					if ( class_exists( 'ZipArchive' ) ) {
+						$this->zip_archive();
+					} else {
+						$this->warning( $this->get_archive_method(), __( 'ZipArchive method is not available.', 'backupwordpress' ) );
+					}
+					break;
+				default:
+					$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
+					break;
+			}
 		} else {
-			$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
+			// Is zip available
+			if ( $this->get_zip_command_path() ) {
+				$this->zip();
+			}
+
+			// If the shell zip failed then use ZipArchive
+			if ( ! $this->get_zip_command_path() || empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) ) {
+				$this->zip_archive();
+			} else {
+				$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
+			}
 		}
 
 		// Delete the database dump file
