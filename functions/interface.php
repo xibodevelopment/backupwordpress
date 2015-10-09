@@ -68,7 +68,7 @@ function hmbkp_admin_notices() {
 
 	<?php if ( ! empty( $notices['backup_errors'] ) ) : ?>
 
-		<div id="hmbkp-warning" class="error fade">
+		<div id="hmbkp-warning-backup" class="error  notice is-dismissible">
 			<p>
 				<strong><?php _e( 'BackUpWordPress detected issues with your last backup.', 'backupwordpress' ); ?></strong>
 				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_dismiss_error' ), admin_url( 'admin-post.php' ) ), 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' ) ); ?>" style="float: right;" class="button">
@@ -77,10 +77,16 @@ function hmbkp_admin_notices() {
 			</p>
 
 			<ul>
+
 				<?php foreach ( $notices['backup_errors'] as $notice ) : ?>
+
 					<li><pre><?php echo esc_html( $notice ); ?></pre></li>
+
 				<?php endforeach; ?>
+
 			</ul>
+
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
 
 		</div>
 
@@ -88,13 +94,19 @@ function hmbkp_admin_notices() {
 
 	<?php if ( ! empty( $notices['server_config'] ) ) : ?>
 
-		<div id="hmbkp-warning" class="error fade">
+		<div id="hmbkp-warning-server" class="error notice is-dismissible">
 
 			<ul>
+
 				<?php foreach ( $notices['server_config'] as $notice ) : ?>
+
 					<li><?php echo wp_kses_data( $notice ); ?></li>
+
 				<?php endforeach; ?>
+
 			</ul>
+
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
 
 		</div>
 
@@ -102,16 +114,25 @@ function hmbkp_admin_notices() {
 
 	<?php $notices = array_filter( $notices );
 
-	if ( ! empty( $notices ) )  : ?>
+	if ( ! empty( $notices ) ) : ?>
 
-		<?php foreach ( $notices as $notice_type ) : ?>
-			<?php if ( ! ( in_array( $notice_type, array( 'server_config', 'backup_errors' ) ) ) ) : ?>
-				<div id="hmbkp-warning" class="error fade">
+		<?php foreach ( $notices as $key => $notice_type ) : ?>
+
+			<?php if ( ! ( in_array( $key, array( 'server_config', 'backup_errors' ) ) ) ) : ?>
+
+				<div id="hmbkp-warning-other" class="error notice is-dismissible">
+
 					<?php foreach ( array_unique( $notice_type ) as $msg ) : ?>
+
 						<p><?php echo wp_kses_data( $msg ); ?></p>
+
+						<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+
 					<?php endforeach; ?>
 				</div>
+
 			<?php endif; ?>
+
 		<?php endforeach; ?>
 
 	<?php endif; ?>
