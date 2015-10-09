@@ -40,6 +40,18 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+### 3.3.0 / 2015-10-09
+
+* Dropped support for PclZip
+* Fixed duplicate cron schedule interval names ( props ucavus )
+* Corrected some typos, grammar and punctuation ( props ucavus )
+* Fixed a bug in the WP CLI command ( props duritong )
+* Better message for wp-cron related errors
+* Replace 'bi-weekly' with less confusing wording
+* Fixed a few errors misc reported by code quality tool
+* Total site size display now subtracts excludes
+* Many general improvements and bug fixes
+
 #### 3.2.7 / 2015-07-27
 
 * Pass schedule type instead of schedule id as context for the calculated sizes, it's more useful
