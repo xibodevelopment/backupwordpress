@@ -1,61 +1,9 @@
-<?php if ( hmbkp_is_first_run() ) : ?>
+<?php if ( hmbkp_is_first_run() ) {
 
-	<div class="wrap about-wrap">
+	require_once( HMBKP_PLUGIN_PATH . 'admin/welcome.php' );
+	return;
 
-		<h1>Welcome to BackUpWordPress</h1>
-
-		<div class="about-text">Thank you for installing BackUpWordPress, your site will soon be safely backed up. Follow the steps below to get going. Or you can <a href>Skip Setup</a>.</div>
-
-		<div class="steps">
-
-			<div class="step wp-filter collapsed">
-
-				<header>
-					<div class="icon"><span class="dashicons dashicons-marker"></span></div>
-					<div class="title"><h2>Test the BackUp Process</h2></div>
-				</header>
-
-				<div class="detail">
-
-
-				</div>
-
-			</div>
-
-			<div class="step wp-filter">
-
-				<header>
-					<div class="icon"><span class="dashicons dashicons-yes"></span></div>
-					<div class="title"><h2>Test the BackUp Process</h2></div>
-				</header>
-
-				<div class="detail">
-
-
-				</div>
-
-			</div>
-
-			<div class="step wp-filter collapsed">
-
-				<header>
-					<div class="icon"><span class="dashicons dashicons-no"></span></div>
-					<div class="title"><h2>Test the BackUp Process</h2></div>
-				</header>
-
-				<div class="detail">
-
-
-				</div>
-
-			</div>
-
-		</div>
-
-	</div>
-
-<?php return;
-endif; ?>
+} ?>
 
 <div class="wrap">
 

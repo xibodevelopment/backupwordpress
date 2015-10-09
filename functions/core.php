@@ -302,7 +302,7 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a database backup daily and store backups
 	 * for the last 2 weeks
 	 */
-	$database_daily = new HM\BackUpWordPress\Scheduled_Backup( (string) time() );
+	$database_daily = new HM\BackUpWordPress\Scheduled_Backup( 'database' );
 	$database_daily->set_type( 'database' );
 	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
 	$database_daily->set_reoccurrence( 'daily' );
@@ -313,7 +313,7 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a complete backup to run weekly and store backups for
 	 * the last 3 months
 	 */
-	$complete_weekly = new HM\BackUpWordPress\Scheduled_Backup( (string) ( time() + 1 ) );
+	$complete_weekly = new HM\BackUpWordPress\Scheduled_Backup( 'complete' );
 	$complete_weekly->set_type( 'complete' );
 	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
 	$complete_weekly->set_reoccurrence( 'weekly' );
@@ -327,7 +327,6 @@ function hmbkp_setup_default_schedules() {
 	} );
 
 }
-
 add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
 
 /**
@@ -349,7 +348,6 @@ function hmbkp_cron_schedules( $schedules = array() ) {
 
 	return $schedules;
 }
-
 add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
 
 /**
