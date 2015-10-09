@@ -1,21 +1,23 @@
 build-dev:
   - makepot
+  - autoprefixer
   - cssmin
   - uglify
-  - autoprefixer
   - shell
-  - compress
+  - compress:dev
 
 build:
   - makepot
+  - autoprefixer
   - cssmin
   - uglify
-  - autoprefixer
-  - bumpup
+  - bumpup # defaults to patch, change to :minor or :major if necessary
   - replace # Update version numbers, build faq.txt
   - concat # build readme.txt
+
+release:
   - shell
-  - compress
+  - compress:main
 
 localize:
   - makepot
