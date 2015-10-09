@@ -9,16 +9,15 @@
 function hmbkp_admin_menu() {
 
 	if ( is_multisite() ) {
-
-		add_submenu_page( 'settings.php', __( 'Manage Backups', 'backupwordpress' ), __( 'Backups', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
-
+		add_submenu_page( 'settings.php', __( 'Manage Backups | BackUpWordPress', 'backupwordpress' ), __( 'Backups', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
 	} else {
-
 		add_management_page( __( 'Manage Backups', 'backupwordpress' ), __( 'Backups', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
-
 	}
-}
 
+	// TODO shouldn't actually show in menu
+	add_management_page( __( 'BackUpWordPress Extensions', 'backupwordpress' ), __( 'Extensions', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG . '_extensions', 'hmbkp_extensions' );
+
+}
 add_action( 'network_admin_menu', 'hmbkp_admin_menu' );
 add_action( 'admin_menu', 'hmbkp_admin_menu' );
 
@@ -30,6 +29,17 @@ add_action( 'admin_menu', 'hmbkp_admin_menu' );
  */
 function hmbkp_manage_backups() {
 	require_once( HMBKP_PLUGIN_PATH . 'admin/page.php' );
+}
+
+
+/**
+ * Load the backups admin page
+ * when the menu option is clicked
+ *
+ * @return null
+ */
+function hmbkp_extensions() {
+	require_once( HMBKP_PLUGIN_PATH . 'admin/extensions.php' );
 }
 
 /**
@@ -49,7 +59,6 @@ function hmbkp_plugin_action_link( $links, $file ) {
 	return $links;
 
 }
-
 add_filter( 'plugin_action_links', 'hmbkp_plugin_action_link', 10, 2 );
 
 /**
@@ -103,5 +112,4 @@ function hmbkp_contextual_help() {
 	);
 
 }
-
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_contextual_help' );

@@ -68,6 +68,10 @@ class Services {
 
 	}
 
+	public function get_available_services() {
+		return $this->get_services();
+	}
+
 	/**
 	 * Register a new service
 	 *

@@ -1,6 +1,12 @@
 <div class="wrap">
 
-	<h2>BackUpWordPress</h2>
+	<h1>
+
+		BackUpWordPress
+
+		<a class="page-title-action" href="<?php echo hmbkp_get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ); ?>">Extensions</a>
+
+	</h1>
 
 	<?php if ( hmbkp_possible() ) : ?>
 
