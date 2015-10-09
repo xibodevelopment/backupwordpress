@@ -8,12 +8,14 @@ build-dev:
 
 build:
   - makepot
+  - autoprefixer
   - cssmin
   - uglify
-  - autoprefixer
-  - bumpup
+  - bumpup:minor
   - replace # Update version numbers, build faq.txt
   - concat # build readme.txt
+
+release:
   - shell
   - compress
 
