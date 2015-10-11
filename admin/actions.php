@@ -114,7 +114,7 @@ function hmbkp_request_download_backup() {
 		return;
 	}
 
-	$url = str_replace( wp_normalize_path( HM\BackUpWordPress\Backup::get_home_path() ), home_url(), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
+	$url = str_replace( wp_normalize_path( HM\BackUpWordPress\Backup::get_home_path() ), home_url( '/' ), trailingslashit( dirname( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ) ) ) ) . urlencode( pathinfo( sanitize_text_field( base64_decode( $_GET['hmbkp_backup_archive'] ) ), PATHINFO_BASENAME ) );
 
 	global $is_apache;
 
