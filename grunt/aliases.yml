@@ -13,9 +13,10 @@ build:
   - uglify
   - bumpup # defaults to patch, change to :minor or :major if necessary
   - replace # Update version numbers, build faq.txt
-  - concat # build readme.txt
 
+# before running release, make sure to add the changelog to readme-footer.txt Also, update the "tested up to" version if necessary
 release:
+  - concat # build readme.txt
   - shell
   - compress:main
 
