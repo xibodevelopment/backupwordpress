@@ -71,8 +71,8 @@ class Backup {
 	 * An array of all the files in root
 	 * excluding excludes and unreadable files
 	 *
-	 * @var array 
-	*/
+	 * @var array
+	 */
 	private $files = array();
 
 	/**
@@ -235,7 +235,7 @@ class Backup {
 	public static function get_home_path() {
 
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
-				return wp_normalize_path( HMBKP_ROOT );
+			return wp_normalize_path( HMBKP_ROOT );
 		}
 
 		$home_url = home_url();
@@ -245,10 +245,10 @@ class Backup {
 
 		// If site_url contains home_url and they differ then assume WordPress is installed in a sub directory
 		if ( $home_url !== $site_url && strpos( $site_url, $home_url ) === 0 ) {
-				$home_path = trailingslashit( substr( wp_normalize_path( ABSPATH ), 0, strrpos( wp_normalize_path( ABSPATH ), str_replace( $home_url, '', $site_url ) ) ) );
+			$home_path = trailingslashit( substr( wp_normalize_path( ABSPATH ), 0, strrpos( wp_normalize_path( ABSPATH ), str_replace( $home_url, '', $site_url ) ) ) );
 		}
 
-			return wp_normalize_path( $home_path );
+		return wp_normalize_path( $home_path );
 
 	}
 
@@ -306,14 +306,14 @@ class Backup {
 
 		if ( empty( $this->archive_filename ) ) {
 			$this->set_archive_filename( implode( '-', array(
-					sanitize_title( str_ireplace( array(
-						'http://',
-						'https://',
-						'www'
-					), '', home_url() ) ),
-					'backup',
-					current_time( 'Y-m-d-H-i-s' )
-				) ) . '.zip' );
+				sanitize_title( str_ireplace( array(
+					'http://',
+					'https://',
+					'www'
+				), '', home_url() ) ),
+				'backup',
+				current_time( 'Y-m-d-H-i-s' )
+			) ) . '.zip' );
 		}
 
 		return $this->archive_filename;
@@ -396,7 +396,7 @@ class Backup {
 	public function get_root() {
 
 		if ( empty( $this->root ) ) {
-				$this->set_root( wp_normalize_path( self::get_home_path() ) );
+			$this->set_root( wp_normalize_path( self::get_home_path() ) );
 		}
 
 		return $this->root;
@@ -416,7 +416,7 @@ class Backup {
 			return new \WP_Error( 'invalid_directory_path', sprintf( __( 'Invalid root path <code>%s</code> must be a valid directory path', 'backupwordpress' ), $path ) );
 		}
 
-			$this->root = wp_normalize_path( $path );
+		$this->root = wp_normalize_path( $path );
 
 	}
 
@@ -442,7 +442,7 @@ class Backup {
 			return new \WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non-empty (string)', 'backupwordpress' ), $existing_archive_filepath ) );
 		}
 
-			$this->existing_archive_filepath = wp_normalize_path( $existing_archive_filepath );
+		$this->existing_archive_filepath = wp_normalize_path( $existing_archive_filepath );
 
 	}
 
@@ -558,7 +558,7 @@ class Backup {
 
 		// Find the first one which works
 		foreach ( $mysqldump_locations as $location ) {
-				if ( (is_null( shell_exec( 'hash ' . wp_normalize_path( $location ) . ' 2>&1' ) ) ) && @is_executable( wp_normalize_path( $location ) ) ) {
+			if ( (is_null( shell_exec( 'hash ' . wp_normalize_path( $location ) . ' 2>&1' ) ) ) && @is_executable( wp_normalize_path( $location ) ) ) {
 				$this->set_mysqldump_command_path( $location );
 				break;  // Found one
 			}
@@ -621,7 +621,7 @@ class Backup {
 
 		// Find the first one which works
 		foreach ( $zip_locations as $location ) {
-				if ( @is_executable( wp_normalize_path( $location ) ) ) {
+			if ( @is_executable( wp_normalize_path( $location ) ) ) {
 				$this->set_zip_command_path( $location );
 				break;  // Found one
 			}
@@ -838,23 +838,21 @@ class Backup {
 	 */
 	public function mysqldump_fallback() {
 
-			try {
-				// Get character set from constant if it is declared.
-				if ( defined( 'DB_CHARSET' ) && DB_CHARSET ) {
-					$charset = DB_CHARSET;
-				} else {
-					$charset = 'utf8';
-				}
-				$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', array( 'default-character-set' => $charset ) );
-				$dump = new IMysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql', $dump_settings );
-
-				$dump->start( $this->get_database_dump_filepath() );
-
-			} catch ( \Exception $e ) {
-
-				return new \WP_Error( 'mysql-fallback-error', sprintf( __( 'mysqldump fallback error %s', 'backupwordpress' ), $e->getMessage() ) );
-
+		try {
+			// Get character set from constant if it is declared.
+			if ( defined( 'DB_CHARSET' ) && DB_CHARSET ) {
+				$charset = DB_CHARSET;
+			} else {
+				$charset = 'utf8';
 			}
+			$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', array( 'default-character-set' => $charset ) );
+			$dump = new IMysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql', $dump_settings );
+
+			$dump->start( $this->get_database_dump_filepath() );
+
+		} catch ( \Exception $e ) {
+
+			return new \WP_Error( 'mysql-fallback-error', sprintf( __( 'mysqldump fallback error %s', 'backupwordpress' ), $e->getMessage() ) );
 
 		}
 
@@ -928,7 +926,7 @@ class Backup {
 			$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
 
 			if ( ! empty ( $stderr ) ) {
-					$this->warning( $this->get_archive_method(), $stderr );
+				$this->warning( $this->get_archive_method(), $stderr );
 			}
 		}
 
@@ -1014,14 +1012,14 @@ class Backup {
 				}
 
 				// Excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 					continue;
 				}
 
 				if ( $file->isDir() ) {
-						$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
+					$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
 				} elseif ( $file->isFile() ) {
-						$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
+					$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
 				}
 
 				if ( ++ $files_added % 500 === 0 ) {
@@ -1165,7 +1163,7 @@ class Backup {
 			}
 
 			// Excludes
-				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				continue;
 			}
 
@@ -1205,7 +1203,7 @@ class Backup {
 			}
 
 			// Excludes
-				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				$this->excluded_files[] = $file;
 			}
 
@@ -1334,7 +1332,7 @@ class Backup {
 			}
 
 			// Strip $this->root and conform
-				$rule = str_ireplace( $this->get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
+			$rule = str_ireplace( $this->get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
 
 			// Strip the preceeding slash
 			if ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {
@@ -1583,4 +1581,3 @@ class Backup {
 	}
 
 }
-
