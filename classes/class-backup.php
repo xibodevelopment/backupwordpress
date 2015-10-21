@@ -2,7 +2,7 @@
 
 namespace HM\BackUpWordPress;
 use Symfony\Component\Finder\Finder;
-use Ifsnop\Mysqldump as IMysqldump;
+use Ifsnop\Mysqldump as Mysqldump;
 
 /**
  * Generic file and database backup class
