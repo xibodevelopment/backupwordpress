@@ -92,6 +92,14 @@ class Backup {
 	protected $included_files = array();
 
 	/**
+	 * An array of all the files in root
+	 * that match the exclude rules
+	 *
+	 * @var array
+	 */
+	private $excluded_files = array();
+
+	/**
 	 * Contains an array of errors
 	 *
 	 * @var mixed
@@ -837,6 +845,12 @@ class Backup {
 	 *
 	 */
 	public function mysqldump_fallback() {
+
+		$this->errors_to_warnings( $this->get_mysqldump_method() );
+
+		$this->mysqldump_method = 'mysqldump_fallback';
+
+		$this->do_action( 'hmbkp_mysqldump_started' );
 
 		try {
 			// Get character set from constant if it is declared.
