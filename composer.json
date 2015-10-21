@@ -7,7 +7,7 @@
     ],
     "type"       : "wordpress-plugin",
     "homepage"   : "https://github.com/humanmade/backupwordpress",
-    "license"    : "GPLv2",
+    "license"    : "GPL-3.0",
     "authors"    : [
         {
             "name"    : "Human Made Limited",

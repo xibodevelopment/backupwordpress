@@ -2,10 +2,10 @@
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
-Tested up to: 4.2
-Stable tag: 3.2.7
+Tested up to: 4.4
+Stable tag: 3.3.2
 
-Simple automated backups of your WordPress powered website.
+Simple automated backups of your WordPress-powered website.
 
 == Description ==
 
@@ -31,7 +31,7 @@ The BackUpWordPress plugin is hosted on GitHub, if you want to help out with dev
 
 = Translations =
 
-We'd also love help translating the plugin into more languages, if you can help then please contact backupwordpress@hmn.md or visit http://translate.hmn.md/.
+We'd also love help translating the plugin into more languages, if you can help then please visit https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/ to start translating.
 
 == Installation ==
 

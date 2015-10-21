@@ -14,6 +14,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.3.1 =
+
+* Fixes a bug that would prevent downloading backups since 3.3.0 - please update.
+
 = 3.2.5 =
 
 * Security fixes related to add_query_arg
@@ -39,6 +43,23 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.3.1 / 2015-10-12
+
+* Fix false positive error message.
+* Fix broken download links
+
+### 3.3.0 / 2015-10-09
+
+* Dropped support for PclZip
+* Fixed duplicate cron schedule interval names ( props ucavus )
+* Corrected some typos, grammar and punctuation ( props ucavus )
+* Fixed a bug in the WP CLI command ( props duritong )
+* Better message for wp-cron related errors
+* Replace 'bi-weekly' with less confusing wording
+* Fixed a few errors misc reported by code quality tool
+* Total site size display now subtracts excludes
+* Many general improvements and bug fixes
 
 #### 3.2.7 / 2015-07-27
 

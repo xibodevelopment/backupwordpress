@@ -7,24 +7,27 @@
  * @subpackage tests
  */
 
-// Support for:
-// 1. Local SaltyWP
-// 2. `WP_DEVELOP_DIR` environment variable
-// 3. Plugin installed inside of WordPress.org developer checkout
-// 4. Tests checked out to /tmp
-
-if ( file_exists( '/srv/www/wordpress-develop.dev/tests/phpunit/includes/bootstrap.php' ) ) {
-	$test_root = '/srv/www/wordpress-develop.dev/tests/phpunit';
-	$plugins_dir = '/srv/www/wordpress-develop.dev/src/wp-content/plugins';
-} elseif ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
+/**
+ * Determine where the WP test suite lives.
+ *
+ * Support for:
+ * 1. `WP_DEVELOP_DIR` environment variable, which points to a checkout
+ *   of the develop.svn.wordpress.org repository (this is recommended)
+ * 2. `WP_TESTS_DIR` environment variable, which points to a checkout
+ * 3. `WP_ROOT_DIR` environment variable, which points to a checkout
+ * 4. Plugin installed inside of WordPress.org developer checkout
+ * 5. Tests checked out to /tmp
+ */
+if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	$test_root = getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit';
-	$plugins_dir = getenv( 'WP_DEVELOP_DIR' ) . '/src/wp-content/plugins';
-} elseif ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
+} else if ( false !== getenv( 'WP_TESTS_DIR' ) ) {
+	$test_root = getenv( 'WP_TESTS_DIR' );
+} else if ( false !== getenv( 'WP_ROOT_DIR' ) ) {
+	$test_root = getenv( 'WP_ROOT_DIR' ) . '/tests/phpunit';
+} else if ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
 	$test_root = '../../../../tests/phpunit';
-	$plugins_dir = '../../../../src/wp-content/plugins';
-} elseif ( file_exists( '/tmp/wordpress-tests-lib/includes/bootstrap.php' ) ) {
+} else if ( file_exists( '/tmp/wordpress-tests-lib/includes/bootstrap.php' ) ) {
 	$test_root = '/tmp/wordpress-tests-lib';
-	$plugins_dir = '/tmp/wordpress/wp-content/plugins';
 }
 
 require $test_root . '/includes/functions.php';
@@ -33,10 +36,6 @@ function _manually_load_plugin() {
 	require_once( dirname( __DIR__ ) . '/backupwordpress.php' );
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
-
-if ( ! file_exists( '/srv/www/wordpress-develop.dev/src/wp-content/plugins/backupwordpress' ) ) {
-	symlink( dirname( __DIR__ ) , $plugins_dir . '/backupwordpress' );
-}
 
 require $test_root . '/includes/bootstrap.php';
 

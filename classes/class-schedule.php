@@ -58,7 +58,7 @@ class Scheduled_Backup {
 
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) ) {
-			throw new \Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non empty string' );
+			throw new \Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non-empty string' );
 		}
 
 		// Store id for later
@@ -140,15 +140,14 @@ class Scheduled_Backup {
 	 * Returns the given option value or WP_Error if it doesn't exist
 	 *
 	 * @param $option_name
-	 *
-	 * @return WP_Error
+	 * @return \WP_Error
 	 */
 	public function get_schedule_option( $option_name ) {
 
 		if ( isset( $this->options[ $option_name ] ) ) {
 			return $this->options[ $option_name ];
 		} else {
-			return new WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
+			return new \WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
 		}
 	}
 
@@ -159,9 +158,7 @@ class Scheduled_Backup {
 	 */
 	public function get_name() {
 
-		$recurrence = ( 'manually' === $this->get_reoccurrence() ) ? $this->get_reoccurrence() : substr( $this->get_reoccurrence(), 6 );
-
-		return ucwords( $this->get_type() ) . ' ' . $recurrence;
+		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
 
 	}
 
@@ -299,8 +296,12 @@ class Scheduled_Backup {
 
 	/**
 	 * Set the service options for this schedule
+	 *
+	 * @param $service
+	 * @param array $options
 	 */
 	public function set_service_options( $service, Array $options ) {
+
 		$this->options[ $service ] = $options;
 	}
 
@@ -311,7 +312,7 @@ class Scheduled_Backup {
 	 *
 	 * @return string
 	 */
-	public function get_site_size() {
+	public function get_site_size( $skip_excluded_files = false ) {
 
 		$size = 0;
 
@@ -332,7 +333,7 @@ class Scheduled_Backup {
 
 			$root = new \SplFileInfo( $this->backup->get_root() );
 
-			$size += $this->filesize( $root );
+			$size += $this->filesize( $root, $skip_excluded_files );
 
 		}
 
@@ -347,8 +348,8 @@ class Scheduled_Backup {
 	 *
 	 * @return bool|string
 	 */
-	public function get_formatted_site_size() {
-		return size_format( $this->get_site_size() );
+	public function get_formatted_site_size( $skip_excluded_files = false ) {
+		return size_format( $this->get_site_size( $skip_excluded_files ) );
 	}
 
 	/**
@@ -356,7 +357,7 @@ class Scheduled_Backup {
 	 *
 	 * @return int            The total of the file or directory
 	 */
-	function is_site_size_being_calculated() {
+	public function is_site_size_being_calculated() {
 		return false !== get_transient( 'hmbkp_directory_filesizes_running' );
 	}
 
@@ -365,7 +366,7 @@ class Scheduled_Backup {
 	 *
 	 * @return bool The total of the file or directory
 	 */
-	function is_site_size_cached() {
+	public function is_site_size_cached() {
 		return false !== get_transient( 'hmbkp_directory_filesizes' );
 	}
 
@@ -472,9 +473,9 @@ class Scheduled_Backup {
 		foreach ( $files as $file ) {
 
 			if ( $file->isReadable() ) {
-				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = $file->getSize();
+				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = $file->getSize();
 			} else {
-				$directory_sizes[ Backup::conform_dir( $file->getRealpath() ) ] = 0;
+				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = 0;
 			}
 
 		}
@@ -559,7 +560,7 @@ class Scheduled_Backup {
 				foreach ( $directory_sizes as $path => $size ) {
 
 					// Skip excluded files if we have excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', Backup::conform_dir( $path ) ) ) ) {
+					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', wp_normalize_path( $path ) ) ) ) {
 						unset( $directory_sizes[ $path ] );
 					}
 
@@ -690,17 +691,7 @@ class Scheduled_Backup {
 	 * @return array
 	 */
 	public static function get_cron_schedules() {
-
-		$schedules = wp_get_schedules();
-
-		// remove any schedule whose key is not prefixed with 'hmbkp_'
-		foreach ( $schedules as $key => $arr ) {
-			if ( ! preg_match( '/^hmbkp_/', $key ) ) {
-				unset( $schedules[ $key ] );
-			}
-		}
-
-		return $schedules;
+		return hmbkp_cron_schedules();
 	}
 
 	/**
@@ -862,7 +853,7 @@ class Scheduled_Backup {
 		) );
 
 		if ( false === @file_put_contents( $this->get_schedule_running_path(), $status ) ) {
-			throw new \RuntimeException( sprintf( __( 'Error writing to file. (%s)', 'backpwordpress' ), $this->get_schedule_running_path() ) );
+			throw new \RuntimeException( sprintf( __( 'Error writing to file. (%s)', 'backupwordpress' ), $this->get_schedule_running_path() ) );
 		}
 
 	}
@@ -1119,7 +1110,7 @@ class Scheduled_Backup {
 
 		// Check that it's a valid filepath
 		if ( empty( $filepath ) || ! is_string( $filepath ) ) {
-			return new \WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non empty string', 'backupwordpress' ), __METHOD__ ) );
+			return new \WP_Error( 'hmbkp_empty_string_error', sprintf( __( 'Argument 1 for %s must be a non-empty string', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		// Make sure it exists

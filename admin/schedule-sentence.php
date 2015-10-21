@@ -13,19 +13,19 @@ $next_backup = 'title="' . esc_attr( sprintf( __( 'The next backup will be on %1
 // Backup Re-occurrence
 switch ( $schedule->get_reoccurrence() ) :
 
-	case 'hmbkp_hourly' :
+	case 'hourly' :
 
 		$reoccurrence = date_i18n( 'i', $schedule->get_next_occurrence( false ) ) === '00' ? '<span ' . $next_backup . '>' . __( 'hourly on the hour', 'backupwordpress' ) . '</span>' : sprintf( __( 'hourly at %s minutes past the hour', 'backupwordpress' ), '<span ' . $next_backup . '>' . intval( date_i18n( 'i', $schedule->get_next_occurrence( false ) ) ) ) . '</span>';
 
 	break;
 
-	case 'hmbkp_daily' :
+	case 'daily' :
 
 		$reoccurrence = sprintf( __( 'daily at %s', 'backupwordpress' ), '<span ' . $next_backup . '>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
 
 	break;
 
-	case 'hmbkp_twicedaily' :
+	case 'twicedaily' :
 
 		$times[] = date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) );
 		$times[] = date_i18n( get_option( 'time_format' ), strtotime( '+ 12 hours', $schedule->get_next_occurrence( false ) ) );
@@ -36,19 +36,19 @@ switch ( $schedule->get_reoccurrence() ) :
 
 	break;
 
-	case 'hmbkp_weekly' :
+	case 'weekly' :
 
 		$reoccurrence = sprintf( __( 'weekly on %1$s at %2$s', 'backupwordpress' ), '<span ' . $next_backup . '>' .esc_html( $day ) . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
 
 	break;
 
-	case 'hmbkp_fortnightly' :
+	case 'fortnightly' :
 
-		$reoccurrence = sprintf( __( 'biweekly on %1$s at %2$s', 'backupwordpress' ), '<span ' . $next_backup . '>' . $day . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
+		$reoccurrence = sprintf( __( 'every two weeks on %1$s at %2$s', 'backupwordpress' ), '<span ' . $next_backup . '>' . $day . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
 
 	break;
 
-	case 'hmbkp_monthly' :
+	case 'monthly' :
 
 		$reoccurrence = sprintf( __( 'on the %1$s of each month at %2$s', 'backupwordpress' ), '<span ' . $next_backup . '>' . esc_html( date_i18n( 'jS', $schedule->get_next_occurrence( false ) ) ) . '</span>', '<span>' . esc_html( date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ) ) . '</span>' );
 
@@ -99,10 +99,8 @@ foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $file => $se
 		$email_msg = $service->get_error_message();
 	}  elseif ( 'Email' === $service->name ) {
 		$email_msg = wp_kses_post( $service->display() );
-
 	} elseif ( $service->is_service_active() ) {
 		$services[] = esc_html( $service->display() );
-
 	}
 
 }
@@ -155,7 +153,7 @@ function hmbkp_get_site_size_text( HM\BackUpWordPress\Scheduled_Backup $schedule
 
 	} elseif ( ( 'database' === $schedule->get_type() ) || $schedule->is_site_size_cached() ) {
 
-		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $schedule->get_formatted_site_size() ) );
+		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $schedule->get_formatted_site_size( true ) ) );
 
 	} else {
 

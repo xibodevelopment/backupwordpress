@@ -82,7 +82,7 @@ class Path {
 		// Ensure the backup directory is protected
 		$this->protect_path();
 
-		return Backup::conform_dir( $this->path );
+		return wp_normalize_path( $this->path );
 
 	}
 
@@ -246,7 +246,7 @@ class Path {
 		// Protect the directory with a .htaccess file on Apache servers
 		if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && wp_is_writable( $this->path ) ) {
 
-			$contents[] = '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'hmbkp' ), '.htaccess' );
+			$contents[] = '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'backupwordpress' ), '.htaccess' );
 			$contents[] = '';
 			$contents[] = '<IfModule mod_rewrite.c>';
 			$contents[] = 'RewriteEngine On';
@@ -254,6 +254,8 @@ class Path {
 			$contents[] = 'RewriteRule (.*) - [F]';
 			$contents[] = '</IfModule>';
 			$contents[] = '';
+
+			file_put_contents( $htaccess, '' );
 
 			insert_with_markers( $htaccess, 'BackUpWordPress', $contents );
 

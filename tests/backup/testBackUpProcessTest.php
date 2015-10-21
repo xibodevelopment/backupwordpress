@@ -137,30 +137,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 	}
 
 	/**
-	 * Test a full backup with the PclZip
-	 */
-	public function testFullBackupWithPclZipAndMysqldumpFallback() {
-
-		$this->backup->set_zip_command_path( false );
-		$this->backup->set_mysqldump_command_path( false );
-
-		$this->backup->skip_zip_archive = true;
-
-		$this->backup->backup();
-
-		$this->assertEquals( $this->backup->get_archive_method(), 'pclzip' );
-		$this->assertEquals( $this->backup->get_mysqldump_method(), 'mysqldump_fallback' );
-
-		$this->assertFileExists( $this->backup->get_archive_filepath() );
-
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), array( 'test-data.txt', $this->backup->get_database_dump_filename() ) );
-		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), 4 );
-
-		$this->assertEmpty( $this->backup->get_errors() );
-
-	}
-
-	/**
 	 * Test a files only backup with the zip command
 	 */
 	public function testFileOnlyWithZipCommand() {
@@ -196,29 +172,6 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 		$this->backup->backup();
 
 		$this->assertEquals( $this->backup->get_archive_method(), 'ziparchive' );
-
-		$this->assertFileExists( $this->backup->get_archive_filepath() );
-
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), array( 'test-data.txt' ) );
-		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), 3 );
-
-		$this->assertEmpty( $this->backup->get_errors() );
-
-	}
-
-	/**
-	 * Test a files only backup with PclZip
-	 */
-	public function testFileOnlyWithPclZip() {
-
-		$this->backup->set_type( 'file' );
-		$this->backup->set_zip_command_path( false );
-
-		$this->backup->skip_zip_archive = true;
-
-		$this->backup->backup();
-
-		$this->assertEquals( $this->backup->get_archive_method(), 'pclzip' );
 
 		$this->assertFileExists( $this->backup->get_archive_filepath() );
 

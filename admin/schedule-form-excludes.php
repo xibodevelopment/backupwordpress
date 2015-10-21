@@ -68,7 +68,7 @@
 
 	<?php endif; ?>
 
-	<h3 id="directory-listing"><?php _e( 'Directory Listing', 'backupwordpress' ); ?></h3>
+	<h3 id="directory-listing"><?php _e( 'Your Site', 'backupwordpress' ); ?></h3>
 
 	<p><?php _e( 'Here\'s a directory listing of all files on your site, you can browse through and exclude files or folders that you don\'t want included in your backup.', 'backupwordpress' ); ?></p>
 
@@ -91,121 +91,121 @@
 	$exclude_string = $schedule->backup->exclude_string( 'regex' );
 
 	// Kick off a recursive filesize scan
-	$files = $schedule->list_directory_by_total_filesize( $directory );
+	$files = $schedule->list_directory_by_total_filesize( $directory ); ?>
 
-	if ( $files ) { ?>
+	<table class="widefat">
 
-		<table class="widefat">
+		<thead>
 
-			<thead>
+		<tr>
+			<th></th>
+			<th scope="col"><?php _e( 'Name', 'backupwordpress' ); ?></th>
+			<th scope="col" class="column-format"><?php _e( 'Size', 'backupwordpress' ); ?></th>
+			<th scope="col" class="column-format"><?php _e( 'Permissions', 'backupwordpress' ); ?></th>
+			<th scope="col" class="column-format"><?php _e( 'Type', 'backupwordpress' ); ?></th>
+			<th scope="col" class="column-format"><?php _e( 'Status', 'backupwordpress' ); ?></th>
+		</tr>
 
-			<tr>
-				<th></th>
-				<th scope="col"><?php _e( 'Name', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Size', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Permissions', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Type', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Status', 'backupwordpress' ); ?></th>
-			</tr>
+		<tr>
 
-			<tr>
+			<th scope="row">
+				<div class="dashicons dashicons-admin-home"></div>
+			</th>
 
-				<th scope="row">
-					<div class="dashicons dashicons-admin-home"></div>
-				</th>
+			<th scope="col">
 
-				<th scope="col">
+				<?php if ( $schedule->backup->get_root() !== $directory ) { ?>
 
-					<?php if ( $schedule->backup->get_root() !== $directory ) { ?>
+					<a href="<?php echo esc_url( remove_query_arg( 'hmbkp_directory_browse' ) ); ?>"><?php echo esc_html( $schedule->backup->get_root() ); ?></a>
+					<code>/</code>
 
-						<a href="<?php echo esc_url( remove_query_arg( 'hmbkp_directory_browse' ) ); ?>"><?php echo esc_html( $schedule->backup->get_root() ); ?></a>
+					<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( $schedule->backup->get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
+
+					foreach ( $parents as $directory_basename ) { ?>
+
+						<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
 						<code>/</code>
 
-						<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( $schedule->backup->get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
+					<?php } ?>
 
-						foreach ( $parents as $directory_basename ) { ?>
+					<?php echo esc_html( basename( $directory ) ); ?>
 
-							<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
-							<code>/</code>
+				<?php } else { ?>
 
-						<?php } ?>
+					<?php echo esc_html( $schedule->backup->get_root() ); ?>
 
-						<?php echo esc_html( basename( $directory ) ); ?>
+				<?php } ?>
 
-					<?php } else { ?>
+			</th>
 
-						<?php echo esc_html( $schedule->backup->get_root() ); ?>
+			<td class="column-filesize">
+
+				<?php if ( $schedule->is_site_size_being_calculated() ) { ?>
+
+					<span class="spinner"></span>
+
+				<?php } else {
+
+					$root = new SplFileInfo( $schedule->backup->get_root() );
+
+					$size = $schedule->filesize( $root, true );
+
+					if ( false !== $size ) {
+
+						$size = size_format( $size );
+
+						if ( ! $size ) {
+							$size = '0 B';
+						} ?>
+
+						<code>
+
+							<?php echo esc_html( $size ); ?>
+
+							<a class="dashicons dashicons-update"
+							   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( $schedule->backup->get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+
+						</code>
+
 
 					<?php } ?>
 
-				</th>
+				<?php } ?>
 
-				<td class="column-filesize">
+			<td>
+				<?php echo esc_html( substr( sprintf( '%o', fileperms( $schedule->backup->get_root() ) ), - 4 ) ); ?>
+			</td>
 
-					<?php if ( $schedule->is_site_size_being_calculated() ) { ?>
+			<td>
 
-						<span class="spinner"></span>
+				<?php if ( is_link( $schedule->backup->get_root() ) ) {
 
-					<?php } else {
+					_e( 'Symlink', 'backupwordpress' );
 
-						$root = new SplFileInfo( $schedule->backup->get_root() );
+				} elseif ( is_dir( $schedule->backup->get_root() ) ) {
 
-						$size = $schedule->filesize( $root, true );
+					_e( 'Folder', 'backupwordpress' );
 
-						if ( false !== $size ) {
+				} ?>
 
-							$size = size_format( $size );
+			</td>
 
-							if ( ! $size ) {
-								$size = '0 B';
-							} ?>
+			<td></td>
 
-							<code>
+		</tr>
 
-								<?php echo esc_html( $size ); ?>
+		</thead>
 
-								<a class="dashicons dashicons-update"
-								   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( $schedule->backup->get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+		<tbody>
 
-							</code>
+		<?php if ( $files ) {
 
-
-						<?php } ?>
-
-					<?php } ?>
-
-				<td>
-					<?php echo esc_html( substr( sprintf( '%o', fileperms( $schedule->backup->get_root() ) ), - 4 ) ); ?>
-				</td>
-
-				<td>
-
-					<?php if ( is_link( $schedule->backup->get_root() ) ) {
-
-						_e( 'Symlink', 'backupwordpress' );
-
-					} elseif ( is_dir( $schedule->backup->get_root() ) ) {
-
-						_e( 'Folder', 'backupwordpress' );
-
-					} ?>
-
-				</td>
-
-				<td></td>
-
-			</tr>
-
-			</thead>
-
-			<tbody>
-
-			<?php foreach ( $files as $size => $file ) {
+			foreach ( $files as $size => $file ) {
 
 				$is_excluded = $is_unreadable = false;
 
 				// Check if the file is excluded
-				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->backup->get_root() ), '', HM\BackUpWordPress\Backup::conform_dir( $file->getPathname() ) ) ) ) {
+				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->backup->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 					$is_excluded = true;
 				}
 
@@ -354,11 +354,18 @@
 
 			<?php } ?>
 
-			</tbody>
+		<?php } else { ?>
 
-		</table>
+			<tr>
+				<td colspan="5"><span class="description"><?php _e( 'This folder is empty', 'backupwordpress' ); ?></span></td>
+			</tr>
 
-	<?php } ?>
+		<?php } ?>
+
+		</tbody>
+
+	</table>
+
 
 	<p class="submit">
 		<a href="<?php echo esc_url( hmbkp_get_settings_url() ) ?>"

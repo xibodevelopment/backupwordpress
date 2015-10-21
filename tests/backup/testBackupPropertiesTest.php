@@ -73,7 +73,7 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup->set_archive_filename( 'backup.zip' );
 
-		$this->assertEquals( HM\BackUpWordPress\Backup::conform_dir( WP_CONTENT_DIR . '/custom/backup.zip' ), $this->backup->get_archive_filepath() );
+		$this->assertEquals( wp_normalize_path( WP_CONTENT_DIR . '/custom/backup.zip' ), $this->backup->get_archive_filepath() );
 
 		$this->backup->backup();
 
@@ -91,7 +91,7 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 
 		$this->backup->set_database_dump_filename( 'dump.sql' );
 
-		$this->assertEquals( HM\BackUpWordPress\Backup::conform_dir( WP_CONTENT_DIR . '/custom/dump.sql' ), $this->backup->get_database_dump_filepath() );
+		$this->assertEquals( wp_normalize_path( WP_CONTENT_DIR . '/custom/dump.sql' ), $this->backup->get_database_dump_filepath() );
 
 		$this->backup->dump_database();
 

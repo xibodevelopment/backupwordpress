@@ -68,7 +68,7 @@ function hmbkp_admin_notices() {
 
 	<?php if ( ! empty( $notices['backup_errors'] ) ) : ?>
 
-		<div id="hmbkp-warning" class="error fade">
+		<div id="hmbkp-warning-backup" class="error notice is-dismissible">
 			<p>
 				<strong><?php _e( 'BackUpWordPress detected issues with your last backup.', 'backupwordpress' ); ?></strong>
 				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_dismiss_error' ), admin_url( 'admin-post.php' ) ), 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' ) ); ?>" style="float: right;" class="button">
@@ -77,10 +77,16 @@ function hmbkp_admin_notices() {
 			</p>
 
 			<ul>
+
 				<?php foreach ( $notices['backup_errors'] as $notice ) : ?>
+
 					<li><pre><?php echo esc_html( $notice ); ?></pre></li>
+
 				<?php endforeach; ?>
+
 			</ul>
+
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 
 		</div>
 
@@ -88,13 +94,19 @@ function hmbkp_admin_notices() {
 
 	<?php if ( ! empty( $notices['server_config'] ) ) : ?>
 
-		<div id="hmbkp-warning" class="error fade">
+		<div id="hmbkp-warning-server" class="error notice is-dismissible">
 
 			<ul>
+
 				<?php foreach ( $notices['server_config'] as $notice ) : ?>
+
 					<li><?php echo wp_kses_data( $notice ); ?></li>
+
 				<?php endforeach; ?>
+
 			</ul>
+
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 
 		</div>
 
@@ -102,16 +114,25 @@ function hmbkp_admin_notices() {
 
 	<?php $notices = array_filter( $notices );
 
-	if ( ! empty( $notices ) )  : ?>
+	if ( ! empty( $notices ) ) : ?>
 
-		<?php foreach ( $notices as $notice_type ) : ?>
-			<?php if ( ! ( in_array( $notice_type, array( 'server_config', 'backup_errors' ) ) ) ) : ?>
-				<div id="hmbkp-warning" class="error fade">
+		<?php foreach ( $notices as $key => $notice_type ) : ?>
+
+			<?php if ( ! ( in_array( $key, array( 'server_config', 'backup_errors' ) ) ) ) : ?>
+
+				<div id="hmbkp-warning-other" class="error notice is-dismissible">
+
 					<?php foreach ( array_unique( $notice_type ) as $msg ) : ?>
+
 						<p><?php echo wp_kses_data( $msg ); ?></p>
+
+						<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
+
 					<?php endforeach; ?>
 				</div>
+
 			<?php endif; ?>
+
 		<?php endforeach; ?>
 
 	<?php endif; ?>
@@ -138,11 +159,11 @@ function hmbkp_set_server_config_notices() {
 	}
 
 	if ( ! is_dir( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable, run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( hmbkp_path() ) ) . '</code>' );
+		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable. Run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( hmbkp_path() ) ) . '</code>' );
 	}
 
 	if ( is_dir( hmbkp_path() ) && ! wp_is_writable( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'Your backups directory isn\'t writable, run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' );
+		$messages[] = sprintf( __( 'Your backups directory isn\'t writable. Run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' );
 	}
 
 	if ( HM\BackUpWordPress\Backup::is_safe_mode_active() ) {
@@ -313,7 +334,7 @@ function hmbkp_backup_warnings() {
 
 }
 
-function hmbkp_backups_number( $schedule ) {
+function hmbkp_backups_number( \HM\BackUpWordPress\Scheduled_Backup $schedule ) {
 
 	$number = count( $schedule->get_backups() );
 
@@ -332,18 +353,18 @@ function hmbkp_translated_schedule_title( $slug, $title ) {
 		'complete-hourly'      => esc_html__( 'Complete Hourly', 'backupwordpress' ),
 		'file-hourly'          => esc_html__( 'File Hourly', 'backupwordpress' ),
 		'database-hourly'      => esc_html__( 'Database Hourly', 'backupwordpress' ),
-		'complete-twicedaily'  => esc_html__( 'Complete Twicedaily', 'backupwordpress' ),
+		'complete-twicedaily'  => esc_html__( 'Complete Twice Daily', 'backupwordpress' ),
 		'file-twicedaily'      => esc_html__( 'File Twicedaily', 'backupwordpress' ),
-		'database-twicedaily'  => esc_html__( 'Database Twicedaily', 'backupwordpress' ),
+		'database-twicedaily'  => esc_html__( 'Database Twice Daily', 'backupwordpress' ),
 		'complete-daily'       => esc_html__( 'Complete Daily', 'backupwordpress' ),
 		'file-daily'           => esc_html__( 'File Daily', 'backupwordpress' ),
 		'database-daily'       => esc_html__( 'Database Daily', 'backupwordpress' ),
 		'complete-weekly'      => esc_html__( 'Complete Weekly', 'backupwordpress' ),
 		'file-weekly'          => esc_html__( 'File Weekly', 'backupwordpress' ),
 		'database-weekly'      => esc_html__( 'Database Weekly', 'backupwordpress' ),
-		'complete-fortnightly' => esc_html__( 'Complete Biweekly', 'backupwordpress' ),
-		'file-fortnightly'     => esc_html__( 'File Biweekly', 'backupwordpress' ),
-		'database-fortnightly' => esc_html__( 'Database Biweekly', 'backupwordpress' ),
+		'complete-fortnightly' => esc_html__( 'Complete Every Two Weeks', 'backupwordpress' ),
+		'file-fortnightly'     => esc_html__( 'File Every Two Weeks', 'backupwordpress' ),
+		'database-fortnightly' => esc_html__( 'Database Every Two Weeks', 'backupwordpress' ),
 		'complete-monthly'     => esc_html__( 'Complete Monthly', 'backupwordpress' ),
 		'file-monthly'         => esc_html__( 'File Monthly', 'backupwordpress' ),
 		'database-monthly'     => esc_html__( 'Database Monthly', 'backupwordpress' ),
