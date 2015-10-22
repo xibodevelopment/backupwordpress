@@ -923,6 +923,7 @@ class Backup {
 
 		try {
 
+			// Allow passing custom options to dump process.
 			$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', $dump_settings );
 
 			$dump = new IMysqldump\Mysqldump( $dsn, DB_USER, $pwd, $dump_settings );
