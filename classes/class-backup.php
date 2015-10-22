@@ -896,15 +896,36 @@ class Backup {
 			$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;
 		}
 
+		// Get character set from constant if it is declared.
+		if ( defined( 'DB_CHARSET' ) && DB_CHARSET ) {
+			$charset = DB_CHARSET;
+		} else {
+			$charset = 'utf8';
+		}
+
+		if ( defined( 'DB_PASSWORD' ) && DB_PASSWORD ) {
+			$pwd = DB_PASSWORD;
+		} else {
+			$pwd = '';
+		}
+
+		if ( ! defined( 'HMBKP_MYSQLDUMP_SINGLE_TRANSACTION' ) || false !== HMBKP_MYSQLDUMP_SINGLE_TRANSACTION  ) {
+			$single_transaction = true;
+		} else {
+			$single_transaction = false;
+		}
+
+		$dump_settings = array(
+			'default-character-set' => $charset,
+			'hex-blob'              => true,
+			'single-transaction'    => $single_transaction,
+		);
+
 		try {
-			// Get character set from constant if it is declared.
-			if ( defined( 'DB_CHARSET' ) && DB_CHARSET ) {
-				$charset = DB_CHARSET;
-			} else {
-				$charset = 'utf8';
-			}
-			$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', array( 'default-character-set' => $charset ) );
-			$dump = new IMysqldump\Mysqldump( $dsn, DB_USER, DB_PASSWORD, $dump_settings );
+
+			$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', $dump_settings );
+
+			$dump = new IMysqldump\Mysqldump( $dsn, DB_USER, $pwd, $dump_settings );
 
 			$dump->start( $this->get_database_dump_filepath() );
 
