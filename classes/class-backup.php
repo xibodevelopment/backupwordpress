@@ -852,6 +852,50 @@ class Backup {
 
 		$this->do_action( 'hmbkp_mysqldump_started' );
 
+		// Guess port or socket connection type
+		$port_or_socket = strstr( DB_HOST, ':' );
+
+		$host = DB_HOST;
+
+		if ( ! empty( $port_or_socket ) ) {
+
+			$host = substr( DB_HOST, 0, strpos( DB_HOST, ':' ) );
+
+			$port_or_socket = substr( $port_or_socket, 1 );
+
+			if ( 0 !== strpos( $port_or_socket, '/' ) ) {
+
+				$port = intval( $port_or_socket );
+
+				$maybe_socket = strstr( $port_or_socket, ':' );
+
+				if ( ! empty( $maybe_socket ) ) {
+
+					$socket = substr( $maybe_socket, 1 );
+
+				}
+
+			} else {
+
+				$socket = $port_or_socket;
+
+			}
+		}
+
+		// PDO connection string formats:
+		// mysql:host=localhost;port=3307;dbname=testdb
+		// mysql:unix_socket=/tmp/mysql.sock;dbname=testdb
+
+		if ( $port_or_socket ) {
+			if ( isset( $port ) ) {
+				$dsn = 'mysql:host=' . DB_HOST . ';port=' . $port . ';dbname=' . DB_NAME;
+			} elseif ( isset( $socket ) ) {
+				$dsn = 'mysql:unix_socket=' . $socket . ';dbname=' . DB_NAME;
+			}
+		} else {
+			$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;
+		}
+
 		try {
 			// Get character set from constant if it is declared.
 			if ( defined( 'DB_CHARSET' ) && DB_CHARSET ) {
@@ -860,7 +904,7 @@ class Backup {
 				$charset = 'utf8';
 			}
 			$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', array( 'default-character-set' => $charset ) );
-			$dump = new IMysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql', $dump_settings );
+			$dump = new IMysqldump\Mysqldump( $dsn, DB_USER, DB_PASSWORD, $dump_settings );
 
 			$dump->start( $this->get_database_dump_filepath() );
 
