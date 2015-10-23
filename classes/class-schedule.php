@@ -124,6 +124,8 @@ class Scheduled_Backup {
 
 			$task->cancel();
 
+			$task = \HM\BackUpWordPress\Task_Manager::get_instance()->remove_task( $this->get_id() );
+
 		}
 	}
 
