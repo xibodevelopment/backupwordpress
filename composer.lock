@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ifsnop/mysqldump-php",
-            "version": "v2.0",
+            "version": "v2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ifsnop/mysqldump-php.git",
-                "reference": "2f850d6c3ea6d55ca2cb7b37bb568264264f728e"
+                "reference": "701024dd160f15796bed8130c3bdeb26c634785a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ifsnop/mysqldump-php/zipball/2f850d6c3ea6d55ca2cb7b37bb568264264f728e",
-                "reference": "2f850d6c3ea6d55ca2cb7b37bb568264264f728e",
+                "url": "https://api.github.com/repos/ifsnop/mysqldump-php/zipball/701024dd160f15796bed8130c3bdeb26c634785a",
+                "reference": "701024dd160f15796bed8130c3bdeb26c634785a",
                 "shasum": ""
             },
             "require": {
@@ -56,7 +56,7 @@
                 "pdo",
                 "sqlite"
             ],
-            "time": "2015-09-10 19:58:38"
+            "time": "2015-10-19 15:58:11"
         },
         {
             "name": "symfony/finder",
