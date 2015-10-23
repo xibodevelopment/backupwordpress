@@ -55,7 +55,10 @@ class Scheduled_Backup {
 	 */
 
 	public function __construct( $id ) {
-
+		ini_set('error_reporting', -1);
+		ini_set('display_errors', 1);
+		// Handle fatal errors so we can bubble up to JS ajax request
+		register_shutdown_function( array( $this, 'shutdown_handler' ) );
 		// Verify the schedule id
 		if ( ! is_string( $id ) || ! trim( $id ) ) {
 			throw new \Exception( 'Argument 1 for ' . __METHOD__ . ' must be a non-empty string' );
@@ -102,6 +105,26 @@ class Scheduled_Backup {
 			$this->schedule();
 		}
 
+	}
+
+	/**
+	 * Returns the fatal error as a JSON object.
+	 */
+	public function shutdown_handler() {
+
+		$e = error_get_last();
+
+		if ( $e & ( E_ERROR | E_COMPILE_ERROR | E_CORE_ERROR ) ) {
+
+			\HM\BackUpWordPress\Notices::get_instance()->set_notices( 'backup_errors', array( $e['message'] ) );
+
+			\HM\BackUpWordPress\Path::get_instance()->cleanup();
+
+			$task = \HM\BackUpWordPress\Task_Manager::get_instance()->get_task( $this->get_id() );
+
+			$task->cancel();
+
+		}
 	}
 
 	/**

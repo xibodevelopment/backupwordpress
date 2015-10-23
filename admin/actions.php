@@ -78,7 +78,13 @@ function hmbkp_request_do_backup() {
 	session_write_close();
 
 	$schedule_id = sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) );
-	$task = new \HM\Backdrop\Task( 'hmbkp_run_schedule_async', $schedule_id );
+
+	$schedule = new HM\BackUpWordPress\Scheduled_Backup( $schedule_id );
+
+	$task = new \HM\Backdrop\Task( 'hmbkp_run_schedule_async', $schedule );
+
+	\HM\BackUpWordPress\Task_Manager::get_instance()->add_task( $schedule_id, $task );
+
 	$task->schedule();
 
 	die;
@@ -86,9 +92,7 @@ function hmbkp_request_do_backup() {
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
 
-function hmbkp_run_schedule_async( $schedule_id ) {
-
-	$schedule = new HM\BackUpWordPress\Scheduled_Backup( $schedule_id );
+function hmbkp_run_schedule_async( $schedule ) {
 
 	$schedule->run();
 
