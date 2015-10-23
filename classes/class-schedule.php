@@ -457,7 +457,7 @@ class Scheduled_Backup {
 	public function recursive_filesize_scanner() {
 
 		// Use the cached array directory sizes if available
-		$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
+		$directory_sizes = json_decode( get_transient( 'hmbkp_directory_filesizes' ) );
 
 		// If we do have it in cache then let's use it and also clear the lock
 		if ( is_array( $directory_sizes ) ) {
@@ -483,7 +483,7 @@ class Scheduled_Backup {
 		// This will be the total size of the included folders MINUS default excludes.
 		$directory_sizes[ $this->backup->get_root() ] = array_sum( $directory_sizes );
 
-		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
+		set_transient( 'hmbkp_directory_filesizes', wp_json_encode( $directory_sizes ), DAY_IN_SECONDS );
 
 		delete_transient( 'hmbkp_directory_filesizes_running' );
 
@@ -518,7 +518,7 @@ class Scheduled_Backup {
 		if ( $file->isDir() ) {
 
 			// If we haven't calculated the site size yet then kick it off in a thread
-			$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
+			$directory_sizes = json_decode( get_transient( 'hmbkp_directory_filesizes' ) );
 
 			if ( ! is_array( $directory_sizes ) ) {
 
