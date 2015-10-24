@@ -34,7 +34,6 @@
 
 					<td>
 						<code><?php echo esc_html( str_ireplace( $schedule->backup->get_root(), '', $exclude ) ); ?></code>
-
 					</td>
 
 					<td>
