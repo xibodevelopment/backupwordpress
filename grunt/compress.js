@@ -1,20 +1,18 @@
 module.exports = {
 	main: {
 		options: {
-			mode: 'zip',
-			archive: './releases/<%= package.name %>-<%= package.version %>.zip'
+			archive: 'releases/<%= package.name %>-<%= package.version %>.zip'
 		},
 		expand: true,
-		cwd: 'releases/svn/',
-		src: ['**/*']
+		cwd: 'releases/svn/trunk/',
+		src: ['**/*'],
 	},
 	dev: {
 		options: {
-			mode: 'zip',
-			archive: './releases/<%= package.name %>-<%= package.version %>-dev.zip'
+			archive: 'releases/<%= package.name %>-<%= package.version %>-dev.zip'
 		},
 		expand: true,
-		cwd: 'releases/svn/',
-		src: ['**/*']
+		cwd: 'releases/svn/trunk/',
+		src: ['**/*'],
 	}
 };

@@ -20,5 +20,7 @@ readme
 tests
 phpunit
 .jshintrc
-CONTRIBUTING.MD
+CONTRIBUTING.md
 changelog.txt
+.scrutinizer.yml
+phpunit.xml

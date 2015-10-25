@@ -4,7 +4,7 @@ module.exports = {
 			mainFile: 'backupwordpress.php',
 			potFilename: 'backupwordpress.pot',
 			domainPath: '/languages',       // Where to save the POT file.
-			exclude: ['node_modules/.*','vendor/.*', 'backdrop/.*','bin/.*','tests/.*','readme/.*','languages/.*'],
+			exclude: ['node_modules/.*','vendor/.*', 'backdrop/.*','bin/.*','tests/.*','readme/.*','languages/.*', 'releases/.*'],
 			mainFile  : 'backupwordpress.php',         // Main project file.
 			type      : 'wp-plugin',    // Type of project (wp-plugin or wp-theme).
 			processPot: function( pot, options ) {
