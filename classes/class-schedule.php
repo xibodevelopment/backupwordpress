@@ -594,7 +594,7 @@ class Scheduled_Backup {
 			}
 
 			// Directory size is now just a sum of all files across all sub directories
-			return array_sum( $directory_sizes );
+			return absint( array_sum( $directory_sizes ) );
 
 		}
 

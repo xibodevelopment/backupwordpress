@@ -2,6 +2,7 @@
 
 namespace HM\BackUpWordPress;
 use Symfony\Component\Finder\Finder;
+use Ifsnop\Mysqldump as IMysqldump;
 
 /**
  * Generic file and database backup class
@@ -67,27 +68,12 @@ class Backup {
 	private $root = '';
 
 	/**
-	 * Holds the current db connection
-	 *
-	 * @var resource
-	 */
-	private $db;
-
-	/**
 	 * An array of all the files in root
 	 * excluding excludes and unreadable files
 	 *
 	 * @var array
 	 */
 	private $files = array();
-
-	/**
-	 * An array of all the files in root
-	 * that match the exclude rules
-	 *
-	 * @var array
-	 */
-	private $excluded_files = array();
 
 	/**
 	 * An array of all the files in root
@@ -104,6 +90,14 @@ class Backup {
 	 * @var array
 	 */
 	protected $included_files = array();
+
+	/**
+	 * An array of all the files in root
+	 * that match the exclude rules
+	 *
+	 * @var array
+	 */
+	private $excluded_files = array();
 
 	/**
 	 * Contains an array of errors
@@ -249,7 +243,7 @@ class Backup {
 	public static function get_home_path() {
 
 		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
-				return wp_normalize_path( HMBKP_ROOT );
+			return wp_normalize_path( HMBKP_ROOT );
 		}
 
 		$home_url = home_url();
@@ -259,10 +253,10 @@ class Backup {
 
 		// If site_url contains home_url and they differ then assume WordPress is installed in a sub directory
 		if ( $home_url !== $site_url && strpos( $site_url, $home_url ) === 0 ) {
-				$home_path = trailingslashit( substr( wp_normalize_path( ABSPATH ), 0, strrpos( wp_normalize_path( ABSPATH ), str_replace( $home_url, '', $site_url ) ) ) );
+			$home_path = trailingslashit( substr( wp_normalize_path( ABSPATH ), 0, strrpos( wp_normalize_path( ABSPATH ), str_replace( $home_url, '', $site_url ) ) ) );
 		}
 
-			return wp_normalize_path( $home_path );
+		return wp_normalize_path( $home_path );
 
 	}
 
@@ -320,14 +314,14 @@ class Backup {
 
 		if ( empty( $this->archive_filename ) ) {
 			$this->set_archive_filename( implode( '-', array(
-					sanitize_title( str_ireplace( array(
-						'http://',
-						'https://',
-						'www'
-					), '', home_url() ) ),
-					'backup',
-					current_time( 'Y-m-d-H-i-s' )
-				) ) . '.zip' );
+				sanitize_title( str_ireplace( array(
+					'http://',
+					'https://',
+					'www'
+				), '', home_url() ) ),
+				'backup',
+				current_time( 'Y-m-d-H-i-s' )
+			) ) . '.zip' );
 		}
 
 		return $this->archive_filename;
@@ -410,7 +404,7 @@ class Backup {
 	public function get_root() {
 
 		if ( empty( $this->root ) ) {
-				$this->set_root( wp_normalize_path( self::get_home_path() ) );
+			$this->set_root( wp_normalize_path( self::get_home_path() ) );
 		}
 
 		return $this->root;
@@ -430,7 +424,7 @@ class Backup {
 			return new \WP_Error( 'invalid_directory_path', sprintf( __( 'Invalid root path <code>%s</code> must be a valid directory path', 'backupwordpress' ), $path ) );
 		}
 
-			$this->root = wp_normalize_path( $path );
+		$this->root = wp_normalize_path( $path );
 
 	}
 
@@ -456,7 +450,7 @@ class Backup {
 			return new \WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non-empty (string)', 'backupwordpress' ), $existing_archive_filepath ) );
 		}
 
-			$this->existing_archive_filepath = wp_normalize_path( $existing_archive_filepath );
+		$this->existing_archive_filepath = wp_normalize_path( $existing_archive_filepath );
 
 	}
 
@@ -572,7 +566,7 @@ class Backup {
 
 		// Find the first one which works
 		foreach ( $mysqldump_locations as $location ) {
-				if ( (is_null( shell_exec( 'hash ' . wp_normalize_path( $location ) . ' 2>&1' ) ) ) && @is_executable( wp_normalize_path( $location ) ) ) {
+			if ( (is_null( shell_exec( 'hash ' . wp_normalize_path( $location ) . ' 2>&1' ) ) ) && @is_executable( wp_normalize_path( $location ) ) ) {
 				$this->set_mysqldump_command_path( $location );
 				break;  // Found one
 			}
@@ -635,7 +629,7 @@ class Backup {
 
 		// Find the first one which works
 		foreach ( $zip_locations as $location ) {
-				if ( @is_executable( wp_normalize_path( $location ) ) ) {
+			if ( @is_executable( wp_normalize_path( $location ) ) ) {
 				$this->set_zip_command_path( $location );
 				break;  // Found one
 			}
@@ -858,42 +852,87 @@ class Backup {
 
 		$this->do_action( 'hmbkp_mysqldump_started' );
 
-		$this->db = @mysql_pconnect( DB_HOST, DB_USER, DB_PASSWORD );
+		// Guess port or socket connection type
+		$port_or_socket = strstr( DB_HOST, ':' );
 
-		if ( ! $this->db ) {
-			$this->db = mysql_connect( DB_HOST, DB_USER, DB_PASSWORD );
+		$host = DB_HOST;
+
+		if ( ! empty( $port_or_socket ) ) {
+
+			$host = substr( DB_HOST, 0, strpos( DB_HOST, ':' ) );
+
+			$port_or_socket = substr( $port_or_socket, 1 );
+
+			if ( 0 !== strpos( $port_or_socket, '/' ) ) {
+
+				$port = intval( $port_or_socket );
+
+				$maybe_socket = strstr( $port_or_socket, ':' );
+
+				if ( ! empty( $maybe_socket ) ) {
+
+					$socket = substr( $maybe_socket, 1 );
+
+				}
+
+			} else {
+
+				$socket = $port_or_socket;
+
+			}
 		}
 
-		if ( ! $this->db ) {
-			return;
+		// PDO connection string formats:
+		// mysql:host=localhost;port=3307;dbname=testdb
+		// mysql:unix_socket=/tmp/mysql.sock;dbname=testdb
+
+		if ( $port_or_socket ) {
+			if ( isset( $port ) ) {
+				$dsn = 'mysql:host=' . DB_HOST . ';port=' . $port . ';dbname=' . DB_NAME;
+			} elseif ( isset( $socket ) ) {
+				$dsn = 'mysql:unix_socket=' . $socket . ';dbname=' . DB_NAME;
+			}
+		} else {
+			$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;
 		}
 
-		mysql_select_db( DB_NAME, $this->db );
-
-		if ( function_exists( 'mysql_set_charset' ) ) {
-			mysql_set_charset( DB_CHARSET, $this->db );
+		// Get character set from constant if it is declared.
+		if ( defined( 'DB_CHARSET' ) && DB_CHARSET ) {
+			$charset = DB_CHARSET;
+		} else {
+			$charset = 'utf8';
 		}
 
-		// Begin new backup of MySql
-		$tables = mysql_query( 'SHOW TABLES' );
+		if ( defined( 'DB_PASSWORD' ) && DB_PASSWORD ) {
+			$pwd = DB_PASSWORD;
+		} else {
+			$pwd = '';
+		}
 
-		$sql_file = "# WordPress : " . get_bloginfo( 'url' ) . " MySQL database backup\n";
-		$sql_file .= "#\n";
-		$sql_file .= "# Generated: " . date( 'l j. F Y H:i T' ) . "\n";
-		$sql_file .= "# Hostname: " . DB_HOST . "\n";
-		$sql_file .= "# Database: " . $this->sql_backquote( DB_NAME ) . "\n";
-		$sql_file .= "# --------------------------------------------------------\n";
+		if ( ! defined( 'HMBKP_MYSQLDUMP_SINGLE_TRANSACTION' ) || false !== HMBKP_MYSQLDUMP_SINGLE_TRANSACTION  ) {
+			$single_transaction = true;
+		} else {
+			$single_transaction = false;
+		}
 
-		for ( $i = 0; $i < mysql_num_rows( $tables ); $i ++ ) {
+		$dump_settings = array(
+			'default-character-set' => $charset,
+			'hex-blob'              => true,
+			'single-transaction'    => $single_transaction,
+		);
 
-			$curr_table = mysql_tablename( $tables, $i );
+		try {
 
-			// Create the SQL statements
-			$sql_file .= "# --------------------------------------------------------\n";
-			$sql_file .= "# Table: " . $this->sql_backquote( $curr_table ) . "\n";
-			$sql_file .= "# --------------------------------------------------------\n";
+			// Allow passing custom options to dump process.
+			$dump_settings = apply_filters( 'hmbkp_mysqldump_fallback_dump_settings', $dump_settings );
 
-			$this->make_sql( $sql_file, $curr_table );
+			$dump = new IMysqldump\Mysqldump( $dsn, DB_USER, $pwd, $dump_settings );
+
+			$dump->start( $this->get_database_dump_filepath() );
+
+		} catch ( \Exception $e ) {
+
+			return new \WP_Error( 'mysql-fallback-error', sprintf( __( 'mysqldump fallback error %s', 'backupwordpress' ), $e->getMessage() ) );
 
 		}
 
@@ -967,7 +1006,7 @@ class Backup {
 			$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
 
 			if ( ! empty ( $stderr ) ) {
-					$this->warning( $this->get_archive_method(), $stderr );
+				$this->warning( $this->get_archive_method(), $stderr );
 			}
 		}
 
@@ -1053,14 +1092,14 @@ class Backup {
 				}
 
 				// Excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 					continue;
 				}
 
 				if ( $file->isDir() ) {
-						$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
+					$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
 				} elseif ( $file->isFile() ) {
-						$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
+					$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
 				}
 
 				if ( ++ $files_added % 500 === 0 ) {
@@ -1204,7 +1243,7 @@ class Backup {
 			}
 
 			// Excludes
-				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				continue;
 			}
 
@@ -1244,7 +1283,7 @@ class Backup {
 			}
 
 			// Excludes
-				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				$this->excluded_files[] = $file;
 			}
 
@@ -1373,7 +1412,7 @@ class Backup {
 			}
 
 			// Strip $this->root and conform
-				$rule = str_ireplace( $this->get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
+			$rule = str_ireplace( $this->get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
 
 			// Strip the preceeding slash
 			if ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {
@@ -1418,237 +1457,6 @@ class Backup {
 		}
 
 		return implode( $separator, $excludes );
-
-	}
-
-	/**
-	 * Add backquotes to tables and db-names in SQL queries. Taken from phpMyAdmin.
-	 *
-	 * @param mixed $a_name
-	 *
-	 * @return array|string
-	 */
-	private function sql_backquote( $a_name ) {
-
-		if ( ! empty( $a_name ) && $a_name !== '*' ) {
-
-			if ( is_array( $a_name ) ) {
-
-				$result = array();
-
-				reset( $a_name );
-
-				while ( list( $key, $val ) = each( $a_name ) ) {
-					$result[ $key ] = '`' . $val . '`';
-				}
-
-				return $result;
-
-			} else {
-				return '`' . $a_name . '`';
-			}
-
-		} else {
-			return $a_name;
-		}
-
-	}
-
-	/**
-	 * Reads the Database table in $table and creates
-	 * SQL Statements for recreating structure and data
-	 * Taken partially from phpMyAdmin and partially from
-	 * Alain Wolf, Zurich - Switzerland
-	 * Website: http://restkultur.ch/personal/wolf/scripts/db_backup/
-	 *
-	 * @param string $sql_file
-	 * @param string $table
-	 */
-	private function make_sql( $sql_file, $table ) {
-
-		// Add SQL statement to drop existing table
-		$sql_file .= "\n";
-		$sql_file .= "\n";
-		$sql_file .= "#\n";
-		$sql_file .= "# Delete any existing table " . $this->sql_backquote( $table ) . "\n";
-		$sql_file .= "#\n";
-		$sql_file .= "\n";
-		$sql_file .= "DROP TABLE IF EXISTS " . $this->sql_backquote( $table ) . ";\n";
-
-		/* Table Structure */
-
-		// Comment in SQL-file
-		$sql_file .= "\n";
-		$sql_file .= "\n";
-		$sql_file .= "#\n";
-		$sql_file .= "# Table structure of table " . $this->sql_backquote( $table ) . "\n";
-		$sql_file .= "#\n";
-		$sql_file .= "\n";
-
-		// Get table structure
-		$query  = 'SHOW CREATE TABLE ' . $this->sql_backquote( $table );
-		$result = mysql_query( $query, $this->db );
-
-		if ( $result ) {
-
-			if ( mysql_num_rows( $result ) > 0 ) {
-				$sql_create_arr = mysql_fetch_array( $result );
-				$sql_file .= $sql_create_arr[1];
-			}
-
-			mysql_free_result( $result );
-			$sql_file .= ' ;';
-
-		}
-
-		/* Table Contents */
-
-		// Get table contents
-		$query  = 'SELECT * FROM ' . $this->sql_backquote( $table );
-		$result = mysql_query( $query, $this->db );
-
-		$fields_cnt = 0;
-		$rows_cnt   = 0;
-
-		if ( $result ) {
-			$fields_cnt = mysql_num_fields( $result );
-			$rows_cnt   = mysql_num_rows( $result );
-		}
-
-		// Comment in SQL-file
-		$sql_file .= "\n";
-		$sql_file .= "\n";
-		$sql_file .= "#\n";
-		$sql_file .= "# Data contents of table " . $table . " (" . $rows_cnt . " records)\n";
-		$sql_file .= "#\n";
-
-		$field_set = $field_num = array();
-
-		// Checks whether the field is an integer or not
-		for ( $j = 0; $j < $fields_cnt; $j ++ ) {
-
-			$field_set[ $j ] = $this->sql_backquote( mysql_field_name( $result, $j ) );
-			$type            = mysql_field_type( $result, $j );
-
-			if ( $type === 'tinyint' || $type === 'smallint' || $type === 'mediumint' || $type === 'int' || $type === 'bigint' ) {
-				$field_num[ $j ] = true;
-			} else {
-				$field_num[ $j ] = false;
-			}
-
-		}
-
-		// Sets the scheme
-		$entries     = 'INSERT INTO ' . $this->sql_backquote( $table ) . ' VALUES (';
-		$search      = array( '\x00', '\x0a', '\x0d', '\x1a' ); //\x08\\x09, not required
-		$replace     = array( '\0', '\n', '\r', '\Z' );
-		$current_row = 0;
-		$batch_write = 0;
-
-		$values = array();
-
-		while ( $row = mysql_fetch_row( $result ) ) {
-
-			$current_row ++;
-
-			// build the statement
-			for ( $j = 0; $j < $fields_cnt; $j ++ ) {
-
-				if ( ! isset( $row[ $j ] ) ) {
-					$values[] = 'NULL';
-
-				} elseif ( $row[ $j ] === '0' || $row[ $j ] !== '' ) {
-
-					// a number
-					if ( $field_num[ $j ] ) {
-						$values[] = $row[ $j ];
-					} else {
-						$values[] = "'" . str_replace( $search, $replace, $this->sql_addslashes( $row[ $j ] ) ) . "'";
-					}
-
-				} else {
-					$values[] = "''";
-				}
-
-			}
-
-			$sql_file .= " \n" . $entries . implode( ', ', $values ) . ") ;";
-
-			// write the rows in batches of 100
-			if ( $batch_write === 100 ) {
-				$batch_write = 0;
-				$this->write_sql( $sql_file );
-				$sql_file = '';
-			}
-
-			$batch_write ++;
-
-			unset( $values );
-
-		}
-
-		mysql_free_result( $result );
-
-		// Create footer/closing comment in SQL-file
-		$sql_file .= "\n";
-		$sql_file .= "#\n";
-		$sql_file .= "# End of data contents of table " . $table . "\n";
-		$sql_file .= "# --------------------------------------------------------\n";
-		$sql_file .= "\n";
-
-		$this->write_sql( $sql_file );
-
-	}
-
-	/**
-	 * Better addslashes for SQL queries.
-	 * Taken from phpMyAdmin.
-	 *
-	 * @param string $a_string (default: '')
-	 * @param bool $is_like (default: false)
-	 *
-	 * @return mixed
-	 */
-	private function sql_addslashes( $a_string = '', $is_like = false ) {
-
-		if ( $is_like ) {
-			$a_string = str_replace( '\\', '\\\\\\\\', $a_string );
-		} else {
-			$a_string = str_replace( '\\', '\\\\', $a_string );
-		}
-
-		$a_string = str_replace( '\'', '\\\'', $a_string );
-
-		return $a_string;
-	}
-
-	/**
-	 * Write the SQL file
-	 *
-	 * @param string $sql
-	 *
-	 * @return null|boolean
-	 */
-	private function write_sql( $sql ) {
-
-		$sqlname = $this->get_database_dump_filepath();
-
-		// Actually write the sql file
-		if ( is_writable( $sqlname ) || ! file_exists( $sqlname ) ) {
-
-			if ( ! $handle = @fopen( $sqlname, 'a' ) ) {
-				return;
-			}
-
-			if ( ! fwrite( $handle, $sql ) ) {
-				return;
-			}
-
-			fclose( $handle );
-
-			return true;
-
-		}
 
 	}
 
@@ -1853,4 +1661,3 @@ class Backup {
 	}
 
 }
-
