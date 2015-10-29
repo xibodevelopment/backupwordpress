@@ -79,6 +79,13 @@ function hmbkp_request_do_backup() {
 
 	$schedule_id = sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) );
 
+	// If a backdrop task already exists for this schedule, delete it.
+	$task = \HM\BackUpWordPress\Task_Manager::get_instance()->get_task( $schedule_id );
+
+	if ( ! is_wp_error( $task ) ) {
+		\HM\BackUpWordPress\Task_Manager::get_instance()->remove_task( $schedule_id );
+	}
+
 	$schedule = new HM\BackUpWordPress\Scheduled_Backup( $schedule_id );
 
 	$task = new \HM\Backdrop\Task( 'hmbkp_run_schedule_async', $schedule );
@@ -92,7 +99,11 @@ function hmbkp_request_do_backup() {
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', 'hmbkp_request_do_backup' );
 
-function hmbkp_run_schedule_async( $schedule ) {
+/**
+ * Backdrop callback function. Starts a backup.
+ * @param $schedule
+ */
+function hmbkp_run_schedule_async( \HM\BackUpWordPress\Scheduled_Backup $schedule ) {
 
 	$schedule->run();
 
@@ -157,6 +168,13 @@ function hmbkp_request_cancel_backup() {
 
 	HM\BackUpWordPress\Path::get_instance()->cleanup();
 
+	// If a backdrop task already exists for this schedule, delete it.
+	$task = \HM\BackUpWordPress\Task_Manager::get_instance()->get_task( $schedule_id );
+
+	if ( ! is_wp_error( $task ) ) {
+		\HM\BackUpWordPress\Task_Manager::get_instance()->remove_task( $schedule_id );
+	}
+
 	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
 
 	die;
@@ -172,6 +190,13 @@ function hmbkp_dismiss_error() {
 	check_admin_referer( 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' );
 
 	HM\BackUpWordPress\Path::get_instance()->cleanup();
+
+	// If a backdrop task already exists for this schedule, delete it.
+	$task = \HM\BackUpWordPress\Task_Manager::get_instance()->get_task( $schedule_id );
+
+	if ( ! is_wp_error( $task ) ) {
+		\HM\BackUpWordPress\Task_Manager::get_instance()->remove_task( $schedule_id );
+	}
 
 	HM\BackUpWordPress\Notices::get_instance()->clear_all_notices();
 
@@ -528,53 +553,6 @@ function hmbkp_calculate_site_size() {
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'hmbkp_calculate_site_size' );
 
-/**
- * Receive the heartbeat and return backup status
- */
-function hmbkp_heartbeat_received( $response, $data ) {
-
-	$response['heartbeat_interval'] = 'fast';
-
-	if ( ! empty( $data['hmbkp_schedule_id'] ) ) {
-
-		$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_schedule_id'] ) ) );
-
-		if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
-
-			if ( ! $schedule->get_status() ) {
-				$response['hmbkp_schedule_status'] = 0;
-
-				// Slow the heartbeat back down
-				$response['heartbeat_interval'] = 'slow';
-
-			} else {
-				$response['hmbkp_schedule_status'] = hmbkp_schedule_status( $schedule, false );
-			}
-
-		}
-
-		if ( ! empty( $data['hmbkp_client_request'] ) ) {
-
-			// Pass the site size to be displayed when it's ready.
-			if ( $schedule->is_site_size_cached() ) {
-
-				$response['hmbkp_site_size'] = $schedule->get_formatted_site_size();
-
-				ob_start();
-				require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
-				$response['hmbkp_dir_sizes'] = ob_get_clean();
-
-				// Slow the heartbeat back down
-				$response['heartbeat_interval'] = 'slow';
-			}
-		}
-
-	}
-	return $response;
-
-}
-add_filter( 'heartbeat_received', 'hmbkp_heartbeat_received', 10, 2 );
-
 // TODO needs work
 function hmbkp_display_error_and_offer_to_email_it() {
 
@@ -640,6 +618,8 @@ function hmbkp_ajax_is_backup_in_progress() {
 
 	$schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) ) );
 
+	// @TODO: handle case when this fires before the schedule running file is created.
+	
 	if ( ! $schedule->get_status() ) {
 		echo 0;
 	} else {

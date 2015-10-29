@@ -47,6 +47,10 @@ class Task_Manager {
 	 */
 	public function get_task( $schedule_id ) {
 
+		if ( empty( $this->tasks[ $schedule_id ] ) ) {
+			return new \WP_Error( 'invalid_task' );
+		}
+
 		return $this->tasks[ $schedule_id ];
 	}
 
