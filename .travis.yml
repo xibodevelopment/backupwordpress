@@ -80,11 +80,6 @@ before_install:
   # set up database
   - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
   - cd $TRAVIS_BUILD_DIR
-  # Install codecov only when testing the latest version
-  - |
-    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then		
-       pip install codecov
-    fi
 
 install:
   - git config --global user.email "paul@hmn.md"
@@ -110,10 +105,7 @@ script:
     fi
 
 after_success:
-  - |
-    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then		
-      codecov
-    fi
+  - bash <(curl -s https://codecov.io/bash)
 
 git:
   depth: 1
