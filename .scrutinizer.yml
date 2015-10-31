@@ -17,9 +17,6 @@ tools:
             - '\badd(?:s|ed)?\b'
             - '\bimplement(?:s|ed)?\b'
 
-    external_code_coverage:
-        timeout: 7200    # Timeout in seconds.
-
     js_hint: true
 
     php_mess_detector:
