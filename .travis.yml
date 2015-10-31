@@ -27,37 +27,17 @@ matrix:
   exclude:
   # Only test latest version of WP with HHVM and PHP 7
     - php: hhvm
-      env: WP_VERSION=3.9.9 WP_MULTISITE=0
+      env: WP_VERSION=3.9.9
     - php: hhvm
-      env: WP_VERSION=3.9.9 WP_MULTISITE=1
+      env: WP_VERSION=4.2.5
     - php: hhvm
-      env: WP_VERSION=4.1.8 WP_MULTISITE=0
-    - php: hhvm
-      env: WP_VERSION=4.1.8 WP_MULTISITE=1
-    - php: hhvm
-      env: WP_VERSION=4.2.5 WP_MULTISITE=0
-    - php: hhvm
-      env: WP_VERSION=4.2.5 WP_MULTISITE=1
-    - php: hhvm
-      env: WP_VERSION=4.3.1 WP_MULTISITE=0
-    - php: hhvm
-      env: WP_VERSION=4.3.1 WP_MULTISITE=1
+      env: WP_VERSION=4.3.1
     - php: 7.0
-      env: WP_VERSION=3.9.9 WP_MULTISITE=0
+      env: WP_VERSION=3.9.9
     - php: 7.0
-      env: WP_VERSION=3.9.9 WP_MULTISITE=1
+      env: WP_VERSION=4.2.5
     - php: 7.0
-      env: WP_VERSION=4.1.8 WP_MULTISITE=0
-    - php: 7.0
-      env: WP_VERSION=4.1.8 WP_MULTISITE=1
-    - php: 7.0
-      env: WP_VERSION=4.2.5 WP_MULTISITE=0
-    - php: 7.0
-      env: WP_VERSION=4.2.5 WP_MULTISITE=1
-    - php: 7.0
-      env: WP_VERSION=4.3.1 WP_MULTISITE=0
-    - php: 7.0
-      env: WP_VERSION=4.3.1 WP_MULTISITE=1
+      env: WP_VERSION=4.3.1
 
 cache:
   directories:
@@ -68,11 +48,9 @@ before_install:
   # set up WP install
   - export WP_DEVELOP_DIR=/tmp/wordpress/
   - mkdir -p $WP_DEVELOP_DIR
-  - git clone --depth=1 git://develop.git.wordpress.org/ $WP_DEVELOP_DIR
+  - git clone --depth=1 --branch $WP_VERSION git://develop.git.wordpress.org/ $WP_DEVELOP_DIR
   # set up tests config
   - cd $WP_DEVELOP_DIR
-  - echo $WP_DEVELOP_DIR
-  - git fetch --tags && git checkout $WP_VERSION
   - cp wp-tests-config-sample.php wp-tests-config.php
   - sed -i "s/youremptytestdbnamehere/wordpress_test/" wp-tests-config.php
   - sed -i "s/yourusernamehere/root/" wp-tests-config.php
@@ -98,14 +76,14 @@ before_script:
 script:
   - cd $TRAVIS_BUILD_DIR
   - |
-    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then
+    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" && "$WP_MULTISITE" == "0" ]] ; then
         phpunit --coverage-clover=coverage.xml
     else
         phpunit
     fi
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
 
 git:
   depth: 1
