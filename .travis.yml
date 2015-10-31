@@ -65,6 +65,7 @@ cache:
   - $HOME/.composer/cache
 
 before_install:
+  - pip install codecov
   # set up WP install
   - export WP_DEVELOP_DIR=/tmp/wordpress/
   - mkdir -p $WP_DEVELOP_DIR
@@ -84,6 +85,7 @@ before_install:
 install:
   - git config --global user.email "paul@hmn.md"
   - git config --global user.name "Paul de Wouters"
+
 notifications:
   email: false
   slack:
@@ -93,21 +95,18 @@ before_script:
   - cd $TRAVIS_BUILD_DIR
   - composer self-update
   - composer install --no-interaction
+
 script:
   - cd $TRAVIS_BUILD_DIR
   - |
     if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then
-        phpunit --coverage-clover=coverage.clover
+        phpunit --coverage-clover=coverage.xml
     else
         phpunit
     fi
 
-after_script:
-  - |
-    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then
-        wget https://scrutinizer-ci.com/ocular.phar
-        php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-    fi
+after_success:
+  - codecov
 
 git:
   depth: 1
