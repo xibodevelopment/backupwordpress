@@ -65,7 +65,10 @@ cache:
   - $HOME/.composer/cache
 
 before_install:
-  - pip install codecov
+  # Install codecov only when testing the latest version
+  - if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then		
+  -      pip install codecov
+  - fi
   # set up WP install
   - export WP_DEVELOP_DIR=/tmp/wordpress/
   - mkdir -p $WP_DEVELOP_DIR
@@ -106,7 +109,10 @@ script:
     fi
 
 after_success:
-  - codecov
+  - |
+    if [[ "$TRAVIS_PHP_VERSION" == "5.6" && "$WP_VERSION" == "master" ]] ; then		
+      codecov
+    fi
 
 git:
   depth: 1
