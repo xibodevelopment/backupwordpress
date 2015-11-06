@@ -23,7 +23,7 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 			foreach ( $this->get_files() as $file ) {
 
 				if ( $file->isDir() ) {
-					$zip->addEmptyDir( trailingslashit( $file->getRelativePathname() ) );
+					$zip->addEmptyDir( $file->getRelativePathname() );
 
 				}
 

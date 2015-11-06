@@ -12,8 +12,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 
 	private function get_zip_executable_path() {
 
-		// Check shell_exec is available
-		if ( ! self::is_exec_available() ) {
+		if ( ! Backup_Utilities::is_exec_available() ) {
 			return false;
 		}
 
@@ -32,7 +31,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 				'/opt/local/bin/zip'
 			);
 
-			$this->zip_executable_path = $this->get_executable_path( $paths );
+			$this->zip_executable_path = Backup_Utilities::get_executable_path( $paths );
 
 		}
 
@@ -41,6 +40,11 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	}
 
 	public function backup() {
+
+		if ( ! $this->get_zip_executable_path() ) {
+			return false;
+		}
+
 
 		// TODO Add the database dump to the archive
 		// if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
@@ -92,7 +96,6 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 
 	}
 
-	// TODO maybe switch back to just excluding whole filepaths
 	public function get_exclude_string( $context = 'zip' ) {
 
 		$excludes = $this->get_excludes();

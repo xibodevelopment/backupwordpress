@@ -18,7 +18,7 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 	}
 
 	public function test_can_pick_first_path() {
-		$this->assertEquals( 'mysql', Mock_Backup_Engine::get_executable_path( $this->paths ) );
+		$this->assertEquals( 'mysql', Backup_Utilities::get_executable_path( $this->paths ) );
 	}
 
 	public function test_can_pick_shuffled_command_path() {
@@ -26,7 +26,7 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 		$paths = $this->paths;
 		shuffle( $paths );
 
-		$this->assertEquals( 'mysql', Mock_Backup_Engine::get_executable_path( $paths ) );
+		$this->assertEquals( 'mysql', Backup_Utilities::get_executable_path( $paths ) );
 
 	}
 
@@ -37,7 +37,7 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 		unset( $paths['mysql'] );
 		shuffle( $paths );
 
-		$this->assertEquals( $path, Mock_Backup_Engine::get_executable_path( $paths ) );
+		$this->assertEquals( $path, Backup_Utilities::get_executable_path( $paths ) );
 
 	}
 

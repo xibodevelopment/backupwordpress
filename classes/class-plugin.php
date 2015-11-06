@@ -162,6 +162,8 @@ final class Plugin {
 			include( HMBKP_PLUGIN_PATH . 'classes/class-backupwordpress-wp-cli-command.php' );
 		}
 
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-utilities.php' );
+
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-database.php' );

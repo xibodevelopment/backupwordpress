@@ -12,7 +12,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 	public function get_mysqldump_executable_path() {
 
-		if ( ! self::is_exec_available() ) {
+		if ( ! Backup_Utilities::is_exec_available() ) {
 			return false;
 		}
 
@@ -49,7 +49,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 				'/opt/local/bin/mysqldump'
 			);
 
-			$this->mysqldump_executable_path = $this->get_executable_path( $paths );
+			$this->mysqldump_executable_path = Backup_Utilities::get_executable_path( $paths );
 
 		}
 
@@ -59,7 +59,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 	public function check_user_can_connect_to_database_via_cli() {
 
-		if ( ! self::is_exec_available() ) {
+		if ( ! Backup_Utilities::is_exec_available() ) {
 			return false;
 		}
 

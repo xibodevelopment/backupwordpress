@@ -69,10 +69,14 @@ class Path {
 		return self::$instance;
 	}
 
+	public static function get_path() {
+		return self::get_instance()->get_calculated_path();
+	}
+
 	/**
 	 * Get the path to the directory where backups will be stored
 	 */
-	public function get_path() {
+	public function get_calculated_path() {
 
 		// Calculate the path if needed
 		if ( empty( $this->path ) || ! wp_is_writable( $this->path ) ) {
