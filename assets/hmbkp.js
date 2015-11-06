@@ -52,7 +52,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	// Run a backup
 	$( document ).on( 'click', '.hmbkp-run', function ( e ) {
-
+		wp.heartbeat.interval( 'fast' );
 		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
