@@ -159,4 +159,19 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 	}
 
+	/**
+	 * Provide a backwards compatible version of assertNotWPError for old versions of WordPress
+	 */
+	public function assertNotWPError( $actual, $message = '' ) {
+
+		if ( is_callable( 'parent::assertNotWPError' ) ) {
+			return parent::assertNotWPError( $actual, $message );
+		}
+
+		if ( is_wp_error( $actual ) && '' === $message ) {
+			$message = $actual->get_error_message();
+		}
+		$this->assertNotInstanceOf( 'WP_Error', $actual, $message );
+	}
+
 }
