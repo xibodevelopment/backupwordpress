@@ -14,18 +14,6 @@ class Mock_Database_Backup_Engine extends Database_Backup_Engine {
 
 }
 
-class Mock_Failing_Database_Backup_Engine extends Database_Backup_Engine {
-
-	public function __construct() {
-		parent::__construct();
-	}
-
-	public function backup() {
-		return false;
-	}
-
-}
-
 class Mock_File_Backup_Engine extends File_Backup_Engine {
 
 	public function __construct() {

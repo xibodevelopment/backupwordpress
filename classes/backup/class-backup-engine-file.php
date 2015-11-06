@@ -102,6 +102,15 @@ class File_Backup_Engine extends Backup_Engine {
 		$finder->ignoreVCS( true );
 		$finder->ignoreUnreadableDirs( true );
 
+		// Skip unreadable files too
+		$finder->filter(
+			function ( \SplFileInfo $file ) {
+		    	if ( ! $file->isReadable() ) {
+		        	return false;
+				}
+			}
+		);
+
 		$excludes = $this->get_excludes();
 
 		// Skips folders/files that match default exclude patterns

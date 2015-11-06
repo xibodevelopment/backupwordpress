@@ -179,9 +179,6 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->backup->backup();
 
-		$this->assertEmpty( $this->backup->get_errors() );
-		$this->assertNotEmpty( $this->backup->get_warnings() );
-
 		$this->assertFileExists( $this->backup->get_backup_filepath() );
 
 		$this->assertArchiveNotContains( $this->backup->get_backup_filepath(), array( 'test-data.txt' ) );

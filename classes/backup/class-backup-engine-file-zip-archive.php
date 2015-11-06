@@ -23,10 +23,12 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 			foreach ( $this->get_files() as $file ) {
 
 				if ( $file->isDir() ) {
-					$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
+					$zip->addEmptyDir( trailingslashit( $file->getRelativePathname() ) );
 
-				} elseif ( $file->isFile() ) {
-					$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
+				}
+
+				elseif ( $file->isFile() ) {
+					$zip->addFile( $file->getPathname(), $file->getRelativePathname() );
 
 				}
 

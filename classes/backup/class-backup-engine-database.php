@@ -14,11 +14,7 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 
 		$this->parse_db_host_constant();
 
-		$this->set_backup_filename( implode( '-', array(
-			'database',
-			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
-			$this->get_id()
-		) ) . '.sql' );
+		$this->set_backup_filename( 'database-' . $this->get_name() . '.sql' );
 
 		parent::__construct();
 
