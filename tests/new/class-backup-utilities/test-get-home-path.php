@@ -11,8 +11,8 @@ class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 	}
 
 	function tearDown() {
-		hmbkp_rmdirtree( $this->test_data );
-		hmbkp_rmdirtree( $this->test_data_symlink );
+		rmdirtree( $this->test_data );
+		rmdirtree( $this->test_data_symlink );
 	}
 
 	function test_standard_install() {

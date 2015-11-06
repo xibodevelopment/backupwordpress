@@ -46,7 +46,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 
 		// Remove all backup paths that exist
 		foreach( $this->path->get_existing_paths() as $path ) {
-			hmbkp_rmdirtree( $path );
+			rmdirtree( $path );
 		}
 
 	}

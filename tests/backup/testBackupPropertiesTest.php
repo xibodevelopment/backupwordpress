@@ -32,7 +32,7 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 
-		hmbkp_rmdirtree( Path::get_path() );
+		rmdirtree( Path::get_path() );
 
 		unset( $this->backup );
 

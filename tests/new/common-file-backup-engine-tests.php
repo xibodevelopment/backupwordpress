@@ -2,7 +2,7 @@
 
 namespace HM\BackUpWordPress;
 
-abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
+abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	/**
 	 * Contains the current backup instance
@@ -17,17 +17,17 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 		$this->setup_test_data();
 
 		Path::get_instance()->set_path( dirname( __DIR__ ) . '/tmp' );
-		$this->backup->set_root( $this->test_data );
+		Path::get_instance()->set_root( $this->test_data );
 
 	}
 
 	public function tearDown() {
 
-		hmbkp_rmdirtree( Path::get_path() );
+		rmdirtree( Path::get_path() );
 
 		chmod( Path::get_root() . '/exclude', 0755 );
-		hmbkp_rmdirtree( $this->test_data );
-		hmbkp_rmdirtree( $this->test_data_symlink );
+		rmdirtree( $this->test_data );
+		rmdirtree( $this->test_data_symlink );
 
 		if ( file_exists( $this->hidden ) ) {
 			unlink( $this->hidden );
@@ -53,7 +53,7 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->markTestSkipped();
 
-		$this->backup->set_root( $this->backup->get_home_path() );
+		Path::get_instance()->set_root( $this->backup->get_home_path() );
 
 		$this->backup->backup();
 

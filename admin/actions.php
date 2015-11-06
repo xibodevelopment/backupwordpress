@@ -5,7 +5,7 @@ namespace HM\BackUpWordPress;
 /**
  * Delete the backup and then redirect back to the backups page
  */
-function hmbkp_request_delete_backup() {
+function request_delete_backup() {
 
 	check_admin_referer( 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' );
 
@@ -27,7 +27,7 @@ add_action( 'admin_post_hmbkp_request_delete_backup', '\HM\BackUpWordPress\hmbkp
 /**
  * Enable support and then redirect back to the backups page
  */
-function hmbkp_request_enable_support() {
+function request_enable_support() {
 
 	check_admin_referer( 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' );
 
@@ -43,7 +43,7 @@ add_action( 'admin_post_hmbkp_request_enable_support', '\HM\BackUpWordPress\hmbk
 /**
  * Delete a schedule and all it's backups and then redirect back to the backups page
  */
-function hmbkp_request_delete_schedule() {
+function request_delete_schedule() {
 
 	check_admin_referer( 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' );
 
@@ -62,7 +62,7 @@ add_action( 'admin_post_hmbkp_request_delete_schedule', '\HM\BackUpWordPress\hmb
  *
  * Handles ajax requests as well as standard GET requests
  */
-function hmbkp_request_do_backup() {
+function request_do_backup() {
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
 		die;
@@ -88,7 +88,7 @@ function hmbkp_request_do_backup() {
 }
 add_action( 'wp_ajax_hmbkp_run_schedule', '\HM\BackUpWordPress\hmbkp_request_do_backup' );
 
-function hmbkp_run_schedule_async( $schedule_id ) {
+function run_schedule_async( $schedule_id ) {
 
 	$schedule = new Scheduled_Backup( $schedule_id );
 
@@ -108,7 +108,7 @@ function hmbkp_run_schedule_async( $schedule_id ) {
 /**
  * Send the download file to the browser and then redirect back to the backups page
  */
-function hmbkp_request_download_backup() {
+function request_download_backup() {
 
 	check_admin_referer( 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' );
 
@@ -138,7 +138,7 @@ add_action( 'admin_post_hmbkp_request_download_backup', '\HM\BackUpWordPress\hmb
 /**
  * Cancels a running backup then redirect back to the backups page
  */
-function hmbkp_request_cancel_backup() {
+function request_cancel_backup() {
 
 	check_admin_referer( 'hmbkp_request_cancel_backup', 'hmbkp-request_cancel_backup_nonce' );
 
@@ -165,7 +165,7 @@ add_action( 'admin_post_hmbkp_request_cancel_backup', '\HM\BackUpWordPress\hmbkp
 /**
  * Dismiss an error and then redirect back to the backups page
  */
-function hmbkp_dismiss_error() {
+function dismiss_error() {
 
 	check_admin_referer( 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' );
 
@@ -185,7 +185,7 @@ add_action( 'admin_post_hmbkp_dismiss_error', '\HM\BackUpWordPress\hmbkp_dismiss
  *
  * Validate and either return errors or update the schedule
  */
-function hmbkp_edit_schedule_services_submit() {
+function edit_schedule_services_submit() {
 
 	check_admin_referer( 'hmbkp-edit-schedule-services', 'hmbkp-edit-schedule-services-nonce' );
 
@@ -221,7 +221,7 @@ add_action( 'admin_post_hmbkp_edit_schedule_services_submit', '\HM\BackUpWordPre
  *
  * Validate and either return errors or update the schedule
  */
-function hmbkp_edit_schedule_submit() {
+function edit_schedule_submit() {
 
 	check_admin_referer( 'hmbkp-edit-schedule', 'hmbkp-edit-schedule-nonce' );
 
@@ -424,7 +424,7 @@ add_action( 'admin_post_hmbkp_edit_schedule_submit', '\HM\BackUpWordPress\hmbkp_
  * @access public
  * @return void
  */
-function hmbkp_add_exclude_rule() {
+function add_exclude_rule() {
 
 	check_admin_referer( 'hmbkp-add-exclude-rule', 'hmbkp-add-exclude-rule-nonce' );
 
@@ -453,7 +453,7 @@ add_action( 'admin_post_hmbkp_add_exclude_rule', '\HM\BackUpWordPress\hmbkp_add_
  * @access public
  * @return void
  */
-function hmbkp_remove_exclude_rule() {
+function remove_exclude_rule() {
 
 	check_admin_referer( 'hmbkp_remove_exclude_rule', 'hmbkp-remove_exclude_rule_nonce' );
 
@@ -480,7 +480,7 @@ add_action( 'admin_post_hmbkp_remove_exclude_rule', '\HM\BackUpWordPress\hmbkp_r
  *
  * @param null
  */
-function hmbkp_recalculate_directory_filesize() {
+function recalculate_directory_filesize() {
 
 	if ( ! isset( $_GET['hmbkp_recalculate_directory_filesize'] ) || ! check_admin_referer( 'hmbkp-recalculate_directory_filesize' ) ) {
 		return;
@@ -501,7 +501,7 @@ function hmbkp_recalculate_directory_filesize() {
 }
 add_action( 'load-' . HMBKP_ADMIN_PAGE, '\HM\BackUpWordPress\hmbkp_recalculate_directory_filesize' );
 
-function hmbkp_calculate_site_size() {
+function calculate_site_size() {
 
 	if ( isset( $_GET['hmbkp_schedule_id'] ) ) {
 
@@ -529,7 +529,7 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, '\HM\BackUpWordPress\hmbkp_calculate_sit
 /**
  * Receive the heartbeat and return backup status
  */
-function hmbkp_heartbeat_received( $response, $data ) {
+function heartbeat_received( $response, $data ) {
 
 	$response['heartbeat_interval'] = 'fast';
 
@@ -574,7 +574,7 @@ function hmbkp_heartbeat_received( $response, $data ) {
 add_filter( 'heartbeat_received', '\HM\BackUpWordPress\hmbkp_heartbeat_received', 10, 2 );
 
 // TODO needs work
-function hmbkp_display_error_and_offer_to_email_it() {
+function display_error_and_offer_to_email_it() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
@@ -592,7 +592,7 @@ function hmbkp_display_error_and_offer_to_email_it() {
 add_action( 'wp_ajax_hmbkp_backup_error', '\HM\BackUpWordPress\hmbkp_display_error_and_offer_to_email_it' );
 
 // TODO needs work
-function hmbkp_send_error_via_email() {
+function send_error_via_email() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
@@ -614,7 +614,7 @@ add_action( 'wp_ajax_hmbkp_email_error', '\HM\BackUpWordPress\hmbkp_send_error_v
  *
  * @return void
  */
-function hmbkp_load_enable_support() {
+function load_enable_support() {
 
 	check_ajax_referer( 'hmbkp_nonce', '_wpnonce' );
 
@@ -628,7 +628,7 @@ add_action( 'wp_ajax_load_enable_support', '\HM\BackUpWordPress\hmbkp_load_enabl
 /**
  * Display the running status via ajax
  */
-function hmbkp_ajax_is_backup_in_progress() {
+function ajax_is_backup_in_progress() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
@@ -652,7 +652,7 @@ add_action( 'wp_ajax_hmbkp_is_in_progress', '\HM\BackUpWordPress\hmbkp_ajax_is_b
 /**
  * Display the calculated size via ajax
  */
-function hmbkp_ajax_calculate_backup_size() {
+function ajax_calculate_backup_size() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 
@@ -674,7 +674,7 @@ add_action( 'wp_ajax_hmbkp_calculate', '\HM\BackUpWordPress\hmbkp_ajax_calculate
 /**
  * Test the cron response and if it's not 200 show a warning message
  */
-function hmbkp_ajax_cron_test() {
+function ajax_cron_test() {
 
 	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
 

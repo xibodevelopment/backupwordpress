@@ -58,7 +58,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		// Zip up $this->root
 
 		// cd to the site root
-		$command[] = 'cd ' . escapeshellarg( Backup_Utilities::get_root() );
+		$command[] = 'cd ' . escapeshellarg( Path::get_root() );
 
 		// Run the zip command with the recursive and quiet flags
 		$command[] = '&& ' . escapeshellcmd( $this->get_zip_executable_path() ) . ' -rq';
@@ -119,7 +119,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 				$fragment = true;
 			}
 
-			$rule = str_ireplace( Backup_Utilities::get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
+			$rule = str_ireplace( Path::get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
 
 			// Strip the preceeding slash
 			if ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {

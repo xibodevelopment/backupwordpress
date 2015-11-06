@@ -1,6 +1,6 @@
 <?php
 
-abstract class Database_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
+abstract class Common_Database_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	/**
 	 * Contains the current backup instance

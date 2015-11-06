@@ -4,7 +4,7 @@
 
 		<tr>
 
-			<th scope="col"><?php hmbkp_backups_number( $schedule ); ?></th>
+			<th scope="col"><?php backups_number( $schedule ); ?></th>
 			<th scope="col"><?php _e( 'Size', 'backupwordpress' ); ?></th>
 			<th scope="col"><?php _e( 'Type', 'backupwordpress' ); ?></th>
 			<th scope="col"><?php _e( 'Actions', 'backupwordpress' ); ?></th>
@@ -25,7 +25,7 @@
 					continue;
 				}
 
-				hmbkp_get_backup_row( $file, $schedule );
+				get_backup_row( $file, $schedule );
 
 			}
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * Tests for the complete backup process both with
  * the shell commands and with the PHP fallbacks
@@ -21,11 +23,10 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function setUp() {
 
-		HM\BackUpWordPress\Path::get_instance()->set_path( dirname( __FILE__ ) . '/tmp' );
+		Path::get_instance()->set_path( dirname( __FILE__ ) . '/tmp' );
+		Path::get_instance()->set_root( dirname( __FILE__ ) . '/test-data' );
 
-		$this->backup = new HM\BackUpWordPress\Backup();
-
-		$this->backup->set_root( dirname( __FILE__ ) . '/test-data' );
+		$this->backup = new Backup();
 
 		wp_mkdir_p( dirname( __FILE__ ) . '/tmp' );
 
@@ -37,7 +38,7 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		hmbkp_rmdirtree( Path::get_path() );
+		rmdirtree( Path::get_path() );
 
 		@unlink( Path::get_root() . '/new.file' );
 

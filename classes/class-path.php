@@ -1,17 +1,12 @@
 <?php
-/**
- * @package BackUpWordPress
- * @subpackage BackUpWordPress/classes
- */
 
 namespace HM\BackUpWordPress;
 
 /**
- * The Backup Path class
+ * Manages both the backup path and site root
  *
  * Handles calculating & protecting the directory that backups will be stored in
- *
- * @todo 	Should be a singleton?
+ * as well as the directory that is being backed up
  */
 class Path {
 
@@ -20,15 +15,27 @@ class Path {
 	 *
 	 * @var string $this->path
 	 */
-	protected $path;
+	private $path;
+
+	/**
+	 * The path to the directory that will be backed up
+	 *
+	 * @var string $this->root
+	 */
+	private $root;
 
 	/**
 	 * The path to the directory that backup files are stored in
 	 *
 	 * @var string $this->path
 	 */
-	protected $custom_path;
+	private $custom_path;
 
+	/**
+	 * Contains the instantiated Path instance
+	 *
+	 * @var Path $this->instance
+	 */
 	private static $instance;
 
 	/**
@@ -40,16 +47,12 @@ class Path {
 	/**
 	 * Private clone method to prevent cloning of the instance of the
 	 * *Singleton* instance.
-	 *
-	 * @return void
 	 */
 	private function __clone() {}
 
 	/**
 	 * Private unserialize method to prevent unserializing of the *Singleton*
 	 * instance.
-	 *
-	 * @return void
 	 */
 	private function __wakeup() {}
 
@@ -69,14 +72,55 @@ class Path {
 		return self::$instance;
 	}
 
+	/**
+	 * Convenience method for quickly grabbing the path
+	 */
 	public static function get_path() {
 		return self::get_instance()->get_calculated_path();
 	}
 
 	/**
-	 * Get the path to the directory where backups will be stored
+	 * Convenience method for quickly grabbing the root
 	 */
-	public function get_calculated_path() {
+	public static function get_root() {
+		return self::get_instance()->get_calculated_root();
+	}
+
+	/**
+	 * Calculate the path to the site "home" directory.
+	 *
+	 * The home directory is the path equivalent to the home_url. That is,
+	 * the path to the true root of the website. In situations where WordPress is
+	 * installed in a subdirectory the home path is different to ABSPATH
+	 *
+	 * @param string $site_path The site_path to use when calculating the home path, defaults to ABSPATH
+	 */
+	public static function get_home_path( $site_path = ABSPATH ) {
+
+		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
+			return wp_normalize_path( HMBKP_ROOT );
+		}
+
+		$home_path = $site_path;
+
+		// Handle wordpress installed in a subdirectory
+		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
+			$home_path = dirname( $site_path );
+		}
+
+		// Handle wp-config.php being above site_path
+		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
+			$home_path = $site_path;
+		}
+
+		return wp_normalize_path( untrailingslashit( $home_path ) );
+
+	}
+
+	/**
+	 * get the calculated path to the directory where backups will be stored
+	 */
+	private function get_calculated_path() {
 
 		// Calculate the path if needed
 		if ( empty( $this->path ) || ! wp_is_writable( $this->path ) ) {
@@ -102,6 +146,34 @@ class Path {
 		// Re-calculate the backup path
 		$this->calculate_path();
 
+	}
+
+	/**
+	 * get the calculated path to the directory that will be backed up
+	 */
+	private function get_calculated_root() {
+
+		$root = self::get_home_path();
+
+		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
+			$root = HMBKP_ROOT;
+		}
+
+		if ( $this->root ) {
+			$root = $this->root;
+		}
+
+		return wp_normalize_path( $this->root );
+
+	}
+
+	/**
+	 * Set the root path directly, overriding the default
+	 *
+	 * @param $root
+	 */
+	public function set_root( $root ) {
+		$this->root = $root;
 	}
 
 	public function reset_path() {
@@ -224,6 +296,11 @@ class Path {
 	}
 
 	/**
+	 * Protect the directory that backups are stored in
+	 *
+	 * - Adds an index.html file in an attempt to disable directory browsing
+	 * - Adds a .httaccess file to deny direct access if on Apache
+	 *
 	 * @param string $reset
 	 */
 	public function protect_path( $reset = 'no' ) {
@@ -287,7 +364,6 @@ class Path {
 	 * location
 	 *
 	 * @param string $path 	The path to move the backups from
-	 * @return void
 	 */
 	public function move_old_backups( $from ) {
 
@@ -326,7 +402,7 @@ class Path {
 
 		// Delete the old directory if it's inside WP_CONTENT_DIR
 		if ( false !== strpos( $from, WP_CONTENT_DIR ) && $from !== Path::get_path() ) {
-			hmbkp_rmdirtree( $from );
+			rmdirtree( $from );
 		}
 
 	}
@@ -351,37 +427,6 @@ class Path {
 
 		}
 
-	}
-
-	public static function get_home_path( $site_path = ABSPATH ) {
-
-		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
-			return wp_normalize_path( HMBKP_ROOT );
-		}
-
-		$home_path = $site_path;
-
-		// Handle wordpress installed in a subdirectory
-		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
-			$home_path = dirname( $site_path );
-		}
-
-		// Handle wp-config.php being above site_path
-		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
-			$home_path = $site_path;
-		}
-
-		return wp_normalize_path( untrailingslashit( $home_path ) );
-
-	}
-
-	public static function get_root() {
-
-		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
-			return wp_normalize_path( HMBKP_ROOT );
-		}
-
-		return self::get_home_path();
 	}
 
 }

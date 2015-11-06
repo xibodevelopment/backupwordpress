@@ -63,7 +63,7 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 		HM\BackUpWordPress\Path::get_instance()->cleanup();
 
 		if ( ! empty( $assoc_args['root'] ) ) {
-			$hm_backup->set_root( $assoc_args['root'] );
+			HM\BackUpWordPress\Path->set_root( $assoc_args['root'] );
 		}
 
 		if ( ( ! is_dir( Path::get_path() ) ) ) {

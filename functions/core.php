@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Handles anything that needs to be
  * done when the plugin is updated
  */
-function hmbkp_update() {
+function update() {
 
 	// Update from backUpWordPress 0.4.5
 	if ( get_option( 'bkpwp_max_backups' ) ) {
@@ -282,7 +282,7 @@ function hmbkp_update() {
 /**
  * Setup the default backup schedules
  */
-function hmbkp_setup_default_schedules() {
+function setup_default_schedules() {
 
 	$schedules = Schedules::get_instance();
 
@@ -296,7 +296,7 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$database_daily = new Scheduled_Backup( (string) time() );
 	$database_daily->set_type( 'database' );
-	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
+	$database_daily->set_schedule_start_time( determine_start_time( 'daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
 	$database_daily->set_reoccurrence( 'daily' );
 	$database_daily->set_max_backups( 7 );
 	$database_daily->save();
@@ -307,7 +307,7 @@ function hmbkp_setup_default_schedules() {
 	 */
 	$complete_weekly = new Scheduled_Backup( (string) ( time() + 1 ) );
 	$complete_weekly->set_type( 'complete' );
-	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
+	$complete_weekly->set_schedule_start_time( determine_start_time( 'weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
 	$complete_weekly->set_reoccurrence( 'weekly' );
 	$complete_weekly->set_max_backups( 3 );
 	$complete_weekly->save();
@@ -320,7 +320,7 @@ function hmbkp_setup_default_schedules() {
 
 }
 
-add_action( 'admin_init', '\HM\BackUpWordPress\hmbkp_setup_default_schedules' );
+add_action( 'admin_init', '\HM\BackUpWordPress\setup_default_schedules' );
 
 /**
  * Return an array of cron schedules
@@ -328,7 +328,7 @@ add_action( 'admin_init', '\HM\BackUpWordPress\hmbkp_setup_default_schedules' );
  * @param $schedules
  * @return array $reccurrences
  */
-function hmbkp_cron_schedules( $schedules = array() ) {
+function cron_schedules( $schedules = array() ) {
 
 	$schedules += array(
 		'hourly'      => array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'backupwordpress' ) ),
@@ -342,7 +342,7 @@ function hmbkp_cron_schedules( $schedules = array() ) {
 	return $schedules;
 }
 
-add_filter( 'cron_schedules', '\HM\BackUpWordPress\hmbkp_cron_schedules' );
+add_filter( 'cron_schedules', '\HM\BackUpWordPress\cron_schedules' );
 
 /**
  * Recursively delete a directory including
@@ -352,7 +352,7 @@ add_filter( 'cron_schedules', '\HM\BackUpWordPress\hmbkp_cron_schedules' );
  * @return bool
  * @return bool|WP_Error
  */
-function hmbkp_rmdirtree( $dir ) {
+function rmdirtree( $dir ) {
 
 	if ( false !== strpos( Path::get_home_path(), $dir ) ) {
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'backupwordpress' ) ) );
@@ -366,7 +366,7 @@ function hmbkp_rmdirtree( $dir ) {
 		return false;
 	}
 
-	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir, RecursiveDirectoryIterator::SKIP_DOTS ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+	$files = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $dir, \RecursiveDirectoryIterator::SKIP_DOTS ), \RecursiveIteratorIterator::CHILD_FIRST, \RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 	foreach ( $files as $file ) {
 
@@ -391,7 +391,7 @@ function hmbkp_rmdirtree( $dir ) {
  *
  * @return bool
  */
-function hmbkp_possible() {
+function is_backup_possible() {
 
 	if ( ! wp_is_writable( Path::get_path() ) || ! is_dir( Path::get_path() ) ) {
 		return false;
@@ -411,7 +411,7 @@ function hmbkp_possible() {
  *
  * return int the filesize
  */
-function hmbkp_get_max_attachment_size() {
+function get_max_attachment_size() {
 
 	$max_size = '10mb';
 
@@ -422,7 +422,7 @@ function hmbkp_get_max_attachment_size() {
 
 }
 
-function hmbkp_is_path_accessible( $dir ) {
+function is_path_accessible( $dir ) {
 
 	// Path is inaccessible
 	if ( strpos( $dir, Path::get_home_path() ) === false ) {
@@ -437,8 +437,8 @@ function hmbkp_is_path_accessible( $dir ) {
  *
  * @return array
  */
-function hmbkp_get_cron_schedules() {
-	return hmbkp_cron_schedules();
+function get_cron_schedules() {
+	return cron_schedules();
 }
 
 /**
@@ -459,7 +459,7 @@ function hmbkp_get_cron_schedules() {
  * }
  * @return int $timestamp Returns the resulting timestamp on success and Int 0 on failure
  */
-function hmbkp_determine_start_time( $type, $times = array() ) {
+function determine_start_time( $type, $times = array() ) {
 
 	// Default to in 10 minutes
 	if ( ! empty( $times['now'] ) ) {
@@ -553,7 +553,7 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
  *
  * @return string
  */
-function hmbkp_admin_action_url( $action, array $query_args = array() ) {
+function admin_action_url( $action, array $query_args = array() ) {
 
 	$query_args = array_merge( $query_args, array( 'action' => 'hmbkp_' . $action ) );
 

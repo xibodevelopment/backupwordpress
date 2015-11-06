@@ -2,7 +2,7 @@
 
 namespace HM\BackUpWordPress;
 
-class Zip_Archive_File_Backup_Engine_Tests extends File_Backup_Engine_Common_Tests {
+class Zip_Archive_File_Backup_Engine_Tests extends Common_File_Backup_Engine_Tests {
 
 	protected $backup;
 

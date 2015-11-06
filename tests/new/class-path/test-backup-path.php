@@ -1,12 +1,14 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * Unit tests for the Path class
  *
  * @see Path
  * @extends HM_Backup_UnitTestCase
  */
-class testBackupPathTestCase extends HM_Backup_UnitTestCase {
+class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 	public function setUp() {
 
@@ -14,7 +16,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 		global $is_apache;
 		$this->is_apache = $is_apache;
 
-		$this->path = HM\BackUpWordPress\Path::get_instance();
+		$this->path = Path::get_instance();
 		$this->custom_path = WP_CONTENT_DIR . '/custom';
 
 		// Cleanup before we kickoff in-case theirs cruft around from previous failures
@@ -33,11 +35,11 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		// Remove all backup paths that exist
 		foreach( $this->path->get_existing_paths() as $path ) {
-			hmbkp_rmdirtree( $path );
+			rmdirtree( $path );
 		}
 
 		// Remove our custom path
-		hmbkp_rmdirtree( $this->custom_path );
+		rmdirtree( $this->custom_path );
 
 	}
 
@@ -140,23 +142,12 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$paths = $this->generate_additional_paths();
 
-		// Do a single database backup in each path
+		// Create a dummy database backup in each path
 		foreach ( $paths as $path ) {
 
-			$this->path->set_path( $path );
-
-			$backup = new HM\BackUpWordPress\Backup();
-
-			$backup->set_type( 'database' );
-
-			// We want to avoid name clashes
-			$backup->set_archive_filename( microtime() . '.zip' );
-
-			$backup->backup();
-
-			$this->assertFileExists( $backup->get_archive_filepath() );
-
-			$backups[] = $backup->get_archive_filename();
+				$backups[] = $backup = microtime() . '.zip';
+			
+				file_put_contents( trailingslashit( $path ) . $backup, 'Just keep swimming, just keep swimming...' );
 
 		}
 

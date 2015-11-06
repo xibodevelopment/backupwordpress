@@ -146,8 +146,8 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$this->test_data = __DIR__ . '/test-data';
 		$this->test_data_symlink = __DIR__ . '/test-data-symlink';
 
-		hmbkp_rmdirtree( $this->test_data );
-		hmbkp_rmdirtree( $this->test_data_symlink );
+		HM\BackUpWordPress\rmdirtree( $this->test_data );
+		HM\BackUpWordPress\rmdirtree( $this->test_data_symlink );
 
 		mkdir( $this->test_data );
 		mkdir( $this->test_data . '/exclude' );
