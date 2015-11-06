@@ -362,24 +362,29 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
  */
 function hmbkp_rmdirtree( $dir ) {
 
-	if ( false !== strpos( HM\BackUpWordPress\Backup::get_home_path(), $dir ) )
+	if ( false !== strpos( HM\BackUpWordPress\Backup::get_home_path(), $dir ) ) {
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'backupwordpress' ) ) );
+	}
 
-	if ( is_file( $dir ) )
+	if ( is_file( $dir ) ){
 		@unlink( $dir );
+	}
 
-	if ( ! is_dir( $dir ) || ! is_readable( $dir ) )
+	if ( ! is_dir( $dir ) || ! is_readable( $dir ) ){
 		return false;
+	}
 
 	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 	foreach ( $files as $file ) {
 
-		if ( $file->isDir() )
+		if ( $file->isDir() ){
 			@rmdir( $file->getPathname() );
+		}
 
-		else
+		else{
 			@unlink( $file->getPathname() );
+		}
 
 	}
 

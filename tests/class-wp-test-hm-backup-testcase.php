@@ -2,6 +2,8 @@
 
 class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
+	protected $test_root = __DIR__;
+
 	/**
 	 * Assert that a zip archive exactly matches the array
 	 * of filenames
@@ -75,7 +77,6 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 			$this->assertContains( $filename, $files );
 		}
 
-
 	}
 
 	/**
@@ -137,6 +138,24 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		}
 
 		return $extracted;
+
+	}
+
+	protected function setup_test_data() {
+
+		$this->test_data = __DIR__ . '/test-data';
+		$this->test_data_symlink = __DIR__ . '/test-data-symlink';
+
+		hmbkp_rmdirtree( $this->test_data );
+		hmbkp_rmdirtree( $this->test_data_symlink );
+
+		mkdir( $this->test_data );
+		mkdir( $this->test_data . '/exclude' );
+		file_put_contents( $this->test_data . '/test-data.txt', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla adipiscing tincidunt dictum. Cras sed elit in ligula volutpat egestas et ac ipsum. Maecenas vitae lorem nulla, vel lacinia ligula. Duis varius nibh consequat dui lacinia tempor eu eu ipsum. Cras gravida metus ut elit eleifend mattis. Cras porta dignissim elit, at tincidunt ante pellentesque vitae. Nam dictum dapibus arcu, vitae tincidunt nunc semper eu. Pellentesque ornare interdum arcu, sit amet molestie orci malesuada a. Morbi ac lacus a lorem consectetur auctor. Suspendisse facilisis nisi vitae nisi convallis a blandit odio imperdiet. Ut lobortis luctus lacinia. Maecenas malesuada ultrices dui.' );
+		file_put_contents( $this->test_data . '/exclude/exclude.exclude', '' );
+
+		mkdir( $this->test_data_symlink );
+		file_put_contents( $this->test_data_symlink . '/test-data-symlink.txt', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla adipiscing tincidunt dictum. Cras sed elit in ligula volutpat egestas et ac ipsum. Maecenas vitae lorem nulla, vel lacinia ligula. Duis varius nibh consequat dui lacinia tempor eu eu ipsum. Cras gravida metus ut elit eleifend mattis. Cras porta dignissim elit, at tincidunt ante pellentesque vitae. Nam dictum dapibus arcu, vitae tincidunt nunc semper eu. Pellentesque ornare interdum arcu, sit amet molestie orci malesuada a. Morbi ac lacus a lorem consectetur auctor. Suspendisse facilisis nisi vitae nisi convallis a blandit odio imperdiet. Ut lobortis luctus lacinia. Maecenas malesuada ultrices dui.' );
 
 	}
 

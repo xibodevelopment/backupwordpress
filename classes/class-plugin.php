@@ -6,6 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
+
 	const PLUGIN_VERSION = '3.3.2';
 
 	/**
@@ -160,6 +161,18 @@ final class Plugin {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			include( HMBKP_PLUGIN_PATH . 'classes/class-backupwordpress-wp-cli-command.php' );
 		}
+
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine.php' );
+
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-database.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-database-mysqldump.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-database-imysqldump.php' );
+
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file-zip.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file-zip-archive.php' );
+
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-director.php' );
 
 	}
 

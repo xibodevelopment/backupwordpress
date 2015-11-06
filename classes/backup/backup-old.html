@@ -1,0 +1,180 @@
+<?php
+
+namespace HM\BackUpWordPress;
+use Symfony\Component\Finder\Finder;
+
+/**
+ * Generic file and database backup class
+ *
+ * @version 2.3
+ */
+class Backup {
+
+
+	/**
+	 * The filename of the existing backup file
+	 *
+	 * @string
+	 */
+	private $existing_archive_filepath = '';
+
+	/**
+	 * The archive method used
+	 *
+	 * @var string
+	 */
+	private $archive_method = '';
+
+	/**
+	 * The mysqldump method used
+	 *
+	 * @var string
+	 */
+	private $mysqldump_method = '';
+
+	/**
+	 * @var bool
+	 */
+	protected $mysqldump_verified = false;
+
+	/**
+	 * @var bool
+	 */
+	protected $archive_verified = false;
+
+	/**
+	 * @var string
+	 */
+	protected $action_callback = '';
+
+	/**
+	 * Get the filepath for the existing archive
+	 *
+	 * @return string
+	 */
+	public function get_existing_archive_filepath() {
+		return $this->existing_archive_filepath;
+	}
+
+	/**
+	 * Set the filepath for the existing archive
+	 *
+	 * @param string $existing_archive_filepath
+	 *
+	 * @return null
+	 */
+	public function set_existing_archive_filepath( $existing_archive_filepath ) {
+
+		if ( empty( $existing_archive_filepath ) || ! is_string( $existing_archive_filepath ) ) {
+			return new \WP_Error( 'invalid_existing_archive_filepath', sprintf( __( 'Invalid existing archive filepath <code>%s</code> must be a non-empty (string)', 'backupwordpress' ), $existing_archive_filepath ) );
+		}
+
+		$this->existing_archive_filepath = wp_normalize_path( $existing_archive_filepath );
+
+	}
+
+	/**
+	 * Fire actions for the various backup stages
+	 *
+	 * Callers can register callbacks to be called using `set_action_callback`
+	 * Both the action and the instance on Backup are then passed to the callback function
+	 *
+	 * @see set_action_callback
+	 *
+	 * @param string $action The event to fire
+	 */
+	protected function do_action( $action ) {
+
+		// If we have any callbacks then let's fire them
+		if ( ! empty( $this->action_callback ) ) {
+
+			// Order them by priority, lowest priority first
+			ksort( $this->action_callback );
+
+			foreach ( $this->action_callback as $priority ) {
+				foreach ( $priority as $callback ) {
+					call_user_func( $callback, $action, $this );
+				}
+			}
+
+		}
+
+		// Also fire a global WordPress action
+		do_action( $action, $this );
+
+	}
+
+	/**
+	 * Allow the caller to set a callback function that will be invoked whenever
+	 * an action fires
+	 *
+	 * @see do_action
+	 * @see /do_action
+	 *
+	 * @param callable $callback The function or method to be called
+	 * @param int $priority The priority of the callback
+	 */
+	public function set_action_callback( $callback, $priority = 10 ) {
+		$this->action_callback[ $priority ][] = $callback;
+	}
+
+	/**
+	 * Zip up all the files.
+	 *
+	 * Attempts to use the shell zip command, if
+	 * thats not available then it falls back to
+	 * PHP ZipArchive.
+	 *
+	 */
+	public function archive() {
+
+		if ( defined( 'HMBKP_FORCE_ZIP_METHOD' ) ) {
+			switch ( HMBKP_FORCE_ZIP_METHOD ) {
+				case 'zip':
+					if ( $this->get_zip_command_path() ) {
+						$this->zip();
+					} else {
+						$this->warning( $this->get_archive_method(), __( 'Zip command is not available.', 'backupwordpress' ) );
+					}
+					break;
+				case 'ziparchive':
+					if ( class_exists( 'ZipArchive' ) ) {
+						$this->zip_archive();
+					} else {
+						$this->warning( $this->get_archive_method(), __( 'ZipArchive method is not available.', 'backupwordpress' ) );
+					}
+					break;
+				default:
+					$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
+					break;
+			}
+		} else {
+			
+			// Is zip available
+			if ( $this->get_zip_command_path() ) {
+			
+				$this->zip();
+			
+			} else {
+			
+				// If the shell zip failed then use ZipArchive
+				if ( empty( $this->archive_verified ) && class_exists( 'ZipArchive' ) ) {
+					$this->zip_archive();
+				} else {
+					$this->warning( $this->get_archive_method(), __( 'No valid archive method found.', 'backupwordpress' ) );
+				}
+			
+			}
+
+		}
+
+		// Delete the database dump file
+		if ( file_exists( $this->get_database_dump_filepath() ) ) {
+			unlink( $this->get_database_dump_filepath() );
+		}
+
+		$this->do_action( 'hmbkp_archive_finished' );
+
+	}
+
+}

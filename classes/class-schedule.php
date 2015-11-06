@@ -68,28 +68,27 @@ class Scheduled_Backup {
 		$this->options = array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) );
 
 		// Setup The Backup class
-		$this->backup = new Backup();
+		$this->file_backup = new Site_Backup();
 
 		// Set the archive filename to site name + schedule slug + date
-		$this->backup->set_archive_filename( implode( '-', array(
-				sanitize_title( str_ireplace( array(
-					'http://',
-					'https://',
-					'www'
-				), '', home_url() ) ),
-				$this->get_id(),
-				$this->get_type(),
-				current_time( 'Y-m-d-H-i-s' )
-			) ) . '.zip' );
+		$this->backup->set_file_backup_filename( implode( '-', array(
+			sanitize_title( str_ireplace( array(
+				'http://',
+				'https://',
+				'www'
+			), '', home_url() ) ),
+			$this->get_id(),
+			$this->get_type(),
+			current_time( 'Y-m-d-H-i-s' )
+		) ) . '.zip' );
 
-		$this->backup->set_database_dump_filename( implode( '-', array(
-				'database',
-				sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
-				$this->get_id()
-			) ) . '.sql' );
+		$this->backup->set_database_backup_filename( implode( '-', array(
+			'database',
+			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
+			$this->get_id()
+		) ) . '.sql' );
 
 		$this->backup->set_type( $this->get_type() );
-		$this->backup->set_excludes( $this->backup->default_excludes(), true );
 		$this->backup->set_excludes( $this->get_excludes() );
 		$this->backup->set_action_callback( array( $this, 'do_action' ) );
 

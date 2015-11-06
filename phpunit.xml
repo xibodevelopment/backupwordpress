@@ -7,7 +7,7 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite name="backup">
+<!-- 		<testsuite name="backup">
 			<directory prefix="test" suffix=".php">tests/backup</directory>
 		</testsuite>
 		<testsuite name="schedule">
@@ -15,6 +15,9 @@
 		</testsuite>
 		<testsuite name="other">
 			<directory prefix="test" suffix=".php">tests/other</directory>
+		</testsuite> -->
+		<testsuite name="new">
+			<directory prefix="test" suffix=".php">tests/new</directory>
 		</testsuite>
 	</testsuites>
 	<groups>
