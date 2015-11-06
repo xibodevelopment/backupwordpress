@@ -24,6 +24,8 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 	public function tearDown() {
 
 		hmbkp_rmdirtree( PATH::get_instance()->get_path() );
+
+		chmod( $this->backup->get_root() . '/exclude', 0755 );
 		hmbkp_rmdirtree( $this->test_data );
 		hmbkp_rmdirtree( $this->test_data_symlink );
 
@@ -84,8 +86,6 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( basename( $this->hidden ) ) );
 		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 4 );
-
-		$this->assertEmpty( $this->backup->get_errors() );
 
 	}
 
@@ -183,6 +183,23 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->assertArchiveNotContains( $this->backup->get_backup_filepath(), array( 'test-data.txt' ) );
 		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 2 );
+
+	}
+
+	public function test_backup_with_unreadable_directory() {
+
+		chmod( $this->backup->get_root() . '/exclude', 0220 );
+
+		if ( is_readable( $this->backup->get_root() . '/exclude' ) ) {
+			$this->markTestSkipped( "Directory was readable." );
+		}
+
+		$this->backup->backup();
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+
+		$this->assertArchiveNotContains( $this->backup->get_backup_filepath(), array( 'exclude' ) );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 1 );
 
 	}
 
