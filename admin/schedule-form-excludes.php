@@ -14,7 +14,7 @@
 
 			<?php foreach ( array_diff( $schedule->get_excludes(), $schedule->backup->default_excludes() ) as $key => $exclude ) :
 
-				$exclude_path = new SplFileInfo( trailingslashit( $schedule->backup->get_root() ) . ltrim( str_ireplace( $schedule->backup->get_root(), '', $exclude ), '/' ) ); ?>
+				$exclude_path = new SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
 
 				<tr>
 
@@ -33,13 +33,13 @@
 					</th>
 
 					<td>
-						<code><?php echo esc_html( str_ireplace( $schedule->backup->get_root(), '', $exclude ) ); ?></code>
+						<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
 
 					</td>
 
 					<td>
 
-						<?php if ( ( in_array( $exclude, $schedule->backup->default_excludes() ) ) || ( hmbkp_path() === untrailingslashit( $exclude ) ) ) : ?>
+						<?php if ( ( in_array( $exclude, $schedule->backup->default_excludes() ) ) || ( Path::get_path() === untrailingslashit( $exclude ) ) ) : ?>
 
 							<?php _e( 'Default rule', 'backupwordpress' ); ?>
 
@@ -75,14 +75,14 @@
 	<?php
 
 	// The directory to display
-	$directory = $schedule->backup->get_root();
+	$directory = Path::get_root();
 
 	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
 
 		$untrusted_directory = urldecode( $_GET['hmbkp_directory_browse'] );
 
 		// Only allow real sub directories of the site root to be browsed
-		if ( false !== strpos( $untrusted_directory, $schedule->backup->get_root() ) && is_dir( $untrusted_directory ) ) {
+		if ( false !== strpos( $untrusted_directory, Path::get_root() ) && is_dir( $untrusted_directory ) ) {
 			$directory = $untrusted_directory;
 		}
 
@@ -114,12 +114,12 @@
 
 			<th scope="col">
 
-				<?php if ( $schedule->backup->get_root() !== $directory ) { ?>
+				<?php if ( Path::get_root() !== $directory ) { ?>
 
-					<a href="<?php echo esc_url( remove_query_arg( 'hmbkp_directory_browse' ) ); ?>"><?php echo esc_html( $schedule->backup->get_root() ); ?></a>
+					<a href="<?php echo esc_url( remove_query_arg( 'hmbkp_directory_browse' ) ); ?>"><?php echo esc_html( Path::get_root() ); ?></a>
 					<code>/</code>
 
-					<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( $schedule->backup->get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
+					<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( Path::get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
 
 					foreach ( $parents as $directory_basename ) { ?>
 
@@ -132,7 +132,7 @@
 
 				<?php } else { ?>
 
-					<?php echo esc_html( $schedule->backup->get_root() ); ?>
+					<?php echo esc_html( Path::get_root() ); ?>
 
 				<?php } ?>
 
@@ -146,7 +146,7 @@
 
 				<?php } else {
 
-					$root = new SplFileInfo( $schedule->backup->get_root() );
+					$root = new SplFileInfo( Path::get_root() );
 
 					$size = $schedule->filesize( $root, true );
 
@@ -163,7 +163,7 @@
 							<?php echo esc_html( $size ); ?>
 
 							<a class="dashicons dashicons-update"
-							   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( $schedule->backup->get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+							   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
 
 						</code>
 
@@ -173,16 +173,16 @@
 				<?php } ?>
 
 			<td>
-				<?php echo esc_html( substr( sprintf( '%o', fileperms( $schedule->backup->get_root() ) ), - 4 ) ); ?>
+				<?php echo esc_html( substr( sprintf( '%o', fileperms( Path::get_root() ) ), - 4 ) ); ?>
 			</td>
 
 			<td>
 
-				<?php if ( is_link( $schedule->backup->get_root() ) ) {
+				<?php if ( is_link( Path::get_root() ) ) {
 
 					_e( 'Symlink', 'backupwordpress' );
 
-				} elseif ( is_dir( $schedule->backup->get_root() ) ) {
+				} elseif ( is_dir( Path::get_root() ) ) {
 
 					_e( 'Folder', 'backupwordpress' );
 
@@ -205,7 +205,7 @@
 				$is_excluded = $is_unreadable = false;
 
 				// Check if the file is excluded
-				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( $schedule->backup->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+				if ( $exclude_string && preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 					$is_excluded = true;
 				}
 

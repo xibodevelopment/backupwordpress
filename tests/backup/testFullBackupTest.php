@@ -70,7 +70,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 		$files = $this->backup->get_included_files();
 		$files[] = $this->backup->get_database_dump_filename();
 
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, $this->backup->get_root() );
+		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, Path::get_root() );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
 		$this->assertEmpty( $this->backup->get_errors() );
@@ -95,7 +95,7 @@ class testFullBackUpTestCase extends HM_Backup_UnitTestCase {
 		$files = $this->backup->get_included_files();
 		$files[] = $this->backup->get_database_dump_filename();
 
-		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, $this->backup->get_root() );
+		$this->assertArchiveContains( $this->backup->get_archive_filepath(), $files, Path::get_root() );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), count( $files ) );
 
 		$this->assertEmpty( $this->backup->get_errors() );

@@ -10,7 +10,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		parent::__construct();
 	}
 
-	private function get_zip_executable_path() {
+	public function get_zip_executable_path() {
 
 		if ( ! Backup_Utilities::is_exec_available() ) {
 			return false;
@@ -48,7 +48,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 
 		// TODO Add the database dump to the archive
 		// if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
-		// 	$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
+		// 	$stderr = shell_exec( 'cd ' . escapeshellarg( Path::get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
 
 		// 	if ( ! empty ( $stderr ) ) {
 		// 		$this->warning( $this->get_archive_method(), $stderr );
@@ -58,7 +58,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		// Zip up $this->root
 
 		// cd to the site root
-		$command[] = 'cd ' . escapeshellarg( $this->get_root() );
+		$command[] = 'cd ' . escapeshellarg( Backup_Utilities::get_root() );
 
 		// Run the zip command with the recursive and quiet flags
 		$command[] = '&& ' . escapeshellcmd( $this->get_zip_executable_path() ) . ' -rq';
@@ -119,7 +119,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 				$fragment = true;
 			}
 
-			$rule = str_ireplace( $this->get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
+			$rule = str_ireplace( Backup_Utilities::get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
 
 			// Strip the preceeding slash
 			if ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {

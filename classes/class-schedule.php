@@ -67,31 +67,6 @@ class Scheduled_Backup {
 		// Load the options
 		$this->options = array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) );
 
-		// Setup The Backup class
-		$this->file_backup = new Site_Backup();
-
-		// Set the archive filename to site name + schedule slug + date
-		$this->backup->set_file_backup_filename( implode( '-', array(
-			sanitize_title( str_ireplace( array(
-				'http://',
-				'https://',
-				'www'
-			), '', home_url() ) ),
-			$this->get_id(),
-			$this->get_type(),
-			current_time( 'Y-m-d-H-i-s' )
-		) ) . '.zip' );
-
-		$this->backup->set_database_backup_filename( implode( '-', array(
-			'database',
-			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
-			$this->get_id()
-		) ) . '.sql' );
-
-		$this->backup->set_type( $this->get_type() );
-		$this->backup->set_excludes( $this->get_excludes() );
-		$this->backup->set_action_callback( array( $this, 'do_action' ) );
-
 		if ( defined( 'HMBKP_SCHEDULE_START_TIME' ) && strtotime( 'HMBKP_SCHEDULE_START_TIME' ) ) {
 			$this->set_schedule_start_time( strtotime( 'HMBKP_SCHEDULE_START_TIME' ) );
 		}
@@ -101,15 +76,6 @@ class Scheduled_Backup {
 			$this->schedule();
 		}
 
-	}
-
-	/**
-	 * Simple class wrapper for Path::get_path()
-	 *
-	 * @return string
-	 */
-	private function get_path() {
-		return Path::get_instance()->get_path();
 	}
 
 	/**
@@ -330,7 +296,7 @@ class Scheduled_Backup {
 		// Include total size of dirs/files except for database only schedule.
 		if ( 'database' !== $this->get_type() ) {
 
-			$root = new \SplFileInfo( $this->backup->get_root() );
+			$root = new \SplFileInfo( Path::get_root() );
 
 			$size += $this->filesize( $root, $skip_excluded_files );
 
@@ -480,7 +446,7 @@ class Scheduled_Backup {
 		}
 
 		// This will be the total size of the included folders MINUS default excludes.
-		$directory_sizes[ $this->backup->get_root() ] = array_sum( $directory_sizes );
+		$directory_sizes[ Path::get_root() ] = array_sum( $directory_sizes );
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
 
@@ -536,12 +502,12 @@ class Scheduled_Backup {
 
 			}
 
-			if ( $this->backup->get_root() === $file->getPathname() ) {
+			if ( Path::get_root() === $file->getPathname() ) {
 				return $directory_sizes[ $file->getPathname() ];
 			}
 
 			$current_pathname = trailingslashit( $file->getPathname() );
-			$root             = trailingslashit( $this->backup->get_root() );
+			$root             = trailingslashit( Path::get_root() );
 
 			foreach ( $directory_sizes as $path => $size ) {
 
@@ -725,7 +691,7 @@ class Scheduled_Backup {
 	 * @return string
 	 */
 	public function get_schedule_running_path() {
-		return $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
+		return Path::get_path() . '/.schedule-' . $this->get_id() . '-running';
 	}
 
 	/**
@@ -781,7 +747,34 @@ class Scheduled_Backup {
 
 		}
 
-		$this->backup->backup();
+		//// Set the archive filename to site name + schedule slug + date
+		//$this->backup->set_file_backup_filename( implode( '-', array(
+		//	sanitize_title( str_ireplace( array(
+		//		'http://',
+		//		'https://',
+		//		'www'
+		//	), '', home_url() ) ),
+		//	$this->get_id(),
+		//	$this->get_type(),
+		//	current_time( 'Y-m-d-H-i-s' )
+		//) ) . '.zip' );
+//
+		//$this->backup->set_database_backup_filename( implode( '-', array(
+		//	'database',
+		//	sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
+		//	$this->get_id()
+		//) ) . '.sql' );
+//
+		//$this->backup->set_type( $this->get_type() );
+		//$this->backup->set_excludes( $this->get_excludes() );
+		//$this->backup->set_action_callback( array( $this, 'do_action' ) );
+
+		$file_backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
+			new Zip_File_Backup_Engine,
+			new Zip_Archive_File_Backup_Engine
+		) );
+
+		$file_backup = call_user_func_array( array( Backup_Director ), $file_backup_engines );
 
 		// Delete the backup running file
 		if ( file_exists( $this->get_schedule_running_path() ) ) {
@@ -932,7 +925,7 @@ class Scheduled_Backup {
 
 				if ( $this->backup->get_errors() ) {
 
-					$file = $this->get_path() . '/.backup_errors';
+					$file = Path::get_path() . '/.backup_errors';
 
 					if ( file_exists( $file ) ) {
 						@unlink( $file );
@@ -954,7 +947,7 @@ class Scheduled_Backup {
 
 				if ( $this->backup->get_warnings() ) {
 
-					$file = $this->get_path() . '/.backup_warnings';
+					$file = Path::get_path() . '/.backup_warnings';
 
 					if ( file_exists( $file ) ) {
 						@unlink( $file );
@@ -1063,12 +1056,12 @@ class Scheduled_Backup {
 
 		$files = array();
 
-		if ( $handle = @opendir( $this->get_path() ) ) {
+		if ( $handle = @opendir( Path::get_path() ) ) {
 
 			while ( false !== ( $file = readdir( $handle ) ) ) {
 
 				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() !== $file ) {
-					$files[ @filemtime( trailingslashit( $this->get_path() ) . $file ) ] = trailingslashit( $this->get_path() ) . $file;
+					$files[ @filemtime( trailingslashit( Path::get_path() ) . $file ) ] = trailingslashit( Path::get_path() ) . $file;
 				}
 
 			}

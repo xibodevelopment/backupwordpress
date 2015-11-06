@@ -178,7 +178,7 @@ class Backup {
 	 *
 	 * @return bool
 	 */
-	public static function is_safe_mode_active( $ini_get_callback = 'ini_get' ) {
+	public static function is_safe_mode_on( $ini_get_callback = 'ini_get' ) {
 
 		$safe_mode = @call_user_func( $ini_get_callback, 'safe_mode' );
 
@@ -198,7 +198,7 @@ class Backup {
 	public static function is_shell_exec_available() {
 
 		// Are we in Safe Mode
-		if ( self::is_safe_mode_active() ) {
+		if ( self::is_safe_mode_on() ) {
 			return false;
 		}
 
@@ -293,7 +293,7 @@ class Backup {
 	 * @return string
 	 */
 	private function get_path() {
-		return Path::get_instance()->get_path();
+		return Path::get_path();
 	}
 
 	/**
@@ -302,7 +302,7 @@ class Backup {
 	 * @return string
 	 */
 	public function get_archive_filepath() {
-		return trailingslashit( $this->get_path() ) . $this->get_archive_filename();
+		return trailingslashit( Path::get_path() ) . $this->get_archive_filename();
 	}
 
 	/**
@@ -355,7 +355,7 @@ class Backup {
 	 * @return string
 	 */
 	public function get_database_dump_filepath() {
-		return trailingslashit( $this->get_path() ) . $this->get_database_dump_filename();
+		return trailingslashit( Path::get_path() ) . $this->get_database_dump_filename();
 	}
 
 	/**
@@ -1003,7 +1003,7 @@ class Backup {
 
 		// Add the database dump to the archive
 		if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
-			$stderr = shell_exec( 'cd ' . escapeshellarg( $this->get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
+			$stderr = shell_exec( 'cd ' . escapeshellarg( Path::get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
 
 			if ( ! empty ( $stderr ) ) {
 				$this->warning( $this->get_archive_method(), $stderr );
@@ -1014,7 +1014,7 @@ class Backup {
 		if ( 'database' !== $this->get_type() ) {
 
 			// cd to the site root
-			$command = 'cd ' . escapeshellarg( $this->get_root() );
+			$command = 'cd ' . escapeshellarg( Path::get_root() );
 
 			// Run the zip command with the recursive and quiet flags
 			$command .= ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -rq ';
@@ -1092,14 +1092,14 @@ class Backup {
 				}
 
 				// Excludes
-				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+				if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 					continue;
 				}
 
 				if ( $file->isDir() ) {
-					$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
+					$zip->addEmptyDir( trailingslashit( str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) );
 				} elseif ( $file->isFile() ) {
-					$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
+					$zip->addFile( $file->getPathname(), str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) );
 				}
 
 				if ( ++ $files_added % 500 === 0 ) {
@@ -1207,7 +1207,7 @@ class Backup {
 			}
 		}
 
-		foreach ( $finder->in( $this->get_root() ) as $entry ) {
+		foreach ( $finder->in( Path::get_root() ) as $entry ) {
 			$this->files[] = $entry;
 		}
 
@@ -1243,7 +1243,7 @@ class Backup {
 			}
 
 			// Excludes
-			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				continue;
 			}
 
@@ -1283,7 +1283,7 @@ class Backup {
 			}
 
 			// Excludes
-			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( $this->get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
+			if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) ) ) {
 				$this->excluded_files[] = $file;
 			}
 
@@ -1339,8 +1339,8 @@ class Backup {
 		}
 
 		// If path() is inside root(), exclude it
-		if ( strpos( $this->get_path(), $this->get_root() ) !== false ) {
-			array_unshift( $excludes, trailingslashit( $this->get_path() ) );
+		if ( strpos( Path::get_path(), Path::get_root() ) !== false ) {
+			array_unshift( $excludes, trailingslashit( Path::get_path() ) );
 		}
 
 		return array_unique( $excludes );
@@ -1412,7 +1412,7 @@ class Backup {
 			}
 
 			// Strip $this->root and conform
-			$rule = str_ireplace( $this->get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
+			$rule = str_ireplace( Path::get_root(), '', untrailingslashit( wp_normalize_path( $rule ) ) );
 
 			// Strip the preceeding slash
 			if ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {

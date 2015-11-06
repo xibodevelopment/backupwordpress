@@ -1,14 +1,6 @@
 <?php
 
-/**
- * Returns the backup path
- *
- * @see Path
- * @todo remove the need for this
- */
-function hmbkp_path() {
-	return HM\BackUpWordPress\Path::get_instance()->get_path();
-}
+namespace HM\BackUpWordPress;
 
 /**
  * Handles anything that needs to be
@@ -63,7 +55,7 @@ function hmbkp_update() {
 		/**
 		 * Setup a backwards compatible schedule
 		 */
-		$legacy_schedule = new HM\BackUpWordPress\Scheduled_Backup( 'backup' );
+		$legacy_schedule = new Scheduled_Backup( 'backup' );
 
 		// Backup type
 		if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) ) {
@@ -254,7 +246,7 @@ function hmbkp_update() {
 	// Update from PRIOR_VERSION
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.3.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		$schedules = HM\BackUpWordPress\Schedules::get_instance();
+		$schedules = Schedules::get_instance();
 
 		// Loop through all schedules and re-set the reccurrence to include hmbkp_
 		foreach ( $schedules->get_schedules() as $schedule ) {
@@ -272,17 +264,17 @@ function hmbkp_update() {
 	}
 
 	// Every update
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HM\BackUpWordPress\Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		HM\BackUpWordPress\Setup::deactivate();
+		Setup::deactivate();
 
-		HM\BackUpWordPress\Path::get_instance()->protect_path( 'reset' );
+		Path::get_instance()->protect_path( 'reset' );
 
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== HM\BackUpWordPress\Plugin::PLUGIN_VERSION ) {
-		update_option( 'hmbkp_plugin_version', HM\BackUpWordPress\Plugin::PLUGIN_VERSION );
+	if ( get_option( 'hmbkp_plugin_version' ) !== Plugin::PLUGIN_VERSION ) {
+		update_option( 'hmbkp_plugin_version', Plugin::PLUGIN_VERSION );
 	}
 
 }
@@ -292,7 +284,7 @@ function hmbkp_update() {
  */
 function hmbkp_setup_default_schedules() {
 
-	$schedules = HM\BackUpWordPress\Schedules::get_instance();
+	$schedules = Schedules::get_instance();
 
 	if ( $schedules->get_schedules() ) {
 		return;
@@ -302,7 +294,7 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a database backup daily and store backups
 	 * for the last 2 weeks
 	 */
-	$database_daily = new HM\BackUpWordPress\Scheduled_Backup( (string) time() );
+	$database_daily = new Scheduled_Backup( (string) time() );
 	$database_daily->set_type( 'database' );
 	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
 	$database_daily->set_reoccurrence( 'daily' );
@@ -313,7 +305,7 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a complete backup to run weekly and store backups for
 	 * the last 3 months
 	 */
-	$complete_weekly = new HM\BackUpWordPress\Scheduled_Backup( (string) ( time() + 1 ) );
+	$complete_weekly = new Scheduled_Backup( (string) ( time() + 1 ) );
 	$complete_weekly->set_type( 'complete' );
 	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
 	$complete_weekly->set_reoccurrence( 'weekly' );
@@ -328,7 +320,7 @@ function hmbkp_setup_default_schedules() {
 
 }
 
-add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
+add_action( 'admin_init', '\HM\BackUpWordPress\hmbkp_setup_default_schedules' );
 
 /**
  * Return an array of cron schedules
@@ -350,7 +342,7 @@ function hmbkp_cron_schedules( $schedules = array() ) {
 	return $schedules;
 }
 
-add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
+add_filter( 'cron_schedules', '\HM\BackUpWordPress\hmbkp_cron_schedules' );
 
 /**
  * Recursively delete a directory including
@@ -362,7 +354,7 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
  */
 function hmbkp_rmdirtree( $dir ) {
 
-	if ( false !== strpos( HM\BackUpWordPress\Backup::get_home_path(), $dir ) ) {
+	if ( false !== strpos( Path::get_home_path(), $dir ) ) {
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'backupwordpress' ) ) );
 	}
 
@@ -401,13 +393,11 @@ function hmbkp_rmdirtree( $dir ) {
  */
 function hmbkp_possible() {
 
-	if ( ! wp_is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) ) {
+	if ( ! wp_is_writable( Path::get_path() ) || ! is_dir( Path::get_path() ) ) {
 		return false;
 	}
 
-	$test_backup = new HM\BackUpWordPress\Backup();
-
-	if ( ! is_readable( $test_backup->get_root() ) ) {
+	if ( ! is_readable( Path::get_root() ) ) {
 		return false;
 	}
 
@@ -435,7 +425,7 @@ function hmbkp_get_max_attachment_size() {
 function hmbkp_is_path_accessible( $dir ) {
 
 	// Path is inaccessible
-	if ( strpos( $dir, HM\BackUpWordPress\Backup::get_home_path() ) === false ) {
+	if ( strpos( $dir, Path::get_home_path() ) === false ) {
 		return false;
 	}
 
@@ -489,7 +479,7 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 
 	$args = wp_parse_args( $times, $default_times );
 
-	$intervals = HM\BackUpWordPress\Scheduled_Backup::get_cron_schedules();
+	$intervals = Scheduled_Backup::get_cron_schedules();
 
 	// Allow the hours and minutes to be overwritten by a constant
 	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {

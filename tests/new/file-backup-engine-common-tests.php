@@ -23,9 +23,9 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 
-		hmbkp_rmdirtree( PATH::get_instance()->get_path() );
+		hmbkp_rmdirtree( Path::get_path() );
 
-		chmod( $this->backup->get_root() . '/exclude', 0755 );
+		chmod( Path::get_root() . '/exclude', 0755 );
 		hmbkp_rmdirtree( $this->test_data );
 		hmbkp_rmdirtree( $this->test_data_symlink );
 
@@ -61,7 +61,7 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 		$files = $this->backup->get_files();
 
-		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files, $this->backup->get_root() );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files, Path::get_root() );
 		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), count( $files ) );
 
 	}
@@ -171,9 +171,9 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 	public function test_backup_with_unreadable_file() {
 
-		chmod( $this->backup->get_root() . '/test-data.txt', 0220 );
+		chmod( Path::get_root() . '/test-data.txt', 0220 );
 
-		if ( is_readable( $this->backup->get_root() . '/test-data.txt' ) ) {
+		if ( is_readable( Path::get_root() . '/test-data.txt' ) ) {
 			$this->markTestSkipped( "File was readable." );
 		}
 
@@ -188,9 +188,9 @@ abstract class File_Backup_Engine_Common_Tests extends \HM_Backup_UnitTestCase {
 
 	public function test_backup_with_unreadable_directory() {
 
-		chmod( $this->backup->get_root() . '/exclude', 0220 );
+		chmod( Path::get_root() . '/exclude', 0220 );
 
-		if ( is_readable( $this->backup->get_root() . '/exclude' ) ) {
+		if ( is_readable( Path::get_root() . '/exclude' ) ) {
 			$this->markTestSkipped( "Directory was readable." );
 		}
 

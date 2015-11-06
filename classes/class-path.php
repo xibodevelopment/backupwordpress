@@ -295,7 +295,7 @@ class Path {
 			return;
 		}
 
-		if ( ! wp_is_writable( $this->get_path() ) ) {
+		if ( ! wp_is_writable( Path::get_path() ) ) {
 			return;
 		}
 
@@ -309,11 +309,11 @@ class Path {
 				if ( 'zip' === pathinfo( $file, PATHINFO_EXTENSION ) ) {
 
 					// Try to move them
-					if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( $this->get_path() ) . $file ) ) {
+					if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( Path::get_path() ) . $file ) ) {
 
 
 						// If we can't move them then try to copy them
-						copy( trailingslashit( $from ) . $file, trailingslashit( $this->get_path() ) . $file );
+						copy( trailingslashit( $from ) . $file, trailingslashit( Path::get_path() ) . $file );
 
 					}
 
@@ -325,7 +325,7 @@ class Path {
 		}
 
 		// Delete the old directory if it's inside WP_CONTENT_DIR
-		if ( false !== strpos( $from, WP_CONTENT_DIR ) && $from !== $this->get_path() ) {
+		if ( false !== strpos( $from, WP_CONTENT_DIR ) && $from !== Path::get_path() ) {
 			hmbkp_rmdirtree( $from );
 		}
 
@@ -337,7 +337,7 @@ class Path {
 	public function cleanup() {
 
 		// Don't cleanup a custom path, who knows what other stuff is there
-		if ( $this->get_path() === $this->get_custom_path() ) {
+		if ( Path::get_path() === $this->get_custom_path() ) {
 			return;
 		}
 
@@ -351,6 +351,37 @@ class Path {
 
 		}
 
+	}
+
+	public static function get_home_path( $site_path = ABSPATH ) {
+
+		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
+			return wp_normalize_path( HMBKP_ROOT );
+		}
+
+		$home_path = $site_path;
+
+		// Handle wordpress installed in a subdirectory
+		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
+			$home_path = dirname( $site_path );
+		}
+
+		// Handle wp-config.php being above site_path
+		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
+			$home_path = $site_path;
+		}
+
+		return wp_normalize_path( untrailingslashit( $home_path ) );
+
+	}
+
+	public static function get_root() {
+
+		if ( defined( 'HMBKP_ROOT' ) && HMBKP_ROOT ) {
+			return wp_normalize_path( HMBKP_ROOT );
+		}
+
+		return self::get_home_path();
 	}
 
 }

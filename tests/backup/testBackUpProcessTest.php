@@ -37,9 +37,9 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function tearDown() {
 
-		hmbkp_rmdirtree( hmbkp_path() );
+		hmbkp_rmdirtree( Path::get_path() );
 
-		@unlink( $this->backup->get_root() . '/new.file' );
+		@unlink( Path::get_root() . '/new.file' );
 
 		HM\BackUpWordPress\Path::get_instance()->reset_path();
 
@@ -90,14 +90,14 @@ class testBackUpProcessTestCase extends HM_Backup_UnitTestCase {
 		$this->assertArchiveContains( $this->backup->get_archive_filepath(), array( 'test-data.txt', $this->backup->get_database_dump_filename() ) );
 		$this->assertArchiveFileCount( $this->backup->get_archive_filepath(), 4 );
 
-		if ( ! copy( $this->backup->get_archive_filepath(), hmbkp_path() . '/delta.zip' ) ) {
+		if ( ! copy( $this->backup->get_archive_filepath(), Path::get_path() . '/delta.zip' ) ) {
 		    $this->markTestSkipped( 'Unable to copy backup' );
 		}
 
 		// create a new file
-		file_put_contents( $this->backup->get_root() . '/new.file', 'test' );
+		file_put_contents( Path::get_root() . '/new.file', 'test' );
 
-		if ( ! file_exists( $this->backup->get_root() . '/new.file' ) ) {
+		if ( ! file_exists( Path::get_root() . '/new.file' ) ) {
 			$this->markTestSkipped( 'new.file couldn\'t be created' );
 		}
 

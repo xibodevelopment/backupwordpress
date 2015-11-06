@@ -1,3 +1,6 @@
+<?php
+namespace HM\BackUpWordPress; ?>
+
 <div class="wrap">
 
 	<h1>

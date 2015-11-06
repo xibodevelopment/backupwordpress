@@ -50,26 +50,6 @@ abstract class File_Backup_Engine extends Backup_Engine {
 
 	}
 
-	public function get_root() {
-
-		if ( empty( $this->root ) ) {
-			$this->set_root( Backup_Utilities::get_home_path() );
-		}
-
-		return $this->root;
-
-	}
-
-	public function set_root( $path ) {
-
-		if ( empty( $path ) || ! is_string( $path ) || ! is_dir( $path ) ) {
-			return new \WP_Error( 'invalid_directory_path', sprintf( __( 'Invalid root path <code>%s</code> must be a valid directory path', 'backupwordpress' ), $path ) );
-		}
-
-		$this->root = wp_normalize_path( $path );
-
-	}
-
 	public function get_files() {
 
 		$finder = new Finder();
@@ -95,7 +75,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 			$finder->notPath( $exclude );
 		}
 
-		return $finder->in( $this->get_root() );
+		return $finder->in( Path::get_root() );
 
 	}
 
@@ -104,7 +84,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 		$excludes = array_merge( $this->get_default_excludes(), $this->excludes );
 
 		// If path() is inside root(), exclude it
-		if ( strpos( Path::get_path(), $this->get_root() ) !== false ) {
+		if ( strpos( Path::get_path(), Path::get_root() ) !== false ) {
 			array_unshift( $excludes, trailingslashit( Path::get_path() ) );
 		}
 

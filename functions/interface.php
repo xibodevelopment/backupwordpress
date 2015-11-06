@@ -27,7 +27,7 @@ function hmbkp_get_backup_row( $file, HM\BackUpWordPress\Scheduled_Backup $sched
 
 		<td>
 
-			<?php if (  hmbkp_is_path_accessible( hmbkp_path() )  ) : ?>
+			<?php if (  hmbkp_is_path_accessible( Path::get_path() )  ) : ?>
 				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php _e( 'Download', 'backupwordpress' ); ?></a> |
 			<?php endif; ?>
 
@@ -149,7 +149,7 @@ function hmbkp_set_server_config_notices() {
 
 	$messages = array();
 
-	if ( ! HM\BackUpWordPress\Backup::is_shell_exec_available() ) {
+	if ( ! HM\BackUpWordPress\Backup_Utilities::is_exec_available() ) {
 		$php_user  = '<PHP USER>';
 		$php_group = '<PHP GROUP>';
 	} else {
@@ -158,15 +158,15 @@ function hmbkp_set_server_config_notices() {
 		$php_group = reset( $groups );
 	}
 
-	if ( ! is_dir( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable. Run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( hmbkp_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( hmbkp_path() ) ) . '</code>' );
+	if ( ! is_dir( HM\BackUpWordPress\Path::get_path() ) ) {
+		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable. Run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( Path::get_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( Path::get_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( Path::get_path() ) ) . '</code>' );
 	}
 
-	if ( is_dir( hmbkp_path() ) && ! wp_is_writable( hmbkp_path() ) ) {
-		$messages[] = sprintf( __( 'Your backups directory isn\'t writable. Run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( hmbkp_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( hmbkp_path() ) . '</code>' );
+	if ( is_dir( HM\BackUpWordPress\Path::get_path() ) && ! wp_is_writable( HM\BackUpWordPress\Path::get_path() ) ) {
+		$messages[] = sprintf( __( 'Your backups directory isn\'t writable. Run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( Path::get_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( Path::get_path() ) . '</code>' );
 	}
 
-	if ( HM\BackUpWordPress\Backup::is_safe_mode_active() ) {
+	if ( HM\BackUpWordPress\Backup_Utilities::is_safe_mode_on() ) {
 		$messages[] = sprintf( __( '%1$s is running in %2$s, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst %3$s is on.', 'backupwordpress' ), '<code>PHP</code>', sprintf( '<a href="%1$s">%2$s</a>', __( 'http://php.net/manual/en/features.safe-mode.php', 'backupwordpress' ), __( 'Safe Mode', 'backupwordpress' ) ), '<code>' . __( 'Safe Mode', 'backupwordpress' ) . '</code>' );
 	}
 
@@ -184,19 +184,17 @@ function hmbkp_set_server_config_notices() {
 		} else {
 
 			if ( ! @is_dir( HMBKP_PATH ) ) {
-				$messages[] = sprintf( __( 'Your custom backups directory %1$s doesn\'t exist and can\'t be created, your backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
+				$messages[] = sprintf( __( 'Your custom backups directory %1$s doesn\'t exist and can\'t be created, your backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( Path::get_path() ) . '</code>' );
 			}
 
 			if ( @is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
-				$messages[] = sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( hmbkp_path() ) . '</code>' );
+				$messages[] = sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( Path::get_path() ) . '</code>' );
 
 			}
 		}
 	}
 
-	$test_backup = new HM\BackUpWordPress\Backup();
-
-	if ( ! is_readable( $test_backup->get_root() ) ) {
+	if ( ! is_readable( HM\BackUpWordPress\Path::get_root() ) ) {
 		$messages[] = sprintf( __( 'Your site root path %s isn\'t readable.', 'backupwordpress' ), '<code>' . $test_backup->get_root() . '</code>' );
 	}
 
@@ -311,11 +309,11 @@ function hmbkp_schedule_status( HM\BackUpWordPress\Scheduled_Backup $schedule, $
  */
 function hmbkp_backup_errors() {
 
-	if ( ! file_exists( hmbkp_path() . '/.backup_errors' ) ) {
+	if ( ! file_exists( Path::get_path() . '/.backup_errors' ) ) {
 		return '';
 	}
 
-	return file_get_contents( hmbkp_path() . '/.backup_errors' );
+	return file_get_contents( Path::get_path() . '/.backup_errors' );
 
 }
 
@@ -326,11 +324,11 @@ function hmbkp_backup_errors() {
  */
 function hmbkp_backup_warnings() {
 
-	if ( ! file_exists( hmbkp_path() . '/.backup_warnings' ) ) {
+	if ( ! file_exists( Path::get_path() . '/.backup_warnings' ) ) {
 		return '';
 	}
 
-	return file_get_contents( hmbkp_path() . '/.backup_warnings' );
+	return file_get_contents( Path::get_path() . '/.backup_warnings' );
 
 }
 

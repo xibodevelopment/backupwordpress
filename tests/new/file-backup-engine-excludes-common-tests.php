@@ -1,7 +1,7 @@
 
 	public function testBackUpDirIsExcludedWhenBackUpDirIsNotInRoot() {
 
-		$this->assertNotContains( $this->backup->get_root(), hmbkp_path() );
+		$this->assertNotContains( Path::get_root(), Path::get_path() );
 		$this->assertEmpty( $this->backup->get_excludes() );
 
 	}
@@ -10,9 +10,9 @@
 
 		Path::get_instance()->set_path( dirname( dirname( __FILE__ ) ) . '/test-data/tmp' );
 
-		$this->assertContains( $this->backup->get_root(), hmbkp_path() );
+		$this->assertContains( Path::get_root(), Path::get_path() );
 		$this->assertNotEmpty( $this->backup->get_excludes() );
-		$this->assertContains( trailingslashit( hmbkp_path() ), $this->backup->get_excludes() );
+		$this->assertContains( trailingslashit( Path::get_path() ), $this->backup->get_excludes() );
 
 	}
 

@@ -46,7 +46,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testdefaultPath() {
 
-		$this->assertEquals( $this->path->get_default_path(), $this->path->get_path() );
+		$this->assertEquals( $this->path->get_default_path(), Path::get_path() );
 
 		$this->assertFileExists( $this->path->get_default_path() );
 
@@ -57,7 +57,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testFallbackPath() {
 
-		$this->assertEquals( $this->path->get_default_path(), $this->path->get_path() );
+		$this->assertEquals( $this->path->get_default_path(), Path::get_path() );
 
 		if ( wp_is_writable( $this->path->get_default_path() ) ) {
 			$this->markTestSkipped( 'The default path was still writable' );
@@ -65,7 +65,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$this->path->calculate_path();
 
-		$this->assertEquals( $this->path->get_path(), $this->path->get_fallback_path() );
+		$this->assertEquals( Path::get_path(), $this->path->get_fallback_path() );
 
 		$this->assertFileExists( $this->path->get_fallback_path() );
 
@@ -84,7 +84,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$this->path->calculate_path();
 
-		$this->assertEquals( $this->path->get_path(), $this->path->get_existing_path() );
+		$this->assertEquals( Path::get_path(), $this->path->get_existing_path() );
 
 		$this->assertFileExists( $this->path->get_existing_path() );
 
@@ -110,7 +110,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->path->get_custom_path(), $this->custom_path );
 
-		$this->assertEquals( $this->path->get_path(), $this->custom_path );
+		$this->assertEquals( Path::get_path(), $this->custom_path );
 
 		$this->assertFileExists( $this->path->get_custom_path() );
 
@@ -127,7 +127,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 			$this->markTestSkipped( 'The custom path was still writable' );
 		}
 
-		$this->assertEquals( $this->path->get_path(), $this->path->get_default_path() );
+		$this->assertEquals( Path::get_path(), $this->path->get_default_path() );
 
 		$this->assertFileExists( $this->path->get_default_path() );
 
@@ -163,7 +163,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 		$this->path->merge_existing_paths();
 
 		foreach ( $backups as $backup ) {
-			$this->assertFileExists( $this->path->get_path() . '/' . $backup );
+			$this->assertFileExists( Path::get_path() . '/' . $backup );
 		}
 
 	}
@@ -178,16 +178,16 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 		$is_apache = true;
 
 		// Test the default backup path
-		$this->assertFileExists( $this->path->get_path() . '/index.html' );
-		$this->assertFileExists( $this->path->get_path() . '/.htaccess' );
+		$this->assertFileExists( Path::get_path() . '/index.html' );
+		$this->assertFileExists( Path::get_path() . '/.htaccess' );
 
 		// Test a custom backup path
 		$this->path->set_path( $this->custom_path );
 
 		$this->path->calculate_path();
 
-		$this->assertFileExists( $this->path->get_path() . '/index.html' );
-		$this->assertFileExists( $this->path->get_path() . '/.htaccess' );
+		$this->assertFileExists( Path::get_path() . '/index.html' );
+		$this->assertFileExists( Path::get_path() . '/.htaccess' );
 
 	}
 

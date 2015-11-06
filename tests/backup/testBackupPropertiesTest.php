@@ -32,7 +32,7 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 
-		hmbkp_rmdirtree( hmbkp_path() );
+		hmbkp_rmdirtree( Path::get_path() );
 
 		unset( $this->backup );
 
@@ -49,11 +49,11 @@ class testPropertiesTestCase extends HM_Backup_UnitTestCase {
 		HM\BackUpWordPress\Path::get_instance()->set_path( '/' );
 		$this->backup->set_archive_filename( 'backup.zip' );
 
-		$this->assertEquals( '/', hmbkp_path() );
+		$this->assertEquals( '/', Path::get_path() );
 
 		$this->assertEquals( '/backup.zip', $this->backup->get_archive_filepath() );
 
-		if ( ! is_writable( hmbkp_path() ) ) {
+		if ( ! is_writable( Path::get_path() ) ) {
 			$this->markTestSkipped( 'Root not writable' );
 		}
 

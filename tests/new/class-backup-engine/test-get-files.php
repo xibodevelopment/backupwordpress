@@ -13,7 +13,7 @@ class Backup_Engine_Get_Files extends \HM_Backup_UnitTestCase {
 	}
 
 	public function tearDown() {
-		chmod( $this->backup->get_root() . '/exclude', 0755 );
+		chmod( Path::get_root() . '/exclude', 0755 );
 		hmbkp_rmdirtree( $this->test_data );
 		hmbkp_rmdirtree( $this->test_data_symlink );
 	}
@@ -36,9 +36,9 @@ class Backup_Engine_Get_Files extends \HM_Backup_UnitTestCase {
 
 	public function test_unreadable_files_ignored() {
 
-		chmod( $this->backup->get_root() . '/test-data.txt', 0220 );
+		chmod( Path::get_root() . '/test-data.txt', 0220 );
 
-		if ( is_readable( $this->backup->get_root() . '/test-data.txt' ) ) {
+		if ( is_readable( Path::get_root() . '/test-data.txt' ) ) {
 			$this->markTestSkipped( "File was readable." );
 		}
 
@@ -49,9 +49,9 @@ class Backup_Engine_Get_Files extends \HM_Backup_UnitTestCase {
 
 	public function test_unreadable_directory_ignored() {
 
-		chmod( $this->backup->get_root() . '/exclude', 0220 );
+		chmod( Path::get_root() . '/exclude', 0220 );
 
-		if ( is_readable( $this->backup->get_root() . '/exclude' ) ) {
+		if ( is_readable( Path::get_root() . '/exclude' ) ) {
 			$this->markTestSkipped( "directory was readable." );
 		}
 

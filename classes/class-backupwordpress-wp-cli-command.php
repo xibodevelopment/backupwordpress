@@ -66,12 +66,12 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 			$hm_backup->set_root( $assoc_args['root'] );
 		}
 
-		if ( ( ! is_dir( hmbkp_path() ) ) ) {
+		if ( ( ! is_dir( Path::get_path() ) ) ) {
 			WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
 			return false;
 		}
 
-		if ( ! is_dir( $hm_backup->get_root() ) || ! is_readable( $hm_backup->get_root() ) ) {
+		if ( ! is_dir( Path::get_root() ) || ! is_readable( Path::get_root() ) ) {
 			WP_CLI::error( __( 'Invalid root path', 'backupwordpress' ) );
 			return false;
 		}
