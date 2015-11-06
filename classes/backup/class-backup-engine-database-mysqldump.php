@@ -154,11 +154,11 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		$args[] = '-h ' . escapeshellarg( $this->get_host() );
 
-		if ( ! empty( $this->get_port() ) ) {
+		if ( $this->get_port() ) {
 			$args[] = '-P ' . escapeshellarg( $this->get_port() );
 		}
 
-		if ( ! empty( $this->get_socket() ) ) {
+		if ( $this->get_socket() ) {
 			$args[] = '--protocol=socket -S ' . escapeshellarg( $this->get_socket() );
 		}
 
