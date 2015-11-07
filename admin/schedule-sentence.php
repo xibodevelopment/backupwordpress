@@ -2,10 +2,10 @@
 
 namespace HM\BackUpWordPress;
 
-$filesize = hmbkp_get_site_size_text( $schedule );
+$filesize = get_site_size_text( $schedule );
 
 // Backup Type
-$type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
+$type = strtolower( human_get_type( $schedule->get_type() ) );
 
 // Backup Time
 $day = date_i18n( 'l', $schedule->get_next_occurrence( false ) );
@@ -130,7 +130,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 	echo $sentence; ?>
 
 	<?php if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) {
-		hmbkp_schedule_status( $schedule );
+		schedule_status( $schedule );
 	} ?>
 
 	<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule-settings.php' ); ?>
@@ -147,7 +147,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
  *
  * @return string
  */
-function hmbkp_get_site_size_text( Scheduled_Backup $schedule ) {
+function get_site_size_text( Scheduled_Backup $schedule ) {
 
 	if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
 

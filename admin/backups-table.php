@@ -1,3 +1,9 @@
+<?php
+
+namespace HM\BackUpWordPress;
+
+?>
+
 <table class="widefat">
 
 	<thead>

@@ -1,3 +1,9 @@
+<?php
+
+namespace HM\BackUpWordPress;
+
+?>
+
 <div class="hmbkp-exclude-settings">
 
 	<?php if ( $schedule->get_excludes() ) : ?>
@@ -14,7 +20,7 @@
 
 			<?php foreach ( array_diff( $schedule->get_excludes(), $schedule->backup->default_excludes() ) as $key => $exclude ) :
 
-				$exclude_path = new SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
+				$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
 
 				<tr>
 
@@ -49,7 +55,7 @@
 
 						<?php else : ?>
 
-							<a href="<?php echo hmbkp_admin_action_url( 'remove_exclude_rule', array(
+							<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
 								'hmbkp_remove_exclude' => $exclude,
 								'hmbkp_schedule_id'    => $schedule->get_id()
 							) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
@@ -146,7 +152,7 @@
 
 				<?php } else {
 
-					$root = new SplFileInfo( Path::get_root() );
+					$root = new \SplFileInfo( Path::get_root() );
 
 					$size = $schedule->filesize( $root, true );
 
@@ -368,7 +374,7 @@
 
 
 	<p class="submit">
-		<a href="<?php echo esc_url( hmbkp_get_settings_url() ) ?>"
+		<a href="<?php echo esc_url( get_settings_url() ) ?>"
 		   class="button-primary"><?php _e( 'Done', 'backupwordpress' ); ?></a>
 	</p>
 

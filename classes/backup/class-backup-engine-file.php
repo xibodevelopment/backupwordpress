@@ -79,6 +79,15 @@ abstract class File_Backup_Engine extends Backup_Engine {
 
 	}
 
+	public function set_excludes( $excludes ) {
+
+		if ( is_string( $excludes ) ) {
+			$excludes = explode( ',', $excludes );
+		}
+
+		$this->excludes = array_filter( array_unique( array_map( 'trim', $excludes ) ) );
+	}
+
 	public function get_excludes() {
 
 		$excludes = array_merge( $this->get_default_excludes(), $this->excludes );

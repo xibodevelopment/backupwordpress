@@ -1,6 +1,12 @@
+<?php
+
+namespace HM\BackUpWordPress;
+
+?>
+
 <h3><?php esc_html_e( 'Settings', 'backupwordpress' ); ?></h3>
 
-<?php $hmbkp_form_errors = hmbkp_get_settings_errors(); ?>
+<?php $hmbkp_form_errors = get_settings_errors(); ?>
 
 <?php if ( ! empty( $hmbkp_form_errors ) ) { ?>
 
@@ -15,7 +21,7 @@
 <?php }
 
 // We can clear them now we've displayed them
-hmbkp_clear_settings_errors();
+clear_settings_errors();
 
 ?>
 
@@ -149,7 +155,7 @@ hmbkp_clear_settings_errors();
 						<?php _e( 'Minutes', 'backupwordpress' ); ?></label>
 
 					</span>
-					
+
 					<p class="description">
 						<?php esc_html_e( '24-hour format.', 'backupwordpress' ); ?>
 						<span class="twice-js <?php if ( $schedule->get_reoccurrence() !== 'fortnightly' ) { ?> hidden<?php } ?>"><?php _e( 'The second backup will run 12 hours after the first.', 'backupwordpress' ); ?><span>
@@ -183,7 +189,7 @@ hmbkp_clear_settings_errors();
 
 			</tr>
 
-			<?php foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $service ) {
+			<?php foreach ( Services::get_services( $schedule ) as $service ) {
 				$service->field();
 			} ?>
 

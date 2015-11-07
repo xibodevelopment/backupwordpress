@@ -7,8 +7,13 @@ class Backup_Director {
 	private $backup_engine = false;
 	private $backup_engines = array();
 
-	public function __construct( Backup_Engine $backup_engine ) {
-		$this->backup_engines = func_get_args();
+	public function __construct( $backup_engines ) {
+
+		// Start the engines
+		$this->backup_engines = array_map( function ( $backup_engine ) {
+			return new $backup_engine();
+		}, $backup_engines );
+
 	}
 
 	public function selected_backup_engine() {
@@ -35,6 +40,14 @@ class Backup_Director {
 
 		}
 
+	}
+
+	public function __call( $method, $arguments ) {
+		foreach ( $this->backup_engines as $backup_engine ) {
+			if ( is_callable( $this->backup_engine->$method ) ){
+				call_user_method_array( $method, $this->backup_engine, $arguments );
+			}
+		}
 	}
 
 }

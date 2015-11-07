@@ -1,7 +1,6 @@
 <?php
 
 namespace HM\BackUpWordPress;
-
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -39,13 +38,6 @@ class Scheduled_Backup {
 	private $options = array();
 
 	/**
-	 * The Backup instance
-	 *
-	 * @var Backup
-	 */
-	public $backup;
-
-	/**
 	 * Setup the schedule object
 	 * Loads the options from the database and populates properties
 	 *
@@ -63,6 +55,25 @@ class Scheduled_Backup {
 
 		// Store id for later
 		$this->id = $id;
+
+		$file_backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
+			new Zip_File_Backup_Engine,
+			new Zip_Archive_File_Backup_Engine
+		) );
+
+		$this->file_backup = new Backup_Director( $file_backup_engines );
+
+		// Set the archive filename to site name + schedule slug + date
+		$this->file_backup->set_backup_filename( implode( '-', array(
+			sanitize_title( str_ireplace( array(
+				'http://',
+				'https://',
+				'www'
+			), '', home_url() ) ),
+			$this->get_id(),
+			$this->get_type(),
+			current_time( 'Y-m-d-H-i-s' )
+		) ) . '.zip' );
 
 		// Load the options
 		$this->options = array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) );
@@ -153,25 +164,17 @@ class Scheduled_Backup {
 			return;
 		}
 
-		$this->backup->set_type( $type );
-
 		$this->options['type'] = $type;
 
 	}
 
 	/**
-	 * Get the exclude rules
+	 * Get the users exclude rules
 	 *
 	 * @return array
 	 */
 	public function get_excludes() {
-
-		if ( ! empty( $this->options['excludes'] ) ) {
-			$this->backup->set_excludes( $this->options['excludes'] );
-		}
-
-		return $this->backup->get_excludes();
-
+		return isset( $this->options['excludes'] ) ? $this->options['excludes'] : array();
 	}
 
 	/**
@@ -184,16 +187,8 @@ class Scheduled_Backup {
 	 */
 	public function set_excludes( $excludes, $append = false ) {
 
-		// Use the validation from Backup::set_excludes
-		$this->backup->set_excludes( $excludes, $append );
-
-		// If these are valid excludes and they are different save them
-		if ( $this->backup->get_excludes() && ( empty( $this->options['excludes'] ) || $this->options['excludes'] !== $this->backup->get_excludes() ) ) {
-
-			$this->options['excludes'] = $append && ! empty( $this->options['excludes'] ) ? array_merge( (array) $this->options['excludes'], $this->backup->get_excludes() ) : $this->backup->get_excludes();;
-
-			$this->backup->set_excludes( $this->options['excludes'] );
-
+		if ( empty( $this->options['excludes'] ) || $this->options['excludes'] !== $excludes ) {
+			$this->options['excludes'] = $append ? array_merge( (array) $this->options['excludes'], $excludes ) : $excludes;
 		}
 
 	}
@@ -266,7 +261,6 @@ class Scheduled_Backup {
 	 * @param array $options
 	 */
 	public function set_service_options( $service, Array $options ) {
-
 		$this->options[ $service ] = $options;
 	}
 
@@ -359,7 +353,7 @@ class Scheduled_Backup {
 			return $this->files;
 		}
 
-		$default_excludes = $this->backup->default_excludes();
+		$default_excludes = File_Backup_Engine::get_default_excludes();
 
 		$finder = new Finder();
 		$finder->ignoreDotFiles( false );
@@ -556,6 +550,7 @@ class Scheduled_Backup {
 		} else {
 			$offset = 0;
 		}
+
 		if ( ! empty( $this->options['schedule_start_time'] ) ) {
 			return $this->options['schedule_start_time'] + $offset;
 		}
@@ -656,7 +651,7 @@ class Scheduled_Backup {
 	 * @return array
 	 */
 	public static function get_cron_schedules() {
-		return hmbkp_cron_schedules();
+		return cron_schedules();
 	}
 
 	/**
@@ -670,7 +665,6 @@ class Scheduled_Backup {
 		if ( ! $time ) {
 			$time = 0;
 		}
-
 
 		if ( ! $gmt ) {
 			$time += get_option( 'gmt_offset' ) * 3600;
@@ -736,29 +730,17 @@ class Scheduled_Backup {
 		// Delete old backups now in-case we fatal error during the backup process
 		$this->delete_old_backups();
 
-		if ( $this->get_backups() ) {
-
-			// If we already have a previous backup then pass it in so it can be re-used
-			list( $existing_backup ) = array_values( $this->get_backups() );
-
-			if ( $existing_backup && file_exists( $existing_backup ) ) {
-				$this->backup->set_existing_archive_filepath( $existing_backup );
-			}
-
-		}
-
-		//// Set the archive filename to site name + schedule slug + date
-		//$this->backup->set_file_backup_filename( implode( '-', array(
-		//	sanitize_title( str_ireplace( array(
-		//		'http://',
-		//		'https://',
-		//		'www'
-		//	), '', home_url() ) ),
-		//	$this->get_id(),
-		//	$this->get_type(),
-		//	current_time( 'Y-m-d-H-i-s' )
-		//) ) . '.zip' );
+		//if ( $this->get_backups() ) {
 //
+		//	// If we already have a previous backup then pass it in so it can be re-used
+		//	list( $existing_backup ) = array_values( $this->get_backups() );
+//
+		//	if ( $existing_backup && file_exists( $existing_backup ) ) {
+		//		$this->backup->set_existing_archive_filepath( $existing_backup );
+		//	}
+//
+		//}
+
 		//$this->backup->set_database_backup_filename( implode( '-', array(
 		//	'database',
 		//	sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
@@ -769,12 +751,9 @@ class Scheduled_Backup {
 		//$this->backup->set_excludes( $this->get_excludes() );
 		//$this->backup->set_action_callback( array( $this, 'do_action' ) );
 
-		$file_backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
-			new Zip_File_Backup_Engine,
-			new Zip_Archive_File_Backup_Engine
-		) );
+		$this->file_backup->set_user_excludes( $this->get_excludes() );
 
-		$file_backup = call_user_func_array( array( Backup_Director ), $file_backup_engines );
+		$this->file_backup->backup();
 
 		// Delete the backup running file
 		if ( file_exists( $this->get_schedule_running_path() ) ) {
@@ -818,7 +797,6 @@ class Scheduled_Backup {
 			return '';
 		}
 
-
 		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
 
 		if ( ! empty( $status->status ) ) {
@@ -839,7 +817,7 @@ class Scheduled_Backup {
 	public function set_status( $message ) {
 
 		$status = json_encode( (object) array(
-			'filename' => $this->backup->get_archive_filename(),
+			'filename' => $this->file_backup->get_backup_filename(),
 			'started'  => $this->get_schedule_running_start_time(),
 			'status'   => $message,
 		) );

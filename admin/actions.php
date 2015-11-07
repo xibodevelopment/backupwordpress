@@ -17,12 +17,12 @@ function request_delete_backup() {
 		wp_die( $deleted->get_error_message() );
 	}
 
-	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
+	wp_safe_redirect( get_settings_url(), 303 );
 
 	die;
 
 }
-add_action( 'admin_post_hmbkp_request_delete_backup', '\HM\BackUpWordPress\hmbkp_request_delete_backup' );
+add_action( 'admin_post_hmbkp_request_delete_backup', 'HM\BackUpWordPress\request_delete_backup' );
 
 /**
  * Enable support and then redirect back to the backups page
@@ -33,12 +33,12 @@ function request_enable_support() {
 
 	update_option( 'hmbkp_enable_support', true );
 
-	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
+	wp_safe_redirect( get_settings_url(), 303 );
 
 	die;
 
 }
-add_action( 'admin_post_hmbkp_request_enable_support', '\HM\BackUpWordPress\hmbkp_request_enable_support' );
+add_action( 'admin_post_hmbkp_request_enable_support', 'HM\BackUpWordPress\request_enable_support' );
 
 /**
  * Delete a schedule and all it's backups and then redirect back to the backups page
@@ -50,12 +50,12 @@ function request_delete_schedule() {
 	$schedule = new Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
 	$schedule->cancel( true );
 
-	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
+	wp_safe_redirect( get_settings_url(), 303 );
 
 	die;
 
 }
-add_action( 'admin_post_hmbkp_request_delete_schedule', '\HM\BackUpWordPress\hmbkp_request_delete_schedule' );
+add_action( 'admin_post_hmbkp_request_delete_schedule', 'HM\BackUpWordPress\request_delete_schedule' );
 
 /**
  * Perform a manual backup
@@ -80,16 +80,16 @@ function request_do_backup() {
 	session_write_close();
 
 	$schedule_id = sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) );
-	$task = new \HM\Backdrop\Task( 'hmbkp_run_schedule_async', $schedule_id );
+	$task = new \HM\Backdrop\Task( '\HM\BackUpWordPress\run_schedule_async', $schedule_id );
 	$task->schedule();
 
 	die;
 
 }
-add_action( 'wp_ajax_hmbkp_run_schedule', '\HM\BackUpWordPress\hmbkp_request_do_backup' );
+add_action( 'wp_ajax_hmbkp_run_schedule', 'HM\BackUpWordPress\request_do_backup' );
 
 function run_schedule_async( $schedule_id ) {
-
+error_log( 'sync' );
 	$schedule = new Scheduled_Backup( $schedule_id );
 
 	$schedule->run();
@@ -133,7 +133,7 @@ function request_download_backup() {
 	die;
 
 }
-add_action( 'admin_post_hmbkp_request_download_backup', '\HM\BackUpWordPress\hmbkp_request_download_backup' );
+add_action( 'admin_post_hmbkp_request_download_backup', 'HM\BackUpWordPress\request_download_backup' );
 
 /**
  * Cancels a running backup then redirect back to the backups page
@@ -155,12 +155,12 @@ function request_cancel_backup() {
 
 	Path::get_instance()->cleanup();
 
-	wp_safe_redirect( hmbkp_get_settings_url(), 303 );
+	wp_safe_redirect( get_settings_url(), 303 );
 
 	die;
 
 }
-add_action( 'admin_post_hmbkp_request_cancel_backup', '\HM\BackUpWordPress\hmbkp_request_cancel_backup' );
+add_action( 'admin_post_hmbkp_request_cancel_backup', 'HM\BackUpWordPress\request_cancel_backup' );
 
 /**
  * Dismiss an error and then redirect back to the backups page
@@ -178,7 +178,7 @@ function dismiss_error() {
 	die;
 
 }
-add_action( 'admin_post_hmbkp_dismiss_error', '\HM\BackUpWordPress\hmbkp_dismiss_error' );
+add_action( 'admin_post_hmbkp_dismiss_error', 'HM\BackUpWordPress\dismiss_error' );
 
 /**
  * Catch the schedule service settings form submission
@@ -214,7 +214,7 @@ function edit_schedule_services_submit() {
 	die;
 
 }
-add_action( 'admin_post_hmbkp_edit_schedule_services_submit', '\HM\BackUpWordPress\hmbkp_edit_schedule_services_submit' );
+add_action( 'admin_post_hmbkp_edit_schedule_services_submit', 'HM\BackUpWordPress\edit_schedule_services_submit' );
 
 /**
  * Catch the schedule settings form submission
@@ -261,7 +261,7 @@ function edit_schedule_submit() {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'backupwordpress' );
 		}
 
-		elseif ( ! in_array( $schedule_recurrence_type, array_keys( hmbkp_cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
+		elseif ( ! in_array( $schedule_recurrence_type, array_keys( cron_schedules() ) ) && 'manually' !== $schedule_recurrence_type ) {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Invalid schedule', 'backupwordpress' );
 		}
 
@@ -372,7 +372,7 @@ function edit_schedule_submit() {
 	if ( ! empty( $settings['recurrence'] ) && ! empty( $settings['start_time'] ) ) {
 
 		// Calculate the start time depending on the recurrence
-		$start_time = hmbkp_determine_start_time( $settings['recurrence'], $settings['start_time'] );
+		$start_time = determine_start_time( $settings['recurrence'], $settings['start_time'] );
 
 		if ( $start_time ) {
 			$schedule->set_schedule_start_time( $start_time );
@@ -401,7 +401,7 @@ function edit_schedule_submit() {
 	if ( $errors ) {
 
 		foreach ( $errors as $error ) {
-			hmbkp_add_settings_error( $error );
+			add_settings_error( $error );
 		}
 
 	}
@@ -416,7 +416,7 @@ function edit_schedule_submit() {
 	die;
 
 }
-add_action( 'admin_post_hmbkp_edit_schedule_submit', '\HM\BackUpWordPress\hmbkp_edit_schedule_submit' );
+add_action( 'admin_post_hmbkp_edit_schedule_submit', 'HM\BackUpWordPress\edit_schedule_submit' );
 
 /**
  * Add an exclude rule
@@ -445,7 +445,7 @@ function add_exclude_rule() {
 	die;
 
 }
-add_action( 'admin_post_hmbkp_add_exclude_rule', '\HM\BackUpWordPress\hmbkp_add_exclude_rule' );
+add_action( 'admin_post_hmbkp_add_exclude_rule', 'HM\BackUpWordPress\add_exclude_rule' );
 
 /**
  * Delete an exclude rule
@@ -474,7 +474,7 @@ function remove_exclude_rule() {
 	die;
 
 }
-add_action( 'admin_post_hmbkp_remove_exclude_rule', '\HM\BackUpWordPress\hmbkp_remove_exclude_rule' );
+add_action( 'admin_post_hmbkp_remove_exclude_rule', 'HM\BackUpWordPress\remove_exclude_rule' );
 
 /**
  *
@@ -489,7 +489,7 @@ function recalculate_directory_filesize() {
 	// Delete the cached directory size
 	delete_transient( 'hmbkp_directory_filesizes' );
 
-	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), hmbkp_get_settings_url() );
+	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), get_settings_url() );
 
 	if ( isset( $_GET['hmbkp_directory_browse'] ) ) {
 		$url = add_query_arg( 'hmbkp_directory_browse', sanitize_text_field( $_GET['hmbkp_directory_browse'] ), $url );
@@ -499,7 +499,7 @@ function recalculate_directory_filesize() {
 	die;
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, '\HM\BackUpWordPress\hmbkp_recalculate_directory_filesize' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'HM\BackUpWordPress\recalculate_directory_filesize' );
 
 function calculate_site_size() {
 
@@ -524,7 +524,7 @@ function calculate_site_size() {
 	}
 
 }
-add_action( 'load-' . HMBKP_ADMIN_PAGE, '\HM\BackUpWordPress\hmbkp_calculate_site_size' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'HM\BackUpWordPress\calculate_site_size' );
 
 /**
  * Receive the heartbeat and return backup status
@@ -546,7 +546,7 @@ function heartbeat_received( $response, $data ) {
 				$response['heartbeat_interval'] = 'slow';
 
 			} else {
-				$response['hmbkp_schedule_status'] = hmbkp_schedule_status( $schedule, false );
+				$response['hmbkp_schedule_status'] = schedule_status( $schedule, false );
 			}
 
 		}
@@ -571,7 +571,7 @@ function heartbeat_received( $response, $data ) {
 	return $response;
 
 }
-add_filter( 'heartbeat_received', '\HM\BackUpWordPress\hmbkp_heartbeat_received', 10, 2 );
+add_filter( 'heartbeat_received', 'HM\BackUpWordPress\heartbeat_received', 10, 2 );
 
 // TODO needs work
 function display_error_and_offer_to_email_it() {
@@ -589,7 +589,7 @@ function display_error_and_offer_to_email_it() {
 	wp_send_json_success( wp_get_referer() );
 
 }
-add_action( 'wp_ajax_hmbkp_backup_error', '\HM\BackUpWordPress\hmbkp_display_error_and_offer_to_email_it' );
+add_action( 'wp_ajax_hmbkp_backup_error', 'HM\BackUpWordPress\display_error_and_offer_to_email_it' );
 
 // TODO needs work
 function send_error_via_email() {
@@ -607,7 +607,7 @@ function send_error_via_email() {
 	die;
 
 }
-add_action( 'wp_ajax_hmbkp_email_error', '\HM\BackUpWordPress\hmbkp_send_error_via_email' );
+add_action( 'wp_ajax_hmbkp_email_error', 'HM\BackUpWordPress\send_error_via_email' );
 
 /**
  * Load the enable support modal contents
@@ -623,7 +623,7 @@ function load_enable_support() {
 	die;
 
 }
-add_action( 'wp_ajax_load_enable_support', '\HM\BackUpWordPress\hmbkp_load_enable_support' );
+add_action( 'wp_ajax_load_enable_support', 'HM\BackUpWordPress\load_enable_support' );
 
 /**
  * Display the running status via ajax
@@ -647,7 +647,7 @@ function ajax_is_backup_in_progress() {
 	die;
 
 }
-add_action( 'wp_ajax_hmbkp_is_in_progress', '\HM\BackUpWordPress\hmbkp_ajax_is_backup_in_progress' );
+add_action( 'wp_ajax_hmbkp_is_in_progress', 'HM\BackUpWordPress\ajax_is_backup_in_progress' );
 
 /**
  * Display the calculated size via ajax
@@ -669,7 +669,7 @@ function ajax_calculate_backup_size() {
 	die;
 
 }
-add_action( 'wp_ajax_hmbkp_calculate', '\HM\BackUpWordPress\hmbkp_ajax_calculate_backup_size' );
+add_action( 'wp_ajax_hmbkp_calculate', 'HM\BackUpWordPress\ajax_calculate_backup_size' );
 
 /**
  * Test the cron response and if it's not 200 show a warning message
@@ -729,4 +729,4 @@ function ajax_cron_test() {
 	die;
 
 }
-add_action( 'wp_ajax_hmbkp_cron_test', '\HM\BackUpWordPress\hmbkp_ajax_cron_test' );
+add_action( 'wp_ajax_hmbkp_cron_test', 'HM\BackUpWordPress\ajax_cron_test' );

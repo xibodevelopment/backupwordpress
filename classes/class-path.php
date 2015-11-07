@@ -163,7 +163,7 @@ class Path {
 			$root = $this->root;
 		}
 
-		return wp_normalize_path( $this->root );
+		return wp_normalize_path( $root );
 
 	}
 

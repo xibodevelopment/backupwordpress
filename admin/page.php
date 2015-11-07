@@ -15,7 +15,7 @@ namespace HM\BackUpWordPress; ?>
 
 	</h1>
 
-	<?php if ( hmbkp_possible() ) : ?>
+	<?php if ( is_backup_possible() ) : ?>
 
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
 

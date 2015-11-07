@@ -7,7 +7,7 @@ namespace HM\BackUpWordPress;
  */
 final class Plugin {
 
-	const PLUGIN_VERSION = '3.3.2';
+	const PLUGIN_VERSION = '3.4 alpha';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -132,6 +132,7 @@ final class Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirement.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-path.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-backup.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-utilities.php' );
 
@@ -265,7 +266,7 @@ final class Plugin {
 
 		// Fire the update action
 		if ( self::PLUGIN_VERSION != get_option( 'hmbkp_plugin_version' ) ) {
-			hmbkp_update();
+			update();
 		}
 
 	}
@@ -331,7 +332,7 @@ final class Plugin {
 	 */
 	public function schedule_hook_run( $schedule_id ) {
 
-		if ( ! hmbkp_possible() ) {
+		if ( ! is_backup_possible() ) {
 			return;
 		}
 

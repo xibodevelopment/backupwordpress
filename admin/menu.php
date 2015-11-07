@@ -106,4 +106,4 @@ function contextual_help() {
 
 }
 
-add_action( 'load-' . HMBKP_ADMIN_PAGE, 'contextual_help' );
+add_action( 'load-' . HMBKP_ADMIN_PAGE, 'HM\BackUpWordPress\contextual_help' );
