@@ -7,7 +7,7 @@ class Backup_Director {
 	private $backup_engine = false;
 	private $backup_engines = array();
 
-	public function __construct( $backup_engines ) {
+	public function __construct( Array $backup_engines ) {
 
 		// Start the engines
 		$this->backup_engines = array_map( function ( $backup_engine ) {
