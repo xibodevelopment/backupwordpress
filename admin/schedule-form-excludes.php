@@ -39,6 +39,7 @@ namespace HM\BackUpWordPress;
 					</th>
 
 					<td>
+
 						<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
 
 					</td>
