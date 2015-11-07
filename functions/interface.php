@@ -354,7 +354,7 @@ function hmbkp_translated_schedule_title( $slug, $title ) {
 		'file-hourly'          => esc_html__( 'File Hourly', 'backupwordpress' ),
 		'database-hourly'      => esc_html__( 'Database Hourly', 'backupwordpress' ),
 		'complete-twicedaily'  => esc_html__( 'Complete Twice Daily', 'backupwordpress' ),
-		'file-twicedaily'      => esc_html__( 'File Twicedaily', 'backupwordpress' ),
+		'file-twicedaily'      => esc_html__( 'File Twice Daily', 'backupwordpress' ),
 		'database-twicedaily'  => esc_html__( 'Database Twice Daily', 'backupwordpress' ),
 		'complete-daily'       => esc_html__( 'Complete Daily', 'backupwordpress' ),
 		'file-daily'           => esc_html__( 'File Daily', 'backupwordpress' ),

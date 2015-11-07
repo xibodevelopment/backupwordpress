@@ -21,7 +21,7 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p><strong>' . __( 'I\'m not receiving my backups by email', 'backupwordpress' ) . '</strong></p>' .
 
-     '<p>' . __( 'Most servers have a filesize limit on email attachments, it\'s generally about 10mb. If your backup file is over that limit it won\'t be sent attached to the email, instead you should receive an email with a link to download the backup, if you aren\'t even receiving that then you likely have a mail issue on your server that you\'ll need to contact your host about.', 'backupwordpress' ) . '</p>' .
+     '<p>' . __( 'Most servers have a filesize limit on email attachments, it\'s generally about 10mb. If your backup file is over that limit, it won\'t be sent attached to the email. Instead, you should receive an email with a link to download the backup. If you aren\'t even receiving that, then you likely have a mail issue on your server that you\'ll need to contact your host about.', 'backupwordpress' ) . '</p>' .
 
      '<p><strong>' . __( 'How many backups are stored by default?', 'backupwordpress' ) . '</strong></p>' .
 
@@ -29,11 +29,11 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p><strong>' . __( 'How long should a backup take?', 'backupwordpress' ) . '</strong></p>' .
 
-     '<p>' . __( 'Unless your site is very large (many gigabytes) it should only take a few minutes to perform a back up, if your back up has been running for longer than an hour it\'s safe to assume that something has gone wrong, try de-activating and re-activating the plugin, if it keeps happening, contact support.', 'backupwordpress' ) . '</p>' .
+     '<p>' . __( 'Unless your site is very large (many gigabytes) it should only take a few minutes to perform a backup. If your back up has been running for longer than an hour, it\'s safe to assume that something has gone wrong. Try de-activating and re-activating the plugin. If it keeps happening, contact support.', 'backupwordpress' ) . '</p>' .
 
      '<p><strong>' . __( 'What do I do if I get the wp-cron error message?', 'backupwordpress' ) . '</strong></p>' .
 
-     '<p>' . __( 'The issue is that your <code>wp-cron.php</code> is not returning a <code>200</code> response when hit with a HTTP request originating from your own server, it could be several things, in most cases, it\'s an issue with the server / site.', 'backupwordpress' ) . '</p>' .
+     '<p>' . __( 'The issue is that your <code>wp-cron.php</code> is not returning a <code>200</code> response when hit with a HTTP request originating from your own server, it could be several things. In most cases, it\'s an issue with the server / site.', 'backupwordpress' ) . '</p>' .
 
      '<p>' . __( 'There are some things you can test to confirm this is the issue.', 'backupwordpress' ) . '</p>' .
 
@@ -41,13 +41,13 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<li>' . __( 'Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around.)', 'backupwordpress' ) . '</li>' .
 
-     '<li>' . __( 'If you click manual backup does it work?', 'backupwordpress' ) . '</li>' .
+     '<li>' . __( 'If you click manual backup, does it work?', 'backupwordpress' ) . '</li>' .
 
-     '<li>' . __( 'Try adding <code>define( \'ALTERNATE_WP_CRON\', true );</code> to your <code>wp-config.php</code>, do automatic backups work?', 'backupwordpress' ) . '</li>' .
+     '<li>' . __( 'Try adding <code>define( \'ALTERNATE_WP_CRON\', true );</code> to your <code>wp-config.php</code>. Do automatic backups work?', 'backupwordpress' ) . '</li>' .
 
-     '<li>' . __( 'Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so wp-cron won\'t work until you remove it. If you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
+     '<li>' . __( 'Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won\'t work until you remove it. If you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
 
-     '<p>' . __( 'Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) . '</p>' .
+     '<p>' . __( 'Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) . '</p>' .
 
      '<p><strong>' . __( 'How to get BackUpWordPress working in Heart Internet', 'backupwordpress' ) . '</strong></p>' .
 
@@ -55,4 +55,4 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
      '<p><strong>' . __( 'My backups seem to be failing?', 'backupwordpress' ) . '</strong></p>' .
 
-     '<p>' . __( 'If your backups are failing, it\'s commonly caused by a lack of available resources on your server. The easiest way to establish this is to exclude some of, or the entirety of your uploads folder, running a backup, and if that succeeds, then you\'ll know it\'s probably a server issue. If not, report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) . '</p>';
+     '<p>' . __( 'If your backups are failing, it\'s commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it\'s probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by enabling support from your Admin Dashboard (recommended), or emailing backupwordpress@hmn.md', 'backupwordpress' ) . '</p>';
