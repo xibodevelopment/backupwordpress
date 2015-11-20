@@ -62,15 +62,15 @@ abstract class File_Backup_Engine extends Backup_Engine {
 		// Skip unreadable files too
 		$finder->filter(
 			function ( \SplFileInfo $file ) {
-		    	if ( ! $file->isReadable() ) {
-		        	return false;
+				if ( ! $file->isReadable() ) {
+					return false;
 				}
 			}
 		);
 
 		$excludes = $this->get_excludes();
 
-		// Skips folders/files that match default exclude patterns
+		// Skips folders/files that match exclude patterns
 		foreach ( $excludes as $exclude ) {
 			$finder->notPath( $exclude );
 		}
@@ -85,7 +85,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 			$excludes = explode( ',', $excludes );
 		}
 
-		$this->excludes = array_filter( array_unique( array_map( 'trim', $excludes ) ) );
+		$this->excludes = $excludes;
 	}
 
 	public function get_excludes() {
@@ -96,6 +96,27 @@ abstract class File_Backup_Engine extends Backup_Engine {
 		if ( strpos( Path::get_path(), Path::get_root() ) !== false ) {
 			array_unshift( $excludes, trailingslashit( Path::get_path() ) );
 		}
+
+		$excludes = array_map( function( $exclude ) {
+
+			$exclude = str_replace( PATH::get_root(), '', wp_normalize_path( $exclude ) );
+			$exclude = ltrim( $exclude, '/' );
+			$exclude = untrailingslashit( $exclude );
+			$exclude = trim( $exclude );
+
+			if ( strpos( $exclude, '*' ) !== false ) {
+				$exclude = untrailingslashit( $exclude );
+				$exclude = str_replace( '/', '\/', $exclude );
+				$exclude = str_replace( '*', '[\s\S]*?', $exclude );
+				$exclude = '/' . $exclude . '/';
+			}
+
+			return $exclude;
+
+		}, $excludes );
+
+		$excludes = array_unique( $excludes );
+		$excludes = array_filter( $excludes );
 
 		return array_unique( $excludes );
 
