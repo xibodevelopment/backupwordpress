@@ -33,6 +33,9 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 			$is_apache = $this->is_apache;
 		}
 
+		// Reset the path internally
+		$this->path->reset_path();
+
 		// Remove all backup paths that exist
 		foreach( $this->path->get_existing_paths() as $path ) {
 			rmdirtree( $path );
@@ -146,7 +149,7 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 		foreach ( $paths as $path ) {
 
 				$backups[] = $backup = microtime() . '.zip';
-			
+
 				file_put_contents( trailingslashit( $path ) . $backup, 'Just keep swimming, just keep swimming...' );
 
 		}
