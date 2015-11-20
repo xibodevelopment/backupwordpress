@@ -601,7 +601,7 @@ class Scheduled_Backup {
 
 		// Check it's valid
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && 'manually' !== $reoccurrence ) {
-			return new \WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron reoccurrence or "manually"', 'backupwordpress' ), __METHOD__ ) );
+			return new \WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid cron recurrence or "manually"', 'backupwordpress' ), __METHOD__ ) );
 		}
 
 		// If the recurrence is already set to the same thing then there's no need to continue
@@ -939,7 +939,7 @@ class Scheduled_Backup {
 
 			default:
 
-				return new \WP_Error( 'unexpected-error', __( 'An unexpected error occured', 'backupwordpress' ) );
+				return new \WP_Error( 'unexpected-error', __( 'An unexpected error occurred', 'backupwordpress' ) );
 
 		endswitch;
 

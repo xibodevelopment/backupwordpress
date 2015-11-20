@@ -20,7 +20,7 @@ namespace HM\BackUpWordPress;
 					<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The path to folder you would like to store your backup files in, defaults to %s.', 'backupwordpress' ), '<code>' . esc_html( Path::get_path() ) . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p>
+				<p><?php printf( __( 'The path to the folder you would like to store your backup files in, defaults to %s.', 'backupwordpress' ), '<code>' . esc_html( Path::get_path() ) . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p>
 
 			</td>
 
