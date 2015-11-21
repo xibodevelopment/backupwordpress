@@ -179,7 +179,7 @@ clear_settings_errors();
 
 						<?php printf( __( 'Past this limit older backups will be deleted automatically.', 'backupwordpress' ) ); ?>
 
-						<?php if ( $schedule->is_site_size_cached() ) {
+						<?php if ( Site_Size::is_site_size_cached() ) {
 							printf( __( 'This schedule will store a maximum of %s of backups.', 'backupwordpress' ), '<code>' . esc_html( size_format( $schedule->get_site_size() * $schedule->get_max_backups() ) ) . '</code>' );
 						} ?>
 

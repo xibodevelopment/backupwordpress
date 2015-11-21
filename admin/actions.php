@@ -89,20 +89,20 @@ function request_do_backup() {
 add_action( 'wp_ajax_hmbkp_run_schedule', 'HM\BackUpWordPress\request_do_backup' );
 
 function run_schedule_async( $schedule_id ) {
-error_log( 'sync' );
+
 	$schedule = new Scheduled_Backup( $schedule_id );
 
 	$schedule->run();
 
-	$errors = array_merge( $schedule->backup->get_errors(), $schedule->backup->get_warnings() );
-
-	$notices = array();
-
-	foreach ( $errors as $key => $error ) {
-		$notices[] = implode( ', ', $error );
-	}
-
-	Notices::get_instance()->set_notices( 'backup_errors', $notices );
+	////$errors = array_merge( $schedule->backup->get_errors(), $schedule->backup->get_warnings() );
+//
+	//$notices = array();
+//
+	//foreach ( $errors as $key => $error ) {
+	//	$notices[] = implode( ', ', $error );
+	//}
+//
+	//Notices::get_instance()->set_notices( 'backup_errors', $notices );
 }
 
 /**
@@ -503,24 +503,11 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'HM\BackUpWordPress\recalculate_director
 
 function calculate_site_size() {
 
-	if ( isset( $_GET['hmbkp_schedule_id'] ) ) {
+	$site_size = new Site_Size;
 
-		$current_schedule = new Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
-
-	} else {
-
-		// Refresh the schedules from the database to make sure we have the latest changes
-		Schedules::get_instance()->refresh_schedules();
-
-		$schedules = Schedules::get_instance()->get_schedules();
-
-		$current_schedule = reset( $schedules );
-
-	}
-
-	if ( ! $current_schedule->is_site_size_cached() ) {
+	if ( ! $site_size::is_site_size_cached() ) {
 		$root = new \SplFileInfo( Path::get_root() );
-		$current_schedule->filesize( $root );
+		$site_size->filesize( $root );
 	}
 
 }
@@ -554,9 +541,12 @@ function heartbeat_received( $response, $data ) {
 		if ( ! empty( $data['hmbkp_client_request'] ) ) {
 
 			// Pass the site size to be displayed when it's ready.
-			if ( $schedule->is_site_size_cached() ) {
+			if ( Site_Size::is_site_size_cached() ) {
 
-				$response['hmbkp_site_size'] = $schedule->get_formatted_site_size();
+				$site_size = new Site_Size;
+				$site_size->set_excludes( $schedule->get_excludes );
+
+				$response['hmbkp_site_size'] = $site_size->get_formatted_site_size( true );
 
 				ob_start();
 				require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
@@ -568,6 +558,7 @@ function heartbeat_received( $response, $data ) {
 		}
 
 	}
+
 	return $response;
 
 }

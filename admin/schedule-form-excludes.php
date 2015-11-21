@@ -2,78 +2,75 @@
 
 namespace HM\BackUpWordPress;
 
-?>
+$excludes = new Excludes;
+$excludes->set_excludes( $schedule->get_excludes() ); ?>
 
 <div class="hmbkp-exclude-settings">
 
-	<?php if ( $schedule->get_excludes() ) : ?>
+	<h3>
+		<?php _e( 'Currently Excluded', 'backupwordpress' ); ?>
+	</h3>
 
-		<h3>
-			<?php _e( 'Currently Excluded', 'backupwordpress' ); ?>
-		</h3>
+	<p><?php _e( 'We automatically detect and ignore common <abbr title="Version Control Systems">VCS</abbr> folders and other backup plugin folders.', 'backupwordpress' ); ?></p>
 
-		<p><?php _e( 'We automatically detect and ignore common <abbr title="Version Control Systems">VCS</abbr> folders and other backup plugin folders.', 'backupwordpress' ); ?></p>
+	<table class="widefat">
 
-		<table class="widefat">
+		<tbody>
 
-			<tbody>
+		<?php foreach ( array_diff( $excludes->get_excludes(), $excludes->get_default_excludes() ) as $key => $exclude ) :
 
-			<?php foreach ( array_diff( $schedule->get_excludes(), $schedule->backup->default_excludes() ) as $key => $exclude ) :
+			$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
 
-				$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
+			<tr>
 
-				<tr>
+				<th scope="row">
 
-					<th scope="row">
+					<?php if ( $exclude_path->isFile() ) { ?>
 
-						<?php if ( $exclude_path->isFile() ) { ?>
+						<div class="dashicons dashicons-media-default"></div>
 
-							<div class="dashicons dashicons-media-default"></div>
+					<?php } elseif ( $exclude_path->isDir() ) { ?>
 
-						<?php } elseif ( $exclude_path->isDir() ) { ?>
+						<div class="dashicons dashicons-portfolio"></div>
 
-							<div class="dashicons dashicons-portfolio"></div>
+					<?php } ?>
 
-						<?php } ?>
+				</th>
 
-					</th>
+				<td>
 
-					<td>
+					<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
 
-						<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
+				</td>
 
-					</td>
+				<td>
 
-					<td>
+					<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === untrailingslashit( $exclude ) ) ) : ?>
 
-						<?php if ( ( in_array( $exclude, $schedule->backup->default_excludes() ) ) || ( Path::get_path() === untrailingslashit( $exclude ) ) ) : ?>
+						<?php _e( 'Default rule', 'backupwordpress' ); ?>
 
-							<?php _e( 'Default rule', 'backupwordpress' ); ?>
+					<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
 
-						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
+						<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
 
-							<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
+					<?php else : ?>
 
-						<?php else : ?>
+						<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
+							'hmbkp_remove_exclude' => $exclude,
+							'hmbkp_schedule_id'    => $schedule->get_id()
+						) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
 
-							<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
-								'hmbkp_remove_exclude' => $exclude,
-								'hmbkp_schedule_id'    => $schedule->get_id()
-							) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
+					<?php endif; ?>
 
-						<?php endif; ?>
+				</td>
 
-					</td>
+			</tr>
 
-				</tr>
+		<?php endforeach; ?>
 
-			<?php endforeach; ?>
+		</tbody>
 
-			</tbody>
-
-		</table>
-
-	<?php endif; ?>
+	</table>
 
 	<h3 id="directory-listing"><?php _e( 'Your Site', 'backupwordpress' ); ?></h3>
 
@@ -95,10 +92,12 @@ namespace HM\BackUpWordPress;
 
 	}
 
-	$exclude_string = $schedule->backup->exclude_string( 'regex' );
+	$exclude_string = $excludes->exclude_string( 'regex' );
+
+	$site_size = new Site_Size;
 
 	// Kick off a recursive filesize scan
-	$files = $schedule->list_directory_by_total_filesize( $directory ); ?>
+	$files = $site_size->list_directory_by_total_filesize( $directory ); ?>
 
 	<table class="widefat">
 
@@ -147,7 +146,7 @@ namespace HM\BackUpWordPress;
 
 			<td class="column-filesize">
 
-				<?php if ( $schedule->is_site_size_being_calculated() ) { ?>
+				<?php if ( Site_Size::is_site_size_being_calculated() ) { ?>
 
 					<span class="spinner"></span>
 
@@ -264,13 +263,13 @@ namespace HM\BackUpWordPress;
 
 					<td class="column-format column-filesize">
 
-						<?php if ( $file->isDir() && $schedule->is_site_size_being_calculated() ) { ?>
+						<?php if ( $file->isDir() && Site_Size::is_site_size_being_calculated() ) { ?>
 
 							<span class="spinner"></span>
 
 						<?php } else {
 
-							$size = $schedule->filesize( $file );
+							$size = $site_size->filesize( $file );
 
 							if ( false !== $size ) {
 

@@ -18,10 +18,10 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 		Path::get_instance()->set_path( $this->test_data . '/tmp' );
 
-		$this->assertContains( Path::get_root(), Path::get_path() );
-		$this->assertNotEmpty( $this->backup->get_excludes() );
+		$excludes = new Excludes;
 
-		$this->assertContains( str_replace( trailingslashit( Path::get_root() ), '', Path::get_path() ), $this->backup->get_excludes() );
+		$this->assertContains( Path::get_root(), Path::get_path() );
+		$this->assertContains( str_replace( trailingslashit( Path::get_root() ), '', Path::get_path() ), $excludes->get_excludes() );
 
 	}
 

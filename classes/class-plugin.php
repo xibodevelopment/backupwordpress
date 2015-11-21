@@ -132,7 +132,8 @@ final class Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirement.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-path.php' );
-		require_once( HMBKP_PLUGIN_PATH . 'classes/class-backup.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-excludes.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-site-size.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-utilities.php' );
 
@@ -147,6 +148,8 @@ final class Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file-zip-archive.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-director.php' );
+
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-site-backup.php' );
 
 		// Load the backup scheduling classes
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-schedule.php' );

@@ -492,11 +492,18 @@ class Requirement_Calculated_Size extends Requirement {
 		$backup_sizes = array();
 
 		$schedules = Schedules::get_instance();
+		$site_size = new Site_Size;
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
-			if ( $schedule->is_site_size_cached() ) {
-				$backup_sizes[ $schedule->get_type() ] = $schedule->get_formatted_site_size();
+
+			if ( $site_size->is_site_size_cached() ) {
+
+				$site_size->set_excludes( $schedule->get_excludes() );
+
+				$backup_sizes[ $schedule->get_type() ] = $site_size->get_formatted_site_size();
+
 			}
+
 		}
 
 		return $backup_sizes;

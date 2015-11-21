@@ -10,52 +10,11 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		parent::__construct();
 	}
 
-	public function get_zip_executable_path() {
-
-		if ( ! Backup_Utilities::is_exec_available() ) {
-			return false;
-		}
-
-		if ( defined( 'HMBKP_ZIP_PATH' ) ) {
-			return HMBKP_ZIP_PATH;
-		}
-
-		$this->zip_executable_path = apply_filters( 'hmbkp_zip_executable_path', '' );
-
-		if ( ! $this->zip_executable_path ) {
-
-			// List of possible zip locations
-			$paths = array(
-				'zip',
-				'/usr/bin/zip',
-				'/opt/local/bin/zip'
-			);
-
-			$this->zip_executable_path = Backup_Utilities::get_executable_path( $paths );
-
-		}
-
-		return $this->zip_executable_path;
-
-	}
-
 	public function backup() {
 
-		if ( ! $this->get_zip_executable_path() ) {
+		if ( ! Backup_Utilities::is_exec_available() || ! $this->get_zip_executable_path() ) {
 			return false;
 		}
-
-
-		// TODO Add the database dump to the archive
-		// if ( 'file' !== $this->get_type() && file_exists( $this->get_database_dump_filepath() ) ) {
-		// 	$stderr = shell_exec( 'cd ' . escapeshellarg( Path::get_path() ) . ' && ' . escapeshellcmd( $this->get_zip_command_path() ) . ' -q ' . escapeshellarg( $this->get_archive_filepath() ) . ' ' . escapeshellarg( $this->get_database_dump_filename() ) . ' 2>&1' );
-
-		// 	if ( ! empty ( $stderr ) ) {
-		// 		$this->warning( $this->get_archive_method(), $stderr );
-		// 	}
-		// }
-
-		// Zip up $this->root
 
 		// cd to the site root
 		$command[] = 'cd ' . escapeshellarg( Path::get_root() );
@@ -96,9 +55,11 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 
 	}
 
-	public function get_exclude_string( $context = 'zip' ) {
+	public function get_exclude_string() {
 
-		$excludes = $this->get_excludes();
+		$excludes = new Excludes;
+		$excludes->set_excludes( $this->excludes );
+		$excludes = $excludes->get_excludes();
 
 		foreach ( $excludes as $key => &$rule ) {
 
@@ -142,6 +103,31 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		$excludes = array_map( 'escapeshellarg', array_unique( $excludes ) );
 
 		return implode( ' -x', $excludes );
+
+	}
+
+	public function get_zip_executable_path() {
+
+		if ( defined( 'HMBKP_ZIP_PATH' ) ) {
+			return HMBKP_ZIP_PATH;
+		}
+
+		$this->zip_executable_path = apply_filters( 'hmbkp_zip_executable_path', '' );
+
+		if ( ! $this->zip_executable_path ) {
+
+			// List of possible zip locations
+			$paths = array(
+				'zip',
+				'/usr/bin/zip',
+				'/opt/local/bin/zip'
+			);
+
+			$this->zip_executable_path = Backup_Utilities::get_executable_path( $paths );
+
+		}
+
+		return $this->zip_executable_path;
 
 	}
 

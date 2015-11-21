@@ -1,7 +1,6 @@
 <?php
 
 namespace HM\BackUpWordPress;
-use Symfony\Component\Finder\Finder;
 
 /**
  * The Backup Scheduler
@@ -35,7 +34,19 @@ class Scheduled_Backup {
 	 * @var array
 	 * @access private
 	 */
-	private $options = array();
+	private $options = array(
+		'max_backups'   => 3,
+		'excludes'      => array(),
+		'type'          => 'complete',
+		'reoccurrence'  => 'manually'
+	);
+
+	/**
+	 * The Backup instance
+	 *
+	 * @var Backup
+	 */
+	private $backup;
 
 	/**
 	 * Setup the schedule object
@@ -56,27 +67,10 @@ class Scheduled_Backup {
 		// Store id for later
 		$this->id = $id;
 
-		$file_backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
-			new Zip_File_Backup_Engine,
-			new Zip_Archive_File_Backup_Engine
-		) );
-
-		$this->file_backup = new Backup_Director( $file_backup_engines );
-
-		// Set the archive filename to site name + schedule slug + date
-		$this->file_backup->set_backup_filename( implode( '-', array(
-			sanitize_title( str_ireplace( array(
-				'http://',
-				'https://',
-				'www'
-			), '', home_url() ) ),
-			$this->get_id(),
-			$this->get_type(),
-			current_time( 'Y-m-d-H-i-s' )
-		) ) . '.zip' );
-
 		// Load the options
-		$this->options = array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) );
+		$this->options = array_merge( $this->options, array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) ) );
+
+		//$this->backup->set_action_callback( array( $this, 'do_action' ) );
 
 		if ( defined( 'HMBKP_SCHEDULE_START_TIME' ) && strtotime( 'HMBKP_SCHEDULE_START_TIME' ) ) {
 			$this->set_schedule_start_time( strtotime( 'HMBKP_SCHEDULE_START_TIME' ) );
@@ -87,6 +81,15 @@ class Scheduled_Backup {
 			$this->schedule();
 		}
 
+	}
+
+	/**
+	 * Simple class wrapper for Path::get_path()
+	 *
+	 * @return string
+	 */
+	private function get_path() {
+		return Path::get_instance()->get_path();
 	}
 
 	/**
@@ -113,17 +116,14 @@ class Scheduled_Backup {
 	}
 
 	/**
-	 * Returns the given option value or WP_Error if it doesn't exist
+	 * Returns the given option value
 	 *
 	 * @param $option_name
-	 * @return \WP_Error
+	 * @return mixed The option value
 	 */
 	public function get_schedule_option( $option_name ) {
-
 		if ( isset( $this->options[ $option_name ] ) ) {
 			return $this->options[ $option_name ];
-		} else {
-			return new \WP_Error( 'invalid_option_name', __( 'Invalid Option Name', 'backupwordpress' ) );
 		}
 	}
 
@@ -133,9 +133,7 @@ class Scheduled_Backup {
 	 * @return string
 	 */
 	public function get_name() {
-
 		return ucwords( $this->get_type() ) . ' ' . $this->get_reoccurrence();
-
 	}
 
 	/**
@@ -144,13 +142,7 @@ class Scheduled_Backup {
 	 * @return string
 	 */
 	public function get_type() {
-
-		if ( empty( $this->options['type'] ) ) {
-			$this->set_type( 'complete' );
-		}
-
 		return $this->options['type'];
-
 	}
 
 	/**
@@ -159,22 +151,18 @@ class Scheduled_Backup {
 	 * @param string $type
 	 */
 	public function set_type( $type ) {
-
-		if ( isset( $this->options['type'] ) && $this->options['type'] === $type ) {
-			return;
+		if ( ! isset( $this->options['type'] ) || $this->options['type'] !== $type ) {
+			$this->options['type'] = $type;
 		}
-
-		$this->options['type'] = $type;
-
 	}
 
 	/**
-	 * Get the users exclude rules
+	 * Get the exclude rules
 	 *
 	 * @return array
 	 */
 	public function get_excludes() {
-		return isset( $this->options['excludes'] ) ? $this->options['excludes'] : array();
+		return $this->options['excludes'];
 	}
 
 	/**
@@ -187,8 +175,9 @@ class Scheduled_Backup {
 	 */
 	public function set_excludes( $excludes, $append = false ) {
 
+		// If these are valid excludes and they are different save them
 		if ( empty( $this->options['excludes'] ) || $this->options['excludes'] !== $excludes ) {
-			$this->options['excludes'] = $append ? array_merge( (array) $this->options['excludes'], $excludes ) : $excludes;
+			$this->options['excludes'] = $append && ! empty( $this->options['excludes'] ) ? array_merge( (array) $this->options['excludes'], (array) $excludes ) : (array) $excludes;
 		}
 
 	}
@@ -199,13 +188,7 @@ class Scheduled_Backup {
 	 * @return int
 	 */
 	public function get_max_backups() {
-
-		if ( empty( $this->options['max_backups'] ) ) {
-			$this->set_max_backups( 3 );
-		}
-
-		return (int) esc_attr( $this->options['max_backups'] );
-
+		return (int) $this->options['max_backups'];
 	}
 
 	/**
@@ -216,14 +199,7 @@ class Scheduled_Backup {
 	 * @return WP_Error|boolean
 	 */
 	public function set_max_backups( $max ) {
-
-		if ( empty( $max ) || ! is_int( $max ) ) {
-			return new \WP_Error( 'hmbkp_invalid_type_error', sprintf( __( 'Argument 1 for %s must be a valid integer', 'backupwordpress' ), __METHOD__ ) );
-		}
-
 		$this->options['max_backups'] = $max;
-
-		return true;
 	}
 
 	/**
@@ -265,270 +241,6 @@ class Scheduled_Backup {
 	}
 
 	/**
-	 * Calculate the size total size of the database + files
-	 *
-	 * Doesn't account for compression
-	 *
-	 * @return string
-	 */
-	public function get_site_size( $skip_excluded_files = false ) {
-
-		$size = 0;
-
-		// Include database size except for file only schedule.
-		if ( 'file' !== $this->get_type() ) {
-
-			global $wpdb;
-
-			$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
-
-			foreach ( $tables as $table ) {
-				$size += (float) $table['Data_length'];
-			}
-		}
-
-		// Include total size of dirs/files except for database only schedule.
-		if ( 'database' !== $this->get_type() ) {
-
-			$root = new \SplFileInfo( Path::get_root() );
-
-			$size += $this->filesize( $root, $skip_excluded_files );
-
-		}
-
-		return $size;
-
-	}
-
-	/**
-	 * Convenience function to format the file size
-	 *
-	 * @param bool $cached
-	 *
-	 * @return bool|string
-	 */
-	public function get_formatted_site_size( $skip_excluded_files = false ) {
-		return size_format( $this->get_site_size( $skip_excluded_files ) );
-	}
-
-	/**
-	 * Whether the total filesize is being calculated
-	 *
-	 * @return int            The total of the file or directory
-	 */
-	public function is_site_size_being_calculated() {
-		return false !== get_transient( 'hmbkp_directory_filesizes_running' );
-	}
-
-	/**
-	 * Whether the total filesize is being calculated
-	 *
-	 * @return bool The total of the file or directory
-	 */
-	public function is_site_size_cached() {
-		return false !== get_transient( 'hmbkp_directory_filesizes' );
-	}
-
-	/**
-	 * Return the single depth list of files and subdirectories in $directory ordered by total filesize
-	 *
-	 * Will schedule background threads to recursively calculate the filesize of subdirectories.
-	 * The total filesize of each directory and subdirectory is cached in a transient for 1 week.
-	 *
-	 * @param string $directory The directory to scan
-	 *
-	 * @return array returns an array of files ordered by filesize
-	 */
-	public function list_directory_by_total_filesize( $directory ) {
-
-		$files = $files_with_no_size = $empty_files = $files_with_size = $unreadable_files = array();
-
-		if ( ! is_dir( $directory ) ) {
-			return $files;
-		}
-
-		$found = array();
-
-		if ( ! empty( $this->files ) ) {
-			return $this->files;
-		}
-
-		$default_excludes = File_Backup_Engine::get_default_excludes();
-
-		$finder = new Finder();
-		$finder->ignoreDotFiles( false );
-		$finder->ignoreUnreadableDirs();
-		$finder->followLinks();
-		$finder->depth( '== 0' );
-
-		foreach ( $default_excludes as $exclude ) {
-			$finder->notPath( $exclude );
-		}
-
-		foreach ( $finder->in( $directory ) as $entry ) {
-			$files[] = $entry;
-			// Get the total filesize for each file and directory
-			$filesize = $this->filesize( $entry );
-
-			if ( $filesize ) {
-
-				// If there is already a file with exactly the same filesize then let's keep increasing the filesize of this one until we don't have a clash
-				while ( array_key_exists( $filesize, $files_with_size ) ) {
-					$filesize ++;
-				}
-
-				$files_with_size[ $filesize ] = $entry;
-
-			} elseif ( 0 === $filesize ) {
-
-				$empty_files[] = $entry;
-
-			} else {
-
-				$files_with_no_size[] = $entry;
-
-			}
-		}
-
-		// Add 0 byte files / directories to the bottom
-		$files = $files_with_size + array_merge( $empty_files, $unreadable_files );
-
-		// Add directories that are still calculating to the top
-		if ( $files_with_no_size ) {
-
-			// We have to loop as merging or concatenating the array would re-flow the keys which we don't want because the filesize is stored in the key
-			foreach ( $files_with_no_size as $entry ) {
-				array_unshift( $files, $entry );
-			}
-		}
-
-		return $files;
-
-	}
-
-	/**
-	 * Recursively scans a directory to calculate the total filesize
-	 *
-	 * Locks should be set by the caller with `set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );`
-	 *
-	 * @return array $directory_sizes    An array of directory paths => filesize sum of all files in directory
-	 */
-	public function recursive_filesize_scanner() {
-
-		// Use the cached array directory sizes if available
-		$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
-
-		// If we do have it in cache then let's use it and also clear the lock
-		if ( is_array( $directory_sizes ) ) {
-
-			delete_transient( 'hmbkp_directory_filesizes_running' );
-
-			return $directory_sizes;
-
-		}
-
-		// If we don't have it cached then we'll need to re-calculate
-		$files = $this->backup->get_files();
-
-		foreach ( $files as $file ) {
-
-			if ( $file->isReadable() ) {
-				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = $file->getSize();
-			} else {
-				$directory_sizes[ wp_normalize_path( $file->getRealpath() ) ] = 0;
-			}
-
-		}
-
-		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
-
-		delete_transient( 'hmbkp_directory_filesizes_running' );
-
-		return $directory_sizes;
-
-	}
-
-	/**
-	 * Get the total filesize for a given file or directory
-	 *
-	 * If $file is a file then just return the result of `filesize()`.
-	 * If $file is a directory then schedule a recursive filesize scan.
-	 *
-	 * @param \SplFileInfo $file The file or directory you want to know the size of
-	 * @param bool $skip_excluded_files Skip excluded files when calculating a directories total size
-	 *
-	 * @return int                        The total of the file or directory
-	 */
-	public function filesize( \SplFileInfo $file, $skip_excluded_files = false ) {
-
-		// Skip missing or unreadable files
-		if ( ! file_exists( $file->getPathname() ) || ! $file->getRealpath() || ! $file->isReadable() ) {
-			return 0;
-		}
-
-		// If it's a file then just pass back the filesize
-		if ( $file->isFile() && $file->isReadable() ) {
-			return $file->getSize();
-		}
-
-		// If it's a directory then pull it from the cached filesize array
-		if ( $file->isDir() ) {
-
-			// If we haven't calculated the site size yet then kick it off in a thread
-			$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
-
-			if ( ! is_array( $directory_sizes ) ) {
-
-				if ( ! $this->is_site_size_being_calculated() ) {
-
-					// Mark the filesize as being calculated
-					set_transient( 'hmbkp_directory_filesizes_running', true, HOUR_IN_SECONDS );
-
-					// Schedule a Backdrop task to trigger a recalculation
-					$task = new \HM\Backdrop\Task( array( $this, 'recursive_filesize_scanner' ) );
-					$task->schedule();
-
-				}
-
-				return 0;
-
-			}
-
-			$current_pathname = trailingslashit( $file->getPathname() );
-			$root             = trailingslashit( Path::get_root() );
-
-			foreach ( $directory_sizes as $path => $size ) {
-
-				// Remove any files that aren't part of the current tree
-				if ( false === strpos( $path, $current_pathname ) ) {
-					unset( $directory_sizes[ $path ] );
-				}
-
-			}
-
-			if ( $skip_excluded_files ) {
-
-				$excludes = $this->backup->exclude_string( 'regex' );
-
-				foreach ( $directory_sizes as $path => $size ) {
-
-					// Skip excluded files if we have excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', wp_normalize_path( $path ) ) ) ) {
-						unset( $directory_sizes[ $path ] );
-					}
-
-				}
-
-			}
-
-			// Directory size is now just a sum of all files across all sub directories
-			return absint( array_sum( $directory_sizes ) );
-
-		}
-
-	}
-
-	/**
 	 * Get the start time for the schedule
 	 *
 	 * @return int timestamp || 0 for manual only schedules
@@ -558,14 +270,9 @@ class Scheduled_Backup {
 	/**
 	 * Set the schedule start time.
 	 *
-	 * @param array $args
+	 * @param timestamp $time
 	 */
 	public function set_schedule_start_time( $time ) {
-
-		// Don't allow setting the start time in the past
-		if ( (int) $time <= time() ) {
-			return new \WP_Error( 'hmbkp_invalid_argument_error', sprintf( __( 'Argument 1 for %s must be a valid future timestamp', 'backupwordpress' ), __METHOD__ ) );
-		}
 
 		$this->options['schedule_start_time'] = $time;
 
@@ -578,14 +285,7 @@ class Scheduled_Backup {
 	 *
 	 */
 	public function get_reoccurrence() {
-
-		// Default to no reoccurrence
-		if ( empty( $this->options['reoccurrence'] ) ) {
-			$this->set_reoccurrence( 'manually' );
-		}
-
 		return $this->options['reoccurrence'];
-
 	}
 
 	/**
@@ -614,6 +314,7 @@ class Scheduled_Backup {
 
 		if ( 'manually' === $reoccurrence ) {
 			$this->unschedule();
+
 		} else {
 			$this->schedule();
 		}
@@ -679,7 +380,7 @@ class Scheduled_Backup {
 	 * @return string
 	 */
 	public function get_schedule_running_path() {
-		return Path::get_path() . '/.schedule-' . $this->get_id() . '-running';
+		return $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
 	}
 
 	/**
@@ -724,30 +425,36 @@ class Scheduled_Backup {
 		// Delete old backups now in-case we fatal error during the backup process
 		$this->delete_old_backups();
 
-		//if ( $this->get_backups() ) {
-//
-		//	// If we already have a previous backup then pass it in so it can be re-used
-		//	list( $existing_backup ) = array_values( $this->get_backups() );
-//
-		//	if ( $existing_backup && file_exists( $existing_backup ) ) {
-		//		$this->backup->set_existing_archive_filepath( $existing_backup );
-		//	}
-//
-		//}
+		if ( $this->get_backups() ) {
 
-		//$this->backup->set_database_backup_filename( implode( '-', array(
-		//	'database',
-		//	sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
-		//	$this->get_id()
-		//) ) . '.sql' );
-//
-		//$this->backup->set_type( $this->get_type() );
-		//$this->backup->set_excludes( $this->get_excludes() );
-		//$this->backup->set_action_callback( array( $this, 'do_action' ) );
+			// If we already have a previous backup then pass it in so it can be re-used
+			list( $existing_backup ) = array_values( $this->get_backups() );
 
-		$this->file_backup->set_user_excludes( $this->get_excludes() );
+			if ( $existing_backup && file_exists( $existing_backup ) ) {
+				$this->backup->set_existing_archive_filepath( $existing_backup );
+			}
 
-		$this->file_backup->backup();
+		}
+
+		// Setup The Backup class
+		$backup = new Site_Backup;
+
+		// Set the archive filename to site name + schedule slug + date
+		$backup->set_backup_filename( $this->get_backup_filename() );
+
+		$database_backup_filename = implode( '-', array(
+			'database',
+			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
+			$this->get_id()
+		) ) . '.sql';
+
+		$backup->set_database_dump_filename( $database_backup_filename );
+		$backup->set_type( $this->get_type() );
+		$backup->set_excludes( $this->get_excludes() );
+
+		$backup->backup();
+
+		$this->backup = $backup;
 
 		// Delete the backup running file
 		if ( file_exists( $this->get_schedule_running_path() ) ) {
@@ -757,6 +464,19 @@ class Scheduled_Backup {
 		// Delete old backups again
 		$this->delete_old_backups();
 
+	}
+
+	public function get_backup_filename() {
+		return implode( '-', array(
+			sanitize_title( str_ireplace( array(
+				'http://',
+				'https://',
+				'www'
+			), '', home_url() ) ),
+			$this->get_id(),
+			$this->get_type(),
+			current_time( 'Y-m-d-H-i-s' )
+		) ) . '.zip';
 	}
 
 	/**
@@ -791,6 +511,7 @@ class Scheduled_Backup {
 			return '';
 		}
 
+
 		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
 
 		if ( ! empty( $status->status ) ) {
@@ -811,7 +532,7 @@ class Scheduled_Backup {
 	public function set_status( $message ) {
 
 		$status = json_encode( (object) array(
-			'filename' => $this->file_backup->get_backup_filename(),
+			'filename' => $this->get_backup_filename(),
 			'started'  => $this->get_schedule_running_start_time(),
 			'status'   => $message,
 		) );
@@ -897,7 +618,7 @@ class Scheduled_Backup {
 
 				if ( $this->backup->get_errors() ) {
 
-					$file = Path::get_path() . '/.backup_errors';
+					$file = $this->get_path() . '/.backup_errors';
 
 					if ( file_exists( $file ) ) {
 						@unlink( $file );
@@ -919,7 +640,7 @@ class Scheduled_Backup {
 
 				if ( $this->backup->get_warnings() ) {
 
-					$file = Path::get_path() . '/.backup_warnings';
+					$file = $this->get_path() . '/.backup_warnings';
 
 					if ( file_exists( $file ) ) {
 						@unlink( $file );
@@ -1028,12 +749,12 @@ class Scheduled_Backup {
 
 		$files = array();
 
-		if ( $handle = @opendir( Path::get_path() ) ) {
+		if ( $handle = @opendir( $this->get_path() ) ) {
 
 			while ( false !== ( $file = readdir( $handle ) ) ) {
 
 				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() !== $file ) {
-					$files[ @filemtime( trailingslashit( Path::get_path() ) . $file ) ] = trailingslashit( Path::get_path() ) . $file;
+					$files[ @filemtime( trailingslashit( $this->get_path() ) . $file ) ] = trailingslashit( $this->get_path() ) . $file;
 				}
 
 			}
