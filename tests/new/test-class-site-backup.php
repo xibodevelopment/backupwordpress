@@ -5,15 +5,14 @@ namespace HM\BackUpWordPress;
 class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	public function setUp() {
-
 		$this->backup = new Site_Backup;
-
+		$this->setup_test_data();
+		Path::get_instance()->set_path( $this->test_data . '/tmp' );
+		Path::get_instance()->set_root( $this->test_data );
 	}
 
 	public function tearDown() {
-
-		rmdirtree( Path::get_path() );
-
+		$this->cleanup_test_data();
 	}
 
 	public function test_database_backup() {

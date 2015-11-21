@@ -13,21 +13,18 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 	protected $backup;
 
 	public function setUp() {
-
 		$this->setup_test_data();
-
-		Path::get_instance()->set_path( dirname( __DIR__ ) . '/tmp' );
+		Path::get_instance()->set_path( $this->test_data . '/tmp' );
 		Path::get_instance()->set_root( $this->test_data );
-
 	}
 
 	public function tearDown() {
 
-		rmdirtree( Path::get_path() );
+		if ( file_exists( Path::get_root() . '/exclude ' ) ) {
+			chmod( Path::get_root() . '/exclude', 0755 );
+		}
 
-		chmod( Path::get_root() . '/exclude', 0755 );
-		rmdirtree( $this->test_data );
-		rmdirtree( $this->test_data_symlink );
+		$this->cleanup_test_data();
 
 		if ( file_exists( $this->hidden ) ) {
 			unlink( $this->hidden );
@@ -36,6 +33,8 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 		if ( file_exists( $this->symlink ) || is_link( $this->symlink ) ) {
 			unlink( $this->symlink );
 		}
+
+		rmdirtree( Path::get_path() );
 
 	}
 
@@ -200,6 +199,90 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->assertArchiveNotContains( $this->backup->get_backup_filepath(), array( 'exclude' ) );
 		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 1 );
+
+	}
+
+	/**
+	 * Test a complete backup of the WordPress Site
+	 *
+	 * @group full-backup
+	 */
+	public function test_complete_file_backup_with_excludes() {
+
+		// Reset Path and Root back to defaults
+		Path::get_instance()->set_path( false );
+		Path::get_instance()->set_root( false );
+
+		$this->backup->set_excludes( array( 'wp-*' ) );
+		$this->backup->backup();
+
+		$finder = $this->backup->get_files();
+
+		foreach( $finder as $file ) {
+			$files[] = $file->getRelativePathname();
+		}
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), iterator_count( $finder ) );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files );
+
+	}
+
+	/**
+	 * Test a complete backup of the WordPress Site
+	 *
+	 * @group full-backup
+	 */
+	public function test_complete_file_backup() {
+
+		// Reset Path and Root back to defaults
+		Path::get_instance()->set_path( false );
+		Path::get_instance()->set_root( false );
+
+		$this->backup->backup();
+
+		$finder = $this->backup->get_files();
+
+		foreach( $finder as $file ) {
+			$files[] = $file->getRelativePathname();
+		}
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), iterator_count( $finder ) );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files );
+
+	}
+
+	public function testDeltaBackupWithCommands() {
+
+		$this->markTestSkipped( 'Functionality not yet implemented' );
+
+		$this->backup->backup();
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'test-data.txt' ) );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 3 );
+
+		if ( ! copy( $this->backup->get_archive_filepath(), Path::get_path() . '/delta.zip' ) ) {
+				$this->markTestSkipped( 'Unable to copy backup' );
+		}
+
+		// create a new file
+		file_put_contents( Path::get_root() . '/new.file', 'test' );
+
+		if ( ! file_exists( Path::get_root() . '/new.file' ) ) {
+			$this->markTestSkipped( 'new.file couldn\'t be created' );
+		}
+
+		$this->backup->set_backup_filename( 'delta.zip' );
+
+		$this->backup->backup();
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'new.file', 'test-data.txt' ) );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 4 );
 
 	}
 

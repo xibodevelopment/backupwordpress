@@ -22,26 +22,16 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		// Run the zip command with the recursive and quiet flags
 		$command[] = '&& ' . escapeshellcmd( $this->get_zip_executable_path() ) . ' -rq';
 
-		// TODO bring this back
-		//if ( defined( 'HMBKP_ENABLE_SYNC' ) && HMBKP_ENABLE_SYNC ) {
-		//
-		//	// If the destination zip file already exists then let's just add changed files to save time
-		//	if ( file_exists( $this->get_archive_filepath() ) && $this->get_existing_archive_filepath() ) {
-		//		$command .= ' -FS ';
-		//	}
-		//
-		//}
-
 		// Save the zip file to the correct path
 		$command[] = escapeshellarg( $this->get_backup_filepath() ) . ' ./';
 
 		// Pass exclude rules in if we have them
 		if ( $this->get_exclude_string() ) {
-			$command[] = ' -x ' . $this->get_exclude_string();
+			$command[] = '-x ' . $this->get_exclude_string();
 		}
 
 		// Push all output to STDERR
-		$command[] = ' 2>&1';
+		$command[] = '2>&1';
 
 		$command = implode( ' ', $command );
 
@@ -102,7 +92,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		// Escape shell args for zip command
 		$excludes = array_map( 'escapeshellarg', array_unique( $excludes ) );
 
-		return implode( ' -x', $excludes );
+		return implode( ' -x ', $excludes );
 
 	}
 

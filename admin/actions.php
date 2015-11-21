@@ -464,8 +464,12 @@ function remove_exclude_rule() {
 	$schedule = new Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 
 	$excludes = $schedule->get_excludes();
+	$exclude_rule_to_remove = stripslashes( sanitize_text_field( $_GET['hmbkp_remove_exclude'] ) );
 
-	$schedule->set_excludes( array_diff( $excludes, (array) stripslashes( sanitize_text_field( $_GET['hmbkp_remove_exclude'] ) ) ) );
+	//var_dump( $excludes );
+	//var_dump( $exclude_rule_to_remove );
+
+	$schedule->set_excludes( array_diff( $excludes, (array) $exclude_rule_to_remove ) );
 
 	$schedule->save();
 

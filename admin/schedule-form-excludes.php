@@ -3,7 +3,8 @@
 namespace HM\BackUpWordPress;
 
 $excludes = new Excludes;
-$excludes->set_excludes( $schedule->get_excludes() ); ?>
+$excludes->set_excludes( $schedule->get_excludes() );
+$user_excludes = $excludes->get_user_excludes(); ?>
 
 <div class="hmbkp-exclude-settings">
 
@@ -17,7 +18,7 @@ $excludes->set_excludes( $schedule->get_excludes() ); ?>
 
 		<tbody>
 
-		<?php foreach ( array_diff( $excludes->get_excludes(), $excludes->get_default_excludes() ) as $key => $exclude ) :
+		<?php foreach ( $user_excludes as $key => $exclude ) :
 
 			$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
 
@@ -45,7 +46,7 @@ $excludes->set_excludes( $schedule->get_excludes() ); ?>
 
 				<td>
 
-					<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === untrailingslashit( $exclude ) ) ) : ?>
+					<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === trailingslashit( Path::get_root() ) . untrailingslashit( $exclude ) ) ) : ?>
 
 						<?php _e( 'Default rule', 'backupwordpress' ); ?>
 
@@ -92,7 +93,7 @@ $excludes->set_excludes( $schedule->get_excludes() ); ?>
 
 	}
 
-	$exclude_string = $excludes->exclude_string( 'regex' );
+	$exclude_string = implode( '|', $excludes->get_excludes_for_regex() );
 
 	$site_size = new Site_Size;
 

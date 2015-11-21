@@ -146,8 +146,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$this->test_data = __DIR__ . '/test-data';
 		$this->test_data_symlink = __DIR__ . '/test-data-symlink';
 
-		HM\BackUpWordPress\rmdirtree( $this->test_data );
-		HM\BackUpWordPress\rmdirtree( $this->test_data_symlink );
+		$this->cleanup_test_data();
 
 		mkdir( $this->test_data );
 		mkdir( $this->test_data . '/exclude' );
@@ -157,6 +156,11 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		mkdir( $this->test_data_symlink );
 		file_put_contents( $this->test_data_symlink . '/test-data-symlink.txt', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla adipiscing tincidunt dictum. Cras sed elit in ligula volutpat egestas et ac ipsum. Maecenas vitae lorem nulla, vel lacinia ligula. Duis varius nibh consequat dui lacinia tempor eu eu ipsum. Cras gravida metus ut elit eleifend mattis. Cras porta dignissim elit, at tincidunt ante pellentesque vitae. Nam dictum dapibus arcu, vitae tincidunt nunc semper eu. Pellentesque ornare interdum arcu, sit amet molestie orci malesuada a. Morbi ac lacus a lorem consectetur auctor. Suspendisse facilisis nisi vitae nisi convallis a blandit odio imperdiet. Ut lobortis luctus lacinia. Maecenas malesuada ultrices dui.' );
 
+	}
+
+	protected function cleanup_test_data() {
+		HM\BackUpWordPress\rmdirtree( $this->test_data );
+		HM\BackUpWordPress\rmdirtree( $this->test_data_symlink );
 	}
 
 	/**

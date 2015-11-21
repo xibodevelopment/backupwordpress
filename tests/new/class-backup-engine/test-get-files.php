@@ -8,14 +8,14 @@ class Backup_Engine_Get_Files extends \HM_Backup_UnitTestCase {
 
 		$this->backup = new Mock_File_Backup_Engine;
 		$this->setup_test_data();
+		Path::get_instance()->set_path( $this->test_data . '/tmp' );
 		Path::get_instance()->set_root( $this->test_data );
 
 	}
 
 	public function tearDown() {
 		chmod( Path::get_root() . '/exclude', 0755 );
-		rmdirtree( $this->test_data );
-		rmdirtree( $this->test_data_symlink );
+		$this->cleanup_test_data();
 	}
 
 	public function test_get_files() {

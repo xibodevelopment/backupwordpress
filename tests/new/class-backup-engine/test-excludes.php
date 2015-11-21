@@ -7,16 +7,17 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 	public function setUp() {
 
 		$this->setup_test_data();
-
-		Path::get_instance()->set_path( dirname( __DIR__ ) . '/tmp' );
+		Path::get_instance()->set_path( $this->test_data . '/tmp' );
 		Path::get_instance()->set_root( $this->test_data );
 
 		$this->backup = new Mock_File_Backup_Engine;
 	}
 
-	public function testBackUpDirIsExcludedWhenBackUpDirIsInRoot() {
+	public function tearDown() {
+		$this->cleanup_test_data();
+	}
 
-		Path::get_instance()->set_path( $this->test_data . '/tmp' );
+	public function testBackUpDirIsExcludedWhenBackUpDirIsInRoot() {
 
 		$excludes = new Excludes;
 
@@ -219,6 +220,34 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 		$this->assertNotContains( 'exclude/exclude.exclude', $files );
 
 		$this->assertCount( 2, $files );
+
+	}
+
+	public function testExcludePartialFilename() {
+
+		$this->backup->set_excludes( 'test-*' );
+
+		$files = $this->get_and_prepare_files();
+
+		$this->assertNotContains( 'test-data.txt', $files );
+		$this->assertContains( 'exclude', $files );
+		$this->assertContains( 'exclude/exclude.exclude', $files );
+
+		$this->assertCount( 2, $files );
+
+	}
+
+	public function testExcludePartialDirectory() {
+
+		$this->backup->set_excludes( 'excl*' );
+
+		$files = $this->get_and_prepare_files();
+
+		$this->assertContains( 'test-data.txt', $files );
+		$this->assertNotContains( 'exclude', $files );
+		$this->assertNotContains( 'exclude/exclude.exclude', $files );
+
+		$this->assertCount( 1, $files );
 
 	}
 

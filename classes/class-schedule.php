@@ -70,8 +70,6 @@ class Scheduled_Backup {
 		// Load the options
 		$this->options = array_merge( $this->options, array_filter( (array) get_option( 'hmbkp_schedule_' . $this->get_id() ) ) );
 
-		//$this->backup->set_action_callback( array( $this, 'do_action' ) );
-
 		if ( defined( 'HMBKP_SCHEDULE_START_TIME' ) && strtotime( 'HMBKP_SCHEDULE_START_TIME' ) ) {
 			$this->set_schedule_start_time( strtotime( 'HMBKP_SCHEDULE_START_TIME' ) );
 		}
@@ -173,7 +171,11 @@ class Scheduled_Backup {
 	 *
 	 * @return string
 	 */
-	public function set_excludes( $excludes, $append = false ) {
+	public function set_excludes( $exclude_rules, $append = false ) {
+
+		// Normalize the exclude rules before we save them
+		$excludes = new Excludes;
+		$excludes = $excludes->normalize( (array) $exclude_rules );
 
 		// If these are valid excludes and they are different save them
 		if ( empty( $this->options['excludes'] ) || $this->options['excludes'] !== $excludes ) {
@@ -424,17 +426,6 @@ class Scheduled_Backup {
 
 		// Delete old backups now in-case we fatal error during the backup process
 		$this->delete_old_backups();
-
-		if ( $this->get_backups() ) {
-
-			// If we already have a previous backup then pass it in so it can be re-used
-			list( $existing_backup ) = array_values( $this->get_backups() );
-
-			if ( $existing_backup && file_exists( $existing_backup ) ) {
-				$this->backup->set_existing_archive_filepath( $existing_backup );
-			}
-
-		}
 
 		// Setup The Backup class
 		$backup = new Site_Backup;
@@ -861,4 +852,3 @@ class Scheduled_Backup {
 	}
 
 }
-

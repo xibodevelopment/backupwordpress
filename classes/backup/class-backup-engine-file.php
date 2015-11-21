@@ -41,7 +41,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 
 		$excludes = new Excludes;
 		$excludes->set_excludes( $this->excludes );
-		$exclude_rules = $excludes->get_excludes();
+		$exclude_rules = $excludes->get_excludes_for_regex();
 
 		// Skips folders/files that match default exclude patterns
 		foreach ( $exclude_rules as $exclude ) {

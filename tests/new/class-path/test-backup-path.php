@@ -64,6 +64,8 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->path->get_default_path(), Path::get_path() );
 
+		chmod( $this->path->get_default_path(), 0220 );
+
 		if ( wp_is_writable( $this->path->get_default_path() ) ) {
 			$this->markTestSkipped( 'The default path was still writable' );
 		}

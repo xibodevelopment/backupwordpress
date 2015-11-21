@@ -22,10 +22,11 @@ class Site_Backup {
 			$this->database_backup_filepath = $this->database_backup_director->get_backup_filepath();
 
 			// Zip up the database dump
+			$root = Path::get_root();
 			Path::get_instance()->set_root( Path::get_path() );
 			$this->file_backup_director->set_excludes( array( '*.zip', 'index.html', '.htaccess' ) );
 			$this->file_backup_director->backup();
-			Path::get_instance()->set_root( false );
+			Path::get_instance()->set_root( $root );
 
 			// Delete the Database Backup now that we've zipped it up
 			if ( file_exists( $this->database_backup_filepath ) ) {
