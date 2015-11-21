@@ -2,26 +2,49 @@
 
 namespace HM\BackUpWordPress;
 
+/**
+ * Perform a database backup using the mysqldump cli command
+ */
 class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
+	/**
+	 * The path to the mysqldump executable
+	 *
+	 * @var string
+	 */
 	private $mysqldump_executable_path = '';
 
 	public function __construct() {
 		parent::__construct();
 	}
 
+	/**
+	 * Calculate the path to the mysqldump executable.
+	 *
+	 * The executable path can be overridden using either the `HMBKP_MYSQLDUMP_PATH`
+	 * Constant or the `hmbkp_mysqldump_executable_path` filter.
+	 *
+	 * If neither of those are set then we fallback to checking a number of
+	 * common locations.
+	 *
+	 * @return string|false The path to the executable or false.
+	 */
 	public function get_mysqldump_executable_path() {
 
 		if ( ! Backup_Utilities::is_exec_available() ) {
 			return false;
 		}
 
-		// Return now if it's set in a constant
+		// Return now if it's set in a Constant
 		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) && HMBKP_MYSQLDUMP_PATH ) {
 			$this->mysqldump_executable_path = HMBKP_MYSQLDUMP_PATH;
 		}
 
-		// Allow the mysqldump path to be set via a filter
+		/**
+		 * Allow the executable path to be set via a filter
+		 *
+		 * @param string The path to the mysqldump executable
+		 */
 		$this->mysqldump_executable_path = apply_filters( 'hmbkp_mysqldump_executable_path', '' );
 
 		if ( ! $this->mysqldump_executable_path ) {
@@ -57,6 +80,12 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 	}
 
+	/**
+	 * Check whether it's possible to connect to the database with the
+	 * credentials we have.
+	 *
+	 * @return bool Whether the database connection was successful.
+	 */
 	public function check_user_can_connect_to_database_via_cli() {
 
 		if ( ! Backup_Utilities::is_exec_available() ) {
@@ -69,16 +98,15 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		$args[] = escapeshellarg( $this->get_name() );
 
-		// Quit immediately
+		// Quit immediately as we're only interesting in testing the connection
 		$args[] = '--execute="quit"';
 
 		// Pipe STDERR to STDOUT
 		$args[] = ' 2>&1';
 
-		$args = implode( ' ', $args );
-		exec( 'mysql ' . $args, $output, $return_status );
+		exec( 'mysql ' . implode( ' ', $args ), $output, $return_status );
 
-		// Test: does this warning mean that we connectec correctly
+		// Test: does this warning mean that we connected correctly
 		if ( $this->is_password_warning_error( $output ) ) {
 			return true;
 		}
@@ -93,6 +121,11 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 	}
 
+	/**
+	 * Perform the database backup.
+	 *
+	 * @return bool Whether the backup completed successfully or not.
+	 */
 	public function backup() {
 
 		if ( ! $this->check_user_can_connect_to_database_via_cli() || ! $this->get_mysqldump_executable_path() ) {
@@ -124,16 +157,15 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		// Pipe STDERR to STDOUT
 		$args[] = '2>&1';
 
-		$args = implode( ' ', $args );
-		$command = escapeshellcmd( $this->get_mysqldump_executable_path() );
-		exec( $command . ' ' . $args, $output, $return_status );
+		exec( escapeshellcmd( $this->get_mysqldump_executable_path() ) . ' ' . implode( ' ', $args ), $output, $return_status );
 
-		// Skip the new password warning that is output in mysql > 5.6 (@see http://bugs.mysql.com/bug.php?id=66546)
+		// Skip the new password warning as a false negative
 		if ( $this->is_password_warning_error( $output ) ) {
 			$output = '';
 			$return_status = 0;
 		}
 
+		// Track any errors
 		if ( $output && $return_status !== 0 ) {
 			$this->error( __CLASS__, $stderr );
 		}
@@ -142,6 +174,11 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 	}
 
+	/**
+	 * Get the connection args for the mysqldump command
+	 *
+	 * @return array The array of connection args
+	 */
 	public function get_mysql_connection_args() {
 
 		$args = array();
@@ -166,6 +203,15 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 	}
 
+	/**
+	 * Check whether the error returned by `exec` is the password warning that
+	 * was added in MySQL 5.6.
+	 *
+	 * @see http://bugs.mysql.com/bug.php?id=66546
+	 * @param  array $error The output from exec.
+	 *
+	 * @return boolean Whether the error is the password warning or not.
+	 */
 	public function is_password_warning_error( $error ) {
 		return isset( $error[0] ) && 'Warning: Using a password on the command line interface can be insecure.' === trim( $error[0] );
 	}
