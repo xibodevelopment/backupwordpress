@@ -60,4 +60,19 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	public function test_multiple_backups_exclude_backups() {
+
+		$this->backup->set_backup_filename( 'backup1.zip' );
+		$this->backup->backup();
+		$backup1 = $this->backup->get_backup_filepath();
+
+		$this->backup->set_backup_filename( 'backup2.zip' );
+		$this->backup->backup();
+		$backup2 = $this->backup->get_backup_filepath();
+
+		$this->assertEquals( filesize( $backup1 ), filesize( $backup2 ) );
+		$this->assertArchiveNotContains( $backup2, array( 'backup1.zip' ) );
+
+	}
+
 }
