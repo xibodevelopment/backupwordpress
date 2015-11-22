@@ -10,24 +10,28 @@ class Backup_Director {
 
 	/**
 	 * The successful backup_engine
+	 *
 	 * @var Backup_Engine|false
 	 */
 	private $backup_engine = false;
 
 	/**
 	 * The array of Backup_Engine's passed in
+	 *
 	 * @var array
 	 */
 	private $backup_engines = array();
 
 	/**
 	 * The filename for the resulting backup
+	 *
 	 * @var string
 	 */
 	private $backup_filename = '';
 
 	/**
 	 * The list of exclude_rules
+	 *
 	 * @var string
 	 */
 	private $excludes = '';
@@ -35,6 +39,7 @@ class Backup_Director {
 	/**
 	 * A Backup_Director must be passed an array of Backup_Engine's when it
 	 * is instantiated
+	 *
 	 * @param array $backup_engines [description]
 	 */
 	public function __construct( Array $backup_engines ) {
@@ -43,6 +48,7 @@ class Backup_Director {
 
 	/**
 	 * Set the filename of the backup
+	 *
 	 * @param string $filename
 	 */
 	public function set_backup_filename( $filename ) {
@@ -90,6 +96,7 @@ class Backup_Director {
 	/**
 	 * Return backup filepath, if this is called before a backup has run
 	 * then it returns an empty string.
+	 *
 	 * @return string The backup filepath.
 	 */
 	public function get_backup_filepath() {
@@ -105,6 +112,7 @@ class Backup_Director {
 	/**
 	 * Returns false if a backup hasn't yet run and the name of the
 	 * Backup_Engine class if a backup completed.
+	 *
 	 * @return false|string The Backup_Engine classname
 	 */
 	public function selected_backup_engine() {

@@ -3,7 +3,7 @@
 namespace HM\BackUpWordPress;
 
 /**
- * The base Database Backup Engine
+ * The Database Backup Engine type
  *
  * All Database Backup Engine implementations should extend this class
  */

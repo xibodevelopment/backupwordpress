@@ -48,23 +48,6 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function test_full_backup() {
-
-		$this->markTestSkipped();
-
-		Path::get_instance()->set_root( $this->backup->get_home_path() );
-
-		$this->backup->backup();
-
-		$this->assertFileExists( $this->backup->get_backup_filepath() );
-
-		$files = $this->backup->get_files();
-
-		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files, Path::get_root() );
-		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), count( $files ) );
-
-	}
-
 	/**
 	 * Test an unreadable file with the shell commands
 	 *
@@ -253,35 +236,25 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function testDeltaBackupWithCommands() {
-
-		$this->markTestSkipped( 'Functionality not yet implemented' );
+	public function test_adding_files_to_existing_backup() {
 
 		$this->backup->backup();
+		$filepath = $this->backup->get_backup_filepath();
 
 		$this->assertFileExists( $this->backup->get_backup_filepath() );
-
-		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'test-data.txt' ) );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'test-data.txt', 'exclude', 'exclude/exclude.exclude' ) );
 		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 3 );
 
-		if ( ! copy( $this->backup->get_archive_filepath(), Path::get_path() . '/delta.zip' ) ) {
-				$this->markTestSkipped( 'Unable to copy backup' );
-		}
-
 		// create a new file
-		file_put_contents( Path::get_root() . '/new.file', 'test' );
-
-		if ( ! file_exists( Path::get_root() . '/new.file' ) ) {
+		if ( ! file_put_contents( Path::get_root() . '/new.file', 'test' ) ) {
 			$this->markTestSkipped( 'new.file couldn\'t be created' );
 		}
 
-		$this->backup->set_backup_filename( 'delta.zip' );
-
 		$this->backup->backup();
 
+		$this->assertEquals( $filepath, $this->backup->get_backup_filepath() );
 		$this->assertFileExists( $this->backup->get_backup_filepath() );
-
-		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'new.file', 'test-data.txt' ) );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'new.file' ) );
 		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 4 );
 
 	}

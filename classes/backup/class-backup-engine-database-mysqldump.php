@@ -92,8 +92,6 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 			return false;
 		}
 
-		$output = $return_status = '';
-
 		$args = $this->get_mysql_connection_args();
 
 		$args[] = escapeshellarg( $this->get_name() );
@@ -104,20 +102,17 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		// Pipe STDERR to STDOUT
 		$args[] = ' 2>&1';
 
-		exec( 'mysql ' . implode( ' ', $args ), $output, $return_status );
+		$output = $return_status = '';
+		$args   = implode( ' ', $args );
+		exec( 'mysql ' . $args, $output, $return_status );
 
-		// Test: does this warning mean that we connected correctly
-		if ( $this->is_password_warning_error( $output ) ) {
-			return true;
+		// If there were errors connecting then track them
+		if ( $output && $return_status !== 0 ) {
+			$this->error( __CLASS__, $output );
+			return false;
 		}
 
-		if ( ! $output && $return_status === 0 ) {
-			return true;
-		}
-
-		$this->error( __CLASS__, $output );
-
-		return false;
+		return true;
 
 	}
 
@@ -159,15 +154,9 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		exec( escapeshellcmd( $this->get_mysqldump_executable_path() ) . ' ' . implode( ' ', $args ), $output, $return_status );
 
-		// Skip the new password warning as a false negative
-		if ( $this->is_password_warning_error( $output ) ) {
-			$output = '';
-			$return_status = 0;
-		}
-
 		// Track any errors
 		if ( $output && $return_status !== 0 ) {
-			$this->error( __CLASS__, $stderr );
+			$this->error( __CLASS__, $output );
 		}
 
 		return $this->verify_backup();
@@ -201,19 +190,6 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		return $args;
 
-	}
-
-	/**
-	 * Check whether the error returned by `exec` is the password warning that
-	 * was added in MySQL 5.6.
-	 *
-	 * @see http://bugs.mysql.com/bug.php?id=66546
-	 * @param  array $error The output from exec.
-	 *
-	 * @return boolean Whether the error is the password warning or not.
-	 */
-	public function is_password_warning_error( $error ) {
-		return isset( $error[0] ) && 'Warning: Using a password on the command line interface can be insecure.' === trim( $error[0] );
 	}
 
 }

@@ -2,14 +2,68 @@
 
 namespace HM\BackUpWordPress;
 
+/**
+ * Perform a file backup using the zip cli command
+ */
 class Zip_File_Backup_Engine extends File_Backup_Engine {
 
+	/**
+	 * The path to the zip executable
+	 *
+	 * @var string
+	 */
 	private $zip_executable_path = '';
 
 	public function __construct() {
 		parent::__construct();
 	}
 
+	/**
+	 * Calculate the path to the zip executable.
+	 *
+	 * The executable path can be overridden using either the `HMBKP_ZIP_PATH`
+	 * Constant or the `hmbkp_zip_executable_path` filter.
+	 *
+	 * If neither of those are set then we fallback to checking a number of
+	 * common locations.
+	 *
+	 * @return string|false The path to the executable or false.
+	 */
+	public function get_zip_executable_path() {
+
+		if ( defined( 'HMBKP_ZIP_PATH' ) ) {
+			return HMBKP_ZIP_PATH;
+		}
+
+		/**
+		 * Allow the executable path to be set via a filter
+		 *
+		 * @param string The path to the zip executable
+		 */
+		$this->zip_executable_path = apply_filters( 'hmbkp_zip_executable_path', '' );
+
+		if ( ! $this->zip_executable_path ) {
+
+			// List of possible zip locations
+			$paths = array(
+				'zip',
+				'/usr/bin/zip',
+				'/opt/local/bin/zip'
+			);
+
+			$this->zip_executable_path = Backup_Utilities::get_executable_path( $paths );
+
+		}
+
+		return $this->zip_executable_path;
+
+	}
+
+	/**
+	 * Perform the file backup.
+	 *
+	 * @return bool Whether the backup completed successfully or not.
+	 */
 	public function backup() {
 
 		if ( ! Backup_Utilities::is_exec_available() || ! $this->get_zip_executable_path() ) {
@@ -34,17 +88,24 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		$command[] = '2>&1';
 
 		$command = implode( ' ', $command );
+		$output = $return_status = 0;
 
-		exec( $command, $stderr, $return_status );
+		exec( $command, $output, $return_status );
 
-		if ( ! empty( $stderr ) ) {
-			$this->error( __CLASS__, $stderr );
+		// Track any errors
+		if ( $output && $return_status !== 0 ) {
+			$this->error( __CLASS__, $output );
 		}
 
 		return $this->verify_backup();
 
 	}
 
+	/**
+	 * Convert the exclude rules to a format zip accepts
+	 *
+	 * @return string The exclude string ready to pass to `zip -x`
+	 */
 	public function get_exclude_string() {
 
 		$excludes = new Excludes;
@@ -93,31 +154,6 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		$excludes = array_map( 'escapeshellarg', array_unique( $excludes ) );
 
 		return implode( ' -x ', $excludes );
-
-	}
-
-	public function get_zip_executable_path() {
-
-		if ( defined( 'HMBKP_ZIP_PATH' ) ) {
-			return HMBKP_ZIP_PATH;
-		}
-
-		$this->zip_executable_path = apply_filters( 'hmbkp_zip_executable_path', '' );
-
-		if ( ! $this->zip_executable_path ) {
-
-			// List of possible zip locations
-			$paths = array(
-				'zip',
-				'/usr/bin/zip',
-				'/opt/local/bin/zip'
-			);
-
-			$this->zip_executable_path = Backup_Utilities::get_executable_path( $paths );
-
-		}
-
-		return $this->zip_executable_path;
 
 	}
 

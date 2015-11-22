@@ -1,12 +1,26 @@
 <?php
 
 namespace HM\BackUpWordPress;
+
 use Symfony\Component\Finder\Finder as Finder;
 
+/**
+ * The File Backup Engine type
+ *
+ * All File Backup Engine implementations should extend this class
+ */
 abstract class File_Backup_Engine extends Backup_Engine {
 
+	/**
+	 * The array of excludes rules
+	 *
+	 * @var array
+	 */
 	protected $excludes = array();
 
+	/**
+	 * Set the default backup filename.
+	 */
 	public function __construct() {
 
 		$this->set_backup_filename( implode( '-', array(
@@ -17,10 +31,26 @@ abstract class File_Backup_Engine extends Backup_Engine {
 
 	}
 
+	/**
+	 * Set the excludes rules for the backup.
+	 *
+	 * @param array $excludes The exclude rules.
+	 */
 	public function set_excludes( $excludes ) {
 		$this->excludes = $excludes;
 	}
 
+	/**
+	 * Returns a Finder instance for the files that will be included in the
+	 * backup.
+	 *
+	 * By default we ignore unreadable files and directories as well as, common
+	 * version control folders / files, "Dot" files and anything matching the
+	 * exclude rules.
+	 *
+	 * @uses Finder
+	 * @return Finder The Finder iterator of all files to be included
+	 */
 	public function get_files() {
 
 		$finder = new Finder();
@@ -39,6 +69,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 			}
 		);
 
+		// Finder expects exclude rules to be in a regex format
 		$excludes = new Excludes;
 		$excludes->set_excludes( $this->excludes );
 		$exclude_rules = $excludes->get_excludes_for_regex();
@@ -52,6 +83,14 @@ abstract class File_Backup_Engine extends Backup_Engine {
 
 	}
 
+	/**
+	 * Verify that the file backup completed successfully.
+	 *
+	 * This should be called from backup method of any final file backup engine
+	 * implementations.
+	 *
+	 * @return bool Whether the backup completed successfully.
+	 */
 	public function verify_backup() {
 
 		// If there are errors delete the backup file.
@@ -59,7 +98,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 			unlink( $this->get_backup_filepath() );
 		}
 
-		// If the archive file still exists assume it's good
+		// If the backup doesn't exist then we must have failed.
 		if ( ! file_exists( $this->get_backup_filepath() ) ) {
 			return false;
 		}

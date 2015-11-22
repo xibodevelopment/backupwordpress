@@ -28,7 +28,7 @@ class IMysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 			$dump->start( $this->get_backup_filepath() );
 
 		} catch ( \Exception $e ) {
-			$this->error( __CLASS__, sprintf( __( 'imysqldump error: %s', 'backupwordpress' ), $e->getMessage() ) );
+			$this->error( __CLASS__, $e->getMessage() );
 		}
 
 		return $this->verify_backup();

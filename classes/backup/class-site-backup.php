@@ -24,6 +24,8 @@ class Site_Backup {
 			// Zip up the database dump
 			$root = Path::get_root();
 			Path::get_instance()->set_root( Path::get_path() );
+
+			// @todo this exclude list isn't working
 			$this->file_backup_director->set_excludes( array( '*.zip', 'index.html', '.htaccess' ) );
 			$this->file_backup_director->backup();
 			Path::get_instance()->set_root( $root );
