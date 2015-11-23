@@ -1,3 +1,10 @@
+<?php if ( hmbkp_is_first_run() ) {
+
+	require_once( HMBKP_PLUGIN_PATH . 'admin/welcome.php' );
+	return;
+
+} ?>
+
 <div class="wrap">
 
 	<h1>
@@ -9,7 +16,6 @@
 			add_thickbox(); ?>
 			<a id="intercom-info" class="thickbox page-title-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support', 'width' => '600', 'height' => '420' ), self_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ) ); ?>"><span class="dashicons dashicons-admin-users"></span>&nbsp;<?php _e( 'Enable Support', 'backupwordpress' ); ?></a>
 		<?php } ?>
-
 	</h1>
 
 	<?php if ( hmbkp_possible() ) : ?>

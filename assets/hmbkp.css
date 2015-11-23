@@ -63,6 +63,8 @@ thead td { border-bottom: 1px solid #e1e1e1; }
 
 .page-title-action span.dashicons-admin-users { position: relative; display:inline-block; vertical-align: middle; top:-2px; }
 
+.step header .icon { float: left; margin-right: 10px; }
+
 pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; word-wrap: normal !important; }
 
 @media screen and (max-width: 768px) {

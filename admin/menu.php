@@ -17,6 +17,7 @@ function hmbkp_admin_menu() {
 		add_management_page( __( 'Manage Backups', 'backupwordpress' ), __( 'Backups', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'hmbkp_manage_backups' );
 
 	}
+
 }
 
 add_action( 'network_admin_menu', 'hmbkp_admin_menu' );

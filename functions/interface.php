@@ -455,3 +455,7 @@ function hmbkp_is_restricted_custom_path() {
 
 	return true;
 }
+
+function hmbkp_is_first_run() {
+	return true;
+}
