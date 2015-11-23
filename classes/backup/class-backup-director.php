@@ -80,7 +80,7 @@ class Backup_Director {
 				$backup_engine->set_backup_filename( $this->backup_filename );
 			}
 
-			if ( $this->excludes && is_a( $backup_engine, 'File_Backup_Engine' ) ) {
+			if ( $this->excludes ) {
 				$backup_engine->set_excludes( $this->excludes );
 			}
 
