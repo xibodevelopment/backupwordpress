@@ -19,7 +19,6 @@ class Site_Backup {
 
 			// Dump the database
 			$this->database_backup_director->backup();
-			$this->database_backup_filepath = $this->database_backup_director->get_backup_filepath();
 
 			// Zip up the database dump
 			$root = Path::get_root();
@@ -27,12 +26,14 @@ class Site_Backup {
 
 			// @todo this exclude list isn't working
 			$this->file_backup_director->set_excludes( array( '*.zip', 'index.html', '.htaccess' ) );
+
+
 			$this->file_backup_director->backup();
 			Path::get_instance()->set_root( $root );
 
 			// Delete the Database Backup now that we've zipped it up
-			if ( file_exists( $this->database_backup_filepath ) ) {
-				unlink( $this->database_backup_filepath );
+			if ( file_exists( $this->database_backup_director->get_backup_filepath() ) ) {
+				unlink( $this->database_backup_director->get_backup_filepath() );
 			}
 
 		}
@@ -43,11 +44,10 @@ class Site_Backup {
 				$this->file_backup_director->set_excludes( $this->excludes );
 			}
 
-			$this->backup_filepath = $this->file_backup_director->backup();
+			$this->file_backup_director->backup();
 
 		}
 
-		$this->backup_filepath = $this->file_backup_director->get_backup_filepath();
 
 		do_action( 'hmbkp_backup_complete' );
 
@@ -91,16 +91,12 @@ class Site_Backup {
 		$this->backup_filename = $filename;
 	}
 
-	public function set_existing_backup_filepath( $filepath ) {
-		$this->existing_backup_filepath = $filepath;
-	}
-
 	public function get_database_backup_filepath() {
-		return $this->database_backup_filepath;
+		return $this->database_backup_director->get_backup_filepath();
 	}
 
 	public function get_backup_filepath() {
-		return $this->backup_filepath;
+		return $this->file_backup_director->get_backup_filepath();;
 	}
 
 }
