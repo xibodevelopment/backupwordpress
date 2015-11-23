@@ -1,5 +1,32 @@
-5c88eed (HEAD -> master, origin/master, origin/HEAD) Merge pull request #813 from humanmade/mu-settings-page
-d924e1e (origin/mu-settings-page, mu-settings-page) Fix settings URL
-297ab9c Merge pull request #820 from herrherrmann/master
-63d1ad0 Updated and extended German translation.
-29710f0 Fixes admin page slug for multisite
+* fixed intercom modal
+* edits admin\faq.php changes
+* Fixes Typos
+* Speed up heartbeat
+* properly specify multisite env variable in exclude rule
+* Stop sending codecov to scrutiniser
+* Travis optimisations
+* try a simpler approach
+* correct multiline syntax
+* correct multiline syntax
+* only run codecov for php5.6/wp master
+* Switch to using codecov for code coverage
+* Fix an issue that caused the site size to report as twice as large as it should
+* Make sure we return an int
+* Update mysqldump PHP lib
+* Comment
+* Pass same options as mysqldump command
+* Update mysqldump lib to latest
+* Build PDO connection string
+* Wasnt actually a typo
+* Fix typo
+* Merge conflict fixes
+* Indentation
+* Fix constant define
+* Ignore DS_Store
+* ignore composer.lock
+* Pass the character set explicitly
+* Track 1.* release tags
+* Remove obsolete code
+* Require dev master
+* uncomment code
+* Adds PHP mysqldump fallback lib
