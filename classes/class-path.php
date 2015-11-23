@@ -284,7 +284,7 @@ class Path {
 
 		// Loop through possible paths, use the first one that exists/can be created and is writable
 		foreach ( $paths as $path ) {
-			if ( wp_mkdir_p( $path ) ) { // Also handles fixing perms / directory already exists
+			if ( wp_mkdir_p( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists
 				break;
 			}
 		}

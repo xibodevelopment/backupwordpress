@@ -33,6 +33,12 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 			$is_apache = $this->is_apache;
 		}
 
+		if ( file_exists( $this->path->get_default_path() ) ) {
+			chmod( $this->path->get_default_path(), 0755 );
+		}
+
+		chmod( dirname( $this->path->get_default_path() ), 0755 );
+
 		// Reset the path internally
 		$this->path->reset_path();
 
@@ -64,13 +70,16 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->path->get_default_path(), Path::get_path() );
 
-		chmod( $this->path->get_default_path(), 0220 );
+		$path = $this->path->get_default_path();
 
-		if ( wp_is_writable( $this->path->get_default_path() ) ) {
-			$this->markTestSkipped( 'The default path was still writable' );
-		}
+		chmod( $path, 0555 );
 
 		$this->path->calculate_path();
+
+		// wp_mkdir_p fixes permissions which invalidates this test
+		if ( wp_is_writable( $path ) ) {
+			$this->markTestSkipped( 'The default path was still writable' );
+		}
 
 		$this->assertEquals( Path::get_path(), $this->path->get_fallback_path() );
 

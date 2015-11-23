@@ -20,11 +20,8 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 
-		if ( file_exists( Path::get_root() . '/exclude ' ) ) {
-			chmod( Path::get_root() . '/exclude', 0755 );
-		}
-
-		$this->cleanup_test_data();
+		chmod( Path::get_root() . '/exclude', 0755 );
+		chmod( Path::get_root() . '/test-data.txt', 0644 );
 
 		if ( file_exists( $this->hidden ) ) {
 			unlink( $this->hidden );
@@ -34,7 +31,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 			unlink( $this->symlink );
 		}
 
-		rmdirtree( Path::get_path() );
+		$this->cleanup_test_data();
 
 	}
 
@@ -192,8 +189,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 	 */
 	public function test_complete_file_backup_with_excludes() {
 
-		// Reset Path and Root back to defaults
-		Path::get_instance()->set_path( false );
+		// Reset root back to defaults
 		Path::get_instance()->set_root( false );
 
 		$this->backup->set_excludes( array( 'wp-*' ) );
@@ -218,8 +214,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 	 */
 	public function test_complete_file_backup() {
 
-		// Reset Path and Root back to defaults
-		Path::get_instance()->set_path( false );
+		// Reset root back to defaults
 		Path::get_instance()->set_root( false );
 
 		$this->backup->backup();

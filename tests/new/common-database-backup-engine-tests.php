@@ -10,12 +10,14 @@ abstract class Common_Database_Backup_Engine_Tests extends \HM_Backup_UnitTestCa
 	 */
 	protected $backup;
 
+	public function setUp() {
+		$this->setup_test_data();
+		Path::get_instance()->set_path( $this->test_data . '/tmp' );
+		Path::get_instance()->set_root( $this->test_data );
+	}
+
 	public function tearDown() {
-
-		if ( file_exists( $this->backup->get_backup_filepath() ) ) {
-			unlink( $this->backup->get_backup_filepath() );
-		}
-
+		$this->cleanup_test_data();
 	}
 
 	public function test_backup() {
