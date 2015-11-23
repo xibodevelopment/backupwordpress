@@ -3,15 +3,21 @@
 namespace HM\BackUpWordPress;
 
 /**
- * Class Notices
+ * Manages exclude rules
  */
 class Excludes {
 
+	/**
+	 * The array of exclude rules.
+	 *
+	 * @var array
+	 */
 	private $excludes = array();
 
 	/**
+	 * The array of default exclude rules
 	 *
-	 * @todo Some of these are two generic
+	 * @var array
 	 */
 	private $default_excludes = array(
 		'.svn',
@@ -34,15 +40,15 @@ class Excludes {
 		'backupwordpress-*-backups'
 	);
 
-	public function __construct() {
-
-		// Some properties can be overridden with defines
-		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE ) {
-			$this->set_excludes( HMBKP_EXCLUDE );
-		}
-
-	}
-
+	/**
+	 * Set the exclude rules.
+	 *
+	 * Excludes rules should be a complete or partial directory or file path.
+	 * Wildcards can be specified with the * character.
+	 *
+	 * @param string|array $excludes The list of exclude rules, accepts either
+	 *                               a comma separated list or an array.
+	 */
 	public function set_excludes( $excludes ) {
 
 		if ( is_string( $excludes ) ) {
@@ -53,10 +59,25 @@ class Excludes {
 
 	}
 
+	/**
+	 * Get the excludes
+	 *
+	 * Returns any user set excludes as well as the default list.
+	 *
+	 * @return array The array of exclude rules.
+	 */
 	public function get_excludes() {
  		return array_merge( $this->get_default_excludes(), $this->get_user_excludes() );
 	}
 
+	/**
+	 * Get the excludes prepared for use with regex.
+	 *
+	 * The primary difference being that any wildcard (*) rules are converted to the regex
+	 * fragment `[\s\S]*?`.
+	 *
+	 * @return array The array of exclude rules
+	 */
 	public function get_excludes_for_regex() {
 
 		$excludes = $this->get_excludes();
@@ -64,15 +85,17 @@ class Excludes {
 		// Prepare the exclude rules
 		foreach ( $excludes as &$exclude ) {
 
-			// Convert WildCards to regex
 			if ( strpos( $exclude, '*' ) !== false ) {
 
 				// Escape slashes
 				$exclude = str_replace( '/', '\/', $exclude );
+
+				// Convert WildCards to regex
 				$exclude = str_replace( '*', '[\s\S]*?', $exclude );
 
 				// Wrap in slashes
 				$exclude = '/' . $exclude . '/';
+
 			}
 
 		}
@@ -81,6 +104,11 @@ class Excludes {
 
 	}
 
+	/**
+	 * Get the user defined excludes.
+	 *
+	 * @return array The array of excludes.
+	 */
 	public function get_user_excludes() {
 
 		$excludes = $this->excludes;
@@ -93,35 +121,61 @@ class Excludes {
 		return $this->normalize( $excludes );
 	}
 
+	/**
+	 * Get the array of default excludes.
+	 *
+	 * @return array The array of excludes.
+	 */
 	public function get_default_excludes() {
 
-		$excludes = $this->default_excludes;
+		$excludes = array();
 
+		// Back compat with the old Constant
+		if ( defined( 'HMBKP_EXCLUDE' ) && HMBKP_EXCLUDE ) {
+			$excludes = explode( ',', implode( ',', (array) HMBKP_EXCLUDE ) );
+		}
+
+		$excludes = array_merge( $this->default_excludes, $excludes );
+
+		/**
+		 * Allow the default excludes list to be modified.
+		 *
+		 * @param $excludes The array of exclude rules.
+		 */
 		$excludes = apply_filters( 'hmbkp_default_excludes', $excludes );
 
 		return $this->normalize( $excludes );
 
 	}
 
+	/**
+	 * normalise the exclude rules so they are ready to work with.
+	 *
+	 * @param  array $excludes The array of exclude rules to normalise.
+	 *
+	 * @return array           The array of normalised rules.
+	 */
 	public function normalize( $excludes ) {
 
-		// Convert absolute paths to relative
 		$excludes = array_map( function( $exclude ) {
 
+			// Convert absolute paths to relative
 			$exclude = str_replace( PATH::get_root(), '', wp_normalize_path( $exclude ) );
 
+			// Trim the slashes
+			$exclude = trim( $exclude );
 			$exclude = ltrim( $exclude, '/' );
 			$exclude = untrailingslashit( $exclude );
-			$exclude = trim( $exclude );
 
 			return $exclude;
 
 		}, $excludes );
 
+		// Remove duplicate or empty rules
 		$excludes = array_unique( $excludes );
 		$excludes = array_filter( $excludes );
 
-		return array_unique( $excludes );
+		return $excludes;
 
 	}
 

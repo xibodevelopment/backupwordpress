@@ -149,13 +149,13 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 				<?php if ( Site_Size::is_site_size_being_calculated() ) { ?>
 
-					<span class="spinner"></span>
+					<span class="spinner is-active"></span>
 
 				<?php } else {
 
 					$root = new \SplFileInfo( Path::get_root() );
 
-					$size = $schedule->filesize( $root, true );
+					$size = $site_size->filesize( $root );
 
 					if ( false !== $size ) {
 
@@ -266,7 +266,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<?php if ( $file->isDir() && Site_Size::is_site_size_being_calculated() ) { ?>
 
-							<span class="spinner"></span>
+							<span class="spinner is-active"></span>
 
 						<?php } else {
 

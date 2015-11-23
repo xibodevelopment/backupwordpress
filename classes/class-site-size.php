@@ -4,32 +4,50 @@ namespace HM\BackUpWordPress;
 
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Site Size class
+ *
+ * Use to calculate the total or partial size of the sites database and files.
+ */
 class Site_Size {
 
-	public function __construct() {
-		$this->excludes = new Excludes;
-	}
+	private $size = 0;
 
-	public function set_excludes( $excludes ) {
-		$this->excludes->set_excludes( $excludes, true );
+	/**
+	 * Constructor
+	 *
+	 * Set up some initial conditions including whether we want to calculate the
+	 * size of the database, files or both and whether to exclude any files from
+	 * the file size calculation.
+	 *
+	 * @param string $type     Whether to calculate the size of the database, files
+	 *                         or both. Should be one of 'file', 'database' or 'complete'
+	 * @param array  $excludes An array of exclude rules
+	 */
+	public function __construct( $type = 'complete', $excludes = array() ) {
+		$this->type = $type;
+		$this->excludes = $excludes;
 	}
 
 	/**
-	 * Calculate the size total size of the database + files
+	 * Calculate the size total size of the database + files.
 	 *
-	 * Doesn't account for compression
+	 * Doesn't account for any compression that would be gained by zipping.
 	 *
 	 * @return string
 	 */
 	public function get_site_size() {
 
+		if ( $this->size ) {
+			return $this->size;
+		}
+
 		$size = 0;
 
 		// Include database size except for file only schedule.
-		if ( 'file' !== $type ) {
+		if ( 'file' !== $this->type ) {
 
 			global $wpdb;
-
 			$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
 
 			foreach ( $tables as $table ) {
@@ -38,56 +56,57 @@ class Site_Size {
 		}
 
 		// Include total size of dirs/files except for database only schedule.
-		if ( 'database' !== $type ) {
+		if ( 'database' !== $this->type ) {
 
 			$root = new \SplFileInfo( Path::get_root() );
-
-			$size += $this->filesize( $root, $skip_excluded_files );
+			$size += $this->filesize( $root );
 
 		}
+
+		$this->size = $size;
 
 		return $size;
 
 	}
 
 	/**
-	 * Convenience function to format the file size
+	 * Get the site size formatted
 	 *
-	 * @param bool $cached
+	 * @see size_format
 	 *
-	 * @return bool|string
+	 * @return string
 	 */
-	public function get_formatted_site_size( $skip_excluded_files = false ) {
-		return size_format( $this->get_site_size( $skip_excluded_files ) );
+	public function get_formatted_site_size() {
+		return size_format( $this->get_site_size() );
 	}
 
 	/**
 	 * Whether the total filesize is being calculated
 	 *
-	 * @return int            The total of the file or directory
+	 * @return bool
 	 */
 	public static function is_site_size_being_calculated() {
 		return false !== get_transient( 'hmbkp_directory_filesizes_running' );
 	}
 
 	/**
-	 * Whether the total filesize is being calculated
+	 * Whether the total filesize is cached
 	 *
-	 * @return bool The total of the file or directory
+	 * @return bool
 	 */
 	public static function is_site_size_cached() {
 		return false !== get_transient( 'hmbkp_directory_filesizes' );
 	}
 
 	/**
-	 * Return the single depth list of files and subdirectories in $directory ordered by total filesize
+	 * Return the contents of `$directory` as a single depth list ordered by total filesize.
 	 *
 	 * Will schedule background threads to recursively calculate the filesize of subdirectories.
 	 * The total filesize of each directory and subdirectory is cached in a transient for 1 week.
 	 *
-	 * @param string $directory The directory to scan
+	 * @param string $directory The directory to list
 	 *
-	 * @return array returns an array of files ordered by filesize
+	 * @return array            returns an array of files ordered by filesize
 	 */
 	public function list_directory_by_total_filesize( $directory ) {
 
@@ -97,22 +116,16 @@ class Site_Size {
 			return $files;
 		}
 
-		$found = array();
-
-		$default_excludes = $this->excludes->get_default_excludes();
-
 		$finder = new Finder();
+		$finder->followLinks();
 		$finder->ignoreDotFiles( false );
 		$finder->ignoreUnreadableDirs();
-		$finder->followLinks();
 		$finder->depth( '== 0' );
 
-		foreach ( $default_excludes as $exclude ) {
-			$finder->notPath( $exclude );
-		}
+		$files = $finder->in( $directory );
 
-		foreach ( $finder->in( $directory ) as $entry ) {
-			$files[] = $entry;
+		foreach ( $files as $entry ) {
+
 			// Get the total filesize for each file and directory
 			$filesize = $this->filesize( $entry );
 
@@ -134,7 +147,11 @@ class Site_Size {
 				$files_with_no_size[] = $entry;
 
 			}
+
 		}
+
+		// Sort files by filesize, largest first
+		krsort( $files_with_size );
 
 		// Add 0 byte files / directories to the bottom
 		$files = $files_with_size + array_merge( $empty_files, $unreadable_files );
@@ -161,26 +178,31 @@ class Site_Size {
 	 */
 	public function recursive_filesize_scanner() {
 
+		/**
+		 * Raise the `memory_limit` and `max_execution time`
+		 *
+		 * Respects the WP_MAX_MEMORY_LIMIT Constant and the `admin_memory_limit`
+		 * filter.
+		 */
+		@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
+		@set_time_limit( 0 );
+
 		// Use the cached array directory sizes if available
 		$directory_sizes = get_transient( 'hmbkp_directory_filesizes' );
 
 		// If we do have it in cache then let's use it and also clear the lock
 		if ( is_array( $directory_sizes ) ) {
-
 			delete_transient( 'hmbkp_directory_filesizes_running' );
-
 			return $directory_sizes;
-
 		}
 
 		// If we don't have it cached then we'll need to re-calculate
 		$finder = new Finder();
-
-		$finder->followLinks( true );
+		$finder->followLinks();
 		$finder->ignoreDotFiles( false );
 		$finder->ignoreUnreadableDirs( true );
 
-		return $finder->in( Path::get_root() );
+		$files = $finder->in( Path::get_root() );
 
 		foreach ( $files as $file ) {
 
@@ -194,6 +216,7 @@ class Site_Size {
 
 		set_transient( 'hmbkp_directory_filesizes', $directory_sizes, DAY_IN_SECONDS );
 
+		// Remove the lock
 		delete_transient( 'hmbkp_directory_filesizes_running' );
 
 		return $directory_sizes;
@@ -206,12 +229,11 @@ class Site_Size {
 	 * If $file is a file then just return the result of `filesize()`.
 	 * If $file is a directory then schedule a recursive filesize scan.
 	 *
-	 * @param \SplFileInfo $file The file or directory you want to know the size of
-	 * @param bool $skip_excluded_files Skip excluded files when calculating a directories total size
+	 * @param \SplFileInfo   $file The file or directory you want to know the size of
 	 *
-	 * @return int                        The total of the file or directory
+	 * @return int           The total of the file or directory
 	 */
-	public function filesize( \SplFileInfo $file, $skip_excluded_files = false ) {
+	public function filesize( \SplFileInfo $file ) {
 
 		// Skip missing or unreadable files
 		if ( ! file_exists( $file->getPathname() ) || ! $file->getRealpath() || ! $file->isReadable() ) {
@@ -242,34 +264,20 @@ class Site_Size {
 
 				}
 
-				return 0;
+				// If the filesize is being calculated then return null
+				return null;
 
 			}
 
-			$current_pathname = trailingslashit( $file->getPathname() );
-			$root             = trailingslashit( Path::get_root() );
+			$directory_sizes = array_flip( preg_grep( '(' . $file->getRealPath() . ')', array_flip( $directory_sizes ) ) );
 
-			foreach ( $directory_sizes as $path => $size ) {
+			if ( $this->excludes ) {
 
-				// Remove any files that aren't part of the current tree
-				if ( false === strpos( $path, $current_pathname ) ) {
-					unset( $directory_sizes[ $path ] );
-				}
+				$excludes = new Excludes;
+				$excludes->set_excludes( $this->excludes );
+				$excludes = implode( '|', $excludes->get_excludes_for_regex() );
 
-			}
-
-			if ( $skip_excluded_files ) {
-
-				$excludes = $this->excludes->exclude_string( 'regex' );
-
-				foreach ( $directory_sizes as $path => $size ) {
-
-					// Skip excluded files if we have excludes
-					if ( $excludes && preg_match( '(' . $excludes . ')', str_ireplace( $root, '', wp_normalize_path( $path ) ) ) ) {
-						unset( $directory_sizes[ $path ] );
-					}
-
-				}
+				$directory_sizes = array_flip( preg_grep( '(' . $excludes . ')', array_flip( $directory_sizes ), PREG_GREP_INVERT ) );
 
 			}
 

@@ -547,10 +547,9 @@ function heartbeat_received( $response, $data ) {
 			// Pass the site size to be displayed when it's ready.
 			if ( Site_Size::is_site_size_cached() ) {
 
-				$site_size = new Site_Size;
-				$site_size->set_excludes( $schedule->get_excludes );
+				$site_size = new Site_Size( $schedule->get_type(),  $schedule->get_excludes() );
 
-				$response['hmbkp_site_size'] = $site_size->get_formatted_site_size( true );
+				$response['hmbkp_site_size'] = $site_size->get_formatted_site_size();
 
 				ob_start();
 				require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );

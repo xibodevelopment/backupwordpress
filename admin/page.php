@@ -1,5 +1,8 @@
 <?php
-namespace HM\BackUpWordPress; ?>
+
+namespace HM\BackUpWordPress;
+
+?>
 
 <div class="wrap">
 
