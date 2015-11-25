@@ -40,6 +40,10 @@ class Excludes {
 		'backupwordpress-*-backups'
 	);
 
+	public function __construct( $excludes ) {
+		$this->set_excludes( $excludes );
+	}
+
 	/**
 	 * Set the exclude rules.
 	 *

@@ -94,15 +94,17 @@ function run_schedule_async( $schedule_id ) {
 
 	$schedule->run();
 
+	// TODO should this be commented out?
 	////$errors = array_merge( $schedule->backup->get_errors(), $schedule->backup->get_warnings() );
-//
+	//
 	//$notices = array();
-//
+	//
 	//foreach ( $errors as $key => $error ) {
 	//	$notices[] = implode( ', ', $error );
 	//}
-//
+	//
 	//Notices::get_instance()->set_notices( 'backup_errors', $notices );
+
 }
 
 /**

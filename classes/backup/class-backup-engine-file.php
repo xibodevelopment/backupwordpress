@@ -23,6 +23,8 @@ abstract class File_Backup_Engine extends Backup_Engine {
 	 */
 	public function __construct() {
 
+		parent::__construct();
+
 		$this->set_backup_filename( implode( '-', array(
 			str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ),
 			'backup',

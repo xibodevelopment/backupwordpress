@@ -5,7 +5,7 @@ namespace HM\BackUpWordPress;
 class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	public function setUp() {
-		$this->backup = new Site_Backup;
+		$this->backup = new Site_Backup( 'backup.zip' );
 		$this->setup_test_data();
 		Path::get_instance()->set_path( $this->test_data . '/tmp' );
 		Path::get_instance()->set_root( $this->test_data );

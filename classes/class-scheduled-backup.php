@@ -42,13 +42,6 @@ class Scheduled_Backup {
 	);
 
 	/**
-	 * The Backup instance
-	 *
-	 * @var Backup
-	 */
-	private $backup;
-
-	/**
 	 * Setup the schedule object
 	 * Loads the options from the database and populates properties
 	 *
@@ -82,17 +75,7 @@ class Scheduled_Backup {
 	}
 
 	/**
-	 * Simple class wrapper for Path::get_path()
-	 *
-	 * @return string
-	 */
-	private function get_path() {
-		return Path::get_instance()->get_path();
-	}
-
-	/**
 	 * Get the id for this schedule
-	 *
 	 */
 	public function get_id() {
 		return esc_attr( $this->id );
@@ -100,7 +83,6 @@ class Scheduled_Backup {
 
 	/**
 	 * Get a slugified version of name
-	 *
 	 */
 	public function get_slug() {
 
@@ -160,7 +142,7 @@ class Scheduled_Backup {
 	 * @return array
 	 */
 	public function get_excludes() {
-		return $this->options['excludes'];
+		return new Excludes( $this->options['excludes'] );
 	}
 
 	/**
@@ -299,7 +281,7 @@ class Scheduled_Backup {
 	 */
 	public function set_reoccurrence( $reoccurrence ) {
 
-		$hmbkp_schedules = $this->get_cron_schedules();
+		$hmbkp_schedules = cron_schedules();
 
 		// Check it's valid
 		if ( ! is_string( $reoccurrence ) || ! trim( $reoccurrence ) || ( ! in_array( $reoccurrence, array_keys( $hmbkp_schedules ) ) ) && 'manually' !== $reoccurrence ) {
@@ -332,7 +314,7 @@ class Scheduled_Backup {
 	 */
 	public function get_interval() {
 
-		$hmbkp_schedules = $this->get_cron_schedules();
+		$hmbkp_schedules = cron_schedules();
 
 		if ( 'manually' === $this->get_reoccurrence() ) {
 			return 0;
@@ -340,15 +322,6 @@ class Scheduled_Backup {
 
 		return $hmbkp_schedules[ $this->get_reoccurrence() ]['interval'];
 
-	}
-
-	/**
-	 * Return an array of BackUpWordPress cron schedules
-	 *
-	 * @return array
-	 */
-	public static function get_cron_schedules() {
-		return cron_schedules();
 	}
 
 	/**
@@ -373,16 +346,6 @@ class Scheduled_Backup {
 
 	public function is_cron_scheduled() {
 		return (bool) $this->get_next_occurrence();
-	}
-
-
-	/**
-	 * Get the path to the backup running file that stores the running backup status
-	 *
-	 * @return string
-	 */
-	public function get_schedule_running_path() {
-		return $this->get_path() . '/.schedule-' . $this->get_id() . '-running';
 	}
 
 	/**
@@ -416,41 +379,29 @@ class Scheduled_Backup {
 	 */
 	public function run() {
 
+		$status = new Backup_Status( $this->get_backup_filename() );
+
 		// Don't run if this schedule is already running
-		if ( $this->get_running_backup_filename() ) {
+		if ( $status->is_started() ) {
 			return;
 		}
 
-		// Mark the backup as started
-		$this->set_status( __( 'Starting Backup', 'backupwordpress' ) );
+		$status->start();
+
+		$status->set_status( __( 'Deleting old backups', 'backupwordpress' ) );
 
 		// Delete old backups now in-case we fatal error during the backup process
 		$this->delete_old_backups();
 
-		// Setup The Backup class
-		$backup = new Site_Backup;
-
-		// Set the archive filename to site name + schedule slug + date
-		$backup->set_backup_filename( $this->get_backup_filename() );
-
-		$database_backup_filename = implode( '-', array(
-			'database',
-			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
-			$this->get_id()
-		) ) . '.sql';
-
-		$backup->set_database_dump_filename( $database_backup_filename );
+		// Setup our Site Backup Object
+		$backup = new Site_Backup( $this->get_backup_filename(), $this->get_database_dump_filename() );
 		$backup->set_type( $this->get_type() );
 		$backup->set_excludes( $this->get_excludes() );
+		$backup->set_status( $status );
 
-		$backup->backup();
+		$backup->run();
 
-		$this->backup = $backup;
-
-		// Delete the backup running file
-		if ( file_exists( $this->get_schedule_running_path() ) ) {
-			unlink( $this->get_schedule_running_path() );
-		}
+		$status->set_status( __( 'Deleting old backups', 'backupwordpress' ) );
 
 		// Delete old backups again
 		$this->delete_old_backups();
@@ -470,89 +421,12 @@ class Scheduled_Backup {
 		) ) . '.zip';
 	}
 
-	/**
-	 * Get the filename that the running status is stored in.
-	 *
-	 * @return string
-	 */
-	public function get_running_backup_filename() {
-
-		if ( ! file_exists( $this->get_schedule_running_path() ) ) {
-			return '';
-		}
-
-		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
-
-		if ( ! empty( $status->filename ) ) {
-			return $status->filename;
-		}
-
-		return '';
-
-	}
-
-	/**
-	 * Get the status of the running backup.
-	 *
-	 * @return string
-	 */
-	public function get_status() {
-
-		if ( ! file_exists( $this->get_schedule_running_path() ) ) {
-			return '';
-		}
-
-
-		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
-
-		if ( ! empty( $status->status ) ) {
-			return $status->status;
-		}
-
-		return '';
-
-	}
-
-	/**
-	 * Set the status of the running backup
-	 *
-	 * @param string $message
-	 *
-	 * @return null
-	 */
-	public function set_status( $message ) {
-
-		$status = json_encode( (object) array(
-			'filename' => $this->get_backup_filename(),
-			'started'  => $this->get_schedule_running_start_time(),
-			'status'   => $message,
-		) );
-
-		if ( false === @file_put_contents( $this->get_schedule_running_path(), $status ) ) {
-			throw new \RuntimeException( sprintf( __( 'Error writing to file. (%s)', 'backupwordpress' ), $this->get_schedule_running_path() ) );
-		}
-
-	}
-
-	/**
-	 * Set the time that the current running backup was started
-	 *
-	 * @return int $timestamp
-	 */
-	public function get_schedule_running_start_time() {
-
-		if ( ! file_exists( $this->get_schedule_running_path() ) ) {
-			return 0;
-		}
-
-		$status = json_decode( file_get_contents( $this->get_schedule_running_path() ) );
-
-		if ( ! empty( $status->started ) && (int) (string) $status->started === $status->started ) {
-			return $status->started;
-		}
-
-		return time();
-
+	public function get_database_dump_filename() {
+		return implode( '-', array(
+			'database',
+			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
+			$this->get_id()
+		) ) . '.sql';
 	}
 
 	/**
@@ -573,43 +447,11 @@ class Scheduled_Backup {
 
 		switch ( $action ) :
 
-			case 'hmbkp_backup_started':
-			case 'hmbkp_mysqldump_finished':
-			case 'hmbkp_archive_finished':
-				break;
-
-			case 'hmbkp_mysqldump_started' :
-
-				$this->set_status( sprintf( __( 'Dumping Database %s', 'backupwordpress' ), '(<code>' . $this->backup->get_mysqldump_method() . '</code>)' ) );
-				break;
-
-			case 'hmbkp_mysqldump_verify_started' :
-
-				$this->set_status( sprintf( __( 'Verifying Database Dump %s', 'backupwordpress' ), '(<code>' . $this->backup->get_mysqldump_method() . '</code>)' ) );
-				break;
-
-			case 'hmbkp_archive_started' :
-
-				$this->set_status( sprintf( __( 'Creating zip archive %s', 'backupwordpress' ), '(<code>' . $this->backup->get_archive_method() . '</code>)' ) );
-				break;
-
-			case 'hmbkp_archive_verify_started' :
-
-				$this->set_status( sprintf( __( 'Verifying Zip Archive %s', 'backupwordpress' ), '(<code>' . $this->backup->get_archive_method() . '</code>)' ) );
-				break;
-
-			case 'hmbkp_backup_complete' :
-
-				$this->set_status( __( 'Finishing Backup', 'backupwordpress' ) );
-				$this->update_average_schedule_run_time( $this->get_schedule_running_start_time(), time() );
-
-				break;
-
 			case 'hmbkp_error' :
 
 				if ( $this->backup->get_errors() ) {
 
-					$file = $this->get_path() . '/.backup_errors';
+					$file = Path::get_path() . '/.backup_errors';
 
 					if ( file_exists( $file ) ) {
 						@unlink( $file );
@@ -631,7 +473,7 @@ class Scheduled_Backup {
 
 				if ( $this->backup->get_warnings() ) {
 
-					$file = $this->get_path() . '/.backup_warnings';
+					$file = Path::get_path() . '/.backup_warnings';
 
 					if ( file_exists( $file ) ) {
 						@unlink( $file );
@@ -740,12 +582,12 @@ class Scheduled_Backup {
 
 		$files = array();
 
-		if ( $handle = @opendir( $this->get_path() ) ) {
+		if ( $handle = @opendir( Path::get_path() ) ) {
 
 			while ( false !== ( $file = readdir( $handle ) ) ) {
 
 				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() !== $file ) {
-					$files[ @filemtime( trailingslashit( $this->get_path() ) . $file ) ] = trailingslashit( $this->get_path() ) . $file;
+					$files[ @filemtime( trailingslashit( Path::get_path() ) . $file ) ] = trailingslashit( Path::get_path() ) . $file;
 				}
 
 			}
@@ -770,6 +612,9 @@ class Scheduled_Backup {
 		if ( count( $this->get_backups() ) <= $this->get_max_backups() ) {
 			return;
 		}
+
+		$status = new Backup_Status( $this->get_backup_filename() );
+		$status->set_status( __( 'Deleting old backups.', 'backupwordpress' ) );
 
 		array_map( array( $this, 'delete_backup' ), array_slice( $this->get_backups(), $this->get_max_backups() ) );
 
@@ -810,9 +655,7 @@ class Scheduled_Backup {
 	 *
 	 */
 	public function delete_backups() {
-
 		array_map( array( $this, 'delete_backup' ), $this->get_backups() );
-
 	}
 
 	/**
