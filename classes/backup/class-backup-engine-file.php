@@ -16,7 +16,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 	 *
 	 * @var array
 	 */
-	protected $excludes = array();
+	protected $excludes;
 
 	/**
 	 * Set the default backup filename.
@@ -31,6 +31,8 @@ abstract class File_Backup_Engine extends Backup_Engine {
 			current_time( 'Y-m-d-H-i-s' )
 		) ) . '.zip' );
 
+		$this->excludes = new Excludes;
+
 	}
 
 	/**
@@ -38,7 +40,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 	 *
 	 * @param array $excludes The exclude rules.
 	 */
-	public function set_excludes( $excludes ) {
+	public function set_excludes( Excludes $excludes ) {
 		$this->excludes = $excludes;
 	}
 
@@ -72,9 +74,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 		);
 
 		// Finder expects exclude rules to be in a regex format
-		$excludes = new Excludes;
-		$excludes->set_excludes( $this->excludes );
-		$exclude_rules = $excludes->get_excludes_for_regex();
+		$exclude_rules = $this->excludes->get_excludes_for_regex();
 
 		// Skips folders/files that match default exclude patterns
 		foreach ( $exclude_rules as $exclude ) {

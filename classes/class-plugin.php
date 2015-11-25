@@ -136,6 +136,7 @@ final class Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-site-size.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-utilities.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-status.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine.php' );
 

@@ -12,7 +12,7 @@ class Excludes {
 	 *
 	 * @var array
 	 */
-	private $excludes = array();
+	private $excludes;
 
 	/**
 	 * The array of default exclude rules
@@ -40,7 +40,7 @@ class Excludes {
 		'backupwordpress-*-backups'
 	);
 
-	public function __construct( $excludes ) {
+	public function __construct( $excludes = array() ) {
 		$this->set_excludes( $excludes );
 	}
 

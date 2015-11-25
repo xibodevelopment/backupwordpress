@@ -7,8 +7,8 @@ namespace HM\BackUpWordPress;
  */
 class Backup_Status {
 
-  public function __construct( $backup_filename ) {
-    $this->backup_filename = $backup_filename;
+  public function __construct( $backup_filepath ) {
+    $this->filename = basename( $backup_filepath );
   }
 
   public function start() {
@@ -94,12 +94,12 @@ class Backup_Status {
   }
 
   /**
-	 * Get the path to the backup running file that stores the running backup status
-	 *
-	 * @return string
-	 */
-	public function get_status_filepath() {
-		return Path::get_path() . '/.backup-' . $this->get_backup_filename . '-running';
-	}
+    * Get the path to the backup running file that stores the running backup status
+    *
+    * @return string
+    */
+    public function get_status_filepath() {
+    	return Path::get_path() . '/.backup-' . $filename . '-running';
+    }
 
 }

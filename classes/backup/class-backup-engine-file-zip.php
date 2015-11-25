@@ -108,9 +108,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	 */
 	public function get_exclude_string() {
 
-		$excludes = new Excludes;
-		$excludes->set_excludes( $this->excludes );
-		$excludes = $excludes->get_excludes();
+		$excludes = $this->excludes->get_excludes();
 
 		foreach ( $excludes as $key => &$rule ) {
 

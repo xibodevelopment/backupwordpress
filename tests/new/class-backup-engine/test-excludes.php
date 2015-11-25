@@ -40,7 +40,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAbsoluteDirPath() {
 
-		$this->backup->set_excludes( '/exclude/' );
+		$this->backup->set_excludes( new Excludes( '/exclude/' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -52,7 +52,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAbsoluteRootDirPath() {
 
-		$this->backup->set_excludes( $this->test_data . '/exclude/' );
+		$this->backup->set_excludes( new Excludes( $this->test_data . '/exclude/' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -63,7 +63,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeDirPathFragment() {
 
-		$this->backup->set_excludes( 'exclude/' );
+		$this->backup->set_excludes( new Excludes( 'exclude/' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -74,7 +74,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAmbiguousAbsoluteDirPath() {
 
-		$this->backup->set_excludes( 'exclude' );
+		$this->backup->set_excludes( new Excludes( 'exclude' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -85,7 +85,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAbsoluteFilePath() {
 
-		$this->backup->set_excludes( '/exclude/exclude.exclude' );
+		$this->backup->set_excludes( new Excludes( '/exclude/exclude.exclude' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -99,7 +99,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAmbiguousAbsoluteFilePath() {
 
-		$this->backup->set_excludes( 'exclude/exclude.exclude' );
+		$this->backup->set_excludes( new Excludes( 'exclude/exclude.exclude' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -113,7 +113,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAbsolutePathWithWildcardFile() {
 
-		$this->backup->set_excludes( '/exclude/*' );
+		$this->backup->set_excludes( new Excludes( '/exclude/*' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -127,7 +127,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAmbiguousAbsolutePathWithWildcardFile() {
 
-		$this->backup->set_excludes( 'exclude/*' );
+		$this->backup->set_excludes( new Excludes( 'exclude/*' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -141,7 +141,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeWildcardFileName() {
 
-		$this->backup->set_excludes( '*.exclude' );
+		$this->backup->set_excludes( new Excludes( '*.exclude' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -155,7 +155,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAbsolutePathWithWildcardFileName() {
 
-		$this->backup->set_excludes( '/exclude/*.exclude' );
+		$this->backup->set_excludes( new Excludes( '/exclude/*.exclude' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -169,7 +169,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAmbiguousAbsolutePathWithWildcardFileName() {
 
-		$this->backup->set_excludes( 'exclude/*.exclude' );
+		$this->backup->set_excludes( new Excludes( 'exclude/*.exclude' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -183,7 +183,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeWildcardFileExtension() {
 
-		$this->backup->set_excludes( 'exclude.*' );
+		$this->backup->set_excludes( new Excludes( 'exclude.*' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -197,7 +197,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAbsolutePathWithWildcardFileExtension() {
 
-		$this->backup->set_excludes( '/exclude/exclude.*' );
+		$this->backup->set_excludes( new Excludes( '/exclude/exclude.*' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -211,7 +211,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludeAmbiguousAbsolutePathWithWildcardFileExtension() {
 
-		$this->backup->set_excludes( 'exclude/exclude.*' );
+		$this->backup->set_excludes( new Excludes( 'exclude/exclude.*' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -225,7 +225,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludePartialFilename() {
 
-		$this->backup->set_excludes( 'test-*' );
+		$this->backup->set_excludes( new Excludes( 'test-*' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -239,7 +239,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testExcludePartialDirectory() {
 
-		$this->backup->set_excludes( 'excl*' );
+		$this->backup->set_excludes( new Excludes( 'excl*' ) );
 
 		$files = $this->get_and_prepare_files();
 
@@ -253,7 +253,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	public function testWildCard() {
 
-		$this->backup->set_excludes( '*' );
+		$this->backup->set_excludes( new Excludes( '*' ) );
 
 		$files = $this->get_and_prepare_files();
 

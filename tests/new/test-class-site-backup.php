@@ -18,7 +18,7 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 	public function test_database_backup() {
 
 		$this->backup->set_type( 'database' );
-		$this->backup->backup();
+		$this->backup->run();
 
 		$this->assertFileExists( $this->backup->get_backup_filepath() );
 		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( basename( $this->backup->get_database_backup_filepath() ) ) );
@@ -28,7 +28,7 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 	public function test_files_backup() {
 
 		$this->backup->set_type( 'files' );
-		$this->backup->backup();
+		$this->backup->run();
 
 		$finder = new Mock_File_Backup_Engine;
 		$finder = $finder->get_files();
@@ -44,7 +44,7 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	public function test_complete_backup() {
 
-		$this->backup->backup();
+		$this->backup->run();
 
 		$finder = new Mock_File_Backup_Engine;
 		$finder = $finder->get_files();
@@ -63,11 +63,11 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 	public function test_multiple_backups_exclude_backups() {
 
 		$this->backup->set_backup_filename( 'backup1.zip' );
-		$this->backup->backup();
+		$this->backup->run();
 		$backup1 = $this->backup->get_backup_filepath();
 
 		$this->backup->set_backup_filename( 'backup2.zip' );
-		$this->backup->backup();
+		$this->backup->run();
 		$backup2 = $this->backup->get_backup_filepath();
 
 		$this->assertEquals( filesize( $backup1 ), filesize( $backup2 ) );
