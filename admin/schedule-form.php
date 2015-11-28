@@ -70,7 +70,7 @@ clear_settings_errors();
 
 						<option value="manually"><?php _e( 'Manual Only', 'backupwordpress' ); ?></option>
 
-						<?php foreach ( $schedule->get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
+						<?php foreach ( get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
 								<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
 

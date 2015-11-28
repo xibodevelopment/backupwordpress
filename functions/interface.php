@@ -287,10 +287,12 @@ function human_get_type( $type, Scheduled_Backup $schedule = null ) {
  */
 function schedule_status( Scheduled_Backup $schedule, $echo = true ) {
 
+	$status = new Backup_Status( $schedule->get_id() );
+
 	ob_start(); ?>
 
-	<span class="hmbkp-status"<?php if ( $schedule->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'backupwordpress' ), human_time_diff( $schedule->get_schedule_running_start_time() ) ); ?>"<?php } ?>>
-		<?php echo $schedule->get_status() ? wp_kses_data( $schedule->get_status() ) : __( 'Starting Backup', 'backupwordpress' ); ?>
+	<span class="hmbkp-status"<?php if ( $status->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'backupwordpress' ), human_time_diff( $status->get_start_time() ) ); ?>"<?php } ?>>
+		<?php echo $status->get_status() ? wp_kses_data( $status->get_status() ) : __( 'Starting backup...', 'backupwordpress' ); ?>
 		<a href="<?php echo admin_action_url( 'request_cancel_backup', array( 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>"><?php _e( 'cancel', 'backupwordpress' ); ?></a>
 	</span>
 

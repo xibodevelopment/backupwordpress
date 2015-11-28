@@ -72,6 +72,25 @@ class Scheduled_Backup {
 			$this->schedule();
 		}
 
+		$this->backup_filename = implode( '-', array(
+			sanitize_title( str_ireplace( array(
+				'http://',
+				'https://',
+				'www'
+			), '', home_url() ) ),
+			$this->get_id(),
+			$this->get_type(),
+			current_time( 'Y-m-d-H-i-s' )
+		) ) . '.zip';
+
+		$this->database_dump_filename = implode( '-', array(
+			'database',
+			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
+			$this->get_id()
+		) ) . '.sql';
+
+		$this->status = new Backup_Status( $this->get_id() );
+
 	}
 
 	/**
@@ -184,6 +203,10 @@ class Scheduled_Backup {
 	 */
 	public function set_max_backups( $max ) {
 		$this->options['max_backups'] = $max;
+	}
+
+	public function get_status() {
+		return $this->status;
 	}
 
 	/**
@@ -379,16 +402,14 @@ class Scheduled_Backup {
 	 */
 	public function run() {
 
-		$status = new Backup_Status( $this->get_backup_filename() );
-
 		// Don't run if this schedule is already running
-		if ( $status->is_started() ) {
+		if ( $this->status->is_started() ) {
 			return;
 		}
 
-		$status->start();
+		$this->status->start( $this->get_backup_filename() );
 
-		$status->set_status( __( 'Deleting old backups', 'backupwordpress' ) );
+		$this->status->set_status( __( 'Deleting old backups...', 'backupwordpress' ) );
 
 		// Delete old backups now in-case we fatal error during the backup process
 		$this->delete_old_backups();
@@ -397,36 +418,30 @@ class Scheduled_Backup {
 		$backup = new Site_Backup( $this->get_backup_filename(), $this->get_database_dump_filename() );
 		$backup->set_type( $this->get_type() );
 		$backup->set_excludes( $this->get_excludes() );
-		$backup->set_status( $status );
+		$backup->set_status( $this->status );
 
 		$backup->run();
 
-		$status->set_status( __( 'Deleting old backups', 'backupwordpress' ) );
+		$this->status->set_status( __( 'Deleting old backups...', 'backupwordpress' ) );
 
 		// Delete old backups again
 		$this->delete_old_backups();
 
+		$this->status->finish();
+
 	}
 
 	public function get_backup_filename() {
-		return implode( '-', array(
-			sanitize_title( str_ireplace( array(
-				'http://',
-				'https://',
-				'www'
-			), '', home_url() ) ),
-			$this->get_id(),
-			$this->get_type(),
-			current_time( 'Y-m-d-H-i-s' )
-		) ) . '.zip';
+
+		if ( $this->status->is_started() ) {
+			$this->backup_filename = $this->status->get_backup_filename();
+		}
+
+		return $this->backup_filename;
 	}
 
 	public function get_database_dump_filename() {
-		return implode( '-', array(
-			'database',
-			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
-			$this->get_id()
-		) ) . '.sql';
+		return $this->database_dump_filename;
 	}
 
 	/**
@@ -586,7 +601,7 @@ class Scheduled_Backup {
 
 			while ( false !== ( $file = readdir( $handle ) ) ) {
 
-				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && $this->get_running_backup_filename() !== $file ) {
+				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && ( isset( $this->status ) && $this->get_backup_filename() !== $file ) ) {
 					$files[ @filemtime( trailingslashit( Path::get_path() ) . $file ) ] = trailingslashit( Path::get_path() ) . $file;
 				}
 
@@ -612,9 +627,6 @@ class Scheduled_Backup {
 		if ( count( $this->get_backups() ) <= $this->get_max_backups() ) {
 			return;
 		}
-
-		$status = new Backup_Status( $this->get_backup_filename() );
-		$status->set_status( __( 'Deleting old backups.', 'backupwordpress' ) );
 
 		array_map( array( $this, 'delete_backup' ), array_slice( $this->get_backups(), $this->get_max_backups() ) );
 

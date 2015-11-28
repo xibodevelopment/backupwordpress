@@ -2,8 +2,7 @@
 
 namespace HM\BackUpWordPress;
 
-$excludes = new Excludes;
-$excludes->set_excludes( $schedule->get_excludes() );
+$excludes = $schedule->get_excludes();
 $user_excludes = $excludes->get_user_excludes(); ?>
 
 <div class="hmbkp-exclude-settings">

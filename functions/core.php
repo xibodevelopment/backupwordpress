@@ -479,7 +479,7 @@ function determine_start_time( $type, $times = array() ) {
 
 	$args = wp_parse_args( $times, $default_times );
 
-	$intervals = Scheduled_Backup::get_cron_schedules();
+	$intervals = get_cron_schedules();
 
 	// Allow the hours and minutes to be overwritten by a constant
 	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {

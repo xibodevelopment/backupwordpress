@@ -16,7 +16,7 @@ if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
 <h2 class="nav-tab-wrapper">
 
 	<?php foreach ( $schedules as $schedule ) :
-		$status = new Backup_Status( $schedule->get_backup_filename() ); ?>
+		$status = new Backup_Status( $schedule->get_id() ); ?>
 
 		<a class="nav-tab<?php if ( $status->get_status() ) { ?> hmbkp-running<?php } ?><?php if ( $schedule->get_id() === $current_schedule->get_id() ) { ?> nav-tab-active<?php } ?>" <?php if ( $status->get_status() ) { ?>title="<?php echo esc_attr( strip_tags( $status->get_status() ) ); ?>"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php echo esc_html( translated_schedule_title( $schedule->get_slug(), $schedule->get_name() ) ); ?> <span class="count">(<?php echo esc_html( count( $schedule->get_backups() ) ); ?>)</span></a>
 

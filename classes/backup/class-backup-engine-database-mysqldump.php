@@ -31,10 +31,6 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	 */
 	public function get_mysqldump_executable_path() {
 
-		if ( ! Backup_Utilities::is_exec_available() ) {
-			return false;
-		}
-
 		// Return now if it's set in a Constant
 		if ( defined( 'HMBKP_MYSQLDUMP_PATH' ) && HMBKP_MYSQLDUMP_PATH ) {
 			$this->mysqldump_executable_path = HMBKP_MYSQLDUMP_PATH;

@@ -35,10 +35,6 @@ class Site_Backup {
 
 	public function run() {
 
-		if ( $this->status ) {
-			$this->status->start();
-		}
-
 		if ( $this->type !== 'file' ) {
 			$this->backup_database();
 		}
@@ -47,15 +43,14 @@ class Site_Backup {
 			$this->backup_files();
 		}
 
-		if ( $this->status ) {
-			$this->status->finish();
-		}
-
 	}
 
 	public function backup_database() {
 
 		do_action( 'hmbkp_database_dump_started' );
+		if ( $this->status ) {
+			$this->status->set_status( __( 'Backing up database...', 'backupwordpress' ) );
+		}
 
 		$database_backup_engines = apply_filters( 'hmbkp_database_backup_engines', array(
 			new Mysqldump_Database_Backup_Engine,
@@ -108,6 +103,9 @@ class Site_Backup {
 	public function backup_files() {
 
 		do_action( 'hmbkp_archive_started' );
+		if ( $this->status ) {
+			$this->status->set_status( __( 'Backing up files...', 'backupwordpress' ) );
+		}
 
 		// Fire up the file backup engines
 		$backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
@@ -139,6 +137,8 @@ class Site_Backup {
 	public function perform_backup( Array $backup_engines ) {
 
 		foreach ( $backup_engines as $backup_engine ) {
+			error_log( 'test' );
+			error_log( get_class( $backup_engine ) );
 			if ( $backup_engine->backup() ) {
 				return $backup_engine;
 			}

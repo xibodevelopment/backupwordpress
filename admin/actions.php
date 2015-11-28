@@ -64,7 +64,7 @@ add_action( 'admin_post_hmbkp_request_delete_schedule', 'HM\BackUpWordPress\requ
  */
 function request_do_backup() {
 
-	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
+	if ( empty( $_REQUEST['hmbkp_schedule_id'] ) ) {
 		die;
 	}
 
@@ -79,7 +79,7 @@ function request_do_backup() {
 	// Fixes an issue on servers which only allow a single session per client
 	session_write_close();
 
-	$schedule_id = sanitize_text_field( urldecode( $_POST['hmbkp_schedule_id'] ) );
+	$schedule_id = sanitize_text_field( urldecode( $_REQUEST['hmbkp_schedule_id'] ) );
 	$task = new \HM\Backdrop\Task( '\HM\BackUpWordPress\run_schedule_async', $schedule_id );
 	$task->schedule();
 
@@ -145,14 +145,15 @@ function request_cancel_backup() {
 	check_admin_referer( 'hmbkp_request_cancel_backup', 'hmbkp-request_cancel_backup_nonce' );
 
 	$schedule = new Scheduled_Backup( sanitize_text_field( urldecode( $_GET['hmbkp_schedule_id'] ) ) );
+	$status = $schedule->get_status();
 
 	// Delete the running backup
-	if ( $schedule->get_running_backup_filename() && file_exists( trailingslashit( Path::get_path() ) . $schedule->get_running_backup_filename() ) ) {
-		unlink( trailingslashit( Path::get_path() ) . $schedule->get_running_backup_filename() );
+	if ( $status->get_backup_filename() && file_exists( trailingslashit( Path::get_path() ) . $status->get_backup_filename() ) ) {
+		unlink( trailingslashit( Path::get_path() ) . $status->get_backup_filename() );
 	}
 
-	if ( $schedule->get_schedule_running_path() && file_exists( $schedule->get_schedule_running_path() ) ) {
-		unlink( $schedule->get_schedule_running_path() );
+	if ( file_exists( $status->get_status_filepath() ) ) {
+		unlink( $status->get_status_filepath() );
 	}
 
 	Path::get_instance()->cleanup();
@@ -468,10 +469,7 @@ function remove_exclude_rule() {
 	$excludes = $schedule->get_excludes();
 	$exclude_rule_to_remove = stripslashes( sanitize_text_field( $_GET['hmbkp_remove_exclude'] ) );
 
-	//var_dump( $excludes );
-	//var_dump( $exclude_rule_to_remove );
-
-	$schedule->set_excludes( array_diff( $excludes, (array) $exclude_rule_to_remove ) );
+	$schedule->set_excludes( array_diff( $excludes->get_user_excludes(), (array) $exclude_rule_to_remove ) );
 
 	$schedule->save();
 
@@ -529,10 +527,11 @@ function heartbeat_received( $response, $data ) {
 	if ( ! empty( $data['hmbkp_schedule_id'] ) ) {
 
 		$schedule = new Scheduled_Backup( sanitize_text_field( urldecode( $data['hmbkp_schedule_id'] ) ) );
+		$status = new Backup_Status( $schedule->get_id() );
 
 		if ( ! empty( $data['hmbkp_is_in_progress'] ) ) {
 
-			if ( ! $schedule->get_status() ) {
+			if ( ! $status->get_status() ) {
 				$response['hmbkp_schedule_status'] = 0;
 
 				// Slow the heartbeat back down

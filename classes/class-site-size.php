@@ -24,7 +24,7 @@ class Site_Size {
 	 *                         or both. Should be one of 'file', 'database' or 'complete'
 	 * @param array  $excludes An array of exclude rules
 	 */
-	public function __construct( $type = 'complete', $excludes = array() ) {
+	public function __construct( $type = 'complete', Excludes $excludes = null ) {
 		$this->type = $type;
 		$this->excludes = $excludes;
 	}
@@ -272,13 +272,10 @@ class Site_Size {
 			$directory_sizes = array_flip( preg_grep( '(' . $file->getRealPath() . ')', array_flip( $directory_sizes ) ) );
 
 			if ( $this->excludes ) {
-
-				$excludes = new Excludes;
-				$excludes->set_excludes( $this->excludes );
-				$excludes = implode( '|', $excludes->get_excludes_for_regex() );
-
-				$directory_sizes = array_flip( preg_grep( '(' . $excludes . ')', array_flip( $directory_sizes ), PREG_GREP_INVERT ) );
-
+				$excludes = implode( '|', $this->excludes->get_excludes_for_regex() );
+				if ( $excludes ) {
+					$directory_sizes = array_flip( preg_grep( '(' . $excludes . ')', array_flip( $directory_sizes ), PREG_GREP_INVERT ) );
+				}
 			}
 
 			// Directory size is now just a sum of all files across all sub directories

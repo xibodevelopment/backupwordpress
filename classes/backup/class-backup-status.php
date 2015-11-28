@@ -7,17 +7,34 @@ namespace HM\BackUpWordPress;
  */
 class Backup_Status {
 
-  public function __construct( $backup_filepath ) {
-    $this->filename = basename( $backup_filepath );
+  public function __construct( $id ) {
+    $this->id = $id;
   }
 
-  public function start() {
+  public function start( $backup_filename ) {
+
+      $this->filename = $backup_filename;
+
       do_action( 'hmbkp_backup_started' );
-      $this->set_status( __( 'Starting Backup', 'backupwordpress' ) );
+      $this->set_status( __( 'Starting backup...', 'backupwordpress' ) );
+
+  }
+
+  public function get_backup_filename() {
+
+      if ( $this->is_started() ) {
+          $status = json_decode( file_get_contents( $this->get_status_filepath() ) );
+
+          if ( ! empty( $status->filename ) ) {
+            $this->filename = $status->filename;
+          }
+      }
+
+      return $this->filename;
   }
 
   public function is_started() {
-    return (bool) $this->get_status_filepath();
+    return (bool) file_exists( $this->get_status_filepath() );
   }
 
   public function finish() {
@@ -99,7 +116,7 @@ class Backup_Status {
     * @return string
     */
     public function get_status_filepath() {
-    	return Path::get_path() . '/.backup-' . $filename . '-running';
+    	return Path::get_path() . '/.backup-' . $this->id . '-running';
     }
 
 }
