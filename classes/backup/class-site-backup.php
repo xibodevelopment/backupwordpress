@@ -116,7 +116,7 @@ class Site_Backup {
 		// Set the file backup engine settings
 		foreach( $backup_engines as &$backup_engine ) {
 			$backup_engine->set_backup_filename( $this->backup_filename );
-			if ( is_a( $this->excludes, 'Excludes' ) ) {
+			if ( $this->excludes ) {
 				$backup_engine->set_excludes( $this->excludes );
 			}
 		}
@@ -137,8 +137,6 @@ class Site_Backup {
 	public function perform_backup( Array $backup_engines ) {
 
 		foreach ( $backup_engines as $backup_engine ) {
-			error_log( 'test' );
-			error_log( get_class( $backup_engine ) );
 			if ( $backup_engine->backup() ) {
 				return $backup_engine;
 			}
