@@ -124,11 +124,11 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 	<?php $sentence = sprintf( _x( 'Backup my %1$s %2$s %3$s, %4$s.', '1: Backup Type 2: Total size of backup 3: Schedule 4: Number of backups to store', 'backupwordpress' ), '<span>' . esc_html( $type ) . '</span>', $filesize, $reoccurrence, $backup_to_keep );
 
 	if ( $email_msg ) {
-		$sentence .= sprintf( __( '%s. ', 'backupwordpress' ), $email_msg );
+		$sentence .= ' ' . $email_msg;
 	}
 
 	if ( $services ) {
-		$sentence .= sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', array_filter( $services ) ) );
+		$sentence .= ' ' . sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', array_filter( $services ) ) );
 	}
 
 	echo $sentence; ?>

@@ -84,7 +84,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	 */
 	public function check_user_can_connect_to_database_via_cli() {
 
-		if ( ! $this->check_user_can_connect_to_database_via_cli() || ! $this->get_mysqldump_executable_path() ) {
+		if ( ! $this->get_mysqldump_executable_path() ) {
 			return false;
 		}
 

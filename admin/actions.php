@@ -89,11 +89,8 @@ function request_do_backup() {
 add_action( 'wp_ajax_hmbkp_run_schedule', 'HM\BackUpWordPress\request_do_backup' );
 
 function run_schedule_async( $schedule_id ) {
-
 	$schedule = new Scheduled_Backup( $schedule_id );
-
 	$schedule->run();
-
 }
 
 /**

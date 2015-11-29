@@ -35,17 +35,17 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 				}
 			}
 
+			// Track any internal warnings
+			if ( $zip->status ) {
+				$this->warning( __CLASS__, $zip->status );
+			}
+
+			if ( $zip->statusSys ) {
+				$this->warning( __CLASS__, $zip->statusSys );
+			}
+
 			$zip->close();
 
-		}
-
-		// Track any internal warnings
-		if ( $zip->status ) {
-			$this->warning( __CLASS__, $zip->status );
-		}
-
-		if ( $zip->statusSys ) {
-			$this->warning( __CLASS__, $zip->statusSys );
 		}
 
 		return $this->verify_backup();
