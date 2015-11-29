@@ -473,56 +473,6 @@ class Scheduled_Backup {
 			$service->action( $action, $backup );
 		}
 
-		switch ( $action ) :
-
-			case 'hmbkp_error' :
-
-				if ( $this->backup->get_errors() ) {
-
-					$file = Path::get_path() . '/.backup_errors';
-
-					if ( file_exists( $file ) ) {
-						@unlink( $file );
-					}
-
-					if ( ! $handle = @fopen( $file, 'w' ) ) {
-						return;
-					}
-
-					fwrite( $handle, json_encode( $this->backup->get_errors() ) );
-
-					fclose( $handle );
-
-				}
-
-				break;
-
-			case 'hmbkp_warning' :
-
-				if ( $this->backup->get_warnings() ) {
-
-					$file = Path::get_path() . '/.backup_warnings';
-
-					if ( file_exists( $file ) ) {
-						@unlink( $file );
-					}
-
-					if ( ! $handle = @fopen( $file, 'w' ) ) {
-						return;
-					}
-
-					fwrite( $handle, json_encode( $this->backup->get_warnings() ) );
-
-					fclose( $handle );
-
-				}
-
-				break;
-
-			default:
-
-		endswitch;
-
 	}
 
 	/**

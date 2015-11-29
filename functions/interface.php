@@ -226,27 +226,6 @@ function plugin_row( $plugins ) {
 add_filter( 'all_plugins', 'HM\BackUpWordPress\plugin_row', 10 );
 
 /**
- * Parse the json string of errors and
- * output as a human readable message
- *
- * @access public
- * @return null
- */
-function backup_errors_message() {
-
-	$message = '';
-
-	foreach ( (array) json_decode( backup_errors() ) as $key => $errors ) {
-		foreach ( $errors as $error ) {
-			$message .= '<p><strong>' . esc_html( $key ) . '</strong>: <code>' . implode( ':', array_map( 'esc_html', (array) $error ) ) . '</code></p>';
-		}
-	}
-
-	return $message;
-
-}
-
-/**
  * Get the human readable backup type in.
  *
  * @access public
@@ -301,36 +280,6 @@ function schedule_status( Scheduled_Backup $schedule, $echo = true ) {
 	}
 
 	echo $output;
-
-}
-
-/**
- * Load the backup errors file
- *
- * @return string
- */
-function backup_errors() {
-
-	if ( ! file_exists( Path::get_path() . '/.backup_errors' ) ) {
-		return '';
-	}
-
-	return file_get_contents( Path::get_path() . '/.backup_errors' );
-
-}
-
-/**
- * Load the backup warnings file
- *
- * @return string
- */
-function backup_warnings() {
-
-	if ( ! file_exists( Path::get_path() . '/.backup_warnings' ) ) {
-		return '';
-	}
-
-	return file_get_contents( Path::get_path() . '/.backup_warnings' );
 
 }
 
