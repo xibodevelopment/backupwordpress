@@ -84,7 +84,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	 */
 	public function check_user_can_connect_to_database_via_cli() {
 
-		if ( ! Backup_Utilities::is_exec_available() ) {
+		if ( ! $this->check_user_can_connect_to_database_via_cli() || ! $this->get_mysqldump_executable_path() ) {
 			return false;
 		}
 
@@ -102,10 +102,16 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		$args   = implode( ' ', $args );
 		exec( 'mysql ' . $args, $output, $return_status );
 
+		$output = $this->ignore_mysql_password_warning( $output );
+
 		// If there were errors connecting then track them
-		if ( $output && $return_status !== 0 ) {
-			$this->error( __CLASS__, $output );
-			return false;
+		if ( $output ) {
+			if ( $return_status === 0 ) {
+				$this->warning( __CLASS__, implode( ', ', $output ) );
+			} else {
+				$this->error( __CLASS__, implode( ', ', $output ) );
+				return false;
+			}
 		}
 
 		return true;
@@ -150,9 +156,15 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		exec( escapeshellcmd( $this->get_mysqldump_executable_path() ) . ' ' . implode( ' ', $args ), $output, $return_status );
 
+		$output = $this->ignore_mysql_password_warning( $output );
+
 		// Track any errors
-		if ( $output && $return_status !== 0 ) {
-			$this->error( __CLASS__, $output );
+		if ( $output ) {
+			if ( $return_status === 0 ) {
+				$this->warning( __CLASS__, implode( ', ', $output ) );
+			} else {
+				$this->error( __CLASS__, implode( ', ', $output ) );
+			}
 		}
 
 		return $this->verify_backup();
@@ -185,6 +197,18 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		}
 
 		return $args;
+
+	}
+
+	private function ignore_mysql_password_warning( $output ) {
+
+		$key = array_search( 'Warning: Using a password on the command line interface can be insecure.', $output );
+
+		if ( $key !== false ) {
+			unset( $output[ $key ] );
+		}
+
+		return $output;
 
 	}
 

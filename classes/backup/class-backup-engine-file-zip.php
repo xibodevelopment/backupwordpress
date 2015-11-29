@@ -93,8 +93,12 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		exec( $command, $output, $return_status );
 
 		// Track any errors
-		if ( $output && $return_status !== 0 ) {
-			$this->error( __CLASS__, $output );
+		if ( $output ) {
+			if ( $return_status === 0 ) {
+				$this->warning( __CLASS__, implode( ', ', $output ) );
+			} else {
+				$this->error( __CLASS__, implode( ', ', $output ) );
+			}
 		}
 
 		return $this->verify_backup();
@@ -107,6 +111,10 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	 * @return string The exclude string ready to pass to `zip -x`
 	 */
 	public function get_exclude_string() {
+
+		if ( ! $this->excludes ) {
+			return '';
+		}
 
 		$excludes = $this->excludes->get_excludes();
 

@@ -36,6 +36,7 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 			}
 
 			$zip->close();
+
 		}
 
 		// Track any internal warnings

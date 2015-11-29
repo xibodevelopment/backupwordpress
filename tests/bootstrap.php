@@ -43,8 +43,8 @@ require $test_root . '/includes/bootstrap.php';
 
 require_once dirname( __FILE__ ) . '/class-mock-backup-engines.php';
 require_once dirname( __FILE__ ) . '/class-wp-test-hm-backup-testcase.php';
-require_once dirname( __FILE__ ) . '/new/common-database-backup-engine-tests.php';
-require_once dirname( __FILE__ ) . '/new/common-file-backup-engine-tests.php';
+require_once dirname( __FILE__ ) . '/class-backup-engine/common-database-backup-engine-tests.php';
+require_once dirname( __FILE__ ) . '/class-backup-engine/common-file-backup-engine-tests.php';
 //require_once dirname( __FILE__ ) . '/backup-base-tests/class-file-backup-engine-excludes-base-tests.php';
 
 /**

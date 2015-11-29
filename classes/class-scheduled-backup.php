@@ -422,12 +422,21 @@ class Scheduled_Backup {
 
 		$backup->run();
 
+		$errors = array_merge( $backup->errors, $backup->warnings );
+		$notices = array();
+		foreach ( $errors as $key => $error ) {
+			$key = str_replace( array( __NAMESPACE__ . '\\', '_File_Backup_Engine', '_Database_Backup_Engine' ), array( '', '', '' ), $key );
+			$notices[] = $key . ': ' . implode( ', ', $error );
+		}
+		Notices::get_instance()->set_notices( 'backup_errors', $notices );
+
 		$this->status->set_status( __( 'Deleting old backups...', 'backupwordpress' ) );
 
 		// Delete old backups again
 		$this->delete_old_backups();
 
 		$this->status->finish();
+		$this->update_average_schedule_run_time( $this->status->get_start_time(), time() );
 
 	}
 

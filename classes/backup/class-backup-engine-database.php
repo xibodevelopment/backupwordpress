@@ -53,12 +53,12 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 	 */
 	public function __construct() {
 
+		parent::__construct();
+
 		$this->parse_db_host_constant();
 
 		// Set a default backup filename
 		$this->set_backup_filename( 'database-' . $this->get_name() . '.sql' );
-
-		parent::__construct();
 
 	}
 

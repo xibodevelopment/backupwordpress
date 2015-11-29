@@ -143,7 +143,7 @@ abstract class Backup_Engine {
 	 * @param  string $context The context for the warning.
 	 * @param  string $error   The warning that was encountered.
 	 */
-	private function warning( $context, $warning ) {
+	public function warning( $context, $warning ) {
 
 		if ( empty( $context ) || empty( $warning ) ) {
 			return;
@@ -151,38 +151,6 @@ abstract class Backup_Engine {
 
 		// Ensure we don't store duplicate warnings by md5'ing the error as the key
 		$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
-
-	}
-
-	/**
-	 * Convert errors to warnings.
-	 *
-	 * Converts any error messsages to warnings instead, so that they aren't treat
-	 * as fatal.
-	 *
-	 * @param  string $context The context of errors to convert.
-	 */
-	private function errors_to_warnings( $context = null ) {
-
-		$errors = $this->get_errors( $context );
-
-		if ( empty( $errors ) ) {
-			return;
-		}
-
-		// Fire a warning for each error.
-		foreach ( $errors as $error_context => $context_errors ) {
-			foreach ( $context_errors as $error ) {
-				$this->warning( $error_context, $error );
-			}
-		}
-
-		// Remove them from the array of errors.
-		if ( $context ) {
-			unset( $this->errors[ $context ] );
-		} else {
-			$this->errors = array();
-		}
 
 	}
 

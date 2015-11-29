@@ -73,9 +73,6 @@ function admin_notices() {
 		<div id="hmbkp-warning-backup" class="error notice is-dismissible">
 			<p>
 				<strong><?php _e( 'BackUpWordPress detected issues with your last backup.', 'backupwordpress' ); ?></strong>
-				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_dismiss_error' ), admin_url( 'admin-post.php' ) ), 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' ) ); ?>" style="float: right;" class="button">
-					<?php _e( 'Dismiss', 'backupwordpress' ); ?>
-				</a>
 			</p>
 
 			<ul>
@@ -128,9 +125,10 @@ function admin_notices() {
 
 						<p><?php echo wp_kses_data( $msg ); ?></p>
 
-						<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
-
 					<?php endforeach; ?>
+
+					<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
+
 				</div>
 
 			<?php endif; ?>

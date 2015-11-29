@@ -94,17 +94,6 @@ function run_schedule_async( $schedule_id ) {
 
 	$schedule->run();
 
-	// TODO should this be commented out?
-	////$errors = array_merge( $schedule->backup->get_errors(), $schedule->backup->get_warnings() );
-	//
-	//$notices = array();
-	//
-	//foreach ( $errors as $key => $error ) {
-	//	$notices[] = implode( ', ', $error );
-	//}
-	//
-	//Notices::get_instance()->set_notices( 'backup_errors', $notices );
-
 }
 
 /**
@@ -170,8 +159,6 @@ add_action( 'admin_post_hmbkp_request_cancel_backup', 'HM\BackUpWordPress\reques
  */
 function dismiss_error() {
 
-	check_admin_referer( 'hmbkp_dismiss_error', 'hmbkp_dismiss_error_nonce' );
-
 	Path::get_instance()->cleanup();
 
 	Notices::get_instance()->clear_all_notices();
@@ -181,7 +168,7 @@ function dismiss_error() {
 	die;
 
 }
-add_action( 'admin_post_hmbkp_dismiss_error', 'HM\BackUpWordPress\dismiss_error' );
+add_action( 'wp_ajax_hmbkp_dismiss_error', 'HM\BackUpWordPress\dismiss_error' );
 
 /**
  * Catch the schedule service settings form submission

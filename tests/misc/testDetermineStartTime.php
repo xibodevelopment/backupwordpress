@@ -243,7 +243,7 @@ class testDetermineStartTimeTestCase extends \HM_Backup_UnitTestCase {
 
 		// 23:59 on the Dec 31
 		self::$now = strtotime( '2013-12-31T23:59:00+00:00' );
-		$timestamp = hmbkp_determine_start_time( 'monthly', array( 'day_of_month' => '31', 'hours' => 23, 'minutes' => 59, 'now' => $this->time() ) );
+		$timestamp = determine_start_time( 'monthly', array( 'day_of_month' => '31', 'hours' => 23, 'minutes' => 59, 'now' => $this->time() ) );
 		$this->assertEquals( strtotime( '2014-01-31T23:59:00+00:00' ), $timestamp, '', 30 );
 
 	}

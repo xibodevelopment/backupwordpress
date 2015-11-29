@@ -5,6 +5,8 @@ namespace HM\BackUpWordPress;
 class Site_Backup {
 
 	private $excludes;
+	public $warnings = array();
+	public $errors = array();
 	private $backup_filename;
 	private $database_dump_filename;
 	private $backup_filepath = '';
@@ -137,9 +139,13 @@ class Site_Backup {
 	public function perform_backup( Array $backup_engines ) {
 
 		foreach ( $backup_engines as $backup_engine ) {
+
 			if ( $backup_engine->backup() ) {
+				$this->warnings = array_merge( $this->warnings, $backup_engine->get_warnings() );
 				return $backup_engine;
 			}
+			$this->warnings = array_merge( $this->warnings, $backup_engine->get_warnings() );
+			$this->errors = array_merge( $this->errors, $backup_engine->get_errors() );
 		}
 
 		return false;
