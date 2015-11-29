@@ -49,7 +49,6 @@ class Site_Backup {
 
 	public function backup_database() {
 
-		do_action( 'hmbkp_database_dump_started' );
 		if ( $this->status ) {
 			$this->status->set_status( __( 'Backing up database...', 'backupwordpress' ) );
 		}
@@ -104,7 +103,6 @@ class Site_Backup {
 
 	public function backup_files() {
 
-		do_action( 'hmbkp_archive_started' );
 		if ( $this->status ) {
 			$this->status->set_status( __( 'Backing up files...', 'backupwordpress' ) );
 		}
@@ -149,6 +147,34 @@ class Site_Backup {
 		}
 
 		return false;
+
+	}
+
+	public function get_warnings() {
+		return $this->warnings;
+	}
+
+	public function get_errors() {
+		return $this->errors;
+	}
+
+	/**
+	 * Add an warning to the errors warnings.
+	 *
+	 * A warning is always treat as non-fatal and should only be used for recoverable
+	 * issues with the backup process.
+	 *
+	 * @param  string $context The context for the warning.
+	 * @param  string $error   The warning that was encountered.
+	 */
+	public function warning( $context, $warning ) {
+
+		if ( empty( $context ) || empty( $warning ) ) {
+			return;
+		}
+
+		// Ensure we don't store duplicate warnings by md5'ing the error as the key
+		$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
 
 	}
 

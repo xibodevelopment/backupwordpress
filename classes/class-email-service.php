@@ -150,11 +150,11 @@ class Email_Service extends Service {
 	 * @param  string $action The action received from the backup
 	 * @return void
 	 */
-	public function action( $action, Backup $backup ) {
+	public function action( $action, Site_Backup $backup ) {
 
 		if ( $action === 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
 
-			$file = $backup->get_archive_filepath();
+			$file = $backup->get_backup_filepath();
 
 			$sent = false;
 

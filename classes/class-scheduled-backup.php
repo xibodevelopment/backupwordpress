@@ -407,18 +407,20 @@ class Scheduled_Backup {
 			return;
 		}
 
-		$this->status->start( $this->get_backup_filename() );
-
-		$this->status->set_status( __( 'Deleting old backups...', 'backupwordpress' ) );
-
-		// Delete old backups now in-case we fatal error during the backup process
-		$this->delete_old_backups();
-
 		// Setup our Site Backup Object
 		$backup = new Site_Backup( $this->get_backup_filename(), $this->get_database_dump_filename() );
 		$backup->set_type( $this->get_type() );
 		$backup->set_excludes( $this->get_excludes() );
 		$backup->set_status( $this->status );
+
+		$this->do_action( 'hmbkp_backup_started', $backup );
+
+		$this->status->start( $this->get_backup_filename(), __( 'Starting backup...', 'backupwordpress' ) );
+
+		$this->status->set_status( __( 'Deleting old backups...', 'backupwordpress' ) );
+
+		// Delete old backups now in-case we fatal error during the backup process
+		$this->delete_old_backups();
 
 		$backup->run();
 
@@ -434,6 +436,8 @@ class Scheduled_Backup {
 
 		// Delete old backups again
 		$this->delete_old_backups();
+
+		$this->do_action( 'hmbkp_backup_complete', $backup );
 
 		$this->status->finish();
 		$this->update_average_schedule_run_time( $this->status->get_start_time(), time() );
@@ -458,7 +462,7 @@ class Scheduled_Backup {
 	 *
 	 * @param $action
 	 */
-	public function do_action( $action, Backup $backup ) {
+	public function do_action( $action, Site_Backup $backup ) {
 
 		// Pass the actions to all the services
 		// Todo should be decoupled into the service class
@@ -516,8 +520,6 @@ class Scheduled_Backup {
 				break;
 
 			default:
-
-				return new \WP_Error( 'unexpected-error', __( 'An unexpected error occurred', 'backupwordpress' ) );
 
 		endswitch;
 

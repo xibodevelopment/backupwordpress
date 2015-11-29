@@ -11,13 +11,9 @@ class Backup_Status {
     $this->id = $id;
   }
 
-  public function start( $backup_filename ) {
-
+  public function start( $backup_filename, $status_message ) {
       $this->filename = $backup_filename;
-
-      do_action( 'hmbkp_backup_started' );
-      $this->set_status( __( 'Starting backup...', 'backupwordpress' ) );
-
+      $this->set_status( $status_message );
   }
 
   public function get_backup_filename() {
@@ -38,14 +34,10 @@ class Backup_Status {
   }
 
   public function finish() {
-
     // Delete the backup running file
     if ( file_exists( $this->get_status_filepath() ) ) {
       unlink( $this->get_status_filepath() );
     }
-
-    do_action( 'hmbkp_backup_complete' );
-
   }
 
   /**
