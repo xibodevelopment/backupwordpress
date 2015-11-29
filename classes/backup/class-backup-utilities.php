@@ -34,7 +34,7 @@ class Backup_Utilities {
 	 * @return boolean [description]
 	 */
 	public static function is_exec_available() {
-return false;
+
 		// You can't use exec if Safe Mode is on.
 		if ( self::is_safe_mode_on() ) {
 			return false;
