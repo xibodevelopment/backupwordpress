@@ -269,7 +269,7 @@ class Site_Size {
 
 			}
 
-			$directory_sizes = array_flip( preg_grep( '(' . $file->getRealPath() . ')', array_flip( $directory_sizes ) ) );
+			$directory_sizes = array_flip( preg_grep( '(' . wp_normalize_path( $file->getRealPath() ) . ')', array_flip( $directory_sizes ) ) );
 
 			if ( $this->excludes ) {
 				$excludes = implode( '|', $this->excludes->get_excludes_for_regex() );

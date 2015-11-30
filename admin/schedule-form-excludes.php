@@ -245,17 +245,17 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 						<?php if ( $is_unreadable ) { ?>
 
 							<code class="strikethrough"
-							      title="<?php echo esc_attr( $file->getRealPath() ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
+							      title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
 
 						<?php } elseif ( $file->isFile() ) { ?>
 
 							<code
-								title="<?php echo esc_attr( $file->getRealPath() ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
+								title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
 
 						<?php } elseif ( $file->isDir() ) { ?>
 
-							<code title="<?php echo esc_attr( $file->getRealPath() ); ?>"><a
-									href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( $file->getPathname() ) ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></a></code>
+							<code title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><a
+									href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( wp_normalize_path( $file->getPathname() ) ) ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></a></code>
 
 						<?php } ?>
 
@@ -287,7 +287,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 										<a title="<?php _e( 'Recalculate the size of this directory', 'backupwordpress' ); ?>"
 										   class="dashicons dashicons-update"
-										   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( $file->getPathname() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+										   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( wp_normalize_path( $file->getPathname() ) ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
 
 									<?php } ?>
 
@@ -311,7 +311,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 						<?php if ( $file->isLink() ) { ?>
 
 							<span
-								title="<?php echo esc_attr( $file->GetRealPath() ); ?>"><?php _e( 'Symlink', 'backupwordpress' ); ?></span>
+								title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php _e( 'Symlink', 'backupwordpress' ); ?></span>
 
 						<?php } elseif ( $file->isDir() ) {
 
@@ -342,7 +342,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 							// Excluded directories need to be trailingslashed
 							if ( $file->isDir() ) {
-								$exclude_path = trailingslashit( $file->getPathname() );
+								$exclude_path = trailingslashit( wp_normalize_path( $file->getPathname() ) );
 							} ?>
 
 							<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
