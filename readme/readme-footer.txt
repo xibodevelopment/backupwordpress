@@ -44,6 +44,18 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Changelog ==
 
+### 3.3.3 / 2015-11-13
+
+* Fix broken Intercom support window
+* Fixes Typos in i18n strings
+* Backups finish faster
+* Fix an issue that caused the site size to report as twice as large as it should
+* Adds PHP mysqldump fallback lib
+
+### 3.3.2 / 2015-10-15
+
+* Mis improvements
+
 ### 3.3.1 / 2015-10-12
 
 * Fix false positive error message.

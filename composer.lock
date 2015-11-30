@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "a5d481f4e8a2c50cc0c488d199f4c83e",
+    "content-hash": "77f3dd81e4007d746a29f10fd5dce8af",
     "packages": [
         {
             "name": "ifsnop/mysqldump-php",
