@@ -201,9 +201,6 @@ clear_settings_errors();
 
 	</table>
 
-	<p class="submit">
-		<button type="submit" class="button-primary"><?php _e( 'Done', 'backupwordpress' ); ?></button>
-	</p>
-
+	<?php submit_button( __( 'Done', 'backupwordpress' ) ); ?>
 
 </form>
