@@ -20,8 +20,13 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 
-		chmod( Path::get_root() . '/exclude', 0755 );
-		chmod( Path::get_root() . '/test-data.txt', 0644 );
+        if ( file_exists( Path::get_root() . '/exclude' ) ) {
+	    	chmod( Path::get_root() . '/exclude', 0755 );
+        }
+
+        if ( file_exists( Path::get_root() . '/test-data.txt' ) ) {
+	    	chmod( Path::get_root() . '/test-data.txt', 0644 );
+        }
 
 		if ( file_exists( $this->hidden ) ) {
 			unlink( $this->hidden );
@@ -76,7 +81,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->symlink = $this->test_data . '/tests';
 
-		if ( ! symlink( trailingslashit( $this->test_data_symlink ), $this->symlink ) ) {
+		if ( ! @symlink( trailingslashit( $this->test_data_symlink ), $this->symlink ) ) {
 			$this->markTestSkipped( 'Couldn\'t create symlink to test with' );
 		}
 
@@ -101,7 +106,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->symlink = trailingslashit( $this->test_data ) . basename( __FILE__ );
 
-		if ( ! symlink( __FILE__, $this->symlink ) ) {
+		if ( ! @symlink( __FILE__, $this->symlink ) ) {
 			$this->markTestSkipped( 'Couldn\'t create symlink to test with' );
 		}
 
@@ -127,7 +132,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->symlink = trailingslashit( $this->test_data ) . basename( __FILE__ );
 		file_put_contents( $this->test_data . '/symlink', '' );
-		$symlink_created = symlink( $this->test_data . '/symlink', $this->symlink );
+		$symlink_created = @symlink( $this->test_data . '/symlink', $this->symlink );
 		unlink( $this->test_data . '/symlink' );
 
 		if ( ! $symlink_created ) {

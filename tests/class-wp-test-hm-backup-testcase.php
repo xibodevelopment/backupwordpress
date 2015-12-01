@@ -70,7 +70,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		}
 
 		foreach( $extracted as $fileInfo ) {
-			$files[] = untrailingslashit( $fileInfo['filename'] );
+			$files[] = untrailingslashit( wp_normalize_path( $fileInfo['filename'] ) );
 		}
 
 		foreach( $filenames as $filename ) {
@@ -94,7 +94,7 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 		$files = array();
 
 		foreach( (array) $extracted as $fileInfo ) {
-			$files[] = $fileInfo['filename'];
+			$files[] = wp_normalize_path( $fileInfo['filename'] );
 		}
 
 		foreach( $filenames as $filename ) {
@@ -143,8 +143,8 @@ class HM_Backup_UnitTestCase extends WP_UnitTestCase {
 
 	protected function setup_test_data() {
 
-		$this->test_data = __DIR__ . '/test-data';
-		$this->test_data_symlink = __DIR__ . '/test-data-symlink';
+		$this->test_data = wp_normalize_path( __DIR__ ) . '/test-data';
+		$this->test_data_symlink = wp_normalize_path( __DIR__ ) . '/test-data-symlink';
 
 		$this->cleanup_test_data();
 

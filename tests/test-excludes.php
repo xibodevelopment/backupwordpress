@@ -267,7 +267,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 		$files = array();
 
 		foreach ( $finder as $file ) {
-			$files[] = $file->getRelativePathname();
+			$files[] = wp_normalize_path( $file->getRelativePathname() );
 		}
 
 		return $files;

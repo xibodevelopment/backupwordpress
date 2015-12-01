@@ -184,7 +184,7 @@ class Path {
 	 * Get the path to the default backup location in wp-content
 	 */
 	public function get_default_path() {
-		return trailingslashit( WP_CONTENT_DIR ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups';
+		return trailingslashit( wp_normalize_path( WP_CONTENT_DIR ) ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups';
 	}
 
 	/**
@@ -194,7 +194,7 @@ class Path {
 
 		$upload_dir = wp_upload_dir();
 
-		return trailingslashit( $upload_dir['basedir'] ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups';
+		return trailingslashit( wp_normalize_path( $upload_dir['basedir'] ) ) . 'backupwordpress-' . substr( HMBKP_SECURE_KEY, 0, 10 ) . '-backups';
 
 	}
 
@@ -233,6 +233,8 @@ class Path {
 		}
 
 		$paths = array_merge( $default, $fallback );
+
+        $paths = array_map( 'wp_normalize_path', $paths );
 
 		return $paths;
 
@@ -289,7 +291,7 @@ class Path {
 			}
 		}
 
-		if ( isset( $path ) ) {
+		if ( file_exists( $path ) && wp_is_writable( $path ) ) {
 			$this->path = $path;
 		}
 
@@ -310,7 +312,7 @@ class Path {
 		// Protect against directory browsing by including an index.html file
 		$index = $this->path . '/index.html';
 
-		if ( ( 'reset' === $reset ) && file_exists( $index ) ) {
+		if ( 'reset' === $reset && file_exists( $index ) ) {
 			@unlink( $index );
 		}
 

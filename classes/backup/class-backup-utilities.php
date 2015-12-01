@@ -113,7 +113,7 @@ class Backup_Utilities {
 			 *
 			 * We pipe STDERR to /dev/null so we don't leak errors.
 			 */
-			exec( escapeshellarg( $path ) . ' --version 2>/dev/null', $output, $result );
+			exec( escapeshellarg( $path ) . ' --version 2>nul', $output, $result );
 
 			// If the command executed successfully then this must be the correct path
 			if ( $result === 0 ) {

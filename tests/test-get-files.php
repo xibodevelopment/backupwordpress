@@ -72,11 +72,10 @@ class Backup_Engine_Get_Files extends \HM_Backup_UnitTestCase {
 	public function test_default_excludes_ignored() {
 
 		$excludes = new Excludes;
-
 		$default_excludes = $excludes->get_default_excludes();
 
 		foreach ( $default_excludes as $default_exclude ) {
-			$default_exclude = str_replace( '*/', '', $default_exclude );
+			$default_exclude = str_replace( '*', rand(), $default_exclude );
 			mkdir( trailingslashit( $this->test_data ) . $default_exclude );
 		}
 

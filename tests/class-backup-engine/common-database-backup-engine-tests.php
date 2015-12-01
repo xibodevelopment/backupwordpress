@@ -1,5 +1,7 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 abstract class Common_Database_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	/**

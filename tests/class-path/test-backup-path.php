@@ -17,7 +17,7 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 		$this->is_apache = $is_apache;
 
 		$this->path = Path::get_instance();
-		$this->custom_path = WP_CONTENT_DIR . '/custom';
+		$this->custom_path = wp_normalize_path( WP_CONTENT_DIR . '/custom' );
 
 		// Cleanup before we kickoff in-case theirs cruft around from previous failures
 		$this->tearDown();
@@ -39,9 +39,6 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		chmod( dirname( $this->path->get_default_path() ), 0755 );
 
-		// Reset the path internally
-		$this->path->reset_path();
-
 		// Remove all backup paths that exist
 		foreach( $this->path->get_existing_paths() as $path ) {
 			rmdirtree( $path );
@@ -49,15 +46,18 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		// Remove our custom path
 		rmdirtree( $this->custom_path );
+   
+    	// Reset the path internally
+		$this->path->reset_path();
 
 	}
 
 	/**
 	 * By default the path should be the default path
 	 */
-	public function testdefaultPath() {
+	public function testDefaultPath() {
 
-		$this->assertEquals( $this->path->get_default_path(), Path::get_path() );
+		$this->assertEquals( $this->path->get_default_path(), $this->path->get_path() );
 
 		$this->assertFileExists( $this->path->get_default_path() );
 
@@ -111,9 +111,13 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 	 */
 	public function testExistingPaths() {
 
-		$paths = $this->generate_additional_paths();
+		$generated_paths = $this->generate_additional_paths();
+        $paths = $this->path->get_existing_paths();
+        
+        sort( $generated_paths );
+        sort( $paths );
 
-		$this->assertEquals( $paths, $this->path->get_existing_paths() );
+		$this->assertEquals( $paths, $paths );
 
 	}
 
@@ -126,7 +130,7 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->path->get_custom_path(), $this->custom_path );
 
-		$this->assertEquals( Path::get_path(), $this->custom_path );
+		$this->assertEquals( Path::get_path(), wp_normalize_path( $this->custom_path ) );
 
 		$this->assertFileExists( $this->path->get_custom_path() );
 
@@ -139,7 +143,7 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		$this->path->set_path( '/' . rand() );
 
-		if ( is_writable( $this->custom_path ) ) {
+		if ( wp_is_writable( $this->custom_path ) ) {
 			$this->markTestSkipped( 'The custom path was still writable' );
 		}
 
@@ -202,14 +206,14 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 	private function generate_additional_paths() {
 
 		for ( $i = 0; $i < 3; $i++ ) {
-			$paths[] = $path = WP_CONTENT_DIR . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
+			$paths[] = $path = wp_normalize_path( WP_CONTENT_DIR ) . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
 			$this->path->set_path( $path );
 		}
 
 		$uploads = wp_upload_dir();
 
 		for ( $i = 0; $i < 3; $i++ ) {
-			$paths[] = $path = $uploads['basedir'] . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
+			$paths[] = $path = wp_normalize_path( $uploads['basedir'] ) . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
 			$this->path->set_path( $path );
 		}
 

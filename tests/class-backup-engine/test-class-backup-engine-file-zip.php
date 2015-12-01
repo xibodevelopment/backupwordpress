@@ -8,6 +8,9 @@ class Zip_File_Backup_Engine_Tests extends Common_File_Backup_Engine_Tests {
 
 	public function setUp() {
 		$this->backup = new Zip_File_Backup_Engine;
+        if ( ! $this->backup->get_zip_executable_path() ) {
+            $this->markTestSkipped( 'zip not available' );
+        }
 		parent::setUp();
 	}
 
