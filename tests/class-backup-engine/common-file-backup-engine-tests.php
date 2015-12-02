@@ -197,7 +197,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 		// Reset root back to defaults
 		Path::get_instance()->set_root( false );
 
-		$this->backup->set_excludes( array( 'wp-*' ) );
+		$this->backup->set_excludes( new Excludes( array( 'wp-*' ) ) );
 		$this->backup->backup();
 
 		$finder = $this->backup->get_files();

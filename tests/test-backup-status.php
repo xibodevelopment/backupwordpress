@@ -3,9 +3,8 @@
 namespace HM\BackUpWordPress;
 
 /**
- * Unit tests for the status class
+ * Unit tests for the Backup_Status class
  *
- * @see Path
  * @extends HM_Backup_UnitTestCase
  */
 class Test_Backup_Status extends \HM_Backup_UnitTestCase {
