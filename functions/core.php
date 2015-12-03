@@ -596,7 +596,7 @@ function list_directory_by_total_filesize( $directory ) {
 		return $files;
 	}
 
-	$finder = new Symfony\Component\Finder\Finder();
+	$finder = new \Symfony\Component\Finder\Finder();
 	$finder->followLinks();
 	$finder->ignoreDotFiles( false );
 	$finder->ignoreUnreadableDirs();
