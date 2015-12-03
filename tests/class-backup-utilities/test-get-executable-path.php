@@ -33,7 +33,7 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 	public function test_remove_default_command_path() {
 
 		$paths = $this->paths;
-		$paths[] = $path = trim( shell_exec( 'which mysql 2>nul' ) );
+		$paths[] = $path = trim( shell_exec( 'which mysql ' . ignore_stderr() ) );
 
         if ( ! $path ) {
             $this->markTestSkipped( 'Couldn\'t find mysql' );

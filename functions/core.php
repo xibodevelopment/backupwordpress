@@ -559,3 +559,94 @@ function admin_action_url( $action, array $query_args = array() ) {
 
 	return esc_url( wp_nonce_url( add_query_arg( $query_args, admin_url( 'admin-post.php' ) ), 'hmbkp_' . $action, 'hmbkp-' . $action . '_nonce' ) );
 }
+
+/**
+ * OS dependant way to pipe stderr to null
+ *
+ * @return string The exec argument to pipe stderr to null
+ */
+function ignore_stderr() {
+
+	// If we're on Windows
+	if ( DIRECTORY_SEPARATOR == '\\' ) {
+		return '2>nul';
+	}
+
+	// Or Unix
+	return '2>/dev/null';
+
+}
+
+/**
+ * Return the contents of `$directory` as a single depth list ordered by total filesize.
+ *
+ * Will schedule background threads to recursively calculate the filesize of subdirectories.
+ * The total filesize of each directory and subdirectory is cached in a transient for 1 week.
+ *
+ * @param string $directory The directory to list
+ *
+ * @todo doesn't really belong in this class, should just be a function
+ * @return array            returns an array of files ordered by filesize
+ */
+function list_directory_by_total_filesize( $directory ) {
+
+	$files = $files_with_no_size = $empty_files = $files_with_size = $unreadable_files = array();
+
+	if ( ! is_dir( $directory ) ) {
+		return $files;
+	}
+
+	$finder = new Symfony\Component\Finder\Finder();
+	$finder->followLinks();
+	$finder->ignoreDotFiles( false );
+	$finder->ignoreUnreadableDirs();
+	$finder->depth( '== 0' );
+
+	$site_size = new Site_Size;
+
+	$files = $finder->in( $directory );
+
+	foreach ( $files as $entry ) {
+
+		// Get the total filesize for each file and directory
+		$filesize = $site_size->filesize( $entry );
+
+		if ( $filesize ) {
+
+			// If there is already a file with exactly the same filesize then let's keep increasing the filesize of this one until we don't have a clash
+			while ( array_key_exists( $filesize, $files_with_size ) ) {
+				$filesize ++;
+			}
+
+			$files_with_size[ $filesize ] = $entry;
+
+		} elseif ( 0 === $filesize ) {
+
+			$empty_files[] = $entry;
+
+		} else {
+
+			$files_with_no_size[] = $entry;
+
+		}
+
+	}
+
+	// Sort files by filesize, largest first
+	krsort( $files_with_size );
+
+	// Add 0 byte files / directories to the bottom
+	$files = $files_with_size + array_merge( $empty_files, $unreadable_files );
+
+	// Add directories that are still calculating to the top
+	if ( $files_with_no_size ) {
+
+		// We have to loop as merging or concatenating the array would re-flow the keys which we don't want because the filesize is stored in the key
+		foreach ( $files_with_no_size as $entry ) {
+			array_unshift( $files, $entry );
+		}
+	}
+
+	return $files;
+
+}

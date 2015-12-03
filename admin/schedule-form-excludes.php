@@ -97,7 +97,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 	$site_size = new Site_Size;
 
 	// Kick off a recursive filesize scan
-	$files = $site_size->list_directory_by_total_filesize( $directory ); ?>
+	$files = list_directory_by_total_filesize( $directory ); ?>
 
 	<table class="widefat">
 

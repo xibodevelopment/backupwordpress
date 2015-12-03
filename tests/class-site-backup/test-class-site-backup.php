@@ -70,7 +70,8 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		$this->backup->run();
 		$backup2 = $this->backup->get_backup_filepath();
 
-		$this->assertEquals( filesize( $backup1 ), filesize( $backup2 ) );
+		// Allow the filesize to vary by 10 bytes to avoid minor changes causing failures
+		$this->assertEquals( filesize( $backup1 ), filesize( $backup2 ), '', 10 );
 		$this->assertArchiveNotContains( $backup2, array( 'backup1.zip' ) );
 
 	}
