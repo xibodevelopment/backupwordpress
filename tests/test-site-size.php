@@ -22,14 +22,14 @@ class Site_Size_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->assertNull( $this->size->filesize( $this->root ) );
 		$this->size->recursive_filesize_scanner();
-		$this->assertEquals( 735, $this->size->filesize( $this->root ), '', 10 );
+		$this->assertEquals( 735, $this->size->filesize( $this->root ), '', 40 );
 
 	}
 
 	public function test_filesize_excludes() {
 		$this->size = new Site_Size( 'file', new Excludes( 'exclude' ) );
 		$this->size->recursive_filesize_scanner();
-		$this->assertEquals( 667, $this->size->get_site_size(), '', 10 );
+		$this->assertEquals( 667, $this->size->get_site_size(), '', 40 );
 	}
 
 
@@ -51,7 +51,7 @@ class Site_Size_Tests extends \HM_Backup_UnitTestCase {
 	public function test_site_size_file() {
 		$this->size = new Site_Size( 'file' );
 		$this->size->recursive_filesize_scanner();
-		$this->assertEquals( 735, $this->size->get_site_size(), '', 10 );
+		$this->assertEquals( 735, $this->size->get_site_size(), '', 40 );
 	}
 
 	public function test_site_size_formatted() {
