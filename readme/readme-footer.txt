@@ -14,6 +14,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.3.4 =
+
+* WordPress 4.4 compatibility.
+
 = 3.3.1 =
 
 * Fixes a bug that would prevent downloading backups since 3.3.0 - please update.
@@ -43,6 +47,10 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
   * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.3.4 / 2015-12-10
+
+* Fixes styling issues with WordPress 4.4
 
 ### 3.3.3 / 2015-11-13
 
