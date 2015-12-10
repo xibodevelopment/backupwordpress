@@ -7,12 +7,12 @@ build-dev:
   - compress:dev
 
 build:
-  - makepot
   - autoprefixer
   - cssmin
   - uglify
   - bumpup # defaults to patch, change to :minor or :major if necessary
   - replace # Update version numbers, build faq.txt
+  - makepot
 
 # before running release, make sure to add the changelog to readme-footer.txt Also, update the "tested up to" version if necessary
 release:
