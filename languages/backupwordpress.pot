@@ -2,16 +2,16 @@
 # This file is distributed under the GPL-2+.
 msgid ""
 msgstr ""
-"Project-Id-Version: BackUpWordPress 3.3.2\n"
+"Project-Id-Version: BackUpWordPress 3.3.4\n"
 "Report-Msgid-Bugs-To: backupwordpress@hmn.md\n"
-"POT-Creation-Date: 2015-11-13 13:55:19+00:00\n"
+"POT-Creation-Date: 2015-12-10 13:34:05+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Human Made Limited\n"
 "Language-Team: Human Made Limited\n"
-"X-Generator: grunt-wp-i18n 0.5.3\n"
+"X-Generator: grunt-wp-i18n 0.4.9\n"
 
 #: admin/actions.php:191
 msgid "The schedule ID was not provided. Aborting."
