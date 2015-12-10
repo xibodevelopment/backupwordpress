@@ -136,19 +136,19 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 = 3.1.3 =
 
-  * Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
-  
+* Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
+
 = 3.0.4 =
 
-  * Fixes a few minor bugs. Immediate update is recommended.
+* Fixes a few minor bugs. Immediate update is recommended.
 
 = 3.0.2 =
 
-  * Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
+* Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
 
 = 3.0.1 =
 
-  * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
+* This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
 
