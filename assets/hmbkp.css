@@ -32,6 +32,7 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 .hmbkp-schedule-sentence .submit { padding: 0; }
 .hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 .hmbkp-schedule-actions a { white-space: nowrap; }
+.hmbkp-schedule-sentence .row-actions { position: static; }
 
 .hmbkp-schedule-settings { border-top: 1px solid #e5e5e5; margin: 20px -20px -20px; background-color: #f5f5f5; padding: 0 20px 20px; }
 

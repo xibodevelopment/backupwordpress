@@ -6,8 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
-
-	const PLUGIN_VERSION = '3.4 alpha';
+	const PLUGIN_VERSION = '3.4-beta1';
 
 	/**
 	 * @var Plugin The singleton instance.
