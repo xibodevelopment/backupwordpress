@@ -42,13 +42,13 @@ jQuery( document ).ready( function ( $ ) {
 	} );
 
 	// Test the cron response using ajax
-	$.post( ajaxurl, {'nonce': hmbkp.nonce, 'action': 'hmbkp_cron_test'},
-		function ( data ) {
-			if ( data !== '1' ) {
-				$( '.wrap > h2' ).after( data );
-			}
-		}
-	);
+	//$.post( ajaxurl, {'nonce': hmbkp.nonce, 'action': 'hmbkp_cron_test'},
+	//	function ( data ) {
+	//		if ( data !== '1' ) {
+	//			$( '.wrap > h2' ).after( data );
+	//		}
+	//	}
+	//);
 
 	// Run a backup
 	$( document ).on( 'click', '.hmbkp-run', function ( e ) {
@@ -59,52 +59,16 @@ jQuery( document ).ready( function ( $ ) {
 
 		var scheduleId = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
 
-		$.post(
+		var ajaxRequest = $.post(
 			ajaxurl,
 			{
-				'hmbkp_run_schedule_nonce': hmbkp.hmbkp_run_schedule_nonce,
-				'action': 'hmbkp_run_schedule',
-				'hmbkp_schedule_id': scheduleId
+				hmbkp_run_schedule_nonce : hmbkp.hmbkp_run_schedule_nonce,
+				action : 'hmbkp_run_schedule',
+				hmbkp_schedule_id : scheduleId
 			}
 		);
-
+		hmbkpRedirectOnBackupComplete();
 		e.preventDefault();
-
-	} );
-
-	// Send the schedule id with the heartbeat
-	$( document ).on( 'heartbeat-send', function ( e, data ) {
-
-		data.hmbkp_schedule_id = $( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' );
-
-		if ( $( '.hmbkp-schedule-sentence.hmbkp-running' ).length ) {
-			data.hmbkp_is_in_progress = true;
-		} else {
-			data.hmbkp_client_request = 'site_size';
-		}
-
-	} );
-
-	// Update schedule status on heartbeat tick
-	$( document ).on( 'heartbeat-tick', function ( e, data ) {
-
-		// If the schedule has finished then reload the page
-		if ( data.hmbkp_schedule_status === 0 && ! $( '.hmbkp-error' ).length ) {
-			location.reload( true );
-		}
-
-		// If the schedule is still running then update the schedule status
-		if ( ( data.hmbkp_schedule_status !== 0 ) && ( data.hmbkp_schedule_status !== undefined ) ) {
-			$( '.hmbkp-status' ).replaceWith( data.hmbkp_schedule_status );
-		}
-
-		if ( (data.hmbkp_site_size !== undefined ) && ( $( 'code.calculating' ).length ) ) {
-			$( 'code.calculating' ).text( data.hmbkp_site_size );
-			var excludes = $( '.hmbkp-exclude-settings' );
-			if ( excludes.length ) {
-				excludes.replaceWith( data.hmbkp_dir_sizes );
-			}
-		}
 
 	} );
 
@@ -117,6 +81,38 @@ jQuery( document ).ready( function ( $ ) {
 	} );
 
 } );
+
+function hmbkpRedirectOnBackupComplete( status ) {
+
+	jQuery.post(
+		ajaxurl,
+		{
+			nonce: hmbkp.nonce,
+			action : 'hmbkp_is_in_progress',
+			hmbkp_schedule_id : jQuery( '[data-hmbkp-schedule-id]' ).attr( 'data-hmbkp-schedule-id' )
+		},
+
+		function( data ) {
+
+			if ( data == 0 && jQuery( '.hmbkp-error' ).length === 0 ) {
+
+				location.reload( true );
+
+			} else {
+				jQuery( '.hmbkp-status' ).remove();
+				if ( data == 99 ) {
+					jQuery( '.hmbkp-schedule-actions' ).replaceWith( 'Starting' );
+				} else {
+					jQuery( '.hmbkp-schedule-actions' ).replaceWith( data );
+				}
+
+				setTimeout( hmbkpRedirectOnBackupComplete, 2000 );
+
+			}
+		}
+	);
+
+}
 
 function hmbkpToggleScheduleFields( recurrence ) {
 

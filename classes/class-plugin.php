@@ -117,6 +117,7 @@ final class Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'vendor/autoload.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-notices.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-task-manager.php' );
 
 		// Load the admin menu
 		require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
