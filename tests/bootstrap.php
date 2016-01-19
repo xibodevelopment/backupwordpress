@@ -33,13 +33,19 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 require $test_root . '/includes/functions.php';
 
 function _manually_load_plugin() {
-	require_once( dirname( __DIR__ ) . '/backupwordpress.php' );
+
+	require_once dirname( __DIR__ ) . '/backupwordpress.php';
+
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 require $test_root . '/includes/bootstrap.php';
 
+require_once dirname( __FILE__ ) . '/class-mock-backup-engines.php';
 require_once dirname( __FILE__ ) . '/class-wp-test-hm-backup-testcase.php';
+require_once dirname( __FILE__ ) . '/class-backup-engine/common-database-backup-engine-tests.php';
+require_once dirname( __FILE__ ) . '/class-backup-engine/common-file-backup-engine-tests.php';
+//require_once dirname( __FILE__ ) . '/backup-base-tests/class-file-backup-engine-excludes-base-tests.php';
 
 /**
  * Dumps the contents of param to the CLI

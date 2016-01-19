@@ -1,3 +1,9 @@
+<?php
+
+namespace HM\BackUpWordPress;
+
+?>
+
 <div class="wrap">
 
 	<h1>
@@ -12,7 +18,7 @@
 
 	</h1>
 
-	<?php if ( hmbkp_possible() ) : ?>
+	<?php if ( is_backup_possible() ) : ?>
 
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
 

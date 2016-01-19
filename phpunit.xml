@@ -7,14 +7,8 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite name="backup">
-			<directory prefix="test" suffix=".php">tests/backup</directory>
-		</testsuite>
-		<testsuite name="schedule">
-			<directory prefix="test" suffix=".php">tests/schedule</directory>
-		</testsuite>
-		<testsuite name="other">
-			<directory prefix="test" suffix=".php">tests/other</directory>
+		<testsuite>
+			<directory prefix="test" suffix=".php">tests</directory>
 		</testsuite>
 	</testsuites>
 	<groups>

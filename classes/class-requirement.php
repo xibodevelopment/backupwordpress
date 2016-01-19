@@ -126,9 +126,9 @@ class Requirement_Zip_Command_Path extends Requirement {
 	 */
 	protected function test() {
 
-		$hm_backup = new Backup;
+		$backup = new Zip_File_Backup_Engine;
 
-		return $hm_backup->get_zip_command_path();
+		return $backup->get_zip_executable_path();
 
 	}
 
@@ -152,9 +152,9 @@ class Requirement_Mysqldump_Command_Path extends Requirement {
 	 */
 	protected function test() {
 
-		$hm_backup = new Backup;
+		$backup = new Mysqldump_Database_Backup_Engine;
 
-		return $hm_backup->get_mysqldump_command_path();
+		return $backup->get_mysqldump_executable_path();
 
 	}
 
@@ -176,7 +176,7 @@ class Requirement_PHP_User extends Requirement {
 	 */
 	protected function test() {
 
-		if ( ! Backup::is_shell_exec_available() ) {
+		if ( ! Backup_Utilities::is_exec_available() ) {
 			return '';
 		}
 
@@ -202,7 +202,7 @@ class Requirement_PHP_Group extends Requirement {
 	 */
 	protected function test() {
 
-		if ( ! Backup::is_shell_exec_available() ) {
+		if ( ! Backup_Utilities::is_exec_available() ) {
 			return '';
 		}
 
@@ -308,7 +308,7 @@ class Requirement_Safe_Mode extends Requirement {
 	 * @return bool
 	 */
 	protected function test() {
-		return Backup::is_safe_mode_active();
+		return Backup_Utilities::is_safe_mode_on();
 	}
 
 }
@@ -328,7 +328,7 @@ class Requirement_Shell_Exec extends Requirement {
 	 * @return bool
 	 */
 	protected function test() {
-		return Backup::is_shell_exec_available();
+		return Backup_Utilities::is_exec_available();
 	}
 
 }
@@ -368,7 +368,7 @@ class Requirement_Backup_Path extends Requirement {
 	 * @return string
 	 */
 	protected function test() {
-		return Path::get_instance()->get_path();
+		return Path::get_path();
 	}
 
 }
@@ -388,7 +388,7 @@ class Requirement_Backup_Path_Permissions extends Requirement {
 	 * @return string
 	 */
 	protected function test() {
-		return substr( sprintf( '%o', fileperms( hmbkp_path() ) ), - 4 );
+		return substr( sprintf( '%o', fileperms( Path::get_path() ) ), - 4 );
 	}
 
 }
@@ -462,17 +462,13 @@ class Requirement_Backup_Root_Path extends Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'Backup Root Path';
+	var $name = 'Site Root Path';
 
 	/**
 	 * @return string
 	 */
 	protected function test() {
-
-		$hm_backup = new Backup();
-
-		return $hm_backup->get_root();
-
+		return Path::get_root();
 	}
 
 }
@@ -498,9 +494,13 @@ class Requirement_Calculated_Size extends Requirement {
 		$schedules = Schedules::get_instance();
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
-			if ( $schedule->is_site_size_cached() ) {
-				$backup_sizes[ $schedule->get_type() ] = $schedule->get_formatted_site_size();
+
+			$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
+
+			if ( $site_size->is_site_size_cached() ) {
+				$backup_sizes[ $schedule->get_type() ] = $site_size->get_formatted_site_size();
 			}
+
 		}
 
 		return $backup_sizes;
