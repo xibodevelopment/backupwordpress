@@ -349,7 +349,7 @@ function get_settings_url() {
  *
  * @param $error_message
  */
-function add_settings_error( $error_message ){
+function add_settings_error( $error_message ) {
 
 	$hmbkp_settings_errors = get_transient( 'hmbkp_settings_errors' );
 
@@ -360,6 +360,16 @@ function add_settings_error( $error_message ){
 		set_transient( 'hmbkp_settings_errors', array_unique( array_merge( $hmbkp_settings_errors, (array) $error_message ) ) );
 	}
 
+}
+
+/**
+ * Back compat version of add_settings_error
+ *
+ * @deprecated 3.4 add_settings_error()
+ */
+function hmbkp_add_settings_error( $error_message ) {
+	_deprecated_function( __FUNCTION__, '3.4', 'add_settings_error()' );
+	add_settings_error( $error_message );
 }
 
 /**

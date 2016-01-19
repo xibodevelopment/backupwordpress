@@ -8,7 +8,7 @@ class Backup_Director_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->good_backup_engine = new Mock_Backup_Engine;
 		$this->bad_backup_engine = new Mock_Failing_Backup_Engine;
-		$this->backup = new Site_Backup( 'backup.zip' );
+		$this->backup = new Backup( 'backup.zip' );
 
 	}
 

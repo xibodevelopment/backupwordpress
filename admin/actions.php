@@ -193,7 +193,7 @@ function edit_schedule_services_submit() {
 
 	if ( $errors ) {
 		foreach ( $errors as $error ) {
-			hmbkp_add_settings_error( $error );
+			add_settings_error( $error );
 		}
 	}
 

@@ -2,7 +2,7 @@
 
 namespace HM\BackUpWordPress;
 
-class Site_Backup {
+class Backup {
 
 	private $excludes;
 	public $warnings = array();
@@ -184,6 +184,17 @@ class Site_Backup {
 
 	public function get_backup_filepath() {
 		return $this->backup_filepath;
+	}
+
+	/**
+	 * Back compat with old method name
+	 *
+	 * @see Backup::get_backup_filepath()
+ 	 * @deprecated 3.4 Use Backup::get_backup_filepath()
+	 */
+	public function get_archive_filepath() {
+		_deprecated_function( __FUNCTION__, '3.4', 'get_backup_filepath()' );
+		return $this->get_backup_filepath();
 	}
 
 }

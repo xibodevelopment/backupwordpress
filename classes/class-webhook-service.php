@@ -32,7 +32,7 @@ abstract class Webhook_Service extends Service {
 	 * @param  string $action The action received from the backup
 	 * @return void
 	 */
-	public function action( $action, Site_Backup $backup ) {
+	public function action( $action, Backup $backup ) {
 
 		if ( 'hmbkp_backup_complete' !== $action || ! $this->is_service_active() ) {
 			return;

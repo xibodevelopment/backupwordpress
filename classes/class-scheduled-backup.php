@@ -210,6 +210,16 @@ class Scheduled_Backup {
 	}
 
 	/**
+	 * Back compat with old set_status mathod
+	 *
+ 	 * @deprecated 3.4 Backup->status->set_status()
+	 */
+	public function set_status( $message ) {
+		_deprecated_function( __FUNCTION__, '3.4', 'Backup->status->set_status()' );
+		$this->status->set_status( $message );
+	}
+
+	/**
 	 * Get the array of services options for this schedule
 	 *
 	 * @param      $service
@@ -408,7 +418,7 @@ class Scheduled_Backup {
 		}
 
 		// Setup our Site Backup Object
-		$backup = new Site_Backup( $this->get_backup_filename(), $this->get_database_dump_filename() );
+		$backup = new Backup( $this->get_backup_filename(), $this->get_database_dump_filename() );
 		$backup->set_type( $this->get_type() );
 		$backup->set_excludes( $this->get_excludes() );
 		$backup->set_status( $this->status );
@@ -462,7 +472,7 @@ class Scheduled_Backup {
 	 *
 	 * @param $action
 	 */
-	public function do_action( $action, Site_Backup $backup ) {
+	public function do_action( $action, Backup $backup ) {
 
 		// Pass the actions to all the services
 		// Todo should be decoupled into the service class
