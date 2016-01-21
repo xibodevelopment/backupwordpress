@@ -97,7 +97,8 @@ switch ( $schedule->get_max_backups() ) :
 
 endswitch;
 
-$email_msg = $services = '';
+$email_msg = '';
+$services = array();
 
 foreach ( Services::get_services( $schedule ) as $file => $service ) {
 
@@ -105,7 +106,7 @@ foreach ( Services::get_services( $schedule ) as $file => $service ) {
 		$email_msg = $service->get_error_message();
 	}  elseif ( 'Email' === $service->name ) {
 		$email_msg = wp_kses_post( $service->display() );
-	} elseif ( $service->is_service_active() ) {
+	} elseif ( $service->is_service_active() && $service->display() ) {
 		$services[] = esc_html( $service->display() );
 	}
 
@@ -127,8 +128,8 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 		$sentence .= ' ' . $email_msg;
 	}
 
-	if ( is_array( $services ) && array_filter( $services ) ) {
-		$sentence .= ' ' . sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', array_filter( $services ) ) );
+	if ( $services ) {
+		$sentence .= ' ' . sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', $services ) );
 	}
 
 	echo $sentence; ?>
