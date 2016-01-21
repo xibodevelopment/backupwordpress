@@ -14,11 +14,15 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.4.1 =
+
+* Fix a possible `PHP Warning` in the Schedule Sentence.
+
 = 3.4 =
 
-This version introduces a major refactoring code responsible for the files and database backup. We made sure to write
+* This version introduces a major refactoring of the code responsible for the core backup engine. We made sure to write
 unit tests for the new code, and we have tested it on several user's sites. It fixes a lot of old bugs, and Windows
-users should see major improvments to reliablity.
+users should see major improvements to reliability.
 
 = 3.3.4 =
 
