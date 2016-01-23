@@ -103,14 +103,18 @@ class Path {
 
 		$home_path = $site_path;
 
-		// Handle wordpress installed in a subdirectory
-		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
-			$home_path = dirname( $site_path );
-		}
+		if ( path_in_php_open_basedir( dirname( $site_path ) ) ) {
 
-		// Handle wp-config.php being above site_path
-		if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
-			$home_path = $site_path;
+			// Handle wordpress installed in a subdirectory
+			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
+				$home_path = dirname( $site_path );
+			}
+
+			// Handle wp-config.php being above site_path
+			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
+				$home_path = $site_path;
+			}
+
 		}
 
 		return wp_normalize_path( untrailingslashit( $home_path ) );
