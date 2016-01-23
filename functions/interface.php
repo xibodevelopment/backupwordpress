@@ -198,6 +198,10 @@ function set_server_config_notices() {
 		$messages[] = sprintf( __( 'Your site root path %s isn\'t readable.', 'backupwordpress' ), '<code>' . Path::get_root() . '</code>' );
 	}
 
+	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
+		$messages[] = sprintf( __( 'Your database cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>mysqldump</code>', '<code>PDO</code>' );
+	}
+
 	if ( count( $messages ) > 0 ) {
 		$notices->set_notices( 'server_config', $messages, false );
 	}
