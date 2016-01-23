@@ -149,21 +149,12 @@ function set_server_config_notices() {
 
 	$messages = array();
 
-	if ( ! Backup_Utilities::is_exec_available() ) {
-		$php_user  = '<PHP USER>';
-		$php_group = '<PHP GROUP>';
-	} else {
-		$php_user  = shell_exec( 'whoami' );
-		$groups = explode( ' ', shell_exec( 'groups' ) );
-		$php_group = reset( $groups );
-	}
-
 	if ( ! is_dir( Path::get_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable. Run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( Path::get_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( Path::get_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( Path::get_path() ) ) . '</code>' );
+		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %s directory isn\'t writable. Please create the folder manually.', 'backupwordpress' ), '<code>' . esc_html( dirname( Path::get_path() ) ) . '</code>' );
 	}
 
 	if ( is_dir( Path::get_path() ) && ! wp_is_writable( Path::get_path() ) ) {
-		$messages[] = sprintf( __( 'Your backups directory isn\'t writable. Run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( Path::get_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( Path::get_path() ) . '</code>' );
+		$messages[] = __( 'The backups directory isn\'t writable. Please fix the permissions.', 'backupwordpress' );
 	}
 
 	if ( Backup_Utilities::is_safe_mode_on() ) {

@@ -317,12 +317,12 @@ Requirements::register( 'HM\BackUpWordPress\Requirement_Safe_Mode', 'PHP' );
 /**
  * Class Requirement_Shell_Exec
  */
-class Requirement_Shell_Exec extends Requirement {
+class Requirement_Exec extends Requirement {
 
 	/**
 	 * @var string
 	 */
-	var $name = 'Shell Exec';
+	var $name = 'Exec';
 
 	/**
 	 * @return bool
@@ -332,7 +332,7 @@ class Requirement_Shell_Exec extends Requirement {
 	}
 
 }
-Requirements::register( 'HM\BackUpWordPress\Requirement_Shell_Exec', 'PHP' );
+Requirements::register( 'HM\BackUpWordPress\Requirement_Exec', 'PHP' );
 
 /**
  * Class Requirement_Memory_Limit
