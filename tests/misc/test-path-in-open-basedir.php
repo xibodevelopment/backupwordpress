@@ -45,7 +45,7 @@ class testPathInOpenBasedir extends \HM_Backup_UnitTestCase {
 
     public function test_multiple_basedir() {
 
-      $this->basedir = 'foobarbaz:' . __DIR__;
+      $this->basedir = 'foobarbaz' . PATH_SEPARATOR . __DIR__;
       $this->assertTrue( path_in_php_open_basedir( __DIR__, array( $this, 'ini_get_mock' ) ) );
 
     }
