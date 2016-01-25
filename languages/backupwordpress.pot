@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2+.
 msgid ""
 msgstr ""
-"Project-Id-Version: BackUpWordPress 3.4.1\n"
+"Project-Id-Version: BackUpWordPress 3.4.2\n"
 "Report-Msgid-Bugs-To: backupwordpress@hmn.md\n"
-"POT-Creation-Date: 2016-01-21 12:16:48+00:00\n"
+"POT-Creation-Date: 2016-01-25 16:25:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -799,7 +799,7 @@ msgstr ""
 msgid "Unfortunately, the backup file was too large to attach to this email."
 msgstr ""
 
-#: classes/class-path.php:332
+#: classes/class-path.php:336
 msgid "This %s file ensures that other people cannot download your backup files."
 msgstr ""
 
@@ -841,7 +841,7 @@ msgstr ""
 msgid "Argument 1 for %s must be a valid cron recurrence or \"manually\""
 msgstr ""
 
-#: classes/class-scheduled-backup.php:428 functions/interface.php:272
+#: classes/class-scheduled-backup.php:428 functions/interface.php:265
 msgid "Starting backup..."
 msgstr ""
 
@@ -901,41 +901,41 @@ msgstr ""
 msgid "Error: %s"
 msgstr ""
 
-#: functions/core.php:318
+#: functions/core.php:336
 msgid "BackUpWordPress has set up your default schedules."
 msgstr ""
 
-#: functions/core.php:318
+#: functions/core.php:336
 msgid ""
 "By default BackUpWordPress performs a daily backup of your database and a "
 "weekly backup of your database &amp; files. You can modify these schedules."
 msgstr ""
 
-#: functions/core.php:334
+#: functions/core.php:352
 msgid "Once Hourly"
 msgstr ""
 
-#: functions/core.php:335
+#: functions/core.php:353
 msgid "Twice Daily"
 msgstr ""
 
-#: functions/core.php:336
+#: functions/core.php:354
 msgid "Once Daily"
 msgstr ""
 
-#: functions/core.php:337
+#: functions/core.php:355
 msgid "Once Weekly"
 msgstr ""
 
-#: functions/core.php:338
+#: functions/core.php:356
 msgid "Once Every Two Weeks"
 msgstr ""
 
-#: functions/core.php:339
+#: functions/core.php:357
 msgid "Once Monthly"
 msgstr ""
 
-#: functions/core.php:358
+#: functions/core.php:376
 msgid "You can only delete directories inside your WordPress installation"
 msgstr ""
 
@@ -952,167 +952,171 @@ msgstr ""
 msgid "Dismiss this notice."
 msgstr ""
 
-#: functions/interface.php:162
+#: functions/interface.php:153
 msgid ""
-"The backups directory can't be created because your %1$s directory isn't "
-"writable. Run %2$s or %3$s or create the folder yourself."
+"The backups directory can't be created because your %s directory isn't "
+"writable. Please create the folder manually."
 msgstr ""
 
-#: functions/interface.php:166
-msgid ""
-"Your backups directory isn't writable. Run %1$s or %2$s or set the "
-"permissions yourself."
+#: functions/interface.php:157
+msgid "The backups directory isn't writable. Please fix the permissions."
 msgstr ""
 
-#: functions/interface.php:170
+#: functions/interface.php:161
 msgid ""
 "%1$s is running in %2$s, please contact your host and ask them to disable "
 "it. BackUpWordPress may not work correctly whilst %3$s is on."
 msgstr ""
 
-#: functions/interface.php:170
+#: functions/interface.php:161
 msgid "http://php.net/manual/en/features.safe-mode.php"
 msgstr ""
 
-#: functions/interface.php:170
+#: functions/interface.php:161
 msgid "Safe Mode"
 msgstr ""
 
-#: functions/interface.php:178
+#: functions/interface.php:168
+msgid ""
+"Your server has an %1$s restriction in effect and your custom backups "
+"directory (%2$s) is not within the allowed path(s): (%3$s)."
+msgstr ""
+
+#: functions/interface.php:171
 msgid "Your custom path does not exist"
 msgstr ""
 
-#: functions/interface.php:182
-msgid ""
-"Your custom path is unreachable due to a restriction set in your PHP "
-"configuration (open_basedir)"
-msgstr ""
-
-#: functions/interface.php:187
+#: functions/interface.php:176
 msgid ""
 "Your custom backups directory %1$s doesn't exist and can't be created, your "
 "backups will be saved to %2$s instead."
 msgstr ""
 
-#: functions/interface.php:191
+#: functions/interface.php:180
 msgid ""
 "Your custom backups directory %1$s isn't writable, new backups will be "
 "saved to %2$s instead."
 msgstr ""
 
-#: functions/interface.php:198
+#: functions/interface.php:187
 msgid "Your site root path %s isn't readable."
 msgstr ""
 
-#: functions/interface.php:239
+#: functions/interface.php:191
+msgid ""
+"Your database cannot be backed up because your server doesn't support %1$s "
+"or %2$s. Please contact your host and ask them to enable them."
+msgstr ""
+
+#: functions/interface.php:232
 msgid "Database and Files"
 msgstr ""
 
-#: functions/interface.php:243
+#: functions/interface.php:236
 msgid "Files"
 msgstr ""
 
-#: functions/interface.php:247
+#: functions/interface.php:240
 msgid "Database"
 msgstr ""
 
-#: functions/interface.php:254
+#: functions/interface.php:247
 msgid "Legacy"
 msgstr ""
 
-#: functions/interface.php:271
+#: functions/interface.php:264
 msgid "Started %s ago"
 msgstr ""
 
-#: functions/interface.php:273
+#: functions/interface.php:266
 msgid "cancel"
 msgstr ""
 
-#: functions/interface.php:291
+#: functions/interface.php:284
 msgid "No backups completed"
 msgstr ""
 
-#: functions/interface.php:302
+#: functions/interface.php:295
 msgid "Complete Hourly"
 msgstr ""
 
-#: functions/interface.php:303
+#: functions/interface.php:296
 msgid "File Hourly"
 msgstr ""
 
-#: functions/interface.php:304
+#: functions/interface.php:297
 msgid "Database Hourly"
 msgstr ""
 
-#: functions/interface.php:305
+#: functions/interface.php:298
 msgid "Complete Twice Daily"
 msgstr ""
 
-#: functions/interface.php:306
+#: functions/interface.php:299
 msgid "File Twice Daily"
 msgstr ""
 
-#: functions/interface.php:307
+#: functions/interface.php:300
 msgid "Database Twice Daily"
 msgstr ""
 
-#: functions/interface.php:308
+#: functions/interface.php:301
 msgid "Complete Daily"
 msgstr ""
 
-#: functions/interface.php:309
+#: functions/interface.php:302
 msgid "File Daily"
 msgstr ""
 
-#: functions/interface.php:310
+#: functions/interface.php:303
 msgid "Database Daily"
 msgstr ""
 
-#: functions/interface.php:311
+#: functions/interface.php:304
 msgid "Complete Weekly"
 msgstr ""
 
-#: functions/interface.php:312
+#: functions/interface.php:305
 msgid "File Weekly"
 msgstr ""
 
-#: functions/interface.php:313
+#: functions/interface.php:306
 msgid "Database Weekly"
 msgstr ""
 
-#: functions/interface.php:314
+#: functions/interface.php:307
 msgid "Complete Every Two Weeks"
 msgstr ""
 
-#: functions/interface.php:315
+#: functions/interface.php:308
 msgid "File Every Two Weeks"
 msgstr ""
 
-#: functions/interface.php:316
+#: functions/interface.php:309
 msgid "Database Every Two Weeks"
 msgstr ""
 
-#: functions/interface.php:317
+#: functions/interface.php:310
 msgid "Complete Monthly"
 msgstr ""
 
-#: functions/interface.php:318
+#: functions/interface.php:311
 msgid "File Monthly"
 msgstr ""
 
-#: functions/interface.php:319
+#: functions/interface.php:312
 msgid "Database Monthly"
 msgstr ""
 
-#: functions/interface.php:320
+#: functions/interface.php:313
 msgid "Complete Manually"
 msgstr ""
 
-#: functions/interface.php:321
+#: functions/interface.php:314
 msgid "File Manually"
 msgstr ""
 
-#: functions/interface.php:322
+#: functions/interface.php:315
 msgid "Database Manually"
 msgstr ""
 
@@ -1142,7 +1146,7 @@ msgctxt ""
 msgid "Backup my %1$s %2$s %3$s, %4$s."
 msgstr ""
 
-#: functions/interface.php:293
+#: functions/interface.php:286
 msgctxt "backups count"
 msgid "One backup completed"
 msgid_plural "%1$s backups completed"

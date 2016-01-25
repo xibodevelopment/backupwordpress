@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.4
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 
 Simple automated backups of your WordPress-powered website.
 
@@ -118,10 +118,6 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
-= 3.4.1 =
-
-* Fix a possible `PHP Warning` in the Schedule Sentence.
-
 = 3.4 =
 
 * This version introduces a major refactoring of the code responsible for the core backup engine. We made sure to write
@@ -162,53 +158,24 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.4.2
+
+* Remove the usage of `shell_exec` in two of our warning messages, fixes a PHP Warning on systems with it disabled.
+* Improve how we handle `open_basedir` restrictions, fixes a PHP Warning on some systems. Adds unit tests to cover `open_basedir` handling.
+* Show an error message if neither `mysqldump` nor `PDO:mysql` are available. Database backups won't work without at least one of them.
+* Improve our upgrade code for users upgrading from pre version 2.0. Fixes a possible fatal error and ensures backups and backup settings are correctly brought forward.
+
+### 3.4.1
+
+* Fix a possible `PHP Warning` in the Schedule Sentence.
+
 ### 3.4 / 2016/01/20
 
-* Updated composer packages
-* Strip empty services from the schedule sentence.
-* Back compat pass
-* Ensure row actions always show
-* don't hardcode byte sizes in unit tests
-* correct namespaced Finder call
-* allow for more variance when comparing filesizes
-* Add unit tests for Site Size
-* fixup the full-backup tests
-* Add tests for the Backup Status class
-* Unit tests now pass on Windows
-* correctly ignore the backup running file when zipping the database.
-* Normalize a bunch of paths to fix issues on windows
-* Don't declare Service::action() as abstract
-* use submit button function
-* Close the service settings page when clicking done as long as there are no errors
-* Remove the old .backup_errors and .backup_warnings files and associated functions as they are no longer used.
-* Fixup the email and webhook services
-* Delete the backups class and fix a recursion issue in mysqldump
-* Re-organise the tests and fixup the failing ones.
-* fix excludes
-* Fixup the backup status.
-* ensure excludes are correctly passed through the backups director
-* Ensure unwritable backup paths are never chosen
-* Return methods directly instead of storing in unneeded variables
-* Fix several bugs in the site size functionality
-* add a test to confirm backups exclude backups, currently failing
-* Hook the new Site_Backup class up the scheduled backups
-* Introduce `Site_Size`, `Excludes` & `Site_Backup`.
-* fix some global state issues in the Path tests
-* Fixup excludes functionality
-* Fix the backup director unit tests
-* More namespacing and renaming.
-* Start using namespaces in a lot more places.
-* start integrating with main plugin
-* Add in tests for unreadable directories and account for how zip uniquely handles them
-* Skip dots in hmbkp_rmdirtree
-* Introduce `Backup_Utilities` and move the static methods from `Backup_Engine` too it.
-* backcompat version of assertNotWPError for when tests run on old versions of WordPress
-* More unit test fixes
-* Update to the latest version of symfony/Finder
-* Fix a fatal error in the tests
-* remove uneeded code copy paste
-* The major backups refactor of 2015
-
+* Introduces a major re-factor of the underlying backups engine, many bugs fixed and much improved unit test coverage.
+* Vastly improved Windows Server support.
+* We no longer write errors and warnings to files on disk.
+* Update to the latest version of `symfony/finder`.
+* Update to the latest version of `ifsnop/mysqldump-php`.
 
 ### 3.3.4 / 2015-12-10
 
@@ -220,11 +187,11 @@ users should see major improvements to reliability.
 * Fixes Typos in i18n strings
 * Backups finish faster
 * Fix an issue that caused the site size to report as twice as large as it should
-* Adds PHP mysqldump fallback lib
+* Adds PHP mysqldump fallback lib (`ifsnop/mysqldump-php`)
 
 ### 3.3.2 / 2015-10-15
 
-* Mis improvements
+* Misc improvements
 
 ### 3.3.1 / 2015-10-12
 
