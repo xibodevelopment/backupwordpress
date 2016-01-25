@@ -388,9 +388,9 @@ function clear_settings_errors(){
 	return delete_transient( 'hmbkp_settings_errors' );
 }
 
-function path_in_php_open_basedir( $path ) {
+function path_in_php_open_basedir( $path, $ini_get = 'ini_get' ) {
 
-	$open_basedir = @ini_get( 'open_basedir' );
+	$open_basedir = @call_user_func( $ini_get, 'open_basedir' );
 
 	if ( ! $open_basedir ) {
 		return true;
