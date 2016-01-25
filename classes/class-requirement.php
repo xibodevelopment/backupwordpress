@@ -16,7 +16,7 @@ abstract class Requirement {
 	/**
 	 * @return mixed
 	 */
-	abstract protected static function test();
+	protected static function test() {}
 
 	/**
 	 * @return mixed
