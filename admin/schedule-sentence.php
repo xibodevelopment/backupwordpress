@@ -1,14 +1,20 @@
 <?php
 
-$filesize = hmbkp_get_site_size_text( $schedule );
+namespace HM\BackUpWordPress;
+
+$filesize = get_site_size_text( $schedule );
 
 // Backup Type
-$type = strtolower( hmbkp_human_get_type( $schedule->get_type() ) );
+$type = strtolower( human_get_type( $schedule->get_type() ) );
 
 // Backup Time
 $day = date_i18n( 'l', $schedule->get_next_occurrence( false ) );
 
+// Next Backup
 $next_backup = 'title="' . esc_attr( sprintf( __( 'The next backup will be on %1$s at %2$s %3$s', 'backupwordpress' ), date_i18n( get_option( 'date_format' ), $schedule->get_next_occurrence( false ) ), date_i18n( get_option( 'time_format' ), $schedule->get_next_occurrence( false ) ), date_i18n( 'T', $schedule->get_next_occurrence( false ) ) ) ) . '"';
+
+// Backup status
+$status = new Backup_Status( $schedule->get_id() );
 
 // Backup Re-occurrence
 switch ( $schedule->get_reoccurrence() ) :
@@ -67,8 +73,8 @@ switch ( $schedule->get_reoccurrence() ) :
 
 endswitch;
 
-$server = '<span title="' . esc_attr( hmbkp_path() ) . '">' . __( 'this server', 'backupwordpress' ) . '</span>';
-$server = '<code>' . esc_attr( str_replace( HM\BackUpWordPress\Backup::get_home_path(), '', hmbkp_path() ) ) . '</code>';
+$server = '<span title="' . esc_attr( Path::get_path() ) . '">' . __( 'this server', 'backupwordpress' ) . '</span>';
+$server = '<code>' . esc_attr( str_replace( Path::get_home_path(), '', Path::get_path() ) ) . '</code>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
@@ -81,7 +87,7 @@ switch ( $schedule->get_max_backups() ) :
 
 	case 0 :
 
-		$backup_to_keep = sprintf( __( 'don\'t store any backups in on this server', 'backupwordpress' ), hmbkp_path() );
+		$backup_to_keep = sprintf( __( 'don\'t store any backups in on this server', 'backupwordpress' ), Path::get_path() );
 
 	break;
 
@@ -91,15 +97,16 @@ switch ( $schedule->get_max_backups() ) :
 
 endswitch;
 
-$email_msg = $services = '';
+$email_msg = '';
+$services = array();
 
-foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $file => $service ) {
+foreach ( Services::get_services( $schedule ) as $file => $service ) {
 
 	if ( is_wp_error( $service ) ) {
 		$email_msg = $service->get_error_message();
 	}  elseif ( 'Email' === $service->name ) {
 		$email_msg = wp_kses_post( $service->display() );
-	} elseif ( $service->is_service_active() ) {
+	} elseif ( $service->is_service_active() && $service->display() ) {
 		$services[] = esc_html( $service->display() );
 	}
 
@@ -113,22 +120,22 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 } ?>
 
-<div class="hmbkp-schedule-sentence<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?>">
+<div class="hmbkp-schedule-sentence<?php if ( $status->get_status() ) { ?> hmbkp-running<?php } ?>">
 
 	<?php $sentence = sprintf( _x( 'Backup my %1$s %2$s %3$s, %4$s.', '1: Backup Type 2: Total size of backup 3: Schedule 4: Number of backups to store', 'backupwordpress' ), '<span>' . esc_html( $type ) . '</span>', $filesize, $reoccurrence, $backup_to_keep );
 
 	if ( $email_msg ) {
-		$sentence .= sprintf( __( '%s. ', 'backupwordpress' ), $email_msg );
+		$sentence .= ' ' . $email_msg;
 	}
 
 	if ( $services ) {
-		$sentence .= sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', array_filter( $services ) ) );
+		$sentence .= ' ' . sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', $services ) );
 	}
 
 	echo $sentence; ?>
 
-	<?php if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) {
-		hmbkp_schedule_status( $schedule );
+	<?php if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) {
+		schedule_status( $schedule );
 	} ?>
 
 	<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule-settings.php' ); ?>
@@ -145,19 +152,21 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
  *
  * @return string
  */
-function hmbkp_get_site_size_text( HM\BackUpWordPress\Scheduled_Backup $schedule ) {
+function get_site_size_text( Scheduled_Backup $schedule ) {
 
 	if ( isset( $_GET['hmbkp_add_schedule'] ) ) {
-
 		return '';
+	}
 
-	} elseif ( ( 'database' === $schedule->get_type() ) || $schedule->is_site_size_cached() ) {
+	$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
-		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $schedule->get_formatted_site_size( true ) ) );
+	if ( ( 'database' === $schedule->get_type() ) || $site_size->is_site_size_cached() ) {
+
+		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $site_size->get_formatted_site_size() ) );
 
 	} else {
 
-		return sprintf( '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your backup&hellip;', 'backupwordpress' ) . '</code>)' );
+		return sprintf( '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your site&hellip;', 'backupwordpress' ) . '</code>)' );
 
 	}
 

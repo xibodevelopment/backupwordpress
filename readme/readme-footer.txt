@@ -14,6 +14,16 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.4 =
+
+* This version introduces a major refactoring of the code responsible for the core backup engine. We made sure to write
+unit tests for the new code, and we have tested it on several user's sites. It fixes a lot of old bugs, and Windows
+users should see major improvements to reliability.
+
+= 3.3.4 =
+
+* WordPress 4.4 compatibility.
+
 = 3.3.1 =
 
 * Fixes a bug that would prevent downloading backups since 3.3.0 - please update.
@@ -28,21 +38,56 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 = 3.1.3 =
 
-  * Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
-  
+* Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
+
 = 3.0.4 =
 
-  * Fixes a few minor bugs. Immediate update is recommended.
+* Fixes a few minor bugs. Immediate update is recommended.
 
 = 3.0.2 =
 
-  * Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
+* Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
 
 = 3.0.1 =
 
-  * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
+* This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.4.2
+
+* Remove the usage of `shell_exec` in two of our warning messages, fixes a PHP Warning on systems with it disabled.
+* Improve how we handle `open_basedir` restrictions, fixes a PHP Warning on some systems. Adds unit tests to cover `open_basedir` handling.
+* Show an error message if neither `mysqldump` nor `PDO:mysql` are available. Database backups won't work without at least one of them.
+* Improve our upgrade code for users upgrading from pre version 2.0. Fixes a possible fatal error and ensures backups and backup settings are correctly brought forward.
+
+### 3.4.1
+
+* Fix a possible `PHP Warning` in the Schedule Sentence.
+
+### 3.4 / 2016/01/20
+
+* Introduces a major re-factor of the underlying backups engine, many bugs fixed and much improved unit test coverage.
+* Vastly improved Windows Server support.
+* We no longer write errors and warnings to files on disk.
+* Update to the latest version of `symfony/finder`.
+* Update to the latest version of `ifsnop/mysqldump-php`.
+
+### 3.3.4 / 2015-12-10
+
+* Fixes styling issues with WordPress 4.4
+
+### 3.3.3 / 2015-11-13
+
+* Fix broken Intercom support window
+* Fixes Typos in i18n strings
+* Backups finish faster
+* Fix an issue that caused the site size to report as twice as large as it should
+* Adds PHP mysqldump fallback lib (`ifsnop/mysqldump-php`)
+
+### 3.3.2 / 2015-10-15
+
+* Misc improvements
 
 ### 3.3.1 / 2015-10-12
 

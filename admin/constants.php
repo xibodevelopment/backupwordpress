@@ -1,3 +1,9 @@
+<?php
+
+namespace HM\BackUpWordPress;
+
+?>
+
 <div id="hmbkp-constants">
 
 	<p><?php printf( __( 'You can %1$s any of the following %2$s in your %3$s to control advanced settings. %4$s. Defined %5$s will be highlighted.', 'backupwordpress' ), '<code>define</code>', '<code>' . __( 'Constants', 'backupwordpress' ) . '</code>', '<code>wp-config.php</code>', '<a href="http://codex.wordpress.org/Editing_wp-config.php">' . __( 'The Codex can help', 'backupwordpress' ) . '</a>', '<code>' . __( 'Constants', 'backupwordpress' ) . '</code>' ); ?></p>
@@ -14,7 +20,7 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The path to folder you would like to store your backup files in, defaults to %s.', 'backupwordpress' ), '<code>' . esc_html( hmbkp_path() ) . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p>
+				<p><?php printf( __( 'The path to the folder you would like to store your backup files in, defaults to %s.', 'backupwordpress' ), '<code>' . esc_html( Path::get_path() ) . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_PATH', '/home/willmot/backups' );</code></p>
 
 			</td>
 
@@ -94,7 +100,7 @@
 					<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . esc_html( HMBKP_ROOT ) . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'backupwordpress' ), '<code>' . HM\BackUpWordPress\Backup::get_home_path() . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p>
+				<p><?php printf( __( 'The root directory that is backed up. Defaults to %s.', 'backupwordpress' ), '<code>' . Path::get_home_path() . '</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ROOT', ABSPATH . 'wp/' );</code></p>
 
 			</td>
 
@@ -116,7 +122,7 @@
 
 		</tr>
 
-		<?php foreach ( HM\BackUpWordPress\Services::get_services() as $file => $service ) {
+		<?php foreach ( Services::get_services() as $file => $service ) {
 			echo wp_kses_post( call_user_func( array( $service, 'constant' ) ) );
 		} ?>
 

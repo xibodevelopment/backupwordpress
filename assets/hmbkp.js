@@ -52,7 +52,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	// Run a backup
 	$( document ).on( 'click', '.hmbkp-run', function ( e ) {
-
+		wp.heartbeat.interval( 'fast' );
 		$( this ).closest( '.hmbkp-schedule-sentence' ).addClass( 'hmbkp-running' );
 
 		$( '.hmbkp-error' ).removeClass( 'hmbkp-error' );
@@ -98,7 +98,7 @@ jQuery( document ).ready( function ( $ ) {
 			$( '.hmbkp-status' ).replaceWith( data.hmbkp_schedule_status );
 		}
 
-		if ( (data.hmbkp_site_size !== undefined ) && ( $( 'code.calculating' ).length ) ) {
+		if ( ( data.hmbkp_site_size !== undefined ) && ( $( 'code.calculating' ).length ) ) {
 			$( 'code.calculating' ).text( data.hmbkp_site_size );
 			var excludes = $( '.hmbkp-exclude-settings' );
 			if ( excludes.length ) {
@@ -115,6 +115,15 @@ jQuery( document ).ready( function ( $ ) {
 		window.parent.tb_remove();
 
 	} );
+
+	$( document ).on( 'click', '#hmbkp-warning-backup .notice-dismiss', function(){
+		$.post(
+			ajaxurl,
+			{
+				'action': 'hmbkp_dismiss_error'
+			}
+		);
+	} )
 
 } );
 
@@ -166,50 +175,5 @@ function hmbkpToggleScheduleFields( recurrence ) {
 			break;
 
 	}
-
-}
-
-function hmbkpCatchResponseAndOfferToEmail( data ) {
-
-	// Backup Succeeded
-	if ( ! data || data === 0 ) {
-		location.reload( true );
-	}
-
-	// The backup failed, show the error and offer to have it emailed back
-	else {
-
-		jQuery( '.hmbkp-schedule-sentence.hmbkp-running' ).removeClass( 'hmbkp-running' ).addClass( 'hmbkp-error' );
-
-		jQuery.post(
-			ajaxurl,
-			{'nonce': hmbkp.nonce, 'action': 'hmbkp_backup_error', 'hmbkp_error': data},
-			function ( data ) {
-
-				if ( ! data || data === 0 ) {
-					return;
-				} else {
-					location.reload( true );
-				}
-			}
-		);
-
-	}
-
-	jQuery( document ).one( 'click', '.hmbkp_send_error_via_email', function ( e ) {
-
-		e.preventDefault();
-
-		jQuery( this ).addClass( 'hmbkp-ajax-loading' ).attr( 'disabled', 'disabled' );
-
-		jQuery.post(
-			ajaxurl,
-			{'nonce': hmbkp.nonce, 'action': 'hmbkp_email_error', 'hmbkp_error': data},
-			function () {
-				//jQuery.colorbox.close();
-			}
-		);
-
-	} );
 
 }

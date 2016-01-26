@@ -1,10 +1,16 @@
+<?php
+
+namespace HM\BackUpWordPress;
+
+?>
+
 <div class="wrap">
 
 	<h1>
 
-		BackUpWordPress Extensions
+		<a class="page-title-action" href="<?php echo get_settings_url() ?>">&larr; Backups</a>
 
-		<a class="page-title-action" href="<?php echo hmbkp_get_settings_url() ?>">Backups</a>
+		BackUpWordPress Extensions
 
 	</h1>
 
