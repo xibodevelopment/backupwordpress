@@ -108,6 +108,8 @@ class Path {
 			// Handle wordpress installed in a subdirectory
 			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
 				$home_path = dirname( $site_path );
+			} else if ( get_site_url() !== get_home_url() ) {
+				$home_path = dirname( $site_path );
 			}
 
 			// Handle wp-config.php being above site_path
