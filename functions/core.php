@@ -1,20 +1,12 @@
 <?php
 
-/**
- * Returns the backup path
- *
- * @see Path
- * @todo remove the need for this
- */
-function hmbkp_path() {
-	return HM\BackUpWordPress\Path::get_instance()->get_path();
-}
+namespace HM\BackUpWordPress;
 
 /**
  * Handles anything that needs to be
  * done when the plugin is updated
  */
-function hmbkp_update() {
+function update() {
 
 	// Update from backUpWordPress 0.4.5
 	if ( get_option( 'bkpwp_max_backups' ) ) {
@@ -63,7 +55,7 @@ function hmbkp_update() {
 		/**
 		 * Setup a backwards compatible schedule
 		 */
-		$legacy_schedule = new HM\BackUpWordPress\Scheduled_Backup( 'backup' );
+		$legacy_schedule = new Scheduled_Backup( 'backup' );
 
 		// Backup type
 		if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) ) {
@@ -115,9 +107,27 @@ function hmbkp_update() {
 		}
 
 		// Set the archive filename to what it used to be
-		$legacy_schedule->backup->set_archive_filename( implode( '-', array( get_bloginfo( 'name' ), 'backup', current_time( 'Y-m-d-H-i-s' ) ) ) . '.zip' );
+		$legacy_schedule->backup_filename = implode( '-', array( get_bloginfo( 'name' ), 'backup', current_time( 'Y-m-d-H-i-s' ) ) ) . '.zip';
 
 		$legacy_schedule->save();
+
+		$legacy_path = get_option( 'hmbkp_path' );
+
+		if ( $legacy_path ) {
+
+			// Prepend 'backup-' to the beginning of any legacy backups so they are picked up by the legacy schedule
+			if ( $handle = opendir( $legacy_path ) ) {
+				while ( false !== ( $file = readdir( $handle ) ) ) {
+					if ( 'zip' === pathinfo( $file, PATHINFO_EXTENSION ) ) {
+						rename( trailingslashit( $legacy_path ) . $file, trailingslashit( $legacy_path ) . 'backup-' . $file );
+					}
+				}
+				closedir( $handle );
+			}
+
+			PATH::get_instance()->move_old_backups( $legacy_path );
+
+		}
 
 		// Remove the legacy options
 		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name ) {
@@ -254,7 +264,7 @@ function hmbkp_update() {
 	// Update from PRIOR_VERSION
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.3.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		$schedules = HM\BackUpWordPress\Schedules::get_instance();
+		$schedules = Schedules::get_instance();
 
 		// Loop through all schedules and re-set the reccurrence to include hmbkp_
 		foreach ( $schedules->get_schedules() as $schedule ) {
@@ -272,17 +282,17 @@ function hmbkp_update() {
 	}
 
 	// Every update
-	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( HM\BackUpWordPress\Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		HM\BackUpWordPress\Setup::deactivate();
+		Setup::deactivate();
 
-		HM\BackUpWordPress\Path::get_instance()->protect_path( 'reset' );
+		Path::get_instance()->protect_path( 'reset' );
 
 	}
 
 	// Update the stored version
-	if ( get_option( 'hmbkp_plugin_version' ) !== HM\BackUpWordPress\Plugin::PLUGIN_VERSION ) {
-		update_option( 'hmbkp_plugin_version', HM\BackUpWordPress\Plugin::PLUGIN_VERSION );
+	if ( get_option( 'hmbkp_plugin_version' ) !== Plugin::PLUGIN_VERSION ) {
+		update_option( 'hmbkp_plugin_version', Plugin::PLUGIN_VERSION );
 	}
 
 }
@@ -290,9 +300,9 @@ function hmbkp_update() {
 /**
  * Setup the default backup schedules
  */
-function hmbkp_setup_default_schedules() {
+function setup_default_schedules() {
 
-	$schedules = HM\BackUpWordPress\Schedules::get_instance();
+	$schedules = Schedules::get_instance();
 
 	if ( $schedules->get_schedules() ) {
 		return;
@@ -302,9 +312,9 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a database backup daily and store backups
 	 * for the last 2 weeks
 	 */
-	$database_daily = new HM\BackUpWordPress\Scheduled_Backup( (string) time() );
+	$database_daily = new Scheduled_Backup( (string) time() );
 	$database_daily->set_type( 'database' );
-	$database_daily->set_schedule_start_time( hmbkp_determine_start_time( 'daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
+	$database_daily->set_schedule_start_time( determine_start_time( 'daily', array( 'hours' => '23', 'minutes' => '0' ) ) );
 	$database_daily->set_reoccurrence( 'daily' );
 	$database_daily->set_max_backups( 7 );
 	$database_daily->save();
@@ -313,9 +323,9 @@ function hmbkp_setup_default_schedules() {
 	 * Schedule a complete backup to run weekly and store backups for
 	 * the last 3 months
 	 */
-	$complete_weekly = new HM\BackUpWordPress\Scheduled_Backup( (string) ( time() + 1 ) );
+	$complete_weekly = new Scheduled_Backup( (string) ( time() + 1 ) );
 	$complete_weekly->set_type( 'complete' );
-	$complete_weekly->set_schedule_start_time( hmbkp_determine_start_time( 'weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
+	$complete_weekly->set_schedule_start_time( determine_start_time( 'weekly', array( 'day_of_week' => 'sunday', 'hours' => '3', 'minutes' => '0' ) ) );
 	$complete_weekly->set_reoccurrence( 'weekly' );
 	$complete_weekly->set_max_backups( 3 );
 	$complete_weekly->save();
@@ -328,7 +338,7 @@ function hmbkp_setup_default_schedules() {
 
 }
 
-add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
+add_action( 'admin_init', '\HM\BackUpWordPress\setup_default_schedules', 11 );
 
 /**
  * Return an array of cron schedules
@@ -336,7 +346,7 @@ add_action( 'admin_init', 'hmbkp_setup_default_schedules' );
  * @param $schedules
  * @return array $reccurrences
  */
-function hmbkp_cron_schedules( $schedules = array() ) {
+function cron_schedules( $schedules = array() ) {
 
 	$schedules += array(
 		'hourly'      => array( 'interval' => HOUR_IN_SECONDS, 'display' => __( 'Once Hourly', 'backupwordpress' ) ),
@@ -350,7 +360,7 @@ function hmbkp_cron_schedules( $schedules = array() ) {
 	return $schedules;
 }
 
-add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
+add_filter( 'cron_schedules', '\HM\BackUpWordPress\cron_schedules' );
 
 /**
  * Recursively delete a directory including
@@ -360,26 +370,31 @@ add_filter( 'cron_schedules', 'hmbkp_cron_schedules' );
  * @return bool
  * @return bool|WP_Error
  */
-function hmbkp_rmdirtree( $dir ) {
+function rmdirtree( $dir ) {
 
-	if ( false !== strpos( HM\BackUpWordPress\Backup::get_home_path(), $dir ) )
+	if ( false !== strpos( Path::get_home_path(), $dir ) ) {
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'backupwordpress' ) ) );
+	}
 
-	if ( is_file( $dir ) )
+	if ( is_file( $dir ) ){
 		@unlink( $dir );
+	}
 
-	if ( ! is_dir( $dir ) || ! is_readable( $dir ) )
+	if ( ! is_dir( $dir ) || ! is_readable( $dir ) ){
 		return false;
+	}
 
-	$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir ), RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
+	$files = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $dir, \RecursiveDirectoryIterator::SKIP_DOTS ), \RecursiveIteratorIterator::CHILD_FIRST, \RecursiveIteratorIterator::CATCH_GET_CHILD );
 
 	foreach ( $files as $file ) {
 
-		if ( $file->isDir() )
+		if ( $file->isDir() ){
 			@rmdir( $file->getPathname() );
+		}
 
-		else
+		else{
 			@unlink( $file->getPathname() );
+		}
 
 	}
 
@@ -394,15 +409,13 @@ function hmbkp_rmdirtree( $dir ) {
  *
  * @return bool
  */
-function hmbkp_possible() {
+function is_backup_possible() {
 
-	if ( ! wp_is_writable( hmbkp_path() ) || ! is_dir( hmbkp_path() ) ) {
+	if ( ! wp_is_writable( Path::get_path() ) || ! is_dir( Path::get_path() ) ) {
 		return false;
 	}
 
-	$test_backup = new HM\BackUpWordPress\Backup();
-
-	if ( ! is_readable( $test_backup->get_root() ) ) {
+	if ( ! is_readable( Path::get_root() ) ) {
 		return false;
 	}
 
@@ -416,7 +429,7 @@ function hmbkp_possible() {
  *
  * return int the filesize
  */
-function hmbkp_get_max_attachment_size() {
+function get_max_attachment_size() {
 
 	$max_size = '10mb';
 
@@ -427,10 +440,10 @@ function hmbkp_get_max_attachment_size() {
 
 }
 
-function hmbkp_is_path_accessible( $dir ) {
+function is_path_accessible( $dir ) {
 
 	// Path is inaccessible
-	if ( strpos( $dir, HM\BackUpWordPress\Backup::get_home_path() ) === false ) {
+	if ( strpos( $dir, Path::get_home_path() ) === false ) {
 		return false;
 	}
 
@@ -442,8 +455,8 @@ function hmbkp_is_path_accessible( $dir ) {
  *
  * @return array
  */
-function hmbkp_get_cron_schedules() {
-	return hmbkp_cron_schedules();
+function get_cron_schedules() {
+	return cron_schedules();
 }
 
 /**
@@ -464,7 +477,7 @@ function hmbkp_get_cron_schedules() {
  * }
  * @return int $timestamp Returns the resulting timestamp on success and Int 0 on failure
  */
-function hmbkp_determine_start_time( $type, $times = array() ) {
+function determine_start_time( $type, $times = array() ) {
 
 	// Default to in 10 minutes
 	if ( ! empty( $times['now'] ) ) {
@@ -484,7 +497,7 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
 
 	$args = wp_parse_args( $times, $default_times );
 
-	$intervals = HM\BackUpWordPress\Scheduled_Backup::get_cron_schedules();
+	$intervals = get_cron_schedules();
 
 	// Allow the hours and minutes to be overwritten by a constant
 	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {
@@ -558,9 +571,100 @@ function hmbkp_determine_start_time( $type, $times = array() ) {
  *
  * @return string
  */
-function hmbkp_admin_action_url( $action, array $query_args = array() ) {
+function admin_action_url( $action, array $query_args = array() ) {
 
 	$query_args = array_merge( $query_args, array( 'action' => 'hmbkp_' . $action ) );
 
 	return esc_url( wp_nonce_url( add_query_arg( $query_args, admin_url( 'admin-post.php' ) ), 'hmbkp_' . $action, 'hmbkp-' . $action . '_nonce' ) );
+}
+
+/**
+ * OS dependant way to pipe stderr to null
+ *
+ * @return string The exec argument to pipe stderr to null
+ */
+function ignore_stderr() {
+
+	// If we're on Windows
+	if ( DIRECTORY_SEPARATOR == '\\' ) {
+		return '2>nul';
+	}
+
+	// Or Unix
+	return '2>/dev/null';
+
+}
+
+/**
+ * Return the contents of `$directory` as a single depth list ordered by total filesize.
+ *
+ * Will schedule background threads to recursively calculate the filesize of subdirectories.
+ * The total filesize of each directory and subdirectory is cached in a transient for 1 week.
+ *
+ * @param string $directory The directory to list
+ *
+ * @todo doesn't really belong in this class, should just be a function
+ * @return array            returns an array of files ordered by filesize
+ */
+function list_directory_by_total_filesize( $directory ) {
+
+	$files = $files_with_no_size = $empty_files = $files_with_size = $unreadable_files = array();
+
+	if ( ! is_dir( $directory ) ) {
+		return $files;
+	}
+
+	$finder = new \Symfony\Component\Finder\Finder();
+	$finder->followLinks();
+	$finder->ignoreDotFiles( false );
+	$finder->ignoreUnreadableDirs();
+	$finder->depth( '== 0' );
+
+	$site_size = new Site_Size;
+
+	$files = $finder->in( $directory );
+
+	foreach ( $files as $entry ) {
+
+		// Get the total filesize for each file and directory
+		$filesize = $site_size->filesize( $entry );
+
+		if ( $filesize ) {
+
+			// If there is already a file with exactly the same filesize then let's keep increasing the filesize of this one until we don't have a clash
+			while ( array_key_exists( $filesize, $files_with_size ) ) {
+				$filesize ++;
+			}
+
+			$files_with_size[ $filesize ] = $entry;
+
+		} elseif ( 0 === $filesize ) {
+
+			$empty_files[] = $entry;
+
+		} else {
+
+			$files_with_no_size[] = $entry;
+
+		}
+
+	}
+
+	// Sort files by filesize, largest first
+	krsort( $files_with_size );
+
+	// Add 0 byte files / directories to the bottom
+	$files = $files_with_size + array_merge( $empty_files, $unreadable_files );
+
+	// Add directories that are still calculating to the top
+	if ( $files_with_no_size ) {
+
+		// We have to loop as merging or concatenating the array would re-flow the keys which we don't want because the filesize is stored in the key
+		foreach ( $files_with_no_size as $entry ) {
+			array_unshift( $files, $entry );
+		}
+	}
+
+	return $files;
+
 }

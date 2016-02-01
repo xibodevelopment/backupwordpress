@@ -16,7 +16,7 @@ abstract class Requirement {
 	/**
 	 * @return mixed
 	 */
-	abstract protected function test();
+	protected static function test() {}
 
 	/**
 	 * @return mixed
@@ -68,7 +68,7 @@ class Requirement_Zip_Archive extends Requirement {
 	/**
 	 * @return bool
 	 */
-	protected function test() {
+	public static function test() {
 
 		if ( class_exists( 'ZipArchive' ) ) {
 			return true;
@@ -96,7 +96,7 @@ class Requirement_Directory_Iterator_Follow_Symlinks extends Requirement {
 	/**
 	 * @return bool
 	 */
-	protected function test() {
+	public static function test() {
 
 		if ( defined( 'RecursiveDirectoryIterator::FOLLOW_SYMLINKS' ) ) {
 			return true;
@@ -124,11 +124,11 @@ class Requirement_Zip_Command_Path extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 
-		$hm_backup = new Backup;
+		$backup = new Zip_File_Backup_Engine;
 
-		return $hm_backup->get_zip_command_path();
+		return $backup->get_zip_executable_path();
 
 	}
 
@@ -150,11 +150,11 @@ class Requirement_Mysqldump_Command_Path extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 
-		$hm_backup = new Backup;
+		$backup = new Mysqldump_Database_Backup_Engine;
 
-		return $hm_backup->get_mysqldump_command_path();
+		return $backup->get_mysqldump_executable_path();
 
 	}
 
@@ -174,9 +174,9 @@ class Requirement_PHP_User extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 
-		if ( ! Backup::is_shell_exec_available() ) {
+		if ( ! Backup_Utilities::is_exec_available() ) {
 			return '';
 		}
 
@@ -200,9 +200,9 @@ class Requirement_PHP_Group extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 
-		if ( ! Backup::is_shell_exec_available() ) {
+		if ( ! Backup_Utilities::is_exec_available() ) {
 			return '';
 		}
 
@@ -226,7 +226,7 @@ class Requirement_PHP_Version extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return PHP_VERSION;
 	}
 
@@ -246,7 +246,7 @@ class Requirement_Cron_Array extends Requirement {
 	/**
 	 * @return bool|mixed
 	 */
-	protected function test() {
+	public static function test() {
 
 		$cron = get_option( 'cron' );
 
@@ -274,7 +274,7 @@ class Requirement_Language extends Requirement {
 	/**
 	 * @return bool|mixed
 	 */
-	protected function test() {
+	public static function test() {
 
 		// Since 4.0
 		$language = get_option( 'WPLANG' );
@@ -307,8 +307,8 @@ class Requirement_Safe_Mode extends Requirement {
 	/**
 	 * @return bool
 	 */
-	protected function test() {
-		return Backup::is_safe_mode_active();
+	public static function test() {
+		return Backup_Utilities::is_safe_mode_on();
 	}
 
 }
@@ -317,22 +317,22 @@ Requirements::register( 'HM\BackUpWordPress\Requirement_Safe_Mode', 'PHP' );
 /**
  * Class Requirement_Shell_Exec
  */
-class Requirement_Shell_Exec extends Requirement {
+class Requirement_Exec extends Requirement {
 
 	/**
 	 * @var string
 	 */
-	var $name = 'Shell Exec';
+	var $name = 'Exec';
 
 	/**
 	 * @return bool
 	 */
-	protected function test() {
-		return Backup::is_shell_exec_available();
+	public static function test() {
+		return Backup_Utilities::is_exec_available();
 	}
 
 }
-Requirements::register( 'HM\BackUpWordPress\Requirement_Shell_Exec', 'PHP' );
+Requirements::register( 'HM\BackUpWordPress\Requirement_Exec', 'PHP' );
 
 /**
  * Class Requirement_Memory_Limit
@@ -347,7 +347,7 @@ class Requirement_PHP_Memory_Limit extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return @ini_get( 'memory_limit' );
 	}
 
@@ -367,8 +367,8 @@ class Requirement_Backup_Path extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
-		return Path::get_instance()->get_path();
+	public static function test() {
+		return Path::get_path();
 	}
 
 }
@@ -387,8 +387,8 @@ class Requirement_Backup_Path_Permissions extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
-		return substr( sprintf( '%o', fileperms( hmbkp_path() ) ), - 4 );
+	public static function test() {
+		return substr( sprintf( '%o', fileperms( Path::get_path() ) ), - 4 );
 	}
 
 }
@@ -407,7 +407,7 @@ class Requirement_WP_CONTENT_DIR extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return WP_CONTENT_DIR;
 	}
 
@@ -427,7 +427,7 @@ class Requirement_WP_CONTENT_DIR_Permissions extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return substr( sprintf( '%o', fileperms( WP_CONTENT_DIR ) ), - 4 );
 	}
 
@@ -447,7 +447,7 @@ class Requirement_ABSPATH extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return ABSPATH;
 	}
 
@@ -462,17 +462,13 @@ class Requirement_Backup_Root_Path extends Requirement {
 	/**
 	 * @var string
 	 */
-	var $name = 'Backup Root Path';
+	var $name = 'Site Root Path';
 
 	/**
 	 * @return string
 	 */
-	protected function test() {
-
-		$hm_backup = new Backup();
-
-		return $hm_backup->get_root();
-
+	public static function test() {
+		return Path::get_root();
 	}
 
 }
@@ -491,16 +487,20 @@ class Requirement_Calculated_Size extends Requirement {
 	/**
 	 * @return array
 	 */
-	protected function test() {
+	public static function test() {
 
 		$backup_sizes = array();
 
 		$schedules = Schedules::get_instance();
 
 		foreach ( $schedules->get_schedules() as $schedule ) {
-			if ( $schedule->is_site_size_cached() ) {
-				$backup_sizes[ $schedule->get_type() ] = $schedule->get_formatted_site_size();
+
+			$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
+
+			if ( $site_size->is_site_size_cached() ) {
+				$backup_sizes[ $schedule->get_type() ] = $site_size->get_formatted_site_size();
 			}
+
 		}
 
 		return $backup_sizes;
@@ -523,7 +523,7 @@ class Requirement_WP_Cron_Test extends Requirement {
 	/**
 	 * @return mixed
 	 */
-	protected function test() {
+	public static function test() {
 		return (bool) get_option( 'hmbkp_wp_cron_test_failed' );
 	}
 
@@ -543,7 +543,7 @@ class Requirement_PHP_API extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return php_sapi_name();
 	}
 
@@ -563,7 +563,7 @@ class Requirement_Server_Software extends Requirement {
 	/**
 	 * @return bool
 	 */
-	protected function test() {
+	public static function test() {
 
 		if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) )
 			return $_SERVER['SERVER_SOFTWARE'];
@@ -588,7 +588,7 @@ class Requirement_Server_OS extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return PHP_OS;
 	}
 
@@ -608,7 +608,7 @@ class Requirement_PHP_Disable_Functions extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return @ini_get( 'disable_functions' );
 	}
 
@@ -628,7 +628,7 @@ class Requirement_PHP_Open_Basedir extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return @ini_get( 'open_basedir' );
 	}
 
@@ -650,7 +650,7 @@ class Requirement_Define_HMBKP_PATH extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_PATH' ) ? HMBKP_PATH : '';
 	}
 
@@ -670,7 +670,7 @@ class Requirement_Define_HMBKP_ROOT extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_ROOT' ) ? HMBKP_ROOT : '';
 	}
 
@@ -690,7 +690,7 @@ class Requirement_Define_HMBKP_MYSQLDUMP_PATH extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_MYSQLDUMP_PATH' ) ? HMBKP_MYSQLDUMP_PATH : '';
 	}
 
@@ -710,7 +710,7 @@ class Requirement_Define_HMBKP_ZIP_PATH extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_ZIP_PATH' ) ? HMBKP_ZIP_PATH : '';
 	}
 
@@ -730,7 +730,7 @@ class Requirement_Define_HMBKP_CAPABILITY extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_CAPABILITY' ) ? HMBKP_CAPABILITY : '';
 	}
 
@@ -750,7 +750,7 @@ class Requirement_Define_HMBKP_EMAIL extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_EMAIL' ) ? HMBKP_EMAIL : '';
 	}
 
@@ -770,7 +770,7 @@ class Requirement_Define_HMBKP_ATTACHMENT_MAX_FILESIZE extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ? HMBKP_ATTACHMENT_MAX_FILESIZE : '';
 	}
 
@@ -790,7 +790,7 @@ class Requirement_Define_HMBKP_EXCLUDE extends Requirement {
 	/**
 	 * @return string
 	 */
-	protected function test() {
+	public static function test() {
 		return defined( 'HMBKP_EXCLUDE' ) ? HMBKP_EXCLUDE : '';
 	}
 
@@ -801,7 +801,7 @@ class Requirement_Active_Plugins extends Requirement {
 
 	var $name = 'Active Plugins';
 
-	protected function test(){
+	public static function test(){
 		return get_option( 'active_plugins' );
 	}
 
@@ -812,7 +812,7 @@ class Requirement_Home_Url extends Requirement {
 
 	var $name = 'Home URL';
 
-	protected function test(){
+	public static function test(){
 		return home_url();
 	}
 
@@ -823,7 +823,7 @@ class Requirement_Site_Url extends Requirement {
 
 	var $name = 'Site URL';
 
-	protected function test() {
+	public static function test() {
 		return site_url();
 	}
 
@@ -833,7 +833,7 @@ Requirements::register( 'HM\BackUpWordPress\Requirement_Site_Url', 'Site' );
 class Requirement_Plugin_Version extends Requirement {
 	var $name = 'Plugin Version';
 
-	protected function test() {
+	public static function test() {
 		return Plugin::PLUGIN_VERSION;
 	}
 }
@@ -843,7 +843,7 @@ class Requirement_Max_Exec extends Requirement {
 
 	var $name = 'Max execution time';
 
-	protected function test(){
+	public static function test(){
 		return @ini_get( 'max_execution_time' );
 	}
 }
@@ -853,7 +853,7 @@ class Requirement_PDO extends Requirement {
 
 	var $name = 'PDO';
 
-	protected function test(){
+	public static function test() {
 
 		if ( class_exists( 'PDO' ) && \PDO::getAvailableDrivers() ) {
 			return implode( ', ', \PDO::getAvailableDrivers() );

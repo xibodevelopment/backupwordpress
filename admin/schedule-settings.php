@@ -1,26 +1,28 @@
 <?php
 
-if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
+namespace HM\BackUpWordPress;
+
+if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 
 	<div class="hmbkp-schedule-actions row-actions">
 
 		<a class="hmbkp-run" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-ajax.php' ) ), 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' ) ); ?>"><?php _e( 'Run now', 'backupwordpress' ); ?></a>  |
 
-		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ), 'hmbkp-edit-schedule' ); ?>"><?php _e( 'Settings', 'backupwordpress' ); ?></a> |
+		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings', 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ), 'hmbkp-edit-schedule' ); ?>"><?php _e( 'Settings', 'backupwordpress' ); ?></a> |
 
 		<?php
 
 		// Only show excludes if we are backing up files
 		if ( 'database' !== $schedule->get_type() ) : ?>
-			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes', 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php _e( 'Excludes', 'backupwordpress' ); ?></a> |
+			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes', 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ) ); ?>"><?php _e( 'Excludes', 'backupwordpress' ); ?></a> |
 		<?php endif; ?>
 
-		<?php foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $service ) :
+		<?php foreach ( Services::get_services( $schedule ) as $service ) :
 
 			if ( ! $service->has_form() )
 				continue; ?>
 
-			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings_' . $service->get_slug() , 'hmbkp_schedule_id' => $schedule->get_id() ), hmbkp_get_settings_url() ) ); ?>"><?php echo esc_html( $service->name ); ?></a> |
+			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings_' . $service->get_slug() , 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ) ); ?>"><?php echo esc_html( $service->name ); ?></a> |
 
 		<?php endforeach; ?>
 
@@ -45,7 +47,7 @@ if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_
 	} ?>
 
 	<?php // Show the service form if we are viewing one
-	foreach ( HM\BackUpWordPress\Services::get_services( $schedule ) as $service ) : ?>
+	foreach ( Services::get_services( $schedule ) as $service ) : ?>
 
 		<?php if ( $_GET['action'] === 'hmbkp_edit_schedule' && $_GET['hmbkp_panel'] === 'hmbkp_edit_schedule_settings_' . $service->get_slug() ) { ?>
 
@@ -53,7 +55,7 @@ if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_
 
 			<?php
 
-			$hmbkp_form_errors = hmbkp_get_settings_errors();
+			$hmbkp_form_errors = get_settings_errors();
 
 			if ( ! empty( $hmbkp_form_errors ) ) :
 
@@ -72,7 +74,7 @@ if ( HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule->get_
 			endif;
 
 			// We can clear them now we've displayed them
-			hmbkp_clear_settings_errors();
+			clear_settings_errors();
 
 			?>
 
