@@ -37,6 +37,9 @@ class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	/**
+	 * In this scenario, index.php and wp-config are both in the parent folder.
+	 */
 	function test_standard_install_in_subdirectory_1() {
 
 		$abspath = $this->test_data . '/exclude' ;
@@ -48,6 +51,9 @@ class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	/**
+	 * In this scenario, there is an index.php in the parent folder of the WP install, but wp-config.php is in the WP folder
+	 */
 	function test_standard_install_in_subdirectory_2() {
 
 		$abspath = $this->test_data . '/exclude' ;
