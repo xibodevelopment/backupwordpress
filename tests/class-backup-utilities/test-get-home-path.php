@@ -37,10 +37,21 @@ class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	function test_standard_install_in_subdirectory() {
+	function test_standard_install_in_subdirectory_1() {
 
 		$abspath = $this->test_data . '/exclude' ;
 		$this->wp_config_in( dirname( $abspath ) );
+		$this->index_in( dirname( $abspath ) );
+		$path = Path::get_home_path( $abspath );
+
+		$this->assertEquals( dirname( $abspath ), $path );
+
+	}
+
+	function test_standard_install_in_subdirectory_2() {
+
+		$abspath = $this->test_data . '/exclude' ;
+		$this->wp_config_in( $abspath );
 		$this->index_in( dirname( $abspath ) );
 		$path = Path::get_home_path( $abspath );
 
