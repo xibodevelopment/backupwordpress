@@ -106,7 +106,9 @@ class Path {
 		if ( path_in_php_open_basedir( dirname( $site_path ) ) ) {
 
 			// Handle wordpress installed in a subdirectory
-			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
+			// 1. index.php and wp-config.php found in parent dir
+			// 2. index.php in parent dir, wp-config.php in $site_path ( wp-config.php can be in both locations )
+			if ( ( file_exists( dirname( $site_path ) . '/wp-config.php' ) || file_exists( $site_path . '/wp-config.php' ) )  && file_exists( dirname( $site_path ) . '/index.php' ) ) {
 				$home_path = dirname( $site_path );
 			}
 
