@@ -6,7 +6,7 @@
 div#hmbkp-warning, h2.nav-tab-wrapper + div[id^="hmbkp"] { margin: 20px 0 15px; }
 h2 + div[id^="hmbkp"] input { max-width: 100%; }
 
-.nav-tab.hmbkp-running:not(.nav-tab-active):before { width: 20px; height: 20px; margin: 0 10px -4px 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
+li a.hmbkp-running:not(.current):before { width: 20px; height: 20px; margin: -1px 10px -5px 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
 
 .hmbkp-upsell { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ccc; }
 .hmbkp-upsell a { color: #57792b }

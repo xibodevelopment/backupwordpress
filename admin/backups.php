@@ -19,7 +19,7 @@ if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
 		<?php foreach ( $schedules as $schedule ) :
 			$status = new Backup_Status( $schedule->get_id() ); ?>
 
-			<li class="<?php if ( $status->get_status() ) { ?>hmbkp-running<?php } ?>"<?php if ( $status->get_status() ) { ?> title="<?php echo esc_attr( strip_tags( $status->get_status() ) ); ?>"<?php } ?>><a href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?>" class="<?php if ( $schedule->get_id() === $current_schedule->get_id() ) { ?>current<?php } ?>"><?php echo esc_html( translated_schedule_title( $schedule->get_slug(), $schedule->get_name() ) ); ?> <span class="count">(<?php echo esc_html( count( $schedule->get_backups() ) ); ?>)</span></a></li>
+			<li<?php if ( $status->get_status() ) { ?> title="<?php echo esc_attr( strip_tags( $status->get_status() ) ); ?>"<?php } ?>><a href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?>" class="<?php if ( $status->get_status() ) { ?>hmbkp-running<?php } ?> <?php if ( $schedule->get_id() === $current_schedule->get_id() ) { ?>current<?php } ?>"><?php echo esc_html( translated_schedule_title( $schedule->get_slug(), $schedule->get_name() ) ); ?> <span class="count">(<?php echo esc_html( count( $schedule->get_backups() ) ); ?>)</span></a></li>
 
 		<?php endforeach; ?>
 
