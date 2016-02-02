@@ -149,21 +149,12 @@ function set_server_config_notices() {
 
 	$messages = array();
 
-	if ( ! Backup_Utilities::is_exec_available() ) {
-		$php_user  = '<PHP USER>';
-		$php_group = '<PHP GROUP>';
-	} else {
-		$php_user  = shell_exec( 'whoami' );
-		$groups = explode( ' ', shell_exec( 'groups' ) );
-		$php_group = reset( $groups );
-	}
-
 	if ( ! is_dir( Path::get_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %1$s directory isn\'t writable. Run %2$s or %3$s or create the folder yourself.', 'backupwordpress' ), '<code>' . esc_html( dirname( Path::get_path() ) ) . '</code>', '<code>chown ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( dirname( Path::get_path() ) ) . '</code>', '<code>chmod 777 ' . esc_html( dirname( Path::get_path() ) ) . '</code>' );
+		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %s directory isn\'t writable. Please create the folder manually.', 'backupwordpress' ), '<code>' . esc_html( dirname( Path::get_path() ) ) . '</code>' );
 	}
 
 	if ( is_dir( Path::get_path() ) && ! wp_is_writable( Path::get_path() ) ) {
-		$messages[] = sprintf( __( 'Your backups directory isn\'t writable. Run %1$s or %2$s or set the permissions yourself.', 'backupwordpress' ), '<code>chown -R ' . esc_html( $php_user ) . ':' . esc_html( $php_group ) . ' ' . esc_html( Path::get_path() ) . '</code>', '<code>chmod -R 777 ' . esc_html( Path::get_path() ) . '</code>' );
+		$messages[] = __( 'The backups directory isn\'t writable. Please fix the permissions.', 'backupwordpress' );
 	}
 
 	if ( Backup_Utilities::is_safe_mode_on() ) {
@@ -173,21 +164,19 @@ function set_server_config_notices() {
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
 
 		// Suppress open_basedir warning https://bugs.php.net/bug.php?id=53041
-		if ( ! @file_exists( HMBKP_PATH ) ) {
+		if ( ! path_in_php_open_basedir( HMBKP_PATH ) ) {
+			$messages[] = sprintf( __( 'Your server has an %1$s restriction in effect and your custom backups directory (%2$s) is not within the allowed path(s): (%3$s).', 'backupwordpress' ), '<code>open_basedir</code>', '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( @ini_get( 'open_basedir' ) ) . '</code>' );
 
+		} elseif ( ! file_exists( HMBKP_PATH ) ) {
 			$messages[] = sprintf( __( 'Your custom path does not exist', 'backupwordpress' ) );
-
-		} elseif ( is_restricted_custom_path() ) {
-
-			$messages[] = sprintf( __( 'Your custom path is unreachable due to a restriction set in your PHP configuration (open_basedir)', 'backupwordpress' ) );
 
 		} else {
 
-			if ( ! @is_dir( HMBKP_PATH ) ) {
+			if ( ! is_dir( HMBKP_PATH ) ) {
 				$messages[] = sprintf( __( 'Your custom backups directory %1$s doesn\'t exist and can\'t be created, your backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( Path::get_path() ) . '</code>' );
 			}
 
-			if ( @is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
+			if ( is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
 				$messages[] = sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( Path::get_path() ) . '</code>' );
 
 			}
@@ -196,6 +185,10 @@ function set_server_config_notices() {
 
 	if ( ! is_readable( Path::get_root() ) ) {
 		$messages[] = sprintf( __( 'Your site root path %s isn\'t readable.', 'backupwordpress' ), '<code>' . Path::get_root() . '</code>' );
+	}
+
+	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
+		$messages[] = sprintf( __( 'Your database cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>mysqldump</code>', '<code>PDO</code>' );
 	}
 
 	if ( count( $messages ) > 0 ) {
@@ -390,27 +383,32 @@ function clear_settings_errors(){
 	return delete_transient( 'hmbkp_settings_errors' );
 }
 
-function is_restricted_custom_path() {
+function path_in_php_open_basedir( $path, $ini_get = 'ini_get' ) {
 
-	$open_basedir = @ini_get( 'open_basedir' );
+	$open_basedir = @call_user_func( $ini_get, 'open_basedir' );
 
-	if ( 0 === strlen( $open_basedir ) ) {
-		return false;
+	if ( ! $open_basedir ) {
+		return true;
 	}
 
-	$open_basedir_paths = array_map( 'trim', explode( ':', $open_basedir ) );
+	$open_basedir_paths = array_map( 'trim', explode( PATH_SEPARATOR, $open_basedir ) );
 
-	// Is backups path in the open_basedir allowed paths?
-	if ( in_array( HMBKP_PATH, $open_basedir_paths ) ) {
-		return false;
+	if ( ! $open_basedir_paths ) {
+		return true;
 	}
 
-	// Is backups path a subdirectory of one of the allowed paths?
-	foreach ( $open_basedir_paths as $path ) {
-		if ( 0 === strpos( HMBKP_PATH, $path ) ) {
-			return false;
+	// Is path in the open_basedir allowed paths?
+	if ( in_array( $path, $open_basedir_paths ) ) {
+		return true;
+	}
+
+	// Is path a subdirectory of one of the allowed paths?
+	foreach ( $open_basedir_paths as $basedir_path ) {
+		if ( 0 === strpos( $path, $basedir_path ) ) {
+			return true;
 		}
 	}
 
-	return true;
+	return false;
+
 }
