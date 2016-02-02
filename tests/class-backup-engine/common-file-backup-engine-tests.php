@@ -187,6 +187,19 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	public function test_file_with_strange_characters() {
+
+		file_put_contents( PATH::get_root() . '/Groß.jpg', '' );
+
+		$this->backup->backup();
+
+		$this->assertFileExists( PATH::get_root() . '/Groß.jpg' );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'Groß.jpg' ) );
+
+		unlink( PATH::get_root() . '/Groß.jpg' );
+
+	}
+
 	/**
 	 * Test a complete backup of the WordPress Site
 	 *
