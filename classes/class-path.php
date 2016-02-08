@@ -105,16 +105,15 @@ class Path {
 
 		if ( path_in_php_open_basedir( dirname( $site_path ) ) ) {
 
-			// Handle wordpress installed in a subdirectory
-			// 1. index.php and wp-config.php found in parent dir
-			// 2. index.php in parent dir, wp-config.php in $site_path ( wp-config.php can be in both locations )
-			if ( ( file_exists( dirname( $site_path ) . '/wp-config.php' ) || file_exists( $site_path . '/wp-config.php' ) )  && file_exists( dirname( $site_path ) . '/index.php' ) ) {
-				$home_path = dirname( $site_path );
-			}
-
-			// Handle wp-config.php being above site_path
-			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
-				$home_path = $site_path;
+			$home    = set_url_scheme( get_option( 'home' ), 'http' );
+			$siteurl = set_url_scheme( get_option( 'siteurl' ), 'http' );
+			if ( ! empty( $home ) && 0 !== strcasecmp( $home, $siteurl ) ) {
+				$wp_path_rel_to_home = str_ireplace( $home, '', $siteurl ); /* $siteurl - $home */
+				$pos = strripos( str_replace( '\\', '/', $_SERVER['SCRIPT_FILENAME'] ), trailingslashit( $wp_path_rel_to_home ) );
+				$home_path = substr( $_SERVER['SCRIPT_FILENAME'], 0, $pos );
+				$home_path = trailingslashit( $home_path );
+			} else {
+				$home_path = ABSPATH;
 			}
 
 		}
