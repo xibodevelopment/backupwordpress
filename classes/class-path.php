@@ -109,13 +109,22 @@ class Path {
 			$siteurl = set_url_scheme( get_option( 'siteurl' ), 'http' );
 			if ( ! empty( $home ) && 0 !== strcasecmp( $home, $siteurl ) ) {
 				$wp_path_rel_to_home = str_ireplace( $home, '', $siteurl ); /* $siteurl - $home */
-				$pos = strripos( str_replace( '\\', '/', $_SERVER['SCRIPT_FILENAME'] ), trailingslashit( $wp_path_rel_to_home ) );
+				$pos = strripos( wp_normalize_path( $_SERVER['SCRIPT_FILENAME'] ), trailingslashit( $wp_path_rel_to_home ) );
 				$home_path = substr( $_SERVER['SCRIPT_FILENAME'], 0, $pos );
 				$home_path = trailingslashit( $home_path );
 			} else {
-				$home_path = ABSPATH;
+				$home_path = wp_normalize_path( ABSPATH );
 			}
 
+			if ( is_multisite() ) {
+				require_once ABSPATH . '/wp-admin/includes/network.php';
+				$hostname          = get_clean_basedomain();
+				$slashed_home      = trailingslashit( get_option( 'home' ) );
+				$base              = parse_url( $slashed_home, PHP_URL_PATH );
+				$document_root_fix = wp_normalize_path( realpath( $_SERVER['DOCUMENT_ROOT'] ) );
+				$abspath_fix       = wp_normalize_path( ABSPATH );
+				$home_path         = 0 === strpos( $abspath_fix, $document_root_fix ) ? $document_root_fix . $base : $home_path;
+			}
 		}
 
 		return wp_normalize_path( untrailingslashit( $home_path ) );
