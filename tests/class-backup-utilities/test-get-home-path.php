@@ -18,7 +18,7 @@ class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 	 */
 	function test_standard_install() {
 
-		$this->assertEquals( wp_normalize_path( ABSPATH ), Path::get_home_path() );
+		$this->assertEquals( wp_normalize_path( untrailingslashit( ABSPATH ) ), Path::get_home_path() );
 
 	}
 
@@ -30,19 +30,19 @@ class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 		$home = get_option( 'home' );
 		$siteurl = get_option( 'siteurl' );
 		$sfn = $_SERVER['SCRIPT_FILENAME'];
-		$this->assertEquals( wp_normalize_path( ABSPATH ), Path::get_home_path() );
+		$this->assertEquals( wp_normalize_path( untrailingslashit( ABSPATH ) ), Path::get_home_path() );
 
 		update_option( 'home', 'http://localhost' );
 		update_option( 'siteurl', 'http://localhost/wp' );
 
 		$_SERVER['SCRIPT_FILENAME'] = 'D:\root\vhosts\site\httpdocs\wp\wp-admin\options-permalink.php';
-		$this->assertEquals( 'D:/root/vhosts/site/httpdocs/', Path::get_home_path() );
+		$this->assertEquals( 'D:/root/vhosts/site/httpdocs/', trailingslashit( Path::get_home_path() ) );
 
 		$_SERVER['SCRIPT_FILENAME'] = '/Users/foo/public_html/trunk/wp/wp-admin/options-permalink.php';
-		$this->assertEquals( '/Users/foo/public_html/trunk/', Path::get_home_path() );
+		$this->assertEquals( '/Users/foo/public_html/trunk/',  trailingslashit( Path::get_home_path() ) );
 
 		$_SERVER['SCRIPT_FILENAME'] = 'S:/home/wordpress/trunk/wp/wp-admin/options-permalink.php';
-		$this->assertEquals( 'S:/home/wordpress/trunk/', Path::get_home_path() );
+		$this->assertEquals( 'S:/home/wordpress/trunk/',  trailingslashit( Path::get_home_path() ) );
 
 		update_option( 'home', $home );
 		update_option( 'siteurl', $siteurl );
