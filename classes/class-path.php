@@ -112,8 +112,6 @@ class Path {
 				$pos = strripos( wp_normalize_path( $_SERVER['SCRIPT_FILENAME'] ), trailingslashit( $wp_path_rel_to_home ) );
 				$home_path = substr( $_SERVER['SCRIPT_FILENAME'], 0, $pos );
 				$home_path = trailingslashit( $home_path );
-			} else {
-				$home_path = wp_normalize_path( ABSPATH );
 			}
 
 			if ( is_multisite() ) {
