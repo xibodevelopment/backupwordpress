@@ -54,6 +54,14 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.4.4-beta
+
+* Fixes a bug which caused the root path to the WordPress install to be miscalulated in certain setups.
+
+### 3.4.3
+
+* Fix a bug where backups were not downloadable when WordPress installed in a subdirectory
+
 ### 3.4.2
 
 * Remove the usage of `shell_exec` in two of our warning messages, fixes a PHP Warning on systems with it disabled.
