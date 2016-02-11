@@ -105,18 +105,22 @@ class Path {
 
 		if ( path_in_php_open_basedir( dirname( $site_path ) ) ) {
 
-			// Handle wordpress installed in a subdirectory
-			// 1. index.php and wp-config.php found in parent dir
-			// 2. index.php in parent dir, wp-config.php in $site_path ( wp-config.php can be in both locations )
-			if ( ( file_exists( dirname( $site_path ) . '/wp-config.php' ) || file_exists( $site_path . '/wp-config.php' ) )  && file_exists( dirname( $site_path ) . '/index.php' ) ) {
-				$home_path = dirname( $site_path );
+			$home    = set_url_scheme( get_option( 'home' ), 'http' );
+			$siteurl = set_url_scheme( get_option( 'siteurl' ), 'http' );
+			if ( ! empty( $home ) && 0 !== strcasecmp( $home, $siteurl ) ) {
+				$wp_path_rel_to_home = str_ireplace( $home, '', $siteurl ); /* $siteurl - $home */
+				$pos = strripos( wp_normalize_path( $_SERVER['SCRIPT_FILENAME'] ), trailingslashit( $wp_path_rel_to_home ) );
+				$home_path = substr( $_SERVER['SCRIPT_FILENAME'], 0, $pos );
+				$home_path = trailingslashit( $home_path );
 			}
 
-			// Handle wp-config.php being above site_path
-			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
-				$home_path = $site_path;
+			if ( is_multisite() ) {
+				$slashed_home      = trailingslashit( get_option( 'home' ) );
+				$base              = parse_url( $slashed_home, PHP_URL_PATH );
+				$document_root_fix = wp_normalize_path( realpath( $_SERVER['DOCUMENT_ROOT'] ) );
+				$abspath_fix       = wp_normalize_path( ABSPATH );
+				$home_path         = 0 === strpos( $abspath_fix, $document_root_fix ) ? $document_root_fix . $base : $home_path;
 			}
-
 		}
 
 		return wp_normalize_path( untrailingslashit( $home_path ) );
