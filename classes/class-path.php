@@ -115,8 +115,6 @@ class Path {
 			}
 
 			if ( is_multisite() ) {
-				require_once ABSPATH . '/wp-admin/includes/network.php';
-				$hostname          = get_clean_basedomain();
 				$slashed_home      = trailingslashit( get_option( 'home' ) );
 				$base              = parse_url( $slashed_home, PHP_URL_PATH );
 				$document_root_fix = wp_normalize_path( realpath( $_SERVER['DOCUMENT_ROOT'] ) );
