@@ -63,11 +63,13 @@ final class Plugin {
 	 */
 	public function maybe_self_deactivate() {
 
-		if ( false === Setup::meets_requirements() ) {
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
 
-			add_action( 'admin_init', array( 'HM\BackUpWordPress\Setup', 'self_deactivate' ) );
+		if ( false === \HMBKP_Setup::meets_requirements() ) {
 
-			add_action( 'all_admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
+			add_action( 'admin_init', array( '\HMBKP_Setup', 'self_deactivate' ) );
+
+			add_action( 'all_admin_notices', array( '\HMBKP_Setup', 'display_admin_notices' ) );
 
 			return true;
 
