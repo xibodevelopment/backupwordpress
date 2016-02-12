@@ -290,6 +290,10 @@ final class Plugin {
 	 */
 	protected function generate_key() {
 
+		$check = apply_filters( "hmbkp_generate_key", null );
+		if ( null !== $check )
+			return $check;
+
 		$key = array( ABSPATH, time() );
 		$constants = array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' );
 
