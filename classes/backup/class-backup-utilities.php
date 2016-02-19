@@ -52,9 +52,9 @@ class Backup_Utilities {
 		}
 
 		// Can we issue a simple echo command?
-		exec( 'echo backupwordpress', $output, $return );
+		@exec( 'echo backupwordpress', $output, $return );
 
-		if ( $return !== 0 ) {
+		if ( 0 !== $return ) {
 			return false;
 		}
 
@@ -116,14 +116,12 @@ class Backup_Utilities {
 			exec( escapeshellarg( $path ) . ' --version ' . ignore_stderr(), $output, $result );
 
 			// If the command executed successfully then this must be the correct path
-			if ( $result === 0 ) {
+			if ( 0 === $result ) {
 				return $path;
 			}
-
 		}
 
 		return false;
 
 	}
-
 }
