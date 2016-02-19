@@ -25,6 +25,23 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	public function test_only_database_zipped_up() {
+
+		$this->backup->set_type( 'database' );
+		Path::get_instance()->reset_path();
+
+		file_put_contents( PATH::get_path() . '/foo.zip.SmuhtP', 'bar' );
+		file_put_contents( PATH::get_path() . '/zicBotXQ', 'baz' );
+
+		$this->backup->run();
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( basename( $this->backup->get_database_backup_filepath() ) ) );
+		$this->assertArchiveNotContains( $this->backup->get_backup_filepath(), array( 'zicBotXQ', 'foo.zip.SmuhtP' ) );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 1 );
+
+	}
+
 	public function test_files_backup() {
 
 		$this->backup->set_type( 'files' );
@@ -33,7 +50,7 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		$finder = new Mock_File_Backup_Engine;
 		$finder = $finder->get_files();
 
-		foreach( $finder as $file ) {
+		foreach ( $finder as $file ) {
 			$files[] = $file->getRelativePathname();
 		}
 
@@ -49,7 +66,7 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		$finder = new Mock_File_Backup_Engine;
 		$finder = $finder->get_files();
 
-		foreach( $finder as $file ) {
+		foreach ( $finder as $file ) {
 			$files[] = $file->getRelativePathname();
 		}
 
@@ -75,5 +92,4 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		$this->assertArchiveNotContains( $backup2, array( 'backup1.zip' ) );
 
 	}
-
 }
