@@ -33,7 +33,7 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		$finder = new Mock_File_Backup_Engine;
 		$finder = $finder->get_files();
 
-		foreach( $finder as $file ) {
+		foreach ( $finder as $file ) {
 			$files[] = $file->getRelativePathname();
 		}
 
@@ -49,7 +49,7 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		$finder = new Mock_File_Backup_Engine;
 		$finder = $finder->get_files();
 
-		foreach( $finder as $file ) {
+		foreach ( $finder as $file ) {
 			$files[] = $file->getRelativePathname();
 		}
 
@@ -76,4 +76,15 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	public function test_with_disabled_functions() {
+
+		if ( Backup_Utilities::is_exec_available() ) {
+			$this->markTestSkipped( 'Disable exec in your php.ini to enable this test to run' );
+		}
+
+		$this->backup->run();
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+
+	}
 }

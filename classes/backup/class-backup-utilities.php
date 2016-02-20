@@ -51,10 +51,12 @@ class Backup_Utilities {
 			return false;
 		}
 
-		// Can we issue a simple echo command?
-		@exec( 'echo backupwordpress', $output, $return );
+		$output = $return_status = null;
 
-		if ( 0 !== $return ) {
+		// Can we issue a simple echo command?
+		@exec( 'echo backupwordpress', $output, $return_status );
+
+		if ( 0 !== $return_status ) {
 			return false;
 		}
 
