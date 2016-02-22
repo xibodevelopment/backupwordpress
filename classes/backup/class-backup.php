@@ -37,6 +37,8 @@ class Backup {
 
 	public function run() {
 
+		Path::get_instance()->cleanup();
+
 		if ( $this->type !== 'file' ) {
 			$this->backup_database();
 		}
@@ -44,6 +46,8 @@ class Backup {
 		if ( $this->type !== 'database' ) {
 			$this->backup_files();
 		}
+
+		Path::get_instance()->cleanup();
 
 	}
 
