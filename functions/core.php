@@ -284,7 +284,9 @@ function update() {
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
-		Setup::deactivate();
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
+		
+		\HMBKP_Setup::deactivate();
 
 		Path::get_instance()->protect_path( 'reset' );
 
