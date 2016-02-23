@@ -54,6 +54,13 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.4.4 / 2016-02-23
+
+* Ensure temporary files are correctly cleaned up before and after running a backup.
+* Avoid killing site if plugin is active on PHP 52
+* Allow custom secure key using filter
+* Fixes a bug which caused the root path to the WordPress install to be miscalulated in certain setups.
+
 ### 3.4.4-beta
 
 * Fixes a bug which caused the root path to the WordPress install to be miscalulated in certain setups.
