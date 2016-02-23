@@ -54,6 +54,10 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.4.5 / 2016-02-23
+
+* Fix fatal error on upgrade
+
 ### 3.4.4 / 2016-02-23
 
 * Ensure temporary files are correctly cleaned up before and after running a backup.

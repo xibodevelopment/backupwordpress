@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.4.2
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 
 Simple automated backups of your WordPress-powered website.
 
@@ -157,6 +157,10 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.4.5 / 2016-02-23
+
+* Fix fatal error on upgrade
 
 ### 3.4.4 / 2016-02-23
 
