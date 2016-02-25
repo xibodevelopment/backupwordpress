@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a5d481f4e8a2c50cc0c488d199f4c83e",
-    "content-hash": "77f3dd81e4007d746a29f10fd5dce8af",
+    "hash": "cb9d8a07e83e01f486197a76fcd5305a",
     "packages": [
         {
             "name": "ifsnop/mysqldump-php",
@@ -61,25 +60,25 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.8.2",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "c90fabdd97e431ee19b6383999cf35334dff27da"
+                "reference": "623bda0abd9aa29e529c8e9c08b3b84171914723"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/c90fabdd97e431ee19b6383999cf35334dff27da",
-                "reference": "c90fabdd97e431ee19b6383999cf35334dff27da",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/623bda0abd9aa29e529c8e9c08b3b84171914723",
+                "reference": "623bda0abd9aa29e529c8e9c08b3b84171914723",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9"
+                "php": ">=5.5.9"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -106,7 +105,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2016-01-14 08:26:52"
+            "time": "2016-01-27 05:14:46"
         }
     ],
     "packages-dev": [],
