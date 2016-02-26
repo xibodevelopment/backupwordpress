@@ -148,6 +148,7 @@ final class Plugin {
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file-zip.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file-zip-archive.php' );
+		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup-engine-file-pclzip.php' );
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/backup/class-backup.php' );
 

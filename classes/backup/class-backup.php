@@ -79,7 +79,8 @@ class Backup {
 		// Fire up the file backup engines
 		$file_backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
 			new Zip_File_Backup_Engine,
-			new Zip_Archive_File_Backup_Engine
+			new Zip_Archive_File_Backup_Engine,
+			new Pclzip_File_Backup_Engine
 		) );
 
 		// Set the file backup engine settings
@@ -114,7 +115,8 @@ class Backup {
 		// Fire up the file backup engines
 		$backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
 			new Zip_File_Backup_Engine,
-			new Zip_Archive_File_Backup_Engine
+			new Zip_Archive_File_Backup_Engine,
+			new Pclzip_File_Backup_Engine
 		) );
 
 		// Set the file backup engine settings
