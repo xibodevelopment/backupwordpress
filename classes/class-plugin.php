@@ -172,6 +172,8 @@ final class Plugin {
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/deprecated.php' );
 
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-extensions.php' );
+
 		// Load the wp cli command
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			include( HMBKP_PLUGIN_PATH . 'classes/class-backupwordpress-wp-cli-command.php' );
