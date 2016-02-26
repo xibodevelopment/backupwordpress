@@ -15,6 +15,10 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->paths = array_combine( $paths, $paths );
 
+		if ( false === Backup_Utilities::is_exec_available() ) {
+			$this->markTestSkipped( 'exec is disabled' );
+		}
+
 	}
 
 	public function test_can_pick_first_path() {
@@ -35,9 +39,9 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 		$paths = $this->paths;
 		$paths[] = $path = trim( shell_exec( 'which mysql ' . ignore_stderr() ) );
 
-        if ( ! $path ) {
-            $this->markTestSkipped( 'Couldn\'t find mysql' );
-        }
+		if ( ! $path ) {
+			$this->markTestSkipped( 'Couldn\'t find mysql' );
+		}
 
 		unset( $paths['mysql'] );
 		shuffle( $paths );
@@ -45,5 +49,4 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 		$this->assertEquals( $path, Backup_Utilities::get_executable_path( $paths ) );
 
 	}
-
 }
