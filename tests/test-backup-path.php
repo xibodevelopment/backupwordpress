@@ -46,7 +46,7 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		// Remove our custom path
 		rmdirtree( $this->custom_path );
-   
+
     	// Reset the path internally
 		$this->path->reset_path();
 
@@ -113,7 +113,7 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 		$generated_paths = $this->generate_additional_paths();
         $paths = $this->path->get_existing_paths();
-        
+
         sort( $generated_paths );
         sort( $paths );
 
@@ -218,6 +218,27 @@ class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 		}
 
 		return $paths;
+
+	}
+
+	public function test_cleanup() {
+
+		// Should be cleaned up
+		file_put_contents( PATH::get_path() . '/foo.zip.SmuhtP', 'bar' );
+		file_put_contents( PATH::get_path() . '/foo.sql', 'bar' );
+		file_put_contents( PATH::get_path() . '/zicBotXQ', 'baz' );
+
+		// Existing backups shouldn't be cleaned up
+		file_put_contents( PATH::get_path() . '/backup.zip', 'baz' );
+
+		Path::get_instance()->cleanup();
+
+		$this->assertFileNotExists( PATH::get_path() . '/foo.zip.SmuhtP' );
+		$this->assertFileNotExists( PATH::get_path() . '/foo.sql' );
+		$this->assertFileNotExists( PATH::get_path() . '/zicBotXQ' );
+
+		$this->assertFileExists( PATH::get_path() . '/index.html' );
+		$this->assertFileExists( PATH::get_path() . '/backup.zip' );
 
 	}
 

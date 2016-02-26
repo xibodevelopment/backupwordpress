@@ -187,7 +187,7 @@ class Path {
 	}
 
 	public function reset_path() {
-		$this->set_path( false );
+		$this->path = $this->custom_path = '';
 	}
 
 	/**
@@ -429,7 +429,7 @@ class Path {
 			return;
 		}
 
-		foreach ( new CleanUpIterator( new \DirectoryIterator( $this->path ) ) as $file ) {
+		foreach ( new CleanUpIterator( new \DirectoryIterator( Path::get_path() ) ) as $file ) {
 
 			if ( $file->isDot() || ! $file->isReadable() || ! $file->isFile() ) {
 				continue;
@@ -438,15 +438,26 @@ class Path {
 			@unlink( $file->getPathname() );
 
 		}
-
 	}
-
 }
 
 class CleanUpIterator extends \FilterIterator {
 
-	// Don't match index.html,files with zip extension or status logfiles.
+	// Don't match index.html, files with zip extension or status logfiles.
 	public function accept() {
-		return ! preg_match( '/(index\.html|.*\.zip|.*-running)/', $this->current() );
+
+		// Don't remove existing backups
+		if ( 'zip' === $this->current()->getExtension() ) {
+			return false;
+		}
+
+		// Don't remove the index.html file
+		if ( 'index.html' === $this->current()->getBasename() ) {
+			return false;
+		}
+
+		// Don't cleanup the backup running file
+		return ! preg_match( '/(.*-running)/', $this->current() );
+
 	}
 }
