@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "a5d481f4e8a2c50cc0c488d199f4c83e",
+    "content-hash": "77f3dd81e4007d746a29f10fd5dce8af",
     "packages": [
         {
             "name": "ifsnop/mysqldump-php",

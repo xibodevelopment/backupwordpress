@@ -105,16 +105,22 @@ class Path {
 
 		if ( path_in_php_open_basedir( dirname( $site_path ) ) ) {
 
-			// Handle wordpress installed in a subdirectory
-			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && file_exists( dirname( $site_path ) . '/index.php' ) ) {
-				$home_path = dirname( $site_path );
+			$home    = set_url_scheme( get_option( 'home' ), 'http' );
+			$siteurl = set_url_scheme( get_option( 'siteurl' ), 'http' );
+			if ( ! empty( $home ) && 0 !== strcasecmp( $home, $siteurl ) ) {
+				$wp_path_rel_to_home = str_ireplace( $home, '', $siteurl ); /* $siteurl - $home */
+				$pos = strripos( wp_normalize_path( $_SERVER['SCRIPT_FILENAME'] ), trailingslashit( $wp_path_rel_to_home ) );
+				$home_path = substr( $_SERVER['SCRIPT_FILENAME'], 0, $pos );
+				$home_path = trailingslashit( $home_path );
 			}
 
-			// Handle wp-config.php being above site_path
-			if ( file_exists( dirname( $site_path ) . '/wp-config.php' ) && ! file_exists( $site_path . '/wp-config.php' ) && ! file_exists( dirname( $site_path ) . '/index.php' ) ) {
-				$home_path = $site_path;
+			if ( is_multisite() ) {
+				$slashed_home      = trailingslashit( get_option( 'home' ) );
+				$base              = parse_url( $slashed_home, PHP_URL_PATH );
+				$document_root_fix = wp_normalize_path( realpath( $_SERVER['DOCUMENT_ROOT'] ) );
+				$abspath_fix       = wp_normalize_path( ABSPATH );
+				$home_path         = 0 === strpos( $abspath_fix, $document_root_fix ) ? $document_root_fix . $base : $home_path;
 			}
-
 		}
 
 		return wp_normalize_path( untrailingslashit( $home_path ) );
@@ -181,7 +187,7 @@ class Path {
 	}
 
 	public function reset_path() {
-		$this->set_path( false );
+		$this->path = $this->custom_path = '';
 	}
 
 	/**
@@ -423,7 +429,7 @@ class Path {
 			return;
 		}
 
-		foreach ( new CleanUpIterator( new \DirectoryIterator( $this->path ) ) as $file ) {
+		foreach ( new CleanUpIterator( new \DirectoryIterator( Path::get_path() ) ) as $file ) {
 
 			if ( $file->isDot() || ! $file->isReadable() || ! $file->isFile() ) {
 				continue;
@@ -432,15 +438,26 @@ class Path {
 			@unlink( $file->getPathname() );
 
 		}
-
 	}
-
 }
 
 class CleanUpIterator extends \FilterIterator {
 
-	// Don't match index.html,files with zip extension or status logfiles.
+	// Don't match index.html, files with zip extension or status logfiles.
 	public function accept() {
-		return ! preg_match( '/(index\.html|.*\.zip|.*-running)/', $this->current() );
+
+		// Don't remove existing backups
+		if ( 'zip' === $this->current()->getExtension() ) {
+			return false;
+		}
+
+		// Don't remove the index.html file
+		if ( 'index.html' === $this->current()->getBasename() ) {
+			return false;
+		}
+
+		// Don't cleanup the backup running file
+		return ! preg_match( '/(.*-running)/', $this->current() );
+
 	}
 }

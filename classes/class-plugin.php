@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
-	const PLUGIN_VERSION = '3.4.2';
+	const PLUGIN_VERSION = '3.4.5';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -63,11 +63,13 @@ final class Plugin {
 	 */
 	public function maybe_self_deactivate() {
 
-		if ( false === Setup::meets_requirements() ) {
+		require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
 
-			add_action( 'admin_init', array( 'HM\BackUpWordPress\Setup', 'self_deactivate' ) );
+		if ( false === \HMBKP_Setup::meets_requirements() ) {
 
-			add_action( 'all_admin_notices', array( 'HM\BackUpWordPress\Setup', 'display_admin_notices' ) );
+			add_action( 'admin_init', array( '\HMBKP_Setup', 'self_deactivate' ) );
+
+			add_action( 'all_admin_notices', array( '\HMBKP_Setup', 'display_admin_notices' ) );
 
 			return true;
 
@@ -287,6 +289,10 @@ final class Plugin {
 	 * @return string
 	 */
 	protected function generate_key() {
+
+		$check = apply_filters( "hmbkp_generate_key", null );
+		if ( null !== $check )
+			return $check;
 
 		$key = array( ABSPATH, time() );
 		$constants = array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' );

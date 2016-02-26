@@ -2,7 +2,7 @@
 
 Thanks for stopping by, It's really great that you're here. BackUpWordPress thrives on the contributions of [many](https://github.com/humanmade/backupwordpress/graphs/contributors) and there is always more to do.
 
-There are three main ways you can contribute currently:
+There are four main ways you can contribute currently:
 
 - Developing
 - Testing

@@ -5,9 +5,7 @@ namespace HM\BackUpWordPress;
 class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 
 	function setUp() {
-
 		$this->setup_test_data();
-
 	}
 
 	function tearDown() {
@@ -15,45 +13,41 @@ class Home_Path_Tests extends \HM_Backup_UnitTestCase {
 		rmdirtree( $this->test_data_symlink );
 	}
 
+	/**
+	 * In this scenario WordPress is installed as normal with wp-config.php and index.php in the root directory.
+	 */
 	function test_standard_install() {
 
-		$abspath = $this->test_data;
-		$this->wp_config_in( $abspath );
-		$this->index_in( $abspath );
-		$path = Path::get_home_path( $abspath );
-
-		$this->assertEquals( $abspath, $path );
+		$this->assertEquals( wp_normalize_path( untrailingslashit( ABSPATH ) ), Path::get_home_path() );
 
 	}
 
-	function test_standard_install_wp_config_above_abspath() {
-
-		$abspath = $this->test_data . '/exclude' ;
-		$this->wp_config_in( dirname( $abspath ) );
-		$this->index_in( $abspath );
-		$path = Path::get_home_path( $abspath );
-
-		$this->assertEquals( $abspath, $path );
-
-	}
-
+	/**
+	 * In this scenario, WordPress is installed in a subdirectory with index.php and wp-config both in root.
+	 */
 	function test_standard_install_in_subdirectory() {
 
-		$abspath = $this->test_data . '/exclude' ;
-		$this->wp_config_in( dirname( $abspath ) );
-		$this->index_in( dirname( $abspath ) );
-		$path = Path::get_home_path( $abspath );
+		$home = get_option( 'home' );
+		$siteurl = get_option( 'siteurl' );
+		$sfn = $_SERVER['SCRIPT_FILENAME'];
+		$this->assertEquals( wp_normalize_path( untrailingslashit( ABSPATH ) ), Path::get_home_path() );
 
-		$this->assertEquals( dirname( $abspath ), $path );
+		update_option( 'home', 'http://localhost' );
+		update_option( 'siteurl', 'http://localhost/wp' );
 
-	}
+		$_SERVER['SCRIPT_FILENAME'] = 'D:\root\vhosts\site\httpdocs\wp\wp-admin\options-permalink.php';
+		$this->assertEquals( 'D:/root/vhosts/site/httpdocs/', trailingslashit( Path::get_home_path() ) );
 
-	private function wp_config_in( $path ) {
-		file_put_contents( trailingslashit( $path ) . 'wp-config.php', '// I am your father' );
-	}
+		$_SERVER['SCRIPT_FILENAME'] = '/Users/foo/public_html/trunk/wp/wp-admin/options-permalink.php';
+		$this->assertEquals( '/Users/foo/public_html/trunk/',  trailingslashit( Path::get_home_path() ) );
 
-	private function index_in( $path ) {
-		file_put_contents( trailingslashit( $path ) . 'index.php', '// shhh' );
+		$_SERVER['SCRIPT_FILENAME'] = 'S:/home/wordpress/trunk/wp/wp-admin/options-permalink.php';
+		$this->assertEquals( 'S:/home/wordpress/trunk/',  trailingslashit( Path::get_home_path() ) );
+
+		update_option( 'home', $home );
+		update_option( 'siteurl', $siteurl );
+		$_SERVER['SCRIPT_FILENAME'] = $sfn;
+
 	}
 
 }
