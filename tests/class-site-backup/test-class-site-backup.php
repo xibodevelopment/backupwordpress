@@ -15,7 +15,14 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		$this->cleanup_test_data();
 	}
 
-	public function test_database_backup() {
+	/**
+	 * @dataProvider file_backup_engine_provider
+	 */
+	public function test_database_backup( $file_backup_engines ) {
+
+		add_filter( 'hmbkp_file_backup_engines', function() use ( $file_backup_engines ) {
+			return $file_backup_engines;
+		} );
 
 		$this->backup->set_type( 'database' );
 		$this->backup->run();
@@ -25,7 +32,14 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function test_only_database_zipped_up() {
+	/**
+	 * @dataProvider file_backup_engine_provider
+	 */
+	public function test_only_database_zipped_up( $file_backup_engines ) {
+
+		add_filter( 'hmbkp_file_backup_engines', function() use ( $file_backup_engines ) {
+			return $file_backup_engines;
+		} );
 
 		$this->backup->set_type( 'database' );
 		Path::get_instance()->reset_path();
@@ -42,7 +56,14 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function test_files_backup() {
+	/**
+	 * @dataProvider file_backup_engine_provider
+	 */
+	public function test_files_backup( $file_backup_engines ) {
+
+		add_filter( 'hmbkp_file_backup_engines', function() use ( $file_backup_engines ) {
+			return $file_backup_engines;
+		} );
 
 		$this->backup->set_type( 'files' );
 		$this->backup->run();
@@ -59,7 +80,14 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function test_complete_backup() {
+	/**
+	 * @dataProvider file_backup_engine_provider
+	 */
+	public function test_complete_backup( $file_backup_engines ) {
+
+		add_filter( 'hmbkp_file_backup_engines', function() use ( $file_backup_engines ) {
+			return $file_backup_engines;
+		} );
 
 		$this->backup->run();
 
@@ -77,7 +105,14 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function test_multiple_backups_exclude_backups() {
+	/**
+	 * @dataProvider file_backup_engine_provider
+	 */
+	public function test_multiple_backups_exclude_backups( $file_backup_engines ) {
+
+		add_filter( 'hmbkp_file_backup_engines', function() use ( $file_backup_engines ) {
+			return $file_backup_engines;
+		} );
 
 		$this->backup->set_backup_filename( 'backup1.zip' );
 		$this->backup->run();
@@ -90,6 +125,20 @@ class Site_Backup_Tests extends \HM_Backup_UnitTestCase {
 		// Allow the filesize to vary by 10 bytes to avoid minor changes causing failures
 		$this->assertEquals( filesize( $backup1 ), filesize( $backup2 ), '', 10 );
 		$this->assertArchiveNotContains( $backup2, array( 'backup1.zip' ) );
+
+	}
+
+	/**
+	 * Ensure we run each of the complete backup tests with each Backup Engine
+	 */
+	public function file_backup_engine_provider() {
+
+		return array(
+			array( array( new Zip_File_Backup_Engine ) ),
+			array( array( new Zip_Archive_File_Backup_Engine ) ),
+			array( array( new Pclzip_File_Backup_Engine ) ),
+			array( array( new Zip_File_Backup_Engine, new Zip_Archive_File_Backup_Engine, new Pclzip_File_Backup_Engine ) ),
+		);
 
 	}
 }
