@@ -78,7 +78,7 @@ class Backup_Utilities {
 		$suhosin_blacklist = array_map( 'trim', explode( ',', @call_user_func( $ini_get_callback, 'suhosin.executor.func.blacklist' ) ) );
 
 		// PHP supports disabling functions by adding them to `disable_functions` in php.ini.
-		$disabled_functions = array_map( 'trim', explode( ',', @call_user_func( $ini_get_callback, 'disable_functions' ) ) );
+		$disabled_functions = array_map( 'trim', preg_split( '/\s|,/', @call_user_func( $ini_get_callback, 'disable_functions' ) ) );
 
 		if ( in_array( $function, array_merge( $suhosin_blacklist, $disabled_functions ) ) ) {
 			return true;
