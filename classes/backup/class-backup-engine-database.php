@@ -194,7 +194,7 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 	public function verify_backup() {
 
 		// If there are errors delete the database dump file
-		if ( $this->get_errors( __CLASS__ ) && file_exists( $this->get_backup_filepath() ) ) {
+		if ( $this->get_errors( get_called_class() ) && file_exists( $this->get_backup_filepath() ) ) {
 			unlink( $this->get_backup_filepath() );
 		}
 
