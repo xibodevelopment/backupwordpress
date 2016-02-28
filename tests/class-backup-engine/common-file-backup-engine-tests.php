@@ -20,13 +20,13 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 
-        if ( file_exists( Path::get_root() . '/exclude' ) ) {
+		if ( file_exists( Path::get_root() . '/exclude' ) ) {
 	    	chmod( Path::get_root() . '/exclude', 0755 );
-        }
+		}
 
-        if ( file_exists( Path::get_root() . '/test-data.txt' ) ) {
+		if ( file_exists( Path::get_root() . '/test-data.txt' ) ) {
 	    	chmod( Path::get_root() . '/test-data.txt', 0644 );
-        }
+		}
 
 		if ( file_exists( $this->hidden ) ) {
 			unlink( $this->hidden );
@@ -81,7 +81,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->symlink = $this->test_data . '/tests';
 
-		if ( ! @symlink( trailingslashit( $this->test_data_symlink ), $this->symlink ) ) {
+		if ( ! symlink( trailingslashit( $this->test_data_symlink ), $this->symlink ) ) {
 			$this->markTestSkipped( 'Couldn\'t create symlink to test with' );
 		}
 
@@ -106,7 +106,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->symlink = trailingslashit( $this->test_data ) . basename( __FILE__ );
 
-		if ( ! @symlink( __FILE__, $this->symlink ) ) {
+		if ( ! symlink( __FILE__, $this->symlink ) ) {
 			$this->markTestSkipped( 'Couldn\'t create symlink to test with' );
 		}
 
@@ -132,7 +132,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->symlink = trailingslashit( $this->test_data ) . basename( __FILE__ );
 		file_put_contents( $this->test_data . '/symlink', '' );
-		$symlink_created = @symlink( $this->test_data . '/symlink', $this->symlink );
+		$symlink_created = symlink( $this->test_data . '/symlink', $this->symlink );
 		unlink( $this->test_data . '/symlink' );
 
 		if ( ! $symlink_created ) {
@@ -158,7 +158,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 		chmod( Path::get_root() . '/test-data.txt', 0220 );
 
 		if ( is_readable( Path::get_root() . '/test-data.txt' ) ) {
-			$this->markTestSkipped( "File was readable." );
+			$this->markTestSkipped( 'File was readable' );
 		}
 
 		$this->backup->backup();
@@ -175,7 +175,7 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 		chmod( Path::get_root() . '/exclude', 0220 );
 
 		if ( is_readable( Path::get_root() . '/exclude' ) ) {
-			$this->markTestSkipped( "Directory was readable." );
+			$this->markTestSkipped( 'Directory was readable.' );
 		}
 
 		$this->backup->backup();
@@ -200,52 +200,18 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	/**
-	 * Test a complete backup of the WordPress Site
-	 *
-	 * @group full-backup
-	 */
-	public function test_complete_file_backup_with_excludes() {
+	public function test_corrupt_jpeg() {
 
-		// Reset root back to defaults
-		Path::get_instance()->set_root( false );
+		copy( HMBKP_PLUGIN_PATH . 'tests/corrupted.jpg', PATH::get_root() . '/corrupted.jpg' );
 
-		$this->backup->set_excludes( new Excludes( array( 'wp-*' ) ) );
-		$this->backup->backup();
+		$this->assertFileExists( PATH::get_root() . '/corrupted.jpg' );
+		$this->assertFalse( @imagecreatefromjpeg( PATH::get_root() . '/corrupted.jpg' ) );
 
-		$finder = $this->backup->get_files();
-
-		foreach( $finder as $file ) {
-			$files[] = $file->getRelativePathname();
-		}
-
+		$this->assertTrue( $this->backup->backup() );
 		$this->assertFileExists( $this->backup->get_backup_filepath() );
-		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), iterator_count( $finder ) );
-		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'corrupted.jpg' ) );
 
-	}
-
-	/**
-	 * Test a complete backup of the WordPress Site
-	 *
-	 * @group full-backup
-	 */
-	public function test_complete_file_backup() {
-
-		// Reset root back to defaults
-		Path::get_instance()->set_root( false );
-
-		$this->backup->backup();
-
-		$finder = $this->backup->get_files();
-
-		foreach( $finder as $file ) {
-			$files[] = $file->getRelativePathname();
-		}
-
-		$this->assertFileExists( $this->backup->get_backup_filepath() );
-		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), iterator_count( $finder ) );
-		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files );
+		unlink( PATH::get_root() . '/corrupted.jpg' );
 
 	}
 
@@ -272,4 +238,52 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	/**
+	 * Test a complete backup of the WordPress Site
+	 *
+	 * @group full-backup
+	 */
+	public function test_complete_file_backup_with_excludes() {
+
+		// Reset root back to defaults
+		Path::get_instance()->set_root( false );
+
+		$this->backup->set_excludes( new Excludes( array( 'wp-*' ) ) );
+		$this->backup->backup();
+
+		$finder = $this->backup->get_files();
+
+		foreach ( $finder as $file ) {
+			$files[] = $file->getRelativePathname();
+		}
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), iterator_count( $finder ) );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files );
+
+	}
+
+	/**
+	 * Test a complete backup of the WordPress Site
+	 *
+	 * @group full-backup
+	 */
+	public function test_complete_file_backup() {
+
+		// Reset root back to defaults
+		Path::get_instance()->set_root( false );
+
+		$this->backup->backup();
+
+		$finder = $this->backup->get_files();
+
+		foreach ( $finder as $file ) {
+			$files[] = $file->getRelativePathname();
+		}
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), iterator_count( $finder ) );
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), $files );
+
+	}
 }
