@@ -2,6 +2,8 @@
 
 namespace HM\BackUpWordPress;
 
+use Symfony\Component\Process\Process as Process;
+
 /**
  * Perform a database backup using the mysqldump cli command
  */
@@ -84,34 +86,22 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	 */
 	public function check_user_can_connect_to_database_via_cli() {
 
-		if ( ! $this->get_mysqldump_executable_path() ) {
+		if ( ! function_exists( 'proc_open' ) ) {
 			return false;
 		}
 
 		$args = $this->get_mysql_connection_args();
-
 		$args[] = escapeshellarg( $this->get_name() );
 
 		// Quit immediately as we're only interesting in testing the connection
 		$args[] = '--execute="quit"';
 
-		// Pipe STDERR to STDOUT
-		$args[] = ' 2>&1';
+		$process = new Process( 'mysql ' . implode( ' ', $args ) );
+		$process->run();
 
-		$output = $return_status = '';
-		$args   = implode( ' ', $args );
-		exec( 'mysql ' . $args, $output, $return_status );
-
-		$output = $this->ignore_mysql_password_warning( $output );
-
-		// If there were errors connecting then track them
-		if ( $output ) {
-			if ( $return_status === 0 ) {
-				$this->warning( __CLASS__, implode( ', ', $output ) );
-			} else {
-				$this->error( __CLASS__, implode( ', ', $output ) );
-				return false;
-			}
+		if ( ! $process->isSuccessful() ) {
+			$this->error( __CLASS__, $process->getErrorOutput() );
+			return false;
 		}
 
 		return true;
@@ -128,8 +118,6 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		if ( ! $this->check_user_can_connect_to_database_via_cli() || ! $this->get_mysqldump_executable_path() ) {
 			return false;
 		}
-
-		$output = $return_status = '';
 
 		// Grab the database connections args
 		$args = $this->get_mysql_connection_args();
@@ -151,20 +139,11 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		// The database we're dumping
 		$args[] = escapeshellarg( $this->get_name() );
 
-		// Pipe STDERR to STDOUT
-		$args[] = '2>&1';
+		$process = new Process( $this->get_mysqldump_executable_path() . ' ' . implode( ' ', $args ) );
+		$process->run();
 
-		exec( escapeshellcmd( $this->get_mysqldump_executable_path() ) . ' ' . implode( ' ', $args ), $output, $return_status );
-
-		$output = $this->ignore_mysql_password_warning( $output );
-
-		// Track any errors
-		if ( $output ) {
-			if ( $return_status === 0 ) {
-				$this->warning( __CLASS__, implode( ', ', $output ) );
-			} else {
-				$this->error( __CLASS__, implode( ', ', $output ) );
-			}
+		if ( ! $process->isSuccessful() ) {
+			$this->error( __CLASS__, $process->getErrorOutput() );
 		}
 
 		return $this->verify_backup();
@@ -199,17 +178,4 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		return $args;
 
 	}
-
-	private function ignore_mysql_password_warning( $output ) {
-
-		$key = array_search( 'Warning: Using a password on the command line interface can be insecure.', $output );
-
-		if ( $key !== false ) {
-			unset( $output[ $key ] );
-		}
-
-		return $output;
-
-	}
-
 }

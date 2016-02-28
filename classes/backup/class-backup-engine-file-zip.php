@@ -2,6 +2,8 @@
 
 namespace HM\BackUpWordPress;
 
+use Symfony\Component\Process\Process as Process;
+
 /**
  * Perform a file backup using the zip cli command
  */
@@ -66,7 +68,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	 */
 	public function backup() {
 
-		if ( ! Backup_Utilities::is_exec_available() || ! $this->get_zip_executable_path() ) {
+		if ( ! $this->get_zip_executable_path() ) {
 			return false;
 		}
 
@@ -84,21 +86,13 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			$command[] = '-x ' . $this->get_exclude_string();
 		}
 
-		// Push all output to STDERR
-		$command[] = '2>&1';
-
 		$command = implode( ' ', $command );
-		$output = $return_status = 0;
 
-		exec( $command, $output, $return_status );
+		$process = new Process( $command );
+		$process->run();
 
-		// Track any errors
-		if ( $output ) {
-			if ( $return_status === 0 ) {
-				$this->warning( __CLASS__, implode( ', ', $output ) );
-			} else {
-				$this->error( __CLASS__, implode( ', ', $output ) );
-			}
+		if ( ! $process->isSuccessful() ) {
+			$this->error( __CLASS__, $process->getErrorOutput() );
 		}
 
 		return $this->verify_backup();
