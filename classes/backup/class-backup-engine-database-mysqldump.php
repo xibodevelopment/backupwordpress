@@ -67,7 +67,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 				'/Program Files/MySQL/MySQL Server 5.1/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 5.0/bin/mysqldump',
 				'/Program Files/MySQL/MySQL Server 4.1/bin/mysqldump',
-				'/opt/local/bin/mysqldump'
+				'/opt/local/bin/mysqldump',
 			);
 
 			$this->mysqldump_executable_path = Backup_Utilities::get_executable_path( $paths );

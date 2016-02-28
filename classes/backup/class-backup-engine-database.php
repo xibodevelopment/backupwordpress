@@ -177,13 +177,10 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 				if ( ! empty( $maybe_socket ) ) {
 					$this->socket = substr( $maybe_socket, 1 );
 				}
-
 			} else {
 				$this->socket = $port_or_socket;
 			}
-
 		}
-
 	}
 
 	/**
@@ -214,5 +211,4 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 		return true;
 
 	}
-
 }

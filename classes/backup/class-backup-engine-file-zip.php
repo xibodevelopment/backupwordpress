@@ -50,7 +50,8 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			$paths = array(
 				'zip',
 				'/usr/bin/zip',
-				'/opt/local/bin/zip'
+				'/usr/local/bin/zip',
+				'/opt/local/bin/zip',
 			);
 
 			$this->zip_executable_path = Backup_Utilities::get_executable_path( $paths );
@@ -119,14 +120,10 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			// Files don't end with /
 			if ( ! in_array( substr( $rule, - 1 ), array( '\\', '/' ) ) ) {
 				$file = true;
-			}
-
-			// If rule starts with a / then treat as absolute path
+			} // If rule starts with a / then treat as absolute path
 			elseif ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {
 				$absolute = true;
-			}
-
-			// Otherwise treat as dir fragment
+			} // Otherwise treat as dir fragment
 			else {
 				$fragment = true;
 			}
@@ -147,7 +144,6 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			if ( $absolute ) {
 				$rule .= '*';
 			}
-
 		}
 
 		// Escape shell args for zip command
@@ -156,5 +152,4 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		return implode( ' -x ', $excludes );
 
 	}
-
 }
