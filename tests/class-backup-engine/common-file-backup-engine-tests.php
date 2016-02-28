@@ -21,11 +21,11 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 	public function tearDown() {
 
 		if ( file_exists( Path::get_root() . '/exclude' ) ) {
-	    	chmod( Path::get_root() . '/exclude', 0755 );
+			chmod( Path::get_root() . '/exclude', 0755 );
 		}
 
 		if ( file_exists( Path::get_root() . '/test-data.txt' ) ) {
-	    	chmod( Path::get_root() . '/test-data.txt', 0644 );
+			chmod( Path::get_root() . '/test-data.txt', 0644 );
 		}
 
 		if ( file_exists( $this->hidden ) ) {
