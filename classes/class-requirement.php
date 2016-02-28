@@ -77,37 +77,8 @@ class Requirement_Zip_Archive extends Requirement {
 		return false;
 
 	}
-
 }
 Requirements::register( 'HM\BackUpWordPress\Requirement_Zip_Archive', 'PHP' );
-
-/**
- * Class Requirement_Directory_Iterator_Follow_Symlinks
- *
- * Tests whether the FOLLOW_SYMLINKS class constant is available on Directory Iterator
- */
-class Requirement_Directory_Iterator_Follow_Symlinks extends Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = 'DirectoryIterator FOLLOW_SYMLINKS';
-
-	/**
-	 * @return bool
-	 */
-	public static function test() {
-
-		if ( defined( 'RecursiveDirectoryIterator::FOLLOW_SYMLINKS' ) ) {
-			return true;
-		}
-
-		return false;
-
-	}
-
-}
-Requirements::register( 'HM\BackUpWordPress\Requirement_Directory_Iterator_Follow_Symlinks', 'PHP' );
 
 /**
  * Class Requirement_Zip_Command
