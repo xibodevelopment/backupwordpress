@@ -57,7 +57,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
 							'hmbkp_remove_exclude' => $exclude,
-							'hmbkp_schedule_id'    => $schedule->get_id()
+							'hmbkp_schedule_id'    => $schedule->get_id(),
 						) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
 
 					<?php endif; ?>
@@ -89,7 +89,6 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 		if ( false !== strpos( $untrusted_directory, Path::get_root() ) && is_dir( $untrusted_directory ) ) {
 			$directory = $untrusted_directory;
 		}
-
 	}
 
 	$exclude_string = implode( '|', $excludes->get_excludes_for_regex() );
@@ -103,102 +102,98 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 		<thead>
 
-		<tr>
-			<th></th>
-			<th scope="col"><?php _e( 'Name', 'backupwordpress' ); ?></th>
-			<th scope="col" class="column-format"><?php _e( 'Size', 'backupwordpress' ); ?></th>
-			<th scope="col" class="column-format"><?php _e( 'Permissions', 'backupwordpress' ); ?></th>
-			<th scope="col" class="column-format"><?php _e( 'Type', 'backupwordpress' ); ?></th>
-			<th scope="col" class="column-format"><?php _e( 'Status', 'backupwordpress' ); ?></th>
-		</tr>
+			<tr>
+				<th></th>
+				<th scope="col"><?php _e( 'Name', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php _e( 'Size', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php _e( 'Permissions', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php _e( 'Type', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php _e( 'Status', 'backupwordpress' ); ?></th>
+			</tr>
 
-		<tr>
+			<tr>
 
-			<th scope="row">
-				<div class="dashicons dashicons-admin-home"></div>
-			</th>
+				<th scope="row">
+					<div class="dashicons dashicons-admin-home"></div>
+				</th>
 
-			<th scope="col">
+				<th scope="col">
 
-				<?php if ( Path::get_root() !== $directory ) { ?>
+					<?php if ( Path::get_root() !== $directory ) { ?>
 
-					<a href="<?php echo esc_url( remove_query_arg( 'hmbkp_directory_browse' ) ); ?>"><?php echo esc_html( Path::get_root() ); ?></a>
-					<code>/</code>
-
-					<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( Path::get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
-
-					foreach ( $parents as $directory_basename ) { ?>
-
-						<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
+						<a href="<?php echo esc_url( remove_query_arg( 'hmbkp_directory_browse' ) ); ?>"><?php echo esc_html( Path::get_root() ); ?></a>
 						<code>/</code>
 
-					<?php } ?>
+						<?php $parents = array_filter( explode( '/', str_replace( trailingslashit( Path::get_root() ), '', trailingslashit( dirname( $directory ) ) ) ) );
 
-					<?php echo esc_html( basename( $directory ) ); ?>
+						foreach ( $parents as $directory_basename ) { ?>
 
-				<?php } else { ?>
+							<a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( substr( $directory, 0, strpos( $directory, $directory_basename ) ) . $directory_basename ) ) ); ?>"><?php echo esc_html( $directory_basename ); ?></a>
+							<code>/</code>
 
-					<?php echo esc_html( Path::get_root() ); ?>
+						<?php } ?>
 
-				<?php } ?>
+						<?php echo esc_html( basename( $directory ) ); ?>
 
-			</th>
+					<?php } else { ?>
 
-			<td class="column-filesize">
-
-				<?php if ( Site_Size::is_site_size_being_calculated() ) { ?>
-
-					<span class="spinner is-active"></span>
-
-				<?php } else {
-
-					$root = new \SplFileInfo( Path::get_root() );
-
-					$size = $site_size->filesize( $root );
-
-					if ( false !== $size ) {
-
-						$size = size_format( $size );
-
-						if ( ! $size ) {
-							$size = '0 B';
-						} ?>
-
-						<code>
-
-							<?php echo esc_html( $size ); ?>
-
-							<a class="dashicons dashicons-update"
-							   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
-
-						</code>
-
+						<?php echo esc_html( Path::get_root() ); ?>
 
 					<?php } ?>
 
-				<?php } ?>
+				</th>
 
-			<td>
-				<?php echo esc_html( substr( sprintf( '%o', fileperms( Path::get_root() ) ), - 4 ) ); ?>
-			</td>
+				<td class="column-filesize">
 
-			<td>
+					<?php if ( Site_Size::is_site_size_being_calculated() ) { ?>
 
-				<?php if ( is_link( Path::get_root() ) ) {
+						<span class="spinner is-active"></span>
 
-					_e( 'Symlink', 'backupwordpress' );
+					<?php } else {
 
-				} elseif ( is_dir( Path::get_root() ) ) {
+						$root = new \SplFileInfo( Path::get_root() );
 
-					_e( 'Folder', 'backupwordpress' );
+						$size = $site_size->filesize( $root );
 
-				} ?>
+						if ( false !== $size ) {
 
-			</td>
+							$size = size_format( $size );
 
-			<td></td>
+							if ( ! $size ) {
+								$size = '0 B';
+							} ?>
 
-		</tr>
+							<code>
+
+								<?php echo esc_html( $size ); ?>
+
+								<a class="dashicons dashicons-update"
+								   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+
+							</code>
+
+
+						<?php } ?>
+
+					<?php } ?>
+
+				<td>
+					<?php echo esc_html( substr( sprintf( '%o', fileperms( Path::get_root() ) ), - 4 ) ); ?>
+				</td>
+
+				<td>
+
+					<?php if ( is_link( Path::get_root() ) ) {
+						_e( 'Symlink', 'backupwordpress' );
+					} elseif ( is_dir( Path::get_root() ) ) {
+						_e( 'Folder', 'backupwordpress' );
+					} ?>
+
+				</td>
+
+				<td></td>
+
+			</tr>
 
 		</thead>
 
@@ -244,18 +239,15 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<?php if ( $is_unreadable ) { ?>
 
-							<code class="strikethrough"
-							      title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
+							<code class="strikethrough" title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
 
 						<?php } elseif ( $file->isFile() ) { ?>
 
-							<code
-								title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
+							<code title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></code>
 
 						<?php } elseif ( $file->isDir() ) { ?>
 
-							<code title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><a
-									href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( wp_normalize_path( $file->getPathname() ) ) ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></a></code>
+							<code title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><a href="<?php echo esc_url( add_query_arg( 'hmbkp_directory_browse', urlencode( wp_normalize_path( $file->getPathname() ) ) ) ); ?>"><?php echo esc_html( $file->getBasename() ); ?></a></code>
 
 						<?php } ?>
 
@@ -284,11 +276,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 									<?php echo esc_html( $size ); ?>
 
 									<?php if ( $file->isDir() ) { ?>
-
-										<a title="<?php _e( 'Recalculate the size of this directory', 'backupwordpress' ); ?>"
-										   class="dashicons dashicons-update"
-										   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( wp_normalize_path( $file->getPathname() ) ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
-
+										<a title="<?php _e( 'Recalculate the size of this directory', 'backupwordpress' ); ?>" class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( wp_normalize_path( $file->getPathname() ) ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
 									<?php } ?>
 
 								</code>
@@ -303,24 +291,21 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 					</td>
 
 					<td>
-						<?php echo esc_html( substr( sprintf( '%o', $file->getPerms() ), - 4 ) ); ?>
+						<?php if ( ! $is_unreadable ) {
+							echo esc_html( substr( sprintf( '%o', $file->getPerms() ), - 4 ) );
+						} ?>
 					</td>
 
 					<td>
 
 						<?php if ( $file->isLink() ) { ?>
 
-							<span
-								title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php _e( 'Symlink', 'backupwordpress' ); ?></span>
+							<span title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php _e( 'Symlink', 'backupwordpress' ); ?></span>
 
 						<?php } elseif ( $file->isDir() ) {
-
 							_e( 'Folder', 'backupwordpress' );
-
 						} else {
-
 							_e( 'File', 'backupwordpress' );
-
 						} ?>
 
 					</td>
@@ -329,8 +314,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<?php if ( $is_unreadable ) { ?>
 
-							<strong
-								title="<?php _e( 'Unreadable files won\'t be backed up.', 'backupwordpress' ); ?>"><?php _e( 'Unreadable', 'backupwordpress' ); ?></strong>
+							<strong title="<?php _e( 'Unreadable files won\'t be backed up.', 'backupwordpress' ); ?>"><?php _e( 'Unreadable', 'backupwordpress' ); ?></strong>
 
 						<?php } elseif ( $is_excluded ) { ?>
 
@@ -348,7 +332,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 							<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
 								'hmbkp_schedule_id' => $schedule->get_id(),
 								'action' => 'hmbkp_add_exclude_rule',
-								'hmbkp_exclude_pathname' => urlencode( $exclude_path )
+								'hmbkp_exclude_pathname' => urlencode( $exclude_path ),
 							), admin_url( 'admin-post.php' ) ), 'hmbkp-add-exclude-rule', 'hmbkp-add-exclude-rule-nonce' ) ); ?>"
 							   class="button-secondary"><?php _e( 'Exclude &rarr;', 'backupwordpress' ); ?></a>
 
@@ -374,8 +358,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 
 	<p class="submit">
-		<a href="<?php echo esc_url( get_settings_url() ) ?>"
-		   class="button-primary"><?php _e( 'Done', 'backupwordpress' ); ?></a>
+		<a href="<?php echo esc_url( get_settings_url() ) ?>" class="button-primary"><?php _e( 'Done', 'backupwordpress' ); ?></a>
 	</p>
 
 </div>
