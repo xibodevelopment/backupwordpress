@@ -97,7 +97,6 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		$args[] = '--execute="quit"';
 
 		$process = new Process( 'mysql ' . implode( ' ', $args ) );
-		$process->setTimeout( HOUR_IN_SECONDS );
 
 		try {
 			$process->run();
