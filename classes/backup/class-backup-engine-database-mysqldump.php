@@ -97,10 +97,16 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		$args[] = '--execute="quit"';
 
 		$process = new Process( 'mysql ' . implode( ' ', $args ) );
-		$process->run();
+		$process->setTimeout( HOUR_IN_SECONDS );
 
-		if ( ! $process->isSuccessful() ) {
-			$this->error( __CLASS__, $process->getErrorOutput() );
+		try {
+			$process->run();
+			if ( ! $process->isSuccessful() ) {
+				$this->error( __CLASS__, $process->getErrorOutput() );
+				return false;
+			}
+		} catch ( \Exception $e ) {
+			$this->error( __CLASS__, $e->getMessage() );
 			return false;
 		}
 
@@ -141,9 +147,14 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		$process = new Process( $this->get_mysqldump_executable_path() . ' ' . implode( ' ', $args ) );
 		$process->run();
+		$process->setTimeout( HOUR_IN_SECONDS );
 
-		if ( ! $process->isSuccessful() ) {
-			$this->error( __CLASS__, $process->getErrorOutput() );
+		try {
+			if ( ! $process->isSuccessful() ) {
+				$this->error( __CLASS__, $process->getErrorOutput() );
+			}
+		} catch( \Exception $e ) {
+			$this->error( __CLASS__, $e->getMessage() );
 		}
 
 		return $this->verify_backup();

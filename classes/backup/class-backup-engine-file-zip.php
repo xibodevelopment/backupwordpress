@@ -112,6 +112,8 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 
 		} catch ( ProcessTimedOutException $e ) {
 			$this->error( __CLASS__, $e->getMessage() );
+		} catch ( \Exception $e ) {
+			$this->error( __CLASS__, $e->getMessage() );
 		}
 
 		return $this->verify_backup();

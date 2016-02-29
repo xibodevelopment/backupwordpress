@@ -52,12 +52,16 @@ class Backup_Utilities {
 			 * must be the correct path.
 			 */
 			 $process = new Process( $path . ' --version' );
-			 $process->run();
 
-			// If the command executed successfully then this must be the correct path
-			if ( $process->isSuccessful() ) {
-				return $path;
+			try {
+				// If the command executed successfully then this must be the correct path
+				if ( $process->isSuccessful() ) {
+					return $path;
+				}
+			} catch( \Exception $e ) {
+				return false;
 			}
+
 		}
 
 		return false;
