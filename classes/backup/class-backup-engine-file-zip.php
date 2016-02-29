@@ -2,7 +2,6 @@
 
 namespace HM\BackUpWordPress;
 
-use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process as Process;
 
 /**
@@ -94,10 +93,8 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		$process->setTimeout( HOUR_IN_SECONDS );
 
 		try {
-
 			$process->run();
-
-		} catch ( ProcessTimedOutException $e ) {
+		} catch ( \Exception $e ) {
 			$this->error( __CLASS__, $e->getMessage() );
 		}
 

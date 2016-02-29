@@ -150,7 +150,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		try {
 			$process->run();
-		} catch( \Exception $e ) {
+		} catch ( \Exception $e ) {
 			$this->error( __CLASS__, $e->getMessage() );
 		}
 

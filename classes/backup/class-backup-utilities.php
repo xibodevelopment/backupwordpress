@@ -55,16 +55,13 @@ class Backup_Utilities {
 
 			try {
 				$process->run();
-
 			} catch ( \Exception $e ) {
 				return false;
 			}
 
-			// If the command executed successfully then this must be the correct path
 			if ( $process->isSuccessful() ) {
 				return $path;
 			}
-
 		}
 
 		return false;
