@@ -19,7 +19,7 @@ namespace HM\BackUpWordPress;
 	</div>
 
 	<?php
-	$extensions_data = Extensions::get_instance()->fetch_data();
+	$extensions_data = Extensions::get_instance()->get_edd_data();
 	$installed_plugins = array_map( 'strtolower' , wp_list_pluck( get_plugins(), 'Name' ) );
 	?>
 
@@ -62,7 +62,7 @@ namespace HM\BackUpWordPress;
 
 						<div class="desc column-description">
 							<p><?php echo wp_kses_post( $extension->content->rendered ); ?></p>
-							<p class="authors"> <cite>By <a href="<?php //echo esc_url( $extension->author_url ); ?>"><?php echo esc_html( $extension->author ); ?></a></cite></p>
+							<p class="authors"> <cite>By <a href="https://hmn.md">Human Made Limited</a></cite></p>
 						</div>
 					</div>
 

@@ -4,37 +4,56 @@ namespace HM\BackUpWordPress;
 
 class Extensions {
 
-	const EXTENSIONS_DATA = 'hmbkp_extensions_data';
+	private static $instance;
 
-	protected $extensions_data = '';
+	function __construct( $root_url ) {
 
-	private static $_instance;
+		$this->root_url  = $root_url;
+
+	}
 
 	public static function get_instance() {
 
-		if ( ! ( self::$_instance instanceof Extensions ) ) {
-			self::$_instance = new Extensions();
+		if ( ! static::$instance ) {
+
+			$root_url = 'https://bwp.hmn.md/wp-json/wp/v2/';
+
+			static::$instance = new static( $root_url );
 		}
 
-		return self::$_instance;
+		return static::$instance;
+	}
+
+	function get_edd_data() {
+
+		$response = $this->fetch( 'edd-downloads', 600 );
+
+		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
+			return false;
+		}
+
+		return json_decode( $response['body'] );
 
 	}
 
-	private function __construct() {}
+	function fetch( $endpoint, $ttl = 10 ) {
 
-	public function fetch_data() {
+		$request_url = $this->root_url . $endpoint;
 
-		if ( false === get_transient( self::EXTENSIONS_DATA ) ) {
-			$response = wp_remote_get( 'https://bwp.hmn.md/wp-json/wp/v2/edd-downloads' );
+		$cache_key = md5( $request_url );
+
+		$cached = get_transient( 'bwp_' . $cache_key );
+
+		if ( $cached ) {
+			return $cached;
 		}
 
-		if ( is_array( $response ) ) {
-			$header = $response['headers'];
-			$body = $response['body'];
-		}
+		$response = wp_remote_get( $request_url );
 
-		if ( ! empty( $body ) ) {
-			return json_decode( $body );
-		}
+		set_transient( $cache_key, $response, $ttl );
+
+		return $response;
+
 	}
+
 }
