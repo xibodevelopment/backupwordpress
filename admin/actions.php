@@ -499,7 +499,7 @@ function calculate_site_size() {
 
 	$site_size = new Site_Size;
 
-	if ( ! $site_size::is_site_size_cached() ) {
+	if ( ! $site_size->is_site_size_cached() ) {
 		$root = new \SplFileInfo( Path::get_root() );
 		$site_size->filesize( $root );
 	}
