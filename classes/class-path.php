@@ -456,6 +456,11 @@ class CleanUpIterator extends \FilterIterator {
 			return false;
 		}
 
+		// Don't remove the file manifest
+		if ( '.files' === $this->current()->getBasename() ) {
+			return false;
+		}
+
 		// Don't cleanup the backup running file
 		return ! preg_match( '/(.*-running)/', $this->current() );
 

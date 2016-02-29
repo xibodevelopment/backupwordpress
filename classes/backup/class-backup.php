@@ -85,7 +85,7 @@ class Backup {
 		// Set the file backup engine settings
 		foreach( $file_backup_engines as &$backup_engine ) {
 			$backup_engine->set_backup_filename( $this->backup_filename );
-			$backup_engine->set_excludes( new Excludes( array( '*.zip', 'index.html', '.htaccess', '.*-running' ) ) );
+			$backup_engine->set_excludes( new Excludes( array( '*.zip', 'index.html', '.htaccess', '.*-running', '.files' ) ) );
 		}
 
 		// Zip up the database dump
