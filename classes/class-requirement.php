@@ -131,56 +131,6 @@ class Requirement_Mysqldump_Command_Path extends Requirement {
 Requirements::register( 'HM\BackUpWordPress\Requirement_Mysqldump_Command_Path', 'Server' );
 
 /**
- * Class Requirement_PHP_User
- */
-class Requirement_PHP_User extends Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = 'User';
-
-	/**
-	 * @return string
-	 */
-	public static function test() {
-
-		if ( ! Backup_Utilities::is_exec_available() ) {
-			return '';
-		}
-
-		return shell_exec( 'whoami' );
-
-	}
-}
-Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_User', 'PHP' );
-
-/**
- * Class Requirement_PHP_Group
- */
-class Requirement_PHP_Group extends Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = 'Group[s]';
-
-	/**
-	 * @return string
-	 */
-	public static function test() {
-
-		if ( ! Backup_Utilities::is_exec_available() ) {
-			return '';
-		}
-
-		return shell_exec( 'groups' );
-
-	}
-}
-Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Group', 'PHP' );
-
-/**
  * Class Requirement_PHP_Version
  */
 class Requirement_PHP_Version extends Requirement {
