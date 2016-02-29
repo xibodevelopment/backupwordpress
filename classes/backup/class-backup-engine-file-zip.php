@@ -2,6 +2,7 @@
 
 namespace HM\BackUpWordPress;
 
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process as Process;
 
 /**
@@ -90,19 +91,27 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		$command = implode( ' ', $command );
 
 		$process = new Process( $command );
-		$process->run();
+		$process->setTimeout( HOUR_IN_SECONDS );
 
-		if ( ! $process->isSuccessful() ) {
+		try {
 
-			/**
-			 * Exit Code 18 is returned when an unreadable file is encountered during the zip process.
-			 *
-			 * Given the zip process still completes correctly and the unreadable file is simple skipped
-			 * we don't want to treat 18 as an actual error.
-			 */
-			if ( $process->getExitCode() !== 18 ) {
-				$this->error( __CLASS__, $process->getErrorOutput() );
+			$process->run();
+
+			if ( ! $process->isSuccessful() ) {
+
+				/**
+				 * Exit Code 18 is returned when an unreadable file is encountered during the zip process.
+				 *
+				 * Given the zip process still completes correctly and the unreadable file is simple skipped
+				 * we don't want to treat 18 as an actual error.
+				 */
+				if ( $process->getExitCode() !== 18 ) {
+					$this->error( __CLASS__, $process->getErrorOutput() );
+				}
 			}
+
+		} catch ( ProcessTimedOutException $e ) {
+			$this->error( __CLASS__, $e->getMessage() );
 		}
 
 		return $this->verify_backup();
