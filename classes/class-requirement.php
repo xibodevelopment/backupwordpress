@@ -181,7 +181,6 @@ class Requirement_PHP_Group extends Requirement {
 Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Group', 'PHP' );
 
 /**
->>>>>>> master
  * Class Requirement_PHP_Version
  */
 class Requirement_PHP_Version extends Requirement {
@@ -277,25 +276,6 @@ class Requirement_Safe_Mode extends Requirement {
 	}
 }
 Requirements::register( 'HM\BackUpWordPress\Requirement_Safe_Mode', 'PHP' );
-
-/**
- * Class Requirement_Shell_Exec
- */
-class Requirement_Proc_Open extends Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = 'proc_open';
-
-	/**
-	 * @return bool
-	 */
-	public static function test() {
-		return function_exists( 'proc_open' );
-	}
-}
-Requirements::register( 'HM\BackUpWordPress\Requirement_Proc_Open', 'PHP' );
 
 /**
  * Class Requirement_Memory_Limit
@@ -801,4 +781,24 @@ class Requirement_PDO extends Requirement {
 
 	}
 }
+
 Requirements::register( 'HM\BackUpWordPress\Requirement_PDO', 'PHP' );
+
+/**
+ * Class Requirement_Proc_Open
+ */
+class Requirement_Proc_Open extends Requirement {
+
+	/**
+	 * @var string
+	 */
+	var $name = 'proc_open';
+
+	/**
+	 * @return bool
+	 */
+	public static function test() {
+		return function_exists( 'proc_open' );
+	}
+}
+Requirements::register( 'HM\BackUpWordPress\Requirement_Proc_Open', 'PHP' );
