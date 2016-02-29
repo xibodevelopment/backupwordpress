@@ -97,23 +97,21 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 
 			$process->run();
 
-			if ( ! $process->isSuccessful() ) {
-
-				/**
-				 * Exit Code 18 is returned when an unreadable file is encountered during the zip process.
-				 *
-				 * Given the zip process still completes correctly and the unreadable file is simple skipped
-				 * we don't want to treat 18 as an actual error.
-				 */
-				if ( $process->getExitCode() !== 18 ) {
-					$this->error( __CLASS__, $process->getErrorOutput() );
-				}
-			}
-
 		} catch ( ProcessTimedOutException $e ) {
 			$this->error( __CLASS__, $e->getMessage() );
-		} catch ( \Exception $e ) {
-			$this->error( __CLASS__, $e->getMessage() );
+		}
+
+		if ( ! $process->isSuccessful() ) {
+
+			/**
+			 * Exit Code 18 is returned when an unreadable file is encountered during the zip process.
+			 *
+			 * Given the zip process still completes correctly and the unreadable file is simple skipped
+			 * we don't want to treat 18 as an actual error.
+			 */
+			if ( $process->getExitCode() !== 18 ) {
+				$this->error( __CLASS__, $process->getErrorOutput() );
+			}
 		}
 
 		return $this->verify_backup();
