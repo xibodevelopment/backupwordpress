@@ -97,8 +97,8 @@ class Site_Size {
 	 *
 	 * @return bool
 	 */
-	public static function is_site_size_cached() {
-		return file_exists( Path::get_path() . '/.files' );
+	public function is_site_size_cached() {
+		return (bool) $this->get_cached_filesizes();
 	}
 
 	/**
@@ -226,20 +226,20 @@ class Site_Size {
 
 	}
 
-	public function get_cached_filesizes() {
+	public function get_cached_filesizes( $max_age = WEEK_IN_SECONDS ) {
 
 		$cache = PATH::get_path() . '/.files';
 		$files = false;
 
 		if ( file_exists( $cache ) ) {
-			$files = json_decode( gzuncompress( file_get_contents( $cache ) ), 'ARRAY_A' );
+
+			// If the file is old then regenerate it
+			if ( ( time() - filemtime( $cache ) ) <= $max_age ) {
+				$files = json_decode( gzuncompress( file_get_contents( $cache ) ), 'ARRAY_A' );
+			}
 		}
 
-		if ( is_array( $files ) ) {
-			return $files;
-		}
-
-		return false;
+		return $files;
 
 	}
 }

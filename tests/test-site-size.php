@@ -13,9 +13,11 @@ class Site_Size_Tests extends \HM_Backup_UnitTestCase {
 	}
 
 	public function tearDown() {
+		if ( file_exists( Path::get_path() . '/.files' ) ) {
+			unlink( Path::get_path() . '/.files' );
+		}
 		$this->cleanup_test_data();
 		delete_transient( 'hmbkp_directory_filesizes_running' );
-		delete_transient( 'hmbkp_directory_filesizes' );
 	}
 
 	public function test_rebuild_directory_filesizes() {
@@ -46,6 +48,21 @@ class Site_Size_Tests extends \HM_Backup_UnitTestCase {
 		$this->assertFalse( $this->size->is_site_size_cached() );
 		$this->size->rebuild_directory_filesizes();
 		$this->assertTrue( $this->size->is_site_size_being_calculated() );
+	}
+
+	public function test_old_cache_is_cleared() {
+
+		$this->assertFalse( $this->size->is_site_size_cached() );
+		$this->size = new Site_Size( 'file' );
+		$this->size->recursive_filesize_scanner();
+		$this->assertTrue( $this->size->is_site_size_cached() );
+
+		// Set the filemtime to over a week ago
+		touch( PATH::get_path() . '/.files', time() - WEEK_IN_SECONDS - 10 );
+		clearstatcache();
+
+		$this->assertFalse( $this->size->is_site_size_cached() );
+
 	}
 
 	public function test_site_size_file() {
@@ -88,5 +105,4 @@ class Site_Size_Tests extends \HM_Backup_UnitTestCase {
 		$this->assertEquals( $size_complete->get_site_size(), $size_database->get_site_size() + $size_file->get_site_size() );
 
 	}
-
 }
