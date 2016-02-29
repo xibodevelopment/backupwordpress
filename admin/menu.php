@@ -17,7 +17,7 @@ function admin_menu() {
 	}
 
 	// TODO shouldn't actually show in menu
-	add_management_page( __( 'BackUpWordPress Extensions', 'backupwordpress' ), __( 'Extensions', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG . '_extensions', 'HM\BackUpWordPress\extensions' );
+	add_submenu_page( null, __( 'BackUpWordPress Extensions', 'backupwordpress' ), __( 'Extensions', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG . '_extensions', 'HM\BackUpWordPress\extensions' );
 
 }
 add_action( 'network_admin_menu', 'HM\BackUpWordPress\admin_menu' );
