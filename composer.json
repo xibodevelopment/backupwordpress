@@ -20,7 +20,7 @@
     },
     "require": {
         "symfony/finder": "~2.6",
-        "symfony/process": "~2.",
+        "symfony/process": "~2.8",
         "ifsnop/mysqldump-php":"2.*"
     }
 }
