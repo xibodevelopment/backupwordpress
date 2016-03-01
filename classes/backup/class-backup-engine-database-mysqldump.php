@@ -134,9 +134,6 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		// Grab the database connections args
 		$args = $this->get_mysql_connection_args();
 
-		// We don't want to create a new DB
-		$args[] = '--no-create-db';
-
 		// Allow lock-tables to be overridden
 		if ( defined( 'HMBKP_MYSQLDUMP_SINGLE_TRANSACTION' ) && HMBKP_MYSQLDUMP_SINGLE_TRANSACTION  ) {
 			$args[] = '--single-transaction';
