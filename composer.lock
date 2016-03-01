@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0ee9095673793d8d700edc5092d27a53",
+    "hash": "5bc2486184bdd88cfe98a9f29529263c",
     "packages": [
         {
             "name": "ifsnop/mysqldump-php",
