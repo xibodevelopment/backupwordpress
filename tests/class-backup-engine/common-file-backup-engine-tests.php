@@ -190,10 +190,11 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 	public function test_file_with_strange_characters() {
 
 		file_put_contents( PATH::get_root() . '/Groß.jpg', '' );
+		$this->assertFileExists( PATH::get_root() . '/Groß.jpg' );
 
 		$this->backup->backup();
 
-		$this->assertFileExists( PATH::get_root() . '/Groß.jpg' );
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
 		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( 'Groß.jpg' ) );
 
 		unlink( PATH::get_root() . '/Groß.jpg' );
@@ -272,4 +273,13 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	public function test_backup_with_errors() {
+
+		$this->assertTrue( $this->backup->backup() );
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+
+		$this->backup->error( get_class( $this->backup ), 'foobar' );
+		$this->assertFalse( $this->backup->verify_backup() );
+
+	}
 }

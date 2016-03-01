@@ -29,4 +29,13 @@ abstract class Common_Database_Backup_Engine_Tests extends \HM_Backup_UnitTestCa
 
 	}
 
+	public function test_backup_with_errors() {
+
+		$this->assertTrue( $this->backup->backup() );
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+
+		$this->backup->error( get_class( $this->backup ), 'foobar' );
+		$this->assertFalse( $this->backup->verify_backup() );
+
+	}
 }
