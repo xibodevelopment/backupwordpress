@@ -19,6 +19,15 @@ var BackUpWordPressAdmin = (function($){
 
 		}
 
+		$('.notice.is-dismissible').on('click', '.notice-dismiss', function(event){
+			$.post(
+				ajaxurl,
+				{
+					'action': 'hmbkp_dismiss_notice'
+				}
+			);
+		});
+
 		// Show delete confirm message for delete schedule
 		$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function ( e ) {
 

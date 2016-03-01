@@ -18,6 +18,14 @@ final class Plugin {
 	 */
 	private function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+
+		$hide_notice = get_site_option( 'hmbkp_hide_info_notice', false );
+
+		if ( ! $hide_notice ) {
+			add_action( 'admin_notices', array( $this, 'display_feature_message' ) );
+			add_action( 'network_admin_notices', array( $this, 'display_feature_message' ) );
+		}
+
 	}
 
 	/**
@@ -413,6 +421,37 @@ final class Plugin {
 			window.intercomSettings = <?php echo json_encode( $info ); ?>;
 		</script>
 		<script>!function(){function e(){var a=c.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://static.intercomcdn.com/intercom.v1.js";var b=c.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)}var a=window,b=a.Intercom;if("function"==typeof b)b("reattach_activator"),b("update",intercomSettings);else{var c=document,d=function(){d.c(arguments)};d.q=[],d.c=function(a){d.q.push(a)},a.Intercom=d,a.attachEvent?a.attachEvent("onload",e):a.addEventListener("load",e,!1)}}();</script>
+
+	<?php }
+
+	public function display_feature_message() {
+
+		$current_screen = get_current_screen();
+
+		if ( ! isset( $current_screen ) ) {
+			return;
+		}
+
+		$page = is_multisite() ? HMBKP_ADMIN_PAGE . '-network' : HMBKP_ADMIN_PAGE;
+		if ( $current_screen->id !== $page ) {
+			return;
+		}
+
+		/* translators: %1$s and %2$s expand to anchor tags linking to the new extensions page. */
+		$info_message = sprintf(
+			__( 'Thanks for updating BackUpWordPress, why not check out %1$sour extensions?%2$s', 'backupwordpress' ),
+			'<a href="' . get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) . '">',
+			'</a>'
+		);
+		?>
+
+		<div id="hmbkp-info-message" class="updated notice is-dismissible">
+
+			<p><?php echo $info_message; ?></p>
+
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
+
+		</div>
 
 	<?php }
 
