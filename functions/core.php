@@ -261,7 +261,7 @@ function update() {
 		}
 	}
 
-	// Update from PRIOR_VERSION
+	// Update from 3.3.0
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.3.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		$schedules = Schedules::get_instance();
@@ -281,11 +281,16 @@ function update() {
 
 	}
 
+	// Update from 3.3.4
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.4.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+		delete_transient( 'hmbkp_directory_filesizes' );
+	}
+
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
-		
+
 		\HMBKP_Setup::deactivate();
 
 		Path::get_instance()->protect_path( 'reset' );
