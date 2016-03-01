@@ -10,6 +10,11 @@ if ( ! current_user_can( 'activate_plugins' ) ) {
 
 global $wpdb;
 
+// Delete the file manifest if it exists
+if ( file_exists( PATH::get_path() . '/.files' ) ) {
+	unlink( PATH::get_path() . '/.files' );
+}
+
 // Get all schedule options with a SELECT query and delete them.
 $schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
 
