@@ -536,7 +536,7 @@ function heartbeat_received( $response, $data ) {
 		if ( ! empty( $data['hmbkp_client_request'] ) ) {
 
 			// Pass the site size to be displayed when it's ready.
-			if ( Site_Size::is_site_size_cached() ) {
+			if ( Site_Size->is_site_size_cached() ) {
 
 				$site_size = new Site_Size( $schedule->get_type(),  $schedule->get_excludes() );
 
