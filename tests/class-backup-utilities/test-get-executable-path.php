@@ -15,6 +15,10 @@ class Backup_Engine_Get_Executable_Path_Tests extends \HM_Backup_UnitTestCase {
 
 		$this->paths = array_combine( $paths, $paths );
 
+		if ( ! function_exists( 'proc_open' ) ) {
+			$this->markTestSkipped( 'proc_open is disabled' );
+		}
+
 	}
 
 	public function test_can_pick_first_path() {
