@@ -182,6 +182,16 @@ class Backup {
 
 	}
 
+	/**
+	 * Back compat with old error mathod
+	 *
+	 * @deprecated 3.4 Backup->warning( $context, $warning )
+	 */
+	public function error( $context, $message ) {
+		_deprecated_function( __FUNCTION__, '3.4', 'Backup->warning( $context, $warning )' );
+		$this->warning( $context, $message );
+	}
+
 	public function get_database_backup_filepath() {
 		return $this->database_dump_filepath;
 	}
