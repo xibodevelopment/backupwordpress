@@ -86,7 +86,7 @@ abstract class Service {
 	 *
 	 * @return mixed
 	 */
-	abstract public function action( $action, Backup $backup );
+	public function action( $action, Backup $backup ) {}
 
 	public function get_slug() {
 		return sanitize_key( $this->name );

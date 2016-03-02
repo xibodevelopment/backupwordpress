@@ -1,5 +1,0 @@
-5c88eed (HEAD -> master, origin/master, origin/HEAD) Merge pull request #813 from humanmade/mu-settings-page
-d924e1e (origin/mu-settings-page, mu-settings-page) Fix settings URL
-297ab9c Merge pull request #820 from herrherrmann/master
-63d1ad0 Updated and extended German translation.
-29710f0 Fixes admin page slug for multisite

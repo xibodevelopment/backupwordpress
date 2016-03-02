@@ -6,7 +6,7 @@
 div#hmbkp-warning, h2.nav-tab-wrapper + div[id^="hmbkp"] { margin: 20px 0 15px; }
 h2 + div[id^="hmbkp"] input { max-width: 100%; }
 
-.nav-tab.hmbkp-running:not(.nav-tab-active):before { width: 20px; height: 20px; margin: 0 10px -4px 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
+li a.hmbkp-running:not(.current):before { width: 20px; height: 20px; margin: -1px 10px -5px 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
 
 .hmbkp-upsell { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ccc; }
 .hmbkp-upsell a { color: #57792b }
@@ -20,7 +20,7 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 .hmbkp-upsell .howto { font-weight: normal; display: inline; }
 .hmbkp-upsell .hmbkp_hide { float: right; }
 
-.hmbkp-schedule-sentence { font-size: 16px; font-weight: lighter; margin: 20px 0; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
+.hmbkp-schedule-sentence { font-size: 16px; font-weight: lighter; margin: 0 0 20px 0; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 60px; display: block; float: left; }
 .hmbkp-schedule-sentence.hmbkp-error:before { content: "\2718"; }
 .hmbkp-schedule-sentence.hmbkp-running:before { width: 20px; height: 80px; margin: -1px 10px 0 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
@@ -32,18 +32,19 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 .hmbkp-schedule-sentence .submit { padding: 0; }
 .hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
 .hmbkp-schedule-actions a { white-space: nowrap; }
+.hmbkp-schedule-sentence .row-actions { position: static; }
 
 .hmbkp-schedule-settings { border-top: 1px solid #e5e5e5; margin: 20px -20px -20px; background-color: #f5f5f5; padding: 0 20px 20px; }
 
 .hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; position: relative; }
 .hmbkp-ajax-loading::after { content: ""; width: 16px; height: 16px; background-image: url('spinner-2x.gif'); background-size: 16px 16px; background-repeat: no-repeat; background-position: 0 0; position: absolute; right: -30px; top: 5px; }
 
-.delete-action { color: #a00; -webkit-transition: all 300ms ease; -moz-transition: all 300ms ease; -ms-transition: all 300ms ease; -o-transition: all 300ms ease; transition: all 300ms ease; }
-.delete-action:hover .delete-action:focus { color: red; -webkit-transition: all 300ms ease; -moz-transition: all 300ms ease; -ms-transition: all 300ms ease; -o-transition: all 300ms ease; transition: all 300ms ease; }
+.delete-action { color: #a00; -webkit-transition: all 300ms ease; transition: all 300ms ease; }
+.delete-action:hover .delete-action:focus { color: red; -webkit-transition: all 300ms ease; transition: all 300ms ease; }
 
 .strikethrough { text-decoration: line-through; }
 
-table.widefat tbody tr:nth-child(even) { background-color: #f9f9f9 }
+table.widefat tbody tr:nth-child(odd) { background-color: #f9f9f9 }
 .hmbkp-exclude-settings td:first-child, .hmbkp-exclude-settings th:first-child { width: 20px; padding-right: 0 }
 .hmbkp-exclude-settings thead tr:last-child { background-color: #f9f9f9; }
 .hmbkp-exclude-settings table .button-secondary { line-height: 18px; height: 20px; }
@@ -61,9 +62,7 @@ thead td { border-bottom: 1px solid #e1e1e1; }
 .server-info { overflow: auto; max-height: 50%; outline: black 1px solid; }
 .server-info pre { max-height: 100px; overflow-x:hidden; }
 
-#intercom-info { background: #0074a2; color:#fff; display: inline-block; margin-bottom: -3px; padding: 3px 8px; }
-#intercom-info:hover { background: #2ea2cc; color:#fff;}
-#intercom-info span.dashicons-admin-users { position: relative; display:inline-block; vertical-align: middle; top:-2px; }
+.page-title-action span.dashicons-admin-users { position: relative; display:inline-block; vertical-align: middle; top:-2px; }
 
 pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px; overflow: auto; word-wrap: normal !important; }
 

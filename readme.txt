@@ -2,8 +2,8 @@
 Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
-Tested up to: 4.2
-Stable tag: 3.2.7
+Tested up to: 4.4.2
+Stable tag: 3.4.5
 
 Simple automated backups of your WordPress-powered website.
 
@@ -64,9 +64,9 @@ See this guide for more details - [How to restore from backup](https://bwp.hmn.m
 
 No.
 
-**I'm not receiving my backups by email?**
+**I'm not receiving my backups by email**
 
-Most servers have a filesize limit on email attachments, it's generally about 10mb. If your backup file is over that limit it won't be sent attached to the email, instead you should receive an email with a link to download the backup, if you aren't even receiving that then you likely have a mail issue on your server that you'll need to contact your host about.
+Most servers have a filesize limit on email attachments, it's generally about 10mb. If your backup file is over that limit, it won't be sent attached to the email. Instead, you should receive an email with a link to download the backup. If you aren't even receiving that, then you likely have a mail issue on your server that you'll need to contact your host about.
 
 **How many backups are stored by default?**
 
@@ -74,25 +74,25 @@ BackUpWordPress stores the last 10 backups by default.
 
 **How long should a backup take?**
 
-Unless your site is very large (many gigabytes) it should only take a few minutes to perform a back up, if your back up has been running for longer than an hour it's safe to assume that something has gone wrong, try de-activating and re-activating the plugin, if it keeps happening, contact support.
+Unless your site is very large (many gigabytes) it should only take a few minutes to perform a backup. If your back up has been running for longer than an hour, it's safe to assume that something has gone wrong. Try de-activating and re-activating the plugin. If it keeps happening, contact support.
 
 **What do I do if I get the wp-cron error message?**
 
-The issue is that your `wp-cron.php` is not returning a `200` response when hit with a HTTP request originating from your own server, it could be several things, in most cases, it's an issue with the server / site.
+The issue is that your `wp-cron.php` is not returning a `200` response when hit with a HTTP request originating from your own server, it could be several things. In most cases, it's an issue with the server / site.
 
 There are some things you can test to confirm this is the issue.
 
-     * Are scheduled posts working? (They use wp-cron as well ). 
+     * Are scheduled posts working? (They use wp-cron as well.)
 
-     * Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around).
+     * Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around.)
 
-     * If you click manual backup does it work?
+     * If you click manual backup, does it work?
 
-     * Try adding `define( 'ALTERNATE_WP_CRON', true );` to your `wp-config.php`, do automatic backups work?
+     * Try adding `define( 'ALTERNATE_WP_CRON', true );` to your `wp-config.php`. Do automatic backups work?
 
-     * Is your site private (I.E. is it behind some kind of authentication, maintenance plugin, .htaccess) if so wp-cron won't work until you remove it, if you are and you temporarily remove the authentication, do backups start working?
+     * Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won't work until you remove it. If you are and you temporarily remove the authentication, do backups start working?
 
-Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
+Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
 
 **How to get BackUpWordPress working in Heart Internet**
 
@@ -100,7 +100,7 @@ The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home
 
 **My backups seem to be failing?**
 
-If your backups are failing, it's commonly caused by lack of available resources on your server. The easiest way to establish this is to exclude some of, or the entirety of your uploads folder, running a backup, and if that succeeds, then you'll know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
+If your backups are failing, it's commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it's probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by enabling support from your Admin Dashboard (recommended), or emailing backupwordpress@hmn.md
 
 **Further Support & Feedback**
 
@@ -118,6 +118,20 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 == Upgrade Notice ==
 
+= 3.4 =
+
+* This version introduces a major refactoring of the code responsible for the core backup engine. We made sure to write
+unit tests for the new code, and we have tested it on several user's sites. It fixes a lot of old bugs, and Windows
+users should see major improvements to reliability.
+
+= 3.3.4 =
+
+* WordPress 4.4 compatibility.
+
+= 3.3.1 =
+
+* Fixes a bug that would prevent downloading backups since 3.3.0 - please update.
+
 = 3.2.5 =
 
 * Security fixes related to add_query_arg
@@ -128,21 +142,92 @@ You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> o
 
 = 3.1.3 =
 
-  * Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
-  
+* Fixes backwards compatibility for add-ons and avoids a Fatal Error. Please upgrade straight to this version before upgrading your add-ons.
+
 = 3.0.4 =
 
-  * Fixes a few minor bugs. Immediate update is recommended.
+* Fixes a few minor bugs. Immediate update is recommended.
 
 = 3.0.2 =
 
-  * Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
+* Important: we have dropped support for PHP 5.2, you will not be able to activate BackUpWordPress on a server running PHP versions older than PHP 5.3.29
 
 = 3.0.1 =
 
-  * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
+* This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.4.5 / 2016-02-23
+
+* Fix fatal error on upgrade
+
+### 3.4.4 / 2016-02-23
+
+* Ensure temporary files are correctly cleaned up before and after running a backup.
+* Avoid killing site if plugin is active on PHP 52
+* Allow custom secure key using filter
+* Fixes a bug which caused the root path to the WordPress install to be miscalulated in certain setups.
+
+### 3.4.4-beta
+
+* Fixes a bug which caused the root path to the WordPress install to be miscalulated in certain setups.
+
+### 3.4.3
+
+* Fix a bug where backups were not downloadable when WordPress installed in a subdirectory
+
+### 3.4.2
+
+* Remove the usage of `shell_exec` in two of our warning messages, fixes a PHP Warning on systems with it disabled.
+* Improve how we handle `open_basedir` restrictions, fixes a PHP Warning on some systems. Adds unit tests to cover `open_basedir` handling.
+* Show an error message if neither `mysqldump` nor `PDO:mysql` are available. Database backups won't work without at least one of them.
+* Improve our upgrade code for users upgrading from pre version 2.0. Fixes a possible fatal error and ensures backups and backup settings are correctly brought forward.
+
+### 3.4.1
+
+* Fix a possible `PHP Warning` in the Schedule Sentence.
+
+### 3.4 / 2016/01/20
+
+* Introduces a major re-factor of the underlying backups engine, many bugs fixed and much improved unit test coverage.
+* Vastly improved Windows Server support.
+* We no longer write errors and warnings to files on disk.
+* Update to the latest version of `symfony/finder`.
+* Update to the latest version of `ifsnop/mysqldump-php`.
+
+### 3.3.4 / 2015-12-10
+
+* Fixes styling issues with WordPress 4.4
+
+### 3.3.3 / 2015-11-13
+
+* Fix broken Intercom support window
+* Fixes Typos in i18n strings
+* Backups finish faster
+* Fix an issue that caused the site size to report as twice as large as it should
+* Adds PHP mysqldump fallback lib (`ifsnop/mysqldump-php`)
+
+### 3.3.2 / 2015-10-15
+
+* Misc improvements
+
+### 3.3.1 / 2015-10-12
+
+* Fix false positive error message.
+* Fix broken download links
+
+### 3.3.0 / 2015-10-09
+
+* Dropped support for PclZip
+* Fixed duplicate cron schedule interval names ( props ucavus )
+* Corrected some typos, grammar and punctuation ( props ucavus )
+* Fixed a bug in the WP CLI command ( props duritong )
+* Better message for wp-cron related errors
+* Replace 'bi-weekly' with less confusing wording
+* Fixed a few errors misc reported by code quality tool
+* Total site size display now subtracts excludes
+* Many general improvements and bug fixes
 
 #### 3.2.7 / 2015-07-27
 

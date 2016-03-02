@@ -1,39 +1,32 @@
 <?php
 
-// Refresh the schedules from the database to make sure we have the latest changes
-HM\BackUpWordPress\Schedules::get_instance()->refresh_schedules();
+namespace HM\BackUpWordPress;
 
-$schedules = HM\BackUpWordPress\Schedules::get_instance()->get_schedules();
+// Refresh the schedules from the database to make sure we have the latest changes
+Schedules::get_instance()->refresh_schedules();
+
+$schedules = Schedules::get_instance()->get_schedules();
 
 if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
-	$current_schedule = new HM\BackUpWordPress\Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
+	$current_schedule = new Scheduled_Backup( sanitize_text_field( $_GET['hmbkp_schedule_id'] ) );
 } else {
 	$current_schedule = reset( $schedules );
 } ?>
 
-<h2 class="nav-tab-wrapper">
+<div class="wp-filter">
+	<ul class="filter-links">
 
-	<?php foreach ( $schedules as $schedule ) : ?>
+		<?php foreach ( $schedules as $schedule ) :
+			$status = new Backup_Status( $schedule->get_id() ); ?>
 
-		<a class="nav-tab<?php if ( $schedule->get_status() ) { ?> hmbkp-running<?php } ?><?php if ( $schedule->get_id() === $current_schedule->get_id() ) { ?> nav-tab-active<?php } ?>" <?php if ( $schedule->get_status() ) { ?>title="<?php echo esc_attr( strip_tags( $schedule->get_status() ) ); ?>"<?php } ?> href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?> "><?php echo esc_html( hmbkp_translated_schedule_title( $schedule->get_slug(), $schedule->get_name() ) ); ?> <span class="count">(<?php echo esc_html( count( $schedule->get_backups() ) ); ?>)</span></a>
+			<li<?php if ( $status->get_status() ) { ?> title="<?php echo esc_attr( strip_tags( $status->get_status() ) ); ?>"<?php } ?>><a href="<?php echo esc_url( add_query_arg( 'hmbkp_schedule_id', $schedule->get_id(), HMBKP_ADMIN_URL ) ); ?>" class="<?php if ( $status->get_status() ) { ?>hmbkp-running<?php } ?> <?php if ( $schedule->get_id() === $current_schedule->get_id() ) { ?>current<?php } ?>"><?php echo esc_html( translated_schedule_title( $schedule->get_slug(), $schedule->get_name() ) ); ?> <span class="count">(<?php echo esc_html( count( $schedule->get_backups() ) ); ?>)</span></a></li>
 
-	<?php endforeach; ?>
+		<?php endforeach; ?>
 
-	<a class="nav-tab<?php if ( ! HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $current_schedule->get_id() ) ) { ?> nav-tab-active<?php } ?>" href="<?php echo esc_url( add_query_arg( array( 'hmbkp_add_schedule' => '1', 'action' => 'hmbkp_edit_schedule', 'hmbkp_schedule_id' => time(), 'hmbkp_panel' => 'hmbkp_edit_schedule_settings' ), HMBKP_ADMIN_URL ) ); ?>"> + <?php _e( 'add schedule', 'backupwordpress' ); ?></a>
+		<li><a href="<?php echo esc_url( add_query_arg( array( 'hmbkp_add_schedule' => '1', 'action' => 'hmbkp_edit_schedule', 'hmbkp_schedule_id' => time(), 'hmbkp_panel' => 'hmbkp_edit_schedule_settings' ), HMBKP_ADMIN_URL ) ); ?>" class="<?php if ( ! Schedules::get_instance()->get_schedule( $current_schedule->get_id() ) ) { ?> current<?php } ?>"> + <?php _e( 'add schedule', 'backupwordpress' ); ?></a></li>
 
-	<?php if ( get_option( 'hmbkp_enable_support' ) ) { ?>
-
-		<a id="intercom" class="add-new-h2" href="mailto:backupwordpress@hmn.md"><?php _e( 'Support', 'backupwordpress' ); ?></a>
-
-	<?php } else {
-
-		add_thickbox(); ?>
-
-		<a id="intercom-info" class="thickbox add-new-h2" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support', 'width' => '600', 'height' => '420' ), self_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ) ); ?>"><span class="dashicons dashicons-admin-users"></span>&nbsp;<?php _e( 'Enable Support', 'backupwordpress' ); ?></a>
-
-	<?php } ?>
-
-</h2>
+	</ul>
+</div>
 
 <?php // Don't continue if we don't have a schedule
 if ( ! $schedule = $current_schedule ) {

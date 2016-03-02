@@ -39,7 +39,7 @@ abstract class Webhook_Service extends Service {
 		}
 
 		$webhook_url = $this->get_url();
-		$file        = $backup->get_archive_filepath();
+		$file        = $backup->get_backup_filepath();
 		$download    = add_query_arg( 'hmbkp_download', base64_encode( $file ), HMBKP_ADMIN_URL );
 		$domain      = parse_url( home_url(), PHP_URL_HOST ) . parse_url( home_url(), PHP_URL_PATH );
 
@@ -100,7 +100,7 @@ abstract class Webhook_Service extends Service {
 		$ret = wp_remote_post( $webhook_url, $webhook_args );
 
 		if ( is_wp_error( $ret ) ) {
-			$backup->error( 'Webhook', sprintf( __( 'Error: %s', 'backupwordpress' ), $ret->get_error_message() ) );
+			$backup->warning( 'Webhook', sprintf( __( 'Error: %s', 'backupwordpress' ), $ret->get_error_message() ) );
 		}
 
 	}

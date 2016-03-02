@@ -1,5 +1,7 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * Implement backup command
  *
@@ -7,7 +9,7 @@
  * @package wp-cli
  * @subpackage commands/third-party
  */
-class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
+class CLI extends \WP_CLI_Command {
 
 	/**
 	 * Perform a Backup.
@@ -26,12 +28,6 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 	 * [--root]
 	 * : dir that should be backed up, defaults to site root.
 	 *
-	 * [--zip_command_path]
-	 * : path to your zip binary, standard locations are automatically used
-	 *
-	 * [--mysqldump_command_path]
-	 * : path to your mysqldump binary, standard locations are automatically used
-	 *
 	 * [--archive_filename]
 	 * : filename for the resulting zip file
 	 *
@@ -47,38 +43,40 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 	public function backup( $args, $assoc_args ) {
 
 		add_action( 'hmbkp_mysqldump_started', function () {
-			WP_CLI::line( __( 'Backup: Dumping database...', 'backupwordpress' ) );
+			\WP_CLI::line( __( 'Backup: Dumping database...', 'backupwordpress' ) );
 		} );
 
 		add_action( 'hmbkp_archive_started', function () {
-			WP_CLI::line( __( 'Backup: Zipping everything up...', 'backupwordpress' ) );
+			\WP_CLI::line( __( 'Backup: Zipping everything up...', 'backupwordpress' ) );
 		} );
 
-		$hm_backup = new HM\BackUpWordPress\Backup();
-
 		if ( ! empty( $assoc_args['destination'] ) ) {
-			HM\BackUpWordPress\Path::get_instance()->set_path( $assoc_args['destination'] );
+			Path::get_instance()->set_path( $assoc_args['destination'] );
 		}
 
-		HM\BackUpWordPress\Path::get_instance()->cleanup();
+		Path::get_instance()->cleanup();
 
 		if ( ! empty( $assoc_args['root'] ) ) {
-			$hm_backup->set_root( $assoc_args['root'] );
+			Path::get_instance()->set_root( $assoc_args['root'] );
 		}
 
-		if ( ( ! is_dir( hmbkp_path() ) ) ) {
-			WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
+		if ( ( ! is_dir( Path::get_path() ) ) ) {
+			\WP_CLI::error( __( 'Invalid backup path', 'backupwordpress' ) );
 			return false;
 		}
 
-		if ( ! is_dir( $hm_backup->get_root() ) || ! is_readable( $hm_backup->get_root() ) ) {
-			WP_CLI::error( __( 'Invalid root path', 'backupwordpress' ) );
+		if ( ! is_dir( Path::get_root() ) || ! is_readable( Path::get_root() ) ) {
+			\WP_CLI::error( __( 'Invalid root path', 'backupwordpress' ) );
 			return false;
 		}
+
+		$filename = 'backup.zip';
 
 		if ( isset( $assoc_args['archive_filename'] ) ) {
-			$hm_backup->set_archive_filename( $assoc_args['archive_filename'] );
+			$filename = $assoc_args['archive_filename'];
 		}
+
+		$hm_backup = new Backup( $filename );
 
 		if ( ! empty( $assoc_args['files_only'] ) ) {
 			$hm_backup->set_type( 'file' );
@@ -88,28 +86,20 @@ class BackUpWordPress_WP_CLI_Command extends WP_CLI_Command {
 			$hm_backup->set_type( 'database' );
 		}
 
-		if ( isset( $assoc_args['mysqldump_command_path'] ) ) {
-			$hm_backup->set_mysqldump_command_path( $assoc_args['mysqldump_command_path'] );
-		}
-
-		if ( isset( $assoc_args['zip_command_path'] ) ) {
-			$hm_backup->set_zip_command_path( $assoc_args['zip_command_path'] );
-		}
-
 		if ( ! empty( $assoc_args['excludes'] ) ) {
 			$hm_backup->set_excludes( $assoc_args['excludes'] );
 		}
 
-		$hm_backup->backup();
+		$hm_backup->run();
 
-		if ( file_exists( $hm_backup->get_archive_filepath() ) ) {
-			WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $hm_backup->get_archive_filepath() );
+		if ( file_exists( $hm_backup->get_backup_filepath() ) ) {
+			\WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $hm_backup->get_backup_filepath() );
 		} else {
-			WP_CLI::error( __( 'Backup Failed', 'backupwordpress' ) );
+			\WP_CLI::error( __( 'Backup Failed', 'backupwordpress' ) );
 		}
 
 	}
 
 }
 
-WP_CLI::add_command( 'backupwordpress', 'BackUpWordPress_WP_CLI_Command' );
+\WP_CLI::add_command( 'backupwordpress', 'HM\BackUpWordPress\CLI' );

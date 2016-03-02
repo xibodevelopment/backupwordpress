@@ -1,11 +1,13 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * Tests for methods dealing with scheduling backups
  *
  * @extends WP_UnitTestCase
  */
-class testScheduleTestCase extends HM_Backup_UnitTestCase {
+class testScheduleTestCase extends \HM_Backup_UnitTestCase {
 
 	/**
 	 * Contains the current backup schedule instance
@@ -21,9 +23,9 @@ class testScheduleTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function setUp() {
 
-		$this->schedule = new HM\BackUpWordPress\Scheduled_Backup( 'unit-test' );
+		$this->schedule = new Scheduled_Backup( 'unit-test' );
 
-		$this->recurrences = HM\BackUpWordPress\Scheduled_Backup::get_cron_schedules();
+		$this->recurrences = get_cron_schedules();
 
 	}
 

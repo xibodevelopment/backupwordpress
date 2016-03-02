@@ -1,11 +1,8 @@
 <?php
-
-namespace HM\BackUpWordPress;
-
 /**
  * Class BackUpWordPress_Setup
  */
-class Setup {
+class HMBKP_Setup {
 
 	/**
 	 * Defines the minimum version of WordPress required by BWP.
@@ -67,11 +64,15 @@ class Setup {
 
 		$schedules = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", 'hmbkp_schedule_%' ) );
 
-		foreach ( array_map( function ( $item ) {
-			return ltrim( $item, 'hmbkp_schedule_' );
-		}, $schedules ) as $item ) {
+		foreach ( array_map( array( 'self', 'trim_prefix' ), $schedules ) as $item ) {
 			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
 		}
+
+
+	}
+
+	public static function trim_prefix( $item ) {
+		return ltrim( $item, 'hmbkp_schedule_' );
 	}
 
 	/**
@@ -104,7 +105,7 @@ class Setup {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
-		deactivate_plugins( dirname( __DIR__ ) . '/backupwordpress.php' );
+		deactivate_plugins( dirname( dirname(__FILE__ ) ) . '/backupwordpress.php' );
 
 		if ( isset( $_GET['activate'] ) ) {
 			unset( $_GET['activate'] );
@@ -155,7 +156,7 @@ class Setup {
 	 */
 	public static function display_admin_notices() {
 
-		echo '<div class="error"><p>' . esc_html( self::get_notice_message() ) . '</p></div>';
+		echo '<div class="error"><p>' . self::get_notice_message() . '</p></div>';
 
 	}
 

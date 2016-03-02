@@ -1,12 +1,14 @@
 <?php
 
+namespace HM\BackUpWordPress;
+
 /**
  * Unit tests for the Path class
  *
  * @see Path
  * @extends HM_Backup_UnitTestCase
  */
-class testBackupPathTestCase extends HM_Backup_UnitTestCase {
+class Test_Backup_Path extends \HM_Backup_UnitTestCase {
 
 	public function setUp() {
 
@@ -14,8 +16,8 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 		global $is_apache;
 		$this->is_apache = $is_apache;
 
-		$this->path = HM\BackUpWordPress\Path::get_instance();
-		$this->custom_path = WP_CONTENT_DIR . '/custom';
+		$this->path = Path::get_instance();
+		$this->custom_path = wp_normalize_path( WP_CONTENT_DIR . '/custom' );
 
 		// Cleanup before we kickoff in-case theirs cruft around from previous failures
 		$this->tearDown();
@@ -31,20 +33,29 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 			$is_apache = $this->is_apache;
 		}
 
+		if ( file_exists( $this->path->get_default_path() ) ) {
+			chmod( $this->path->get_default_path(), 0755 );
+		}
+
+		chmod( dirname( $this->path->get_default_path() ), 0755 );
+
 		// Remove all backup paths that exist
 		foreach( $this->path->get_existing_paths() as $path ) {
-			hmbkp_rmdirtree( $path );
+			rmdirtree( $path );
 		}
 
 		// Remove our custom path
-		hmbkp_rmdirtree( $this->custom_path );
+		rmdirtree( $this->custom_path );
+
+    	// Reset the path internally
+		$this->path->reset_path();
 
 	}
 
 	/**
 	 * By default the path should be the default path
 	 */
-	public function testdefaultPath() {
+	public function testDefaultPath() {
 
 		$this->assertEquals( $this->path->get_default_path(), $this->path->get_path() );
 
@@ -57,15 +68,20 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testFallbackPath() {
 
-		$this->assertEquals( $this->path->get_default_path(), $this->path->get_path() );
+		$this->assertEquals( $this->path->get_default_path(), Path::get_path() );
 
-		if ( wp_is_writable( $this->path->get_default_path() ) ) {
-			$this->markTestSkipped( 'The default path was still writable' );
-		}
+		$path = $this->path->get_default_path();
+
+		chmod( $path, 0555 );
 
 		$this->path->calculate_path();
 
-		$this->assertEquals( $this->path->get_path(), $this->path->get_fallback_path() );
+		// wp_mkdir_p fixes permissions which invalidates this test
+		if ( wp_is_writable( $path ) ) {
+			$this->markTestSkipped( 'The default path was still writable' );
+		}
+
+		$this->assertEquals( Path::get_path(), $this->path->get_fallback_path() );
 
 		$this->assertFileExists( $this->path->get_fallback_path() );
 
@@ -84,7 +100,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$this->path->calculate_path();
 
-		$this->assertEquals( $this->path->get_path(), $this->path->get_existing_path() );
+		$this->assertEquals( Path::get_path(), $this->path->get_existing_path() );
 
 		$this->assertFileExists( $this->path->get_existing_path() );
 
@@ -95,9 +111,13 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	 */
 	public function testExistingPaths() {
 
-		$paths = $this->generate_additional_paths();
+		$generated_paths = $this->generate_additional_paths();
+        $paths = $this->path->get_existing_paths();
 
-		$this->assertEquals( $paths, $this->path->get_existing_paths() );
+        sort( $generated_paths );
+        sort( $paths );
+
+		$this->assertEquals( $paths, $paths );
 
 	}
 
@@ -110,7 +130,7 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$this->assertEquals( $this->path->get_custom_path(), $this->custom_path );
 
-		$this->assertEquals( $this->path->get_path(), $this->custom_path );
+		$this->assertEquals( Path::get_path(), wp_normalize_path( $this->custom_path ) );
 
 		$this->assertFileExists( $this->path->get_custom_path() );
 
@@ -123,11 +143,11 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$this->path->set_path( '/' . rand() );
 
-		if ( is_writable( $this->custom_path ) ) {
+		if ( wp_is_writable( $this->custom_path ) ) {
 			$this->markTestSkipped( 'The custom path was still writable' );
 		}
 
-		$this->assertEquals( $this->path->get_path(), $this->path->get_default_path() );
+		$this->assertEquals( Path::get_path(), $this->path->get_default_path() );
 
 		$this->assertFileExists( $this->path->get_default_path() );
 
@@ -140,30 +160,19 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 
 		$paths = $this->generate_additional_paths();
 
-		// Do a single database backup in each path
+		// Create a dummy database backup in each path
 		foreach ( $paths as $path ) {
 
-			$this->path->set_path( $path );
+				$backups[] = $backup = microtime() . '.zip';
 
-			$backup = new HM\BackUpWordPress\Backup();
-
-			$backup->set_type( 'database' );
-
-			// We want to avoid name clashes
-			$backup->set_archive_filename( microtime() . '.zip' );
-
-			$backup->backup();
-
-			$this->assertFileExists( $backup->get_archive_filepath() );
-
-			$backups[] = $backup->get_archive_filename();
+				file_put_contents( trailingslashit( $path ) . $backup, 'Just keep swimming, just keep swimming...' );
 
 		}
 
 		$this->path->merge_existing_paths();
 
 		foreach ( $backups as $backup ) {
-			$this->assertFileExists( $this->path->get_path() . '/' . $backup );
+			$this->assertFileExists( Path::get_path() . '/' . $backup );
 		}
 
 	}
@@ -178,16 +187,16 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 		$is_apache = true;
 
 		// Test the default backup path
-		$this->assertFileExists( $this->path->get_path() . '/index.html' );
-		$this->assertFileExists( $this->path->get_path() . '/.htaccess' );
+		$this->assertFileExists( Path::get_path() . '/index.html' );
+		$this->assertFileExists( Path::get_path() . '/.htaccess' );
 
 		// Test a custom backup path
 		$this->path->set_path( $this->custom_path );
 
 		$this->path->calculate_path();
 
-		$this->assertFileExists( $this->path->get_path() . '/index.html' );
-		$this->assertFileExists( $this->path->get_path() . '/.htaccess' );
+		$this->assertFileExists( Path::get_path() . '/index.html' );
+		$this->assertFileExists( Path::get_path() . '/.htaccess' );
 
 	}
 
@@ -197,18 +206,39 @@ class testBackupPathTestCase extends HM_Backup_UnitTestCase {
 	private function generate_additional_paths() {
 
 		for ( $i = 0; $i < 3; $i++ ) {
-			$paths[] = $path = WP_CONTENT_DIR . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
+			$paths[] = $path = wp_normalize_path( WP_CONTENT_DIR ) . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
 			$this->path->set_path( $path );
 		}
 
 		$uploads = wp_upload_dir();
 
 		for ( $i = 0; $i < 3; $i++ ) {
-			$paths[] = $path = $uploads['basedir'] . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
+			$paths[] = $path = wp_normalize_path( $uploads['basedir'] ) . '/backupwordpress-' . str_pad( $i, 10, $i ) . '-backups';
 			$this->path->set_path( $path );
 		}
 
 		return $paths;
+
+	}
+
+	public function test_cleanup() {
+
+		// Should be cleaned up
+		file_put_contents( PATH::get_path() . '/foo.zip.SmuhtP', 'bar' );
+		file_put_contents( PATH::get_path() . '/foo.sql', 'bar' );
+		file_put_contents( PATH::get_path() . '/zicBotXQ', 'baz' );
+
+		// Existing backups shouldn't be cleaned up
+		file_put_contents( PATH::get_path() . '/backup.zip', 'baz' );
+
+		Path::get_instance()->cleanup();
+
+		$this->assertFileNotExists( PATH::get_path() . '/foo.zip.SmuhtP' );
+		$this->assertFileNotExists( PATH::get_path() . '/foo.sql' );
+		$this->assertFileNotExists( PATH::get_path() . '/zicBotXQ' );
+
+		$this->assertFileExists( PATH::get_path() . '/index.html' );
+		$this->assertFileExists( PATH::get_path() . '/backup.zip' );
 
 	}
 
