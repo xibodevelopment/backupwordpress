@@ -10,9 +10,11 @@ if ( ! current_user_can( 'activate_plugins' ) ) {
 
 global $wpdb;
 
+require_once dirname( __FILE__ ) . '/classes/class-path.php';
+
 // Delete the file manifest if it exists
-if ( file_exists( PATH::get_path() . '/.files' ) ) {
-	unlink( PATH::get_path() . '/.files' );
+if ( file_exists( HM\BackUpWordPress\PATH::get_path() . '/.files' ) ) {
+	unlink( HM\BackUpWordPress\PATH::get_path() . '/.files' );
 }
 
 // Get all schedule options with a SELECT query and delete them.
