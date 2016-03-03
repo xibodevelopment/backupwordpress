@@ -46,19 +46,27 @@ cd "$TMPDIR"
 sed -e "s/{{TAG}}/$VERSION/g" < "$PLUGINDIR/bin/readme.txt" > readme.txt
 
 # Remove special files
-rm ".gitignore"
-rm ".scrutinizer.yml"
-rm ".travis.yml"
-rm "composer.json"
-rm "Gruntfile.js"
-rm "package.json"
-rm "phpcs.ruleset.xml"
-rm "phpunit.xml.dist"
-rm "multisite.xml"
-rm "codecoverage.xml"
-rm -r "assets"
-rm -r "bin"
-rm -r "tests"
+rm .gitignore
+rm .gitmodules
+rm .bowerrc
+rm .travis.yml
+rm .jshintrc
+rm CONTRIBUTING.md
+rm changelog.txt
+rm .scrutinizer.yml
+rm phpunit.xml
+rm bower.json
+rm Gruntfile.js
+rm package.json
+rm README.md
+rm -r bin
+rm -r grunt
+rm -r releases
+rm -r vendor/symfony/finder/Symfony/Component/Finder/Tests
+rm -r readme
+rm -r tests
+
+
 
 # Add any new files
 svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2}' | xargs svn add
