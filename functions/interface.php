@@ -412,3 +412,23 @@ function path_in_php_open_basedir( $path, $ini_get = 'ini_get' ) {
 	return false;
 
 }
+
+/**
+ * Check if two filesizes are of the same size format
+ *
+ * E.g. 22 MB and 44 MB are both MB so return true. Whereas
+ * 22 KB and 12 TB are not so return false.
+ *
+ * @param  int  $size
+ * @param  int  $other_size
+ *
+ * @return boolean             Whether the two filesizes are of the same magnitude
+ */
+function is_same_size_format( $size, $other_size ) {
+
+	if ( ! is_int( $size ) || ! is_int( $other_size ) ) {
+		return false;
+	}
+
+	return preg_replace( '/[0-9]+/', '', size_format( $size ) ) === preg_replace( '/[0-9]+/', '', size_format( $other_size ) );
+}
