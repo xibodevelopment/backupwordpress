@@ -17,56 +17,56 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 		<tbody>
 
-		<?php foreach ( $user_excludes as $key => $exclude ) :
+			<?php foreach ( $user_excludes as $key => $exclude ) :
 
-			$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
+				$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
 
-			<tr>
+				<tr>
 
-				<th scope="row">
+					<th scope="row">
 
-					<?php if ( $exclude_path->isFile() ) { ?>
+						<?php if ( $exclude_path->isFile() ) { ?>
 
-						<div class="dashicons dashicons-media-default"></div>
+							<div class="dashicons dashicons-media-default"></div>
 
-					<?php } elseif ( $exclude_path->isDir() ) { ?>
+						<?php } elseif ( $exclude_path->isDir() ) { ?>
 
-						<div class="dashicons dashicons-portfolio"></div>
+							<div class="dashicons dashicons-portfolio"></div>
 
-					<?php } ?>
+						<?php } ?>
 
-				</th>
+					</th>
 
-				<td>
+					<td>
 
-					<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
+						<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
 
-				</td>
+					</td>
 
-				<td>
+					<td>
 
-					<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === trailingslashit( Path::get_root() ) . untrailingslashit( $exclude ) ) ) : ?>
+						<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === trailingslashit( Path::get_root() ) . untrailingslashit( $exclude ) ) ) : ?>
 
-						<?php _e( 'Default rule', 'backupwordpress' ); ?>
+							<?php _e( 'Default rule', 'backupwordpress' ); ?>
 
-					<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
+						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
 
-						<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
+							<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
 
-					<?php else : ?>
+						<?php else : ?>
 
-						<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
-							'hmbkp_remove_exclude' => $exclude,
-							'hmbkp_schedule_id'    => $schedule->get_id(),
-						) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
+							<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
+								'hmbkp_remove_exclude' => $exclude,
+								'hmbkp_schedule_id'    => $schedule->get_id(),
+							) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
 
-					<?php endif; ?>
+						<?php endif; ?>
 
-				</td>
+					</td>
 
-			</tr>
+				</tr>
 
-		<?php endforeach; ?>
+			<?php endforeach; ?>
 
 		</tbody>
 
@@ -171,11 +171,15 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 				<td>
 
-					<code><?php if ( is_link( Path::get_root() ) ) {
-						_e( 'Symlink', 'backupwordpress' );
-					} elseif ( is_dir( Path::get_root() ) ) {
-						_e( 'Folder', 'backupwordpress' );
-					} ?></code>
+					<code>
+
+						<?php if ( is_link( Path::get_root() ) ) {
+							_e( 'Symlink', 'backupwordpress' );
+						} elseif ( is_dir( Path::get_root() ) ) {
+							_e( 'Folder', 'backupwordpress' );
+						} ?>
+
+					</code>
 
 				</td>
 
