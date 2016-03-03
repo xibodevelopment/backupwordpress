@@ -208,8 +208,8 @@ function plugin_row( $plugins ) {
 
 	$menu = is_multisite() ? 'Settings' : 'Tools';
 
-	if ( isset( $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php'] ) ) {
-		$plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] = str_replace( 'Once activated you\'ll find me under <strong>' . $menu . ' &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( get_settings_url() ) . '">' . $menu . ' &rarr; Backups</a></strong>', $plugins[HMBKP_PLUGIN_SLUG . '/backupwordpress.php']['Description'] );
+	if ( isset( $plugins[ HMBKP_PLUGIN_SLUG . '/backupwordpress.php' ] ) ) {
+		$plugins[ HMBKP_PLUGIN_SLUG . '/backupwordpress.php' ]['Description'] = str_replace( 'Once activated you\'ll find me under <strong>' . $menu . ' &rarr; Backups</strong>', 'Find me under <strong><a href="' . esc_url( get_settings_url() ) . '">' . $menu . ' &rarr; Backups</a></strong>', $plugins[ HMBKP_PLUGIN_SLUG . '/backupwordpress.php' ]['Description'] );
 	}
 
 	return $plugins;
@@ -312,7 +312,7 @@ function translated_schedule_title( $slug, $title ) {
 		'database-monthly'     => esc_html__( 'Database Monthly', 'backupwordpress' ),
 		'complete-manually'    => esc_html__( 'Complete Manually', 'backupwordpress' ),
 		'file-manually'        => esc_html__( 'File Manually', 'backupwordpress' ),
-		'database-manually'    => esc_html__( 'Database Manually', 'backupwordpress' )
+		'database-manually'    => esc_html__( 'Database Manually', 'backupwordpress' ),
 	);
 
 	if ( isset( $titles[ $slug ] ) ) {
@@ -379,7 +379,7 @@ function get_settings_errors() {
  *
  * @return bool
  */
-function clear_settings_errors(){
+function clear_settings_errors() {
 	return delete_transient( 'hmbkp_settings_errors' );
 }
 
@@ -411,4 +411,24 @@ function path_in_php_open_basedir( $path, $ini_get = 'ini_get' ) {
 
 	return false;
 
+}
+
+/**
+ * Check if two filesizes are of the same size format
+ *
+ * E.g. 22 MB and 44 MB are both MB so return true. Whereas
+ * 22 KB and 12 TB are not so return false.
+ *
+ * @param  int  $size
+ * @param  int  $other_size
+ *
+ * @return boolean             Whether the two filesizes are of the same magnitude
+ */
+function is_same_size_format( $size, $other_size ) {
+
+	if ( ! is_int( $size ) || ! is_int( $other_size ) ) {
+		return false;
+	}
+
+	return preg_replace( '/[0-9]+/', '', size_format( $size ) ) === preg_replace( '/[0-9]+/', '', size_format( $other_size ) );
 }
