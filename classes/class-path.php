@@ -276,6 +276,28 @@ class Path {
 	 */
 	public function calculate_path() {
 
+		$paths = $this->get_possible_paths();
+
+		// Loop through possible paths, use the first one that exists/can be created and is writable
+		foreach ( $paths as $path ) {
+			if ( wp_mkdir_p( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists
+				break;
+			}
+		}
+
+		/**
+		 * If we managed to create a writable path then use that, otherwise
+		 * just return the unwritable path
+		 */
+		if ( file_exists( $path ) && wp_is_writable( $path ) ) {
+			$this->path = $path;
+		} else {
+			$this->path = reset( $paths );
+		}
+	}
+
+	public function get_possible_paths() {
+
 		$paths = array();
 
 		// If we have a custom path then try to use it
@@ -294,16 +316,7 @@ class Path {
 		// If that didn't work then fallback to a new directory in uploads
 		$paths[] = $this->get_fallback_path();
 
-		// Loop through possible paths, use the first one that exists/can be created and is writable
-		foreach ( $paths as $path ) {
-			if ( wp_mkdir_p( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists
-				break;
-			}
-		}
-
-		if ( file_exists( $path ) && wp_is_writable( $path ) ) {
-			$this->path = $path;
-		}
+		return $paths;
 
 	}
 
@@ -399,12 +412,10 @@ class Path {
 					// Try to move them
 					if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( Path::get_path() ) . $file ) ) {
 
-
 						// If we can't move them then try to copy them
 						copy( trailingslashit( $from ) . $file, trailingslashit( Path::get_path() ) . $file );
 
 					}
-
 				}
 			}
 
@@ -416,7 +427,6 @@ class Path {
 		if ( false !== strpos( $from, WP_CONTENT_DIR ) && $from !== Path::get_path() ) {
 			rmdirtree( $from );
 		}
-
 	}
 
 	/**

@@ -140,14 +140,6 @@ function admin_notices() {
 
 	<?php endif; ?>
 
-	<div class="wrap">
-		<?php
-		if ( get_option( 'hmbkp_request_credentials' ) ) {
-			hmbkp_print_request_filesystem_credentials_modal();
-		}
-		?>
-	</div>
-
 	<?php echo ob_get_clean();
 
 }
@@ -159,17 +151,6 @@ function set_server_config_notices() {
 	$notices = Notices::get_instance();
 
 	$messages = array();
-
-	if ( ! is_dir( Path::get_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %s directory isn\'t writable. Please create the folder manually.', 'backupwordpress' ), '<code>' . esc_html( dirname( Path::get_path() ) ) . '</code>' );
-	}
-
-	if ( is_dir( Path::get_path() ) && ! wp_is_writable( Path::get_path() ) ) {
-		$messages[] = sprintf( __( 'Your backups directory isn\'t writable.', 'backupwordpress' ) );
-		update_option( 'hmbkp_request_credentials', true );
-		$msg = __( 'We couldn\'t create your backups directory. You\'ll need to either <a href="https://bwp.hmn.md/support-center/backupwordpress-faqs/#where">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' );
-		Notices::get_instance()->set_notices( 'server_config', $msg );
-	}
 
 	if ( Backup_Utilities::is_safe_mode_on() ) {
 		$messages[] = sprintf( __( '%1$s is running in %2$s, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst %3$s is on.', 'backupwordpress' ), '<code>PHP</code>', sprintf( '<a href="%1$s">%2$s</a>', __( 'http://php.net/manual/en/features.safe-mode.php', 'backupwordpress' ), __( 'Safe Mode', 'backupwordpress' ) ), '<code>' . __( 'Safe Mode', 'backupwordpress' ) . '</code>' );
@@ -207,6 +188,10 @@ function set_server_config_notices() {
 
 	if ( count( $messages ) > 0 ) {
 		$notices->set_notices( 'server_config', $messages, false );
+	}
+
+	if ( ! is_dir( Path::get_path() ) || is_dir( Path::get_path() ) && ! wp_is_writable( Path::get_path() ) ) {
+		$notices->set_notices( 'blocker', array( sprintf( __( 'We couldn\'t create your backups directory. You\'ll need to either <a href="https://bwp.hmn.md/support-center/backupwordpress-faqs/#where">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ) ) ), false );
 	}
 
 }
@@ -424,39 +409,4 @@ function path_in_php_open_basedir( $path, $ini_get = 'ini_get' ) {
 
 	return false;
 
-}
-
-/**
- * Displays the filesystem credentials request form.
- *
- * @return bool
- */
-function hmbkp_print_request_filesystem_credentials_modal() {
-
-	$method = 'ftp';
-
-	$creds = request_filesystem_credentials( HMBKP_ADMIN_URL, $method, false, false );
-
-	// now we have some credentials, try to get the wp_filesystem running
-	if ( ! WP_Filesystem( $creds ) ) {
-		// our credentials were no good, ask the user for them again
-		request_filesystem_credentials( HMBKP_ADMIN_URL, $method, true, false );
-		return;
-	}
-
-	$paths = Path::get_instance()->get_possible_paths();
-
-	if ( ! empty( $paths ) ) {
-		global $wp_filesystem;
-
-		foreach ( $paths as $path ) {
-			if ( $wp_filesystem->mkdir( $path ) ) {
-				Path::get_instance()->set_path( $path );
-				delete_option( 'hmbkp_request_credentials' );
-				break;
-			}
-		}
-	}
-
-	return true;
 }

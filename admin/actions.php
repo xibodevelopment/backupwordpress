@@ -57,6 +57,28 @@ function request_delete_schedule() {
 }
 add_action( 'admin_post_hmbkp_request_delete_schedule', 'HM\BackUpWordPress\request_delete_schedule' );
 
+
+add_action( 'admin_post_hmbkp_request_credentials', function() {
+
+	global $wp_filesystem;
+
+	ob_start();
+	$creds = request_filesystem_credentials( '' );
+	ob_end_clean();
+
+	$url = add_query_arg( 'connection_error', 1, get_settings_url() );
+
+	if ( WP_Filesystem( $creds ) ) {
+		$url = get_settings_url();
+		if ( ! $wp_filesystem->mkdir( Path::get_path(), 0755 ) ) {
+			$url = add_query_arg( 'creation_error', 1, get_settings_url() );
+		}
+	}
+
+	wp_safe_redirect( $url , 303 );
+	die;
+
+} );
 /**
  * Perform a manual backup
  *
