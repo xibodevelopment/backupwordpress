@@ -131,56 +131,6 @@ class Requirement_Mysqldump_Command_Path extends Requirement {
 Requirements::register( 'HM\BackUpWordPress\Requirement_Mysqldump_Command_Path', 'Server' );
 
 /**
- * Class Requirement_PHP_User
- */
-class Requirement_PHP_User extends Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = 'User';
-
-	/**
-	 * @return string
-	 */
-	public static function test() {
-
-		if ( ! Backup_Utilities::is_exec_available() ) {
-			return '';
-		}
-
-		return shell_exec( 'whoami' );
-
-	}
-}
-Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_User', 'PHP' );
-
-/**
- * Class Requirement_PHP_Group
- */
-class Requirement_PHP_Group extends Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = 'Group[s]';
-
-	/**
-	 * @return string
-	 */
-	public static function test() {
-
-		if ( ! Backup_Utilities::is_exec_available() ) {
-			return '';
-		}
-
-		return shell_exec( 'groups' );
-
-	}
-}
-Requirements::register( 'HM\BackUpWordPress\Requirement_PHP_Group', 'PHP' );
-
-/**
  * Class Requirement_PHP_Version
  */
 class Requirement_PHP_Version extends Requirement {
@@ -276,25 +226,6 @@ class Requirement_Safe_Mode extends Requirement {
 	}
 }
 Requirements::register( 'HM\BackUpWordPress\Requirement_Safe_Mode', 'PHP' );
-
-/**
- * Class Requirement_Shell_Exec
- */
-class Requirement_Exec extends Requirement {
-
-	/**
-	 * @var string
-	 */
-	var $name = 'Exec';
-
-	/**
-	 * @return bool
-	 */
-	public static function test() {
-		return Backup_Utilities::is_exec_available();
-	}
-}
-Requirements::register( 'HM\BackUpWordPress\Requirement_Exec', 'PHP' );
 
 /**
  * Class Requirement_Memory_Limit
@@ -800,4 +731,24 @@ class Requirement_PDO extends Requirement {
 
 	}
 }
+
 Requirements::register( 'HM\BackUpWordPress\Requirement_PDO', 'PHP' );
+
+/**
+ * Class Requirement_Proc_Open
+ */
+class Requirement_Proc_Open extends Requirement {
+
+	/**
+	 * @var string
+	 */
+	var $name = 'proc_open';
+
+	/**
+	 * @return bool
+	 */
+	public static function test() {
+		return function_exists( 'proc_open' );
+	}
+}
+Requirements::register( 'HM\BackUpWordPress\Requirement_Proc_Open', 'PHP' );

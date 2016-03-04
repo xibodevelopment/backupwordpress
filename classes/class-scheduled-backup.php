@@ -287,7 +287,7 @@ class Scheduled_Backup {
 	/**
 	 * Set the schedule start time.
 	 *
-	 * @param timestamp $time
+	 * @param Int $time A valid timestamp
 	 */
 	public function set_schedule_start_time( $time ) {
 

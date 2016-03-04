@@ -17,56 +17,56 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 		<tbody>
 
-		<?php foreach ( $user_excludes as $key => $exclude ) :
+			<?php foreach ( $user_excludes as $key => $exclude ) :
 
-			$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
+				$exclude_path = new \SplFileInfo( trailingslashit( Path::get_root() ) . ltrim( str_ireplace( Path::get_root(), '', $exclude ), '/' ) ); ?>
 
-			<tr>
+				<tr>
 
-				<th scope="row">
+					<th scope="row">
 
-					<?php if ( $exclude_path->isFile() ) { ?>
+						<?php if ( $exclude_path->isFile() ) { ?>
 
-						<div class="dashicons dashicons-media-default"></div>
+							<div class="dashicons dashicons-media-default"></div>
 
-					<?php } elseif ( $exclude_path->isDir() ) { ?>
+						<?php } elseif ( $exclude_path->isDir() ) { ?>
 
-						<div class="dashicons dashicons-portfolio"></div>
+							<div class="dashicons dashicons-portfolio"></div>
 
-					<?php } ?>
+						<?php } ?>
 
-				</th>
+					</th>
 
-				<td>
+					<td>
 
-					<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
+						<code><?php echo esc_html( str_ireplace( Path::get_root(), '', $exclude ) ); ?></code>
 
-				</td>
+					</td>
 
-				<td>
+					<td>
 
-					<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === trailingslashit( Path::get_root() ) . untrailingslashit( $exclude ) ) ) : ?>
+						<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === trailingslashit( Path::get_root() ) . untrailingslashit( $exclude ) ) ) : ?>
 
-						<?php _e( 'Default rule', 'backupwordpress' ); ?>
+							<?php _e( 'Default rule', 'backupwordpress' ); ?>
 
-					<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
+						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
 
-						<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
+							<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
 
-					<?php else : ?>
+						<?php else : ?>
 
-						<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
-							'hmbkp_remove_exclude' => $exclude,
-							'hmbkp_schedule_id'    => $schedule->get_id(),
-						) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
+							<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
+								'hmbkp_remove_exclude' => $exclude,
+								'hmbkp_schedule_id'    => $schedule->get_id(),
+							) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
 
-					<?php endif; ?>
+						<?php endif; ?>
 
-				</td>
+					</td>
 
-			</tr>
+				</tr>
 
-		<?php endforeach; ?>
+			<?php endforeach; ?>
 
 		</tbody>
 
@@ -93,10 +93,11 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 	$exclude_string = implode( '|', $excludes->get_excludes_for_regex() );
 
-	$site_size = new Site_Size;
+	$site_size = new Site_Size( 'file' );
+	$excluded_site_size = new Site_Size( 'file', $excludes );
 
 	// Kick off a recursive filesize scan
-	$files = list_directory_by_total_filesize( $directory ); ?>
+	$files = list_directory_by_total_filesize( $directory, $excludes ); ?>
 
 	<table class="widefat">
 
@@ -105,7 +106,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 			<tr>
 				<th></th>
 				<th scope="col"><?php _e( 'Name', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Size', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php _e( 'Included Size', 'backupwordpress' ); ?></th>
 				<th scope="col" class="column-format"><?php _e( 'Permissions', 'backupwordpress' ); ?></th>
 				<th scope="col" class="column-format"><?php _e( 'Type', 'backupwordpress' ); ?></th>
 				<th scope="col" class="column-format"><?php _e( 'Status', 'backupwordpress' ); ?></th>
@@ -154,40 +155,31 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 						$root = new \SplFileInfo( Path::get_root() );
 
 						$size = $site_size->filesize( $root );
-
-						if ( false !== $size ) {
-
-							$size = size_format( $size );
-
-							if ( ! $size ) {
-								$size = '0 B';
-							} ?>
+						$excluded_size = $excluded_site_size->filesize( $root ); ?>
 
 							<code>
-
-								<?php echo esc_html( $size ); ?>
-
-								<a class="dashicons dashicons-update"
-								   href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
-
+								<?php $excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size ); ?>
+								<?php echo sprintf( __( '%s of %s', 'backupwordpress' ), esc_html( $excluded_size ), esc_html( size_format( $size ) ) ); ?>
+								<a class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
 							</code>
-
-
-						<?php } ?>
 
 					<?php } ?>
 
 				<td>
-					<?php echo esc_html( substr( sprintf( '%o', fileperms( Path::get_root() ) ), - 4 ) ); ?>
+					<code><?php echo esc_html( substr( sprintf( '%o', fileperms( Path::get_root() ) ), - 4 ) ); ?></code>
 				</td>
 
 				<td>
 
-					<?php if ( is_link( Path::get_root() ) ) {
-						_e( 'Symlink', 'backupwordpress' );
-					} elseif ( is_dir( Path::get_root() ) ) {
-						_e( 'Folder', 'backupwordpress' );
-					} ?>
+					<code>
+
+						<?php if ( is_link( Path::get_root() ) ) {
+							_e( 'Symlink', 'backupwordpress' );
+						} elseif ( is_dir( Path::get_root() ) ) {
+							_e( 'Folder', 'backupwordpress' );
+						} ?>
+
+					</code>
 
 				</td>
 
@@ -265,19 +257,19 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 							if ( false !== $size ) {
 
-								$size = size_format( $size );
-
-								if ( ! $size ) {
-									$size = '0 B';
-								} ?>
+								$size = size_format( $size ) ?: '0 B';
+								$excluded_size = size_format( $excluded_site_size->filesize( $file ) ) ?: '0'; ?>
 
 								<code>
 
-									<?php echo esc_html( $size ); ?>
-
-									<?php if ( $file->isDir() ) { ?>
-										<a title="<?php _e( 'Recalculate the size of this directory', 'backupwordpress' ); ?>" class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize', urlencode( wp_normalize_path( $file->getPathname() ) ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
-									<?php } ?>
+									<?php if ( $file->isDir() ) {
+										$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
+										echo sprintf( __( '%s of %s', 'backupwordpress' ), esc_html( $excluded_size ), esc_html( size_format( $size ) ) );
+									} elseif ( ! $is_unreadable ) {
+										echo esc_html( $size );
+									} else {
+										echo '-';
+									} ?>
 
 								</code>
 
@@ -291,13 +283,17 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 					</td>
 
 					<td>
-						<?php if ( ! $is_unreadable ) {
-							echo esc_html( substr( sprintf( '%o', $file->getPerms() ), - 4 ) );
-						} ?>
+						<code>
+							<?php if ( ! $is_unreadable ) {
+								echo esc_html( substr( sprintf( '%o', $file->getPerms() ), - 4 ) );
+							} else {
+								echo '-';
+							} ?>
+						</code>
 					</td>
 
 					<td>
-
+						<code>
 						<?php if ( $file->isLink() ) { ?>
 
 							<span title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php _e( 'Symlink', 'backupwordpress' ); ?></span>
@@ -307,7 +303,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 						} else {
 							_e( 'File', 'backupwordpress' );
 						} ?>
-
+						</code>
 					</td>
 
 					<td class="column-format">

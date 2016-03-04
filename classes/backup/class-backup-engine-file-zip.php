@@ -2,6 +2,8 @@
 
 namespace HM\BackUpWordPress;
 
+use Symfony\Component\Process\Process as Process;
+
 /**
  * Perform a file backup using the zip cli command
  */
@@ -48,7 +50,8 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			$paths = array(
 				'zip',
 				'/usr/bin/zip',
-				'/opt/local/bin/zip'
+				'/usr/local/bin/zip',
+				'/opt/local/bin/zip',
 			);
 
 			$this->zip_executable_path = Backup_Utilities::get_executable_path( $paths );
@@ -66,7 +69,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	 */
 	public function backup() {
 
-		if ( ! Backup_Utilities::is_exec_available() || ! $this->get_zip_executable_path() ) {
+		if ( ! $this->get_zip_executable_path() ) {
 			return false;
 		}
 
@@ -84,20 +87,27 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			$command[] = '-x ' . $this->get_exclude_string();
 		}
 
-		// Push all output to STDERR
-		$command[] = '2>&1';
-
 		$command = implode( ' ', $command );
-		$output = $return_status = 0;
 
-		exec( $command, $output, $return_status );
+		$process = new Process( $command );
+		$process->setTimeout( HOUR_IN_SECONDS );
 
-		// Track any errors
-		if ( $output ) {
-			if ( $return_status === 0 ) {
-				$this->warning( __CLASS__, implode( ', ', $output ) );
-			} else {
-				$this->error( __CLASS__, implode( ', ', $output ) );
+		try {
+			$process->run();
+		} catch ( \Exception $e ) {
+			$this->error( __CLASS__, $e->getMessage() );
+		}
+
+		if ( ! $process->isSuccessful() ) {
+
+			/**
+			 * Exit Code 18 is returned when an unreadable file is encountered during the zip process.
+			 *
+			 * Given the zip process still completes correctly and the unreadable file is simple skipped
+			 * we don't want to treat 18 as an actual error.
+			 */
+			if ( $process->getExitCode() !== 18 ) {
+				$this->error( __CLASS__, $process->getErrorOutput() );
 			}
 		}
 
@@ -125,14 +135,10 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			// Files don't end with /
 			if ( ! in_array( substr( $rule, - 1 ), array( '\\', '/' ) ) ) {
 				$file = true;
-			}
-
-			// If rule starts with a / then treat as absolute path
+			} // If rule starts with a / then treat as absolute path
 			elseif ( in_array( substr( $rule, 0, 1 ), array( '\\', '/' ) ) ) {
 				$absolute = true;
-			}
-
-			// Otherwise treat as dir fragment
+			} // Otherwise treat as dir fragment
 			else {
 				$fragment = true;
 			}
@@ -153,7 +159,6 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			if ( $absolute ) {
 				$rule .= '*';
 			}
-
 		}
 
 		// Escape shell args for zip command
@@ -162,5 +167,4 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 		return implode( ' -x ', $excludes );
 
 	}
-
 }

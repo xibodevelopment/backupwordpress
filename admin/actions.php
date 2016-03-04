@@ -499,7 +499,7 @@ function calculate_site_size() {
 
 	$site_size = new Site_Size;
 
-	if ( ! $site_size::is_site_size_cached() ) {
+	if ( ! $site_size->is_site_size_cached() ) {
 		$root = new \SplFileInfo( Path::get_root() );
 		$site_size->filesize( $root );
 	}
@@ -535,10 +535,10 @@ function heartbeat_received( $response, $data ) {
 
 		if ( ! empty( $data['hmbkp_client_request'] ) ) {
 
-			// Pass the site size to be displayed when it's ready.
-			if ( Site_Size::is_site_size_cached() ) {
+			$site_size = new Site_Size( $schedule->get_type(),  $schedule->get_excludes() );
 
-				$site_size = new Site_Size( $schedule->get_type(),  $schedule->get_excludes() );
+			// Pass the site size to be displayed when it's ready.
+			if ( $site_size->is_site_size_cached() ) {
 
 				$response['hmbkp_site_size'] = $site_size->get_formatted_site_size();
 

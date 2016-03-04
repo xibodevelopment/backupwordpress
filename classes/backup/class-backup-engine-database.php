@@ -177,13 +177,10 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 				if ( ! empty( $maybe_socket ) ) {
 					$this->socket = substr( $maybe_socket, 1 );
 				}
-
 			} else {
 				$this->socket = $port_or_socket;
 			}
-
 		}
-
 	}
 
 	/**
@@ -197,7 +194,7 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 	public function verify_backup() {
 
 		// If there are errors delete the database dump file
-		if ( $this->get_errors( __CLASS__ ) && file_exists( $this->get_backup_filepath() ) ) {
+		if ( $this->get_errors( get_called_class() ) && file_exists( $this->get_backup_filepath() ) ) {
 			unlink( $this->get_backup_filepath() );
 		}
 
@@ -214,5 +211,4 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 		return true;
 
 	}
-
 }

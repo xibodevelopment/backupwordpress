@@ -101,7 +101,7 @@ class Path {
 			return wp_normalize_path( HMBKP_ROOT );
 		}
 
-		$home_path = $site_path;
+		$home_path = wp_normalize_path( $site_path );
 
 		if ( path_in_php_open_basedir( dirname( $site_path ) ) ) {
 
@@ -110,7 +110,7 @@ class Path {
 			if ( ! empty( $home ) && 0 !== strcasecmp( $home, $siteurl ) ) {
 				$wp_path_rel_to_home = str_ireplace( $home, '', $siteurl ); /* $siteurl - $home */
 				$pos = strripos( wp_normalize_path( $_SERVER['SCRIPT_FILENAME'] ), trailingslashit( $wp_path_rel_to_home ) );
-				$home_path = substr( $_SERVER['SCRIPT_FILENAME'], 0, $pos );
+				$home_path = substr( wp_normalize_path( $_SERVER['SCRIPT_FILENAME'] ), 0, $pos );
 				$home_path = trailingslashit( $home_path );
 			}
 
@@ -453,6 +453,11 @@ class CleanUpIterator extends \FilterIterator {
 
 		// Don't remove the index.html file
 		if ( 'index.html' === $this->current()->getBasename() ) {
+			return false;
+		}
+
+		// Don't remove the file manifest
+		if ( '.files' === $this->current()->getBasename() ) {
 			return false;
 		}
 
