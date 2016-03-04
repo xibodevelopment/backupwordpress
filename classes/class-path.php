@@ -119,7 +119,7 @@ class Path {
 				$base              = parse_url( $slashed_home, PHP_URL_PATH );
 				$document_root_fix = wp_normalize_path( realpath( $_SERVER['DOCUMENT_ROOT'] ) );
 				$abspath_fix       = wp_normalize_path( ABSPATH );
-				$home_path         = 0 === strpos( $abspath_fix, $document_root_fix ) ? $document_root_fix . $base : $home_path;
+				$home_path         = strpos( $abspath_fix, $document_root_fix ) === 0 ? $document_root_fix . $base : $home_path;
 			}
 		}
 
@@ -244,7 +244,7 @@ class Path {
 
 		$paths = array_merge( $default, $fallback );
 
-        $paths = array_map( 'wp_normalize_path', $paths );
+		$paths = array_map( 'wp_normalize_path', $paths );
 
 		return $paths;
 

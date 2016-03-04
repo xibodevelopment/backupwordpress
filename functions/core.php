@@ -267,14 +267,13 @@ function update() {
 			$schedule->save();
 
 		}
-
 	}
 
 	// Every update
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( Plugin::PLUGIN_VERSION, get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-setup.php' );
-		
+
 		\HMBKP_Setup::deactivate();
 
 		Path::get_instance()->protect_path( 'reset' );
@@ -367,11 +366,11 @@ function rmdirtree( $dir ) {
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'backupwordpress' ) ) );
 	}
 
-	if ( is_file( $dir ) ){
+	if ( is_file( $dir ) ) {
 		@unlink( $dir );
 	}
 
-	if ( ! is_dir( $dir ) || ! is_readable( $dir ) ){
+	if ( ! is_dir( $dir ) || ! is_readable( $dir ) ) {
 		return false;
 	}
 
@@ -379,19 +378,17 @@ function rmdirtree( $dir ) {
 
 	foreach ( $files as $file ) {
 
-		if ( $file->isDir() ){
+		if ( $file->isDir() ) {
 			@rmdir( $file->getPathname() );
-		}
-
-		else{
+		} else {
 			@unlink( $file->getPathname() );
 		}
-
 	}
 
 	@rmdir( $dir );
 
 	return true;
+
 }
 
 /**
@@ -424,8 +421,9 @@ function get_max_attachment_size() {
 
 	$max_size = '10mb';
 
-	if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) && wp_convert_hr_to_bytes( HMBKP_ATTACHMENT_MAX_FILESIZE ) )
+	if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) && wp_convert_hr_to_bytes( HMBKP_ATTACHMENT_MAX_FILESIZE ) ) {
 		$max_size = HMBKP_ATTACHMENT_MAX_FILESIZE;
+	}
 
 	return wp_convert_hr_to_bytes( $max_size );
 
@@ -483,7 +481,7 @@ function determine_start_time( $type, $times = array() ) {
 		'hours'        => date( 'G', $default_timestamp ),
 		'day_of_week'  => date( 'l', $default_timestamp ),
 		'day_of_month' => date( 'j', $default_timestamp ),
-		'now'          => time()
+		'now'          => time(),
 	);
 
 	$args = wp_parse_args( $times, $default_times );
@@ -493,10 +491,8 @@ function determine_start_time( $type, $times = array() ) {
 	// Allow the hours and minutes to be overwritten by a constant
 	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {
 		$hm = HMBKP_SCHEDULE_TIME;
-	}
-
-	// The hour and minute that the schedule should start on
-	else {
+	} else {
+		// The hour and minute that the schedule should start on
 		$hm = $args['hours'] . ':' . $args['minutes'] . ':00';
 	}
 
@@ -638,7 +634,6 @@ function list_directory_by_total_filesize( $directory ) {
 			$files_with_no_size[] = $entry;
 
 		}
-
 	}
 
 	// Sort files by filesize, largest first
