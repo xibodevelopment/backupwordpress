@@ -250,7 +250,7 @@ function update() {
 		}
 	}
 
-	// Update from PRIOR_VERSION
+	// Update from 3.3.0
 	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.3.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
 
 		$schedules = Schedules::get_instance();
@@ -267,6 +267,11 @@ function update() {
 			$schedule->save();
 
 		}
+	}
+
+	// Update from 3.3.4
+	if ( get_option( 'hmbkp_plugin_version' ) && version_compare( '3.4.0', get_option( 'hmbkp_plugin_version' ), '>' ) ) {
+		delete_transient( 'hmbkp_directory_filesizes' );
 	}
 
 	// Every update
@@ -593,7 +598,7 @@ function ignore_stderr() {
  * @todo doesn't really belong in this class, should just be a function
  * @return array            returns an array of files ordered by filesize
  */
-function list_directory_by_total_filesize( $directory ) {
+function list_directory_by_total_filesize( $directory, Excludes $excludes ) {
 
 	$files = $files_with_no_size = $empty_files = $files_with_size = $unreadable_files = array();
 
@@ -607,7 +612,7 @@ function list_directory_by_total_filesize( $directory ) {
 	$finder->ignoreUnreadableDirs();
 	$finder->depth( '== 0' );
 
-	$site_size = new Site_Size;
+	$site_size = new Site_Size( 'file', $excludes );
 
 	$files = $finder->in( $directory );
 
