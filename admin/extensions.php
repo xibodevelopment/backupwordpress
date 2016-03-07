@@ -40,7 +40,7 @@ namespace HM\BackUpWordPress;
 							<h4>
 								<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox">
 									<?php echo esc_html( $extension->title->rendered ); ?>
-									<img src="<?php echo esc_url( $extension->featured_image_thumbnail_url ); ?>" class="plugin-icon" alt="">
+									<img src="<?php echo esc_url( $extension->featured_image_url ); ?>" class="plugin-icon" alt="">
 								</a>
 							</h4>
 						</div>
