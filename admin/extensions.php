@@ -25,7 +25,7 @@ namespace HM\BackUpWordPress;
 
 	<h3><?php _e( 'Remote Storage', 'backupwordpress' ); ?></h3>
 
-	<p><?php _e( 'It\'s important to store your backups somewhere other than on your site. Using the extensions below you can easily push your backups to one or more Cloud providor.', 'backupwordpress' ); ?></p>
+	<p><?php _e( 'It\'s important to store your backups somewhere other than on your site. Using the extensions below you can easily push your backups to one or more Cloud providers.', 'backupwordpress' ); ?></p>
 
 	<div class="wp-list-table widefat plugin-install">
 		<div id="the-list">
@@ -62,13 +62,12 @@ namespace HM\BackUpWordPress;
 
 						<div class="desc column-description">
 							<p><?php echo wp_kses_post( $extension->content->rendered ); ?></p>
-							<p class="authors"> <cite><?php _e( 'By', 'backupwordpress' ); ?> <a href="https://hmn.md">Human Made Limited</a></cite></p>
 						</div>
 					</div>
 
 					<div class="plugin-card-bottom">
 						<div class="column-updated">
-							<strong>Last Updated:</strong> <span title="<?php echo esc_attr( $extension->modified ); ?>"><?php echo esc_html( human_time_diff( strtotime( $extension->modified ) ) ); ?></span>
+							<strong>Last Updated:</strong> <span title="<?php echo esc_attr( $extension->modified ); ?>"><?php printf( __( '%s ago' ), human_time_diff( strtotime( $extension->modified ) ) ); ?></span>
 						</div>
 					</div>
 				</div>
