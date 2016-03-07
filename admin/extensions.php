@@ -66,6 +66,11 @@ namespace HM\BackUpWordPress;
 					</div>
 
 					<div class="plugin-card-bottom">
+						<div class="vers column-rating">
+							<div>
+								<?php esc_html_e( sprintf( __( 'Plugin version %s', 'backupwordpress' ), $extension->_edd_sl_version ) ); ?>
+							</div>
+						</div>
 						<div class="column-updated">
 							<strong><?php _e( 'Last Updated:', 'backupwordpress' ); ?></strong> <span title="<?php echo esc_attr( $extension->modified ); ?>"><?php printf( __( '%s ago', 'backupwordpress' ), human_time_diff( strtotime( $extension->modified ) ) ); ?></span>
 						</div>
