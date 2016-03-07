@@ -42,14 +42,6 @@ class CLI extends \WP_CLI_Command {
 	 */
 	public function backup( $args, $assoc_args ) {
 
-		add_action( 'hmbkp_mysqldump_started', function () {
-			\WP_CLI::line( __( 'Backup: Dumping database...', 'backupwordpress' ) );
-		} );
-
-		add_action( 'hmbkp_archive_started', function () {
-			\WP_CLI::line( __( 'Backup: Zipping everything up...', 'backupwordpress' ) );
-		} );
-
 		if ( ! empty( $assoc_args['destination'] ) ) {
 			Path::get_instance()->set_path( $assoc_args['destination'] );
 		}
@@ -76,30 +68,44 @@ class CLI extends \WP_CLI_Command {
 			$filename = $assoc_args['archive_filename'];
 		}
 
-		$hm_backup = new Backup( $filename );
+		$status = new Backup_Status( 'backup' );
+		$status->set_status_callback( function( $message ) {
+			\WP_CLI::line( $message );
+		} );
+
+		if ( $status->is_running() ) {
+			\WP_CLI::error( 'There\'s a backup already running' );
+		}
+
+		$status->start( $filename, __( 'Starting backup...', 'backupwordpress' ) );
+
+		$backup = new Backup( $filename );
+		$backup->set_status( $status );
+
 
 		if ( ! empty( $assoc_args['files_only'] ) ) {
-			$hm_backup->set_type( 'file' );
+			$backup->set_type( 'file' );
 		}
 
 		if ( ! empty( $assoc_args['database_only'] ) ) {
-			$hm_backup->set_type( 'database' );
+			$backup->set_type( 'database' );
 		}
 
 		if ( ! empty( $assoc_args['excludes'] ) ) {
-			$hm_backup->set_excludes( $assoc_args['excludes'] );
+			$backup->set_excludes( $assoc_args['excludes'] );
 		}
 
-		$hm_backup->run();
+		$backup->run();
 
-		if ( file_exists( $hm_backup->get_backup_filepath() ) ) {
-			\WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $hm_backup->get_backup_filepath() );
+		if ( file_exists( $backup->get_backup_filepath() ) ) {
+			\WP_CLI::success( __( 'Backup Complete: ', 'backupwordpress' ) . $backup->get_backup_filepath() );
 		} else {
 			\WP_CLI::error( __( 'Backup Failed', 'backupwordpress' ) );
 		}
 
-	}
+		$status->finish();
 
+	}
 }
 
 \WP_CLI::add_command( 'backupwordpress', 'HM\BackUpWordPress\CLI' );

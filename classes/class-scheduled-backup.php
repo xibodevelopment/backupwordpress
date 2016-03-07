@@ -97,7 +97,7 @@ class Scheduled_Backup {
 	 * Get the id for this schedule
 	 */
 	public function get_id() {
-		return esc_attr( $this->id );
+		return $this->id;
 	}
 
 	/**
