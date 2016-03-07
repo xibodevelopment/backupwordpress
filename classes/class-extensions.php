@@ -24,7 +24,7 @@ class Extensions {
 		return static::$instance;
 	}
 
-	function get_edd_data() {
+	public function get_edd_data() {
 
 		$response = $this->fetch( 'edd-downloads', 600 );
 
@@ -50,7 +50,7 @@ class Extensions {
 
 		$response = wp_remote_get( $request_url );
 
-		set_transient( $cache_key, $response, $ttl );
+		set_transient( 'bwp_' . $cache_key, $response, $ttl );
 
 		return $response;
 
