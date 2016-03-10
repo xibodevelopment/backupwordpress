@@ -1,3 +1,107 @@
+=== BackUpWordPress ===
+Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
+Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
+Requires at least: 3.9
+Tested up to: 4.4.2
+Stable tag: 3.5
+
+Simple automated backups of your WordPress-powered website.
+
+== Description ==
+
+[BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
+
+This plugin requires PHP version 5.3.2 or later
+
+= Features =
+
+* Super simple to use, no setup required.
+* Works in low memory, "shared host" environments.
+* Manage multiple schedules.
+* Option to have each backup file emailed to you.
+* Uses `zip` and `mysqldump` for faster backups if they are available.
+* Works on Linux & Windows Server.
+* Exclude files and folders from your backups.
+* Good support should you need help.
+* Translations for Spanish, German, Chinese, Romanian, Russian, Serbian, Lithuanian, Italian, Czech, Dutch, French, Basque.
+
+= Help develop this plugin =
+
+The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
+
+= Translations =
+
+We'd also love help translating the plugin into more languages, if you can help then please visit https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/ to start translating.
+
+== Installation ==
+
+1. Install BackUpWordPress either via the WordPress.org plugin directory, or by uploading the files to your server.
+2. Activate the plugin.
+3. Sit back and relax safe in the knowledge that your whole site will be backed up every day.
+
+The plugin will try to use the `mysqldump` and `zip` commands via shell if they are available, using these will greatly improve the time it takes to back up your site.
+
+== Frequently Asked Questions ==
+
+
+**Where does BackUpWordPress store the backup files?**
+
+Backups are stored on your server in `/wp-content/backups`, you can change the directory.
+
+Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.
+
+**What if I want to back up my site to another destination?**
+
+BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: [https://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin "BackUpWordPress Homepage")
+
+**How do I restore my site from a backup?**
+
+You need to download the latest backup file either by clicking download on the backups page or via `FTP`. `Unzip` the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely `phpMyAdmin`).
+
+See this guide for more details - [How to restore from backup](https://bwp.hmn.md/support-center/restore-backup/ "Go to support center").
+
+**Does BackUpWordPress back up the backups directory?**
+
+No.
+
+**I'm not receiving my backups by email**
+
+Most servers have a filesize limit on email attachments, it's generally about 10mb. If your backup file is over that limit, it won't be sent attached to the email. Instead, you should receive an email with a link to download the backup. If you aren't even receiving that, then you likely have a mail issue on your server that you'll need to contact your host about.
+
+**How many backups are stored by default?**
+
+BackUpWordPress stores the last 10 backups by default.
+
+**How long should a backup take?**
+
+Unless your site is very large (many gigabytes) it should only take a few minutes to perform a backup. If your back up has been running for longer than an hour, it's safe to assume that something has gone wrong. Try de-activating and re-activating the plugin. If it keeps happening, contact support.
+
+**What do I do if I get the wp-cron error message?**
+
+The issue is that your `wp-cron.php` is not returning a `200` response when hit with a HTTP request originating from your own server, it could be several things. In most cases, it's an issue with the server / site.
+
+There are some things you can test to confirm this is the issue.
+
+     * Are scheduled posts working? (They use wp-cron as well.)
+
+     * Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around.)
+
+     * If you click manual backup, does it work?
+
+     * Try adding `define( 'ALTERNATE_WP_CRON', true );` to your `wp-config.php`. Do automatic backups work?
+
+     * Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won't work until you remove it. If you are and you temporarily remove the authentication, do backups start working?
+
+Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
+
+**How to get BackUpWordPress working in Heart Internet**
+
+The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php` (note the space between php5 and the location of the file). The file `wp-cron.php` `chmod` must be set to `711`.
+
+**My backups seem to be failing?**
+
+If your backups are failing, it's commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it's probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by enabling support from your Admin Dashboard (recommended), or emailing backupwordpress@hmn.md
+
 **Further Support & Feedback**
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
