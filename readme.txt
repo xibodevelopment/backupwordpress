@@ -942,7 +942,7 @@ users should see major improvements to reliability.
 
 #### 2.0.6
 
-* Fix possible warning on plugin activation if the sites cron option is empty.
+* Fix possible warning on plugin activation if the site's cron option is empty.
 * Don't show the version warning in the help for Constants as that comes from the current version.
 
 #### 2.0.5

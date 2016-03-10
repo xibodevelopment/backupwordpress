@@ -183,7 +183,7 @@ function set_server_config_notices() {
 	}
 
 	if ( ! is_readable( Path::get_root() ) ) {
-		$messages[] = sprintf( __( 'Your sites root path (%s) isn\'t readable. Please contact support.', 'backupwordpress' ), '<code>' . Path::get_root() . '</code>' );
+		$messages[] = sprintf( __( 'Your site\'s root path (%s) isn\'t readable. Please contact support.', 'backupwordpress' ), '<code>' . Path::get_root() . '</code>' );
 	}
 
 	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
