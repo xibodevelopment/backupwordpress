@@ -178,7 +178,7 @@ class Backup {
 		}
 
 		// Ensure we don't store duplicate warnings by md5'ing the error as the key
-		$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
+		$this->warnings[ $context ][ md5( implode( ':', (array) $warning ) ) ] = $warning;
 
 	}
 
