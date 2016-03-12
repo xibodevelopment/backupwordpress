@@ -426,6 +426,10 @@ function is_backup_possible() {
 		return false;
 	}
 
+	if ( disk_space_low() ) {
+		return false;
+	}
+
 	return true;
 }
 

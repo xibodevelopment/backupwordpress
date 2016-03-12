@@ -191,6 +191,10 @@ function set_server_config_notices() {
 		$messages[] = sprintf( __( 'Your database cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>mysqldump</code>', '<code>PDO</code>' );
 	}
 
+	if ( disk_space_low() ) {
+		$messages[] = sprintf( __( 'You\'re server only has %s of disk space left which probably isn\'t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ), '<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>' );
+	}
+
 	if ( count( $messages ) > 0 ) {
 		$notices->set_notices( 'server_config', $messages, false );
 	}
@@ -431,4 +435,18 @@ function is_same_size_format( $size, $other_size ) {
 	}
 
 	return preg_replace( '/[0-9]+/', '', size_format( $size ) ) === preg_replace( '/[0-9]+/', '', size_format( $other_size ) );
+}
+
+/**
+ * Check whether the server is low on disk space.
+ *
+ * @return bool Whether there's less disk space less than 2 * the entire size of the site.
+ */
+function disk_space_low() {
+
+	$site_size = new Site_Size();
+	$disk_space = disk_free_space( Path::get_path() );
+
+	return $site_size->is_site_size_cached() && ( ($site_size->get_site_size() * 2) > $disk_space );
+
 }
