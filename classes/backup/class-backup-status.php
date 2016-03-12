@@ -30,6 +30,7 @@ class Backup_Status {
 	 */
 	public function __construct( $id ) {
 		$this->id = (string) $id;
+		$this->cleanup_after_crash();
 	}
 
 	/**
@@ -111,6 +112,32 @@ class Backup_Status {
 	 */
 	public function has_crashed() {
 		return ( $this->is_started() && ! $this->is_running() );
+	}
+
+	/**
+	 * Handle a process that's previouly crashed
+	 *
+	 * If the partially created backup exists then delete it.
+	 *
+	 * @return bool Whether the crash was handled or not
+	 */
+	public function cleanup_after_crash() {
+
+		if ( ! $this->has_crashed() ) {
+			return false;
+		}
+
+		if ( file_exists( trailingslashit( Path::get_path() ) . $this->get_backup_filename() ) ) {
+			unlink( trailingslashit( Path::get_path() ) . $this->get_backup_filename() );
+		}
+
+		$this->finish();
+
+		$message = __( 'Your previous backup failed, the backup process was killed before it could complete. Please contact your host for assistance.', 'backupwordpress' );
+		Notices::get_instance()->set_notices( '', array( $message ), false );
+
+		return true;
+
 	}
 
 	/**
