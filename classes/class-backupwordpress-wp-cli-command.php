@@ -92,7 +92,7 @@ class CLI extends \WP_CLI_Command {
 		}
 
 		if ( ! empty( $assoc_args['excludes'] ) ) {
-			$backup->set_excludes( $assoc_args['excludes'] );
+			$backup->set_excludes( new Excludes( $assoc_args['excludes'] ) );
 		}
 
 		$backup->run();

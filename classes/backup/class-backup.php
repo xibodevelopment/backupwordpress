@@ -142,12 +142,21 @@ class Backup {
 
 		foreach ( $backup_engines as $backup_engine ) {
 
+			/**
+			 * If the backup_engine completes the backup then we
+			 * clear any errors or warnings from previously failed backup_engines
+			 * and return the successful one.
+			 */
 			if ( $backup_engine->backup() ) {
-				$this->warnings = array_merge( $this->warnings, $backup_engine->get_warnings() );
+				$this->errors = array();
+				$this->warnings = $backup_engine->get_warnings();
 				return $backup_engine;
 			}
+
+			// Store all the errors and warnings as they are shown if all engines fail
 			$this->warnings = array_merge( $this->warnings, $backup_engine->get_warnings() );
-			$this->errors = array_merge( $this->errors, $backup_engine->get_errors() );
+			$this->errors   = array_merge( $this->errors, $backup_engine->get_errors() );
+
 		}
 
 		return false;
@@ -178,12 +187,14 @@ class Backup {
 		}
 
 		// Ensure we don't store duplicate warnings by md5'ing the error as the key
-		$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
+		$this->warnings[ $context ][ md5( implode( ':', (array) $warning ) ) ] = $warning;
 
 	}
 
 	/**
-	 * Back compat with old error mathod
+	 * Back compat with old error method
+	 *
+	 * Only the backup engines themselves can fire fatal errors
 	 *
 	 * @deprecated 3.4 Backup->warning( $context, $warning )
 	 */

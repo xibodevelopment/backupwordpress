@@ -111,7 +111,7 @@ abstract class Backup_Engine {
 		}
 
 		// Ensure we don't store duplicate errors by md5'ing the error as the key
-		$this->errors[ $context ][ $_key = md5( implode( ':', (array) $error ) ) ] = $error;
+		$this->errors[ $context ][ md5( implode( ':', (array) $error ) ) ] = $error;
 
 	}
 
@@ -150,7 +150,7 @@ abstract class Backup_Engine {
 		}
 
 		// Ensure we don't store duplicate warnings by md5'ing the error as the key
-		$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
+		$this->warnings[ $context ][ md5( implode( ':', (array) $warning ) ) ] = $warning;
 
 	}
 
