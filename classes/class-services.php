@@ -43,8 +43,9 @@ class Services {
 	 */
 	public static function instance() {
 
-		if ( ! isset( self::$instance ) )
+		if ( ! isset( self::$instance ) ) {
 			self::$instance = new Services;
+		}
 
 		return self::$instance;
 
@@ -122,5 +123,4 @@ class Services {
 		return $class;
 
 	}
-
 }

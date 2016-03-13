@@ -65,7 +65,6 @@ class WPRemote_Webhook_Service extends Webhook_Service {
 	protected function get_secret_key() {
 		return get_option( 'wpr_api_key' );
 	}
-
 }
 
 // Register the service

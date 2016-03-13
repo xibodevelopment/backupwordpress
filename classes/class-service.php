@@ -186,9 +186,7 @@ abstract class Service {
 				if ( ! empty( $options ) ) {
 					return $options;
 				}
-
 			}
-
 		}
 
 		return array();
@@ -214,5 +212,4 @@ abstract class Service {
 	public static function intercom_data() {}
 
 	public static function intercom_data_html() {}
-
 }
