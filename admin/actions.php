@@ -457,7 +457,7 @@ function recalculate_directory_filesize() {
 	}
 
 	// Delete the cached directory size
-	delete_transient( 'hmbkp_directory_filesizes' );
+	@unlink( trailingslashit( Path::get_path() ) . '.files' );
 
 	$url = add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes' ), get_settings_url() );
 
