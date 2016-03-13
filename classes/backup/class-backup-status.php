@@ -48,6 +48,8 @@ class Backup_Status {
 	public function start( $backup_filename, $status_message ) {
 		$this->filename = $backup_filename;
 
+		add_action( 'shutdown', array( $this, 'catch_fatals' ), 10 );
+
 		$this->lock_handler = new LockHandler( basename( $this->get_status_filepath() ), Path::get_path() );
 
 		if ( ! $this->lock_handler->lock() || $this->get_status() ) {
@@ -135,9 +137,38 @@ class Backup_Status {
 		$this->finish();
 
 		$message = __( 'Your previous backup failed, the backup process was killed before it could complete. Please contact your host for assistance.', 'backupwordpress' );
-		Notices::get_instance()->set_notices( '', array( $message ), false );
+		Notices::get_instance()->set_notices( 'backup_errors', array( $message ), true );
 
 		return true;
+
+	}
+
+	/**
+	 * Catch fatal errors and react accordingly.
+	 *
+	 * Hooked into the shutdown action. If we've shutdown because of a Fatal error
+	 * then we cleanup and set an error message for the user.
+	 */
+	public function catch_fatals() {
+
+		$error = error_get_last();
+
+		if ( empty( $error ) ) {
+			return;
+		}
+
+		if ( ! isset( $error['type'] ) || ! defined( 'E_ERROR' ) || E_ERROR !== $error['type'] ) {
+			return;
+		}
+
+		if ( file_exists( trailingslashit( Path::get_path() ) . $this->get_backup_filename() ) ) {
+			unlink( trailingslashit( Path::get_path() ) . $this->get_backup_filename() );
+		}
+
+		$this->finish();
+
+		$message = sprintf( __( 'Your previous backup failed, the backup process encountered a %s before it could complete. The error was %s.', 'backupwordpress' ), '<code>PHP Fatal Error</code>', '<code>' . $error['message'] . '</code>' );
+		Notices::get_instance()->set_notices( 'backup_errors', array( $message ), true );
 
 	}
 
