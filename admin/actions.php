@@ -223,6 +223,7 @@ function edit_schedule_submit() {
 	}
 
 	$schedule = new Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
+	$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
 	$errors = array();
 
@@ -349,6 +350,10 @@ function edit_schedule_submit() {
 
 		elseif ( ! ( $max_backups >= 1 ) ) {
 			$errors['hmbkp_schedule_max_backups'] = __( 'Max backups must be greater than 0', 'backupwordpress' );
+		}
+
+		elseif ( $site_size->is_site_size_cached() && disk_space_low( $site_size->get_site_size() * $max_backups ) ) {
+			$errors['hmbkp_schedule_max_backups'] = sprintf( __( 'Storing %s backups would use %s of disk space but your server only has %s free.', 'backupwordpress' ), '<code>' . number_format_i18n( $max_backups ) . '</code>', '<code>' . size_format( $max_backups * $site_size->get_site_size() ) . '</code>', '<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>' );
 		}
 
 		else {

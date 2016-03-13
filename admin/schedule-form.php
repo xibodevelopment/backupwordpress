@@ -13,7 +13,7 @@ namespace HM\BackUpWordPress;
 	<div id="hmbkp-warning" class="error settings-error">
 
 		<?php foreach ( $hmbkp_form_errors as $error ) { ?>
-			<p><strong><?php echo esc_html( $error ); ?></strong></p>
+			<p><strong><?php echo wp_kses_data( $error ); ?></strong></p>
 		<?php } ?>
 
 	</div>

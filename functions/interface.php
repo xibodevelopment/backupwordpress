@@ -442,11 +442,22 @@ function is_same_size_format( $size, $other_size ) {
  *
  * @return bool Whether there's less disk space less than 2 * the entire size of the site.
  */
-function disk_space_low() {
+function disk_space_low( $backup_size = false ) {
 
-	$site_size = new Site_Size();
+	if ( ! $backup_size ) {
+
+		$site_size = new Site_Size();
+
+		if ( $site_size->is_site_size_cached() ) {
+			return false;
+		}
+
+		$backup_size = $site_size->get_site_size() * 2;
+
+	}
+
 	$disk_space = disk_free_space( Path::get_path() );
 
-	return $site_size->is_site_size_cached() && ( ($site_size->get_site_size() * 2) > $disk_space );
+	return $backup_size >= $disk_space;
 
 }
