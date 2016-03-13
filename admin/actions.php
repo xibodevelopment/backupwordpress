@@ -524,42 +524,6 @@ function heartbeat_received( $response, $data ) {
 }
 add_filter( 'heartbeat_received', 'HM\BackUpWordPress\heartbeat_received', 10, 2 );
 
-// TODO needs work
-function display_error_and_offer_to_email_it() {
-
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
-
-	if ( empty( $_POST['hmbkp_error'] ) ) {
-		die;
-	}
-
-	$errors = explode( "\n", wp_strip_all_tags( stripslashes( $_POST['hmbkp_error'] ) ) );
-
-	Notices::get_instance()->set_notices( 'backup_errors', $errors );
-
-	wp_send_json_success( wp_get_referer() );
-
-}
-add_action( 'wp_ajax_hmbkp_backup_error', 'HM\BackUpWordPress\display_error_and_offer_to_email_it' );
-
-// TODO needs work
-function send_error_via_email() {
-
-	check_ajax_referer( 'hmbkp_nonce', 'nonce' );
-
-	if ( empty( $_POST['hmbkp_error'] ) ) {
-		die;
-	}
-
-	$error = wp_strip_all_tags( $_POST['hmbkp_error'] );
-
-	wp_mail( 'backupwordpress@hmn.md', 'BackUpWordPress Fatal error on ' . parse_url( home_url(), PHP_URL_HOST ), $error, 'From: BackUpWordPress <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n" );
-
-	die;
-
-}
-add_action( 'wp_ajax_hmbkp_email_error', 'HM\BackUpWordPress\send_error_via_email' );
-
 /**
  * Load the enable support modal contents
  *
