@@ -115,9 +115,10 @@ class Backup_Status {
 	}
 
 	/**
-	 * Handle a process that's previouly crashed
+	 * Handle a process that's previouly crashed.
 	 *
-	 * If the partially created backup exists then delete it.
+	 * Delete the partially created backup if it exists and then run the standard
+	 * cleanup tasks and set an error message for the user.
 	 *
 	 * @return bool Whether the crash was handled or not
 	 */
