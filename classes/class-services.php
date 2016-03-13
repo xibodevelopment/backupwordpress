@@ -74,7 +74,7 @@ class Services {
 	 *
 	 * @param $filepath
 	 * @param $classname
-	 * @return bool|WP_Error
+	 * @return \WP_Error|boolean
 	 */
 	public static function register( $filepath, $classname ) {
 		if ( ! file_exists( $filepath ) ) {
@@ -89,7 +89,7 @@ class Services {
 	/**
 	 * De-register an existing service
 	 * @param string $filepath
-	 * @return bool|WP_Error
+	 * @return \WP_Error|boolean
 	 */
 	public static function unregister( $filepath ) {
 
