@@ -191,7 +191,7 @@ function edit_schedule_services_submit() {
 
 	$schedule->save();
 
-	if ( $errors ) {
+	if ( ! empty( $errors ) ) {
 		foreach ( $errors as $error ) {
 			add_settings_error( $error );
 		}
@@ -199,7 +199,7 @@ function edit_schedule_services_submit() {
 
 	$redirect = remove_query_arg( array( 'hmbkp_panel', 'action' ), wp_get_referer() );
 
-	if ( $errors ) {
+	if ( ! empty( $errors ) ) {
 		$redirect = wp_get_referer();
 	}
 
