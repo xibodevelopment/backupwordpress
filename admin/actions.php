@@ -81,6 +81,14 @@ function request_do_backup() {
 
 	$schedule_id = sanitize_text_field( urldecode( $_REQUEST['hmbkp_schedule_id'] ) );
 	$task = new \HM\Backdrop\Task( '\HM\BackUpWordPress\run_schedule_async', $schedule_id );
+
+	/**
+	 * Backdrop doesn't cleanup tasks which fatal before they can finish
+	 * so we manually cancel the task if it's already scheduled.
+	 */
+	if ( $task->is_scheduled() ) {
+		$task->cancel();
+	}
 	$task->schedule();
 
 	die;
