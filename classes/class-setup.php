@@ -67,8 +67,6 @@ class HMBKP_Setup {
 		foreach ( array_map( array( 'self', 'trim_prefix' ), $schedules ) as $item ) {
 			wp_clear_scheduled_hook( 'hmbkp_schedule_hook', array( 'id' => $item ) );
 		}
-
-
 	}
 
 	public static function trim_prefix( $item ) {
@@ -105,7 +103,7 @@ class HMBKP_Setup {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
-		deactivate_plugins( dirname( dirname(__FILE__ ) ) . '/backupwordpress.php' );
+		deactivate_plugins( dirname( dirname( __FILE__ ) ) . '/backupwordpress.php' );
 
 		if ( isset( $_GET['activate'] ) ) {
 			unset( $_GET['activate'] );
@@ -177,5 +175,4 @@ class HMBKP_Setup {
 			'</a>'
 		);
 	}
-
 }

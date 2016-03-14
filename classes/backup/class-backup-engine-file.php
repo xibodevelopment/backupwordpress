@@ -28,7 +28,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 		$this->set_backup_filename( implode( '-', array(
 			str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ),
 			'backup',
-			current_time( 'Y-m-d-H-i-s' )
+			current_time( 'Y-m-d-H-i-s' ),
 		) ) . '.zip' );
 
 		$this->excludes = new Excludes;

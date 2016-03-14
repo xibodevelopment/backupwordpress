@@ -104,20 +104,16 @@ foreach ( Services::get_services( $schedule ) as $file => $service ) {
 
 	if ( is_wp_error( $service ) ) {
 		$email_msg = $service->get_error_message();
-	}  elseif ( 'Email' === $service->name ) {
+	} elseif ( 'Email' === $service->name ) {
 		$email_msg = wp_kses_post( $service->display() );
 	} elseif ( $service->is_service_active() && $service->display() ) {
 		$services[] = esc_html( $service->display() );
 	}
-
 }
 
 if ( ! empty( $services ) && count( $services ) > 1 ) {
-
-	$services[count( $services ) -2] .= ' & ' . $services[count( $services ) -1];
-
+	$services[ count( $services ) -2 ] .= ' & ' . $services[ count( $services ) -1 ];
 	array_pop( $services );
-
 } ?>
 
 <div class="hmbkp-schedule-sentence<?php if ( $status->get_status() ) { ?> hmbkp-running<?php } ?>">
@@ -134,9 +130,9 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 	echo $sentence; ?>
 
-	<?php if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) {
+	<?php if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) :
 		schedule_status( $schedule );
-	} ?>
+	endif; ?>
 
 	<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule-settings.php' ); ?>
 
@@ -161,13 +157,9 @@ function get_site_size_text( Scheduled_Backup $schedule ) {
 	$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
 	if ( ( 'database' === $schedule->get_type() ) || $site_size->is_site_size_cached() ) {
-
 		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $site_size->get_formatted_site_size() ) );
-
 	} else {
-
 		return sprintf( '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your site&hellip;', 'backupwordpress' ) . '</code>)' );
-
 	}
 
 }

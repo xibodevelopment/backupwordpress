@@ -99,7 +99,6 @@ class CLI extends \WP_CLI_Command {
 		}
 
 	}
-
 }
 
 \WP_CLI::add_command( 'backupwordpress', 'HM\BackUpWordPress\CLI' );

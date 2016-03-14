@@ -50,7 +50,7 @@ class Requirements {
 	 * @return WP_Error
 	 */
 	public static function register( $class, $group = 'misc' ) {
-		self::$requirements[$group][] = $class;
+		self::$requirements[ $group ][] = $class;
 	}
 
 	/**
@@ -67,5 +67,4 @@ class Requirements {
 		return $$class;
 
 	}
-
 }
