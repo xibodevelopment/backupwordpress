@@ -411,6 +411,14 @@ function is_backup_possible() {
 		return false;
 	}
 
+	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
+		return false;
+	}
+
+	if ( ! Requirement_Zip_Command_Path::test() && ! Requirement_Zip_Archive::test() ) {
+		return false;
+	}
+
 	return true;
 }
 
