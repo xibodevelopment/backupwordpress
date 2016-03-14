@@ -90,5 +90,4 @@ class Notices {
 		delete_option( 'hmbkp_notices' );
 
 	}
-
 }

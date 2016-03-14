@@ -111,7 +111,7 @@ abstract class Backup_Engine {
 		}
 
 		// Ensure we don't store duplicate errors by md5'ing the error as the key
-		$this->errors[ $context ][ $_key = md5( implode( ':', (array) $error ) ) ] = $error;
+		$this->errors[ $context ][ md5( implode( ':', (array) $error ) ) ] = $error;
 
 	}
 
@@ -150,7 +150,7 @@ abstract class Backup_Engine {
 		}
 
 		// Ensure we don't store duplicate warnings by md5'ing the error as the key
-		$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
+		$this->warnings[ $context ][ md5( implode( ':', (array) $warning ) ) ] = $warning;
 
 	}
 
@@ -168,7 +168,7 @@ abstract class Backup_Engine {
 	public function error_handler( $type ) {
 
 		// Skip strict & deprecated warnings
-		if ( ( defined( 'E_DEPRECATED' ) && $type === E_DEPRECATED ) || ( defined( 'E_STRICT' ) && $type === E_STRICT ) || error_reporting() === 0 ) {
+		if ( ( defined( 'E_DEPRECATED' ) && E_DEPRECATED === $type ) || ( defined( 'E_STRICT' ) && E_STRICT === $type ) || 0 === error_reporting() ) {
 			return false;
 		}
 
@@ -193,5 +193,4 @@ abstract class Backup_Engine {
 		return false;
 
 	}
-
 }

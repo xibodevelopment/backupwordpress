@@ -87,7 +87,7 @@ class CLI extends \WP_CLI_Command {
 		}
 
 		if ( ! empty( $assoc_args['excludes'] ) ) {
-			$hm_backup->set_excludes( $assoc_args['excludes'] );
+			$hm_backup->set_excludes( new Excludes( $assoc_args['excludes'] ) );
 		}
 
 		$hm_backup->run();
@@ -99,7 +99,6 @@ class CLI extends \WP_CLI_Command {
 		}
 
 	}
-
 }
 
 \WP_CLI::add_command( 'backupwordpress', 'HM\BackUpWordPress\CLI' );

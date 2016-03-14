@@ -2,6 +2,7 @@
 <div class="hmbkp-upsell">
 
 <p>
+
 <?php
 /** translators:  the 1st placeholder is the first part of the anchor tag with the link to the extensions admin page and the second is the closing anchor tag */
 printf(
@@ -10,5 +11,7 @@ printf(
 	'</a>'
 );
 ?>
+
 </p>
+
 </div>

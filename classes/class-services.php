@@ -43,8 +43,9 @@ class Services {
 	 */
 	public static function instance() {
 
-		if ( ! isset( self::$instance ) )
+		if ( ! isset( self::$instance ) ) {
 			self::$instance = new Services;
+		}
 
 		return self::$instance;
 
@@ -77,7 +78,7 @@ class Services {
 	 *
 	 * @param $filepath
 	 * @param $classname
-	 * @return bool|WP_Error
+	 * @return \WP_Error|boolean
 	 */
 	public static function register( $filepath, $classname ) {
 		if ( ! file_exists( $filepath ) ) {
@@ -92,7 +93,7 @@ class Services {
 	/**
 	 * De-register an existing service
 	 * @param string $filepath
-	 * @return bool|WP_Error
+	 * @return \WP_Error|boolean
 	 */
 	public static function unregister( $filepath ) {
 
@@ -126,5 +127,4 @@ class Services {
 		return $class;
 
 	}
-
 }

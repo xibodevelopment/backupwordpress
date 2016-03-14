@@ -39,11 +39,11 @@ class Backup {
 
 		Path::get_instance()->cleanup();
 
-		if ( $this->type !== 'file' ) {
+		if ( 'file' !== $this->type ) {
 			$this->backup_database();
 		}
 
-		if ( $this->type !== 'database' ) {
+		if ( 'database' !== $this->type ) {
 			$this->backup_files();
 		}
 
@@ -59,12 +59,12 @@ class Backup {
 
 		$database_backup_engines = apply_filters( 'hmbkp_database_backup_engines', array(
 			new Mysqldump_Database_Backup_Engine,
-			new IMysqldump_Database_Backup_Engine
+			new IMysqldump_Database_Backup_Engine,
 		) );
 
 		// Set the file backup engine settings
 		if (  $this->database_dump_filename ) {
-			foreach( $database_backup_engines as &$backup_engine ) {
+			foreach ( $database_backup_engines as &$backup_engine ) {
 				$backup_engine->set_backup_filename( $this->database_dump_filename );
 			}
 		}
@@ -79,11 +79,11 @@ class Backup {
 		// Fire up the file backup engines
 		$file_backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
 			new Zip_File_Backup_Engine,
-			new Zip_Archive_File_Backup_Engine
+			new Zip_Archive_File_Backup_Engine,
 		) );
 
 		// Set the file backup engine settings
-		foreach( $file_backup_engines as &$backup_engine ) {
+		foreach ( $file_backup_engines as &$backup_engine ) {
 			$backup_engine->set_backup_filename( $this->backup_filename );
 			$backup_engine->set_excludes( new Excludes( array( '*.zip', 'index.html', '.htaccess', '.*-running', '.files' ) ) );
 		}
@@ -114,11 +114,11 @@ class Backup {
 		// Fire up the file backup engines
 		$backup_engines = apply_filters( 'hmbkp_file_backup_engines', array(
 			new Zip_File_Backup_Engine,
-			new Zip_Archive_File_Backup_Engine
+			new Zip_Archive_File_Backup_Engine,
 		) );
 
 		// Set the file backup engine settings
-		foreach( $backup_engines as &$backup_engine ) {
+		foreach ( $backup_engines as &$backup_engine ) {
 			$backup_engine->set_backup_filename( $this->backup_filename );
 			if ( $this->excludes ) {
 				$backup_engine->set_excludes( $this->excludes );
@@ -138,16 +138,25 @@ class Backup {
 	 * we find one which works. If a backup filename or any excludes have been
 	 * set then those are passed to each Backup_Engine.
 	 */
-	public function perform_backup( Array $backup_engines ) {
+	public function perform_backup( array $backup_engines ) {
 
 		foreach ( $backup_engines as $backup_engine ) {
 
+			/**
+			 * If the backup_engine completes the backup then we
+			 * clear any errors or warnings from previously failed backup_engines
+			 * and return the successful one.
+			 */
 			if ( $backup_engine->backup() ) {
-				$this->warnings = array_merge( $this->warnings, $backup_engine->get_warnings() );
+				$this->errors = array();
+				$this->warnings = $backup_engine->get_warnings();
 				return $backup_engine;
 			}
+
+			// Store all the errors and warnings as they are shown if all engines fail
 			$this->warnings = array_merge( $this->warnings, $backup_engine->get_warnings() );
-			$this->errors = array_merge( $this->errors, $backup_engine->get_errors() );
+			$this->errors   = array_merge( $this->errors, $backup_engine->get_errors() );
+
 		}
 
 		return false;
@@ -178,12 +187,14 @@ class Backup {
 		}
 
 		// Ensure we don't store duplicate warnings by md5'ing the error as the key
-		$this->warnings[ $context ][ $_key = md5( implode( ':', (array) $warning ) ) ] = $warning;
+		$this->warnings[ $context ][ md5( implode( ':', (array) $warning ) ) ] = $warning;
 
 	}
 
 	/**
-	 * Back compat with old error mathod
+	 * Back compat with old error method
+	 *
+	 * Only the backup engines themselves can fire fatal errors
 	 *
 	 * @deprecated 3.4 Backup->warning( $context, $warning )
 	 */
@@ -204,11 +215,10 @@ class Backup {
 	 * Back compat with old method name
 	 *
 	 * @see Backup::get_backup_filepath()
- 	 * @deprecated 3.4 Use Backup::get_backup_filepath()
+	 * @deprecated 3.4 Use Backup::get_backup_filepath()
 	 */
 	public function get_archive_filepath() {
 		_deprecated_function( __FUNCTION__, '3.4', 'get_backup_filepath()' );
 		return $this->get_backup_filepath();
 	}
-
 }
