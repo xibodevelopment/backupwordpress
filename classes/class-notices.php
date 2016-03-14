@@ -2,7 +2,6 @@
 
 namespace HM\BackUpWordPress;
 
-
 /**
  * Class for managing notices
  *
@@ -68,9 +67,9 @@ class Notices {
 	 *
 	 * @param string  $context    The context of the notice message
 	 * @param array   $messages   The array of messages
-	 * @param boolean $persistant Whether the notice should persist via the database. Defaults to true.
+	 * @param boolean $persistent Whether the notice should persist via the database. Defaults to true.
 	 */
-	public function set_notices( $context, array $messages, $persistant = true ) {
+	public function set_notices( $context, array $messages, $persistent = true ) {
 
 		// Clear any empty messages and avoid duplicates
 		$messages = array_unique( array_filter( $messages ) );
@@ -81,9 +80,9 @@ class Notices {
 
 		$this->notices[ $context ] = array_merge( $this->get_notices( $context ), $messages );
 
-		if ( $persistant ) {
+		if ( $persistent ) {
 
-			$new_notices = $notices = $this->get_persistant_notices();
+			$new_notices = $notices = $this->get_persistent_notices();
 
 			// Make sure we merge in any existing notices
 			if ( ! empty( $notices[ $context ] ) ) {
@@ -130,20 +129,20 @@ class Notices {
 	}
 
 	/**
-	 * Get both standard and persistant notices
+	 * Get both standard and persistent notices
 	 *
 	 * @return array The array of contexts and notices
 	 */
 	private function get_all_notices() {
-		return array_map( 'array_unique', array_merge_recursive( $this->notices, $this->get_persistant_notices() ) );
+		return array_map( 'array_unique', array_merge_recursive( $this->notices, $this->get_persistent_notices() ) );
 	}
 
 	/**
-	 * Load the persistant notices from the database
+	 * Load the persistent notices from the database
 	 *
 	 * @return array The array of notices
 	 */
-	private function get_persistant_notices() {
+	private function get_persistent_notices() {
 		$notices = get_option( 'hmbkp_notices' );
 		if ( ! empty( $notices ) ) {
 			return $notices;
@@ -152,7 +151,7 @@ class Notices {
 	}
 
 	/**
-	 * Clear all notices including persistant ones
+	 * Clear all notices including persistent ones
 	 */
 	public function clear_all_notices() {
 		$this->notices = array();
