@@ -95,3 +95,8 @@ pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px
     table.widefat tbody tr:nth-child(odd) { background-color: #f9f9f9 }
 
 }
+
+.tools_page_backupwordpress_extensions a[href*="page=backupwordpress"] {
+    font-weight: bold !important;
+    color: white !important;
+}
