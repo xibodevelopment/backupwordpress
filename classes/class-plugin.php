@@ -373,7 +373,7 @@ final class Plugin {
 	 */
 	public function styles( $hook ) {
 
-		if ( HMBKP_ADMIN_PAGE !== $hook ) {
+		if ( 'tools_page_backupwordpress_extensions' !== $hook && HMBKP_ADMIN_PAGE !== $hook ) {
 			return;
 		}
 
