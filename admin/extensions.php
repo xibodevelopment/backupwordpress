@@ -8,7 +8,7 @@ namespace HM\BackUpWordPress;
 
 	<h1>
 
-		<a class="page-title-action" href="<?php echo get_settings_url() ?>"><?php _e( '&larr; Backups', 'backupwordpress' ); ?></a>
+		<a class="page-title-action" href="<?php echo esc_url( get_settings_url() ); ?>"><?php _e( '&larr; Backups', 'backupwordpress' ); ?></a>
 
 		<?php _e( 'BackUpWordPress Extensions', 'backupwordpress' ); ?>
 
