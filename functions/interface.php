@@ -190,7 +190,7 @@ function set_server_config_notices() {
 	}
 
 	if ( disk_space_low() ) {
-		$messages[] = sprintf( __( 'You\'re server only has %s of disk space left which probably isn\'t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ), '<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>' );
+		$messages[] = sprintf( __( 'Your server only has %s of disk space left which probably isn\'t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ), '<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>' );
 	}
 
 	if ( count( $messages ) > 0 ) {
