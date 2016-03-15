@@ -144,10 +144,7 @@ class Notices {
 	 */
 	private function get_persistent_notices() {
 		$notices = get_option( 'hmbkp_notices' );
-		if ( ! empty( $notices ) ) {
-			return $notices;
-		}
-		return array();
+		return ! empty( $notices ) ? $notices : array();
 	}
 
 	/**
