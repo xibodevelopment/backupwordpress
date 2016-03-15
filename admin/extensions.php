@@ -20,6 +20,12 @@ namespace HM\BackUpWordPress;
 
 	<?php
 	$extensions_data = Extensions::get_instance()->get_edd_data();
+
+	// Sort by title
+	usort( $extensions_data, function( $a, $b ) {
+		return strcmp( $b->title->rendered, $a->title->rendered );
+	});
+
 	$installed_plugins = array_map( 'strtolower' , wp_list_pluck( get_plugins(), 'Name' ) );
 	?>
 
