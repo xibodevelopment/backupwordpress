@@ -23,7 +23,7 @@ class Notices {
 	/**
 	 * Contains the instantiated Notices instance
 	 *
-	 * @var Path $this->get_instance
+	 * @var Notices $this->get_instance
 	 */
 	private static $instance;
 
