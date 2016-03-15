@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Extensions
  * @package HM\BackUpWordPress
  */
-class Extensions {
+final class Extensions {
 
 	/**
 	 * Contains the instantiated Extensions instance.
@@ -26,11 +26,15 @@ class Extensions {
 	 * Extensions constructor.
 	 *
 	 */
-	function __construct() {
+	private function __construct() {
 
 		$this->root_url  = 'https://bwp.hmn.md/wp-json/wp/v2/';
 
 	}
+
+	private function __wakeup() {}
+
+	private function __clone() {}
 
 	/**
 	 * Returns the *Singleton* instance of this class.
@@ -76,7 +80,7 @@ class Extensions {
 	 *
 	 * @return array|mixed|\WP_Error
 	 */
-	function fetch( $endpoint, $ttl = DAY_IN_SECONDS ) {
+	protected function fetch( $endpoint, $ttl = DAY_IN_SECONDS ) {
 
 		$request_url = $this->root_url . $endpoint;
 

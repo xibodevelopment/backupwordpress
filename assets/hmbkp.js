@@ -19,7 +19,7 @@ var BackUpWordPressAdmin = (function($){
 
 		}
 
-		$('.notice.is-dismissible').on('click', '.notice-dismiss', function(event){
+		$('.notice.is-dismissible').on('click', '.notice-dismiss', function(){
 			$.post(
 				ajaxurl,
 				{
