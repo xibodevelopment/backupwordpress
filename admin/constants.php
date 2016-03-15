@@ -122,9 +122,9 @@ namespace HM\BackUpWordPress;
 
 		</tr>
 
-		<?php foreach ( Services::get_services() as $file => $service ) {
+		<?php foreach ( Services::get_services() as $file => $service ) :
 			echo wp_kses_post( call_user_func( array( $service, 'constant' ) ) );
-		} ?>
+		endforeach; ?>
 
 	</table>
 

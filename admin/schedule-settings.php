@@ -19,10 +19,11 @@ if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 
 		<?php foreach ( Services::get_services( $schedule ) as $service ) :
 
-			if ( ! $service->has_form() )
-				continue; ?>
+			if ( ! $service->has_form() ) {
+				continue;
+			} ?>
 
-			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings_' . $service->get_slug() , 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ) ); ?>"><?php echo esc_html( $service->name ); ?></a> |
+			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings_' . $service->get_slug(), 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ) ); ?>"><?php echo esc_html( $service->name ); ?></a> |
 
 		<?php endforeach; ?>
 
@@ -38,24 +39,22 @@ if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 
 <div class="hmbkp-schedule-settings">
 
-	<?php if ( $_GET['action'] === 'hmbkp_edit_schedule' && $_GET['hmbkp_panel'] === 'hmbkp_edit_schedule_settings' ) {
+	<?php if ( 'hmbkp_edit_schedule' === $_GET['action'] && 'hmbkp_edit_schedule_settings' === $_GET['hmbkp_panel'] ) :
 		require( HMBKP_PLUGIN_PATH . 'admin/schedule-form.php' );
-	} ?>
+	endif; ?>
 
-	<?php if ( $_GET['action'] === 'hmbkp_edit_schedule' && $_GET['hmbkp_panel'] === 'hmbkp_edit_schedule_excludes' ) {
+	<?php if ( 'hmbkp_edit_schedule' === $_GET['action'] && 'hmbkp_edit_schedule_excludes' === $_GET['hmbkp_panel'] ) :
 		require( HMBKP_PLUGIN_PATH . 'admin/schedule-form-excludes.php' );
-	} ?>
+	endif; ?>
 
 	<?php // Show the service form if we are viewing one
 	foreach ( Services::get_services( $schedule ) as $service ) : ?>
 
-		<?php if ( $_GET['action'] === 'hmbkp_edit_schedule' && $_GET['hmbkp_panel'] === 'hmbkp_edit_schedule_settings_' . $service->get_slug() ) { ?>
+		<?php if ( 'hmbkp_edit_schedule' === $_GET['action'] && 'hmbkp_edit_schedule_settings_' . $service->get_slug() === $_GET['hmbkp_panel'] ) : ?>
 
 			<h3><?php echo esc_html( $service->name ); ?></h3>
 
-			<?php
-
-			$hmbkp_form_errors = get_settings_errors();
+			<?php $hmbkp_form_errors = get_settings_errors();
 
 			if ( ! empty( $hmbkp_form_errors ) ) :
 
@@ -63,20 +62,16 @@ if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 
 				<div id="hmbkp-warning" class="error settings-error">
 
-					<?php foreach ( $hmbkp_form_errors as $error ) { ?>
+					<?php foreach ( $hmbkp_form_errors as $error ) : ?>
 						<p><strong><?php echo esc_html( $error ); ?></strong></p>
-					<?php } ?>
+					<?php endforeach; ?>
 
 				</div>
 
-			<?php
-
-			endif;
+			<?php endif;
 
 			// We can clear them now we've displayed them
-			clear_settings_errors();
-
-			?>
+			clear_settings_errors(); ?>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 
@@ -93,7 +88,7 @@ if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 
 			<?php break; ?>
 
-		<?php } ?>
+		<?php endif; ?>
 
 	<?php endforeach; ?>
 

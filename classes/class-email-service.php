@@ -20,7 +20,9 @@ class Email_Service extends Service {
 	 *
 	 * @access  public
 	 */
-	public function field() { ?>
+	public function field() {
+
+	?>
 
 		<tr>
 
@@ -48,7 +50,9 @@ class Email_Service extends Service {
 		return '';
 	}
 
-	public static function constant() { ?>
+	public static function constant() {
+
+	?>
 
 		<tr<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?> class="hmbkp_active"<?php } ?>>
 
@@ -116,9 +120,7 @@ class Email_Service extends Service {
 					if ( ! is_email( $email ) ) {
 						$errors['email'] = sprintf( __( '%s isn\'t a valid email',  'backupwordpress' ), $email );
 					}
-
 				}
-
 			}
 
 			if ( ! empty( $errors['email'] ) ) {
@@ -128,7 +130,6 @@ class Email_Service extends Service {
 			return $errors;
 
 		}
-
 	}
 
 	/**
@@ -136,11 +137,8 @@ class Email_Service extends Service {
 	 * @return array An array of validated email address's
 	 */
 	private function get_email_address_array() {
-
 		$emails = array_map( 'trim', explode( ',', $this->get_field_value( 'email' ) ) );
-
 		return array_filter( array_unique( $emails ), 'is_email' );
-
 	}
 
 	/**
@@ -152,7 +150,7 @@ class Email_Service extends Service {
 	 */
 	public function action( $action, Backup $backup ) {
 
-		if ( $action === 'hmbkp_backup_complete' && $this->get_email_address_array() ) {
+		if ( 'hmbkp_backup_complete' === $action && $this->get_email_address_array() ) {
 
 			$file = $backup->get_backup_filepath();
 
@@ -201,19 +199,17 @@ class Email_Service extends Service {
 			if ( ! $sent ) {
 
 				$message = sprintf( __( 'BackUpWordPress has completed a backup of your site %1$s.', 'backupwordpress' ) . "\n\n" . __( 'Unfortunately, the backup file was too large to attach to this email.', 'backupwordpress' ) . "\n\n" . __( 'You can download the backup file by clicking the link below:', 'backupwordpress' ) . "\n\n" . '%2$s' . "\n\n" . __( "Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'backupwordpress' ), home_url(), $download );
-
 				wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
 
 			}
-
 		}
-
 	}
 
-	public static function intercom_data() { return array(); }
+	public static function intercom_data() {
+		return array();
+	}
 
 	public static function intercom_data_html() {}
-
 }
 
 // Register the service

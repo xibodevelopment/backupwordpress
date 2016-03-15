@@ -86,5 +86,4 @@ class Schedules {
 	private function instantiate( $id ) {
 		return new Scheduled_Backup( str_replace( 'hmbkp_schedule_', '', $id ) );
 	}
-
 }

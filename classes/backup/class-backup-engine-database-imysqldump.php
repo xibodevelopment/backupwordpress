@@ -51,7 +51,7 @@ class IMysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 		return apply_filters( 'hmbkp_imysqldump_command', array(
 			'default-character-set' => $this->get_charset(),
 			'hex-blob'              => true,
-			'single-transaction'    => defined( 'HMBKP_MYSQLDUMP_SINGLE_TRANSACTION' ) && HMBKP_MYSQLDUMP_SINGLE_TRANSACTION
+			'single-transaction'    => defined( 'HMBKP_MYSQLDUMP_SINGLE_TRANSACTION' ) && HMBKP_MYSQLDUMP_SINGLE_TRANSACTION,
 		) );
 
 	}
@@ -69,14 +69,11 @@ class IMysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 
 		if ( $this->get_host() && $this->get_port() ) {
 			$dsn = 'mysql:host=' . $this->get_host() . ';port=' . $this->get_port() . ';dbname=' . $this->get_name();
-		}
-
-		elseif ( $this->get_socket() ) {
+		} elseif ( $this->get_socket() ) {
 			$dsn = 'mysql:unix_socket=' . $this->get_socket() . ';dbname=' . $this->get_name();
 		}
 
 		return $dsn;
 
 	}
-
 }

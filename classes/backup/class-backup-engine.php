@@ -168,7 +168,7 @@ abstract class Backup_Engine {
 	public function error_handler( $type ) {
 
 		// Skip strict & deprecated warnings
-		if ( ( defined( 'E_DEPRECATED' ) && $type === E_DEPRECATED ) || ( defined( 'E_STRICT' ) && $type === E_STRICT ) || error_reporting() === 0 ) {
+		if ( ( defined( 'E_DEPRECATED' ) && E_DEPRECATED === $type ) || ( defined( 'E_STRICT' ) && E_STRICT === $type ) || 0 === error_reporting() ) {
 			return false;
 		}
 
@@ -193,5 +193,4 @@ abstract class Backup_Engine {
 		return false;
 
 	}
-
 }
