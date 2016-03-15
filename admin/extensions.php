@@ -35,7 +35,7 @@ namespace HM\BackUpWordPress;
 
 	<div class="wp-list-table widefat plugin-install">
 		<div id="the-list">
-
+			<?php $first = true; ?>
 			<?php foreach ( $extensions_data as $extension ) : ?>
 
 				<div class="plugin-card plugin-card-<?php echo esc_attr( $extension->slug ); ?>">
@@ -71,7 +71,11 @@ namespace HM\BackUpWordPress;
 						</div>
 					</div>
 
-					<div class="plugin-card-bottom">
+					<?php
+					$style = $first === true ? 'background-color:aliceblue;' : '';
+					$first = false;
+					?>
+					<div class="plugin-card-bottom" style="<?php echo esc_attr( $style ); ?>">
 						<div class="vers column-rating">
 							<div>
 								<?php esc_html_e( sprintf( __( 'Plugin version %s', 'backupwordpress' ), $extension->_edd_sl_version ) ); ?>
