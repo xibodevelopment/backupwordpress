@@ -2,28 +2,60 @@
 
 namespace HM\BackUpWordPress;
 
+/**
+ * Class Extensions
+ * @package HM\BackUpWordPress
+ */
 class Extensions {
 
+	/**
+	 * Contains the instantiated Extensions instance.
+	 *
+	 * @var Extensions $this->instance
+	 */
 	private static $instance;
 
-	function __construct( $root_url ) {
+	/**
+	 * Holds the root URL of the API.
+	 *
+	 * @var string
+	 */
+	protected $root_url = '';
 
-		$this->root_url  = $root_url;
+	/**
+	 * Extensions constructor.
+	 *
+	 */
+	function __construct() {
+
+		$this->root_url  = 'https://bwp.hmn.md/wp-json/wp/v2/';
 
 	}
 
+	/**
+	 * Returns the *Singleton* instance of this class.
+	 *
+	 * @staticvar Extensions $instance The *Singleton* instances of this class.
+	 *
+	 * @return Extensions The *Singleton* instance.
+	 */
 	public static function get_instance() {
 
-		if ( ! static::$instance ) {
+		if ( ! ( self::$instance instanceof Extensions ) ) {
 
-			$root_url = 'https://bwp.hmn.md/wp-json/wp/v2/';
+			self::$instance = new Extensions();
 
-			static::$instance = new static( $root_url );
 		}
 
-		return static::$instance;
+		return self::$instance;
+
 	}
 
+	/**
+	 * Parses the body of the API response and returns it.
+	 *
+	 * @return array|bool|mixed|object
+	 */
 	public function get_edd_data() {
 
 		$response = $this->fetch( 'edd-downloads', 600 );
@@ -36,7 +68,15 @@ class Extensions {
 
 	}
 
-	function fetch( $endpoint, $ttl = 10 ) {
+	/**
+	 * Makes a request to the JSON API or retrieves the cached response. Caches the response for one day.
+	 *
+	 * @param $endpoint
+	 * @param int $ttl
+	 *
+	 * @return array|mixed|\WP_Error
+	 */
+	function fetch( $endpoint, $ttl = DAY_IN_SECONDS ) {
 
 		$request_url = $this->root_url . $endpoint;
 
