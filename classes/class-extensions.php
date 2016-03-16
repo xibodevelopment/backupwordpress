@@ -94,6 +94,10 @@ final class Extensions {
 
 		$response = wp_remote_get( $request_url );
 
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return new \WP_Error( 'hmbkp-error', 'Unable to fetch API response' );
+		}
+
 		set_transient( 'bwp_' . $cache_key, $response, $ttl );
 
 		return $response;
