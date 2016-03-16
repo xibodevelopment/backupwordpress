@@ -115,9 +115,9 @@ class Notices {
 
 		$notices = $this->get_all_notices();
 
-		if ( $notices ) {
+		if ( ! empty( $notices ) ) {
 
-			if ( $context ) {
+			if ( ! empty( $context ) ) {
 				return isset( $notices[ $context ] ) ? $notices[ $context ] : array();
 			}
 
