@@ -62,7 +62,7 @@ final class Extensions {
 	 */
 	public function get_edd_data() {
 
-		$response = $this->fetch( 'edd-downloads', 600 );
+		$response = $this->fetch( 'edd-downloads' );
 
 		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
 			return false;
