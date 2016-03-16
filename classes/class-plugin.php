@@ -442,14 +442,14 @@ final class Plugin {
 		/* translators: %1$s and %2$s expand to anchor tags linking to the new extensions page. */
 		$info_message = sprintf(
 			__( 'Thanks for updating BackUpWordPress, why not check out %1$sour extensions?%2$s', 'backupwordpress' ),
-			'<a href="' . get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) . '">',
+			'<a href="' . esc_url( get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) ) . '">',
 			'</a>'
 		);
 		?>
 
 		<div id="hmbkp-info-message" class="updated notice is-dismissible">
 
-			<p><?php echo $info_message; ?></p>
+			<p><?php echo wp_kses_post( $info_message ); ?></p>
 
 			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 
