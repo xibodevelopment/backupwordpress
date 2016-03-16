@@ -27,6 +27,8 @@ class Extensions_Tests extends \HM_Backup_UnitTestCase {
 
 		$extensions_data = $this->extensions->get_edd_data();
 
+		$this->assertNotFalse( $extensions_data );
+
 		$this->assertInternalType( 'array', $extensions_data );
 		$this->assertGreaterThan( 0, count( $extensions_data ) );
 	}
