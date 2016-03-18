@@ -452,8 +452,12 @@ function disk_space_low( $backup_size = false ) {
 
 	}
 
+	if ( ! is_readable( Path::get_path() ) ) {
+		return false;
+	}
+
 	$disk_space = disk_free_space( Path::get_path() );
 
-	return $backup_size >= $disk_space;
+	return $disk_space && $backup_size >= $disk_space;
 
 }
