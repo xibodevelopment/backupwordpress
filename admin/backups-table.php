@@ -21,11 +21,11 @@ namespace HM\BackUpWordPress;
 
 	<tbody>
 
-		<?php if ( $schedule->get_backups() ) {
+		<?php if ( $schedule->get_backups() ) :
 
 			$schedule->delete_old_backups();
 
-			foreach ( $schedule->get_backups() as $file ) {
+			foreach ( $schedule->get_backups() as $file ) :
 
 				if ( ! file_exists( $file ) ) {
 					continue;
@@ -33,15 +33,15 @@ namespace HM\BackUpWordPress;
 
 				get_backup_row( $file, $schedule );
 
-			}
+			endforeach;
 
-		} else { ?>
+		else : ?>
 
 			<tr>
 				<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'backupwordpress' ); ?></td>
 			</tr>
 
-		<?php } ?>
+		<?php endif; ?>
 
 	</tbody>
 

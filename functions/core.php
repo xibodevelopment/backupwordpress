@@ -260,7 +260,7 @@ function update() {
 
 			$reoccurrence = $schedule->get_reoccurrence();
 
-			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === 0 ) {
+			if ( 'manually' !== $reoccurrence && strpos( $reoccurrence, 'hmbkp_' ) === 0 ) {
 				$schedule->set_reoccurrence( substr( $reoccurrence, 6 ) );
 			}
 
@@ -412,6 +412,18 @@ function is_backup_possible() {
 		return false;
 	}
 
+	if ( disk_space_low() ) {
+		return false;
+	}
+
+	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
+		return false;
+	}
+
+	if ( ! Requirement_Zip_Command_Path::test() && ! Requirement_Zip_Archive::test() ) {
+		return false;
+	}
+
 	return true;
 }
 
@@ -496,8 +508,7 @@ function determine_start_time( $type, $times = array() ) {
 	// Allow the hours and minutes to be overwritten by a constant
 	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {
 		$hm = HMBKP_SCHEDULE_TIME;
-	} else {
-		// The hour and minute that the schedule should start on
+	} else { // The hour and minute that the schedule should start on
 		$hm = $args['hours'] . ':' . $args['minutes'] . ':00';
 	}
 
@@ -631,13 +642,9 @@ function list_directory_by_total_filesize( $directory, Excludes $excludes ) {
 			$files_with_size[ $filesize ] = $entry;
 
 		} elseif ( 0 === $filesize ) {
-
 			$empty_files[] = $entry;
-
 		} else {
-
 			$files_with_no_size[] = $entry;
-
 		}
 	}
 

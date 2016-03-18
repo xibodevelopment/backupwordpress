@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
-	const PLUGIN_VERSION = '3.5-beta';
+	const PLUGIN_VERSION = '3.5';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -232,7 +232,7 @@ final class Plugin {
 				'delete_schedule'          => __( 'Are you sure you want to delete this schedule? All of its backups will also be deleted.', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
 				'delete_backup'            => __( 'Are you sure you want to delete this backup?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
 				'remove_exclude_rule'      => __( 'Are you sure you want to remove this exclude rule?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
-				'remove_old_backups'       => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted. Are you sure that\'s what you want?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n"
+				'remove_old_backups'       => __( 'Reducing the number of backups that are stored on this server will cause some of your existing backups to be deleted. Are you sure that\'s what you want?', 'backupwordpress' ) . "\n\n" . __( '\'Cancel\' to go back, \'OK\' to delete.', 'backupwordpress' ) . "\n",
 			)
 		);
 
@@ -290,9 +290,11 @@ final class Plugin {
 	 */
 	protected function generate_key() {
 
-		$check = apply_filters( "hmbkp_generate_key", null );
-		if ( null !== $check )
+		$check = apply_filters( 'hmbkp_generate_key', null );
+
+		if ( null !== $check ) {
 			return $check;
+		}
 
 		$key = array( ABSPATH, time() );
 		$constants = array( 'AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT', 'SECRET_KEY' );
@@ -413,7 +415,6 @@ final class Plugin {
 		<script>!function(){function e(){var a=c.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://static.intercomcdn.com/intercom.v1.js";var b=c.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)}var a=window,b=a.Intercom;if("function"==typeof b)b("reattach_activator"),b("update",intercomSettings);else{var c=document,d=function(){d.c(arguments)};d.q=[],d.c=function(a){d.q.push(a)},a.Intercom=d,a.attachEvent?a.attachEvent("onload",e):a.addEventListener("load",e,!1)}}();</script>
 
 	<?php }
-
 }
 
 if ( is_multisite() && ! is_main_site() ) {

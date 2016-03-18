@@ -58,6 +58,6 @@ foreach ( HM\BackUpWordPress\Requirements::get_requirement_groups() as $group ) 
 
 <?php endforeach;
 
-foreach ( HM\BackUpWordPress\Services::get_services() as $file => $service ) {
+foreach ( HM\BackUpWordPress\Services::get_services() as $file => $service ) :
 	echo wp_kses_post( call_user_func( array( $service, 'intercom_data_html' ) ) );
-}
+endforeach;

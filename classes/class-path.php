@@ -243,7 +243,6 @@ class Path {
 		}
 
 		$paths = array_merge( $default, $fallback );
-
 		$paths = array_map( 'wp_normalize_path', $paths );
 
 		return $paths;
@@ -424,7 +423,7 @@ class Path {
 		}
 
 		// Delete the old directory if it's inside WP_CONTENT_DIR
-		if ( false !== strpos( $from, WP_CONTENT_DIR ) && $from !== Path::get_path() ) {
+		if ( false !== strpos( $from, WP_CONTENT_DIR ) &&  Path::get_path() !== $from ) {
 			rmdirtree( $from );
 		}
 	}

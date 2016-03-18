@@ -5,8 +5,6 @@ namespace HM\BackUpWordPress;
 /**
  * Add the backups menu item
  * to the tools menu
- *
- * @return null
  */
 function admin_menu() {
 
@@ -16,7 +14,6 @@ function admin_menu() {
 		add_management_page( __( 'Manage Backups', 'backupwordpress' ), __( 'Backups', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'HM\BackUpWordPress\manage_backups' );
 	}
 }
-
 add_action( 'network_admin_menu', 'HM\BackUpWordPress\admin_menu' );
 add_action( 'admin_menu', 'HM\BackUpWordPress\admin_menu' );
 
@@ -72,14 +69,16 @@ function contextual_help() {
 	include_once( HMBKP_PLUGIN_PATH . 'admin/faq.php' );
 	$faq = ob_get_clean();
 
-	get_current_screen()->add_help_tab( array( 'title'   => __( 'FAQ', 'backupwordpress' ),
-	                                           'id'      => 'hmbkp_faq',
-	                                           'content' => wp_kses_post( $faq )
+	get_current_screen()->add_help_tab( array(
+		'title'   => __( 'FAQ', 'backupwordpress' ),
+		'id'      => 'hmbkp_faq',
+		'content' => wp_kses_post( $faq ),
 	) );
 
-	get_current_screen()->add_help_tab( array( 'title'   => __( 'Constants', 'backupwordpress' ),
-	                                           'id'      => 'hmbkp_constants',
-	                                           'content' => wp_kses_post( $constants )
+	get_current_screen()->add_help_tab( array(
+		'title'   => __( 'Constants', 'backupwordpress' ),
+		'id'      => 'hmbkp_constants',
+		'content' => wp_kses_post( $constants ),
 	) );
 
 	require_once( HMBKP_PLUGIN_PATH . 'classes/class-requirements.php' );
@@ -101,5 +100,4 @@ function contextual_help() {
 	);
 
 }
-
 add_action( 'load-' . HMBKP_ADMIN_PAGE, 'HM\BackUpWordPress\contextual_help' );
