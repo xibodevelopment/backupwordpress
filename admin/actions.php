@@ -656,3 +656,11 @@ function ajax_cron_test() {
 
 }
 add_action( 'wp_ajax_hmbkp_cron_test', 'HM\BackUpWordPress\ajax_cron_test' );
+
+/**
+ * Remember notice dismissal
+ */
+function hmbkp_dismiss_notice() {
+	update_site_option( 'hmbkp_hide_info_notice', true );
+}
+add_action( 'wp_ajax_hmbkp_dismiss_notice', 'HM\BackUpWordPress\hmbkp_dismiss_notice' );

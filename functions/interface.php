@@ -325,9 +325,9 @@ function translated_schedule_title( $slug, $title ) {
 
 }
 
-function get_settings_url() {
+function get_settings_url( $slug = HMBKP_PLUGIN_SLUG ) {
 
-	$url = is_multisite() ? network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG ) : admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
+	$url = is_multisite() ? network_admin_url( 'settings.php?page=' . $slug ) : admin_url( 'tools.php?page=' . $slug );
 
 	schedules::get_instance()->refresh_schedules();
 
