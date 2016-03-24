@@ -444,7 +444,7 @@ class CleanUpIterator extends \FilterIterator {
 	public function accept() {
 
 		// Don't remove existing backups
-		if ( 'zip' === $this->current()->getExtension() ) {
+		if ( 'zip' === pathinfo( $this->current()->getFilename(), PATHINFO_EXTENSION ) ) {
 			return false;
 		}
 
