@@ -48,7 +48,7 @@ class Extensions_Tests extends \HM_Backup_UnitTestCase {
 			$response = array(
 				'headers'  => array(),
 				'body'     => $response_body,
-				'response' => 200,
+				'response' => array( 'code' => 200 ),
 			);
 
 			return $response;
