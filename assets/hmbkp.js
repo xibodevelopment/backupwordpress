@@ -130,7 +130,7 @@ var BackUpWordPressAdmin = (function($){
 
 		} );
 
-		$( document ).on( 'click', '#hmbkp-warning-backup .notice-dismiss', function(){
+		$( document ).on( 'click', '[id^="hmbkp-warning-"] .notice-dismiss', function(){
 			$.post(
 				ajaxurl,
 				{
