@@ -54,6 +54,15 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.6.0 / 2016-03-31
+
+* Fix a bug caused by using a function incompatible with min PHP version requirements
+* Misc code quality improvements and bug fixes
+* Fix bugs in the code responsible for admin notices
+* Display disk space info
+* Uninstall cleanup
+* Introduce a dedicated extensions page
+
 ### 3.5 / 2016-03-10
 
 * Reduce duplication and improve code readability when echoing filesizes
