@@ -43,8 +43,9 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 			}
 			// @codingStandardsIgnoreEnd
 
-			$zip->close();
-
+			if ( file_exists( $this->get_backup_filepath() ) ) {
+				$zip->close();
+			}
 		}
 
 		return $this->verify_backup();
