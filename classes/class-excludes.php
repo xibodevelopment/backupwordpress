@@ -37,7 +37,7 @@ class Excludes {
 		'backup-db',
 		'Envato-backups',
 		'managewp',
-		'backupwordpress-*-backups'
+		'backupwordpress-*-backups',
 	);
 
 	public function __construct( $excludes = array() ) {
@@ -71,7 +71,7 @@ class Excludes {
 	 * @return array The array of exclude rules.
 	 */
 	public function get_excludes() {
- 		return array_merge( $this->get_default_excludes(), $this->get_user_excludes() );
+		return array_merge( $this->get_default_excludes(), $this->get_user_excludes() );
 	}
 
 	/**
@@ -101,7 +101,6 @@ class Excludes {
 				$exclude = '/' . $exclude . '/';
 
 			}
-
 		}
 
 		return $excludes;
@@ -161,19 +160,21 @@ class Excludes {
 	 */
 	public function normalize( $excludes ) {
 
-		$excludes = array_map( function( $exclude ) {
+		$excludes = array_map(
+			function( $exclude ) {
 
-			// Convert absolute paths to relative
-			$exclude = str_replace( PATH::get_root(), '', wp_normalize_path( $exclude ) );
+				// Convert absolute paths to relative
+				$exclude = str_replace( PATH::get_root(), '', wp_normalize_path( $exclude ) );
 
-			// Trim the slashes
-			$exclude = trim( $exclude );
-			$exclude = ltrim( $exclude, '/' );
-			$exclude = untrailingslashit( $exclude );
+				// Trim the slashes
+				$exclude = trim( $exclude );
+				$exclude = ltrim( $exclude, '/' );
+				$exclude = untrailingslashit( $exclude );
 
-			return $exclude;
+				return $exclude;
 
-		}, $excludes );
+			},
+		$excludes );
 
 		// Remove duplicate or empty rules
 		$excludes = array_unique( $excludes );
@@ -182,5 +183,4 @@ class Excludes {
 		return $excludes;
 
 	}
-
 }

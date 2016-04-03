@@ -3,7 +3,7 @@
 Plugin Name: BackUpWordPress
 Plugin URI: http://bwp.hmn.md/
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>. On multisite, you'll find me under the Network Settings menu.
-Version: 3.5
+Version: 3.6.0
 Author: Human Made Limited
 Author URI: http://hmn.md/
 License: GPL-2+
@@ -51,7 +51,5 @@ if ( HMBKP_Setup::meets_requirements() ) {
 	require_once( HMBKP_PLUGIN_PATH . 'classes/class-plugin.php' );
 } else {
 	add_action( 'admin_init', array( 'HMBKP_Setup', 'self_deactivate' ) );
-
 	add_action( 'all_admin_notices', array( 'HMBKP_Setup', 'display_admin_notices' ) );
 }
-

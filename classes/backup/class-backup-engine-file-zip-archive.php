@@ -42,10 +42,7 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 				// Create an empty directory for each directory in the filesystem
 				if ( $file->isDir() ) {
 					$zip->addEmptyDir( $file->getRelativePathname() );
-				}
-
-				// Archive the file with a relative path
-				elseif ( $file->isFile() ) {
+				} elseif ( $file->isFile() ) { // Archive the file with a relative path
 					$zip->addFile( $file->getPathname(), $file->getRelativePathname() );
 				}
 			}
@@ -55,9 +52,11 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 				$this->warning( __CLASS__, $zip->status );
 			}
 
+			// @codingStandardsIgnoreStart
 			if ( $zip->statusSys ) {
 				$this->warning( __CLASS__, $zip->statusSys );
 			}
+			// @codingStandardsIgnoreEnd
 
 			$zip->close();
 
@@ -66,5 +65,4 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 		return $this->verify_backup();
 
 	}
-
 }

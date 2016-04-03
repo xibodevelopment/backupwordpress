@@ -85,15 +85,13 @@ function admin_notices() {
 
 			</ul>
 
-			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
-
 		</div>
 
 	<?php endif; ?>
 
 	<?php if ( ! empty( $notices['server_config'] ) ) : ?>
 
-		<div id="hmbkp-warning-server" class="error notice is-dismissible">
+		<div id="hmbkp-warning-server" class="error notice">
 
 			<ul>
 
@@ -104,8 +102,6 @@ function admin_notices() {
 				<?php endforeach; ?>
 
 			</ul>
-
-			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 
 		</div>
 
@@ -126,8 +122,6 @@ function admin_notices() {
 						<p><?php echo wp_kses_data( $msg ); ?></p>
 
 					<?php endforeach; ?>
-
-					<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 
 				</div>
 
@@ -188,7 +182,15 @@ function set_server_config_notices() {
 	}
 
 	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
-		$messages[] = sprintf( __( 'Your database cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>mysqldump</code>', '<code>PDO</code>' );
+		$messages[] = sprintf( __( 'Your site cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>mysqldump</code>', '<code>PDO::mysql</code>' );
+	}
+
+	if ( ! Requirement_Zip_Command_Path::test() && ! Requirement_Zip_Archive::test() ) {
+		$messages[] = sprintf( __( 'Your site cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>zip</code>', '<code>ZipArchive</code>' );
+	}
+
+	if ( disk_space_low() ) {
+		$messages[] = sprintf( __( 'Your server only has %s of disk space left which probably isn\'t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ), '<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>' );
 	}
 
 	if ( count( $messages ) > 0 ) {
@@ -323,9 +325,9 @@ function translated_schedule_title( $slug, $title ) {
 
 }
 
-function get_settings_url() {
+function get_settings_url( $slug = HMBKP_PLUGIN_SLUG ) {
 
-	$url = is_multisite() ? network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG ) : admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
+	$url = is_multisite() ? network_admin_url( 'settings.php?page=' . $slug ) : admin_url( 'tools.php?page=' . $slug );
 
 	schedules::get_instance()->refresh_schedules();
 
@@ -431,4 +433,29 @@ function is_same_size_format( $size, $other_size ) {
 	}
 
 	return preg_replace( '/[0-9]+/', '', size_format( $size ) ) === preg_replace( '/[0-9]+/', '', size_format( $other_size ) );
+}
+
+/**
+ * Check whether the server is low on disk space.
+ *
+ * @return bool Whether there's less disk space less than 2 * the entire size of the site.
+ */
+function disk_space_low( $backup_size = false ) {
+
+	if ( ! $backup_size ) {
+
+		$site_size = new Site_Size();
+
+		if ( $site_size->is_site_size_cached() ) {
+			return false;
+		}
+
+		$backup_size = $site_size->get_site_size() * 2;
+
+	}
+
+	$disk_space = disk_free_space( Path::get_path() );
+
+	return $backup_size >= $disk_space;
+
 }

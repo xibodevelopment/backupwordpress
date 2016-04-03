@@ -38,7 +38,7 @@ class Scheduled_Backup {
 		'max_backups'   => 3,
 		'excludes'      => array(),
 		'type'          => 'complete',
-		'reoccurrence'  => 'manually'
+		'reoccurrence'  => 'manually',
 	);
 
 	/**
@@ -76,17 +76,17 @@ class Scheduled_Backup {
 			sanitize_title( str_ireplace( array(
 				'http://',
 				'https://',
-				'www'
+				'www',
 			), '', home_url() ) ),
 			$this->get_id(),
 			$this->get_type(),
-			current_time( 'Y-m-d-H-i-s' )
+			current_time( 'Y-m-d-H-i-s' ),
 		) ) . '.zip';
 
 		$this->database_dump_filename = implode( '-', array(
 			'database',
 			sanitize_title( str_ireplace( array( 'http://', 'https://', 'www' ), '', home_url() ) ),
-			$this->get_id()
+			$this->get_id(),
 		) ) . '.sql';
 
 		$this->status = new Backup_Status( $this->get_id() );
@@ -212,7 +212,7 @@ class Scheduled_Backup {
 	/**
 	 * Back compat with old set_status mathod
 	 *
- 	 * @deprecated 3.4 Backup->status->set_status()
+	 * @deprecated 3.4 Backup->status->set_status()
 	 */
 	public function set_status( $message ) {
 		_deprecated_function( __FUNCTION__, '3.4', 'Backup->status->set_status()' );
@@ -253,7 +253,7 @@ class Scheduled_Backup {
 	 * @param $service
 	 * @param array $options
 	 */
-	public function set_service_options( $service, Array $options ) {
+	public function set_service_options( $service, array $options ) {
 		$this->options[ $service ] = $options;
 	}
 
@@ -325,7 +325,6 @@ class Scheduled_Backup {
 		if ( isset( $this->options['reoccurrence'] ) && $this->options['reoccurrence'] === $reoccurrence && $this->is_cron_scheduled() ) {
 			return;
 		}
-
 
 		$this->options['reoccurrence'] = $reoccurrence;
 
@@ -575,7 +574,6 @@ class Scheduled_Backup {
 				if ( pathinfo( $file, PATHINFO_EXTENSION ) === 'zip' && strpos( $file, $this->get_id() ) !== false && ( isset( $this->status ) && $this->get_backup_filename() !== $file ) ) {
 					$files[ @filemtime( trailingslashit( Path::get_path() ) . $file ) ] = trailingslashit( Path::get_path() ) . $file;
 				}
-
 			}
 
 			closedir( $handle );
@@ -648,7 +646,7 @@ class Scheduled_Backup {
 	public function save() {
 
 		// Only save them if they have changed
-		if ( $this->options !== get_option( 'hmbkp_schedule_' . $this->get_id() ) ) {
+		if ( get_option( 'hmbkp_schedule_' . $this->get_id() ) !== $this->options ) {
 			update_option( 'hmbkp_schedule_' . $this->get_id(), $this->options );
 		}
 
@@ -676,5 +674,4 @@ class Scheduled_Backup {
 		}
 
 	}
-
 }

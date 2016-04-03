@@ -33,7 +33,7 @@ function update() {
 			'bkpwp_calculation',
 			'bkpwppath',
 			'bkpwp_status_config',
-			'bkpwp_status'
+			'bkpwp_status',
 		);
 
 		foreach ( $legacy_options as $option ) {
@@ -60,13 +60,9 @@ function update() {
 		// Backup type
 		if ( ( defined( 'HMBKP_FILES_ONLY' ) && HMBKP_FILES_ONLY ) || get_option( 'hmbkp_files_only' ) ) {
 			$legacy_schedule->set_type( 'file' );
-		}
-
-		elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) ) {
+		} elseif ( ( defined( 'HMBKP_DATABASE_ONLY' ) && HMBKP_DATABASE_ONLY ) || get_option( 'hmbkp_database_only' ) ) {
 			$legacy_schedule->set_type( 'database' );
-		}
-
-		else {
+		} else {
 			$legacy_schedule->set_type( 'complete' );
 		}
 
@@ -86,9 +82,7 @@ function update() {
 		// Max backups
 		if ( defined( 'HMBKP_MAX_BACKUPS' ) && is_numeric( HMBKP_MAX_BACKUPS ) ) {
 			$legacy_schedule->set_max_backups( (int) HMBKP_MAX_BACKUPS );
-		}
-
-		else {
+		} else {
 			$legacy_schedule->set_max_backups( (int) get_option( 'hmbkp_max_backups', 10 ) );
 		}
 
@@ -100,9 +94,7 @@ function update() {
 		// Backup email
 		if ( defined( 'HMBKP_EMAIL' ) && is_email( HMBKP_EMAIL ) ) {
 			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => HMBKP_EMAIL ) );
-		}
-
-		elseif ( is_email( get_option( 'hmbkp_email_address' ) ) ) {
+		} elseif ( is_email( get_option( 'hmbkp_email_address' ) ) ) {
 			$legacy_schedule->set_service_options( 'HMBKP_Email_Service', array( 'email' => get_option( 'hmbkp_email_address' ) ) );
 		}
 
@@ -133,7 +125,6 @@ function update() {
 		foreach ( array( 'hmbkp_database_only', 'hmbkp_files_only', 'hmbkp_max_backups', 'hmbkp_email_address', 'hmbkp_email', 'hmbkp_schedule_frequency', 'hmbkp_disable_automatic_backup' ) as $option_name ) {
 			delete_option( $option_name );
 		}
-
 	}
 
 	// Update from 2.x to 3.0
@@ -203,8 +194,6 @@ function update() {
 				update_option( $schedule_id, $schedule_settings );
 			}
 		}
-
-
 	}
 
 	// Update to 3.1.5
@@ -271,14 +260,13 @@ function update() {
 
 			$reoccurrence = $schedule->get_reoccurrence();
 
-			if ( $reoccurrence !== 'manually' && strpos( $reoccurrence, 'hmbkp_' ) === 0 ) {
+			if ( 'manually' !== $reoccurrence && strpos( $reoccurrence, 'hmbkp_' ) === 0 ) {
 				$schedule->set_reoccurrence( substr( $reoccurrence, 6 ) );
 			}
 
 			$schedule->save();
 
 		}
-
 	}
 
 	// Update from 3.3.4
@@ -383,11 +371,11 @@ function rmdirtree( $dir ) {
 		return new WP_Error( 'hmbkp_invalid_action_error', sprintf( __( 'You can only delete directories inside your WordPress installation', 'backupwordpress' ) ) );
 	}
 
-	if ( is_file( $dir ) ){
+	if ( is_file( $dir ) ) {
 		@unlink( $dir );
 	}
 
-	if ( ! is_dir( $dir ) || ! is_readable( $dir ) ){
+	if ( ! is_dir( $dir ) || ! is_readable( $dir ) ) {
 		return false;
 	}
 
@@ -395,14 +383,11 @@ function rmdirtree( $dir ) {
 
 	foreach ( $files as $file ) {
 
-		if ( $file->isDir() ){
+		if ( $file->isDir() ) {
 			@rmdir( $file->getPathname() );
-		}
-
-		else{
+		} else {
 			@unlink( $file->getPathname() );
 		}
-
 	}
 
 	@rmdir( $dir );
@@ -426,6 +411,18 @@ function is_backup_possible() {
 		return false;
 	}
 
+	if ( disk_space_low() ) {
+		return false;
+	}
+
+	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
+		return false;
+	}
+
+	if ( ! Requirement_Zip_Command_Path::test() && ! Requirement_Zip_Archive::test() ) {
+		return false;
+	}
+
 	return true;
 }
 
@@ -440,8 +437,9 @@ function get_max_attachment_size() {
 
 	$max_size = '10mb';
 
-	if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) && wp_convert_hr_to_bytes( HMBKP_ATTACHMENT_MAX_FILESIZE ) )
+	if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) && wp_convert_hr_to_bytes( HMBKP_ATTACHMENT_MAX_FILESIZE ) ) {
 		$max_size = HMBKP_ATTACHMENT_MAX_FILESIZE;
+	}
 
 	return wp_convert_hr_to_bytes( $max_size );
 
@@ -499,7 +497,7 @@ function determine_start_time( $type, $times = array() ) {
 		'hours'        => date( 'G', $default_timestamp ),
 		'day_of_week'  => date( 'l', $default_timestamp ),
 		'day_of_month' => date( 'j', $default_timestamp ),
-		'now'          => time()
+		'now'          => time(),
 	);
 
 	$args = wp_parse_args( $times, $default_times );
@@ -509,10 +507,7 @@ function determine_start_time( $type, $times = array() ) {
 	// Allow the hours and minutes to be overwritten by a constant
 	if ( defined( 'HMBKP_SCHEDULE_TIME' ) && HMBKP_SCHEDULE_TIME ) {
 		$hm = HMBKP_SCHEDULE_TIME;
-	}
-
-	// The hour and minute that the schedule should start on
-	else {
+	} else { // The hour and minute that the schedule should start on
 		$hm = $args['hours'] . ':' . $args['minutes'] . ':00';
 	}
 
@@ -646,15 +641,10 @@ function list_directory_by_total_filesize( $directory, Excludes $excludes ) {
 			$files_with_size[ $filesize ] = $entry;
 
 		} elseif ( 0 === $filesize ) {
-
 			$empty_files[] = $entry;
-
 		} else {
-
 			$files_with_no_size[] = $entry;
-
 		}
-
 	}
 
 	// Sort files by filesize, largest first

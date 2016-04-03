@@ -58,10 +58,10 @@ abstract class Webhook_Service extends Service {
 
 			$subject = sprintf( __( 'Backup of %s Failed', 'backupwordpress' ), $domain );
 
-			$body = array (
+			$body = array(
 				'type'         => 'backup.error',
 				'site_url'     => site_url(),
-				'backup'      => array(
+				'backup'       => array(
 					'id'           => 'backup_' . pathinfo( $file, PATHINFO_FILENAME ),
 					'start'        => '0',
 					'end'          => '0',
@@ -69,14 +69,14 @@ abstract class Webhook_Service extends Service {
 					'type'         => $this->schedule->get_type(),
 					'status'       => array(
 						'message'      => $subject . ' - ' . $error_message,
-						'success'      => '0'
-					)
-				)
+						'success'      => '0',
+					),
+				),
 			);
 
 		} else {
 
-			$body = array (
+			$body = array(
 				'type'         => 'backup.success',
 				'site_url'     => site_url(),
 				'backup'      => array(
@@ -87,9 +87,9 @@ abstract class Webhook_Service extends Service {
 					'type'         => $this->schedule->get_type(),
 					'status'       => array(
 						'message'      => 'Backup complete',
-						'success'      => '1'
-					)
-				)
+						'success'      => '1',
+					),
+				),
 			);
 
 		}
@@ -105,8 +105,9 @@ abstract class Webhook_Service extends Service {
 
 	}
 
-	public static function intercom_data() { return array(); }
+	public static function intercom_data() {
+		return array();
+	}
 
 	public static function intercom_data_html() {}
-
 }

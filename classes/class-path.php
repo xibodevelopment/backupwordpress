@@ -119,7 +119,7 @@ class Path {
 				$base              = parse_url( $slashed_home, PHP_URL_PATH );
 				$document_root_fix = wp_normalize_path( realpath( $_SERVER['DOCUMENT_ROOT'] ) );
 				$abspath_fix       = wp_normalize_path( ABSPATH );
-				$home_path         = 0 === strpos( $abspath_fix, $document_root_fix ) ? $document_root_fix . $base : $home_path;
+				$home_path         = strpos( $abspath_fix, $document_root_fix ) === 0 ? $document_root_fix . $base : $home_path;
 			}
 		}
 
@@ -243,8 +243,7 @@ class Path {
 		}
 
 		$paths = array_merge( $default, $fallback );
-
-        $paths = array_map( 'wp_normalize_path', $paths );
+		$paths = array_map( 'wp_normalize_path', $paths );
 
 		return $paths;
 
@@ -399,12 +398,10 @@ class Path {
 					// Try to move them
 					if ( ! @rename( trailingslashit( $from ) . $file, trailingslashit( Path::get_path() ) . $file ) ) {
 
-
 						// If we can't move them then try to copy them
 						copy( trailingslashit( $from ) . $file, trailingslashit( Path::get_path() ) . $file );
 
 					}
-
 				}
 			}
 
@@ -413,7 +410,7 @@ class Path {
 		}
 
 		// Delete the old directory if it's inside WP_CONTENT_DIR
-		if ( false !== strpos( $from, WP_CONTENT_DIR ) && $from !== Path::get_path() ) {
+		if ( false !== strpos( $from, WP_CONTENT_DIR ) &&  Path::get_path() !== $from ) {
 			rmdirtree( $from );
 		}
 
@@ -447,7 +444,7 @@ class CleanUpIterator extends \FilterIterator {
 	public function accept() {
 
 		// Don't remove existing backups
-		if ( 'zip' === $this->current()->getExtension() ) {
+		if ( 'zip' === pathinfo( $this->current()->getFilename(), PATHINFO_EXTENSION ) ) {
 			return false;
 		}
 
