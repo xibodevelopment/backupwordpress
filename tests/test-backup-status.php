@@ -20,6 +20,7 @@ class Test_Backup_Status extends \HM_Backup_UnitTestCase {
 
 	public function tearDown() {
 		$this->cleanup_test_data();
+		Notices::get_instance()->clear_all_notices();
 		$status = new Backup_Status( 'backup' );
 		$status->finish();
 	}
@@ -97,22 +98,26 @@ class Test_Backup_Status extends \HM_Backup_UnitTestCase {
 	}
 
 	public function test_manually_crash() {
+
 		Path::get_instance()->reset_path();
 		$process = new Process( 'wp backupwordpress backup' );
 		$status = new Backup_Status( 'backup' );
+
 		try {
-			$process->run( function() use ( $process, $status ) {
-				if ( $process->getPid() ) {
-					$this->assertTrue( $status->is_started() );
-					$this->assertTrue( $status->is_running() );
-					exec( 'kill -9 ' . $process->getPid() );
-				}
+			$process->run( function() use ( $process ) {
+				exec( 'kill -9 ' . $process->getPid() . ' 2>&1' );
 			} );
 		} catch ( \Exception $e ) {}
-		sleep( 5 );
-		$this->assertFalse( $status->is_running() );
+
+		$timer = 0;
+		while ( $status->is_running() && ++$timer <= 100 ) {
+			usleep( 1000 );
+		}
+
 		$this->assertTrue( $status->is_started() );
+		$this->assertFalse( $status->is_running() );
 		$this->assertTrue( $status->has_crashed() );
+
 	}
 
 	public function test_in_another_thread() {
@@ -120,58 +125,6 @@ class Test_Backup_Status extends \HM_Backup_UnitTestCase {
 		$process = new Process( 'wp backupwordpress backup --database_only' );
 		$process->run();
 		$this->assertFileExists( PATH::get_path() . '/backup.zip' );
-	}
-
-	public function test_in_multiple_threads() {
-		Path::get_instance()->reset_path();
-		$process = new Process( 'wp backupwordpress backup --database_only' );
-
-		$phpunit = $this;
-		$status = new Backup_Status( 'backup' );
-
-		$process->run( function( $type, $buffer ) use ( $phpunit, $process, $status ) {
-			if ( Process::ERR !== $type ) {
-
-				$this->assertTrue( $process->isRunning() );
-				$this->assertTrue( $status->is_running() );
-				$this->assertFalse( $status->start( 'test', 'test' ) );
-
-				if ( $process->stop() ) {
-					sleep( 3 );
-					$this->assertFalse( $status->is_running() );
-					$this->assertTrue( $status->has_crashed() );
-				}
-
-			}
-		} );
-	}
-
-	public function test_killed_process() {
-
-		Path::get_instance()->reset_path();
-		$process = new Process( 'wp backupwordpress backup --database_only' );
-
-		$phpunit = $this;
-		$status = new Backup_Status( 'backup' );
-
-		$process->run( function( $type, $buffer ) use ( $phpunit, $process, $status ) {
-			if ( Process::ERR !== $type ) {
-
-				$this->assertTrue( $process->isRunning() );
-				$this->assertTrue( $status->is_running() );
-
-				exec( 'kill -9 ' . $process->getPid() );
-
-				sleep( 3 );
-
-				$this->assertFalse( $process->isRunning() );
-				$this->assertFalse( $status->is_running() );
-				$this->assertTrue( $status->has_crashed() );
-
-				$process->stop();
-
-			}
-		} );
 	}
 
 	public function test_multiple_status_dont_clash() {

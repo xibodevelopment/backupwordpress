@@ -79,7 +79,7 @@ class Backup_Status {
 	}
 
 	/**
-	 * Check if the backup has been started by checking if the runnign file
+	 * Check if the backup has been started by checking if the running file
 	 * exists.
 	 *
 	 * @return boolean Whether the backup process has been started
