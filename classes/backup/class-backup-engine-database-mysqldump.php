@@ -86,7 +86,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	 */
 	public function check_user_can_connect_to_database_via_cli() {
 
-		if ( ! function_exists( 'proc_open' ) ) {
+		if ( ! function_exists( 'proc_open' ) || ! function_exists( 'proc_close' ) ) {
 			return false;
 		}
 
