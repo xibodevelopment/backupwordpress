@@ -442,7 +442,7 @@ function is_same_size_format( $size, $other_size ) {
  */
 function disk_space_low( $backup_size = false ) {
 
-	$disk_space = disk_free_space( Path::get_path() );
+	$disk_space = @disk_free_space( Path::get_path() );
 
 	if ( ! $disk_space ) {
 		return false;
