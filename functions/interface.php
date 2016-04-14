@@ -442,19 +442,23 @@ function is_same_size_format( $size, $other_size ) {
  */
 function disk_space_low( $backup_size = false ) {
 
+	$disk_space = @disk_free_space( Path::get_path() );
+
+	if ( ! $disk_space ) {
+		return false;
+	}
+
 	if ( ! $backup_size ) {
 
 		$site_size = new Site_Size();
 
-		if ( $site_size->is_site_size_cached() ) {
+		if ( ! $site_size->is_site_size_cached() ) {
 			return false;
 		}
 
 		$backup_size = $site_size->get_site_size() * 2;
 
 	}
-
-	$disk_space = disk_free_space( Path::get_path() );
 
 	return $backup_size >= $disk_space;
 
