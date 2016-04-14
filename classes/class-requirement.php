@@ -748,7 +748,7 @@ class Requirement_Proc_Open extends Requirement {
 	 * @return bool
 	 */
 	public static function test() {
-		return function_exists( 'proc_open' );
+		return function_exists( 'proc_open' ) && function_exists( 'proc_close' );
 	}
 }
 Requirements::register( 'HM\BackUpWordPress\Requirement_Proc_Open', 'PHP' );
