@@ -54,6 +54,11 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.6.1 / 2016-04-26
+
+* Bug fixes/improvements in disk space calculation
+* Misc bug fixes
+
 ### 3.6.0 / 2016-03-31
 
 * Fix a bug caused by using a function incompatible with min PHP version requirements
