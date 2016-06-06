@@ -152,13 +152,11 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 					<?php else :
 
-						$root = new \SplFileInfo( Path::get_root() );
-
-						$size = $site_size->filesize( $root );
-						$excluded_size = $excluded_site_size->filesize( $root ); ?>
-
+						$root          = new \SplFileInfo( Path::get_root() );
+						$size          = $site_size->filesize( $root );
+						$excluded_size = $excluded_site_size->filesize( $root );
+						$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size ); ?>
 							<code>
-								<?php $excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size ); ?>
 								<?php echo sprintf( __( '%s of %s', 'backupwordpress' ), esc_html( $excluded_size ), esc_html( size_format( $size ) ) ); ?>
 								<a class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
 							</code>
@@ -253,7 +251,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 							$size = $site_size->filesize( $file );
 
 							if ( false !== $size ) :
-								$size = $size ?: '0';
+								$size          = $size ?: '0';
 								$excluded_size = $excluded_site_size->filesize( $file ) ?: '0'; ?>
 
 								<code>
