@@ -8,10 +8,10 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 <div class="hmbkp-exclude-settings">
 
 	<h3>
-		<?php _e( 'Currently Excluded', 'backupwordpress' ); ?>
+		<?php esc_html_e( 'Currently Excluded', 'backupwordpress' ); ?>
 	</h3>
 
-	<p><?php _e( 'We automatically detect and ignore common <abbr title="Version Control Systems">VCS</abbr> folders and other backup plugin folders.', 'backupwordpress' ); ?></p>
+	<p><?php esc_html_e( 'We automatically detect and ignore common Version Control Systems folders and other backup plugin folders.', 'backupwordpress' ); ?></p>
 
 	<table class="widefat">
 
@@ -47,18 +47,18 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<?php if ( ( in_array( $exclude, $excludes->get_default_excludes() ) ) || ( Path::get_path() === trailingslashit( Path::get_root() ) . untrailingslashit( $exclude ) ) ) : ?>
 
-							<?php _e( 'Default rule', 'backupwordpress' ); ?>
+							<?php esc_html_e( 'Default rule', 'backupwordpress' ); ?>
 
 						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
 
-							<?php _e( 'Defined in wp-config.php', 'backupwordpress' ); ?>
+							<?php printf( esc_html__( 'Defined in %s', 'backupwordpress' ), 'wp-config.php' ); ?>
 
 						<?php else : ?>
 
 							<a href="<?php echo admin_action_url( 'remove_exclude_rule', array(
 								'hmbkp_remove_exclude' => $exclude,
 								'hmbkp_schedule_id'    => $schedule->get_id(),
-							) ); ?>" class="delete-action"><?php _e( 'Stop excluding', 'backupwordpress' ); ?></a>
+							) ); ?>" class="delete-action"><?php esc_html_e( 'Stop excluding', 'backupwordpress' ); ?></a>
 
 						<?php endif; ?>
 
@@ -72,9 +72,9 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 	</table>
 
-	<h3 id="directory-listing"><?php _e( 'Your Site', 'backupwordpress' ); ?></h3>
+	<h3 id="directory-listing"><?php esc_html_e( 'Your Site', 'backupwordpress' ); ?></h3>
 
-	<p><?php _e( 'Here\'s a directory listing of all files on your site, you can browse through and exclude files or folders that you don\'t want included in your backup.', 'backupwordpress' ); ?></p>
+	<p><?php esc_html_e( 'Here\'s a directory listing of all files on your site, you can browse through and exclude files or folders that you don\'t want included in your backup.', 'backupwordpress' ); ?></p>
 
 	<?php
 
@@ -105,11 +105,11 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 			<tr>
 				<th></th>
-				<th scope="col"><?php _e( 'Name', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Included Size', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Permissions', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Type', 'backupwordpress' ); ?></th>
-				<th scope="col" class="column-format"><?php _e( 'Status', 'backupwordpress' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Name', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php esc_html_e( 'Included Size', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php esc_html_e( 'Permissions', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php esc_html_e( 'Type', 'backupwordpress' ); ?></th>
+				<th scope="col" class="column-format"><?php esc_html_e( 'Status', 'backupwordpress' ); ?></th>
 			</tr>
 
 			<tr>
@@ -152,15 +152,20 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 					<?php else :
 
-						$root = new \SplFileInfo( Path::get_root() );
-
-						$size = $site_size->filesize( $root );
-						$excluded_size = $excluded_site_size->filesize( $root ); ?>
-
+						$root          = new \SplFileInfo( Path::get_root() );
+						$size          = $site_size->filesize( $root );
+						$excluded_size = $excluded_site_size->filesize( $root );
+						$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size ); ?>
 							<code>
-								<?php $excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size ); ?>
-								<?php echo sprintf( __( '%s of %s', 'backupwordpress' ), esc_html( $excluded_size ), esc_html( size_format( $size ) ) ); ?>
-								<a class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php _e( 'Refresh', 'backupwordpress' ); ?></span></a>
+								<?php
+								/* translators: 1: Excluded size 2: Overall site size */
+								printf(
+									esc_html__( '%1$s of %2$s', 'backupwordpress' ),
+									esc_html( $excluded_size ),
+									esc_html( size_format( $size ) )
+								);
+								?>
+								<a class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>"><span><?php esc_html_e( 'Refresh', 'backupwordpress' ); ?></span></a>
 							</code>
 
 					<?php endif; ?>
@@ -174,9 +179,9 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 					<code>
 
 						<?php if ( is_link( Path::get_root() ) ) :
-							_e( 'Symlink', 'backupwordpress' );
+							esc_html_e( 'Symlink', 'backupwordpress' );
 						elseif ( is_dir( Path::get_root() ) ) :
-							_e( 'Folder', 'backupwordpress' );
+							esc_html_e( 'Folder', 'backupwordpress' );
 						endif; ?>
 
 					</code>
@@ -253,16 +258,22 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 							$size = $site_size->filesize( $file );
 
 							if ( false !== $size ) :
-								$size = size_format( $size ) ?: '0 B';
-								$excluded_size = size_format( $excluded_site_size->filesize( $file ) ) ?: '0'; ?>
+								$size          = $size ?: '0';
+								$excluded_size = $excluded_site_size->filesize( $file ) ?: '0'; ?>
 
 								<code>
 
 									<?php if ( $file->isDir() ) :
 										$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
-										echo sprintf( __( '%s of %s', 'backupwordpress' ), esc_html( $excluded_size ), esc_html( size_format( $size ) ) );
+
+										/* translators: 1: Excluded size 2: Overall site size */
+										printf(
+											esc_html__( '%1$s of %2$s', 'backupwordpress' ),
+											esc_html( $excluded_size ),
+											esc_html( size_format( $size ) )
+										);
 									elseif ( ! $is_unreadable ) :
-										echo esc_html( $size );
+										echo esc_html( size_format( $size ) );
 									else :
 										echo '-';
 									endif; ?>
@@ -291,11 +302,11 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 					<td>
 						<code>
 						<?php if ( $file->isLink() ) : ?>
-							<span title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php _e( 'Symlink', 'backupwordpress' ); ?></span>
+							<span title="<?php echo esc_attr( wp_normalize_path( $file->getRealPath() ) ); ?>"><?php esc_html_e( 'Symlink', 'backupwordpress' ); ?></span>
 						<?php elseif ( $file->isDir() ) :
-							_e( 'Folder', 'backupwordpress' );
+							esc_html_e( 'Folder', 'backupwordpress' );
 						else :
-							_e( 'File', 'backupwordpress' );
+							esc_html_e( 'File', 'backupwordpress' );
 						endif; ?>
 						</code>
 					</td>
@@ -304,11 +315,11 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<?php if ( $is_unreadable ) : ?>
 
-							<strong title="<?php _e( 'Unreadable files won\'t be backed up.', 'backupwordpress' ); ?>"><?php _e( 'Unreadable', 'backupwordpress' ); ?></strong>
+							<strong title="<?php esc_attr_e( 'Unreadable files won\'t be backed up.', 'backupwordpress' ); ?>"><?php esc_html_e( 'Unreadable', 'backupwordpress' ); ?></strong>
 
 						<?php elseif ( $is_excluded ) : ?>
 
-							<strong><?php _e( 'Excluded', 'backupwordpress' ); ?></strong>
+							<strong><?php esc_html_e( 'Excluded', 'backupwordpress' ); ?></strong>
 
 						<?php else :
 
@@ -323,7 +334,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 								'hmbkp_schedule_id' => $schedule->get_id(),
 								'action' => 'hmbkp_add_exclude_rule',
 								'hmbkp_exclude_pathname' => urlencode( $exclude_path ),
-							), admin_url( 'admin-post.php' ) ), 'hmbkp-add-exclude-rule', 'hmbkp-add-exclude-rule-nonce' ) ); ?>" class="button-secondary"><?php _e( 'Exclude &rarr;', 'backupwordpress' ); ?></a>
+							), admin_url( 'admin-post.php' ) ), 'hmbkp-add-exclude-rule', 'hmbkp-add-exclude-rule-nonce' ) ); ?>" class="button-secondary"><?php esc_html_e( 'Exclude &rarr;', 'backupwordpress' ); ?></a>
 
 						<?php endif; ?>
 
@@ -336,7 +347,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 		<?php else : ?>
 
 			<tr>
-				<td colspan="5"><span class="description"><?php _e( 'This folder is empty', 'backupwordpress' ); ?></span></td>
+				<td colspan="5"><span class="description"><?php esc_html_e( 'This folder is empty', 'backupwordpress' ); ?></span></td>
 			</tr>
 
 		<?php endif; ?>
@@ -346,7 +357,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 	</table>
 
 	<p class="submit">
-		<a href="<?php echo esc_url( get_settings_url() ) ?>" class="button-primary"><?php _e( 'Done', 'backupwordpress' ); ?></a>
+		<a href="<?php echo esc_url( get_settings_url() ) ?>" class="button-primary"><?php esc_html_e( 'Done', 'backupwordpress' ); ?></a>
 	</p>
 
 </div>
