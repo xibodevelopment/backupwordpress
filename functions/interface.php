@@ -323,9 +323,9 @@ function translated_schedule_title( $slug, $title ) {
 
 }
 
-function get_settings_url() {
+function get_settings_url( $slug = HMBKP_PLUGIN_SLUG ) {
 
-	$url = is_multisite() ? network_admin_url( 'settings.php?page=' . HMBKP_PLUGIN_SLUG ) : admin_url( 'tools.php?page=' . HMBKP_PLUGIN_SLUG );
+	$url = is_multisite() ? network_admin_url( 'settings.php?page=' . $slug ) : admin_url( 'tools.php?page=' . $slug );
 
 	schedules::get_instance()->refresh_schedules();
 
@@ -440,11 +440,17 @@ function is_same_size_format( $size, $other_size ) {
  */
 function disk_space_low( $backup_size = false ) {
 
+	$disk_space = @disk_free_space( Path::get_path() );
+
+	if ( ! $disk_space ) {
+		return false;
+	}
+
 	if ( ! $backup_size ) {
 
 		$site_size = new Site_Size();
 
-		if ( $site_size->is_site_size_cached() ) {
+		if ( ! $site_size->is_site_size_cached() ) {
 			return false;
 		}
 
@@ -459,5 +465,4 @@ function disk_space_low( $backup_size = false ) {
 	$disk_space = disk_free_space( Path::get_path() );
 
 	return $disk_space && $backup_size >= $disk_space;
-
 }

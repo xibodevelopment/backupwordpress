@@ -7,9 +7,13 @@ namespace HM\BackUpWordPress;
 <div class="wrap">
 
 	<h1>
+
 		BackUpWordPress
 
+		<a class="page-title-action" href="<?php echo esc_url( get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) ); ?>">Extensions</a>
+
 		<?php if ( get_option( 'hmbkp_enable_support' ) ) : ?>
+
 			<a id="intercom" class="page-title-action" href="mailto:backupwordpress@hmn.md"><?php _e( 'Support', 'backupwordpress' ); ?></a>
 		<?php else :
 			add_thickbox(); ?>

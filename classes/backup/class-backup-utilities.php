@@ -39,7 +39,7 @@ class Backup_Utilities {
 	 */
 	public static function get_executable_path( $paths ) {
 
-		if ( ! function_exists( 'proc_open' ) ) {
+		if ( ! function_exists( 'proc_open' ) || ! function_exists( 'proc_close' ) ) {
 			return false;
 		}
 

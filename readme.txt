@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, pauldewouters, joehoyle, mattheu, tcrsavage, c
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.4.2
-Stable tag: 3.5
+Stable tag: 3.6.0
 
 Simple automated backups of your WordPress-powered website.
 
@@ -82,15 +82,15 @@ The issue is that your `wp-cron.php` is not returning a `200` response when hit 
 
 There are some things you can test to confirm this is the issue.
 
-     * Are scheduled posts working? (They use wp-cron as well.)
+	 * Are scheduled posts working? (They use wp-cron as well.)
 
-     * Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around.)
+	 * Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around.)
 
-     * If you click manual backup, does it work?
+	 * If you click manual backup, does it work?
 
-     * Try adding `define( 'ALTERNATE_WP_CRON', true );` to your `wp-config.php`. Do automatic backups work?
+	 * Try adding `define( 'ALTERNATE_WP_CRON', true );` to your `wp-config.php`. Do automatic backups work?
 
-     * Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won't work until you remove it. If you are and you temporarily remove the authentication, do backups start working?
+	 * Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won't work until you remove it. If you are and you temporarily remove the authentication, do backups start working?
 
 Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
 
@@ -157,6 +157,15 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.6.0 / 2016-03-31
+
+* Fix a bug caused by using a function incompatible with min PHP version requirements
+* Misc code quality improvements and bug fixes
+* Fix bugs in the code responsible for admin notices
+* Display disk space info
+* Uninstall cleanup
+* Introduce a dedicated extensions page
 
 ### 3.5 / 2016-03-10
 
