@@ -57,7 +57,6 @@ function request_delete_schedule() {
 }
 add_action( 'admin_post_hmbkp_request_delete_schedule', 'HM\BackUpWordPress\request_delete_schedule' );
 
-
 add_action( 'admin_post_hmbkp_request_credentials', function() {
 
 	global $wp_filesystem;
@@ -66,7 +65,7 @@ add_action( 'admin_post_hmbkp_request_credentials', function() {
 	$creds = request_filesystem_credentials( '' );
 	ob_end_clean();
 
-	// Default to showing an error if we're not able to connect
+	// Default to showing an error if we're not able to connect.
 	$url = add_query_arg( 'connection_error', 1, get_settings_url() );
 
 	/**
@@ -83,12 +82,12 @@ add_action( 'admin_post_hmbkp_request_credentials', function() {
 			$wp_filesystem->chmod( Path::get_path(), FS_CHMOD_DIR );
 		}
 
-		if ( ! $wp_filesystem->mkdir( Path::get_path(), FS_CHMOD_DIR ) ) {
-			if ( ! $wp_filesystem->mkdir( Path::get_instance()->get_fallback_path(), FS_CHMOD_DIR ) ) {
-
-				// If both failed then we need to show an error
-				$url = add_query_arg( 'creation_error', 1, get_settings_url() );
-			}
+		// If both failed then we need to show an error.
+		if (
+			! $wp_filesystem->mkdir( Path::get_path(), FS_CHMOD_DIR ) &&
+			! $wp_filesystem->mkdir( Path::get_instance()->get_fallback_path(), FS_CHMOD_DIR )
+		) {
+			$url = add_query_arg( 'creation_error', 1, get_settings_url() );
 		}
 	}
 
@@ -96,6 +95,7 @@ add_action( 'admin_post_hmbkp_request_credentials', function() {
 	die;
 
 } );
+
 /**
  * Perform a manual backup
  *

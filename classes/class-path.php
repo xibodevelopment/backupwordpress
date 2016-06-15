@@ -277,16 +277,17 @@ class Path {
 
 		$paths = $this->get_possible_paths();
 
-		// Loop through possible paths, use the first one that exists/can be created and is writable
+		// Loop through possible paths, use the first one that exists/can be created and is writable.
 		foreach ( $paths as $path ) {
-			if ( wp_mkdir_p( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists
+			// Also handles fixing perms / directory already exists.
+			if ( wp_mkdir_p( $path ) && wp_is_writable( $path ) ) {
 				break;
 			}
 		}
 
 		/**
-		 * If we managed to create a writable path then use that, otherwise
-		 * just return the unwritable path
+		 * If we managed to create a writable path then use that,
+		 * otherwise just return the unwritable path.
 		 */
 		if ( file_exists( $path ) && wp_is_writable( $path ) ) {
 			$this->path = $path;
