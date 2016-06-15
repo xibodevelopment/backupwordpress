@@ -123,7 +123,6 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-
 	public function test_backup_with_broken_symlink() {
 
 		if ( ! function_exists( 'symlink' ) ) {
