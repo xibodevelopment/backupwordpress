@@ -79,49 +79,13 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	}
 
 	/**
-	 * Check whether it's possible to connect to the database with the
-	 * credentials we have.
-	 *
-	 * @return bool Whether the database connection was successful.
-	 */
-	public function check_user_can_connect_to_database_via_cli() {
-
-		if ( ! function_exists( 'proc_open' ) || ! function_exists( 'proc_close' ) ) {
-			return false;
-		}
-
-		$args = $this->get_mysql_connection_args();
-		$args[] = escapeshellarg( $this->get_name() );
-
-		// Quit immediately as we're only interesting in testing the connection
-		$args[] = '--execute="quit"';
-
-		$process = new Process( 'mysql ' . implode( ' ', $args ) );
-
-		try {
-			$process->run();
-		} catch ( \Exception $e ) {
-			$this->error( __CLASS__, $e->getMessage() );
-			return false;
-		}
-
-		if ( ! $process->isSuccessful() ) {
-			$this->error( __CLASS__, $process->getErrorOutput() );
-			return false;
-		}
-
-		return true;
-
-	}
-
-	/**
 	 * Perform the database backup.
 	 *
 	 * @return bool Whether the backup completed successfully or not.
 	 */
 	public function backup() {
 
-		if ( ! $this->check_user_can_connect_to_database_via_cli() || ! $this->get_mysqldump_executable_path() ) {
+		if ( ! $this->get_mysqldump_executable_path() ) {
 			return false;
 		}
 
