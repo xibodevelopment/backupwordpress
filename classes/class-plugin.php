@@ -128,7 +128,8 @@ final class Plugin {
 
 		require_once( HMBKP_PLUGIN_PATH . 'classes/class-notices.php' );
 
-		// Load the admin menu
+		// Load Whitelist HTML submodule and admin required functions.
+		require_once( HMBKP_PLUGIN_PATH . 'whitelist-html/whitelist-html.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'admin/menu.php' );
 		require_once( HMBKP_PLUGIN_PATH . 'admin/actions.php' );
 

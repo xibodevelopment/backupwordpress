@@ -1,3 +1,6 @@
 [submodule "backdrop"]
 	path = backdrop
 	url = https://github.com/humanmade/Backdrop.git
+[submodule "whitelist-html"]
+	path = whitelist-html
+	url = git@github.com:humanmade/whitelist-html.git
