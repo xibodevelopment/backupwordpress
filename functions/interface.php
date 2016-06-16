@@ -54,8 +54,7 @@ function get_backup_row( $file, Scheduled_Backup $schedule ) {
 <?php }
 
 /**
- * Displays admin notices for various error / warning
- * conditions
+ * Displays admin notices for various error / warning conditions.
  *
  * @return void
  */
@@ -107,7 +106,7 @@ function admin_notices() {
 
 				<?php foreach ( $notices['server_config'] as $notice ) : ?>
 
-					<li><?php echo wp_kses_data( $notice ); ?></li>
+					<li><?php echo print_whitelist_html( $notice ); ?></li>
 
 				<?php endforeach; ?>
 
@@ -154,14 +153,16 @@ function set_server_config_notices() {
 
 	if ( Backup_Utilities::is_safe_mode_on() ) {
 
-		$messages[] = sprintf(
-			__( '%1$s is running in %2$s, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst %3$s is on.', 'backupwordpress' ),
-			'<code>PHP</code>',
+		$messages[] = whitelist_html(
+			/* translators: 1: The `PHP` abbreviation. */
 			sprintf(
-				'<a href="%1$s">%2$s</a>', __( 'http://php.net/manual/en/features.safe-mode.php', 'backupwordpress' ),
-				__( 'Safe Mode', 'backupwordpress' )
+				__( '%1$s is running in <a href="http://php.net/manual/en/features.safe-mode.php">Safe Mode</a>, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst <code>Safe Mode</code> is on.', 'backupwordpress' ),
+				'<code>PHP</code>'
 			),
-			'<code>' . __( 'Safe Mode', 'backupwordpress' ) . '</code>'
+			array(
+				'code',
+				'a' => array( 'href' => true ),
+			)
 		);
 	}
 
@@ -169,17 +170,30 @@ function set_server_config_notices() {
 
 		if ( isset( $_GET['creation_error'] ) ) {
 
-			$messages[] = sprintf(
-				__( 'We connected to your server successfully but still weren\'t able to automatically create the directory. You\'ll need to %s.', 'backupwordpress' ),
-				'<a href="https://bwp.hmn.md/support-center/backupwordpress-faqs/#where">' . __( 'manually specify a valid directory', 'backupwordpress' ) . '</a>'
+			$messages[] = whitelist_html(
+				/* translators: 1: URL to BackupWordPress docs. */
+				sprintf(
+					__( 'We connected to your server successfully but still weren&apos;t able to automatically create the directory. You&apos;ll need to <a href="%1$s">manually specify a valid directory</a>', 'backupwordpress' ),
+					'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
+				),
+				array(
+					'a' => array( 'href' => true ),
+				)
 			);
 
 		} else {
 
-			$messages[] = sprintf(
-				__( 'We couldn\'t create the backups directory (%1$s). You\'ll need to %2$s or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ),
-				'<code>' . esc_html( Path::get_path() ) . '</code>',
-				'<a href="https://bwp.hmn.md/support-center/backupwordpress-faqs/#where">' . __( 'manually specify a valid directory', 'backupwordpress' ) . '</a>'
+			$messages[] = whitelist_html(
+				/* translators: 1: Path to backup directory. 2: URL to BackupWordPress docs. */
+				sprintf(
+					__( 'We couldn&apos;t create the backups directory (%1$s). You&apos;ll need to <a href="%2$s">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ),
+					'<code>' . esc_html( Path::get_path() ) . '</code>',
+					'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
+				),
+				array(
+					'code',
+					'a' => array( 'href' => true ),
+				)
 			);
 		}
 	}
@@ -199,7 +213,7 @@ function set_server_config_notices() {
 		} elseif ( ! is_dir( HMBKP_PATH ) ) {
 
 			$messages[] = sprintf(
-				__( 'Your custom backups directory (%1$s) doesn\'t exist, your backups will be saved to %2$s instead.', 'backupwordpress' ),
+				__( 'Your custom backups directory (%1$s) doesn&apos;t exist, your backups will be saved to %2$s instead.', 'backupwordpress' ),
 				'<code>' . esc_html( HMBKP_PATH ) . '</code>',
 				'<code>' . esc_html( Path::get_path() ) . '</code>'
 			);
@@ -207,7 +221,7 @@ function set_server_config_notices() {
 		} elseif ( is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
 
 			$messages[] = sprintf(
-				__( 'Your custom backups directory (%1$s) isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ),
+				__( 'Your custom backups directory (%1$s) isn&apos;t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ),
 				'<code>' . esc_html( HMBKP_PATH ) . '</code>',
 				'<code>' . esc_html( Path::get_path() ) . '</code>'
 			);
@@ -217,7 +231,7 @@ function set_server_config_notices() {
 	if ( ! is_readable( Path::get_root() ) ) {
 
 		$messages[] = sprintf(
-			__( 'Your site\'s root path (%s) isn\'t readable. Please contact support.', 'backupwordpress' ),
+			__( 'Your site&apos;s root path (%s) isn&apos;t readable. Please contact support.', 'backupwordpress' ),
 			'<code>' . Path::get_root() . '</code>'
 		);
 	}
@@ -225,7 +239,8 @@ function set_server_config_notices() {
 	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
 
 		$messages[] = sprintf(
-			__( 'Your site cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
+			/* translators: FYI: MySQL features. */
+			__( 'Your site cannot be backed up because your server doesn&apos;t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
 			'<code>mysqldump</code>',
 			'<code>PDO::mysql</code>'
 		);
@@ -234,7 +249,8 @@ function set_server_config_notices() {
 	if ( ! Requirement_Zip_Command_Path::test() && ! Requirement_Zip_Archive::test() ) {
 
 		$messages[] = sprintf(
-			__( 'Your site cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
+			/* translators: FYI: zip archiving features. */
+			__( 'Your site cannot be backed up because your server doesn&apos;t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
 			'<code>zip</code>',
 			'<code>ZipArchive</code>'
 		);
@@ -243,7 +259,7 @@ function set_server_config_notices() {
 	if ( disk_space_low() ) {
 
 		$messages[] = sprintf(
-			__( 'Your server only has %s of disk space left which probably isn\'t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ),
+			__( 'Your server only has %s of disk space left which probably isn&apos;t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ),
 			'<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>'
 		);
 	}
