@@ -106,7 +106,12 @@ function admin_notices() {
 
 				<?php foreach ( $notices['server_config'] as $notice ) : ?>
 
-					<li><?php echo print_whitelist_html( $notice ); ?></li>
+					<li>
+						<?php print_whitelist_html(
+							$notice,
+							'strong, b, i, em, code, a'
+						); ?>
+					</li>
 
 				<?php endforeach; ?>
 
@@ -153,16 +158,10 @@ function set_server_config_notices() {
 
 	if ( Backup_Utilities::is_safe_mode_on() ) {
 
-		$messages[] = whitelist_html(
+		$messages[] = sprintf(
 			/* translators: 1: The `PHP` abbreviation. */
-			sprintf(
-				__( '%1$s is running in <a href="http://php.net/manual/en/features.safe-mode.php">Safe Mode</a>, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst <code>Safe Mode</code> is on.', 'backupwordpress' ),
-				'<code>PHP</code>'
-			),
-			array(
-				'code',
-				'a' => array( 'href' => true ),
-			)
+			__( '%1$s is running in <a href="http://php.net/manual/en/features.safe-mode.php">Safe Mode</a>, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst <code>Safe Mode</code> is on.', 'backupwordpress' ),
+			'<code>PHP</code>'
 		);
 	}
 
@@ -170,30 +169,19 @@ function set_server_config_notices() {
 
 		if ( isset( $_GET['creation_error'] ) ) {
 
-			$messages[] = whitelist_html(
+			$messages[] = sprintf(
 				/* translators: 1: URL to BackupWordPress docs. */
-				sprintf(
-					__( 'We connected to your server successfully but still weren&apos;t able to automatically create the directory. You&apos;ll need to <a href="%1$s">manually specify a valid directory</a>', 'backupwordpress' ),
-					'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
-				),
-				array(
-					'a' => array( 'href' => true ),
-				)
+				__( 'We connected to your server successfully but still weren&apos;t able to automatically create the directory. You&apos;ll need to <a href="%1$s">manually specify a valid directory</a>', 'backupwordpress' ),
+				'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
 			);
 
 		} else {
 
-			$messages[] = whitelist_html(
+			$messages[] = sprintf(
 				/* translators: 1: Path to backup directory. 2: URL to BackupWordPress docs. */
-				sprintf(
-					__( 'We couldn&apos;t create the backups directory (%1$s). You&apos;ll need to <a href="%2$s">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ),
-					'<code>' . esc_html( Path::get_path() ) . '</code>',
-					'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
-				),
-				array(
-					'code',
-					'a' => array( 'href' => true ),
-				)
+				__( 'We couldn&apos;t create the backups directory (%1$s). You&apos;ll need to <a href="%2$s">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ),
+				'<code>' . esc_html( Path::get_path() ) . '</code>',
+				'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
 			);
 		}
 	}
@@ -239,7 +227,7 @@ function set_server_config_notices() {
 	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
 
 		$messages[] = sprintf(
-			/* translators: FYI: MySQL features. */
+			/* translators: FYI: specified MySQL features. */
 			__( 'Your site cannot be backed up because your server doesn&apos;t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
 			'<code>mysqldump</code>',
 			'<code>PDO::mysql</code>'
@@ -249,7 +237,7 @@ function set_server_config_notices() {
 	if ( ! Requirement_Zip_Command_Path::test() && ! Requirement_Zip_Archive::test() ) {
 
 		$messages[] = sprintf(
-			/* translators: FYI: zip archiving features. */
+			/* translators: FYI: specified zip archiving features. */
 			__( 'Your site cannot be backed up because your server doesn&apos;t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
 			'<code>zip</code>',
 			'<code>ZipArchive</code>'
