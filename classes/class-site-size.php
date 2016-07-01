@@ -194,7 +194,7 @@ class Site_Size {
 	public function directory_filesize( \SplFileInfo $file ) {
 
 		// For performance reasons we cache the root
-		if ( $file->getRealPath() === PATH::get_root() ) {
+		if ( $file->getRealPath() === PATH::get_root() && $this->excludes ) {
 			$directory_sizes = get_transient( 'hmbkp_root_size' );
 			if ( $directory_sizes ) {
 				return $directory_sizes;
@@ -225,7 +225,7 @@ class Site_Size {
 		$directory_sizes = absint( array_sum( $directory_sizes ) );
 
 		// For performance reasons we cache the root
-		if ( $file->getRealPath() === PATH::get_root() ) {
+		if ( $file->getRealPath() === PATH::get_root() && $this->excludes ) {
 			set_transient( 'hmbkp_root_size', $directory_sizes, time() + DAY_IN_SECONDS );
 		}
 
