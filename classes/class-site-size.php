@@ -50,11 +50,19 @@ class Site_Size {
 		// Include database size except for file only schedule.
 		if ( 'file' !== $this->type ) {
 
-			global $wpdb;
-			$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
+			$size = (int) get_transient( 'hmbkp_database_size' );
 
-			foreach ( $tables as $table ) {
-				$size += (float) $table['Data_length'];
+			if ( ! $size ) {
+
+				global $wpdb;
+				$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
+
+				foreach ( $tables as $table ) {
+					$size += (float) $table['Data_length'];
+				}
+
+				set_transient( 'hmbkp_database_size', $size, time() + WEEK_IN_SECONDS );
+
 			}
 		}
 
