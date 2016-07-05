@@ -55,6 +55,7 @@ class Site_Size {
 			if ( ! $size ) {
 
 				global $wpdb;
+
 				$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
 
 				foreach ( $tables as $table ) {
@@ -62,7 +63,6 @@ class Site_Size {
 				}
 
 				set_transient( 'hmbkp_database_size', $size, WEEK_IN_SECONDS );
-
 			}
 		}
 
@@ -193,8 +193,9 @@ class Site_Size {
 
 	public function directory_filesize( \SplFileInfo $file ) {
 
-		// For performance reasons we cache the root
+		// For performance reasons we cache the root.
 		if ( $file->getRealPath() === PATH::get_root() && $this->excludes ) {
+
 			$directory_sizes = get_transient( 'hmbkp_root_size' );
 			if ( $directory_sizes ) {
 				return $directory_sizes;
@@ -211,7 +212,10 @@ class Site_Size {
 			return null;
 		}
 
-		// Ensure we only include files in the current path, the filepaths are stored in keys so we need to flip for use with preg_grep
+		/*
+		 * Ensure we only include files in the current path, the filepaths are stored in keys
+		 * so we need to flip for use with preg_grep.
+		 */
 		$directory_sizes = array_flip( preg_grep( '(' . wp_normalize_path( $file->getRealPath() ) . ')', array_flip( $directory_sizes ) ) );
 
 		if ( $this->excludes ) {
@@ -224,12 +228,12 @@ class Site_Size {
 
 		$directory_sizes = absint( array_sum( $directory_sizes ) );
 
-		// For performance reasons we cache the root
+		// For performance reasons we cache the root.
 		if ( $file->getRealPath() === PATH::get_root() && $this->excludes ) {
 			set_transient( 'hmbkp_root_size', $directory_sizes, DAY_IN_SECONDS );
 		}
 
-		// Directory size is now just a sum of all files across all sub directories
+		// Directory size is now just a sum of all files across all sub directories.
 		return $directory_sizes;
 
 	}
