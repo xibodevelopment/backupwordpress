@@ -49,7 +49,7 @@ class Schedules {
 			// Load all schedule options from the database
 			$schedules = $wpdb->get_col( "SELECT option_name from $wpdb->options WHERE option_name LIKE 'hmbkp\_schedule\_%'" );
 
-			set_transient( 'hmbkp_schedules', $schedules, time() + WEEK_IN_SECONDS );
+			set_transient( 'hmbkp_schedules', $schedules, WEEK_IN_SECONDS );
 
 		}
 

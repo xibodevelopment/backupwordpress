@@ -61,7 +61,7 @@ class Site_Size {
 					$size += (float) $table['Data_length'];
 				}
 
-				set_transient( 'hmbkp_database_size', $size, time() + WEEK_IN_SECONDS );
+				set_transient( 'hmbkp_database_size', $size, WEEK_IN_SECONDS );
 
 			}
 		}
@@ -226,7 +226,7 @@ class Site_Size {
 
 		// For performance reasons we cache the root
 		if ( $file->getRealPath() === PATH::get_root() && $this->excludes ) {
-			set_transient( 'hmbkp_root_size', $directory_sizes, time() + DAY_IN_SECONDS );
+			set_transient( 'hmbkp_root_size', $directory_sizes, DAY_IN_SECONDS );
 		}
 
 		// Directory size is now just a sum of all files across all sub directories
