@@ -648,6 +648,9 @@ class Scheduled_Backup {
 		// Only save them if they have changed
 		if ( get_option( 'hmbkp_schedule_' . $this->get_id() ) !== $this->options ) {
 			update_option( 'hmbkp_schedule_' . $this->get_id(), $this->options );
+
+			// Delete the schedule cache.
+			delete_transient( 'hmbkp_schedules' );
 		}
 
 	}
@@ -664,6 +667,9 @@ class Scheduled_Backup {
 
 		// Delete the schedule options
 		delete_option( 'hmbkp_schedule_' . $this->get_id() );
+
+		// Delete the schedule cache.
+		delete_transient( 'hmbkp_schedules' );
 
 		// Clear any existing schedules
 		$this->unschedule();

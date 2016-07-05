@@ -411,6 +411,7 @@ function add_exclude_rule() {
 	$schedule->set_excludes( $exclude_rule, true );
 
 	$schedule->save();
+	delete_transient( 'hmbkp_root_size' );
 
 	wp_safe_redirect( wp_get_referer(), '303' );
 
@@ -441,6 +442,7 @@ function remove_exclude_rule() {
 	$schedule->set_excludes( array_diff( $excludes->get_user_excludes(), (array) $exclude_rule_to_remove ) );
 
 	$schedule->save();
+	delete_transient( 'hmbkp_root_size' );
 
 	wp_safe_redirect( wp_get_referer(), '303' );
 
