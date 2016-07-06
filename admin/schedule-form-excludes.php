@@ -96,7 +96,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 		$untrusted_directory = urldecode( $_GET['hmbkp_directory_browse'] );
 
-		// Only allow real sub directories of the site root to be browsed.
+		// Only allow real sub-directories of the site root to be browsed.
 		if (
 			false !== strpos( $untrusted_directory, Path::get_root() ) &&
 			is_dir( $untrusted_directory )
@@ -298,12 +298,15 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 							$size = $site_size->filesize( $file );
 
 							if ( false !== $size ) :
-								$size          = $size ?: '0';
-								$excluded_size = $excluded_site_size->filesize( $file ) ?: '0'; ?>
+								$size          = $size ?: 0;
+								$excluded_size = $excluded_site_size->filesize( $file ) ?: 0;
+								?>
 
 								<code>
 
-									<?php if ( $file->isDir() ) :
+									<?php
+									// Display `included of total size` info for directories and excluded files.
+									if ( $file->isDir() || ( $file->isFile() && $is_excluded ) ) :
 
 										$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
 
@@ -313,7 +316,6 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 											esc_html( $excluded_size ),
 											esc_html( size_format( $size ) )
 										);
-
 									elseif ( ! $is_unreadable ) :
 										echo esc_html( size_format( $size ) );
 									else :
