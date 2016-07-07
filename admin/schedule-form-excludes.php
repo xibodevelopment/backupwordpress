@@ -105,8 +105,6 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 		}
 	}
 
-	$exclude_string = implode( '|', $excludes->get_excludes_for_regex() );
-
 	$site_size          = new Site_Size( 'file' );
 	$excluded_site_size = new Site_Size( 'file', $excludes );
 
@@ -231,10 +229,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 				$is_excluded = $is_unreadable = false;
 
 				// Check if the file is excluded.
-				if (
-					$exclude_string &&
-					preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) )
-				) :
+				if ( $excludes->is_file_excluded( $file ) ) :
 					$is_excluded = true;
 				endif;
 

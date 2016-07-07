@@ -183,4 +183,29 @@ class Excludes {
 		return $excludes;
 
 	}
+
+	/**
+	 * Check if a file is excluded.
+	 * i.e. excluded directly or is in an excluded folder.
+	 *
+	 * @param \SplFileInfo $file File to check if it's excluded.
+	 *
+	 * @return bool|null         True if file is excluded, false otherwise.
+	 *                           Null - if it's not a file.
+	 */
+	public function is_file_excluded( \SplFileInfo $file ) {
+
+		if ( ! $file->isFile() ) {
+			return null;
+		}
+
+		$exclude_string    = implode( '|', $this->get_excludes_for_regex() );
+		$file_path_no_root = str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) );
+
+		if ( $exclude_string && preg_match( '(' . $exclude_string . ')', $file_path_no_root ) ) {
+			return true;
+		}
+
+		return false;
+	}
 }

@@ -184,10 +184,7 @@ class Site_Size {
 		// If it's a file then return its filesize or 0 if it's excluded.
 		if ( $file->isFile() ) {
 
-			if (
-				$this->excludes
-				&& in_array( $file->getFilename(), $this->excludes->get_excludes() )
-			) {
+			if ( $this->excludes && $this->excludes->is_file_excluded( $file ) ) {
 				return 0;
 			} else {
 				return $file->getSize();
