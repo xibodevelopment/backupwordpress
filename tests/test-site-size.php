@@ -105,4 +105,32 @@ class Site_Size_Tests extends \HM_Backup_UnitTestCase {
 		$this->assertEquals( $size_complete->get_site_size(), $size_database->get_site_size() + $size_file->get_site_size() );
 
 	}
+
+	public function test_site_size_file_size_not_excluded() {
+
+		// Non-excluded file (directly, not in a sub-folder) - size of the file.
+
+		// Non-excluded file (in a non-excluded sub-folder) - size of the file.
+
+		// Non-excluded file (in an excluded sub-folder) - size of the file.
+	}
+
+	public function test_site_size_file_size_excluded() {
+
+		// Excluded file (directly, not in an excluded sub-folder) - file size is 0.
+		$excluded_file = new Site_Size( 'file', new Excludes( 'test-data.txt' ) );
+		$size_file     = $excluded_file->filesize( new \SplFileInfo( 'test-data.txt' ) );
+
+		$this->assertEquals( $size_file, 0 );
+
+		// Excluded file (in a non-excluded sub-folder) - file size is 0.
+		// TODO
+
+		// Excluded file (in an excluded sub-folder) - file size is 0.
+		$excluded_file = new Site_Size( 'file', new Excludes( 'exclude' ) );
+		$size_file     = $excluded_file->filesize( new \SplFileInfo( 'exclude/exclude.exclude' ) );
+
+		$this->assertEquals( $size_file, 0 );
+	}
+
 }

@@ -261,6 +261,21 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	}
 
+	public function test_is_file_excluded() {
+
+		// Non-excluded file, directly (not in a sub-folder) - false.
+
+		// Non-excluded file, in a non-excluded sub-folder - false.
+
+		// Non-excluded file, in an excluded sub-folder - false.
+
+		// Excluded file, directly (not in a sub-folder) - true.
+
+		// Excluded file, in a non-excluded sub-folder - true.
+
+		// Excluded file, in an excluded sub-folder - true.
+	}
+
 	private function get_and_prepare_files() {
 
 		$finder = $this->backup->get_files();
