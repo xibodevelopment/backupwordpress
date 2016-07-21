@@ -106,31 +106,70 @@ class Site_Size_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function test_site_size_file_size_not_excluded() {
+	/**
+	 * File is excluded directly (either in the root or any non-excluded sub-directory).
+	 *
+	 * Main test: Site_Size->filesize( $file )
+	 * Expected:  file size should be 0.
+	 */
+	public function test_file_size_excluded_directly() {
 
-		// Non-excluded file (directly, not in a sub-folder) - size of the file.
+		$file_path =  $this->test_data . '/test-data.txt';
+		$file      = new \SplFileInfo( $file_path );
 
-		// Non-excluded file (in a non-excluded sub-folder) - size of the file.
+		// Check the file is created and its size is NOT 0.
+		$this->assertContains( $this->root->getPath(), $file->getPath() );
+		$this->assertNotSame( $file->getSize(), 0 );
 
-		// Non-excluded file (in an excluded sub-folder) - size of the file.
+		// Exclude file directly - file size should be 0.
+		$excluded_file_site_size = new Site_Size( 'file', new Excludes( $file_path ) );
+		$this->assertSame( $excluded_file_site_size->filesize( $file ), 0 );
 	}
 
-	public function test_site_size_file_size_excluded() {
+	/**
+	 * File is excluded as a result of being in an excluded directory.
+	 *
+	 * Main test: Site_Size->filesize( $file )
+	 * Expected:  file size should be 0.
+	 */
+	public function test_file_size_excluded_via_parent_directory() {
 
-		// Excluded file (directly, not in an excluded sub-folder) - file size is 0.
-		$excluded_file = new Site_Size( 'file', new Excludes( 'test-data.txt' ) );
-		$size_file     = $excluded_file->filesize( new \SplFileInfo( 'test-data.txt' ) );
+		$file_path = $this->test_data . '/test-data.txt';
+		$file      = new \SplFileInfo( $file_path );
 
-		$this->assertEquals( $size_file, 0 );
+		// Check the file is created and its size is NOT 0.
+		$this->assertContains( $this->root->getPath(), $file->getPath() );
+		$this->assertNotSame( $file->getSize(), 0 );
 
-		// Excluded file (in a non-excluded sub-folder) - file size is 0.
-		// TODO
+		// Exclude the parent directory, so the file in it is excluded by "inheritance" - file size should be 0.
+		$excluded_dir_name      = basename( $file->getPath() ); // test-data directory, the parent dir of the file.
+		$excluded_dir           = new Excludes( $excluded_dir_name );
+		$excluded_dir_site_size = new Site_Size( 'file', $excluded_dir );
 
-		// Excluded file (in an excluded sub-folder) - file size is 0.
-		$excluded_file = new Site_Size( 'file', new Excludes( 'exclude' ) );
-		$size_file     = $excluded_file->filesize( new \SplFileInfo( 'exclude/exclude.exclude' ) );
+		// Check the directory is excluded. File size in that directory should return 0.
+		$this->assertContains( $excluded_dir_name, $excluded_dir->get_user_excludes() );
+		$this->assertSame( $excluded_dir_site_size->filesize( $file ), 0 );
+	}
 
-		$this->assertEquals( $size_file, 0 );
+	/**
+	 * File is NOT excluded directly (either in the root or any non-excluded sub-directory).
+	 *
+	 * Main test: Site_Size->filesize( $file )
+	 * Expected:  file size should be what it is.
+	 */
+	public function test_file_size_not_excluded_directly() {
+
+		$file_path =  $this->test_data . '/test-data.txt';
+		$file      = new \SplFileInfo( $file_path );
+
+		// Check the file is created and its size is NOT 0.
+		$this->assertContains( $this->root->getPath(), $file->getPath() );
+		$this->assertNotSame( $file->getSize(), 0 );
+
+		// Check file size via BWP function. It should NOT be 0, should be the same size as via getSize().
+		$site_size = new Site_Size( 'file' );
+		$this->assertNotSame( $site_size->filesize( $file ), 0 );
+		$this->assertSame( $site_size->filesize( $file ), $file->getSize() );
 	}
 
 }

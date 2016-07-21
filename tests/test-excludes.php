@@ -9,6 +9,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 		$this->setup_test_data();
 		Path::get_instance()->set_path( $this->test_data . '/tmp' );
 		Path::get_instance()->set_root( $this->test_data );
+		$this->root = new \SplFileInfo( Path::get_root() );
 
 		$this->backup = new Mock_File_Backup_Engine;
 	}
@@ -261,19 +262,75 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 	}
 
-	public function test_is_file_excluded() {
+	/**
+	 * File is excluded directly (either in the root or any non-excluded sub-directory).
+	 *
+	 * Main test: Excludes->is_file_excluded( $file )
+	 * Expected:  true.
+	 */
+	public function test_excluded_file_directly_is_excluded() {
 
-		// Non-excluded file, directly (not in a sub-folder) - false.
+		$file_path =  $this->test_data . '/test-data.txt';
+		$file      = new \SplFileInfo( $file_path );
 
-		// Non-excluded file, in a non-excluded sub-folder - false.
+		// Check the file is created and its size is NOT 0.
+		$this->assertContains( $this->root->getPath(), $file->getPath() );
+		$this->assertNotSame( $file->getSize(), 0 );
 
-		// Non-excluded file, in an excluded sub-folder - false.
+		// Exclude file directly.
+		$excluded_file = new Excludes( $file_path );
 
-		// Excluded file, directly (not in a sub-folder) - true.
+		// Check the file is excluded - true.
+		$this->assertContains( basename( $file->getPathname() ), $excluded_file->get_user_excludes() );
+		$this->assertSame( $excluded_file->is_file_excluded( $file ), true );
+	}
 
-		// Excluded file, in a non-excluded sub-folder - true.
+	/**
+	 * File is excluded as a result of being in an excluded directory.
+	 *
+	 * Main test: Excludes->is_file_excluded( $file )
+	 * Expected:  true.
+	 */
+	public function test_excluded_file_via_parent_directory_is_excluded() {
 
-		// Excluded file, in an excluded sub-folder - true.
+		$file_path = $this->test_data . '/test-data.txt';
+		$file      = new \SplFileInfo( $file_path );
+
+		// Check the file is created and its size is NOT 0.
+		$this->assertContains( $this->root->getPath(), $file->getPath() );
+		$this->assertNotSame( $file->getSize(), 0 );
+
+		// Exclude the parent directory, so the file in it is excluded by "inheritance".
+		$excluded_dir_name = basename( $file->getPath() ); // test-data directory, the parent dir of the file.
+		$excluded_dir      = new Excludes( $excluded_dir_name );
+
+		// Check the directory is excluded. File in that directory should be excluded too.
+		$this->assertContains( $excluded_dir_name, $excluded_dir->get_user_excludes() );
+		$this->assertSame( $excluded_dir->is_file_excluded( $file ), true );
+	}
+
+	/**
+	 * File is NOT excluded directly (either in the root or any non-excluded sub-directory).
+	 *
+	 * Main test: Excludes->is_file_excluded( $file )
+	 * Expected:  false.
+	 */
+	public function test_non_excluded_file_is_excluded() {
+
+		$file_path =  $this->test_data . '/test-data.txt';
+		$file      = new \SplFileInfo( $file_path );
+
+		// Check the file is created and its size is NOT 0.
+		$this->assertContains( $this->root->getPath(), $file->getPath() );
+		$this->assertNotSame( $file->getSize(), 0 );
+
+		// Do NOT exclude the parent directory, so the file in it is also non excluded by "inheritance".
+		$non_excluded_dir_name = basename( $file->getPath() ); // test-data directory, the parent dir of the file.
+		$non_excluded_dir      = new Excludes();
+
+		// Check the directory is NOT excluded. File in that directory should be NOT excluded too.
+		$this->assertNotContains( $non_excluded_dir_name, $non_excluded_dir->get_user_excludes() );
+		$this->assertSame( $non_excluded_dir->is_file_excluded( $file ), false );
 	}
 
 	private function get_and_prepare_files() {
