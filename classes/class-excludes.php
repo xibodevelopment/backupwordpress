@@ -195,10 +195,6 @@ class Excludes {
 	 */
 	public function is_file_excluded( \SplFileInfo $file ) {
 
-		if ( ! $file->isFile() ) {
-			return null;
-		}
-
 		$exclude_string    = implode( '|', $this->get_excludes_for_regex() );
 		$file_path_no_root = str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) );
 
