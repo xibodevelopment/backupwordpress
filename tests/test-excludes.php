@@ -282,7 +282,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 		// Check the file is excluded - true.
 		$this->assertContains( basename( $file->getPathname() ), $excluded_file->get_user_excludes() );
-		$this->assertSame( $excluded_file->is_file_excluded( $file ), true );
+		$this->assertTrue( $excluded_file->is_file_excluded( $file ) );
 	}
 
 	/**
@@ -306,7 +306,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 		// Check the directory is excluded. File in that directory should be excluded too.
 		$this->assertContains( $excluded_dir_name, $excluded_dir->get_user_excludes() );
-		$this->assertSame( $excluded_dir->is_file_excluded( $file ), true );
+		$this->assertTrue( $excluded_dir->is_file_excluded( $file ) );
 	}
 
 	/**
@@ -330,7 +330,7 @@ class Backup_Engine_Excludes extends \HM_Backup_UnitTestCase {
 
 		// Check the directory is NOT excluded. File in that directory should be NOT excluded too.
 		$this->assertNotContains( $non_excluded_dir_name, $non_excluded_dir->get_user_excludes() );
-		$this->assertSame( $non_excluded_dir->is_file_excluded( $file ), false );
+		$this->assertFalse( $non_excluded_dir->is_file_excluded( $file ) );
 	}
 
 	private function get_and_prepare_files() {
