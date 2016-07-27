@@ -50,11 +50,19 @@ class Site_Size {
 		// Include database size except for file only schedule.
 		if ( 'file' !== $this->type ) {
 
-			global $wpdb;
-			$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
+			$size = (int) get_transient( 'hmbkp_database_size' );
 
-			foreach ( $tables as $table ) {
-				$size += (float) $table['Data_length'];
+			if ( ! $size ) {
+
+				global $wpdb;
+
+				$tables = $wpdb->get_results( 'SHOW TABLE STATUS FROM `' . DB_NAME . '`', ARRAY_A );
+
+				foreach ( $tables as $table ) {
+					$size += (float) $table['Data_length'];
+				}
+
+				set_transient( 'hmbkp_database_size', $size, WEEK_IN_SECONDS );
 			}
 		}
 
@@ -185,6 +193,15 @@ class Site_Size {
 
 	public function directory_filesize( \SplFileInfo $file ) {
 
+		// For performance reasons we cache the root.
+		if ( $file->getRealPath() === PATH::get_root() && $this->excludes ) {
+
+			$directory_sizes = get_transient( 'hmbkp_root_size' );
+			if ( $directory_sizes ) {
+				return $directory_sizes;
+			}
+		}
+
 		// If we haven't calculated the site size yet then kick it off in a thread
 		$directory_sizes = $this->get_cached_filesizes();
 
@@ -195,7 +212,10 @@ class Site_Size {
 			return null;
 		}
 
-		// The filepaths are stored in keys so we need to flip for use with preg_grep
+		/*
+		 * Ensure we only include files in the current path, the filepaths are stored in keys
+		 * so we need to flip for use with preg_grep.
+		 */
 		$directory_sizes = array_flip( preg_grep( '(' . wp_normalize_path( $file->getRealPath() ) . ')', array_flip( $directory_sizes ) ) );
 
 		if ( $this->excludes ) {
@@ -206,8 +226,15 @@ class Site_Size {
 			}
 		}
 
-		// Directory size is now just a sum of all files across all sub directories
-		return absint( array_sum( $directory_sizes ) );
+		$directory_sizes = absint( array_sum( $directory_sizes ) );
+
+		// For performance reasons we cache the root.
+		if ( $file->getRealPath() === PATH::get_root() && $this->excludes ) {
+			set_transient( 'hmbkp_root_size', $directory_sizes, DAY_IN_SECONDS );
+		}
+
+		// Directory size is now just a sum of all files across all sub directories.
+		return $directory_sizes;
 
 	}
 
