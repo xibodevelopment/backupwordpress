@@ -54,6 +54,11 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.6.2 / 2016-08-02
+
+* Improves admin performance.
+* Improves security in internationalised strings.
+
 ### 3.6.1 / 2016-04-26
 
 * Bug fixes/improvements in disk space calculation
