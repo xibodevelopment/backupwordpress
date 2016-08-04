@@ -2,6 +2,8 @@
 
 namespace HM\BackUpWordPress;
 
+global $wp_locale;
+
 ?>
 
 <h3><?php esc_html_e( 'Settings', 'backupwordpress' ); ?></h3>
@@ -103,13 +105,13 @@ clear_settings_errors();
 					<select id="hmbkp_schedule_start_day_of_week" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_day_of_week]">
 
 						<?php $weekdays = array(
-							'monday'    => __( 'Monday',    'backupwordpress' ),
-							'tuesday'   => __( 'Tuesday',   'backupwordpress' ),
-							'wednesday' => __( 'Wednesday', 'backupwordpress' ),
-							'thursday'  => __( 'Thursday',  'backupwordpress' ),
-							'friday'    => __( 'Friday',    'backupwordpress' ),
-							'saturday'  => __( 'Saturday',  'backupwordpress' ),
-							'sunday'    => __( 'Sunday',    'backupwordpress' ),
+							'monday'    => $wp_locale->weekday[1],
+							'tuesday'   => $wp_locale->weekday[2],
+							'wednesday' => $wp_locale->weekday[3],
+							'thursday'  => $wp_locale->weekday[4],
+							'friday'    => $wp_locale->weekday[5],
+							'saturday'  => $wp_locale->weekday[6],
+							'sunday'    => $wp_locale->weekday[0],
 						);
 
 						foreach ( $weekdays as $key => $day ) : ?>
