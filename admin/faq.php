@@ -7,13 +7,19 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<p><strong>' . __( 'What if I want to back up my site to another destination?', 'backupwordpress' ) . '</strong></p>' .
 
-	 '<p>' . __( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: <a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin" title="BackUpWordPress Homepage" target="_blank">https://bwp.hmn.md</a>', 'backupwordpress' ) . '</p>' .
+	 '<p>' . sprintf(
+	 	__( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. <a href="%s" target="_blank">Check it out at bwp.hmn.md</a>', 'backupwordpress' ),
+	 	'https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin'
+	 	) . '</p>' .
 
 	 '<p><strong>' . __( 'How do I restore my site from a backup?', 'backupwordpress' ) . '</strong></p>' .
 
-	 '<p>' . __( 'You need to download the latest backup file either by clicking download on the backups page or via <code>FTP</code>. <code>Unzip</code> the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely <code>phpMyAdmin</code>).', 'backupwordpress' ) . '</p>' .
+	 '<p>' . __( 'You need to download the latest backup file either by clicking download on the backups page or via FTP. Unzip the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely phpMyAdmin).', 'backupwordpress' ) . '</p>' .
 
-	 '<p>' . __( 'See this guide for more details - <a href="https://bwp.hmn.md/support-center/restore-backup/" title="Go to support center" target="_blank">How to restore from backup</a>.', 'backupwordpress' ) . '</p>' .
+	 '<p>' . sprintf(
+	 	__( 'See this guide for more details - <a href="%s" target="_blank">How to restore from backup</a>.', 'backupwordpress' ),
+	 	'https://bwp.hmn.md/support-center/restore-backup/'
+	 	) . '</p>' .
 
 	 '<p><strong>' . __( 'Does BackUpWordPress back up the backups directory?', 'backupwordpress' ) . '</strong></p>' .
 
@@ -43,7 +49,11 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<li>' . __( 'If you click manual backup, does it work?', 'backupwordpress' ) . '</li>' .
 
-	 '<li>' . __( 'Try adding <code>define( \'ALTERNATE_WP_CRON\', true );</code> to your <code>wp-config.php</code>. Do automatic backups work?', 'backupwordpress' ) . '</li>' .
+	 '<li>' . sprintf(
+	 	__( 'Try adding %1$s to your %2$s file. Do automatic backups work?', 'backupwordpress' ),
+	 	"<code>define( 'ALTERNATE_WP_CRON', true );</code>",
+	 	'<code>wp-config.php</code>'
+	 	) . '</li>' .
 
 	 '<li>' . __( 'Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won\'t work until you remove it. If you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
 

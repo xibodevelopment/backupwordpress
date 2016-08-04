@@ -64,7 +64,11 @@ class Email_Service extends Service {
 				<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'backupwordpress' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
+				<p><?php printf(
+					__( 'The maximum file size of your backup that will be attached to your notification emails. Defaults to %1$s. e.g. %2$s', 'backupwordpress' ),
+					'<code>10MB</code>',
+					"<code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code>"
+				); ?></p>
 
 			</td>
 

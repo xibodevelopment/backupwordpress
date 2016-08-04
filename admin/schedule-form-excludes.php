@@ -56,7 +56,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
 
-							<?php printf( esc_html__( 'Defined in %s', 'backupwordpress' ), 'wp-config.php' ); ?>
+							<?php printf( esc_html__( 'Defined in %s', 'backupwordpress' ), '<code>wp-config.php</code>' ); ?>
 
 						<?php else : ?>
 

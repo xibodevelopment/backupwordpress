@@ -26,7 +26,7 @@ namespace HM\BackUpWordPress;
 
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
 
-		<p class="howto"><?php printf( __( 'If you\'re finding BackUpWordPress useful, please %1$s rate it on the plugin directory%2$s.', 'backupwordpress' ), '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">', '</a>' ); ?></p>
+		<p class="howto"><?php printf( __( 'If you\'re finding BackUpWordPress useful, please <a href="%s">rate it on the plugin directory</a>', 'backupwordpress' ), 'https://wordpress.org/support/view/plugin-reviews/backupwordpress' ); ?></p>
 
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/upsell.php' ); ?>
 
