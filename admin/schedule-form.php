@@ -74,7 +74,7 @@ clear_settings_errors();
 
 								<option <?php selected( $schedule->get_reoccurrence(), $cron_schedule ); ?> value="<?php echo esc_attr( $cron_schedule ); ?>">
 
-									<?php esc_html_e( $cron_details['display'], 'backupwordpress' ); ?>
+									<?php echo esc_html( $cron_details['display'] ); ?>
 
 								</option>
 

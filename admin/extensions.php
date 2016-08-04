@@ -117,7 +117,7 @@ namespace HM\BackUpWordPress;
 
 							<div>
 
-								<?php esc_html_e( sprintf( __( 'Plugin version %s', 'backupwordpress' ), $extension->_edd_sl_version ) ); ?>
+								<?php echo esc_html( sprintf( __( 'Plugin version %s', 'backupwordpress' ), $extension->_edd_sl_version ) ); ?>
 
 							</div>
 
