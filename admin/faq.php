@@ -27,7 +27,7 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<p><strong>' . __( 'I\'m not receiving my backups by email', 'backupwordpress' ) . '</strong></p>' .
 
-	 '<p>' . __( 'Most servers have a filesize limit on email attachments, it\'s generally about 10mb. If your backup file is over that limit, it won\'t be sent attached to the email. Instead, you should receive an email with a link to download the backup. If you aren\'t even receiving that, then you likely have a mail issue on your server that you\'ll need to contact your host about.', 'backupwordpress' ) . '</p>' .
+	 '<p>' . __( 'Most servers have a file size limit on email attachments, it\'s generally about 10mb. If your backup file is over that limit, it won\'t be sent attached to the email. Instead, you should receive an email with a link to download the backup. If you aren\'t even receiving that, then you likely have a mail issue on your server that you\'ll need to contact your host about.', 'backupwordpress' ) . '</p>' .
 
 	 '<p><strong>' . __( 'How many backups are stored by default?', 'backupwordpress' ) . '</strong></p>' .
 
