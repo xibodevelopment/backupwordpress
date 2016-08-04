@@ -76,7 +76,10 @@ namespace HM\BackUpWordPress;
 
 									<?php else : ?>
 
-										<a class="install-now button-primary" data-slug="<?php echo esc_attr( $extension->slug ); ?>" href="<?php echo esc_url( $extension->link ); ?>" aria-label="Install <?php echo esc_attr( $extension->title->rendered ); ?> now" data-name="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php printf( __( 'Buy Now &dollar;%s', 'backupwordpress' ), $extension->edd_price ); ?></a>
+										<a class="install-now button-primary" data-slug="<?php echo esc_attr( $extension->slug ); ?>" href="<?php echo esc_url( $extension->link ); ?>" aria-label="<?php echo esc_attr( sprintf(
+										__( 'Install %s now', 'backupwordpress' ),
+										$extension->title->rendered
+										) ); ?>" data-name="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php printf( __( 'Buy Now &dollar;%s', 'backupwordpress' ), $extension->edd_price ); ?></a>
 
 									<?php endif; ?>
 

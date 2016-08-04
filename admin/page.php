@@ -10,7 +10,7 @@ namespace HM\BackUpWordPress;
 
 		BackUpWordPress
 
-		<a class="page-title-action" href="<?php echo esc_url( get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) ); ?>">Extensions</a>
+		<a class="page-title-action" href="<?php echo esc_url( get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) ); ?>"><?php esc_html_e( 'Extensions', 'backupwordpress' ); ?></a>
 
 		<?php if ( get_option( 'hmbkp_enable_support' ) ) : ?>
 
