@@ -183,12 +183,12 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 							<code>
 								<?php
-								/* translators: 1: Excluded size 2: Overall site size */
-								printf(
-									esc_html__( '%1$s of %2$s', 'backupwordpress' ),
-									esc_html( $excluded_size ),
-									esc_html( size_format( $size ) )
-								);
+								echo esc_html( sprintf(
+									/* translators: 1: Excluded size 2: Overall site size */
+									__( '%1$s of %2$s', 'backupwordpress' ),
+									$excluded_size,
+									size_format( $size )
+								) );
 								?>
 
 								<a class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>">
@@ -307,12 +307,12 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 										$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
 
-										/* translators: 1: Excluded size 2: Overall site size */
-										printf(
-											esc_html__( '%1$s of %2$s', 'backupwordpress' ),
-											esc_html( $excluded_size ),
-											esc_html( size_format( $size ) )
-										);
+										echo esc_html( sprintf(
+											/* translators: 1: Excluded size 2: Overall site size */
+											__( '%1$s of %2$s', 'backupwordpress' ),
+											$excluded_size,
+											size_format( $size )
+										) );
 
 									elseif ( ! $is_unreadable ) :
 										echo esc_html( size_format( $size ) );
