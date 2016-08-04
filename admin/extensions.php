@@ -72,7 +72,7 @@ namespace HM\BackUpWordPress;
 								<li>
 									<?php if ( in_array( strtolower( $extension->title->rendered ), array_keys( $installed_plugins ) ) ) : ?>
 
-										<span class="button button-disabled" title="<?php _e( 'This extension is already installed', 'backupwordpress' ); ?>"><?php _e( 'Installed', 'backupwordpress' ); ?></span>
+										<span class="button button-disabled" title="<?php esc_attr_e( 'This extension is already installed', 'backupwordpress' ); ?>"><?php _e( 'Installed', 'backupwordpress' ); ?></span>
 
 									<?php else : ?>
 
@@ -84,7 +84,7 @@ namespace HM\BackUpWordPress;
 
 								<li>
 
-									<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox" aria-label="<?php printf( __( 'More information about %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ) ; ?>" data-title="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php _e( 'More Details', 'backupwordpress' ); ?></a>
+									<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox" aria-label="<?php echo esc_attr( sprintf( __( 'More information about %s', 'backupwordpress' ), $extension->title->rendered ) ); ?>" data-title="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php _e( 'More Details', 'backupwordpress' ); ?></a>
 
 								</li>
 

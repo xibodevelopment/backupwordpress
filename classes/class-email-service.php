@@ -61,7 +61,7 @@ class Email_Service extends Service {
 			<td>
 
 				<?php if ( defined( 'HMBKP_ATTACHMENT_MAX_FILESIZE' ) ) { ?>
-				<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
+				<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . esc_html( HMBKP_ATTACHMENT_MAX_FILESIZE ) . '</code>' ); ?></p>
 				<?php } ?>
 
 				<p><?php printf(
