@@ -122,23 +122,19 @@ namespace HM\BackUpWordPress;
 
 								<?php
 
-								$text = '';
-
 								if ( in_array( strtolower( $extension->title->rendered ), array_keys( $installed_plugins ) ) ) {
 
 									$current_version = $installed_plugins[ strtolower( $extension->title->rendered ) ];
 
 									if ( version_compare( $current_version, $extension->_edd_sl_version, '<' ) ) {
 
-										$text = sprintf( __( 'A newer version (%1$s) is available. <a href="%2$s">Update now!</a>', 'backupwordpress' ), esc_html( $extension->_edd_sl_version ), esc_url( admin_url( 'update-core.php' ) ) );
+										printf( __( 'A newer version (%1$s) is available. <a href="%2$s">Update now!</a>', 'backupwordpress' ), esc_html( $extension->_edd_sl_version ), esc_url( admin_url( 'update-core.php' ) ) );
 									} else {
 
-										$text = esc_html__( 'You have the latest version', 'backupwordpress' );
+										esc_html_e( 'You have the latest version', 'backupwordpress' );
 
 									}
 								}
-
-								echo $text;
 
 								?>
 
