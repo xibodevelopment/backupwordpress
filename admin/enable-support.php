@@ -1,8 +1,13 @@
 <?php require_once HMBKP_PLUGIN_PATH . 'classes/class-requirements.php'; ?>
 
-<h2><?php _e( 'Enable BackUpWordPress Support', 'backupwordpress' ); ?></h2>
+<h2><?php esc_html_e( 'Enable BackUpWordPress Support', 'backupwordpress' ); ?></h2>
 
-<p class="howto"><?php printf( __( 'BackUpWordPress uses %s to provide support. In addition to allowing you to send and receive messages we also send the following server information along with your requests:', 'backupwordpress' ), '<a target="blank" href="https://www.intercom.io">Intercom</a>' ); ?></p>
+<p class="howto"><?php printf(
+	/* translators: Link to Intercom site */
+	esc_html__( 'BackUpWordPress uses %s to provide support. In addition to allowing you to send and receive messages we also send the following server information along with your requests:', 'backupwordpress' ),
+	'<a target="blank" href="https://www.intercom.io">Intercom</a>'
+	); ?>
+</p>
 
 <div class="server-info">
 
@@ -55,7 +60,7 @@
 
 </div>
 
-<p class="howto"><?php _e( 'You can disable support in the future by deactivating BackUpWordPress.', 'backupwordpress' ); ?></p>
+<p class="howto"><?php esc_html_e( 'You can disable support in the future by deactivating BackUpWordPress.', 'backupwordpress' ); ?></p>
 
-<a href="#" class="button-secondary hmbkp-thickbox-close"><?php _e( 'No, thanks', 'backupwordpress' ); ?></a>
-<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_enable_support' ), admin_url( 'admin-post.php' ) ), 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' ) ); ?>" class="button-primary right"><?php _e( 'Yes, I want to enable support', 'backupwordpress' ); ?></a>
+<a href="#" class="button-secondary hmbkp-thickbox-close"><?php esc_html_e( 'No, thanks', 'backupwordpress' ); ?></a>
+<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_enable_support' ), admin_url( 'admin-post.php' ) ), 'hmbkp_enable_support', 'hmbkp_enable_support_nonce' ) ); ?>" class="button-primary right"><?php esc_html_e( 'Yes, I want to enable support', 'backupwordpress' ); ?></a>
