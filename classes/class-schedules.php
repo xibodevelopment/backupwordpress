@@ -40,10 +40,17 @@ class Schedules {
 
 	public function refresh_schedules() {
 
-		global $wpdb;
+		$schedules = get_transient( 'hmbkp_schedules' );
 
-		// Load all schedule options from the database
-		$schedules = $wpdb->get_col( "SELECT option_name from $wpdb->options WHERE option_name LIKE 'hmbkp\_schedule\_%'" );
+		if ( ! $schedules ) {
+
+			global $wpdb;
+
+			// Load all schedule options from the database.
+			$schedules = $wpdb->get_col( "SELECT option_name from $wpdb->options WHERE option_name LIKE 'hmbkp\_schedule\_%'" );
+
+			set_transient( 'hmbkp_schedules', $schedules, WEEK_IN_SECONDS );
+		}
 
 		// Instantiate each one as a Scheduled_Backup
 		$this->schedules = array_map( array( $this, 'instantiate' ), array_filter( (array) $schedules ) );

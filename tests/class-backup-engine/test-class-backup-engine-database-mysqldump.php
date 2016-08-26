@@ -18,8 +18,4 @@ class Mysqldump_Database_Backup_Engine_Tests extends Common_Database_Backup_Engi
 		$this->assertEquals( 'mysqldump', $this->backup->get_mysqldump_executable_path() );
 	}
 
-	public function test_check_user_can_connect_to_database_via_cli() {
-		$this->assertNotWPError( $this->backup->check_user_can_connect_to_database_via_cli() );
-	}
-
 }
