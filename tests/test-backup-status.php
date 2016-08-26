@@ -99,6 +99,8 @@ class Test_Backup_Status extends \HM_Backup_UnitTestCase {
 
 	public function test_manually_crash() {
 
+		$this->markTestSkipped();
+
 		Path::get_instance()->reset_path();
 		$process = new Process( 'wp backupwordpress backup' );
 		$status = new Backup_Status( 'backup' );
@@ -121,6 +123,9 @@ class Test_Backup_Status extends \HM_Backup_UnitTestCase {
 	}
 
 	public function test_in_another_thread() {
+
+		$this->markTestSkipped();
+
 		Path::get_instance()->reset_path();
 		$process = new Process( 'wp backupwordpress backup --database_only' );
 		$process->run();
