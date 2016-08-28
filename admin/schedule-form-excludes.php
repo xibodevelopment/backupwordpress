@@ -293,9 +293,9 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 							$size = $site_size->filesize( $file );
 
 							if ( false !== $size ) :
-								$size          = $size ?: 0;
-								$excluded_size = $excluded_site_size->filesize( $file ) ?: 0;
-								?>
+
+								$size          = $size;
+								$excluded_size = $excluded_site_size->filesize( $file ); ?>
 
 								<code>
 
@@ -303,14 +303,26 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 									// Display `included of total size` info for directories and excluded files.
 									if ( $file->isDir() || ( $file->isFile() && $is_excluded ) ) :
 
-										$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
+										if ( $size === $excluded_size || $file->isFile() ) {
+												echo $excluded_size ? esc_html( size_format( $excluded_size ) ) : '0';
+										} else {
 
-										/* translators: 1: Excluded size 2: Overall site size */
-										printf(
-											esc_html__( '%1$s of %2$s', 'backupwordpress' ),
-											esc_html( $excluded_size ),
-											esc_html( size_format( $size ) )
-										);
+											if ( $excluded_size ) {
+												$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
+											}
+
+											if ( $size ) {
+												$size = size_format( $size );
+											}
+
+											/* translators: 1: Excluded size 2: Overall site size */
+											printf(
+												esc_html__( '%1$s of %2$s', 'backupwordpress' ),
+												esc_html( $excluded_size ),
+												esc_html( $size )
+											);
+										}
+
 									elseif ( ! $is_unreadable ) :
 										echo esc_html( size_format( $size ) );
 									else :

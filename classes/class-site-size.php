@@ -205,7 +205,7 @@ class Site_Size {
 			$directory_sizes = get_transient( 'hmbkp_root_size' );
 
 			if ( $directory_sizes ) {
-				return $directory_sizes;
+				return (int) $directory_sizes;
 			}
 		}
 
@@ -243,7 +243,8 @@ class Site_Size {
 		}
 
 		// Directory size is now just a sum of all files across all sub directories.
-		return $directory_sizes;
+		return (int) $directory_sizes;
+
 	}
 
 	public function rebuild_directory_filesizes() {
