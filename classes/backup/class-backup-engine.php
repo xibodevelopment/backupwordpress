@@ -13,6 +13,13 @@ namespace HM\BackUpWordPress;
 abstract class Backup_Engine {
 
 	/**
+	 * The filename of the backup
+	 *
+	 * @var string
+	 */
+	private $backup_filename = '';
+
+	/**
 	 * An array of backup errors.
 	 *
 	 * @var array
@@ -79,7 +86,7 @@ abstract class Backup_Engine {
 	/**
 	 * Get the array of errors encountered during the backup process.
 	 *
-	 * @param  string $context The context for the error, usually the Backup
+	 * @param  string|null $context The context for the error, usually the Backup
 	 *                         Engine that encountered the error.
 	 *
 	 * @return array           The array of errors.
@@ -118,7 +125,7 @@ abstract class Backup_Engine {
 	/**
 	 * Get the array of warnings encountered during the backup process.
 	 *
-	 * @param  string $context The context for the warning, usually the Backup
+	 * @param  string|null $context The context for the warning, usually the Backup
 	 *                         Engine that encountered the warning.
 	 *
 	 * @return array           The array of warnings.
@@ -141,7 +148,7 @@ abstract class Backup_Engine {
 	 * issues with the backup process.
 	 *
 	 * @param  string $context The context for the warning.
-	 * @param  string $error   The warning that was encountered.
+	 * @param  string $warning   The warning that was encountered.
 	 */
 	public function warning( $context, $warning ) {
 
@@ -162,7 +169,7 @@ abstract class Backup_Engine {
 	 *
 	 * @param  int $type   The level of error raised
 	 *
-	 * @return false       Return false to pass the error back to PHP so it can
+	 * @return boolean     Return false to pass the error back to PHP so it can
 	 *                     be handled natively.
 	 */
 	public function error_handler( $type ) {

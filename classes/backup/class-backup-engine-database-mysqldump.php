@@ -12,7 +12,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	/**
 	 * The path to the mysqldump executable
 	 *
-	 * @var string
+	 * @var string|false
 	 */
 	private $mysqldump_executable_path = '';
 
@@ -85,7 +85,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	 */
 	public function backup() {
 
-		if ( ! $this->get_mysqldump_executable_path() ) {
+		if ( empty( $this->get_mysqldump_executable_path() ) ) {
 			return false;
 		}
 
@@ -126,7 +126,7 @@ class Mysqldump_Database_Backup_Engine extends Database_Backup_Engine {
 	/**
 	 * Get the connection args for the mysqldump command
 	 *
-	 * @return array The array of connection args
+	 * @return string[] The array of connection args
 	 */
 	public function get_mysql_connection_args() {
 

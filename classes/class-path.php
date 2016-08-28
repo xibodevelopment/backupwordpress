@@ -295,15 +295,11 @@ class Path {
 
 		// Loop through possible paths, use the first one that exists/can be created and is writable
 		foreach ( $paths as $path ) {
-			if ( wp_mkdir_p( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists
+			if ( wp_mkdir_p( $path ) && file_exists( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists
+				$this->path = $path;
 				break;
 			}
 		}
-
-		if ( file_exists( $path ) && wp_is_writable( $path ) ) {
-			$this->path = $path;
-		}
-
 	}
 
 	/**
@@ -338,6 +334,7 @@ class Path {
 		// Protect the directory with a .htaccess file on Apache servers
 		if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && wp_is_writable( $this->path ) ) {
 
+			$contents   = array();
 			$contents[] = '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'backupwordpress' ), '.htaccess' );
 			$contents[] = '';
 			$contents[] = '<IfModule mod_rewrite.c>';
@@ -362,7 +359,7 @@ class Path {
 
 		$paths = $this->get_existing_paths();
 
-		if ( ( $paths && $this->get_custom_path() ) || count( $paths ) > 1 ) {
+		if ( ( ! empty( $paths ) && $this->get_custom_path() ) || count( $paths ) > 1 ) {
 			foreach ( $paths as $old_path ) {
 				$this->move_old_backups( $old_path );
 			}
@@ -374,7 +371,7 @@ class Path {
 	 * Move backup files from an existing directory and the new
 	 * location
 	 *
-	 * @param string $path 	The path to move the backups from
+	 * @param string $from 	The path to move the backups from
 	 */
 	public function move_old_backups( $from ) {
 

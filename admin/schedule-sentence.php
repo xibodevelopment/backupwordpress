@@ -124,7 +124,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 		$sentence .= ' ' . $email_msg;
 	}
 
-	if ( $services ) {
+	if ( ! empty( $services ) ) {
 		$sentence .= ' ' . sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', $services ) );
 	}
 
