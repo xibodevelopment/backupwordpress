@@ -48,6 +48,9 @@ class Backup_Status {
 	public function start( $backup_filename, $status_message ) {
 		$this->filename = $backup_filename;
 
+		// Clear any errors from previous backup runs
+		Notices::get_instance()->clear_notice_context( 'backup_errors' );
+
 		add_action( 'shutdown', array( $this, 'catch_fatals' ), 10 );
 
 		$this->lock_handler = new LockHandler( basename( $this->get_status_filepath() ), Path::get_path() );

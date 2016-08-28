@@ -154,4 +154,20 @@ class Notices {
 		$this->notices = array();
 		delete_option( 'hmbkp_notices' );
 	}
+
+	public function clear_notice_context( $context ) {
+
+		if ( isset( $this->notices[ $context ] ) ) {
+			unset( $this->notices[ $context ] );
+		}
+
+		$persistent_notices = $this->get_persistent_notices();
+
+		if ( isset( $persistent_notices[ $context ] ) ) {
+			unset( $persistent_notices[ $context ] );
+		}
+
+		update_option( 'hmbkp_notices', $persistent_notices );
+
+	}
 }
