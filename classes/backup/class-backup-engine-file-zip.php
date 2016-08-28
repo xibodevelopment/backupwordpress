@@ -69,7 +69,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	 */
 	public function backup() {
 
-		if ( empty( $this->get_zip_executable_path() ) ) {
+		if ( ! $this->get_zip_executable_path() ) {
 			return false;
 		}
 

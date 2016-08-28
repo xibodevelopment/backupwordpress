@@ -16,7 +16,7 @@ abstract class Requirement {
 	protected $name = '';
 
 	/**
-	 * @return boolean Did the requirement pass or fail
+	 * @return mixed Did the requirement pass or fail
 	 */
 	protected static function test() {}
 
@@ -741,7 +741,7 @@ class Requirement_PDO extends Requirement {
 	protected $name = 'PDO';
 
 	/**
-	 * @return string
+	 * @return string|false
 	 */
 	public static function test() {
 
