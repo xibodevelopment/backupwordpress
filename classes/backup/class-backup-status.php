@@ -49,7 +49,7 @@ class Backup_Status {
 		$this->filename = $backup_filename;
 
 		// Clear any errors from previous backup runs
-		Notices::get_instance()->clear_notice_context( 'backup_errors' );
+		Notices::get_instance()->clear_notice_context( 'backup_failed' );
 
 		add_action( 'shutdown', array( $this, 'catch_fatals' ), 10 );
 
@@ -139,8 +139,11 @@ class Backup_Status {
 
 		$this->finish();
 
-		$message = __( 'Your previous backup failed, the backup process was killed before it could complete. Please contact your host for assistance.', 'backupwordpress' );
-		Notices::get_instance()->set_notices( 'backup_errors', array( $message ), true );
+		// If we already have a fatal error then let's not stomp on it.
+		if ( Notices::get_instance()->get_notices( 'backup_failed' ) ) {
+			$message = __( 'Your last backup failed. The backup process was killed before it could complete. Please contact your host for assistance or try excluding more files.', 'backupwordpress' );
+			Notices::get_instance()->set_notices( 'backup_failed', array( $message ), true );
+		}
 
 		return true;
 
@@ -170,8 +173,8 @@ class Backup_Status {
 
 		$this->finish();
 
-		$message = sprintf( __( 'Your previous backup failed, the backup process encountered a %s before it could complete. The error was %s.', 'backupwordpress' ), '<code>PHP Fatal Error</code>', '<code>' . $error['message'] . '</code>' );
-		Notices::get_instance()->set_notices( 'backup_errors', array( $message ), true );
+		$message = sprintf( __( 'Your last backup failed. The backup process encountered an error before it could complete. The error was %s. Please contact your host for assistance or try excluding more files.', 'backupwordpress' ), '<code>' . esc_html( $error['message'] ) . '</code>' );
+		Notices::get_instance()->set_notices( 'backup_failed', array( $message ), true );
 
 	}
 
