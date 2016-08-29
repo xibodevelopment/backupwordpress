@@ -5,6 +5,6 @@ module.exports = {
 			'readme/faq.txt',
 			'readme/readme-footer.txt'
 		],
-		dest: 'bin/readme.txt'
+		dest: 'readme.txt'
 	}
 };
