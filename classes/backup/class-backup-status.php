@@ -53,10 +53,12 @@ class Backup_Status {
 
 		add_action( 'shutdown', array( $this, 'catch_fatals' ), 10 );
 
-		$this->lock_handler = new LockHandler( basename( $this->get_status_filepath() ), Path::get_path() );
+		if ( ! defined( 'HMBKP_DISABLE_FILE_LOCKING' ) || ! HMBKP_DISABLE_FILE_LOCKING ) {
+			$this->lock_handler = new LockHandler( basename( $this->get_status_filepath() ), Path::get_path() );
 
-		if ( ! $this->lock_handler->lock() || $this->get_status() ) {
-		    return false;
+			if ( ! $this->lock_handler->lock() || $this->get_status() ) {
+			    return false;
+			}
 		}
 
 		return $this->set_status( $status_message );
@@ -69,8 +71,10 @@ class Backup_Status {
 	 */
 	public function finish() {
 
-		if ( isset( $this->lock_handler ) && is_a( $this->lock_handler, 'LockHandler' ) ) {
-			$this->lock_handler->release();
+		if ( ! defined( 'HMBKP_DISABLE_FILE_LOCKING' ) || ! HMBKP_DISABLE_FILE_LOCKING ) {
+			if ( isset( $this->lock_handler ) && is_a( $this->lock_handler, 'LockHandler' ) ) {
+				$this->lock_handler->release();
+			}
 		}
 
 		// Delete the backup running file
@@ -97,14 +101,20 @@ class Backup_Status {
 			return false;
 		}
 
-		// If we're in the same thread then we know we must be running if the running file exists
-		if ( is_a( $this->lock_handler, 'LockHandler' ) ) {
-			return $this->is_started();
+		if ( ! defined( 'HMBKP_DISABLE_FILE_LOCKING' ) || ! HMBKP_DISABLE_FILE_LOCKING ) {
+
+			// If we're in the same thread then we know we must be running if the running file exists
+			if ( is_a( $this->lock_handler, 'LockHandler' ) ) {
+				return $this->is_started();
+			}
+
+			$lock_handler = new LockHandler( basename( $this->get_status_filepath() ), Path::get_path() );
+
+			return ! $lock_handler->lock();
 		}
 
-		$lock_handler = new LockHandler( basename( $this->get_status_filepath() ), Path::get_path() );
-
-		return ! $lock_handler->lock();
+		// If the backup is started and we don't support file locks then we have to assume we're still running
+		return true;
 	}
 
 	/**
