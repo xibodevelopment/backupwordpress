@@ -9,18 +9,8 @@ h2 + div[id^="hmbkp"] input { max-width: 100%; }
 li a.hmbkp-running:not(.current):before { width: 20px; height: 20px; margin: -1px 10px -5px 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
 
 .hmbkp-upsell { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ccc; }
-.hmbkp-upsell a { color: #57792b }
-.hmbkp-upsell a:hover { color: #98c063 }
 
-.hmbkp-upsell-sep { color: #bbb;}
-.hmbkp-upsell ul { overflow: hidden; }
-.hmbkp-upsell li { float: left; margin: 0 20px 20px 0; }
-.hmbkp-upsell img { display: block; margin: 0 auto; max-width: 120px; min-height: 60px; }
-.hmbkp-upsell ul a { display: block; margin-bottom: 0; width: 120px; }
-.hmbkp-upsell .howto { font-weight: normal; display: inline; }
-.hmbkp-upsell .hmbkp_hide { float: right; }
-
-.hmbkp-schedule-sentence { font-size: 16px; font-weight: lighter; margin: 0 0 20px 0; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
+.hmbkp-schedule-sentence { font-size: 16px; margin: 0 0 20px 0; background-color: #FBFBFB; padding: 20px; border: 1px solid #e5e5e5; box-shadow: 0 1px 1px rgba( 0,0,0,.04 ); }
 .hmbkp-schedule-sentence::before { content: "\2714"; margin-right: 10px; width: 16px; height: 60px; display: block; float: left; }
 .hmbkp-schedule-sentence.hmbkp-error:before { content: "\2718"; }
 .hmbkp-schedule-sentence.hmbkp-running:before { width: 20px; height: 80px; margin: -1px 10px 0 0; content: ""; background: transparent url('spinner-2x.gif') no-repeat 0 0; background-size: 20px; display: inline-block; }
@@ -30,7 +20,7 @@ li a.hmbkp-running:not(.current):before { width: 20px; height: 20px; margin: -1p
 .hmbkp-schedule-sentence *:not(a)[title] { border-bottom: 1px dotted #CCC; cursor: help; }
 .hmbkp-schedule-sentence .hmbkp-status[title] { border-bottom: none; }
 .hmbkp-schedule-sentence .submit { padding: 0; }
-.hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; font-size: 12px; font-weight: normal; margin: 0 0 0 26px; }
+.hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; font-size: 12px; margin: 0 0 0 26px; }
 .hmbkp-schedule-actions a { white-space: nowrap; }
 .hmbkp-schedule-sentence .row-actions { position: static; }
 
@@ -94,9 +84,4 @@ pre { background-color: #eee; padding: 10px; white-space: pre; max-height: 320px
     table.widefat tbody tr:nth-child(even) { background-color: #fff }
     table.widefat tbody tr:nth-child(odd) { background-color: #f9f9f9 }
 
-}
-
-.tools_page_backupwordpress_extensions a[href*="page=backupwordpress"] {
-    font-weight: bold !important;
-    color: white !important;
 }
