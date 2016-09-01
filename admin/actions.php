@@ -78,15 +78,17 @@ add_action( 'admin_post_hmbkp_request_credentials', function() {
 		// If we're able to connect then no need to redirect with an error.
 		$url = get_settings_url();
 
-		// If the backup path exists then let's just try to chmod it to the correct permissions
-		if ( is_dir( Path::get_instance()->get_default_path() ) ) {
-			if ( ! $wp_filesystem->chmod( Path::get_instance()->get_default_path(), FS_CHMOD_DIR ) ) {
-				$url = add_query_arg( 'creation_error', 1, get_settings_url() );
-			}
+		// If the backup path exists then let's just try to chmod it to the correct permissions.
+		if (
+			is_dir( Path::get_instance()->get_default_path() ) &&
+			! $wp_filesystem->chmod( Path::get_instance()->get_default_path(), FS_CHMOD_DIR )
+		) {
+			$url = add_query_arg( 'creation_error', 1, get_settings_url() );
 		} else {
 
-			// If the path doesn't exist then try to correct the permission for the parent directory and create it
+			// If the path doesn't exist then try to correct the permission for the parent directory and create it.
 			$wp_filesystem->chmod( dirname( Path::get_instance()->get_default_path() ), FS_CHMOD_DIR );
+
 			if (
 				! $wp_filesystem->mkdir( Path::get_instance()->get_default_path(), FS_CHMOD_DIR ) &&
 				! $wp_filesystem->mkdir( Path::get_instance()->get_fallback_path(), FS_CHMOD_DIR )
