@@ -156,10 +156,12 @@ function get_site_size_text( Scheduled_Backup $schedule ) {
 
 	$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
-	if ( ( 'database' === $schedule->get_type() ) || $site_size->is_site_size_cached() ) {
-		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $site_size->get_formatted_site_size() ) );
-	} else {
-		return sprintf( '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your site&hellip;', 'backupwordpress' ) . '</code>)' );
+	if ( 'database' === $schedule->get_type() || $site_size->is_site_size_cached() ) {
+		return sprintf(
+			'(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)',
+			esc_html( $site_size->get_formatted_site_size() )
+		);
 	}
 
+	return '';
 }
