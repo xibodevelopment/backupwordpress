@@ -96,7 +96,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 		$untrusted_directory = urldecode( $_GET['hmbkp_directory_browse'] );
 
-		// Only allow real sub directories of the site root to be browsed.
+		// Only allow real sub-directories of the site root to be browsed.
 		if (
 			false !== strpos( $untrusted_directory, Path::get_root() ) &&
 			is_dir( $untrusted_directory )
@@ -104,8 +104,6 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 			$directory = $untrusted_directory;
 		}
 	}
-
-	$exclude_string = implode( '|', $excludes->get_excludes_for_regex() );
 
 	$site_size          = new Site_Size( 'file' );
 	$excluded_site_size = new Site_Size( 'file', $excludes );
@@ -186,8 +184,8 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 								/* translators: 1: Excluded size 2: Overall site size */
 								printf(
 									esc_html__( '%1$s of %2$s', 'backupwordpress' ),
-									esc_html( $excluded_size ),
-									esc_html( size_format( $size ) )
+									$excluded_size,
+									size_format( $size )
 								);
 								?>
 
@@ -231,10 +229,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 				$is_excluded = $is_unreadable = false;
 
 				// Check if the file is excluded.
-				if (
-					$exclude_string &&
-					preg_match( '(' . $exclude_string . ')', str_ireplace( trailingslashit( Path::get_root() ), '', wp_normalize_path( $file->getPathname() ) ) )
-				) :
+				if ( $excludes->is_file_excluded( $file ) ) :
 					$is_excluded = true;
 				endif;
 
@@ -298,20 +293,29 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 							$size = $site_size->filesize( $file );
 
 							if ( false !== $size ) :
-								$size          = $size ?: '0';
-								$excluded_size = $excluded_site_size->filesize( $file ) ?: '0'; ?>
+
+								$size          = $size;
+								$excluded_size = $excluded_site_size->filesize( $file ); ?>
 
 								<code>
 
-									<?php if ( $file->isDir() ) :
+									<?php
+									// Display `included of total size` info for directories and excluded files only.
+									if ( $file->isDir() || ( $file->isFile() && $is_excluded ) ) :
 
-										$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
+										if ( $excluded_size ) {
+											$excluded_size = is_same_size_format( $size, $excluded_size ) ? (int) size_format( $excluded_size ) : size_format( $excluded_size );
+										}
 
-										/* translators: 1: Excluded size 2: Overall site size */
+										if ( $size ) {
+											$size = size_format( $size );
+										}
+
+										/* translators: 1: Excluded size 2: Overall directory/file size */
 										printf(
 											esc_html__( '%1$s of %2$s', 'backupwordpress' ),
-											esc_html( $excluded_size ),
-											esc_html( size_format( $size ) )
+											$excluded_size,
+											$size
 										);
 
 									elseif ( ! $is_unreadable ) :
