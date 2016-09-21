@@ -9,14 +9,14 @@ namespace HM\BackUpWordPress;
 abstract class Requirement {
 
 	/**
-	 * The name of the equirement
+	 * The name of the requirement.
 	 *
 	 * @var string
 	 */
 	protected $name = '';
 
 	/**
-	 * @return mixed Did the requirement pass or fail
+	 * @return mixed Did the requirement pass or fail.
 	 */
 	protected static function test() {}
 
@@ -675,9 +675,9 @@ class Requirement_Active_Plugins extends Requirement {
 	protected $name = 'Active Plugins';
 
 	/**
-	 * Output the list of active plugins
+	 * Output the list of active plugins.
 	 *
-	 * @return array The array of active plugins
+	 * @return array The array of active plugins.
 	 */
 	public static function test() {
 		return get_option( 'active_plugins' );

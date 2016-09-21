@@ -138,7 +138,7 @@ class Backup {
 	 * we find one which works. If a backup filename or any excludes have been
 	 * set then those are passed to each Backup_Engine.
 	 *
-	 * @return Backup_Engine|false The successful backup engine or false on failure
+	 * @return Backup_Engine|false The successful backup engine or false on failure.
 	 */
 	public function perform_backup( array $backup_engines ) {
 

@@ -20,9 +20,9 @@ class Backup_Status {
 	}
 
 	/**
-	 * Get the filename of the backup
+	 * Get the filename of the backup.
 	 *
-	 * @return string The backup filename
+	 * @return string The backup filename.
 	 */
 	public function get_backup_filename() {
 

@@ -87,9 +87,9 @@ abstract class Backup_Engine {
 	 * Get the array of errors encountered during the backup process.
 	 *
 	 * @param  string|null $context The context for the error, usually the Backup
-	 *                         Engine that encountered the error.
+	 *                              Engine that encountered the error.
 	 *
-	 * @return array           The array of errors.
+	 * @return array                The array of errors.
 	 */
 	public function get_errors( $context = null ) {
 
@@ -126,9 +126,9 @@ abstract class Backup_Engine {
 	 * Get the array of warnings encountered during the backup process.
 	 *
 	 * @param  string|null $context The context for the warning, usually the Backup
-	 *                         Engine that encountered the warning.
+	 *                              Engine that encountered the warning.
 	 *
-	 * @return array           The array of warnings.
+	 * @return array                The array of warnings.
 	 */
 	public function get_warnings( $context = null ) {
 
@@ -148,7 +148,7 @@ abstract class Backup_Engine {
 	 * issues with the backup process.
 	 *
 	 * @param  string $context The context for the warning.
-	 * @param  string $warning   The warning that was encountered.
+	 * @param  string $warning The warning that was encountered.
 	 */
 	public function warning( $context, $warning ) {
 
@@ -167,14 +167,14 @@ abstract class Backup_Engine {
 	 *
 	 * PHP errors are always treat as warnings rather than errors.
 	 *
-	 * @param  int $type   The level of error raised
+	 * @param  int $type The level of error raised.
 	 *
-	 * @return boolean     Return false to pass the error back to PHP so it can
-	 *                     be handled natively.
+	 * @return boolean   Return false to pass the error back to PHP so it can
+	 *                   be handled natively.
 	 */
 	public function error_handler( $type ) {
 
-		// Skip strict & deprecated warnings
+		// Skip strict & deprecated warnings.
 		if ( ( defined( 'E_DEPRECATED' ) && E_DEPRECATED === $type ) || ( defined( 'E_STRICT' ) && E_STRICT === $type ) || 0 === error_reporting() ) {
 			return false;
 		}
@@ -184,7 +184,7 @@ abstract class Backup_Engine {
 		 *
 		 * These are:
 		 *
-		 * @param int    $errorno   The error level expressed as an integer/
+		 * @param int    $errorno   The error level expressed as an integer.
 		 * @param string $errstr    The error message.
 		 * @param string $errfile   The file that the error raised in.
 		 * @param string $errorline The line number the error was raised on.
