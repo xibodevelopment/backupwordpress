@@ -73,8 +73,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 endswitch;
 
-$server = '<span title="' . esc_attr( Path::get_path() ) . '">' . __( 'this server', 'backupwordpress' ) . '</span>';
-$server = '<code>' . esc_attr( str_replace( Path::get_home_path(), '', Path::get_path() ) ) . '</code>';
+$server = '<code title="' . __( 'Check the help tab to learn how to change where your backups are stored.', 'backupwordpress' ) . '">' . esc_attr( str_replace( Path::get_home_path(), '', Path::get_path() ) ) . '</code>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
