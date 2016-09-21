@@ -184,8 +184,8 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 								/* translators: 1: Excluded size 2: Overall site size */
 								printf(
 									esc_html__( '%1$s of %2$s', 'backupwordpress' ),
-									esc_html( $excluded_size ),
-									esc_html( size_format( $size ) )
+									$excluded_size,
+									size_format( $size )
 								);
 								?>
 
@@ -314,8 +314,8 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 										/* translators: 1: Excluded size 2: Overall directory/file size */
 										printf(
 											esc_html__( '%1$s of %2$s', 'backupwordpress' ),
-											esc_html( $excluded_size ),
-											esc_html( $size )
+											$excluded_size,
+											$size
 										);
 
 									elseif ( ! $is_unreadable ) :
