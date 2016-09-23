@@ -29,9 +29,10 @@ class Excludes {
 		'.bzr',
 		'.git',
 		'.hg',
+		'backupwp',
 		'backwpup-*',
 		'updraft',
-		'wp-snapshots',
+		'(?:wp-)?snapshots?', // wp-snapshots, snapshots, snapshot
 		'backupbuddy_backups',
 		'pb_backupbuddy',
 		'backup-db',
