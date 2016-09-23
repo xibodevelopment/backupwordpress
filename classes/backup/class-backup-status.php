@@ -10,7 +10,7 @@ use Symfony\Component\Filesystem\LockHandler;
 class Backup_Status {
 
 	/**
-	 * The filename for the backup file we are the tracking status of
+	 * The filename for the backup file we are the tracking status of.
 	 *
 	 * @var string
 	 */
@@ -26,7 +26,7 @@ class Backup_Status {
 	private $callback;
 
 	/**
-	 * @param string $id The unique id for the backup job
+	 * @param string $id The unique id for the backup job.
 	 */
 	public function __construct( $id ) {
 		$this->id = (string) $id;
@@ -40,15 +40,15 @@ class Backup_Status {
 	 * instances of this backup process running concurrently and allows us to detect if
 	 * the PHP thread running the process is killed as that will clear the lock.
 	 *
-	 * @param  string $backup_filename The filename for the backup file that we're tracking
-	 * @param  string $status_message  The initial status for the backup process
+	 * @param string $backup_filename The filename for the backup file that we're tracking.
+	 * @param string $status_message  The initial status for the backup process.
 	 *
-	 * @return boolean                  Whether the backup process was success marked as started
+	 * @return boolean                Whether the backup process was success marked as started.
 	 */
 	public function start( $backup_filename, $status_message ) {
 		$this->filename = $backup_filename;
 
-		// Clear any errors from previous backup runs
+		// Clear any errors from previous backup runs.
 		Notices::get_instance()->clear_notice_context( 'backup_failed' );
 
 		add_action( 'shutdown', array( $this, 'catch_fatals' ), 10 );
@@ -77,7 +77,7 @@ class Backup_Status {
 			}
 		}
 
-		// Delete the backup running file
+		// Delete the backup running file.
 		if ( file_exists( $this->get_status_filepath() ) ) {
 			return unlink( $this->get_status_filepath() );
 		}
@@ -89,7 +89,7 @@ class Backup_Status {
 	 * Check if the backup has been started by checking if the running file
 	 * exists.
 	 *
-	 * @return boolean Whether the backup process has been started
+	 * @return boolean Whether the backup process has been started.
 	 */
 	public function is_started() {
 		return (bool) file_exists( $this->get_status_filepath() );
@@ -103,7 +103,7 @@ class Backup_Status {
 
 		if ( ! defined( 'HMBKP_DISABLE_FILE_LOCKING' ) || ! HMBKP_DISABLE_FILE_LOCKING ) {
 
-			// If we're in the same thread then we know we must be running if the running file exists
+			// If we're in the same thread then we know we must be running if the running file exists.
 			if ( is_a( $this->lock_handler, 'LockHandler' ) ) {
 				return $this->is_started();
 			}
@@ -113,7 +113,7 @@ class Backup_Status {
 			return ! $lock_handler->lock();
 		}
 
-		// If the backup is started and we don't support file locks then we have to assume we're still running
+		// If the backup is started and we don't support file locks then we have to assume we're still running.
 		return true;
 	}
 
@@ -121,21 +121,21 @@ class Backup_Status {
 	 * If the running file exists but isn't locked then the thread that
 	 * the backup process is running in must have been killed.
 	 *
-	 * You should only be running this command from a separate thread
+	 * You should only be running this command from a separate thread.
 	 *
-	 * @return boolean Whether the backup process has crashed or not
+	 * @return boolean Whether the backup process has crashed or not.
 	 */
 	public function has_crashed() {
 		return ( $this->is_started() && ! $this->is_running() );
 	}
 
 	/**
-	 * Handle a process that's previouly crashed.
+	 * Handle a process that's previously crashed.
 	 *
-	 * Delete the partially created backup if it exists and then run the standard
-	 * cleanup tasks and set an error message for the user.
+	 * Delete the partially created backup if it exists and then
+	 * run the standard cleanup tasks and set an error message for the user.
 	 *
-	 * @return bool Whether the crash was handled or not
+	 * @return bool Whether the crash was handled or not.
 	 */
 	public function cleanup_after_crash() {
 
@@ -156,7 +156,6 @@ class Backup_Status {
 		}
 
 		return true;
-
 	}
 
 	/**
@@ -183,15 +182,17 @@ class Backup_Status {
 
 		$this->finish();
 
-		$message = sprintf( __( 'Your last backup failed. The backup process encountered an error before it could complete. The error was %s. Please contact your host for assistance or try excluding more files.', 'backupwordpress' ), '<code>' . esc_html( $error['message'] ) . '</code>' );
+		$message = sprintf(
+			__( 'Your last backup failed. The backup process encountered an error before it could complete. The error was %s. Please contact your host for assistance or try excluding more files.', 'backupwordpress' ),
+			'<code>' . esc_html( $error['message'] ) . '</code>'
+		);
 		Notices::get_instance()->set_notices( 'backup_failed', array( $message ), true );
-
 	}
 
 	/**
-	 * Get the filepath for the backup file we're tracking
+	 * Get the filepath for the backup file we're tracking.
 	 *
-	 * @return string The path to the backup file
+	 * @return string The path to the backup file.
 	 */
 	public function get_backup_filename() {
 
@@ -224,11 +225,10 @@ class Backup_Status {
 		}
 
 		return false;
-
 	}
 
 	/**
-	 * Set the status of the running backup
+	 * Set the status of the running backup.
 	 *
 	 * @param string $message
 	 *
@@ -240,7 +240,7 @@ class Backup_Status {
 			call_user_func( $this->callback, $message );
 		}
 
-		// If start hasn't been called yet then we wont' have a backup filename
+		// If start hasn't been called yet then we wont' have a backup filename.
 		if ( ! $this->filename ) {
 			return false;
 		}
@@ -252,11 +252,10 @@ class Backup_Status {
 		) );
 
 		return (bool) file_put_contents( $this->get_status_filepath(), $status );
-
 	}
 
 	/**
-	 * Get the time that the current running backup was started
+	 * Get the time that the current running backup was started.
 	 *
 	 * @return int $timestamp
 	 */
@@ -273,11 +272,10 @@ class Backup_Status {
 		}
 
 		return time();
-
 	}
 
 	/**
-	 * Get the path to the backup running file that stores the running backup status
+	 * Get the path to the backup running file that stores the running backup status.
 	 *
 	 * @return string
 	 */

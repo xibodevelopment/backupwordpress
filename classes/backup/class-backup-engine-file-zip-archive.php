@@ -20,7 +20,7 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 		$zip = new \ZipArchive();
 
 		/**
-		 * Ensure the zip is closed on shutdown if it hasn't been closed already
+		 * Ensure the zip is closed on shutdown if it hasn't been closed already.
 		 *
 		 * ZipArchive does automatically cleanup on unexpected shutdown (a fatal error
 		 * for example), but we manually cleanup here as we want the opportunity to run
