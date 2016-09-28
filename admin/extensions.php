@@ -2,6 +2,8 @@
 
 namespace HM\BackUpWordPress;
 
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
 ?>
 
 <div class="wrap">
@@ -26,11 +28,14 @@ namespace HM\BackUpWordPress;
 		return strcmp( $b->title->rendered, $a->title->rendered );
 	});
 
-	$installed_plugins = array_reduce( get_plugins(), function( $carry, $item ) {
-		$carry[ strtolower( $item['Name'] ) ] = $item['Version'];
-		return $carry;
-	}, array() );
-
+	$installed_plugins = array();
+	foreach ( get_plugins() as $path => $plugin_info ) {
+		$installed_plugins[ strtolower( $plugin_info['Name'] ) ] = array(
+			'version'   => $plugin_info['Version'],
+			'is_active' => is_plugin_active( $path ),
+			'path'      => $path,
+		);
+	}
 	?>
 
 	<h3><?php esc_html_e( 'Remote Storage', 'backupwordpress' ); ?></h3>
@@ -43,7 +48,11 @@ namespace HM\BackUpWordPress;
 
 			<?php $first = true; ?>
 
-			<?php foreach ( $extensions_data as $extension ) : ?>
+			<?php foreach ( $extensions_data as $extension ) :
+
+				$extension_name_lowcase = strtolower( $extension->title->rendered );
+				$is_extension_installed = in_array( $extension_name_lowcase, array_keys( $installed_plugins ) );
+				?>
 
 				<div class="plugin-card plugin-card-<?php echo esc_attr( $extension->slug ); ?>">
 
@@ -51,7 +60,7 @@ namespace HM\BackUpWordPress;
 
 						<div class="name column-name">
 
-							<h4>
+							<h3>
 
 								<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox">
 
@@ -61,7 +70,7 @@ namespace HM\BackUpWordPress;
 
 								</a>
 
-							</h4>
+							</h3>
 
 						</div>
 
@@ -70,13 +79,78 @@ namespace HM\BackUpWordPress;
 							<ul class="plugin-action-buttons">
 
 								<li>
-									<?php if ( in_array( strtolower( $extension->title->rendered ), array_keys( $installed_plugins ) ) ) : ?>
+									<?php
+									// Update Now - Installed and update is available.
+									if (
+										$is_extension_installed &&
+										version_compare( $installed_plugins[ $extension_name_lowcase ]['version'], $extension->_edd_sl_version, '<' )
+									) :
 
-										<span class="button button-disabled" title="<?php esc_attr_e( 'This extension is already installed', 'backupwordpress' ); ?>"><?php esc_html_e( 'Installed', 'backupwordpress' ); ?></span>
+										$update_url = wp_nonce_url(
+											self_admin_url( 'update.php?action=upgrade-plugin&plugin=' . $installed_plugins[ $extension_name_lowcase ]['path'] ),
+											'upgrade-plugin_' . $installed_plugins[ $extension_name_lowcase ]['path']
+										);
+										?>
 
-									<?php else : ?>
+										<a
+											class="update-now button aria-button-if-js"
+											data-plugin="<?php echo esc_attr( $installed_plugins[ $extension_name_lowcase ]['path'] ); ?>"
+											data-slug="<?php echo esc_attr( $extension->slug ); ?>"
+											href="<?php echo esc_url( $update_url ); ?>"
+											aria-label="<?php echo esc_attr( sprintf( __( 'Update %s now', 'backupwordpress' ), $extension->title->rendered ) ) ?>"
+											data-name="<?php esc_attr( $extension->title->rendered ); ?>">
+											<?php esc_html_e( 'Update Now', 'backupwordpress' ); ?>
+										</a>
 
-										<a class="install-now button-primary" data-slug="<?php echo esc_attr( $extension->slug ); ?>" href="<?php echo esc_url( $extension->link ); ?>" aria-label="Install <?php echo esc_attr( $extension->title->rendered ); ?> now" data-name="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php printf( esc_html__( 'Buy Now &#36;%s', 'backupwordpress' ), esc_html( $extension->edd_price ) ); ?></a>
+									<?php
+									// Active - Installed and activated, but no update.
+									elseif (
+										$is_extension_installed &&
+										$installed_plugins[ $extension_name_lowcase ]['is_active']
+									) : ?>
+
+										<button
+											type="button"
+											class="button button-disabled"
+											disabled="disabled">
+											<?php echo esc_html_x( 'Active', 'Plugin status', 'backupwordpress' ); ?>
+										</button>
+
+									<?php
+									// Activate - Installed, but not activated.
+									elseif (
+										$is_extension_installed &&
+										! $installed_plugins[ $extension_name_lowcase ]['is_active']
+									) :
+
+										$activate_url = add_query_arg( array(
+											'_wpnonce'    => wp_create_nonce( 'activate-plugin_' . $installed_plugins[ $extension_name_lowcase ]['path'] ),
+											'action'      => 'activate',
+											'plugin'      => $installed_plugins[ $extension_name_lowcase ]['path'],
+											), network_admin_url( 'plugins.php' ) );
+
+										// TODO: Network Activate?
+										?>
+
+										<a
+											href="<?php echo esc_url( $activate_url ); ?>"
+											class="button activate-now button-secondary"
+											aria-label="<?php esc_attr( sprintf( __( 'Activate %s', 'backupwordpress' ), $extension->title->rendered ) ); ?>">
+											<?php esc_html_e( 'Activate', 'backupwordpress' ); ?>
+										</a>
+
+									<?php
+									// Buy Now - Not installed.
+									else : ?>
+
+										<a
+											class="install-now button-primary"
+											data-slug="<?php echo esc_attr( $extension->slug ); ?>"
+											href="<?php echo esc_url( $extension->link ); ?>"
+											aria-label="Install <?php echo esc_attr( $extension->title->rendered ); ?> now"
+											data-name="<?php echo esc_attr( $extension->title->rendered ); ?>">
+											<?php printf( esc_html__( 'Buy Now &#36;%s', 'backupwordpress' ), esc_html( $extension->edd_price ) ); ?>
+										</a>
 
 									<?php endif; ?>
 
@@ -84,7 +158,13 @@ namespace HM\BackUpWordPress;
 
 								<li>
 
-									<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox" aria-label="<?php printf( esc_attr__( 'More information about %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ) ; ?>" data-title="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php esc_html_e( 'More Details', 'backupwordpress' ); ?></a>
+									<a
+										href="<?php echo esc_url( $extension->link ); ?>"
+										class="thickbox"
+										aria-label="<?php printf( esc_attr__( 'More information about %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ) ; ?>"
+										data-title="<?php echo esc_attr( $extension->title->rendered ); ?>">
+										<?php esc_html_e( 'More Details', 'backupwordpress' ); ?>
+									</a>
 
 								</li>
 
@@ -101,55 +181,13 @@ namespace HM\BackUpWordPress;
 					</div>
 
 					<?php
-
 					$style = $first === true ? 'background-color:aliceblue;' : '';
-
 					$first = false;
-
 					?>
 
 					<div class="plugin-card-bottom" style="<?php echo esc_attr( $style ); ?>">
 
 						<div class="vers column-rating">
-
-							<div>
-
-								<?php printf( esc_html__( 'Latest plugin version %s', 'backupwordpress' ), esc_html( $extension->_edd_sl_version ) ); ?>
-
-							</div>
-
-							<div>
-
-								<?php
-								if ( in_array( strtolower( $extension->title->rendered ), array_keys( $installed_plugins ) ) ) {
-
-									$current_version = $installed_plugins[ strtolower( $extension->title->rendered ) ];
-
-									if ( version_compare( $current_version, $extension->_edd_sl_version, '<' ) ) {
-
-										printf(
-											wp_kses(
-												/* translators: 1: Currently installed extension version 2: URL to update an extension 3: Latest extension version */
-												__( 'Your installed plugin version %1$s <a href="%2$s">Update now to the latest version</a>.', 'backupwordpress' ),
-												array(
-													'a' => array(
-														'href' => array(),
-													),
-												)
-											),
-											esc_html( $current_version ),
-											esc_url( admin_url( 'update-core.php' ) )
-										);
-									} else {
-
-										esc_html_e( 'You have the latest version', 'backupwordpress' );
-									}
-								}
-
-								?>
-
-							</div>
-
 						</div>
 
 						<div class="column-updated">
