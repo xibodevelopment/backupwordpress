@@ -8,20 +8,20 @@ namespace HM\BackUpWordPress;
 
 	<h1>
 
-		<a class="page-title-action" href="<?php echo esc_url( get_settings_url() ); ?>"><?php _e( '&larr; Backups', 'backupwordpress' ); ?></a>
+		<a class="page-title-action" href="<?php echo esc_url( get_settings_url() ); ?>"><?php esc_html_e( '&larr; Backups', 'backupwordpress' ); ?></a>
 
-		<?php _e( 'BackUpWordPress Extensions', 'backupwordpress' ); ?>
+		<?php esc_html_e( 'BackUpWordPress Extensions', 'backupwordpress' ); ?>
 
 	</h1>
 
 	<div class="wp-filter">
-		<p><?php _e( 'Extend BackUpWordPress by installing extensions. Extensions allows you to pick and choose the exact features you need whilst also supporting us, the developers, so we can continue working on BackUpWordPress.', 'backupwordpress' ); ?></p>
+		<p><?php esc_html_e( 'Extend BackUpWordPress by installing extensions. Extensions allow you to pick and choose the exact features you need whilst also supporting us, the developers, so we can continue working on BackUpWordPress.', 'backupwordpress' ); ?></p>
 	</div>
 
 	<?php
 	$extensions_data = Extensions::get_instance()->get_edd_data();
 
-	// Sort by title
+	// Sort by title.
 	usort( $extensions_data, function( $a, $b ) {
 		return strcmp( $b->title->rendered, $a->title->rendered );
 	});
@@ -33,9 +33,9 @@ namespace HM\BackUpWordPress;
 
 	?>
 
-	<h3><?php _e( 'Remote Storage', 'backupwordpress' ); ?></h3>
+	<h3><?php esc_html_e( 'Remote Storage', 'backupwordpress' ); ?></h3>
 
-	<p><?php _e( 'It\'s important to store your backups somewhere other than on your site. Using the extensions below you can easily push your backups to one or more Cloud providers.', 'backupwordpress' ); ?></p>
+	<p><?php esc_html_e( 'It\'s important to store your backups somewhere other than on your site. Using the extensions below you can easily push your backups to one or more Cloud providers.', 'backupwordpress' ); ?></p>
 
 	<div class="wp-list-table widefat plugin-install">
 
@@ -72,11 +72,11 @@ namespace HM\BackUpWordPress;
 								<li>
 									<?php if ( in_array( strtolower( $extension->title->rendered ), array_keys( $installed_plugins ) ) ) : ?>
 
-										<span class="button button-disabled" title="<?php _e( 'This extension is already installed', 'backupwordpress' ); ?>"><?php _e( 'Installed', 'backupwordpress' ); ?></span>
+										<span class="button button-disabled" title="<?php esc_attr_e( 'This extension is already installed', 'backupwordpress' ); ?>"><?php esc_html_e( 'Installed', 'backupwordpress' ); ?></span>
 
 									<?php else : ?>
 
-										<a class="install-now button-primary" data-slug="<?php echo esc_attr( $extension->slug ); ?>" href="<?php echo esc_url( $extension->link ); ?>" aria-label="Install <?php echo esc_attr( $extension->title->rendered ); ?> now" data-name="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php printf( __( 'Buy Now &dollar;%s', 'backupwordpress' ), $extension->edd_price ); ?></a>
+										<a class="install-now button-primary" data-slug="<?php echo esc_attr( $extension->slug ); ?>" href="<?php echo esc_url( $extension->link ); ?>" aria-label="Install <?php echo esc_attr( $extension->title->rendered ); ?> now" data-name="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php printf( esc_html__( 'Buy Now &#36;%s', 'backupwordpress' ), esc_html( $extension->edd_price ) ); ?></a>
 
 									<?php endif; ?>
 
@@ -84,7 +84,7 @@ namespace HM\BackUpWordPress;
 
 								<li>
 
-									<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox" aria-label="<?php printf( __( 'More information about %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ) ; ?>" data-title="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php _e( 'More Details', 'backupwordpress' ); ?></a>
+									<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox" aria-label="<?php printf( esc_attr__( 'More information about %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ) ; ?>" data-title="<?php echo esc_attr( $extension->title->rendered ); ?>"><?php esc_html_e( 'More Details', 'backupwordpress' ); ?></a>
 
 								</li>
 
@@ -114,7 +114,7 @@ namespace HM\BackUpWordPress;
 
 							<div>
 
-								<?php esc_html_e( sprintf( __( 'Latest plugin version %s', 'backupwordpress' ), $extension->_edd_sl_version ) ); ?>
+								<?php printf( esc_html__( 'Latest plugin version %s', 'backupwordpress' ), esc_html( $extension->_edd_sl_version ) ); ?>
 
 							</div>
 
@@ -154,7 +154,15 @@ namespace HM\BackUpWordPress;
 
 						<div class="column-updated">
 
-							<strong><?php _e( 'Last Updated:', 'backupwordpress' ); ?></strong> <span title="<?php echo esc_attr( $extension->modified ); ?>"><?php printf( __( '%s ago', 'backupwordpress' ), human_time_diff( strtotime( $extension->modified ) ) ); ?></span>
+							<?php printf(
+								wp_kses(
+									__( '<strong>Last Updated:</strong> %s ago', 'backupwordpress' ),
+									array(
+										'strong' => array(),
+									)
+								),
+								esc_html( human_time_diff( strtotime( $extension->modified ) ) )
+							); ?>
 
 						</div>
 
