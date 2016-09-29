@@ -87,7 +87,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 											data-plugin="<?php echo esc_attr( $extension_path ); ?>"
 											data-slug="<?php echo esc_attr( $extension->slug ); ?>"
 											href="<?php echo esc_url( $update_url ); ?>"
-											aria-label="<?php echo esc_attr( sprintf( __( 'Update %s now', 'backupwordpress' ), $extension->title->rendered ) ) ?>"
+											aria-label="<?php printf( esc_attr__( 'Update %s now', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>"
 											data-name="<?php esc_attr( $extension->title->rendered ); ?>">
 											<?php esc_html_e( 'Update Now', 'backupwordpress' ); ?>
 										</a>
@@ -119,7 +119,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 										<a
 											href="<?php echo esc_url( $activate_url ); ?>"
 											class="button activate-now button-secondary"
-											aria-label="<?php esc_attr( sprintf( __( 'Activate %s', 'backupwordpress' ), $extension->title->rendered ) ); ?>">
+											aria-label="<?php printf( esc_attr__( 'Activate %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>">
 											<?php esc_html_e( 'Activate', 'backupwordpress' ); ?>
 										</a>
 
