@@ -68,76 +68,85 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 						<div class="action-links">
 							<ul class="plugin-action-buttons">
-								<li>
-									<?php
-									// Update Now - Installed and update is available.
-									if (
-										$is_extension_installed &&
-										version_compare( $extension_version, $extension->_edd_sl_version, '<' )
-									) :
 
-										$update_url = wp_nonce_url(
-											self_admin_url( 'update.php?action=upgrade-plugin&plugin=' . $extension_path ),
-											'upgrade-plugin_' . $extension_path
-										);
-										?>
+								<?php
+								if (
+									current_user_can( 'install_plugins' ) ||
+									current_user_can( 'update_plugins' )
+								) : ?>
 
-										<a
-											class="update-now button aria-button-if-js"
-											data-plugin="<?php echo esc_attr( $extension_path ); ?>"
-											data-slug="<?php echo esc_attr( $extension->slug ); ?>"
-											href="<?php echo esc_url( $update_url ); ?>"
-											aria-label="<?php printf( esc_attr__( 'Update %s now', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>"
-											data-name="<?php esc_attr( $extension->title->rendered ); ?>">
-											<?php esc_html_e( 'Update Now', 'backupwordpress' ); ?>
-										</a>
+									<li>
+										<?php
+										// Update Now - Installed and update is available.
+										if (
+											$is_extension_installed &&
+											version_compare( $extension_version, $extension->_edd_sl_version, '<' )
+										) :
 
-									<?php
-									// Active - Installed and activated, but no update.
-									elseif ( $is_extension_installed && $is_extension_active ) : ?>
+											$update_url = wp_nonce_url(
+												self_admin_url( 'update.php?action=upgrade-plugin&plugin=' . $extension_path ),
+												'upgrade-plugin_' . $extension_path
+											);
+											?>
 
-										<button
-											type="button"
-											class="button button-disabled"
-											disabled="disabled">
-											<?php echo esc_html_x( 'Active', 'Plugin status', 'backupwordpress' ); ?>
-										</button>
+											<a
+												class="update-now button aria-button-if-js"
+												data-plugin="<?php echo esc_attr( $extension_path ); ?>"
+												data-slug="<?php echo esc_attr( $extension->slug ); ?>"
+												href="<?php echo esc_url( $update_url ); ?>"
+												aria-label="<?php printf( esc_attr__( 'Update %s now', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>"
+												data-name="<?php esc_attr( $extension->title->rendered ); ?>">
+												<?php esc_html_e( 'Update Now', 'backupwordpress' ); ?>
+											</a>
 
-									<?php
-									// Activate - Installed, but not activated.
-									elseif ( $is_extension_installed && ! $is_extension_active ) :
+										<?php
+										// Active - Installed and activated, but no update.
+										elseif ( $is_extension_installed && $is_extension_active ) : ?>
 
-										$activate_url = add_query_arg( array(
-											'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $extension_path ),
-											'action'   => 'activate',
-											'plugin'   => $extension_path,
-											), network_admin_url( 'plugins.php' ) );
+											<button
+												type="button"
+												class="button button-disabled"
+												disabled="disabled">
+												<?php echo esc_html_x( 'Active', 'Plugin status', 'backupwordpress' ); ?>
+											</button>
 
-										// TODO: Network Activate?
-										?>
+										<?php
+										// Activate - Installed, but not activated.
+										elseif ( $is_extension_installed && ! $is_extension_active ) :
 
-										<a
-											href="<?php echo esc_url( $activate_url ); ?>"
-											class="button activate-now button-secondary"
-											aria-label="<?php printf( esc_attr__( 'Activate %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>">
-											<?php esc_html_e( 'Activate', 'backupwordpress' ); ?>
-										</a>
+											$activate_url = add_query_arg( array(
+												'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $extension_path ),
+												'action'   => 'activate',
+												'plugin'   => $extension_path,
+												), network_admin_url( 'plugins.php' ) );
 
-									<?php
-									// Buy Now - Not installed.
-									else : ?>
+											// TODO: Network Activate?
+											?>
 
-										<a
-											class="install-now button-primary"
-											data-slug="<?php echo esc_attr( $extension->slug ); ?>"
-											href="<?php echo esc_url( $extension->link ); ?>"
-											aria-label="<?php printf( esc_attr__( 'Install %s now', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>
-											data-name="<?php echo esc_attr( $extension->title->rendered ); ?>">
-											<?php printf( esc_html__( 'Buy Now &#36;%s', 'backupwordpress' ), esc_html( $extension->edd_price ) ); ?>
-										</a>
+											<a
+												href="<?php echo esc_url( $activate_url ); ?>"
+												class="button activate-now button-secondary"
+												aria-label="<?php printf( esc_attr__( 'Activate %s', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>">
+												<?php esc_html_e( 'Activate', 'backupwordpress' ); ?>
+											</a>
 
-									<?php endif; ?>
-								</li>
+										<?php
+										// Buy Now - Not installed.
+										else : ?>
+
+											<a
+												class="install-now button-primary"
+												data-slug="<?php echo esc_attr( $extension->slug ); ?>"
+												href="<?php echo esc_url( $extension->link ); ?>"
+												aria-label="<?php printf( esc_attr__( 'Install %s now', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>
+												data-name="<?php echo esc_attr( $extension->title->rendered ); ?>">
+												<?php printf( esc_html__( 'Buy Now &#36;%s', 'backupwordpress' ), esc_html( $extension->edd_price ) ); ?>
+											</a>
+
+										<?php endif; ?>
+									</li>
+
+								<?php endif; ?>
 
 								<li>
 									<a
