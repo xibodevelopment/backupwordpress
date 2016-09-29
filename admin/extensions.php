@@ -1,19 +1,12 @@
 <?php
-
 namespace HM\BackUpWordPress;
-
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
 ?>
 
 <div class="wrap">
-
 	<h1>
-
 		<a class="page-title-action" href="<?php echo esc_url( get_settings_url() ); ?>"><?php esc_html_e( '&larr; Backups', 'backupwordpress' ); ?></a>
-
 		<?php esc_html_e( 'BackUpWordPress Extensions', 'backupwordpress' ); ?>
-
 	</h1>
 
 	<div class="wp-filter">
@@ -43,7 +36,6 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	<p><?php esc_html_e( 'It\'s important to store your backups somewhere other than on your site. Using the extensions below you can easily push your backups to one or more Cloud providers.', 'backupwordpress' ); ?></p>
 
 	<div class="wp-list-table widefat plugin-install">
-
 		<div id="the-list">
 
 			<?php $first = true; ?>
@@ -55,29 +47,18 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 				?>
 
 				<div class="plugin-card plugin-card-<?php echo esc_attr( $extension->slug ); ?>">
-
 					<div class="plugin-card-top">
-
 						<div class="name column-name">
-
 							<h3>
-
 								<a href="<?php echo esc_url( $extension->link ); ?>" class="thickbox">
-
 									<?php echo esc_html( $extension->title->rendered ); ?>
-
-									<img src="<?php echo esc_url( $extension->featured_image_url ); ?>" class="plugin-icon" alt="">
-
+									<img src="<?php echo esc_url( $extension->featured_image_url ); ?>" class="plugin-icon" alt="" />
 								</a>
-
 							</h3>
-
 						</div>
 
 						<div class="action-links">
-
 							<ul class="plugin-action-buttons">
-
 								<li>
 									<?php
 									// Update Now - Installed and update is available.
@@ -124,9 +105,9 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 									) :
 
 										$activate_url = add_query_arg( array(
-											'_wpnonce'    => wp_create_nonce( 'activate-plugin_' . $installed_plugins[ $extension_name_lowcase ]['path'] ),
-											'action'      => 'activate',
-											'plugin'      => $installed_plugins[ $extension_name_lowcase ]['path'],
+											'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $installed_plugins[ $extension_name_lowcase ]['path'] ),
+											'action'   => 'activate',
+											'plugin'   => $installed_plugins[ $extension_name_lowcase ]['path'],
 											), network_admin_url( 'plugins.php' ) );
 
 										// TODO: Network Activate?
@@ -153,11 +134,9 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 										</a>
 
 									<?php endif; ?>
-
 								</li>
 
 								<li>
-
 									<a
 										href="<?php echo esc_url( $extension->link ); ?>"
 										class="thickbox"
@@ -165,19 +144,13 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 										data-title="<?php echo esc_attr( $extension->title->rendered ); ?>">
 										<?php esc_html_e( 'More Details', 'backupwordpress' ); ?>
 									</a>
-
 								</li>
-
 							</ul>
-
 						</div>
 
 						<div class="desc column-description">
-
 							<p><?php echo wp_kses_post( $extension->content->rendered ); ?></p>
-
 						</div>
-
 					</div>
 
 					<?php
@@ -186,12 +159,10 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 					?>
 
 					<div class="plugin-card-bottom" style="<?php echo esc_attr( $style ); ?>">
-
 						<div class="vers column-rating">
 						</div>
 
 						<div class="column-updated">
-
 							<?php printf(
 								wp_kses(
 									__( '<strong>Last Updated:</strong> %s ago', 'backupwordpress' ),
@@ -201,17 +172,11 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 								),
 								esc_html( human_time_diff( strtotime( $extension->modified ) ) )
 							); ?>
-
 						</div>
-
 					</div>
-
 				</div>
 
 			<?php endforeach; ?>
-
 		</div>
-
 	</div>
-
 </div>
