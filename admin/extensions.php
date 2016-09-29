@@ -25,8 +25,8 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	foreach ( get_plugins() as $path => $plugin_info ) {
 		$installed_plugins[ strtolower( $plugin_info['Name'] ) ] = array(
 			'version'   => $plugin_info['Version'],
-			'is_active' => is_plugin_active( $path ),
 			'path'      => $path,
+			'is_active' => is_plugin_active( $path ),
 		);
 	}
 	?>
@@ -44,6 +44,15 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 				$extension_name_lowcase = strtolower( $extension->title->rendered );
 				$is_extension_installed = in_array( $extension_name_lowcase, array_keys( $installed_plugins ) );
+
+				$extension_version  = $is_extension_installed ?
+					$installed_plugins[ $extension_name_lowcase ]['version'] : '';
+
+				$extension_path     = $is_extension_installed ?
+					$installed_plugins[ $extension_name_lowcase ]['path'] : '';
+
+				$is_extension_active = $is_extension_installed ?
+					$installed_plugins[ $extension_name_lowcase ]['is_active'] : false;
 				?>
 
 				<div class="plugin-card plugin-card-<?php echo esc_attr( $extension->slug ); ?>">
@@ -64,18 +73,18 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 									// Update Now - Installed and update is available.
 									if (
 										$is_extension_installed &&
-										version_compare( $installed_plugins[ $extension_name_lowcase ]['version'], $extension->_edd_sl_version, '<' )
+										version_compare( $extension_version, $extension->_edd_sl_version, '<' )
 									) :
 
 										$update_url = wp_nonce_url(
-											self_admin_url( 'update.php?action=upgrade-plugin&plugin=' . $installed_plugins[ $extension_name_lowcase ]['path'] ),
-											'upgrade-plugin_' . $installed_plugins[ $extension_name_lowcase ]['path']
+											self_admin_url( 'update.php?action=upgrade-plugin&plugin=' . $extension_path ),
+											'upgrade-plugin_' . $extension_path
 										);
 										?>
 
 										<a
 											class="update-now button aria-button-if-js"
-											data-plugin="<?php echo esc_attr( $installed_plugins[ $extension_name_lowcase ]['path'] ); ?>"
+											data-plugin="<?php echo esc_attr( $extension_path ); ?>"
 											data-slug="<?php echo esc_attr( $extension->slug ); ?>"
 											href="<?php echo esc_url( $update_url ); ?>"
 											aria-label="<?php echo esc_attr( sprintf( __( 'Update %s now', 'backupwordpress' ), $extension->title->rendered ) ) ?>"
@@ -85,10 +94,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 									<?php
 									// Active - Installed and activated, but no update.
-									elseif (
-										$is_extension_installed &&
-										$installed_plugins[ $extension_name_lowcase ]['is_active']
-									) : ?>
+									elseif ( $is_extension_installed && $is_extension_active ) : ?>
 
 										<button
 											type="button"
@@ -99,15 +105,12 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 									<?php
 									// Activate - Installed, but not activated.
-									elseif (
-										$is_extension_installed &&
-										! $installed_plugins[ $extension_name_lowcase ]['is_active']
-									) :
+									elseif ( $is_extension_installed && ! $is_extension_active ) :
 
 										$activate_url = add_query_arg( array(
-											'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $installed_plugins[ $extension_name_lowcase ]['path'] ),
+											'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $extension_path ),
 											'action'   => 'activate',
-											'plugin'   => $installed_plugins[ $extension_name_lowcase ]['path'],
+											'plugin'   => $extension_path,
 											), network_admin_url( 'plugins.php' ) );
 
 										// TODO: Network Activate?
