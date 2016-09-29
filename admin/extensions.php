@@ -131,7 +131,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 											class="install-now button-primary"
 											data-slug="<?php echo esc_attr( $extension->slug ); ?>"
 											href="<?php echo esc_url( $extension->link ); ?>"
-											aria-label="Install <?php echo esc_attr( $extension->title->rendered ); ?> now"
+											aria-label="<?php printf( esc_attr__( 'Install %s now', 'backupwordpress' ), esc_attr( $extension->title->rendered ) ); ?>
 											data-name="<?php echo esc_attr( $extension->title->rendered ); ?>">
 											<?php printf( esc_html__( 'Buy Now &#36;%s', 'backupwordpress' ), esc_html( $extension->edd_price ) ); ?>
 										</a>
