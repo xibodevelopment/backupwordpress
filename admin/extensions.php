@@ -1,6 +1,5 @@
 <?php
 namespace HM\BackUpWordPress;
-include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 ?>
 
 <div class="wrap">
@@ -20,6 +19,14 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	usort( $extensions_data, function( $a, $b ) {
 		return strcmp( $b->title->rendered, $a->title->rendered );
 	});
+
+	/**
+	 * Include is required for the usage of is_plugin_active()
+	 * to identify if a plugin is currently activated.
+	 * This info is further used to display a correct action button
+	 * depending on plugin's state (i.e. Update Now, Activate, Active).
+	 */
+	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 	$installed_plugins = array();
 	foreach ( get_plugins() as $path => $plugin_info ) {
