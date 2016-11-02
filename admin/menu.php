@@ -55,6 +55,7 @@ function highlight_submenu( $parent_file ) {
 
 	if ( 'tools_page_' . HMBKP_PLUGIN_SLUG . '_extensions' === $screen->id ) {
 
+		// Set the main plugin page to be the active submenu page
 		$submenu_file = HMBKP_PLUGIN_SLUG;
 
 	}
