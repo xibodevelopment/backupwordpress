@@ -450,7 +450,7 @@ function disk_space_low( $backup_size = false ) {
 
 	if ( ! $backup_size ) {
 
-		$site_size = new Site_Size();
+		$site_size = new Site_Size( 'complete', new Excludes() );
 
 		if ( ! $site_size->is_site_size_cached() ) {
 			return false;
