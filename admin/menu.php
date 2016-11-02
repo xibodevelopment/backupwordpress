@@ -42,6 +42,28 @@ function extensions() {
 }
 
 /**
+ * Highlights the 'Backups' submenu item when on the Extentions page
+ *
+ * @param string $parent_file The filename of the parent menu item
+ * @return string $parent_file The filename of the parent menu item
+ */
+function highlight_submenu( $parent_file ) {
+
+	global $submenu_file;
+
+	$screen = get_current_screen();
+
+	if ( 'tools_page_' . HMBKP_PLUGIN_SLUG . '_extensions' === $screen->id ) {
+
+		$submenu_file = HMBKP_PLUGIN_SLUG;
+
+	}
+
+	return $parent_file;
+}
+add_filter( 'parent_file', 'HM\BackUpWordPress\highlight_submenu' );
+
+/**
  * Add a link to the backups page to the plugin action links.
  *
  * @param array $links
