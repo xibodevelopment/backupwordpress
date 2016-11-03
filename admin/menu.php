@@ -42,7 +42,7 @@ function extensions() {
 }
 
 /**
- * Highlights the 'Backups' submenu item when on the Extentions page
+ * Highlights the 'Backups' submenu item when on the Extensions page
  *
  * @param string $submenu_file
  * @return string $submenu_file The slug of the menu item to highlight
