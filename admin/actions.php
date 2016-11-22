@@ -248,9 +248,9 @@ function edit_schedule_submit() {
 		}
 	}
 
-	$schedule_recurrence_type = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] );
-
 	if ( isset( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] ) ) {
+
+		$schedule_recurrence_type = sanitize_text_field( $_POST['hmbkp_schedule_recurrence']['hmbkp_type'] );
 
 		if ( empty( $schedule_recurrence_type ) ) {
 			$errors['hmbkp_schedule_recurrence']['hmbkp_type'] = __( 'Schedule cannot be empty', 'backupwordpress' );
