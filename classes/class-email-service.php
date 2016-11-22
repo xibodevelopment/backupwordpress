@@ -101,9 +101,10 @@ class Email_Service extends Service {
 	/**
 	 * Validate the email and return an error if validation fails
 	 *
-	 * @param  array  &$new_data Array of new data, passed by reference
-	 * @param  array  $old_data  The data we are replacing
-	 * @return null|array        Null on success, array of errors if validation failed
+	 * @param array &$new_data Array of new data, passed by reference.
+	 * @param array $old_data  The data we are replacing.
+	 *
+	 * @return array|null      Null on success, array of errors if validation failed.
 	 */
 	public function update( &$new_data, $old_data ) {
 
@@ -146,7 +147,6 @@ class Email_Service extends Service {
 	 *
 	 * @see  Backup::do_action
 	 * @param  string $action The action received from the backup
-	 * @return void
 	 */
 	public function action( $action, Backup $backup ) {
 

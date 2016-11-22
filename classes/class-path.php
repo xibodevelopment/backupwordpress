@@ -269,7 +269,7 @@ class Path {
 	/**
 	 * Calculate the backup path and create the directory if it doesn't exist.
 	 *
-	 * Tries all possible locations and uses the first one possible
+	 * Tries all possible locations and uses the first one possible.
 	 *
 	 * @return
 	 */
@@ -277,33 +277,29 @@ class Path {
 
 		$paths = array();
 
-		// If we have a custom path then try to use it
+		// If we have a custom path then try to use it.
 		if ( $this->get_custom_path() ) {
 			$paths[] = $this->get_custom_path();
 		}
 
-		// If there is already a backups directory then try to use that
+		// If there is already a backups directory then try to use that.
 		if ( $this->get_existing_path() ) {
 			$paths[] = $this->get_existing_path();
 		}
 
-		// If not then default to a new directory in wp-content
+		// If not then default to a new directory in wp-content.
 		$paths[] = $this->get_default_path();
 
-		// If that didn't work then fallback to a new directory in uploads
+		// If that didn't work then fallback to a new directory in uploads.
 		$paths[] = $this->get_fallback_path();
 
-		// Loop through possible paths, use the first one that exists/can be created and is writable
+		// Loop through possible paths, use the first one that exists/can be created and is writable.
 		foreach ( $paths as $path ) {
-			if ( wp_mkdir_p( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists
+			if ( wp_mkdir_p( $path ) && file_exists( $path ) && wp_is_writable( $path ) ) { // Also handles fixing perms / directory already exists.
+				$this->path = $path;
 				break;
 			}
 		}
-
-		if ( file_exists( $path ) && wp_is_writable( $path ) ) {
-			$this->path = $path;
-		}
-
 	}
 
 	/**
@@ -338,6 +334,7 @@ class Path {
 		// Protect the directory with a .htaccess file on Apache servers
 		if ( $is_apache && function_exists( 'insert_with_markers' ) && ! file_exists( $htaccess ) && wp_is_writable( $this->path ) ) {
 
+			$contents   = array();
 			$contents[] = '# ' . sprintf( __( 'This %s file ensures that other people cannot download your backup files.', 'backupwordpress' ), '.htaccess' );
 			$contents[] = '';
 			$contents[] = '<IfModule mod_rewrite.c>';
@@ -362,7 +359,7 @@ class Path {
 
 		$paths = $this->get_existing_paths();
 
-		if ( ( $paths && $this->get_custom_path() ) || count( $paths ) > 1 ) {
+		if ( ( ! empty( $paths ) && $this->get_custom_path() ) || count( $paths ) > 1 ) {
 			foreach ( $paths as $old_path ) {
 				$this->move_old_backups( $old_path );
 			}
@@ -372,9 +369,9 @@ class Path {
 
 	/**
 	 * Move backup files from an existing directory and the new
-	 * location
+	 * location.
 	 *
-	 * @param string $path 	The path to move the backups from
+	 * @param string $from The path to move the backups from.
 	 */
 	public function move_old_backups( $from ) {
 
