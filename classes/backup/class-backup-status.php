@@ -8,6 +8,7 @@ namespace HM\BackUpWordPress;
 class Backup_Status {
 
 	private $filename = '';
+	private $id;
 
 	public function __construct( $id ) {
 		$this->id = $id;
@@ -18,6 +19,11 @@ class Backup_Status {
 		$this->set_status( $status_message );
 	}
 
+	/**
+	 * Get the filename of the backup.
+	 *
+	 * @return string|null The backup filename.
+	 */
 	public function get_backup_filename() {
 
 		if ( $this->is_started() ) {
@@ -74,7 +80,7 @@ class Backup_Status {
 
 		// If start hasn't been called yet then we wont' have a backup filename
 		if ( ! $this->filename ) {
-			return '';
+			return;
 		}
 
 		$status = json_encode( (object) array(

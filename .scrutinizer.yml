@@ -1,5 +1,5 @@
 filter:
-    excluded_paths: [ 'vendor/*', 'bin/*', 'backdrop/*', 'node_modules/*', 'readme/*', 'tests/*', 'languages/*']
+    excluded_paths: [ 'vendor/*', 'bin/*', 'backdrop/*', 'node_modules/*', 'readme/*', 'tests/*', 'languages/*', 'grunt/*', 'Gruntfile.js', '*.min.*']
 
 before_commands:
     - "composer self-update"

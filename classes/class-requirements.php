@@ -20,10 +20,10 @@ class Requirements {
 	/**
 	 * Get the array of registered requirements
 	 *
-	 * @param bool $group
+	 * @param string $group
 	 * @return array
 	 */
-	public static function get_requirements( $group = false ) {
+	public static function get_requirements( $group = '' ) {
 
 		$requirements = $group ? self::$requirements[ $group ] : self::$requirements;
 
@@ -36,7 +36,7 @@ class Requirements {
 	/**
 	 * Get the requirement groups
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public static function get_requirement_groups() {
 		return array_keys( self::$requirements );
@@ -47,7 +47,6 @@ class Requirements {
 	 *
 	 * @param        $class
 	 * @param string $group
-	 * @return WP_Error
 	 */
 	public static function register( $class, $group = 'misc' ) {
 		self::$requirements[ $group ][] = $class;
@@ -56,15 +55,11 @@ class Requirements {
 	/**
 	 * Instantiate the individual requirement classes
 	 *
-	 * @access private
 	 * @param string $class
 	 * @return array An array of instantiated classes
 	 */
 	private static function instantiate( $class ) {
-
 		$$class = new $class;
-
 		return $$class;
-
 	}
 }

@@ -412,10 +412,6 @@ function is_backup_possible() {
 		return false;
 	}
 
-	if ( disk_space_low() ) {
-		return false;
-	}
-
 	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
 		return false;
 	}

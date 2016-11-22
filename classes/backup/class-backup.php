@@ -137,6 +137,8 @@ class Backup {
 	 * Perform the backup by iterating through each Backup_Engine in turn until
 	 * we find one which works. If a backup filename or any excludes have been
 	 * set then those are passed to each Backup_Engine.
+	 *
+	 * @return Backup_Engine|false The successful backup engine or false on failure.
 	 */
 	public function perform_backup( array $backup_engines ) {
 
@@ -178,7 +180,7 @@ class Backup {
 	 * issues with the backup process.
 	 *
 	 * @param  string $context The context for the warning.
-	 * @param  string $error   The warning that was encountered.
+	 * @param  string $warning The warning that was encountered.
 	 */
 	public function warning( $context, $warning ) {
 

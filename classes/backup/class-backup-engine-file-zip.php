@@ -12,7 +12,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	/**
 	 * The path to the zip executable
 	 *
-	 * @var string
+	 * @var string|false
 	 */
 	private $zip_executable_path = '';
 
@@ -73,6 +73,8 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			return false;
 		}
 
+		$command = array();
+
 		// cd to the site root
 		$command[] = 'cd ' . escapeshellarg( Path::get_root() );
 
@@ -122,7 +124,7 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	 */
 	public function get_exclude_string() {
 
-		if ( ! $this->excludes ) {
+		if ( empty( $this->excludes ) ) {
 			return '';
 		}
 
