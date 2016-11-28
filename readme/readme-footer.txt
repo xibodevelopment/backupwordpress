@@ -54,6 +54,15 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.6.3-beta / 2016-11-28
+
+* Fix issue where low disk space caused the admin interface to be unavailable
+* Improves file size calculations
+* Improves remaining disk space calculations
+* Improves file exclusion methods
+* Misc admin interface improvements
+* Misc code quality improvements and bug fixes
+
 ### 3.6.2 / 2016-08-02
 
 * Improves admin performance.
