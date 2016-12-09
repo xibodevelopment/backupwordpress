@@ -84,9 +84,9 @@ class Notices {
 
 			$new_notices = $notices = $this->get_persistent_notices();
 
-			// Make sure we merge in any existing notices
+			// Make sure we merge new notices into to any existing notices
 			if ( ! empty( $notices[ $context ] ) ) {
-				$new_notices[ $context ] = array_merge( $notices[ $context ], $messages );
+				$new_notices[ $context ] = array_unique( array_merge( $new_notices[ $context ], $messages ) );
 			} else {
 				$new_notices[ $context ] = $messages;
 			}
