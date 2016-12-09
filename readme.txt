@@ -1,9 +1,9 @@
 === BackUpWordPress ===
-Contributors: humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier
+Contributors: humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, samantha-miller
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
-Tested up to: 4.6.1
-Stable tag: 3.6.3-beta
+Tested up to: 4.7
+Stable tag: 3.6.3.1-beta
 
 Simple automated backups of your WordPress-powered website.
 
@@ -158,9 +158,10 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
-### 3.6.3-beta / 2016-11-28
+### 3.6.3.1-beta / 2016-12-09
 
 * Fix issue where low disk space caused the admin interface to be unavailable
+* Fix issue where admin notices were causing databases and error logs to fill up
 * Improves file size calculations
 * Improves remaining disk space calculations
 * Improves file exclusion methods
