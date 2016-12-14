@@ -3,7 +3,7 @@ Contributors: humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, t
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.7
-Stable tag: 3.6.3.1-beta
+Stable tag: 3.6.3
 
 Simple automated backups of your WordPress-powered website.
 

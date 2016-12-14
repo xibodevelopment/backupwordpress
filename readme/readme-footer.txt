@@ -54,7 +54,7 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
-### 3.6.3.1-beta / 2016-12-09
+### 3.6.3 / 2016-12-14
 
 * Fix issue where low disk space caused the admin interface to be unavailable
 * Fix issue where admin notices were causing databases and error logs to fill up
