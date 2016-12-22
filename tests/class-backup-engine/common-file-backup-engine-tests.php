@@ -98,6 +98,31 @@ abstract class Common_File_Backup_Engine_Tests extends \HM_Backup_UnitTestCase {
 
 	}
 
+	public function test_backup_with_recursive_symlink_directory() {
+
+		if ( ! function_exists( 'symlink' ) ) {
+			$this->markTestSkipped( 'symlink function not defined' );
+		}
+
+		$this->symlink = $this->test_data . '/symlink';
+
+		if ( ! @symlink( trailingslashit( $this->test_data ), $this->symlink ) ) {
+			$this->markTestSkipped( 'Couldn\'t create symlink to test with' );
+		}
+
+		$this->assertFileExists( $this->symlink );
+
+		$this->backup->backup();
+
+		$this->assertFileExists( $this->backup->get_backup_filepath() );
+
+		$this->assertArchiveContains( $this->backup->get_backup_filepath(), array( basename( $this->symlink ) ) );
+		$this->assertArchiveFileCount( $this->backup->get_backup_filepath(), 5 );
+
+		$this->assertEmpty( $this->backup->get_errors() );
+
+	}
+
 	public function test_backup_with_symlink_file() {
 
 		if ( ! function_exists( 'symlink' ) ) {
