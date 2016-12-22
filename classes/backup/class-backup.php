@@ -51,6 +51,30 @@ class Backup {
 
 	}
 
+	public function get_metadata() {
+
+		// Calculate the total number of posts
+		$post_count = (array) wp_count_posts();
+		unset( $post_count['auto-draft'] );
+		$post_count = array_sum( $post_count );
+
+		// Calculate the total number of pages
+		$page_count = (array) wp_count_posts();
+		unset( $page_count['auto-draft'] );
+		$page_count = array_sum( $page_count );
+
+		$metadata = json_encode( (object) array(
+			'type'       => $this->type,
+			'started'    => time(),
+			'wp_version' => get_bloginfo( 'version', true ),
+			'post_count' => $post_count,
+			'page_count' => $page_count,
+		) );
+
+		return $metadata;
+
+	}
+
 	public function backup_database() {
 
 		if ( $this->status ) {
@@ -85,6 +109,7 @@ class Backup {
 		// Set the file backup engine settings
 		foreach ( $file_backup_engines as &$backup_engine ) {
 			$backup_engine->set_backup_filename( $this->backup_filename );
+			$backup_engine->set_backup_comment( $this->get_metadata() );
 			$backup_engine->set_excludes( new Excludes( array( '*.zip', 'index.html', '.htaccess', '.*-running', '.files' ) ) );
 		}
 
@@ -120,6 +145,7 @@ class Backup {
 		// Set the file backup engine settings
 		foreach ( $backup_engines as &$backup_engine ) {
 			$backup_engine->set_backup_filename( $this->backup_filename );
+			$backup_engine->set_backup_comment( $this->get_metadata() );
 			if ( $this->excludes ) {
 				$backup_engine->set_excludes( $this->excludes );
 			}

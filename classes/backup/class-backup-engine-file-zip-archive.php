@@ -11,6 +11,10 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 		parent::__construct();
 	}
 
+	public function set_backup_comment( $comment ) {
+		$this->backup_comment = $comment;
+	}
+
 	public function backup() {
 
 		if ( ! class_exists( 'ZipArchive' ) ) {
@@ -21,6 +25,10 @@ class Zip_Archive_File_Backup_Engine extends File_Backup_Engine {
 
 		// Attempt to create the zip file.
 		if ( $zip->open( $this->get_backup_filepath(), \ZIPARCHIVE::CREATE ) ) {
+
+			if ( ! empty( $this->backup_comment ) ) {
+				$zip->setArchiveComment( $this->backup_comment );
+			}
 
 			foreach ( $this->get_files() as $file ) {
 

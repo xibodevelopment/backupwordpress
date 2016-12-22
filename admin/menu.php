@@ -15,14 +15,14 @@ function admin_menu() {
 	}
 
 	add_submenu_page( null, __( 'BackUpWordPress Extensions', 'backupwordpress' ), __( 'Extensions', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG . '_extensions', 'HM\BackUpWordPress\extensions' );
+	add_submenu_page( null, __( 'BackUpWordPress Backup Details', 'backupwordpress' ), __( 'Backup Details', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG . '_backup_details', 'HM\BackUpWordPress\backup_details' );
 
 }
 add_action( 'network_admin_menu', 'HM\BackUpWordPress\admin_menu' );
 add_action( 'admin_menu', 'HM\BackUpWordPress\admin_menu' );
 
 /**
- * Load the backups admin page
- * when the menu option is clicked
+ * Load the backups admin page when the url is loaded
  *
  * @return null
  */
@@ -32,13 +32,21 @@ function manage_backups() {
 
 
 /**
- * Load the backups admin page
- * when the menu option is clicked
+ * Load the extensions page when the url is loaded
  *
  * @return null
  */
 function extensions() {
 	require_once( HMBKP_PLUGIN_PATH . 'admin/extensions.php' );
+}
+
+/**
+ * Load the backup details page when the url is loaded
+ *
+ * @return null
+ */
+function backup_details() {
+	require_once( HMBKP_PLUGIN_PATH . 'admin/backup-details.php' );
 }
 
 /**

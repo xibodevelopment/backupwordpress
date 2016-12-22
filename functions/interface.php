@@ -29,6 +29,8 @@ function get_backup_row( $file, Scheduled_Backup $schedule ) {
 
 		<td>
 
+			<a href="<?php echo esc_url( add_query_arg( 'hmbkp_backup_archive', $encoded_file, get_settings_url( HMBKP_PLUGIN_SLUG . '_backup_details' ) ) ); ?>">Details</a> |
+
 			<?php if (  is_path_accessible( Path::get_path() )  ) : ?>
 				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php _e( 'Download', 'backupwordpress' ); ?></a> |
 			<?php endif; ?>

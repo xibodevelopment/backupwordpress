@@ -16,6 +16,8 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 	 */
 	private $zip_executable_path = '';
 
+	private $backup_comment = '';
+
 	public function __construct() {
 		parent::__construct();
 	}
@@ -62,12 +64,18 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 
 	}
 
+	public function set_backup_comment( $comment ) {
+		$this->backup_comment = $comment;
+	}
+
 	/**
 	 * Perform the file backup.
 	 *
 	 * @return bool Whether the backup completed successfully or not.
 	 */
 	public function backup() {
+
+		return false;
 
 		if ( ! $this->get_zip_executable_path() ) {
 			return false;
@@ -87,7 +95,13 @@ class Zip_File_Backup_Engine extends File_Backup_Engine {
 			$command[] = '-x ' . $this->get_exclude_string();
 		}
 
+		if ( ! empty( $this->backup_comment ) ) {
+			$command[] = '-z ' . $this->backup_comment;
+		}
+
 		$command = implode( ' ', $command );
+
+		error_log( $command );
 
 		$process = new Process( $command );
 		$process->setTimeout( HOUR_IN_SECONDS );
