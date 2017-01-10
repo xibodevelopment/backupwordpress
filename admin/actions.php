@@ -640,8 +640,9 @@ function ajax_cron_test() {
 				/* translators: 1: wp-cron.php 2: Error messages 3: URL to plugin's FAQ page in wordpress.org plugin directory */
 				__( '<strong>BackUpWordPress has detected a problem.</strong> %1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the <a href="%3$s">FAQ</a> for more details.', 'backupwordpress' ),
 				array(
-					'strong',
-					'a' => array(
+					'strong' => array(),
+					'code'   => array(),
+					'a'      => array(
 						'href' => array(),
 					),
 				)
@@ -664,8 +665,9 @@ function ajax_cron_test() {
 				/* translators: 1: wp-cron.php 2: Error messages 3: URL to plugin's FAQ page in wordpress.org plugin directory */
 				__( '<strong>BackUpWordPress has detected a problem.</strong> %1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups, and more generally relies on HTTP loopback connections not being blocked for manual backups. See the <a href="%3$s">FAQ</a> for more details.', 'backupwordpress' ),
 				array(
-					'strong',
-					'a' => array(
+					'strong' => array(),
+					'code'   => array(),
+					'a'      => array(
 						'href' => array(),
 					),
 				)
