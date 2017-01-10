@@ -139,21 +139,6 @@ var BackUpWordPressAdmin = (function($){
 			);
 		} );
 
-		jQuery( document ).one( 'click', '.hmbkp_send_error_via_email', function ( e ) {
-
-			e.preventDefault();
-
-			jQuery( this ).addClass( 'hmbkp-ajax-loading' ).attr( 'disabled', 'disabled' );
-
-			jQuery.post(
-					ajaxurl,
-					{'nonce': hmbkp.nonce, 'action': 'hmbkp_email_error', 'hmbkp_error': data},
-					function () {
-						//jQuery.colorbox.close();
-					}
-			);
-
-		} );
 	}
 
 	function hmbkpToggleScheduleFields( recurrence ) {
@@ -213,4 +198,4 @@ var BackUpWordPressAdmin = (function($){
 
 })(jQuery);
 
-jQuery( document ).ready(BackUpWordPressAdmin.init);
+jQuery( document ).ready( BackUpWordPressAdmin.init );

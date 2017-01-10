@@ -233,9 +233,7 @@ function edit_schedule_submit() {
 	$schedule = new Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
 	$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
-	$errors = array();
-
-	$settings = array();
+	$errors = $settings = array();
 
 	if ( isset( $_POST['hmbkp_schedule_type'] ) ) {
 
@@ -372,7 +370,7 @@ function edit_schedule_submit() {
 	// Remove any old backups in-case max backups was reduced
 	$schedule->delete_old_backups();
 
-	if ( $errors ) {
+	if ( ! empty( $errors ) ) {
 		foreach ( $errors as $error ) {
 			add_settings_error( $error );
 		}
@@ -380,7 +378,7 @@ function edit_schedule_submit() {
 
 	$redirect = remove_query_arg( array( 'hmbkp_panel', 'action' ), wp_get_referer() );
 
-	if ( $errors ) {
+	if ( ! empty( $errors ) ) {
 		$redirect = wp_get_referer();
 	}
 

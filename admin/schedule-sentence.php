@@ -109,8 +109,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 endswitch;
 
-$server = '<span title="' . esc_attr( Path::get_path() ) . '">' . esc_html__( 'this server', 'backupwordpress' ) . '</span>';
-$server = '<code>' . esc_attr( str_replace( Path::get_home_path(), '', Path::get_path() ) ) . '</code>';
+$server = '<code title="' . __( 'Check the help tab to learn how to change where your backups are stored.', 'backupwordpress' ) . '">' . esc_attr( str_replace( Path::get_home_path(), '', Path::get_path() ) ) . '</code>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
@@ -172,7 +171,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 		$sentence .= ' ' . $email_msg;
 	}
 
-	if ( $services ) {
+	if ( ! empty( $services ) ) {
 		$sentence .= ' ' . sprintf(
 			/* translators: List of available services for storing backups */
 			esc_html__( 'Send a copy of each backup to %s.', 'backupwordpress' ),
@@ -224,5 +223,4 @@ function get_site_size_text( Scheduled_Backup $schedule ) {
 			esc_html__( 'calculating the size of your site&hellip;', 'backupwordpress' )
 		);
 	}
-
 }
