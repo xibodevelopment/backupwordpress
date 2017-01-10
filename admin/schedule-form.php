@@ -39,18 +39,18 @@ clear_settings_errors();
 			<tr valign="top">
 
 				<th scope="row">
-					<label for="hmbkp_schedule_type"><?php _e( 'Backup', 'backupwordpress' ); ?></label>
+					<label for="hmbkp_schedule_type"><?php esc_html_e( 'Backup', 'backupwordpress' ); ?></label>
 				</th>
 
 				<td>
 
 					<select name="hmbkp_schedule_type" id="hmbkp_schedule_type">
 
-						<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php _e( 'Both Database &amp; files', 'backupwordpress' ); ?></option>
+						<option<?php selected( $schedule->get_type(), 'complete' ); ?> value="complete"><?php esc_html_e( 'Both Database &amp; files', 'backupwordpress' ); ?></option>
 
-						<option<?php selected( $schedule->get_type(), 'file' ); ?> value="file"><?php _e( 'Files only', 'backupwordpress' ); ?></option>
+						<option<?php selected( $schedule->get_type(), 'file' ); ?> value="file"><?php esc_html_e( 'Files only', 'backupwordpress' ); ?></option>
 
-						<option<?php selected( $schedule->get_type(), 'database' ); ?> value="database"><?php _e( 'Database only', 'backupwordpress' ); ?></option>
+						<option<?php selected( $schedule->get_type(), 'database' ); ?> value="database"><?php esc_html_e( 'Database only', 'backupwordpress' ); ?></option>
 
 					</select>
 
@@ -61,14 +61,14 @@ clear_settings_errors();
 			<tr>
 
 				<th scope="row">
-					<label for="hmbkp_schedule_recurrence_type"><?php _e( 'Schedule', 'backupwordpress' ); ?></label>
+					<label for="hmbkp_schedule_recurrence_type"><?php esc_html_e( 'Schedule', 'backupwordpress' ); ?></label>
 				</th>
 
 				<td>
 
 					<select name="hmbkp_schedule_recurrence[hmbkp_type]" id="hmbkp_schedule_recurrence_type">
 
-						<option value="manually"><?php _e( 'Manual Only', 'backupwordpress' ); ?></option>
+						<option value="manually"><?php esc_html_e( 'Manual Only', 'backupwordpress' ); ?></option>
 
 						<?php foreach ( get_cron_schedules() as $cron_schedule => $cron_details ) : ?>
 
@@ -95,7 +95,7 @@ clear_settings_errors();
 			<tr id="start-day" class="recurring-setting">
 
 				<th scope="row">
-					<label for="hmbkp_schedule_start_day_of_week"><?php _e( 'Start Day', 'backupwordpress' ); ?></label>
+					<label for="hmbkp_schedule_start_day_of_week"><?php esc_html_e( 'Start Day', 'backupwordpress' ); ?></label>
 				</th>
 
 				<td>
@@ -127,7 +127,7 @@ clear_settings_errors();
 			<tr id="start-date" class="recurring-setting">
 
 				<th scope="row">
-					<label for="hmbkp_schedule_start_day_of_month"><?php _e( 'Start Day of Month', 'backupwordpress' ); ?></label>
+					<label for="hmbkp_schedule_start_day_of_month"><?php esc_html_e( 'Start Day of Month', 'backupwordpress' ); ?></label>
 				</th>
 
 				<td>
@@ -139,7 +139,7 @@ clear_settings_errors();
 			<tr id="schedule-start" class="recurring-setting">
 
 				<th scope="row">
-					<label for="hmbkp_schedule_start_hours"><?php _e( 'Start Time', 'backupwordpress' ); ?></label>
+					<label for="hmbkp_schedule_start_hours"><?php esc_html_e( 'Start Time', 'backupwordpress' ); ?></label>
 				</th>
 
 				<td>
@@ -148,17 +148,17 @@ clear_settings_errors();
 
 						<label for="hmbkp_schedule_start_hours"><input type="number" min="0" max="23" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_hours]" id="hmbkp_schedule_start_hours" value="<?php echo esc_attr( $start_date_array['hour'] ); ?>">
 
-						<?php _e( 'Hours', 'backupwordpress' ); ?></label>
+						<?php esc_html_e( 'Hours', 'backupwordpress' ); ?></label>
 
 						<label for="hmbkp_schedule_start_minutes"><input type="number" min="0" max="59" step="1" name="hmbkp_schedule_recurrence[hmbkp_schedule_start_minutes]" id="hmbkp_schedule_start_minutes" value="<?php echo esc_attr( $start_date_array['minute'] ); ?>">
 
-						<?php _e( 'Minutes', 'backupwordpress' ); ?></label>
+						<?php esc_html_e( 'Minutes', 'backupwordpress' ); ?></label>
 
 					</span>
 
 					<p class="description">
 						<?php esc_html_e( '24-hour format.', 'backupwordpress' ); ?>
-						<span class="twice-js <?php if ( $schedule->get_reoccurrence() !== 'fortnightly' ) { ?> hidden<?php } ?>"><?php _e( 'The second backup will run 12 hours after the first.', 'backupwordpress' ); ?><span>
+						<span class="twice-js <?php if ( $schedule->get_reoccurrence() !== 'fortnightly' ) { ?> hidden<?php } ?>"><?php esc_html_e( 'The second backup will run 12 hours after the first.', 'backupwordpress' ); ?><span>
 					</p>
 
 				</td>
@@ -168,7 +168,7 @@ clear_settings_errors();
 			<tr>
 
 				<th scope="row">
-					<label for="hmbkp_schedule_max_backups"><?php _e( 'Number of backups to store on this server', 'backupwordpress' ); ?></label>
+					<label for="hmbkp_schedule_max_backups"><?php esc_html_e( 'Number of backups to store on this server', 'backupwordpress' ); ?></label>
 				</th>
 
 				<td>

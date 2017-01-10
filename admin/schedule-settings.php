@@ -8,17 +8,17 @@ if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 
 		<?php if ( is_backup_possible() ) : ?>
 
-			<a class="hmbkp-run" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-ajax.php' ) ), 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' ) ); ?>"><?php _e( 'Run now', 'backupwordpress' ); ?></a>  |
+			<a class="hmbkp-run" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_run_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-ajax.php' ) ), 'hmbkp_run_schedule', 'hmbkp_run_schedule_nonce' ) ); ?>"><?php esc_html_e( 'Run now', 'backupwordpress' ); ?></a>  |
 
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings', 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ), 'hmbkp-edit-schedule' ); ?>"><?php _e( 'Settings', 'backupwordpress' ); ?></a> |
+		<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_settings', 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ), 'hmbkp-edit-schedule' ); ?>"><?php esc_html_e( 'Settings', 'backupwordpress' ); ?></a> |
 
 		<?php
 
 		// Only show excludes if we are backing up files
 		if ( 'database' !== $schedule->get_type() ) : ?>
-			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes', 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ) ); ?>"><?php _e( 'Excludes', 'backupwordpress' ); ?></a> |
+			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'hmbkp_edit_schedule', 'hmbkp_panel' => 'hmbkp_edit_schedule_excludes', 'hmbkp_schedule_id' => $schedule->get_id() ), get_settings_url() ) ); ?>"><?php esc_html_e( 'Excludes', 'backupwordpress' ); ?></a> |
 		<?php endif; ?>
 
 		<?php foreach ( Services::get_services( $schedule ) as $service ) :
@@ -31,7 +31,7 @@ if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 
 		<?php endforeach; ?>
 
-		<a class="delete-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' ) ); ?>"><?php _e( 'Delete', 'backupwordpress' ); ?></a>
+		<a class="delete-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' ) ); ?>"><?php esc_html_e( 'Delete', 'backupwordpress' ); ?></a>
 
 	</div>
 
