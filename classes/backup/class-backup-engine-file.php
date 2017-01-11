@@ -14,7 +14,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 	/**
 	 * The array of excludes rules
 	 *
-	 * @var array
+	 * @var Excludes
 	 */
 	protected $excludes;
 
@@ -38,7 +38,7 @@ abstract class File_Backup_Engine extends Backup_Engine {
 	/**
 	 * Set the excludes rules for the backup.
 	 *
-	 * @param array $excludes The exclude rules.
+	 * @param Excludes $excludes The exclude rules.
 	 */
 	public function set_excludes( Excludes $excludes ) {
 		$this->excludes = $excludes;
@@ -53,13 +53,13 @@ abstract class File_Backup_Engine extends Backup_Engine {
 	 * exclude rules.
 	 *
 	 * @uses Finder
-	 * @return Finder The Finder iterator of all files to be included
+	 * @return SplFileInfo[] The array of all files to be included
 	 */
 	public function get_files() {
 
 		$finder = new Finder();
 
-		$finder->followLinks( true );
+		$finder->followLinks(); // defaults to true
 		$finder->ignoreDotFiles( false );
 		$finder->ignoreVCS( true );
 		$finder->ignoreUnreadableDirs( true );

@@ -181,10 +181,10 @@ clear_settings_errors();
 
 						<?php
 
-						$site_size = new Site_Size;
+						$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
 						if ( $site_size->is_site_size_cached() ) :
-							printf( __( 'This schedule will store a maximum of %s of backups.', 'backupwordpress' ), '<code>' . esc_html( size_format( $site_size->get_site_size( $schedule->get_type(), $schedule->get_excludes() ) * $schedule->get_max_backups() ) ) . '</code>' );
+							printf( __( 'This schedule will store a maximum of %s of backups.', 'backupwordpress' ), '<code>' . esc_html( size_format( $site_size->get_site_size() * $schedule->get_max_backups() ) ) . '</code>' );
 						endif; ?>
 
 					</p>

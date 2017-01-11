@@ -15,6 +15,7 @@ class Backup_Status {
 	 * @var string
 	 */
 	private $filename = '';
+	private $id;
 
 	/**
 	 * [$lock_handler description]
