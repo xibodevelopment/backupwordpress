@@ -1,18 +1,18 @@
 <p><strong><?php esc_html_e( 'Where does BackUpWordPress store the backup files?', 'backupwordpress' ); ?></strong></p>
 
-<p><?php echo wp_kses_post( __( 'Backups are stored on your server in <code>/wp-content/backups</code>, you can change the directory.', 'backupwordpress' ) ); ?></p>
+<p><?php echo whitelist_html( __( 'Backups are stored on your server in <code>/wp-content/backups</code>, you can change the directory.', 'backupwordpress' ), 'code' ); ?></p>
 
 <p><?php esc_html_e( 'Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.', 'backupwordpress' ); ?></p>
 
 <p><strong><?php esc_html_e( 'What if I want to back up my site to another destination?', 'backupwordpress' ); ?></strong></p>
 
-<p><?php echo wp_kses_post( __( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: <a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin" title="BackUpWordPress Homepage" target="_blank">https://bwp.hmn.md</a>', 'backupwordpress' ) ); ?></p>
+<p><?php echo whitelist_html( __( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: <a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin" title="BackUpWordPress Homepage" target="_blank">https://bwp.hmn.md</a>', 'backupwordpress' ), 'a' ); ?></p>
 
 <p><strong><?php esc_html_e( 'How do I restore my site from a backup?', 'backupwordpress' ); ?></strong></p>
 
-<p><?php echo wp_kses_post( __( 'You need to download the latest backup file either by clicking download on the backups page or via <code>FTP</code>. <code>Unzip</code> the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely <code>phpMyAdmin</code>).', 'backupwordpress' ) ); ?></p>
+<p><?php echo whitelist_html( __( 'You need to download the latest backup file either by clicking download on the backups page or via <code>FTP</code>. <code>Unzip</code> the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely <code>phpMyAdmin</code>).', 'backupwordpress' ), 'code' ); ?></p>
 
-<p><?php echo wp_kses_post( __( 'See this guide for more details - <a href="https://bwp.hmn.md/support-center/restore-backup/" title="Go to support center" target="_blank">How to restore from backup</a>.', 'backupwordpress' ) ); ?></p>
+<p><?php echo whitelist_html( __( 'See this guide for more details - <a href="https://bwp.hmn.md/support-center/restore-backup/" title="Go to support center" target="_blank">How to restore from backup</a>.', 'backupwordpress' ), 'a' ); ?></p>
 
 <p><strong><?php esc_html_e( 'Does BackUpWordPress back up the backups directory?', 'backupwordpress' ); ?></strong></p>
 
@@ -32,7 +32,7 @@
 
 <p><strong><?php esc_html_e( 'What do I do if I get the wp-cron error message?', 'backupwordpress' ); ?></strong></p>
 
-<p><?php echo wp_kses_post( __( 'The issue is that your <code>wp-cron.php</code> is not returning a <code>200</code> response when hit with a HTTP request originating from your own server, it could be several things. In most cases, it\'s an issue with the server / site.', 'backupwordpress' ) ); ?></p>
+<p><?php echo whitelist_html( __( 'The issue is that your <code>wp-cron.php</code> is not returning a <code>200</code> response when hit with a HTTP request originating from your own server, it could be several things. In most cases, it\'s an issue with the server / site.', 'backupwordpress' ), 'code' ); ?></p>
 
 <p><?php esc_html_e( 'There are some things you can test to confirm this is the issue.', 'backupwordpress' ); ?></p>
 
@@ -40,15 +40,15 @@
 	<li><?php esc_html_e( 'Are scheduled posts working? (They use wp-cron as well.)', 'backupwordpress' ); ?></li>
 	<li><?php esc_html_e( 'Are you hosted on Heart Internet? (wp-cron may not be supported by Heart Internet, see below for work-around.)', 'backupwordpress' ); ?></li>
 	<li><?php esc_html_e( 'If you click manual backup, does it work?', 'backupwordpress' ); ?></li>
-	<li><?php echo wp_kses_post( __( 'Try adding <code>define( \'ALTERNATE_WP_CRON\', true );</code> to your <code>wp-config.php</code>. Do automatic backups work?', 'backupwordpress' ) ); ?></li>
+	<li><?php echo whitelist_html( __( 'Try adding <code>define( \'ALTERNATE_WP_CRON\', true );</code> to your <code>wp-config.php</code>. Do automatic backups work?', 'backupwordpress' ), 'a' ); ?></li>
 	<li><?php esc_html_e( 'Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won\'t work until you remove it. If you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ); ?></li>
 </ul>
 
-<p><?php wp_kses_post( __( 'Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) ); ?></p>
+<p><?php whitelist_html( __( 'Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ), 'a' ); ?></p>
 
 <p><strong><?php esc_html_e( 'How to get BackUpWordPress working in Heart Internet', 'backupwordpress' ); ?></strong></p>
 
-<p><?php wp_kses_post( __( 'The script to be entered into the Heart Internet cPanel is: <code>/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php</code> (note the space between php5 and the location of the file). The file <code>wp-cron.php</code> <code>chmod</code> must be set to <code>711</code>.', 'backupwordpress' ) ); ?></p>
+<p><?php whitelist_html( __( 'The script to be entered into the Heart Internet cPanel is: <code>/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php</code> (note the space between php5 and the location of the file). The file <code>wp-cron.php</code> <code>chmod</code> must be set to <code>711</code>.', 'backupwordpress' ), 'code' ); ?></p>
 
 <p><strong><?php esc_html_e( 'My backups seem to be failing?', 'backupwordpress' ); ?></strong></p>
 

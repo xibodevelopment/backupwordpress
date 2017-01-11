@@ -184,7 +184,7 @@ clear_settings_errors();
 						$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
 						if ( $site_size->is_site_size_cached() ) :
-							echo wp_kses_post( sprintf( __( 'This schedule will store a maximum of %s of backups.', 'backupwordpress' ), '<code>' . esc_html( size_format( $site_size->get_site_size() * $schedule->get_max_backups() ) ) . '</code>' ) );
+							echo whitelist_html( sprintf( __( 'This schedule will store a maximum of %s of backups.', 'backupwordpress' ), '<code>' . esc_html( size_format( $site_size->get_site_size() * $schedule->get_max_backups() ) ) . '</code>' ), 'code' );
 						endif; ?>
 
 					</p>
