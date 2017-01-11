@@ -127,7 +127,9 @@ class Backup_Status {
 
 			$lock_handler = new LockHandler( basename( $this->get_status_filepath() ), Path::get_path() );
 
-			return ! $lock_handler->lock();
+			// Determine whether a lock has been acquired and return the result as a status.
+			// True if process is still running, false if no lock was acquired.
+			return $lock_handler->lock();
 		}
 
 		// If the backup is started and we don't support file locks then we have to assume we're still running.
@@ -189,7 +191,13 @@ class Backup_Status {
 			return;
 		}
 
-		if ( ! isset( $error['type'] ) || ! defined( 'E_ERROR' ) || E_ERROR !== $error['type'] ) {
+		if (
+			! isset( $error['type'] )
+			|| ! defined( 'E_ERROR' )
+			|| ! defined( 'E_USER_ERROR' )
+			|| E_ERROR !== $error['type']
+			|| E_USER_ERROR !== $error['type']
+		) {
 			return;
 		}
 
