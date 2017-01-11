@@ -2,10 +2,13 @@
 
 <h2><?php esc_html_e( 'Enable BackUpWordPress Support', 'backupwordpress' ); ?></h2>
 
-<p class="howto"><?php printf(
-	/* translators: Link to Intercom site */
-	esc_html__( 'BackUpWordPress uses %s to provide support. In addition to allowing you to send and receive messages we also send the following server information along with your requests:', 'backupwordpress' ),
-	'<a target="blank" href="https://www.intercom.io">Intercom</a>'
+<p class="howto">
+	<?php whitelist_html(
+		printf(
+			/* translators: Link to Intercom site */
+			__( 'BackUpWordPress uses %s to provide support. In addition to allowing you to send and receive messages we also send the following server information along with your requests:', 'backupwordpress' ),
+			'<a target="blank" href="https://www.intercom.io">Intercom</a>'
+		), 'a'
 	); ?>
 </p>
 
