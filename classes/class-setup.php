@@ -28,7 +28,7 @@ class HMBKP_Setup {
 
 		if ( ! self::meets_requirements() ) {
 
-			wp_die( self::get_notice_message(), __( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
+			wp_die( self::get_notice_message(), esc_html__( 'BackUpWordPress', 'backupwordpress' ), array( 'back_link' => true ) );
 
 		}
 
