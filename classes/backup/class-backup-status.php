@@ -15,16 +15,27 @@ class Backup_Status {
 	 * @var string
 	 */
 	private $filename = '';
-	private $id;
 
 	/**
-	 * [$lock_handler description]
+	 * Unique ID for the current backup job.
+	 *
+	 * @var string
+	 */
+	private $id = '';
+
+	/**
+	 * Instance of Symfony\Component\Filesystem\LockHandler.
 	 *
 	 * @var LockHandler
 	 */
 	private $lock_handler = '';
 
-	private $callback;
+	/**
+	 * Optional callback to log message outside of status class.
+	 *
+	 * @var mixed string || array
+	 */
+	private $callback = '';
 
 	/**
 	 * @param string $id The unique id for the backup job.
@@ -96,6 +107,11 @@ class Backup_Status {
 		return (bool) file_exists( $this->get_status_filepath() );
 	}
 
+	/**
+	 * Check whether a backup is currently running or not.
+	 *
+	 * @return bool
+	 */
 	public function is_running() {
 
 		if ( ! $this->is_started() ) {
@@ -284,6 +300,11 @@ class Backup_Status {
 		return Path::get_path() . '/.backup-' . $this->id . '-running';
 	}
 
+	/**
+	 * Set a callback to log messages externally of this class.
+	 *
+	 * @param mixed $callback String or array - Callback for logging.
+	 */
 	public function set_status_callback( $callback ) {
 		$this->callback = $callback;
 	}
