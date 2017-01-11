@@ -27,7 +27,7 @@ class Email_Service extends Service {
 		<tr>
 
 			<th scope="row">
-				<label for="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>"><?php _e( 'Email notification', 'backupwordpress' ); ?></label>
+				<label for="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>"><?php esc_html_e( 'Email notification', 'backupwordpress' ); ?></label>
 			</th>
 
 			<td>
@@ -64,7 +64,7 @@ class Email_Service extends Service {
 				<p><?php printf( __( 'You\'ve set it to: %s', 'backupwordpress' ), '<code>' . HMBKP_ATTACHMENT_MAX_FILESIZE . '</code>' ); ?></p>
 				<?php } ?>
 
-				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'backupwordpress' ), '<code>10MB</code>' ); ?> <?php _e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
+				<p><?php printf( __( 'The maximum filesize of your backup that will be attached to your notification emails . Defaults to %s.', 'backupwordpress' ), '<code>10MB</code>' ); ?> <?php esc_html_e( 'e.g.', 'backupwordpress' ); ?> <code>define( 'HMBKP_ATTACHMENT_MAX_FILESIZE', '25MB' );</code></p>
 
 			</td>
 

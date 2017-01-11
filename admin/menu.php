@@ -74,7 +74,7 @@ add_filter( 'submenu_file', 'HM\BackUpWordPress\highlight_submenu' );
 function plugin_action_link( $links, $file ) {
 
 	if ( false !== strpos( $file, HMBKP_PLUGIN_SLUG ) ) {
-		array_push( $links, '<a href="' . esc_url( HMBKP_ADMIN_URL ) . '">' . __( 'Backups', 'backupwordpress' ) . '</a>' );
+		array_push( $links, '<a href="' . esc_url( HMBKP_ADMIN_URL ) . '">' . esc_html__( 'Backups', 'backupwordpress' ) . '</a>' );
 	}
 
 	return $links;

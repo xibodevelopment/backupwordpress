@@ -23,7 +23,7 @@ if ( ! empty( $_GET['hmbkp_schedule_id'] ) ) {
 
 		<?php endforeach; ?>
 
-		<li><a href="<?php echo esc_url( add_query_arg( array( 'hmbkp_add_schedule' => '1', 'action' => 'hmbkp_edit_schedule', 'hmbkp_schedule_id' => time(), 'hmbkp_panel' => 'hmbkp_edit_schedule_settings' ), HMBKP_ADMIN_URL ) ); ?>" class="<?php if ( ! Schedules::get_instance()->get_schedule( $current_schedule->get_id() ) ) { ?> current<?php } ?>"> + <?php _e( 'add schedule', 'backupwordpress' ); ?></a></li>
+		<li><a href="<?php echo esc_url( add_query_arg( array( 'hmbkp_add_schedule' => '1', 'action' => 'hmbkp_edit_schedule', 'hmbkp_schedule_id' => time(), 'hmbkp_panel' => 'hmbkp_edit_schedule_settings' ), HMBKP_ADMIN_URL ) ); ?>" class="<?php if ( ! Schedules::get_instance()->get_schedule( $current_schedule->get_id() ) ) { ?> current<?php } ?>"> + <?php esc_html_e( 'add schedule', 'backupwordpress' ); ?></a></li>
 
 	</ul>
 </div>

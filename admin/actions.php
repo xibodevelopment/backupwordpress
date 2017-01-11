@@ -185,7 +185,7 @@ function edit_schedule_services_submit() {
 	check_admin_referer( 'hmbkp-edit-schedule-services', 'hmbkp-edit-schedule-services-nonce' );
 
 	if ( empty( $_POST['hmbkp_schedule_id'] ) ) {
-		wp_die( __( 'The schedule ID was not provided. Aborting.', 'backupwordpress' ) );
+		wp_die( esc_html__( 'The schedule ID was not provided. Aborting.', 'backupwordpress' ) );
 	}
 
 	$schedule = new Scheduled_Backup( sanitize_text_field( $_POST['hmbkp_schedule_id'] ) );
@@ -633,13 +633,51 @@ function ajax_cron_test() {
 
 	if ( is_wp_error( $response1 ) && is_wp_error( $response2 ) && is_wp_error( $response3 ) ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . $response1->get_error_message() . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p>';
+
+		printf(
+			wp_kses(
+				/* translators: 1: wp-cron.php 2: Error messages 3: URL to plugin's FAQ page in wordpress.org plugin directory */
+				__( '<strong>BackUpWordPress has detected a problem.</strong> %1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups. See the <a href="%3$s">FAQ</a> for more details.', 'backupwordpress' ),
+				array(
+					'strong' => array(),
+					'code'   => array(),
+					'a'      => array(
+						'href' => array(),
+					),
+				)
+			),
+			'<code>wp-cron.php</code>',
+			'<code>' . esc_html( $response1->get_error_message() ) . '</code>',
+			'http://wordpress.org/extend/plugins/backupwordpress/faq/'
+		);
+
+		echo '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 
 	} elseif ( ! in_array( 200, array_map( 'wp_remote_retrieve_response_code', array( $response1, $response2, $response3 ) ) ) ) {
 
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has detected a problem.', 'backupwordpress' ) . '</strong> ' . sprintf( __( '%1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups, and more generally relies on HTTP loopback connections not being blocked for manual backups. See the %3$s for more details.', 'backupwordpress' ), '<code>wp-cron.php</code>', '<code>' . esc_html( wp_remote_retrieve_response_code( $response1 ) ) . ' ' . esc_html( get_status_header_desc( wp_remote_retrieve_response_code( $response1 ) ) ) . '</code>', '<a href="http://wordpress.org/extend/plugins/backupwordpress/faq/">FAQ</a>' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p>';
+
+		printf(
+			wp_kses(
+				/* translators: 1: wp-cron.php 2: Error messages 3: URL to plugin's FAQ page in wordpress.org plugin directory */
+				__( '<strong>BackUpWordPress has detected a problem.</strong> %1$s is returning a %2$s response which could mean cron jobs aren\'t getting fired properly. BackUpWordPress relies on wp-cron to run scheduled backups, and more generally relies on HTTP loopback connections not being blocked for manual backups. See the <a href="%3$s">FAQ</a> for more details.', 'backupwordpress' ),
+				array(
+					'strong' => array(),
+					'code'   => array(),
+					'a'      => array(
+						'href' => array(),
+					),
+				)
+			),
+			'<code>wp-cron.php</code>',
+			'<code>' . esc_html( wp_remote_retrieve_response_code( $response1 ) . ' ' . get_status_header_desc( wp_remote_retrieve_response_code( $response1 ) ) ) . '</code>',
+			'http://wordpress.org/extend/plugins/backupwordpress/faq/'
+		);
+
+		echo '</p></div>';
 
 		update_option( 'hmbkp_wp_cron_test_failed', true );
 

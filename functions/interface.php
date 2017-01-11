@@ -30,10 +30,10 @@ function get_backup_row( $file, Scheduled_Backup $schedule ) {
 		<td>
 
 			<?php if (  is_path_accessible( Path::get_path() )  ) : ?>
-				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php _e( 'Download', 'backupwordpress' ); ?></a> |
+				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php esc_html_e( 'Download', 'backupwordpress' ); ?></a> |
 			<?php endif; ?>
 
-			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_delete_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' ) ); ?>" class="delete-action"><?php _e( 'Delete', 'backupwordpress' ); ?></a>
+			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_delete_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' ) ); ?>" class="delete-action"><?php esc_html_e( 'Delete', 'backupwordpress' ); ?></a>
 
 		</td>
 
@@ -72,7 +72,7 @@ function admin_notices() {
 
 		<div id="hmbkp-warning-backup" class="error notice is-dismissible">
 			<p>
-				<strong><?php _e( 'BackUpWordPress detected issues with your last backup.', 'backupwordpress' ); ?></strong>
+				<strong><?php esc_html_e( 'BackUpWordPress detected issues with your last backup.', 'backupwordpress' ); ?></strong>
 			</p>
 
 			<ul>
@@ -265,7 +265,7 @@ function schedule_status( Scheduled_Backup $schedule, $echo = true ) {
 
 	<span class="hmbkp-status"<?php if ( $status->get_status() ) { ?> title="<?php printf( __( 'Started %s ago', 'backupwordpress' ), human_time_diff( $status->get_start_time() ) ); ?>"<?php } ?>>
 		<?php echo $status->get_status() ? wp_kses_data( $status->get_status() ) : __( 'Starting backup...', 'backupwordpress' ); ?>
-		<a href="<?php echo admin_action_url( 'request_cancel_backup', array( 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>"><?php _e( 'cancel', 'backupwordpress' ); ?></a>
+		<a href="<?php echo admin_action_url( 'request_cancel_backup', array( 'hmbkp_schedule_id' => $schedule->get_id() ) ); ?>"><?php esc_html_e( 'cancel', 'backupwordpress' ); ?></a>
 	</span>
 
 	<?php $output = ob_get_clean();

@@ -11,9 +11,9 @@ namespace HM\BackUpWordPress;
 		<tr>
 
 			<th scope="col"><?php backups_number( $schedule ); ?></th>
-			<th scope="col"><?php _e( 'Size', 'backupwordpress' ); ?></th>
-			<th scope="col"><?php _e( 'Type', 'backupwordpress' ); ?></th>
-			<th scope="col"><?php _e( 'Actions', 'backupwordpress' ); ?></th>
+			<th scope="col"><?php esc_html_e( 'Size', 'backupwordpress' ); ?></th>
+			<th scope="col"><?php esc_html_e( 'Type', 'backupwordpress' ); ?></th>
+			<th scope="col"><?php esc_html_e( 'Actions', 'backupwordpress' ); ?></th>
 
 		</tr>
 
@@ -38,7 +38,7 @@ namespace HM\BackUpWordPress;
 		else : ?>
 
 			<tr>
-				<td class="hmbkp-no-backups" colspan="4"><?php _e( 'This is where your backups will appear once you have some.', 'backupwordpress' ); ?></td>
+				<td class="hmbkp-no-backups" colspan="4"><?php esc_html_e( 'This is where your backups will appear once you have some.', 'backupwordpress' ); ?></td>
 			</tr>
 
 		<?php endif; ?>

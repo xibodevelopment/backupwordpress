@@ -328,7 +328,7 @@ function setup_default_schedules() {
 	$schedules->refresh_schedules();
 
 	add_action( 'admin_notices', function() {
-		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . __( 'BackUpWordPress has set up your default schedules.', 'backupwordpress' ) . '</strong> ' . __( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules.', 'backupwordpress' ) . '</p></div>';
+		echo '<div id="hmbkp-warning" class="updated fade"><p><strong>' . esc_html__( 'BackUpWordPress has set up your default schedules.', 'backupwordpress' ) . '</strong> ' . esc_html__( 'By default BackUpWordPress performs a daily backup of your database and a weekly backup of your database &amp; files. You can modify these schedules.', 'backupwordpress' ) . '</p></div>';
 	} );
 
 }

@@ -182,14 +182,11 @@ namespace HM\BackUpWordPress;
 						</div>
 
 						<div class="column-updated">
-							<?php printf(
-								wp_kses(
+							<?php whitelist_html(
+								printf(
 									__( '<strong>Last Updated:</strong> %s ago', 'backupwordpress' ),
-									array(
-										'strong' => array(),
-									)
-								),
-								esc_html( human_time_diff( strtotime( $extension->modified ) ) )
+									esc_html( human_time_diff( strtotime( $extension->modified ) ) )
+								), 'strong'
 							); ?>
 						</div>
 					</div>
