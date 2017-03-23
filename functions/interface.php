@@ -33,7 +33,19 @@ function get_backup_row( $file, Scheduled_Backup $schedule ) {
 				<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_download_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_download_backup', 'hmbkp_download_backup_nonce' ) ); ?>" class="download-action"><?php _e( 'Download', 'backupwordpress' ); ?></a> |
 			<?php endif; ?>
 
-			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'hmbkp_backup_archive' => $encoded_file, 'hmbkp_schedule_id' => $schedule->get_id(), 'action' => 'hmbkp_request_delete_backup' ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_backup', 'hmbkp_delete_backup_nonce' ) ); ?>" class="delete-action"><?php _e( 'Delete', 'backupwordpress' ); ?></a>
+			<a href="<?php echo esc_url( wp_nonce_url(
+				add_query_arg( array(
+					'hmbkp_backup_archive' => $encoded_file,
+					'hmbkp_schedule_id'    => $schedule->get_id(),
+					'action'               => 'hmbkp_request_delete_backup',
+					),
+					admin_url( 'admin-post.php' )
+				),
+				'hmbkp_delete_backup',
+				'hmbkp_delete_backup_nonce'
+			) ); ?>" class="delete-action">
+				<?php esc_html_e( 'Delete', 'backupwordpress' ); ?>
+			</a>
 
 		</td>
 
@@ -42,8 +54,7 @@ function get_backup_row( $file, Scheduled_Backup $schedule ) {
 <?php }
 
 /**
- * Displays admin notices for various error / warning
- * conditions
+ * Displays admin notices for various error / warning conditions.
  *
  * @return void
  */
@@ -78,9 +89,7 @@ function admin_notices() {
 			<ul>
 
 				<?php foreach ( $notices['backup_errors'] as $notice ) : ?>
-
 					<li><pre><?php echo esc_html( $notice ); ?></pre></li>
-
 				<?php endforeach; ?>
 
 			</ul>
@@ -97,7 +106,12 @@ function admin_notices() {
 
 				<?php foreach ( $notices['server_config'] as $notice ) : ?>
 
-					<li><?php echo wp_kses_data( $notice ); ?></li>
+					<li>
+						<?php print_whitelist_html(
+							$notice,
+							'strong, b, i, em, code, a'
+						); ?>
+					</li>
 
 				<?php endforeach; ?>
 
@@ -139,65 +153,110 @@ add_action( 'network_admin_notices', 'HM\BackUpWordPress\admin_notices' );
 
 function set_server_config_notices() {
 
-	$notices = Notices::get_instance();
-
+	$notices  = Notices::get_instance();
 	$messages = array();
 
-	if ( ! is_dir( Path::get_path() ) ) {
-		$messages[] = sprintf( __( 'The backups directory can\'t be created because your %s directory isn\'t writable. Please create the folder manually.', 'backupwordpress' ), '<code>' . esc_html( dirname( Path::get_path() ) ) . '</code>' );
-	}
-
-	if ( is_dir( Path::get_path() ) && ! wp_is_writable( Path::get_path() ) ) {
-		$messages[] = __( 'The backups directory isn\'t writable. Please fix the permissions.', 'backupwordpress' );
-	}
-
 	if ( Backup_Utilities::is_safe_mode_on() ) {
-		$messages[] = sprintf( __( '%1$s is running in %2$s, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst %3$s is on.', 'backupwordpress' ), '<code>PHP</code>', sprintf( '<a href="%1$s">%2$s</a>', __( 'http://php.net/manual/en/features.safe-mode.php', 'backupwordpress' ), __( 'Safe Mode', 'backupwordpress' ) ), '<code>' . __( 'Safe Mode', 'backupwordpress' ) . '</code>' );
+
+		$messages[] = sprintf(
+			/* translators: 1: The `PHP` abbreviation. */
+			__( '%1$s is running in <a href="http://php.net/manual/en/features.safe-mode.php">Safe Mode</a>, please contact your host and ask them to disable it. BackUpWordPress may not work correctly whilst <code>Safe Mode</code> is on.', 'backupwordpress' ),
+			'<code>PHP</code>'
+		);
 	}
 
 	if ( defined( 'HMBKP_PATH' ) && HMBKP_PATH ) {
 
 		// Suppress open_basedir warning https://bugs.php.net/bug.php?id=53041
 		if ( ! path_in_php_open_basedir( HMBKP_PATH ) ) {
-			$messages[] = sprintf( __( 'Your server has an %1$s restriction in effect and your custom backups directory (%2$s) is not within the allowed path(s): (%3$s).', 'backupwordpress' ), '<code>open_basedir</code>', '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( @ini_get( 'open_basedir' ) ) . '</code>' );
 
-		} elseif ( ! file_exists( HMBKP_PATH ) ) {
-			$messages[] = sprintf( __( 'Your custom path does not exist', 'backupwordpress' ) );
+			$messages[] = sprintf(
+				__( 'Your server has an %1$s restriction in effect and your custom backups directory (%2$s) is not within the allowed path(s): (%3$s).', 'backupwordpress' ),
+				'<code>open_basedir</code>',
+				'<code>' . esc_html( HMBKP_PATH ) . '</code>',
+				'<code>' . esc_html( @ini_get( 'open_basedir' ) ) . '</code>'
+			);
+
+		} elseif ( ! is_dir( HMBKP_PATH ) ) {
+
+			$messages[] = sprintf(
+				__( 'Your custom backups directory (%1$s) doesn&apos;t exist, your backups will be saved to %2$s instead.', 'backupwordpress' ),
+				'<code>' . esc_html( HMBKP_PATH ) . '</code>',
+				'<code>' . esc_html( Path::get_path() ) . '</code>'
+			);
+
+		} elseif ( is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
+
+			$messages[] = sprintf(
+				__( 'Your custom backups directory (%1$s) isn&apos;t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ),
+				'<code>' . esc_html( HMBKP_PATH ) . '</code>',
+				'<code>' . esc_html( Path::get_path() ) . '</code>'
+			);
+		}
+	}
+
+	if ( ! is_dir( Path::get_path() ) || is_dir( Path::get_path() ) && ! wp_is_writable( Path::get_path() ) ) {
+
+		if ( isset( $_GET['creation_error'] ) ) {
+
+			$messages[] = sprintf(
+				/* translators: 1: URL to BackupWordPress docs. */
+				__( 'We connected to your server successfully but still weren&apos;t able to automatically create the directory. You&apos;ll need to <a href="%1$s">manually specify a valid directory</a>', 'backupwordpress' ),
+				'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
+			);
 
 		} else {
 
-			if ( ! is_dir( HMBKP_PATH ) ) {
-				$messages[] = sprintf( __( 'Your custom backups directory %1$s doesn\'t exist and can\'t be created, your backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( Path::get_path() ) . '</code>' );
-			}
-
-			if ( is_dir( HMBKP_PATH ) && ! wp_is_writable( HMBKP_PATH ) ) {
-				$messages[] = sprintf( __( 'Your custom backups directory %1$s isn\'t writable, new backups will be saved to %2$s instead.', 'backupwordpress' ), '<code>' . esc_html( HMBKP_PATH ) . '</code>', '<code>' . esc_html( Path::get_path() ) . '</code>' );
-
-			}
+			$messages[] = sprintf(
+				/* translators: 1: Path to backup directory. 2: URL to BackupWordPress docs. */
+				__( 'We couldn&apos;t create the backups directory (%1$s). You&apos;ll need to <a href="%2$s">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ),
+				'<code>' . esc_html( Path::get_path() ) . '</code>',
+				'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
+			);
 		}
 	}
 
 	if ( ! is_readable( Path::get_root() ) ) {
-		$messages[] = sprintf( __( 'Your site root path %s isn\'t readable.', 'backupwordpress' ), '<code>' . Path::get_root() . '</code>' );
+
+		$messages[] = sprintf(
+			__( 'Your site&apos;s root path (%s) isn&apos;t readable. Please contact support.', 'backupwordpress' ),
+			'<code>' . Path::get_root() . '</code>'
+		);
 	}
 
 	if ( ! Requirement_Mysqldump_Command_Path::test() && ! Requirement_PDO::test() ) {
-		$messages[] = sprintf( __( 'Your site cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>mysqldump</code>', '<code>PDO::mysql</code>' );
+
+		$messages[] = sprintf(
+			/* translators: FYI: specified MySQL features. */
+			__( 'Your site cannot be backed up because your server doesn&apos;t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
+			'<code>mysqldump</code>',
+			'<code>PDO::mysql</code>'
+		);
 	}
 
 	if ( ! Requirement_Zip_Command_Path::test() && ! Requirement_Zip_Archive::test() ) {
-		$messages[] = sprintf( __( 'Your site cannot be backed up because your server doesn\'t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ), '<code>zip</code>', '<code>ZipArchive</code>' );
+
+		$messages[] = sprintf(
+			/* translators: FYI: specified zip archiving features. */
+			__( 'Your site cannot be backed up because your server doesn&apos;t support %1$s or %2$s. Please contact your host and ask them to enable them.', 'backupwordpress' ),
+			'<code>zip</code>',
+			'<code>ZipArchive</code>'
+		);
 	}
 
 	if ( disk_space_low() ) {
-		$messages[] = sprintf( __( 'Your server only has %s of disk space left which probably isn\'t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ), '<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>' );
+
+		$messages[] = sprintf(
+			__( 'Your server only has %s of disk space left which probably isn&apos;t enough to complete a backup. Try deleting some existing backups or other files to free up space.', 'backupwordpress' ),
+			'<code>' . size_format( disk_free_space( Path::get_path() ) ) . '</code>'
+		);
 	}
 
 	if ( count( $messages ) > 0 ) {
 		$notices->set_notices( 'server_config', $messages, false );
 	}
-
 }
+
 add_action( 'admin_init', 'HM\BackUpWordPress\set_server_config_notices' );
 
 /**
@@ -217,7 +276,6 @@ function plugin_row( $plugins ) {
 	return $plugins;
 
 }
-
 add_filter( 'all_plugins', 'HM\BackUpWordPress\plugin_row', 10 );
 
 /**
@@ -460,6 +518,11 @@ function disk_space_low( $backup_size = false ) {
 
 	}
 
-	return $backup_size >= $disk_space;
+	if ( ! is_readable( Path::get_path() ) ) {
+		return false;
+	}
 
+	$disk_space = disk_free_space( Path::get_path() );
+
+	return $disk_space && $backup_size >= $disk_space;
 }

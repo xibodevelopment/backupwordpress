@@ -57,6 +57,52 @@ function request_delete_schedule() {
 }
 add_action( 'admin_post_hmbkp_request_delete_schedule', 'HM\BackUpWordPress\request_delete_schedule' );
 
+add_action( 'admin_post_hmbkp_request_credentials', function() {
+
+	global $wp_filesystem;
+
+	ob_start();
+	$creds = request_filesystem_credentials( '' );
+	ob_end_clean();
+
+	// Default to showing an error if we're not able to connect.
+	$url = add_query_arg( 'connection_error', 1, get_settings_url() );
+
+	/**
+	 * If we have valid filesystem credentials then let's attempt
+	 * to use them to create the backups directory. If we can't create it in
+	 * WP_CONTENT_DIR then we fallback to trying in uploads.
+	 */
+	if ( WP_Filesystem( $creds ) ) {
+
+		// If we're able to connect then no need to redirect with an error.
+		$url = get_settings_url();
+
+		// If the backup path exists then let's just try to chmod it to the correct permissions.
+		if (
+			is_dir( Path::get_instance()->get_default_path() ) &&
+			! $wp_filesystem->chmod( Path::get_instance()->get_default_path(), FS_CHMOD_DIR )
+		) {
+			$url = add_query_arg( 'creation_error', 1, get_settings_url() );
+		} else {
+
+			// If the path doesn't exist then try to correct the permission for the parent directory and create it.
+			$wp_filesystem->chmod( dirname( Path::get_instance()->get_default_path() ), FS_CHMOD_DIR );
+
+			if (
+				! $wp_filesystem->mkdir( Path::get_instance()->get_default_path(), FS_CHMOD_DIR ) &&
+				! $wp_filesystem->mkdir( Path::get_instance()->get_fallback_path(), FS_CHMOD_DIR )
+			) {
+				$url = add_query_arg( 'creation_error', 1, get_settings_url() );
+			}
+		}
+	}
+
+	wp_safe_redirect( $url , 303 );
+	die;
+
+} );
+
 /**
  * Perform a manual backup
  *

@@ -281,7 +281,10 @@ class Requirement_Backup_Path_Permissions extends Requirement {
 	 * @return string
 	 */
 	public static function test() {
-		return substr( sprintf( '%o', fileperms( Path::get_path() ) ), - 4 );
+		if ( is_readable( PATH::get_path() ) ) {
+			return substr( sprintf( '%o', fileperms( Path::get_path() ) ), - 4 );
+		}
+		return 'Unreadable';
 	}
 }
 Requirements::register( 'HM\BackUpWordPress\Requirement_Backup_Path_Permissions', 'Site' );

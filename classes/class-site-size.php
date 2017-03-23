@@ -8,7 +8,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * Site Size class
  *
- * Use to calculate the total or partial size of the sites database and files.
+ * Use to calculate the total or partial size of the site's database and files.
  */
 class Site_Size {
 

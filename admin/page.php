@@ -25,10 +25,18 @@ namespace HM\BackUpWordPress;
 
 	</h1>
 
-	<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
+	<?php if ( has_server_permissions() ) : ?>
 
-	<p class="howto"><?php printf( __( 'If you\'re finding BackUpWordPress useful, please %1$s rate it on the plugin directory%2$s.', 'backupwordpress' ), '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">', '</a>' ); ?></p>
+		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
 
-	<?php include_once( HMBKP_PLUGIN_PATH . 'admin/upsell.php' ); ?>
+		<p class="howto"><?php printf( __( 'If you\'re finding BackUpWordPress useful, please %1$s rate it on the plugin directory%2$s.', 'backupwordpress' ), '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">', '</a>' ); ?></p>
+
+		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/upsell.php' ); ?>
+
+	<?php else : ?>
+
+		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/filesystem-credentials.php' ); ?>
+
+	<?php endif; ?>
 
 </div>

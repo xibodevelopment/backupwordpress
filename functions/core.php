@@ -393,6 +393,25 @@ function rmdirtree( $dir ) {
 	@rmdir( $dir );
 
 	return true;
+
+}
+
+/**
+ * Check if we have read and write permission on the server
+ *
+ * @return bool
+ */
+function has_server_permissions() {
+
+	if ( ! wp_is_writable( Path::get_path() ) ) {
+		return false;
+	}
+
+	if ( ! is_readable( Path::get_root() ) ) {
+		return false;
+	}
+
+	return true;
 }
 
 /**
@@ -403,11 +422,7 @@ function rmdirtree( $dir ) {
  */
 function is_backup_possible() {
 
-	if ( ! wp_is_writable( Path::get_path() ) || ! is_dir( Path::get_path() ) ) {
-		return false;
-	}
-
-	if ( ! is_readable( Path::get_root() ) ) {
+	if ( ! has_server_permissions() || ! is_dir( Path::get_path() ) ) {
 		return false;
 	}
 
