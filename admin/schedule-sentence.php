@@ -135,7 +135,6 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 
 	<?php require( HMBKP_PLUGIN_PATH . 'admin/schedule-settings.php' ); ?>
 
-</div>
 
 <?php
 

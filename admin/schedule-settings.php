@@ -34,7 +34,7 @@ if ( Schedules::get_instance()->get_schedule( $schedule->get_id() ) ) { ?>
 		<a class="delete-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'hmbkp_request_delete_schedule', 'hmbkp_schedule_id' => $schedule->get_id() ), admin_url( 'admin-post.php' ) ), 'hmbkp_delete_schedule', 'hmbkp_delete_schedule_nonce' ) ); ?>"><?php _e( 'Delete', 'backupwordpress' ); ?></a>
 
 	</div>
-
+</div><!-- end schedule sentence -->
 <?php } ?>
 
 <?php if ( ! isset( $_GET['action'] ) || 'hmbkp_edit_schedule' !== $_GET['action'] || ! isset( $_GET['hmbkp_panel'] ) ) {
