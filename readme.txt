@@ -1,33 +1,33 @@
 === BackUpWordPress ===
 Contributors: humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance
-Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
+Tags: wordpress backup plugin, wordpress database backup, backup wordpress, backup wordpress site, wordpress backup, backupwordpress, back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.7
 Stable tag: 3.6.3.1
 
-Simple automated backups of your WordPress-powered website.
+Automated WordPress backups with your choice of scheduled backup options. This WordPress backup plugin provides database backups and file backups.
 
 == Description ==
 
-[BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
+[BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) WordPress backup plugin will back up your WordPress site, allowing you to backup your database and files together or separately, on your own schedule.
 
-This plugin requires PHP version 5.3.2 or later
+IMPORTANT: This plugin requires PHP version 5.3.2 or later
 
 = Features =
 
 * Super simple to use, no setup required.
-* Works in low memory, "shared host" environments.
-* Manage multiple schedules.
-* Option to have each backup file emailed to you.
-* Uses `zip` and `mysqldump` for faster backups if they are available.
-* Works on Linux & Windows Server.
-* Exclude files and folders from your backups.
-* Good support should you need help.
+* Works in many low memory, "shared host" environments.
+* Allows you to manage multiple schedules.
+* Emails each backup file to you, if wanted.
+* Uses `Unix Zip Command` and `MySQLDump` for faster backups if they are available.
+* Works on Linux & Windows Servers.
+* Allows you to exclude files and folders from your backups.
+* Great available support should you need help.
 * Translations for Spanish, German, Chinese, Romanian, Russian, Serbian, Lithuanian, Italian, Czech, Dutch, French, Basque.
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
+We welcome all contributers if you want to help with the plugin. The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
 
 = Translations =
 
