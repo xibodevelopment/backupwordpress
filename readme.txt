@@ -1,6 +1,6 @@
 === BackUpWordPress ===
 Contributors: humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance
-Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
+Tags: back up, backup, backups, schedule, restore, restoration, migrate, migration, duplicate, copy, sftp, ftp, database, mysql, sql, dump, zip, db, files, archive, wp-cli, email, e-mail, cloud, dropbox, google drive, amazon, s3, dreamhost, dreamobjects, rackspace, microsoft, azure
 Requires at least: 3.9
 Tested up to: 4.7
 Stable tag: 3.6.3.1
