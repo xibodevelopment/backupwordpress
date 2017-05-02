@@ -24,4 +24,3 @@ CONTRIBUTING.md
 changelog.txt
 .scrutinizer.yml
 phpunit.xml
-codecov.yml
