@@ -29,7 +29,6 @@ class Excludes {
 		'.bzr',
 		'.git',
 		'.hg',
-		'.log',
 		'backupwp',
 		'backwpup-*',
 		'updraft',
