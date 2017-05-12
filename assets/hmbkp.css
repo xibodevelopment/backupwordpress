@@ -20,7 +20,7 @@ li a.hmbkp-running:not(.current):before { width: 20px; height: 20px; margin: -1p
 .hmbkp-schedule-sentence *:not(a)[title] { border-bottom: 1px dotted #CCC; cursor: help; }
 .hmbkp-schedule-sentence .hmbkp-status[title] { border-bottom: none; }
 .hmbkp-schedule-sentence .submit { padding: 0; }
-.hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; font-size: 12px; margin: 0 0 0 26px; }
+.hmbkp-schedule-sentence .hmbkp-schedule-actions { visibility: visible; font-size: 12px; margin: 0 0 0 26px; padding: 10px 0 0; }
 .hmbkp-schedule-actions a { white-space: nowrap; }
 .hmbkp-schedule-sentence .row-actions { position: static; }
 
