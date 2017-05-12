@@ -82,7 +82,5 @@ script:
         phpunit
     fi
 
-after_success:
-
 git:
   depth: 1
