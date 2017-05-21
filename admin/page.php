@@ -10,7 +10,7 @@ namespace HM\BackUpWordPress;
 
 		BackUpWordPress
 
-        <a class="page-title-action" href="<?php echo esc_url( 'https://bwp.hmn.md/' ); ?>" target="_blank">Extensions</a>
+        <a class="page-title-action" href="https://bwp.hmn.md/" target="_blank">Extensions</a>
 
 		<?php if ( get_option( 'hmbkp_enable_support' ) ) : ?>
 
