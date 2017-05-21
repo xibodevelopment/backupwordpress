@@ -3,7 +3,7 @@
 
 <?php
 /** translators:  the 1st placeholder is the first part of the anchor tag with the link to the plugin review page and the second is the closing anchor tag */
-$cta_message = printf(
+$cta_message = sprintf(
 	__( 'If you\'re finding BackUpWordPress useful, please %1$s rate it on the plugin directory%2$s.', 'backupwordpress' ),
 	'<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">',
 	'</a>'
