@@ -9,7 +9,7 @@ $cta_message = sprintf(
 	'</a>'
 );
 ?>
-    <div id="hmbkp-cta-message" class="updated notice is-dismissible">
+<div id="hmbkp-cta-message" class="updated notice is-dismissible">
     <p><?php echo wp_kses_post( $cta_message ); ?></p>
     <button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 </div>
