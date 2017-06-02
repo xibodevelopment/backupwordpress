@@ -29,8 +29,8 @@ li a.hmbkp-running:not(.current):before { width: 20px; height: 20px; margin: -1p
 .hmbkp-ajax-loading, button.hmbkp-ajax-loading { padding-left: 20px; position: relative; }
 .hmbkp-ajax-loading::after { content: ""; width: 16px; height: 16px; background-image: url('spinner-2x.gif'); background-size: 16px 16px; background-repeat: no-repeat; background-position: 0 0; position: absolute; right: -30px; top: 5px; }
 
-.delete-action { color: #a00; -webkit-transition: all 300ms ease; transition: all 300ms ease; }
-.delete-action:hover .delete-action:focus { color: red; -webkit-transition: all 300ms ease; transition: all 300ms ease; }
+.delete-action { color: #a00; transition: all 300ms ease; }
+.delete-action:hover .delete-action:focus { color: red; transition: all 300ms ease; }
 
 .strikethrough { text-decoration: line-through; }
 

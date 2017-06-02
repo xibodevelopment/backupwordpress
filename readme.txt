@@ -1,6 +1,6 @@
 === BackUpWordPress ===
 Contributors: humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance
-Tags: back up, backup, backups, schedule, restore, restoration, migrate, migration, duplicate, copy, sftp, ftp, database, mysql, sql, dump, zip, db, files, archive, wp-cli, email, e-mail, cloud, dropbox, google drive, amazon, s3, dreamhost, dreamobjects, rackspace, microsoft, azure
+Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
 Requires at least: 3.9
 Tested up to: 4.7
 Stable tag: 3.6.3.1
@@ -157,6 +157,12 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.6.4 / 2016-06-02
+
+* Various improvements to exclusion handling.
+* i18n improvements.
+* Misc. UI improvements.
 
 ### 3.6.3.1 / 2016-12-14
 
@@ -985,7 +991,7 @@ users should see major improvements to reliability.
 
 #### 2.0.6
 
-* Fix possible warning on plugin activation if the site's cron option is empty.
+* Fix possible warning on plugin activation if the sites cron option is empty.
 * Don't show the version warning in the help for Constants as that comes from the current version.
 
 #### 2.0.5

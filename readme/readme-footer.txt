@@ -54,6 +54,12 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.6.4 / 2016-06-02
+
+* Various improvements to exclusion handling.
+* i18n improvements.
+* Misc. UI improvements.
+
 ### 3.6.3.1 / 2016-12-14
 
 * Fix issue where low disk space caused the admin interface to be unavailable
