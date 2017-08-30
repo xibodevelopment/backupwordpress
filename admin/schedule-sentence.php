@@ -73,8 +73,7 @@ switch ( $schedule->get_reoccurrence() ) :
 
 endswitch;
 
-$server = '<span title="' . esc_attr( Path::get_path() ) . '">' . __( 'this server', 'backupwordpress' ) . '</span>';
-$server = '<code>' . esc_attr( str_replace( Path::get_home_path(), '', Path::get_path() ) ) . '</code>';
+$server = '<code title="' . __( 'Check the help tab to learn how to change where your backups are stored.', 'backupwordpress' ) . '">' . esc_attr( str_replace( Path::get_home_path(), '', Path::get_path() ) ) . '</code>';
 
 // Backup to keep
 switch ( $schedule->get_max_backups() ) :
@@ -124,7 +123,7 @@ if ( ! empty( $services ) && count( $services ) > 1 ) {
 		$sentence .= ' ' . $email_msg;
 	}
 
-	if ( $services ) {
+	if ( ! empty( $services ) ) {
 		$sentence .= ' ' . sprintf( __( 'Send a copy of each backup to %s.', 'backupwordpress' ), implode( ', ', $services ) );
 	}
 
@@ -156,10 +155,12 @@ function get_site_size_text( Scheduled_Backup $schedule ) {
 
 	$site_size = new Site_Size( $schedule->get_type(), $schedule->get_excludes() );
 
-	if ( ( 'database' === $schedule->get_type() ) || $site_size->is_site_size_cached() ) {
-		return sprintf( '(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)', esc_attr( $site_size->get_formatted_site_size() ) );
-	} else {
-		return sprintf( '(<code class="calculating" title="' . __( 'this shouldn\'t take long&hellip;', 'backupwordpress' ) . '">' . __( 'calculating the size of your site&hellip;', 'backupwordpress' ) . '</code>)' );
+	if ( 'database' === $schedule->get_type() || $site_size->is_site_size_cached() ) {
+		return sprintf(
+			'(<code title="' . __( 'Backups will be compressed and should be smaller than this.', 'backupwordpress' ) . '">%s</code>)',
+			esc_html( $site_size->get_formatted_site_size() )
+		);
 	}
 
+	return '';
 }

@@ -10,35 +10,30 @@ namespace HM\BackUpWordPress;
 
 		BackUpWordPress
 
-		<a class="page-title-action" href="<?php echo esc_url( get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) ); ?>"><?php esc_html_e( 'Extensions', 'backupwordpress' ); ?></a>
+		<a class="page-title-action" href="https://bwp.hmn.md/" target="_blank"><?php esc_html_e( 'Extensions', 'backupwordpress' ); ?></a>
 
 		<?php if ( get_option( 'hmbkp_enable_support' ) ) : ?>
 
 			<a id="intercom" class="page-title-action" href="mailto:backupwordpress@hmn.md"><?php esc_html_e( 'Support', 'backupwordpress' ); ?></a>
 		<?php else :
+
 			add_thickbox(); ?>
+
 			<a id="intercom-info" class="thickbox page-title-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'load_enable_support', 'width' => '600', 'height' => '420' ), self_admin_url( 'admin-ajax.php' ) ), 'hmbkp_nonce' ) ); ?>"><span class="dashicons dashicons-admin-users"></span>&nbsp;<?php esc_html_e( 'Enable Support', 'backupwordpress' ); ?></a>
+
 		<?php endif; ?>
 
 	</h1>
 
-	<?php if ( is_backup_possible() ) : ?>
+	<?php if ( has_server_permissions() ) : ?>
 
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/backups.php' ); ?>
-
-		<p class="howto"><?php printf(
-			wp_kses(
-				__( 'If you\'re finding BackUpWordPress useful, please <a href="%s">rate it on the plugin directory</a>', 'backupwordpress' ),
-				array(
-					'a' => array(
-						'href' => array(),
-					),
-				)
-			),
-			'https://wordpress.org/support/view/plugin-reviews/backupwordpress'
-		); ?></p>
-
+  
 		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/upsell.php' ); ?>
+
+	<?php else : ?>
+
+		<?php include_once( HMBKP_PLUGIN_PATH . 'admin/filesystem-credentials.php' ); ?>
 
 	<?php endif; ?>
 

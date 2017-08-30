@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
-	const PLUGIN_VERSION = '3.6.2';
+	const PLUGIN_VERSION = '3.6.4';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -443,7 +443,7 @@ final class Plugin {
 		/* translators: %1$s and %2$s expand to anchor tags linking to the new extensions page. */
 		$info_message = sprintf(
 			__( 'Thanks for updating BackUpWordPress, why not check out %1$sour extensions?%2$s', 'backupwordpress' ),
-			'<a href="' . esc_url( get_settings_url( HMBKP_PLUGIN_SLUG . '_extensions' ) ) . '">',
+			'<a href="https://bwp.hmn.md/" target="_blank">',
 			'</a>'
 		);
 		?>

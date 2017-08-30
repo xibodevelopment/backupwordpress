@@ -42,7 +42,7 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 	 * Individual Database Backup Engine implementations must include
 	 * a backup method at a minimum.
 	 *
-	 * @return [type] [description]
+	 * @return bool Whether the backup completed successfully or not.
 	 */
 	abstract public function backup();
 
@@ -65,7 +65,7 @@ abstract class Database_Backup_Engine extends Backup_Engine {
 	/**
 	 * Get the database charset setting.
 	 *
-	 * @return [string The database charset.
+	 * @return string The database charset.
 	 */
 	public function get_charset() {
 		global $wpdb;

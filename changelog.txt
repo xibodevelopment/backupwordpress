@@ -1,0 +1,41 @@
+2741ba7 composer npm update
+d5a5468 Update class-plugin to remove escaping
+37bbf48 Update upsell.php
+06d1ec7 Update upsell.php
+c48fa22 Update page.php
+b37d80d Update to bump up padding. Bumped up padding around schedule sentence.
+25da000 Update to error notices. Removed extra extensions upsell and replaced non-dismissible notice with a dismissible notice. Both are at the top, though?
+647b4a1 corrected improper URL inclusion
+71570de This just adds error and debug logs to the automatic exclusions list in the class-excludes.php
+9ecc8f6 Changing out upsell link (at bottom of admin page) to reflect link to site homepage for conversion funnel rather than link to in-admin extension page.
+5191fc9 Changing out upsell link (at bottom of admin page) to reflect link to site homepage for conversion funnel rather than link to in-admin extension page.
+d6ee584 Changing out upsell link (at bottom of admin page) to reflect link to site homepage for conversion funnel rather than link to in-admin extension page.
+dae3fef Changing out upsell link (at bottom of admin page) to reflect link to site homepage for conversion funnel rather than link to in-admin extension page.
+31a4d53 Update tags for wp.org
+3928532 Fix wp-snapshots
+335865c Rename ISSUE_TEMPLATE to ISSUE_TEMPLATE.md
+8a04298 Update TEMPLATE file
+34702b1 Create new ISSUE_TEMPLATE
+f840674 Delete template.txt
+19255c3 Create template.txt
+a02d722 Check for correct server permission, else show site credentials form
+32f6791 Minor - simplify 'if' statements. Fix coding standards - full stop after single line comment
+7b9be93 Correct the order of error messages when both a custom path and the default paths are both unwritable.
+badc2e4 Avoid a Warning when the backup path isn't readable
+3f81248 Improve the ability to automatically create the backups directory
+cd957da Clean up translatin strings - remove allowed HTML per string and add some allowed tags to generic output function for Server Notices in WP admin
+45492c0 Use whitelist_html for translated strings to allow some HTML
+1f4395a Clean up - combine conditions in if statements for better readability, alignment and indentation of code
+611b878 Ensure Path is readable before calling `disk_free_space`
+3267c87 s/sites/site's when used in a singulat possesive context
+b9173ef Improved error messaging
+0915923 WPCS fixes
+1d5a525 Refactor the request_credentials code so it actually works
+cdfe2e4 Show notice and hide backups list
+6092f59 Force FTP form
+7e01802 Add a function comment
+fd95e12 Extract list of possible paths to own method
+428a939 Fix code formatting
+d4835f6 Display a form to get users connection credentials
+17f238f Make notices dismissable
+e9d99f8 Remove folder permissions notices
