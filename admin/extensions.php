@@ -163,7 +163,6 @@ namespace HM\BackUpWordPress;
 										data-title="<?php echo esc_attr( $extension->title->rendered ); ?>">
 										<?php esc_html_e( 'More Details', 'backupwordpress' ); ?>
 									</a>
-
 								</li>
 							</ul>
 						</div>
@@ -192,7 +191,6 @@ namespace HM\BackUpWordPress;
 								),
 								esc_html( human_time_diff( strtotime( $extension->modified ) ) )
 							); ?>
-
 						</div>
 					</div>
 				</div>
