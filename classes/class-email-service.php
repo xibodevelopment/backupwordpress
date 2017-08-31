@@ -194,6 +194,7 @@ class Email_Service extends Service {
 				) );
 
 				$message = sprintf(
+						/* translators: 1: Site URL 2: List of errors */
 						esc_html__(
 								'BackUpWordPress was unable to backup your site %1$s.' . "\n\n" .
 								'Here are the errors that we\'ve encountered: %2$s' . "\n\n" .
@@ -221,9 +222,9 @@ class Email_Service extends Service {
 					/* translators: 1: Site URL 2: WordPress admin URL to BackupWordPress page */
 					esc_html__(
 							'BackUpWordPress has completed a backup of your site %1$s'. "\n\n" .
-							"The backup file should be attached to this email. \n\n" .
-							"You can download the backup file by clicking the link below: \n\n" . '%2$s' . "\n\n" .
-							"Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'backupwordpress' ),
+							'The backup file should be attached to this email.' . "\n\n" .
+							'You can download the backup file by clicking the link below:' . "\n\n" . '%2$s' . "\n\n" .
+							'Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot', 'backupwordpress' ),
 					esc_url( home_url() ),
 					esc_url( $download )
 				);
@@ -238,9 +239,9 @@ class Email_Service extends Service {
 				/* translators: 1: Site URL 2: WordPress admin URL to BackupWordPress page */
 					esc_html__(
 							'BackUpWordPress has completed a backup of your site %1$s' . "\n\n" .
-							"Unfortunately, the backup file was too large to attach to this email. \n\n" .
+							'Unfortunately, the backup file was too large to attach to this email.' . "\n\n" .
 							'You can download the backup file by clicking the link below:' . "\n\n" . '%2$s' . "\n\n" .
-							"Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot", 'backupwordpress' ),
+							'Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot', 'backupwordpress' ),
 					esc_url( home_url() ),
 					esc_url( $download )
 				);
