@@ -198,7 +198,8 @@ class Email_Service extends Service {
 						esc_html__(
 								'BackUpWordPress was unable to backup your site %1$s.' . "\n\n" .
 								'Here are the errors that we\'ve encountered: %2$s' . "\n\n" .
-								'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look.' . "\n\n", 'backupwordpress' ),
+								'If the errors above look like Martian, forward this email to %3$s and we\'ll take a look.' . "\n\n", 'backupwordpress'
+						),
 						esc_url( home_url() ),
 						$error_message,
 						'backupwordpress@hmn.md'
@@ -219,14 +220,15 @@ class Email_Service extends Service {
 			if ( @filesize( $file ) < get_max_attachment_size() ) {
 
 				$message = sprintf(
-					/* translators: 1: Site URL 2: WordPress admin URL to BackupWordPress page */
-					esc_html__(
-							'BackUpWordPress has completed a backup of your site %1$s'. "\n\n" .
-							'The backup file should be attached to this email.' . "\n\n" .
-							'You can download the backup file by clicking the link below:' . "\n\n" . '%2$s' . "\n\n" .
-							'Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot', 'backupwordpress' ),
-					esc_url( home_url() ),
-					esc_url( $download )
+						/* translators: 1: Site URL 2: WordPress admin URL to BackupWordPress page */
+						esc_html__(
+								'BackUpWordPress has completed a backup of your site %1$s' . "\n\n" .
+								'The backup file should be attached to this email.' . "\n\n" .
+								'You can download the backup file by clicking the link below:' . "\n\n" . '%2$s' . "\n\n" .
+								'Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot', 'backupwordpress'
+						),
+						esc_url( home_url() ),
+						esc_url( $download )
 				);
 
 				$sent = wp_mail( $this->get_email_address_array(), $subject, $message, $headers, $file );
@@ -236,14 +238,15 @@ class Email_Service extends Service {
 			if ( ! $sent ) {
 
 				$message = sprintf(
-				/* translators: 1: Site URL 2: WordPress admin URL to BackupWordPress page */
-					esc_html__(
-							'BackUpWordPress has completed a backup of your site %1$s' . "\n\n" .
-							'Unfortunately, the backup file was too large to attach to this email.' . "\n\n" .
-							'You can download the backup file by clicking the link below:' . "\n\n" . '%2$s' . "\n\n" .
-							'Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot', 'backupwordpress' ),
-					esc_url( home_url() ),
-					esc_url( $download )
+						/* translators: 1: Site URL 2: WordPress admin URL to BackupWordPress page */
+						esc_html__(
+								'BackUpWordPress has completed a backup of your site %1$s' . "\n\n" .
+								'Unfortunately, the backup file was too large to attach to this email.' . "\n\n" .
+								'You can download the backup file by clicking the link below:' . "\n\n" . '%2$s' . "\n\n" .
+								'Kind Regards,\nThe Happy BackUpWordPress Backup Emailing Robot', 'backupwordpress'
+						),
+						esc_url( home_url() ),
+						esc_url( $download )
 				);
 
 				wp_mail( $this->get_email_address_array(), $subject, $message, $headers );
