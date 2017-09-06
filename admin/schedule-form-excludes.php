@@ -56,7 +56,7 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 						<?php elseif ( defined( 'HMBKP_EXCLUDE' ) && false !== strpos( HMBKP_EXCLUDE, $exclude ) ) : ?>
 
-							<?php printf( esc_html__( 'Defined in %s', 'backupwordpress' ), 'wp-config.php' ); ?>
+							<?php printf( esc_html__( 'Defined in %s', 'backupwordpress' ), '<code>wp-config.php</code>' ); ?>
 
 						<?php else : ?>
 
@@ -181,12 +181,12 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 
 							<code>
 								<?php
-								/* translators: 1: Excluded size 2: Overall site size */
-								printf(
-									esc_html__( '%1$s of %2$s', 'backupwordpress' ),
+								echo esc_html( sprintf(
+									/* translators: 1: Excluded size 2: Overall site size */
+									__( '%1$s of %2$s', 'backupwordpress' ),
 									$excluded_size,
 									size_format( $size )
-								);
+								) );
 								?>
 
 								<a class="dashicons dashicons-update" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'hmbkp_recalculate_directory_filesize',  urlencode( Path::get_root() ) ), 'hmbkp-recalculate_directory_filesize' ) ); ?>">
@@ -311,12 +311,12 @@ $user_excludes = $excludes->get_user_excludes(); ?>
 											$size = size_format( $size );
 										}
 
-										/* translators: 1: Excluded size 2: Overall directory/file size */
-										printf(
-											esc_html__( '%1$s of %2$s', 'backupwordpress' ),
+										echo esc_html( sprintf(
+											/* translators: 1: Excluded size 2: Overall site size */
+											__( '%1$s of %2$s', 'backupwordpress' ),
 											$excluded_size,
-											$size
-										);
+											size_format( $size )
+										) );
 
 									elseif ( ! $is_unreadable ) :
 										echo esc_html( size_format( $size ) );
