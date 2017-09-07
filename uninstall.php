@@ -12,7 +12,24 @@ global $wpdb;
 
 require_once dirname( __FILE__ ) . '/classes/class-path.php';
 
-$path = HM\BackUpWordPress\PATH::get_instance()->get_existing_path();
+if ( false === $default = glob( WP_CONTENT_DIR . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
+	$default = array();
+}
+
+$upload_dir = wp_upload_dir();
+
+if ( false === $fallback = glob( $upload_dir['basedir'] . '/backupwordpress-*-backups', GLOB_ONLYDIR ) ) {
+	$fallback = array();
+}
+
+$paths = array_merge( $default, $fallback );
+$paths = array_map( 'wp_normalize_path', $paths );
+
+if ( ! empty( $paths ) ) {
+	$path = $paths[0];
+} else {
+	exit;
+}
 
 // Delete the file manifest if it exists
 if ( file_exists( $path . '/.files' ) ) {
