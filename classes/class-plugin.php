@@ -222,11 +222,11 @@ final class Plugin {
 			return;
 		}
 
-		$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.js';
+		$js_file = HMBKP_PLUGIN_URL . 'js/hmbkp.min.js';
 
 		// TODO shuold this also support WP_SCRIPT_DEBUG
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			$js_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.js';
+			$js_file = HMBKP_PLUGIN_URL . 'js/hmbkp.js';
 		}
 
 		wp_enqueue_script( 'hmbkp', $js_file, array( 'heartbeat' ), sanitize_key( self::PLUGIN_VERSION ) );
@@ -378,10 +378,10 @@ final class Plugin {
 			return;
 		}
 
-		$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.min.css';
+		$css_file = HMBKP_PLUGIN_URL . 'css/hmbkp.min.css';
 
 		if ( WP_DEBUG ) {
-			$css_file = HMBKP_PLUGIN_URL . 'assets/hmbkp.css';
+			$css_file = HMBKP_PLUGIN_URL . 'css/hmbkp.css';
 		}
 
 		wp_enqueue_style( 'backupwordpress', $css_file, false, sanitize_key( self::PLUGIN_VERSION ) );

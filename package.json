@@ -23,25 +23,10 @@
   },
   "homepage": "https://github.com/humanmade/backupwordpress",
   "devDependencies": {
-    "grunt": "*",
-    "grunt-autoprefixer": "*",
-    "grunt-bumpup": "*",
-    "grunt-checktextdomain": "*",
-    "grunt-checkwpversion": "*",
-    "grunt-contrib-clean": "*",
-    "grunt-contrib-compress": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-cssmin": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-po2mo": "*",
-    "grunt-pot": "*",
-    "grunt-shell": "*",
-    "grunt-text-replace": "*",
-    "grunt-wp-deploy": "*",
-    "grunt-wp-i18n": "*",
-    "load-grunt-config": "*",
-    "load-grunt-tasks": "*"
+    "grunt": "^1.0.2",
+    "grunt-contrib-cssmin": "^2.2.1",
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-newer": "^1.3.0",
+    "grunt-wp-i18n": "^1.0.1"
   }
 }
