@@ -10,3 +10,4 @@ vendor
 composer.lock
 .DS_Store
 releases
+package-lock.json
