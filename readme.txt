@@ -102,6 +102,10 @@ The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home
 
 If your backups are failing, it's commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it's probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by enabling support from your Admin Dashboard (recommended), or emailing backupwordpress@hmn.md
 
+**Disable backup in local or development environments**
+
+To disable backups add "define('HMBKP_DISABLE', true);" to your wp-config.php.
+
 **Further Support & Feedback**
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
