@@ -56,7 +56,7 @@ Backups are stored on your server in `/wp-content/backups`, you can change the d
 
 Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.
 
-**What if I want to back up my site to anothr destination?**
+**What if I want to back up my site to another destination?**
 
 We no longer be sell or support the paid add-ons (e.g. for backups to Dropbox and Google Drive). It's certainly a good idea to backup to cloud storage to protect against server-wide risks. For this we recommend [UpdraftPlus WordPress Backups](https://updraftplus.com/?afref=744) which can do things for free BackupWordPress Premium could do on a paid basis. Click here for [full comparison](https://updraftplus.com/backupwordpress/?afref=744).
 
