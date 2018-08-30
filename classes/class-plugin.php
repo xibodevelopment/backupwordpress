@@ -21,6 +21,10 @@ final class Plugin {
 
 		$hide_notice = get_site_option( 'hmbkp_hide_info_notice', false );
 
+		// Display message about XIBO
+		add_action( 'admin_notices', array( $this, 'display_xibo_message' ) );
+		add_action( 'network_admin_notices', array( $this, 'display_xibo_message' ) );
+		
 		if ( ! $hide_notice ) {
 			add_action( 'admin_notices', array( $this, 'display_feature_message' ) );
 			add_action( 'network_admin_notices', array( $this, 'display_feature_message' ) );
@@ -457,6 +461,38 @@ final class Plugin {
 		</div>
 
 	<?php }
+	
+	public function display_xibo_message() {
+		$current_screen = get_current_screen();
+
+		if ( ! isset( $current_screen ) ) {
+			return;
+		}
+
+		$page = is_multisite() ? HMBKP_ADMIN_PAGE . '-network' : HMBKP_ADMIN_PAGE;
+		if ( $current_screen->id !== $page ) {
+			return;
+		}
+		
+		$owner_message = sprintf(
+			__('BackupWordPress was created by our friends at HumanMade but is now owned by XIBO. We\'re committed to opensource and WordPress and will provide free support for the many BackupWordPress fans. However, we\'ll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive).%1$sIt\'s a good idea to backup to cloud storage to protect against server-wide risks. For this we recommend %2$sUpdraftPlus WordPress Backups%3$s. Click here for %4$sfull comparison%3$s', 'backupwordpress'),
+			'<p/>',
+			'<a href="https://updraftplus.com/?afref=744" target="_blank">',
+			'</a>',
+			'<a href="https://updraftplus.com/backupwordpress/?afref=744">'
+		);
+		?>
+		
+		<div id="hmbkp-info-message" class="notice-info notice is-dismissible">
+			
+			<p><?php echo wp_kses_post( $owner_message ); ?></p>
+
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
+
+		</div>
+
+	<?php 
+	}
 
 }
 
