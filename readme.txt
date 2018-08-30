@@ -1,9 +1,9 @@
 === BackUpWordPress ===
-Contributors: xibodevelopment, humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance, dnutbourne
+Contributors: xibodevelopment, humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance, dnutbourne, snightingale
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
 Tested up to: 4.7
-Stable tag: 3.6.3.1
+Stable tag: 3.6.3.2
 
 Simple automated backups of your WordPress-powered website.
 
@@ -161,6 +161,11 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.6.4.2 / 2018-08-30
+
+* Updated readme to reflect ownership changes
+* Stripped out support and premium links
 
 ### 3.6.4 / 2016-06-02
 
