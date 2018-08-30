@@ -56,15 +56,9 @@ Backups are stored on your server in `/wp-content/backups`, you can change the d
 
 Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.
 
-**What if I want to back up my site to another destination?**
-
-BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: [https://bwp.hmn.md](http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin "BackUpWordPress Homepage")
-
 **How do I restore my site from a backup?**
 
 You need to download the latest backup file either by clicking download on the backups page or via `FTP`. `Unzip` the files and upload all the files to your server overwriting your site. You can then import the database using your hosts database management tool (likely `phpMyAdmin`).
-
-See this guide for more details - [How to restore from backup](https://bwp.hmn.md/support-center/restore-backup/ "Go to support center").
 
 **Does BackUpWordPress back up the backups directory?**
 
@@ -98,7 +92,7 @@ There are some things you can test to confirm this is the issue.
 
 	 * Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won't work until you remove it. If you are and you temporarily remove the authentication, do backups start working?
 
-Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md
+Report the results to our support team for further help. To do this, email support@xibomarketing.com
 
 **How to get BackUpWordPress working in Heart Internet**
 
@@ -106,7 +100,7 @@ The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home
 
 **My backups seem to be failing?**
 
-If your backups are failing, it's commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it's probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by enabling support from your Admin Dashboard (recommended), or emailing backupwordpress@hmn.md
+If your backups are failing, it's commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it's probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by emailing support@xibomarketing.com
 
 **Further Support & Feedback**
 
@@ -114,7 +108,7 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email backupwordpress@hmn.md for further help/support.
+You can also email support@xibomarketing.com for further help/support.
 
 == Screenshots ==
 
