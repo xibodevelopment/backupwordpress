@@ -9,7 +9,13 @@ Simple automated backups of your WordPress-powered website.
 
 == Description ==
 
-[BackUpWordPress](https://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin) will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
+BackupWordPress was created by our friends at HumanMade but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
+We'll make occasional updates to the free software - please send us any patches you'd like to see released here: https://github.com/orgs/xibodevelopment
+
+However, we'll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive). It's certainly a good idea to backup to cloud storage to protect against server-wide risks.
+For this we recommend [UpdraftPlus WordPress Backups](https://updraftplus.com/?afref=744) which can do things for free BackupWordPress Premium could do on a paid basis.  Click here for [full comparison](https://updraftplus.com/backupwordpress/?afref=744). 
+
+BackUpWordPress will back up your entire site including your database and all your files on a schedule that suits you. Try it now to see how easy it is!
 
 This plugin requires PHP version 5.3.2 or later
 
@@ -27,7 +33,7 @@ This plugin requires PHP version 5.3.2 or later
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/humanmade/backupwordpress/.
+The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/orgs/xibodevelopment/backupwordpress
 
 = Translations =
 
