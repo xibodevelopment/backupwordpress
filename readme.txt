@@ -1,6 +1,6 @@
 === BackUpWordPress ===
-Contributors: xibodevelopment, humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance
-Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, humanmade
+Contributors: xibodevelopment, humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance, dnutbourne
+Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
 Tested up to: 4.7
 Stable tag: 3.6.3.1
@@ -10,7 +10,7 @@ Simple automated backups of your WordPress-powered website.
 == Description ==
 
 BackupWordPress was created by our friends at HumanMade but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
-We'll make occasional updates to the free software - please send us any patches you'd like to see released here: https://github.com/orgs/xibodevelopment
+We'll make occasional updates to the free software - please send us any patches you'd like to see released here: https://github.com/orgs/xibodevelopment/
 
 However, we'll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive). It's certainly a good idea to backup to cloud storage to protect against server-wide risks.
 For this we recommend [UpdraftPlus WordPress Backups](https://updraftplus.com/?afref=744) which can do things for free BackupWordPress Premium could do on a paid basis.  Click here for [full comparison](https://updraftplus.com/backupwordpress/?afref=744). 
@@ -33,7 +33,7 @@ This plugin requires PHP version 5.3.2 or later
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/orgs/xibodevelopment/backupwordpress
+The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/orgs/xibodevelopment/backupwordpress/
 
 = Translations =
 
@@ -55,6 +55,10 @@ The plugin will try to use the `mysqldump` and `zip` commands via shell if they 
 Backups are stored on your server in `/wp-content/backups`, you can change the directory.
 
 Important: By default BackUpWordPress backs up everything in your site root as well as your database, this includes any non WordPress folders that happen to be in your site root. This does mean that your backup directory can get quite large.
+
+**What if I want to back up my site to anothr destination?**
+
+We no longer be sell or support the paid add-ons (e.g. for backups to Dropbox and Google Drive). It's certainly a good idea to backup to cloud storage to protect against server-wide risks. For this we recommend [UpdraftPlus WordPress Backups](https://updraftplus.com/?afref=744) which can do things for free BackupWordPress Premium could do on a paid basis. Click here for [full comparison](https://updraftplus.com/backupwordpress/?afref=744).
 
 **How do I restore my site from a backup?**
 
@@ -106,7 +110,7 @@ If your backups are failing, it's commonly caused by a lack of available resourc
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
 
-For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
+For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/orgs/xibodevelopment/backupwordpress/">BackUpWordPress on GitHub.</a>
 
 You can also email support@xibomarketing.com for further help/support.
 

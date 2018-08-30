@@ -445,11 +445,8 @@ final class Plugin {
 		}
 
 		/* translators: %1$s and %2$s expand to anchor tags linking to the new extensions page. */
-		$info_message = sprintf(
-			__( 'Thanks for updating BackUpWordPress, why not check out %1$sour extensions?%2$s', 'backupwordpress' ),
-			'<a href="https://bwp.hmn.md/" target="_blank">',
-			'</a>'
-		);
+		$info_message = __( 'Thanks for updating BackUpWordPress', 'backupwordpress' );
+		
 		?>
 
 		<div id="hmbkp-info-message" class="updated notice is-dismissible">
