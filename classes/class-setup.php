@@ -168,7 +168,7 @@ class HMBKP_Setup {
 		return sprintf(
 			__( 'BackUpWordPress requires PHP version %1$s or later and WordPress version %2$s or later to run. It has not been activated.', 'backupwordpress' ),
 			self::MIN_PHP_VERSION,
-			self::MIN_WP_VERSION,
+			self::MIN_WP_VERSION
 		);
 	}
 }

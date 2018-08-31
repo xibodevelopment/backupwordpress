@@ -24,11 +24,6 @@ final class Plugin {
 		// Display message about XIBO
 		add_action( 'admin_notices', array( $this, 'display_xibo_message' ) );
 		add_action( 'network_admin_notices', array( $this, 'display_xibo_message' ) );
-		
-		if ( ! $hide_notice ) {
-			add_action( 'admin_notices', array( $this, 'display_feature_message' ) );
-			add_action( 'network_admin_notices', array( $this, 'display_feature_message' ) );
-		}
 
 	}
 
@@ -431,34 +426,6 @@ final class Plugin {
 
 	<?php }
 
-	public function display_feature_message() {
-
-		$current_screen = get_current_screen();
-
-		if ( ! isset( $current_screen ) ) {
-			return;
-		}
-
-		$page = is_multisite() ? HMBKP_ADMIN_PAGE . '-network' : HMBKP_ADMIN_PAGE;
-		if ( $current_screen->id !== $page ) {
-			return;
-		}
-
-		/* translators: %1$s and %2$s expand to anchor tags linking to the new extensions page. */
-		$info_message = __( 'Thanks for updating BackUpWordPress', 'backupwordpress' );
-		
-		?>
-
-		<div id="hmbkp-info-message" class="updated notice is-dismissible">
-
-			<p><?php echo wp_kses_post( $info_message ); ?></p>
-
-			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
-
-		</div>
-
-	<?php }
-	
 	public function display_xibo_message() {
 		$current_screen = get_current_screen();
 
