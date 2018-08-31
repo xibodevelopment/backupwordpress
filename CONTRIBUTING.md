@@ -44,12 +44,8 @@ All translations are managed here: https://translate.wordpress.org/projects/wp-p
 
 We take the security of BackUpWordPress extremely seriously. If you think you've found a security issue with the plugin (whether information disclosure, privilege escalation, or another issue), we'd appreciate responsible disclosure as soon as possible.
 
-To report a security issue, you can email backupwordpress@hmn.md. We will attempt to give an initial response to security issues within 48 hours at most, however keep in mind that the team is distributed across various timezones, and delays may occur as we discuss internally.
+To report a security issue, you can email support@xibomarketing.com. We will attempt to give an initial response to security issues within 48 hours at most, however keep in mind that the team is distributed across various timezones, and delays may occur as we discuss internally.
 
 (Please note: For testing, you should install a copy of the project and WordPress on your own server. Do not test on servers you do not own.)
-
-## Weekly Dev Chat
-
-We have a weekly dev chat in [Slack](https://backupwordpress.slack.com) and we'd love you to join. We use the chat to run through new issues that have come in, discuss any open Pull Requests and talk through the plans and progress for the next release. If you'd like to join in just drop us an email to backupwordpress@hmn.md.
 
 Thank you for contributing!

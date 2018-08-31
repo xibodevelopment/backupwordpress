@@ -199,19 +199,14 @@ function set_server_config_notices() {
 
 		if ( isset( $_GET['creation_error'] ) ) {
 
-			$messages[] = sprintf(
-				/* translators: 1: URL to BackupWordPress docs. */
-				__( 'We connected to your server successfully but still weren&apos;t able to automatically create the directory. You&apos;ll need to <a href="%1$s">manually specify a valid directory</a>', 'backupwordpress' ),
-				'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
-			);
+			$messages[] = __( 'We connected to your server successfully but still weren&apos;t able to automatically create the directory. You&apos;ll need to manually specify a valid directory', 'backupwordpress' );
 
 		} else {
 
 			$messages[] = sprintf(
-				/* translators: 1: Path to backup directory. 2: URL to BackupWordPress docs. */
-				__( 'We couldn&apos;t create the backups directory (%1$s). You&apos;ll need to <a href="%2$s">manually specify a valid directory</a> or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ),
-				'<code>' . esc_html( Path::get_path() ) . '</code>',
-				'https://bwp.hmn.md/support-center/backupwordpress-faqs/#where'
+				/* translators: 1: Path to backup directory.*/
+				__( 'We couldn&apos;t create the backups directory (%1$s). You&apos;ll need to manually specify a valid directory or you can have WordPress do it automatically by entering your server details below. This is a one time thing.', 'backupwordpress' ),
+				'<code>' . esc_html( Path::get_path() ) . '</code>'
 			);
 		}
 	}
