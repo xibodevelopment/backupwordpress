@@ -54,6 +54,11 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.6.4.1 / 2018-08-30
+
+* Updated readme to reflect ownership changes
+* Stripped out support and premium links
+
 ### 3.6.4 / 2016-06-02
 
 * Various improvements to exclusion handling.
