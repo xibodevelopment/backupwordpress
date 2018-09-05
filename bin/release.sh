@@ -3,7 +3,7 @@
 # Takes a tag to release, and syncs it to WordPress.org
 
 TAG=3.6.4.1
-PLUGIN="backupwordpress"
+PLUGIN="backupwordpress-new"
 PLUGINDIR=$(pwd)
 TMPDIR=$(pwd)/tmp/
 
@@ -31,7 +31,7 @@ mkdir -p "${TMPDIR}"
 echo "Make TMP: ${TMPDIR}"
 
 # Make a Copy of all the files in the folder
-rsync -av --progress "${PWD}" "${TMPDIR}" --exclude="${TMPDIR}"
+rsync -av --progress "${PWD}" "${TMPDIR}" --exclude="${TMPDIR}" --exclude="${TMPDIR}node_modules/" --exclude="${TMPDIR}.git/"
 if [[ $? -ne 0 ]]; then
 	remove_tmp
 	echo "rsync $PLUGINDIR Failed. Aborting."
