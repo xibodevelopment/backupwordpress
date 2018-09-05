@@ -9,7 +9,21 @@ Stop using outdated practices, and start making sense.
 BackUpWordPress requires WordPress 3.9 or newer and requires PHP 5.3+ due to the use of namespaced code.
 
 ## Installation
-Just install like any other plugin
+In order to develop / add to this plugin, you will need to do the following in order to compile:
+
+== NPM ==
+
+Run `npm install`
+
+== Composer ==
+
+Run `composer install`
+
+== Grunt ==
+Install `npm install -g grunt-cli`
+Install `npm install grunt --save-dev`
+Install `npm install -D load-grunt-config`
+Run `grunt build`
 
 ## Contributing
 Read our [contributing.md](https://github.com/xibodevelopment/backupwordpress/blob/master/CONTRIBUTING.md) file
@@ -23,7 +37,7 @@ Maintained by [XIBO Ltd](https://github.com/xibodevelopment).
 
 Created by Human Made for high volume and large-scale sites. BackUpWordPress is used on over 200,000 sites worldwide.
 
-Written by [Tom Willmot](https://github.com/willmot) & [Paul De Wouters](https://github.com/pdwouters). Thanks to all our [contributors](https://github.com/humanmade/backupwordpress/graphs/contributors).
+Written by [Tom Willmot](https://github.com/willmot) & [Paul De Wouters](https://github.com/pdwouters). Thanks to all our [contributors](https://github.com/xibodevelopment/backupwordpress/graphs/contributors).
 
 BackUpWordPress was originally developed by [wpdprx](http://profiles.wordpress.org/users/wpdprx/) before being taken over by Human Made.
 

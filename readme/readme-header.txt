@@ -1,9 +1,9 @@
 === BackUpWordPress ===
-Contributors: xibodevelopment, humanmade, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance, dnutbourne
+Contributors: xibodevelopment, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance, dnutbourne
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
 Tested up to: 4.7
-Stable tag: 3.6.4.2
+Stable tag: 3.7
 
 Simple automated backups of your WordPress-powered website.
 
@@ -27,7 +27,7 @@ This plugin requires PHP version 5.3.2 or later
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/xibodevelopment/backupwordpress/.
+The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to <a href="https://github.com/xibodevelopment/backupwordpress/">BackUpWordPress on GitHub.</a>
 
 = Translations =
 

@@ -131,7 +131,7 @@ function contextual_help() {
 	);
 
 	get_current_screen()->set_help_sidebar(
-		'<p><strong>' . esc_html__( 'For more information:', 'backupwordpress' ) . '</strong></p><p><a href="https://github.com/humanmade/backupwordpress" target="_blank">GitHub</a></p><p><a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">' . esc_html__( 'Support Forums', 'backupwordpress' ) . '</a></p><p><a href="https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/" target="_blank">' . esc_html__( 'Help with translation', 'backupwordpress' ) . '</a></p>'
+		'<p><strong>' . esc_html__( 'For more information:', 'backupwordpress' ) . '</strong></p><p><a href="https://github.com/xibodevelopment/backupwordpress" target="_blank">GitHub</a></p><p><a href="http://wordpress.org/tags/backupwordpress?forum_id=10" target="_blank">' . esc_html__( 'Support Forums', 'backupwordpress' ) . '</a></p><p><a href="https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/" target="_blank">' . esc_html__( 'Help with translation', 'backupwordpress' ) . '</a></p>'
 	);
 
 }
