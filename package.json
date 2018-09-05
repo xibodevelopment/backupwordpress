@@ -11,17 +11,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/humanmade/backupwordpress"
+    "url": "https://github.com/xibodevelopment/backupwordpress"
   },
   "keywords": [
     "backups"
   ],
-  "author": "Human Made Limited",
+  "author": "xibodevelopment",
   "license": "GPLv2",
   "bugs": {
-    "url": "https://github.com/humanmade/backupwordpress/issues"
+    "url": "https://github.com/xibodevelopment/backupwordpress/issues"
   },
-  "homepage": "https://github.com/humanmade/backupwordpress",
+  "homepage": "https://github.com/xibodevelopment/backupwordpress",
   "devDependencies": {
     "grunt": "*",
     "grunt-autoprefixer": "*",
