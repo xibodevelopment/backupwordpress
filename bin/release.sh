@@ -31,7 +31,7 @@ mkdir -p "${TMPDIR}"
 echo "Make TMP: ${TMPDIR}"
 
 # Make a Copy of all the files in the folder
-rsync -av --progress "${PWD}" "${TMPDIR}" --exclude="${TMPDIR}" --exclude="${TMPDIR}node_modules/" --exclude="${TMPDIR}.git/"
+rsync -av --progress --exclude=tmp/ --exclude=node_modules/ "${PWD}" "${TMPDIR}"
 if [[ $? -ne 0 ]]; then
 	remove_tmp
 	echo "rsync $PLUGINDIR Failed. Aborting."
