@@ -1,6 +1,6 @@
 {
   "name": "BackUpWordPress",
-  "version": "3.6.3.1",
+  "version": "3.6.4.1",
   "description": "Simple automated backups of your WordPress powered website.",
   "main": "backupwordpress.php",
   "directories": {
