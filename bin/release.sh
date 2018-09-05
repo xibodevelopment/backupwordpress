@@ -10,18 +10,6 @@ TMPDIR=$(pwd)/tmp/
 # Fail on any error
 set -e
 
-# Install NPM
-
-npm install
-
-# Install Composer
-
-composer install
-
-# Run Grunt
-
-grunt build
-
 if [[ $VERSION == "v*" ]]; then
 	# Starts with an extra "v", strip for the version
 	VERSION=${TAG:1}
@@ -86,3 +74,4 @@ rm -rf grunt
 rm -rf tmp
 rm -rf readme
 rm -rf tests
+rm -rf node_modules
