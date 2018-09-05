@@ -9,8 +9,8 @@ Simple automated backups of your WordPress-powered website.
 
 == Description ==
 
-BackupWordPress was created by our friends at xibodevelopment but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
-We'll make occasional updates to the free software - please send us any patches you'd like to see released here: https://github.com/orgs/xibodevelopment/
+BackupWordPress was created by our friends at HumanMade but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
+We'll make occasional updates to the free software - please send us any patches you'd like to see released here: [https://github.com/orgs/xibodevelopment/](https://github.com/orgs/xibodevelopment/)
 
 However, we'll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive). It's certainly a good idea to backup to cloud storage to protect against server-wide risks.
 For this we recommend [UpdraftPlus WordPress Backups](https://updraftplus.com/?afref=744) which can do things for free BackupWordPress Premium could do on a paid basis.  Click here for [full comparison](https://updraftplus.com/backupwordpress/?afref=744). 
@@ -33,11 +33,10 @@ This plugin requires PHP version 5.3.2 or later
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/orgs/xibodevelopment/backupwordpress/
-
+The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to [https://github.com/orgs/xibodevelopment/backupwordpress/](https://github.com/orgs/xibodevelopment/backupwordpress/)
 = Translations =
 
-We'd also love help translating the plugin into more languages, if you can help then please visit https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/ to start translating.
+We'd also love help translating the plugin into more languages, if you can help then please visit [https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/](https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/) to start translating.
 
 == Installation ==
 
@@ -1294,7 +1293,7 @@ Fix some silly 1.0 bugs
 
 #### 1.0
 
-1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [XIBO Ltd](https://github.com/xibodevelopment) the chaps behind [WP Remote](https://wpremote.com)
+1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [XIBO Ltd](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
 
 #### Previous
 
