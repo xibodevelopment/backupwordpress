@@ -54,7 +54,7 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
-### 3.6.4.1 / 2018-08-30
+### 3.7 / 2018-08-30
 
 * Updated readme to reflect ownership changes
 * Stripped out support and premium links
@@ -1186,7 +1186,7 @@ Fix some silly 1.0 bugs
 
 #### 1.0
 
-1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [Human Made Limited](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
+1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [XIBO Ltd](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
 
 #### Previous
 

@@ -37,7 +37,7 @@ Maintained by [XIBO Ltd](https://github.com/xibodevelopment).
 
 Created by Human Made for high volume and large-scale sites. BackUpWordPress is used on over 200,000 sites worldwide.
 
-Written by [Tom Willmot](https://github.com/willmot) & [Paul De Wouters](https://github.com/pdwouters). Thanks to all our [contributors](https://github.com/humanmade/backupwordpress/graphs/contributors).
+Written by [Tom Willmot](https://github.com/willmot) & [Paul De Wouters](https://github.com/pdwouters). Thanks to all our [contributors](https://github.com/xibodevelopment/backupwordpress/graphs/contributors).
 
 BackUpWordPress was originally developed by [wpdprx](http://profiles.wordpress.org/users/wpdprx/) before being taken over by Human Made.
 

@@ -3,13 +3,13 @@ Contributors: xibodevelopment, willmot, dashaluna, pauldewouters, joehoyle, matt
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
 Tested up to: 4.7
-Stable tag: 3.6.4.1
+Stable tag: 3.7
 
 Simple automated backups of your WordPress-powered website.
 
 == Description ==
 
-BackupWordPress was created by our friends at HumanMade but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
+BackupWordPress was created by our friends at xibodevelopment but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
 We'll make occasional updates to the free software - please send us any patches you'd like to see released here: https://github.com/orgs/xibodevelopment/
 
 However, we'll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive). It's certainly a good idea to backup to cloud storage to protect against server-wide risks.
@@ -162,7 +162,7 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
-### 3.6.4.1 / 2018-08-30
+### 3.7 / 2018-08-30
 
 * Updated readme to reflect ownership changes
 * Stripped out support and premium links
@@ -1294,7 +1294,7 @@ Fix some silly 1.0 bugs
 
 #### 1.0
 
-1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [Human Made Limited](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
+1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [XIBO Ltd](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
 
 #### Previous
 

@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
-	const PLUGIN_VERSION = '3.6.4';
+	const PLUGIN_VERSION = '3.7';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -439,7 +439,7 @@ final class Plugin {
 		}
 		
 		$owner_message = sprintf(
-			__('BackupWordPress was created by our friends at HumanMade but is now owned by XIBO. We\'re committed to opensource and WordPress and will provide free support for the many BackupWordPress fans. However, we\'ll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive).%1$sIt\'s a good idea to backup to cloud storage to protect against server-wide risks. For this we recommend %2$sUpdraftPlus WordPress Backups%3$s. Click here for %4$sfull comparison%3$s', 'backupwordpress'),
+			__('BackupWordPress was created by our friends at xibodevelopment but is now owned by XIBO. We\'re committed to opensource and WordPress and will provide free support for the many BackupWordPress fans. However, we\'ll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive).%1$sIt\'s a good idea to backup to cloud storage to protect against server-wide risks. For this we recommend %2$sUpdraftPlus WordPress Backups%3$s. Click here for %4$sfull comparison%3$s', 'backupwordpress'),
 			'<p/>',
 			'<a href="https://updraftplus.com/?afref=744" target="_blank">',
 			'</a>',

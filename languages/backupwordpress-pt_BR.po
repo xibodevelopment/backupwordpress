@@ -1168,8 +1168,8 @@ msgstr "Simples backups automatizado do seu site Wordpress."
 # @ backupwordpress
 #. translators: plugin header field 'Author'
 #: backupwordpress.php:0
-msgid "Human Made Limited"
-msgstr "Human Made Limited"
+msgid "XIBO Ltd"
+msgstr "XIBO Ltd"
 
 # @ backupwordpress
 #. translators: plugin header field 'AuthorURI'

@@ -3,7 +3,7 @@ Contributors: xibodevelopment, willmot, dashaluna, pauldewouters, joehoyle, matt
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
 Tested up to: 4.7
-Stable tag: 3.6.4.1
+Stable tag: 3.7
 
 Simple automated backups of your WordPress-powered website.
 

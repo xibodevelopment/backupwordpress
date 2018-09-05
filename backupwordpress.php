@@ -3,8 +3,8 @@
 Plugin Name: BackUpWordPress
 Plugin URI: https://updraftplus.com/backupwordpress/?afref=744
 Description: Simple automated backups of your WordPress powered website. Once activated you'll find me under <strong>Tools &rarr; Backups</strong>. On multisite, you'll find me under the Network Settings menu.
-Version: 3.6.4
-Author: Human Made Limited
+Version: 3.7
+Author: XIBO Ltd
 Author URI: http://hmn.md/
 License: GPL-2+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -14,7 +14,7 @@ Network: true
 */
 
 /*
-Copyright 2011 - 2014 Human Made Limited  (email : support@xibomarketing.com)
+Copyright 2011 - 2018 XIBO Ltd  (email : support@xibomarketing.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

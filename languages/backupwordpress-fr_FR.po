@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: backupwordpress@hmn.md\n"
 "POT-Creation-Date: 2015-02-24 08:44:19+00:00\n"
 "PO-Revision-Date: 2015-07-18 15:53+0100\n"
-"Last-Translator: Human Made Limited <backupwordpress@hmn.md>\n"
+"Last-Translator: XIBO Ltd <backupwordpress@hmn.md>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1252,8 +1252,8 @@ msgstr ""
 "règlages se trouvent ici: <strong>Outils > Sauvegardes</strong>"
 
 #. Author of the plugin/theme
-msgid "Human Made Limited"
-msgstr "Human Made Limited"
+msgid "XIBO Ltd"
+msgstr "XIBO Ltd"
 
 #. Author URI of the plugin/theme
 msgid "http://hmn.md/"
