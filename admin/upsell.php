@@ -9,7 +9,7 @@ $cta_message = sprintf(
 	'</a>'
 );
 $hide_notice = get_site_option( 'hmbkp_hide_rate_notice', false );
-if(time() <= $hide_notice) {
+if(empty($hide_notice) || time() >= $hide_notice) {
 ?>
 <div id="hmbkp-cta-message" class="updated rate notice is-dismissible">
     <p><?php echo wp_kses_post( $cta_message ); ?></p>
