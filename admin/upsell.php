@@ -8,10 +8,14 @@ $cta_message = sprintf(
 	'<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/backupwordpress">',
 	'</a>'
 );
+$hide_notice = get_site_option( 'hmbkp_hide_rate_notice', false );
+if(time() <= $hide_notice) {
 ?>
-<div id="hmbkp-cta-message" class="updated notice is-dismissible">
+<div id="hmbkp-cta-message" class="updated rate notice is-dismissible">
     <p><?php echo wp_kses_post( $cta_message ); ?></p>
     <button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 </div>
 
 </div>
+<?php
+}
