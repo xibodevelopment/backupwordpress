@@ -54,6 +54,10 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.7.1 / 2018-09-11
+
+* Fixed admin notices
+
 ### 3.7 / 2018-08-30
 
 * Updated readme to reflect ownership changes
