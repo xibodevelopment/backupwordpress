@@ -7,7 +7,7 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<p><strong>' . __( 'What if I want to back up my site to another destination?', 'backupwordpress' ) . '</strong></p>' .
 
-	 '<p>' . __( 'BackUpWordPress Pro supports Dropbox, Google Drive, Amazon S3, Rackspace, Azure, DreamObjects and FTP/SFTP. Check it out here: <a href="http://bwp.hmn.md/?utm_source=wordpress-org&utm_medium=plugin-page&utm_campaign=freeplugin" title="BackUpWordPress Homepage" target="_blank">https://bwp.hmn.md</a>', 'backupwordpress' ) . '</p>' .
+	 '<p>' . __( 'We no longer sell or support the paid add-ons (e.g. for backups to Dropbox and Google Drive). It\'s certainly a good idea to backup to cloud storage to protect against server-wide risks. For this we recommend <a href="https://updraftplus.com/?afref=744" title="UpdraftPlus WordPress Backups" target="_blank">UpdraftPlus WordPress Backups</a> which can do things for free BackupWordPress Premium could do on a paid basis. Click here for <a href="https://updraftplus.com/backupwordpress/?afref=744" title="plugin comparison" target="_blank">full comparison</a>.', 'backupwordpress' ) . '</p>' .
 
 	 '<p><strong>' . __( 'How do I restore my site from a backup?', 'backupwordpress' ) . '</strong></p>' .
 
@@ -47,7 +47,7 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<li>' . __( 'Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won\'t work until you remove it. If you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
 
-	 '<p>' . __( 'Report the results to our support team for further help. To do this, either enable support from your Admin Dashboard (recommended), or email backupwordpress@hmn.md', 'backupwordpress' ) . '</p>' .
+	 '<p>' . __( 'Report the results to our support team for further help. To do this, email support@xibomarketing.com', 'backupwordpress' ) . '</p>' .
 
 	 '<p><strong>' . __( 'How to get BackUpWordPress working in Heart Internet', 'backupwordpress' ) . '</strong></p>' .
 
@@ -55,4 +55,4 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<p><strong>' . __( 'My backups seem to be failing?', 'backupwordpress' ) . '</strong></p>' .
 
-	 '<p>' . __( 'If your backups are failing, it\'s commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it\'s probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by enabling support from your Admin Dashboard (recommended), or emailing backupwordpress@hmn.md', 'backupwordpress' ) . '</p>';
+	 '<p>' . __( 'If your backups are failing, it\'s commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it\'s probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by emailing support@xibomarketing.com', 'backupwordpress' ) . '</p>';

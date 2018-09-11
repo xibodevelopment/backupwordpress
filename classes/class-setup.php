@@ -166,13 +166,9 @@ class HMBKP_Setup {
 	public static function get_notice_message() {
 
 		return sprintf(
-			__( 'BackUpWordPress requires PHP version %1$s or later and WordPress version %2$s or later to run. It has not been activated. %3$s%4$s%5$sLearn more%6$s', 'backupwordpress' ),
+			__( 'BackUpWordPress requires PHP version %1$s or later and WordPress version %2$s or later to run. It has not been activated.', 'backupwordpress' ),
 			self::MIN_PHP_VERSION,
-			self::MIN_WP_VERSION,
-			'<a href="',
-			'https://bwp.hmn.md/unsupported-php-version-error/',
-			'">',
-			'</a>'
+			self::MIN_WP_VERSION
 		);
 	}
 }

@@ -1,9 +1,9 @@
 {
 	"name": "backupwordpress",
 	"version": "3.6.0",
-	"homepage": "https://bwp.hmn.md",
+	"homepage": "https://profiles.wordpress.org/xibodevelopment",
 	"authors": [
-		"Human Made Limited"
+		"XIBO Ltd"
 	],
 	"description": "Simple automated backups of your WordPress powered website.",
 	"main": "backupwordpress.php",

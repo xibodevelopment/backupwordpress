@@ -1,6 +1,6 @@
 # Contributing to BackUpWordPress
 
-Thanks for stopping by, It's really great that you're here. BackUpWordPress thrives on the contributions of [many](https://github.com/humanmade/backupwordpress/graphs/contributors) and there is always more to do.
+Thanks for stopping by, It's really great that you're here. BackUpWordPress thrives on the contributions of [many](https://github.com/xibodevelopment/backupwordpress/graphs/contributors) and there is always more to do.
 
 There are four main ways you can contribute currently:
 
@@ -30,9 +30,9 @@ We're trying to solve a hard problem. BackUpWordPress aims to work reliably acro
 
 We rely on a few different kinds of tests:
 
-- Unit tests help us ensure that small, atomic pieces of code (generally individual functions or methods) do what they should under a variety of input conditions. We use Travis to run them automatically against all new Pull Requests. If you submit a code change you should try to also submit some unit tests to cover the changes you are making. We're [working on documenting how to setup and run our unit tests locally](https://github.com/humanmade/backupwordpress/issues/837).
+- Unit tests help us ensure that small, atomic pieces of code (generally individual functions or methods) do what they should under a variety of input conditions. We use Travis to run them automatically against all new Pull Requests. If you submit a code change you should try to also submit some unit tests to cover the changes you are making. We're [working on documenting how to setup and run our unit tests locally](https://github.com/xibodevelopment/backupwordpress/issues/837).
 - Integration tests are something we need, we don't currently have them.
-- Manual testing of different hosting environments. If you have access to a specific hosting environment, you can help out hugely by installing BackUpWordPress and testing if it works correctly. We're working on a [host support matrix](https://github.com/humanmade/backupwordpress/issues/838) that you can contribute your findings too but for now please just open a Github issue if you run into a problem.
+- Manual testing of different hosting environments. If you have access to a specific hosting environment, you can help out hugely by installing BackUpWordPress and testing if it works correctly. We're working on a [host support matrix](https://github.com/xibodevelopment/backupwordpress/issues/838) that you can contribute your findings too but for now please just open a Github issue if you run into a problem.
 
 ## Translating
 
@@ -44,12 +44,8 @@ All translations are managed here: https://translate.wordpress.org/projects/wp-p
 
 We take the security of BackUpWordPress extremely seriously. If you think you've found a security issue with the plugin (whether information disclosure, privilege escalation, or another issue), we'd appreciate responsible disclosure as soon as possible.
 
-To report a security issue, you can email backupwordpress@hmn.md. We will attempt to give an initial response to security issues within 48 hours at most, however keep in mind that the team is distributed across various timezones, and delays may occur as we discuss internally.
+To report a security issue, you can email support@xibomarketing.com. We will attempt to give an initial response to security issues within 48 hours at most, however keep in mind that the team is distributed across various timezones, and delays may occur as we discuss internally.
 
 (Please note: For testing, you should install a copy of the project and WordPress on your own server. Do not test on servers you do not own.)
-
-## Weekly Dev Chat
-
-We have a weekly dev chat in [Slack](https://backupwordpress.slack.com) and we'd love you to join. We use the chat to run through new issues that have come in, discuss any open Pull Requests and talk through the plans and progress for the next release. If you'd like to join in just drop us an email to backupwordpress@hmn.md.
 
 Thank you for contributing!

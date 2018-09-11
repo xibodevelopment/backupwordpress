@@ -1,4 +1,4 @@
-# Copyright (C) 2015 Human Made Limited
+# Copyright (C) 2015 XIBO Ltd
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
@@ -1189,7 +1189,7 @@ msgid ""
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "Human Made Limited"
+msgid "XIBO Ltd"
 msgstr ""
 
 #. Author URI of the plugin/theme

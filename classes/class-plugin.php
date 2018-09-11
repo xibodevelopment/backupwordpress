@@ -6,7 +6,7 @@ namespace HM\BackUpWordPress;
  * Class Plugin
  */
 final class Plugin {
-	const PLUGIN_VERSION = '3.6.4';
+	const PLUGIN_VERSION = '3.7';
 
 	/**
 	 * @var Plugin The singleton instance.
@@ -21,10 +21,9 @@ final class Plugin {
 
 		$hide_notice = get_site_option( 'hmbkp_hide_info_notice', false );
 
-		if ( ! $hide_notice ) {
-			add_action( 'admin_notices', array( $this, 'display_feature_message' ) );
-			add_action( 'network_admin_notices', array( $this, 'display_feature_message' ) );
-		}
+		// Display message about XIBO
+		add_action( 'admin_notices', array( $this, 'display_xibo_message' ) );
+		add_action( 'network_admin_notices', array( $this, 'display_xibo_message' ) );
 
 	}
 
@@ -427,8 +426,7 @@ final class Plugin {
 
 	<?php }
 
-	public function display_feature_message() {
-
+	public function display_xibo_message() {
 		$current_screen = get_current_screen();
 
 		if ( ! isset( $current_screen ) ) {
@@ -439,24 +437,26 @@ final class Plugin {
 		if ( $current_screen->id !== $page ) {
 			return;
 		}
-
-		/* translators: %1$s and %2$s expand to anchor tags linking to the new extensions page. */
-		$info_message = sprintf(
-			__( 'Thanks for updating BackUpWordPress, why not check out %1$sour extensions?%2$s', 'backupwordpress' ),
-			'<a href="https://bwp.hmn.md/" target="_blank">',
-			'</a>'
+		
+		$owner_message = sprintf(
+			__('BackupWordPress was created by our friends at xibodevelopment but is now owned by XIBO. We\'re committed to opensource and WordPress and will provide free support for the many BackupWordPress fans. However, we\'ll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive).%1$sIt\'s a good idea to backup to cloud storage to protect against server-wide risks. For this we recommend %2$sUpdraftPlus WordPress Backups%3$s. Click here for %4$sfull comparison%3$s', 'backupwordpress'),
+			'<p/>',
+			'<a href="https://updraftplus.com/?afref=744" target="_blank">',
+			'</a>',
+			'<a href="https://updraftplus.com/backupwordpress/?afref=744">'
 		);
 		?>
-
-		<div id="hmbkp-info-message" class="updated notice is-dismissible">
-
-			<p><?php echo wp_kses_post( $info_message ); ?></p>
+		
+		<div id="hmbkp-info-message" class="notice-info notice is-dismissible">
+			
+			<p><?php echo wp_kses_post( $owner_message ); ?></p>
 
 			<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'backupwordpress' ); ?></span></button>
 
 		</div>
 
-	<?php }
+	<?php 
+	}
 
 }
 

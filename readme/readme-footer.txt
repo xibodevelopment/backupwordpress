@@ -2,9 +2,9 @@
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
 
-For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/humanmade/backupwordpress/">BackUpWordPress on GitHub.</a>
+For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/xibodevelopment/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also tweet <a href="http://twitter.com/humanmadeltd">@humanmadeltd</a> or email backupwordpress@hmn.md for further help/support.
+You can also email support@xibomarketing.com for further help/support.
 
 == Screenshots ==
 
@@ -53,6 +53,11 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.7 / 2018-08-30
+
+* Updated readme to reflect ownership changes
+* Stripped out support and premium links
 
 ### 3.6.4 / 2016-06-02
 
@@ -1181,7 +1186,7 @@ Fix some silly 1.0 bugs
 
 #### 1.0
 
-1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [Human Made Limited](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
+1.0 represents a total rewrite & rethink of the BackUpWordPress plugin with a focus on making it "Just Work". The management and development of the plugin has been taken over by [XIBO Ltd](http://hmn.md) the chaps behind [WP Remote](https://wpremote.com)
 
 #### Previous
 

@@ -1,22 +1,22 @@
 {
-    "name"       : "humanmade/backupwordpress",
+    "name"       : "xibodevelopment/backupwordpress",
     "description": "Simple automated backups of your WordPress powered website.",
     "keywords"   : [
         "wordpress",
         "backup"
     ],
     "type"       : "wordpress-plugin",
-    "homepage"   : "https://github.com/humanmade/backupwordpress",
+    "homepage"   : "https://github.com/xibodevelopment/backupwordpress",
     "license"    : "GPL-2.0",
     "authors"    : [
         {
-            "name"    : "Human Made Limited",
-            "email"   : "backupwordpress@hmn.md",
-            "homepage": "https://bwp.hmn.md/"
+            "name"    : "XIBO Ltd",
+            "email"   : "support@xibomarketing.com",
+            "homepage": "https://github.com/xibodevelopment"
         }
     ],
     "support"    : {
-        "issues": "https://github.com/humanmade/backupwordpress/issues"
+        "issues": "https://github.com/xibodevelopment/backupwordpress/issues"
     },
     "require": {
         "symfony/finder": "~2.8",
