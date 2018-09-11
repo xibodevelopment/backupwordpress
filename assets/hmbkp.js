@@ -27,6 +27,15 @@ var BackUpWordPressAdmin = (function($){
 				}
 			);
 		});
+		
+		$('.notice.rate.is-dismissible').on('click', '.notice-dismiss', function(){
+			$.post(
+				ajaxurl,
+				{
+					'action': 'hmbkp_dismiss_rate_notice'
+				}
+			);
+		});
 
 		// Show delete confirm message for delete schedule
 		$( document ).on( 'click', '.hmbkp-schedule-actions .delete-action', function ( e ) {

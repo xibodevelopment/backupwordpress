@@ -22,8 +22,10 @@ final class Plugin {
 		$hide_notice = get_site_option( 'hmbkp_hide_info_notice', false );
 
 		// Display message about XIBO
-		add_action( 'admin_notices', array( $this, 'display_xibo_message' ) );
-		add_action( 'network_admin_notices', array( $this, 'display_xibo_message' ) );
+		if(!$hide_notice) {
+			add_action( 'admin_notices', array( $this, 'display_xibo_message' ) );
+			add_action( 'network_admin_notices', array( $this, 'display_xibo_message' ) );
+		}
 
 	}
 
