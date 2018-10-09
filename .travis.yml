@@ -1,43 +1,17 @@
 language: php
 sudo: false
 php:
-  - 5.3
-  - 5.4
-  - 5.5
+  - 7.2
   - 5.6
-  - hhvm
-  - 7.0
 
 env:
-  # trunk:
-  - WP_VERSION=master WP_MULTISITE=0
-  - WP_VERSION=master WP_MULTISITE=1
-  # latest stable:
-  - WP_VERSION=4.3.1 WP_MULTISITE=0
-  # previous stable:
-  - WP_VERSION=4.2.5 WP_MULTISITE=0
-  # earliest supported:
-  - WP_VERSION=3.9.9 WP_MULTISITE=0
+  # WP latest stable:
+  - WP_VERSION=latest
+  # WP nightly:
+  - WP_VERSION=nightly
 
 matrix:
-  allow_failures:
-    - php: hhvm
-    - php: 7.0
   fast_finish: true
-  exclude:
-  # Only test latest version of WP with HHVM and PHP 7
-    - php: hhvm
-      env: WP_VERSION=3.9.9 WP_MULTISITE=0
-    - php: hhvm
-      env: WP_VERSION=4.2.5 WP_MULTISITE=0
-    - php: hhvm
-      env: WP_VERSION=4.3.1 WP_MULTISITE=0
-    - php: 7.0
-      env: WP_VERSION=3.9.9 WP_MULTISITE=0
-    - php: 7.0
-      env: WP_VERSION=4.2.5 WP_MULTISITE=0
-    - php: 7.0
-      env: WP_VERSION=4.3.1 WP_MULTISITE=0
 
 cache:
   directories:
