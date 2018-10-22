@@ -3,14 +3,14 @@ Contributors: xibodevelopment, willmot, dashaluna, pauldewouters, joehoyle, matt
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
 Tested up to: 4.7
-Stable tag: 3.7
+Stable tag: 3.7.1
 
 Simple automated backups of your WordPress-powered website.
 
 == Description ==
 
-BackupWordPress was created by our friends at xibodevelopment but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
-We'll make occasional updates to the free software - please send us any patches you'd like to see released here: https://github.com/orgs/xibodevelopment/
+BackupWordPress was created by our friends at HumanMade but is now under new ownership.  We're committed to opensource and WordPress and will provide free support for the many BackupWordPress fans.
+We'll make occasional updates to the free software - please send us any patches you'd like to see released here: [https://github.com/orgs/xibodevelopment/](https://github.com/orgs/xibodevelopment/)
 
 However, we'll no longer be selling or supporting the paid add-ons (e.g. for backups to Dropbox and Google Drive). It's certainly a good idea to backup to cloud storage to protect against server-wide risks.
 For this we recommend [UpdraftPlus WordPress Backups](https://updraftplus.com/?afref=744) which can do things for free BackupWordPress Premium could do on a paid basis.  Click here for [full comparison](https://updraftplus.com/backupwordpress/?afref=744). 
@@ -33,11 +33,10 @@ This plugin requires PHP version 5.3.2 or later
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to https://github.com/orgs/xibodevelopment/backupwordpress/
-
+The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to [https://github.com/orgs/xibodevelopment/backupwordpress/](https://github.com/orgs/xibodevelopment/backupwordpress/)
 = Translations =
 
-We'd also love help translating the plugin into more languages, if you can help then please visit https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/ to start translating.
+We'd also love help translating the plugin into more languages, if you can help then please visit [https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/](https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/) to start translating.
 
 == Installation ==
 
@@ -161,6 +160,10 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.7.1 / 2018-09-11
+
+* Fixed admin notices
 
 ### 3.7 / 2018-08-30
 

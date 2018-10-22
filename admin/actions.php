@@ -710,3 +710,10 @@ function hmbkp_dismiss_notice() {
 	update_site_option( 'hmbkp_hide_info_notice', true );
 }
 add_action( 'wp_ajax_hmbkp_dismiss_notice', 'HM\BackUpWordPress\hmbkp_dismiss_notice' );
+
+function hmbkp_dismiss_rate_notice() {
+	//Set rate notice to reappear after 30 days
+	$expiry = time() + 2592000;
+	update_site_option( 'hmbkp_hide_rate_notice', $expiry );
+}
+add_action( 'wp_ajax_hmbkp_dismiss_rate_notice', 'HM\BackUpWordPress\hmbkp_dismiss_rate_notice' );
