@@ -856,8 +856,8 @@ msgstr "O seu site é privado (ou seja, é por trás de algum tipo de autentica�
 
 # @ backupwordpress
 #: admin/faq.php:50
-msgid "Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md"
-msgstr "Relatar os resultados para nossa equipe de suporte para obter mais ajuda. Para fazer isso, ative o suporte de seu Painel de Administração (recomendado), ou envie um e-mail para backupwordpress@hmn.md"
+msgid "Report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@xibodevelopment.com"
+msgstr "Relatar os resultados para nossa equipe de suporte para obter mais ajuda. Para fazer isso, ative o suporte de seu Painel de Administração (recomendado), ou envie um e-mail para support@xibodevelopment.com"
 
 # @ backupwordpress
 #: admin/faq.php:52
@@ -876,8 +876,8 @@ msgstr "Meus backups parecem estar falhando?"
 
 # @ backupwordpress
 #: admin/faq.php:58
-msgid "If your backups are failing - it's commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email backupwordpress@hmn.md"
-msgstr "Se os seus backups estão falhando - é comumente causada por falta de recursos disponíveis em seu servidor. A maneira mais fácil de estabelecer isso é excluir algumas ou sua pasta de uploads inteira, executando um um backup se isso for bem-sucedido. Se assim for, nós saberemos que é, provavelmente, um problema de servidor. Se não, relatar os resultados para nossa equipe de suporte para obter mais ajuda. Para fazer isso, ative o suporte de seu Painel Administrativo (recomendado), ou envie um e-mail para backupwordpress@hmn.md"
+msgid "If your backups are failing - it's commonly caused by lack of available resources on your server. The easiest way to establish this to exclude some [of] or your entire uploades folder, running a backup an if that succeeds. If so, we know it's probably a server issue. If not, report the results to our support team for further help. To do this, either enable suport from your Admin Dashboard (recommended), or email support@xibodevelopment.com"
+msgstr "Se os seus backups estão falhando - é comumente causada por falta de recursos disponíveis em seu servidor. A maneira mais fácil de estabelecer isso é excluir algumas ou sua pasta de uploads inteira, executando um um backup se isso for bem-sucedido. Se assim for, nós saberemos que é, provavelmente, um problema de servidor. Se não, relatar os resultados para nossa equipe de suporte para obter mais ajuda. Para fazer isso, ative o suporte de seu Painel Administrativo (recomendado), ou envie um e-mail para support@xibodevelopment.com"
 
 # @ backupwordpress
 #: admin/menu.php:79
