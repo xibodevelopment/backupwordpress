@@ -334,8 +334,8 @@ msgstr ""
 #: admin/faq.php:50
 msgid ""
 "Report the results to our support team for further help. To do this, either "
-"enable suport from your Admin Dashboard (recommended), or email support@hmn."
-"md"
+"enable suport from your Admin Dashboard (recommended), or email support@xibodevelopment."
+"com"
 msgstr ""
 
 #: admin/faq.php:52
@@ -361,7 +361,7 @@ msgid ""
 "[of] or your entire uploades folder, running a backup an if that succeeds. "
 "If so, we know it's probably a server issue. If not, report the results to "
 "our support team for further help. To do this, either enable suport from "
-"your Admin Dashboard (recommended), or email support@hmn.md"
+"your Admin Dashboard (recommended), or email support@xibodevelopment.com"
 msgstr ""
 
 #: admin/menu.php:13 admin/menu.php:17
