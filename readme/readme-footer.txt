@@ -54,6 +54,10 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.7.2 / 2018-10-29
+
+* Check remove intercomm links
+
 ### 3.7.1 / 2018-09-11
 
 * Fixed admin notices
