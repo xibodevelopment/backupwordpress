@@ -3,7 +3,7 @@ Contributors: xibodevelopment, willmot, dashaluna, pauldewouters, joehoyle, matt
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
 Tested up to: 4.7
-Stable tag: 3.7.1
+Stable tag: 3.7.2
 
 Simple automated backups of your WordPress-powered website.
 
@@ -160,6 +160,14 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.7.3 / 2018-09-11
+
+* Check remove intercomm links
+
+### 3.7.2 / 2018-09-11
+
+* Version update
 
 ### 3.7.1 / 2018-09-11
 
