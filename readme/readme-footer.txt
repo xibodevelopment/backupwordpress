@@ -54,6 +54,10 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.8 / 2018-11-01
+
+* GNU Wording change
+
 ### 3.7.2 / 2018-10-29
 
 * Check remove intercomm links
