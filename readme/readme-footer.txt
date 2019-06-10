@@ -52,6 +52,10 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.9 / 2019-06-10
+
+* Readme update
+
 ### 3.8 / 2018-11-01
 
 * GNU Wording change
