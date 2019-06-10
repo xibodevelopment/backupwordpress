@@ -4,8 +4,6 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/xibodevelopment/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also email support@xibomarketing.com for further help/support.
-
 == Screenshots ==
 
 1. Manage multiple schedules.

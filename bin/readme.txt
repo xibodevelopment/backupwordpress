@@ -95,23 +95,19 @@ There are some things you can test to confirm this is the issue.
 
 	 * Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won't work until you remove it. If you are and you temporarily remove the authentication, do backups start working?
 
-Report the results to our support team for further help. To do this, email support@xibomarketing.com
-
 **How to get BackUpWordPress working in Heart Internet**
 
 The script to be entered into the Heart Internet cPanel is: `/usr/bin/php5 /home/sites/yourdomain.com/public_html/wp-cron.php` (note the space between php5 and the location of the file). The file `wp-cron.php` `chmod` must be set to `711`.
 
 **My backups seem to be failing?**
 
-If your backups are failing, it's commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it's probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by emailing support@xibomarketing.com
+If your backups are failing, it's commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it's probably a server issue. If it does not succeed, you can find further assistance on our <a href="http://wordpress.org/support/plugin/backupwordpress" title="support forums" target="_blank">support forums</a>.
 
 **Further Support & Feedback**
 
 General support questions should be posted in the <a href="http://wordpress.org/tags/backupwordpress?forum_id=10">WordPress support forums, tagged with backupwordpress.</a>
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/orgs/xibodevelopment/backupwordpress/">BackUpWordPress on GitHub.</a>
-
-You can also email support@xibomarketing.com for further help/support.
 
 == Screenshots ==
 
