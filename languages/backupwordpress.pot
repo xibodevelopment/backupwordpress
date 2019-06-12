@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2+.
 msgid ""
 msgstr ""
-"Project-Id-Version: BackUpWordPress 3.9\n"
+"Project-Id-Version: BackUpWordPress 3.10\n"
 "Report-Msgid-Bugs-To: support@xibomarketing.com\n"
 "POT-Creation-Date: 2018-10-29 10:39:44+00:00\n"
 "MIME-Version: 1.0\n"

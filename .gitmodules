@@ -1,6 +1,0 @@
-[submodule "backdrop"]
-	path = backdrop
-	url = https://github.com/xibodevelopment/Backdrop.git
-[submodule "whitelist-html"]
-	path = whitelist-html
-	url = https://github.com/xibodevelopment/whitelist-html.git

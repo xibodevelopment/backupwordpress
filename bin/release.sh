@@ -2,7 +2,7 @@
 #
 # Takes a tag to release, and syncs it to WordPress.org
 
-TAG=3.9
+TAG=3.10
 PLUGIN="backupwordpress"
 PLUGINDIR=$(pwd)
 TMPDIR=$(pwd)/tmp/
@@ -54,7 +54,6 @@ sed -e "s/{{TAG}}/$VERSION/g" < "$PLUGINDIR/bin/readme.txt" > readme.txt
 
 # Remove special files
 rm .gitignore
-rm .gitmodules
 rm .bowerrc
 rm .travis.yml
 rm .jshintrc

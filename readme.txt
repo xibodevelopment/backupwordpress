@@ -2,8 +2,8 @@
 Contributors: xibodevelopment, willmot, dashaluna, pauldewouters, joehoyle, mattheu, tcrsavage, cuvelier, katmoody, sambulance, dnutbourne, snightingale
 Tags: back up, backup, backups, database, zip, db, files, archive, wp-cli, xibodevelopment
 Requires at least: 3.9
-Tested up to: 4.9.8
-Stable tag: 3.9
+Tested up to: 5.1
+Stable tag: 3.10
 
 Simple automated backups of your WordPress-powered website.
 
@@ -156,6 +156,10 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.10 / 2019-06-12
+
+* Fixed whitelist-html
 
 ### 3.9 / 2019-06-10
 
