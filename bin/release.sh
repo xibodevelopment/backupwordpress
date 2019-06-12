@@ -54,7 +54,6 @@ sed -e "s/{{TAG}}/$VERSION/g" < "$PLUGINDIR/bin/readme.txt" > readme.txt
 
 # Remove special files
 rm .gitignore
-rm .gitmodules
 rm .bowerrc
 rm .travis.yml
 rm .jshintrc
