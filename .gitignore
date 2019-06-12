@@ -12,6 +12,3 @@ composer.lock
 releases
 package-lock.json
 tmp
-backdrop
-
-whitelist-html

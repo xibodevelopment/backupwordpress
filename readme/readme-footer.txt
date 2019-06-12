@@ -52,6 +52,10 @@ users should see major improvements to reliability.
 
 == Changelog ==
 
+### 3.10 / 2019-06-12
+
+* Fixed whitelist-html
+
 ### 3.9 / 2019-06-10
 
 * Readme update
