@@ -47,7 +47,7 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<li>' . __( 'Is your site private (i.e. is it behind some kind of authentication, maintenance plugin, .htaccess)? If so, wp-cron won\'t work until you remove it. If you are and you temporarily remove the authentication, do backups start working?', 'backupwordpress' ) . '</li></ul>' .
 
-	 '<p>' . __( 'Report the results to our support team for further help. To do this, email support@xibomarketing.com', 'backupwordpress' ) . '</p>' .
+	 '<p>' . __( 'For further help, please post on our <a href="http://wordpress.org/support/plugin/backupwordpress" title="support forums" target="_blank">support forums</a>', 'backupwordpress' ) . '</p>' .
 
 	 '<p><strong>' . __( 'How to get BackUpWordPress working in Heart Internet', 'backupwordpress' ) . '</strong></p>' .
 
@@ -55,4 +55,4 @@ echo '<p><strong>' . __( 'Where does BackUpWordPress store the backup files?', '
 
 	 '<p><strong>' . __( 'My backups seem to be failing?', 'backupwordpress' ) . '</strong></p>' .
 
-	 '<p>' . __( 'If your backups are failing, it\'s commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it\'s probably a server issue. If it does not succeed, report the results to our support team for further help. You can contact support by emailing support@xibomarketing.com', 'backupwordpress' ) . '</p>';
+	 '<p>' . __( 'If your backups are failing, it\'s commonly caused by a lack of available resources on your server. To establish this is the case, exclude the complete (or parts of the) uploads folder and run a backup. If that succeeds, you know it\'s probably a server issue. If it does not succeed, you can seek further help on our <a href="http://wordpress.org/support/plugin/backupwordpress" title="support forums" target="_blank">support forums</a>', 'backupwordpress' ) . '</p>';

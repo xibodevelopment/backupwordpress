@@ -2,8 +2,8 @@
 #
 # Takes a tag to release, and syncs it to WordPress.org
 
-TAG=3.8
-PLUGIN="backupwordpress-new"
+TAG=3.9
+PLUGIN="backupwordpress"
 PLUGINDIR=$(pwd)
 TMPDIR=$(pwd)/tmp/
 

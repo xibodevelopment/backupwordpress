@@ -4,8 +4,6 @@ General support questions should be posted in the <a href="http://wordpress.org/
 
 For development issues, feature requests or anybody wishing to help out with development checkout <a href="https://github.com/xibodevelopment/backupwordpress/">BackUpWordPress on GitHub.</a>
 
-You can also email support@xibomarketing.com for further help/support.
-
 == Screenshots ==
 
 1. Manage multiple schedules.
@@ -53,6 +51,10 @@ users should see major improvements to reliability.
 * This is a critical update. Fixes a bug in the core backup library. Please update immediately.
 
 == Changelog ==
+
+### 3.9 / 2019-06-10
+
+* Readme update
 
 ### 3.8 / 2018-11-01
 
