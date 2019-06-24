@@ -422,6 +422,14 @@ function has_server_permissions() {
  */
 function is_backup_possible() {
 
+  /**
+   * Kill switch to disable backups with constant `HMBKP_DISABLE` set to true.
+   * For example in local or development environments.
+   */
+  if (defined(HMBKP_DISABLE) && HMBKP_DISABLE === true){
+    return false;
+  }
+
 	if ( ! has_server_permissions() || ! is_dir( Path::get_path() ) ) {
 		return false;
 	}
