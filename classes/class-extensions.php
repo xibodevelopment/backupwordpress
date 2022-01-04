@@ -32,9 +32,9 @@ final class Extensions {
 
 	}
 
-	private function __wakeup() {}
+	public function __wakeup() { throw new \Exception('may not be serialized'); }
 
-	private function __clone() {}
+	public function __clone() { throw new \Exception('may not be cloned'); }
 
 	/**
 	 * Returns the *Singleton* instance of this class.
