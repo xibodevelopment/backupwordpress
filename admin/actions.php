@@ -537,6 +537,8 @@ add_action( 'load-' . HMBKP_ADMIN_PAGE, 'HM\BackUpWordPress\calculate_site_size'
  */
 function heartbeat_received( $response, $data ) {
 
+	if (!current_user_can('manage_options')) return $response;
+
 	$response['heartbeat_interval'] = 'fast';
 
 	if ( ! empty( $data['hmbkp_schedule_id'] ) ) {
