@@ -349,16 +349,16 @@ final class Plugin {
 	/**
 	 * Function to run when the schedule cron fires.
 	 *
-	 * @param $schedule_id
+	 * @param $id
 	 */
-	public function schedule_hook_run( $schedule_id ) {
+	public function schedule_hook_run( $id ) {
 
 		if ( ! is_backup_possible() ) {
 			return;
 		}
 
 		$schedules = Schedules::get_instance();
-		$schedule  = $schedules->get_schedule( $schedule_id );
+		$schedule  = $schedules->get_schedule( $id );
 
 		if ( ! $schedule ) {
 			return;

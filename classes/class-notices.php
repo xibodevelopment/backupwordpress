@@ -34,16 +34,14 @@ class Notices {
 	protected function __construct() {}
 
 	/**
-	 * Private clone method to prevent cloning of the instance of the
-	 * *Singleton* instance.
+	 * Prevent cloning of the instance of the *Singleton* instance.
 	 */
-	private function __clone() {}
+	public function __clone() { throw new \Exception('may not be cloned'); }
 
 	/**
-	 * Private unserialize method to prevent unserializing of the *Singleton*
-	 * instance.
+	 * Prevent unserializing of the *Singleton* instance.
 	 */
-	private function __wakeup() {}
+	public function __wakeup() { throw new \Exception('may not be serialized'); }
 
 	/**
 	 * Returns the *Singleton* instance of this class.
