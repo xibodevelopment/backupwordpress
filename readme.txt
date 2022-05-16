@@ -33,7 +33,7 @@ This plugin requires PHP version 5.3.2 or later
 
 = Help develop this plugin =
 
-The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to [https://github.com/orgs/xibodevelopment/backupwordpress/](https://github.com/orgs/xibodevelopment/backupwordpress/)
+The BackUpWordPress plugin is hosted on GitHub, if you want to help out with development or testing then head over to [https://github.com/xibodevelopment/backupwordpress/](https://github.com/xibodevelopment/backupwordpress/)
 = Translations =
 
 We'd also love help translating the plugin into more languages, if you can help then please visit [https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/](https://translate.wordpress.org/projects/wp-plugins/backupwordpress/dev/) to start translating.
