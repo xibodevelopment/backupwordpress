@@ -452,7 +452,7 @@ class Path {
 class CleanUpIterator extends \FilterIterator {
 
 	// Don't match index.html, files with zip extension or status logfiles.
-	public function accept() {
+	public function accept(): bool {
 
 		// Don't remove existing backups
 		if ( 'zip' === pathinfo( $this->current()->getFilename(), PATHINFO_EXTENSION ) ) {
