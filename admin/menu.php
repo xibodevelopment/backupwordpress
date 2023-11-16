@@ -14,7 +14,7 @@ function admin_menu() {
 		add_management_page( __( 'Manage Backups', 'backupwordpress' ), __( 'Backups', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG, 'HM\BackUpWordPress\manage_backups' );
 	}
 
-	add_submenu_page( null, __( 'BackUpWordPress Extensions', 'backupwordpress' ), __( 'Extensions', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG . '_extensions', 'HM\BackUpWordPress\extensions' );
+	add_submenu_page('options.php', __( 'BackUpWordPress Extensions', 'backupwordpress' ), __( 'Extensions', 'backupwordpress' ), ( defined( 'HMBKP_CAPABILITY' ) && HMBKP_CAPABILITY ) ? HMBKP_CAPABILITY : 'manage_options', HMBKP_PLUGIN_SLUG . '_extensions', 'HM\BackUpWordPress\extensions' );
 
 }
 add_action( 'network_admin_menu', 'HM\BackUpWordPress\admin_menu' );
